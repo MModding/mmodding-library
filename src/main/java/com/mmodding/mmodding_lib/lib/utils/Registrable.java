@@ -1,4 +1,4 @@
-package com.modding.mmodding_lib.lib.utils;
+package com.mmodding.mmodding_lib.lib.utils;
 
 public interface Registrable {
     boolean isNotRegistered();

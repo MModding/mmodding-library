@@ -1,4 +1,4 @@
-package com.modding.mmodding_lib.lib.initializers;
+package com.mmodding.mmodding_lib.lib.initializers;
 
 public interface ElementsInitializer {
 

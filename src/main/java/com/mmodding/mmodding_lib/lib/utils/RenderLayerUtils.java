@@ -1,4 +1,4 @@
-package com.modding.mmodding_lib.lib.utils;
+package com.mmodding.mmodding_lib.lib.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;

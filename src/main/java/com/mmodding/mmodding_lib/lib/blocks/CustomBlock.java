@@ -1,6 +1,6 @@
-package com.modding.mmodding_lib.lib.blocks;
+package com.mmodding.mmodding_lib.lib.blocks;
 
-import com.modding.mmodding_lib.lib.utils.RenderLayerUtils;
+import com.mmodding.mmodding_lib.lib.utils.RenderLayerUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;

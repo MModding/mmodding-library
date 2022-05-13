@@ -1,4 +1,4 @@
-package com.modding.mmodding_lib;
+package com.mmodding.mmodding_lib;
 
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;

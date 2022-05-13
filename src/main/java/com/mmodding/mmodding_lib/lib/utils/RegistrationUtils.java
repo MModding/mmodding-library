@@ -1,6 +1,6 @@
-package com.modding.mmodding_lib.lib.utils;
+package com.mmodding.mmodding_lib.lib.utils;
 
-import com.modding.mmodding_lib.lib.blocks.CustomBlock;
+import com.mmodding.mmodding_lib.lib.blocks.CustomBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
