@@ -1,0 +1,41 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "com.mmodding",
+		"id": "mmodding_lib",
+		"version": "${version}",
+		"metadata": {
+			"name": "MModding Library",
+			"description": "None",
+			"contributors": {
+				"FirstMegaGame4": "Owner, Author",
+				"Max094Reikeb": "Owner, Author"
+			},
+			"contact": {
+				"homepage": "https://mmodding.github.io/",
+				"issues": "https://github.com/MModding/MModding-Library/issues",
+				"sources": "https://github.com/MModding/MModding-Library"
+			},
+			"icon": "assets/mmodding_lib/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": "com.mmodding.mmodding_lib.MModdingLib"
+		},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.16.0-"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=1.0.0-"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.18.2"
+			}
+		]
+	},
+	"mixin": "mmodding_lib.mixins.json"
+}
