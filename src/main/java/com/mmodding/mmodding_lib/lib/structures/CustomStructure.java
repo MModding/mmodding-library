@@ -10,19 +10,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CustomStructure<C extends FeatureConfig> extends StructureFeature<C> implements StructureRegistrable {
 
-	private final AtomicBoolean registered = new AtomicBoolean(false);
+    private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	public CustomStructure(Codec<C> codec, StructurePiecesGeneratorFactory<C> structurePiecesGeneratorFactory, PostPlacementProcessor postPlacementProcessor) {
-		super(codec, structurePiecesGeneratorFactory, postPlacementProcessor);
-	}
+    public CustomStructure(Codec<C> codec, StructurePiecesGeneratorFactory<C> structurePiecesGeneratorFactory, PostPlacementProcessor postPlacementProcessor) {
+        super(codec, structurePiecesGeneratorFactory, postPlacementProcessor);
+    }
 
-	@Override
-	public boolean isNotRegistered() {
-		return !registered.get();
-	}
+    @Override
+    public boolean isNotRegistered() {
+        return !registered.get();
+    }
 
-	@Override
-	public void setRegistered() {
-		registered.set(true);
-	}
+    @Override
+    public void setRegistered() {
+        registered.set(true);
+    }
 }

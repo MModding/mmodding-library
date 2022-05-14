@@ -11,21 +11,21 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.GenerationStep;
 
 public class RegistrationUtils {
-	public static void registerItem(Identifier identifier, Item item) {
-		Registry.register(Registry.ITEM, identifier, item);
-	}
+    public static void registerItem(Identifier identifier, Item item) {
+        Registry.register(Registry.ITEM, identifier, item);
+    }
 
-	public static void registerBlock(Identifier identifier, CustomBlock block) {
-		Registry.register(Registry.BLOCK, identifier, block);
-		if (block.getItem() != null) registerItem(identifier, block.getItem());
-	}
+    public static void registerBlock(Identifier identifier, CustomBlock block) {
+        Registry.register(Registry.BLOCK, identifier, block);
+        if (block.getItem() != null) registerItem(identifier, block.getItem());
+    }
 
-	public static void registerNormalBlock(Identifier identifier, Block block, BlockItem blockItem) {
-		Registry.register(Registry.BLOCK, identifier, block);
-		Registry.register(Registry.ITEM, identifier, blockItem);
-	}
+    public static void registerNormalBlock(Identifier identifier, Block block, BlockItem blockItem) {
+        Registry.register(Registry.BLOCK, identifier, block);
+        Registry.register(Registry.ITEM, identifier, blockItem);
+    }
 
-	public static void registerStructure(Identifier identifier, CustomStructure<?> structure) {
-		StructureFeatureAccessor.callRegister(identifier.toString(), structure, GenerationStep.Feature.SURFACE_STRUCTURES);
-	}
+    public static void registerStructure(Identifier identifier, CustomStructure<?> structure) {
+        StructureFeatureAccessor.callRegister(identifier.toString(), structure, GenerationStep.Feature.SURFACE_STRUCTURES);
+    }
 }
