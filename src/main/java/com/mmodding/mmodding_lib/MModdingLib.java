@@ -31,5 +31,4 @@ public class MModdingLib implements ModInitializer {
 		mods = StringUtils.chop(mods);
 		LOGGER.info(mods);
 	}
-
 }

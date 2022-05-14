@@ -27,8 +27,8 @@ public class RegistrationUtils {
 		Registry.register(Registry.ITEM, identifier, blockItem);
 	}
 
-	public static <T extends Entity> void registerEntities(Identifier identifier, EntityType.Builder<T> type) {
-		Registry.register(Registry.ENTITY_TYPE, identifier, type.build(identifier.getPath()));
+	public static <T extends Entity> EntityType<?> registerEntityType(Identifier identifier, EntityType.Builder<?> entityTypeBuilder) {
+		return Registry.register(Registry.ENTITY_TYPE, identifier, entityTypeBuilder.build(identifier.getPath()));
 	}
 
 	public static void registerStructure(Identifier identifier, CustomStructure<?> structure) {
