@@ -27,7 +27,7 @@ public class RegistrationUtils {
 		Registry.register(Registry.ITEM, identifier, blockItem);
 	}
 
-	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<?> entityType) {
+	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {
 		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
 	}
 
