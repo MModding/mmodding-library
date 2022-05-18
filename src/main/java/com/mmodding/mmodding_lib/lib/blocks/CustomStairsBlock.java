@@ -1,0 +1,46 @@
+package com.mmodding.mmodding_lib.lib.blocks;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemGroup;
+import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class CustomStairsBlock extends StairsBlock implements BlockRegistrable, BlockWithItem {
+	private final AtomicBoolean registered = new AtomicBoolean(false);
+
+	private BlockItem item = null;
+
+	public CustomStairsBlock(BlockState blockState, Settings settings) {
+		this(blockState, settings, false);
+	}
+
+	public CustomStairsBlock(BlockState blockState, Settings settings, boolean hasItem) {
+		this(blockState, settings, hasItem, null);
+	}
+
+	public CustomStairsBlock(BlockState blockState, Settings settings, boolean hasItem, ItemGroup itemGroup) {
+		super(blockState, settings);
+		if (hasItem) {
+			if (itemGroup != null) this.item = new BlockItem(this, new QuiltItemSettings().group(itemGroup));
+			else this.item = new BlockItem(this, new QuiltItemSettings());
+		}
+	}
+
+	@Override
+	public BlockItem getItem() {
+		return this.item;
+	}
+
+	@Override
+	public boolean isNotRegistered() {
+		return !this.registered.get();
+	}
+
+	@Override
+	public void setRegistered() {
+		this.registered.set(true);
+	}
+}

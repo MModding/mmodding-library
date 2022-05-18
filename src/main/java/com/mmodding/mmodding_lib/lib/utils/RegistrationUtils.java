@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.lib.utils;
 
+import com.mmodding.mmodding_lib.lib.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.lib.blocks.CustomBlock;
 import com.mmodding.mmodding_lib.lib.structures.CustomStructure;
 import com.mmodding.mmodding_lib.mixin.StructureFeatureAccessor;
@@ -17,9 +18,11 @@ public class RegistrationUtils {
 		Registry.register(Registry.ITEM, identifier, item);
 	}
 
-	public static void registerBlock(Identifier identifier, CustomBlock block) {
-		Registry.register(Registry.BLOCK, identifier, block);
-		if (block.getItem() != null) registerItem(identifier, block.getItem());
+	public static void registerBlock(Identifier identifier, BlockWithItem blockWithItem) {
+		if (blockWithItem instanceof Block block) {
+			Registry.register(Registry.BLOCK, identifier, block);
+			if (blockWithItem.getItem() != null) registerItem(identifier, blockWithItem.getItem());
+		}
 	}
 
 	public static void registerNormalBlock(Identifier identifier, Block block, BlockItem blockItem) {

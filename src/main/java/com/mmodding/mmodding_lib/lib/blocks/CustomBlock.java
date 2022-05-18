@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.lib.blocks;
 
-import com.mmodding.mmodding_lib.lib.utils.RenderLayerUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
@@ -8,7 +7,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomBlock extends Block implements BlockRegistrable {
+public class CustomBlock extends Block implements BlockRegistrable, BlockWithItem {
     private final AtomicBoolean registered = new AtomicBoolean(false);
     private BlockItem item = null;
 
@@ -28,27 +27,18 @@ public class CustomBlock extends Block implements BlockRegistrable {
         }
     }
 
+	@Override
     public BlockItem getItem() {
         return this.item;
     }
 
-    // Client
-    public void cutout() {
-        RenderLayerUtils.setCutout(this);
-    }
-
-    // Client
-    public void translucent() {
-        RenderLayerUtils.setTranslucent(this);
-    }
-
     @Override
     public boolean isNotRegistered() {
-        return !registered.get();
+        return !this.registered.get();
     }
 
     @Override
     public void setRegistered() {
-        registered.set(true);
+        this.registered.set(true);
     }
 }
