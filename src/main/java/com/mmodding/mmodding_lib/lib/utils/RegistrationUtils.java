@@ -10,7 +10,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
 
 public class RegistrationUtils {
@@ -36,5 +39,9 @@ public class RegistrationUtils {
 
 	public static void registerStructure(Identifier identifier, CustomStructure<?> structure) {
 		StructureFeatureAccessor.callRegister(identifier.toString(), structure, GenerationStep.Feature.SURFACE_STRUCTURES);
+	}
+
+	public static void registerBiome(Identifier identifier, Biome biome) {
+		Registry.register(BuiltinRegistries.BIOME, RegistryKey.of(Registry.BIOME_KEY, identifier), biome);
 	}
 }
