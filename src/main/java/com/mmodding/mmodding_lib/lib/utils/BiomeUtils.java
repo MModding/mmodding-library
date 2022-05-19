@@ -2,7 +2,8 @@ package com.mmodding.mmodding_lib.lib.utils;
 
 import net.minecraft.util.Holder;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.HeightLimitView;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -12,11 +13,9 @@ public class BiomeUtils {
 
 	public static void changeBiomeForBlock(World world, BlockPos pos, Biome biome) {
 		Chunk chunk = world.getChunk(pos);
-		HeightLimitView heightLimitView = chunk.getHeightLimitView();
+		ChunkSectionPos sectionPos = ChunkSectionPos.from(new ChunkPos(pos), ChunkSectionPos.getSectionCoord(pos.getY()));
 
-		for (int i = heightLimitView.getBottomSectionCoord(); i < heightLimitView.getTopSectionCoord(); i++) {
-			ChunkSection chunkSection = chunk.getSection(chunk.sectionCoordToIndex(i));
-			chunkSection.getBiomeContainer().set(pos.getX(), pos.getY(), pos.getZ(), Holder.createDirect(biome));
-		}
+		ChunkSection chunkSection = chunk.getSection(chunk.getSectionIndex(pos.getY()));
+		chunkSection.getBiomeContainer().setSync(sectionPos.getX(),	sectionPos.getY(), sectionPos.getZ(), Holder.createDirect(biome));
 	}
 }
