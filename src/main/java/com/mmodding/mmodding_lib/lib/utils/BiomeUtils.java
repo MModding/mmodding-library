@@ -10,12 +10,12 @@ import net.minecraft.world.chunk.ChunkSection;
 
 public class BiomeUtils {
 
-	public static void changeBiomeForBlock(World world, BlockPos pos, ChunkSection section, Biome biome) {
+	public static void changeBiomeForBlock(World world, BlockPos pos, Biome biome) {
 		Chunk chunk = world.getChunk(pos);
 		HeightLimitView heightLimitView = chunk.getHeightLimitView();
 
-		for (int k = heightLimitView.getBottomSectionCoord(); k < heightLimitView.getTopSectionCoord(); k++) {
-			ChunkSection chunkSection = chunk.getSection(chunk.sectionCoordToIndex(k));
+		for (int i = heightLimitView.getBottomSectionCoord(); i < heightLimitView.getTopSectionCoord(); i++) {
+			ChunkSection chunkSection = chunk.getSection(chunk.sectionCoordToIndex(i));
 			chunkSection.getBiomeContainer().set(pos.getX(), pos.getY(), pos.getZ(), Holder.createDirect(biome));
 		}
 	}
