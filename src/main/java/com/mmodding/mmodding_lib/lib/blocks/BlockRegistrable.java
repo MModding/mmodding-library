@@ -28,6 +28,6 @@ public interface BlockRegistrable extends Registrable {
 	}
 
 	default void translucent() {
-		if (this instanceof Block block) RenderLayerUtils.setCutout(block);
+		if (this instanceof Block block) RenderLayerUtils.setTranslucent(block);
 	}
 }

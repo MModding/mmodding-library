@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.lib.blocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -18,15 +19,16 @@ public class CustomStairsBlock extends StairsBlock implements BlockRegistrable, 
 	}
 
 	public CustomStairsBlock(BlockState blockState, Settings settings, boolean hasItem) {
-		this(blockState, settings, hasItem, null);
+		this(blockState, settings, hasItem, (ItemGroup) null);
 	}
 
 	public CustomStairsBlock(BlockState blockState, Settings settings, boolean hasItem, ItemGroup itemGroup) {
+		this(blockState, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+	}
+
+	public CustomStairsBlock(BlockState blockState, Settings settings, boolean hasItem, Item.Settings itemSettings) {
 		super(blockState, settings);
-		if (hasItem) {
-			if (itemGroup != null) this.item = new BlockItem(this, new QuiltItemSettings().group(itemGroup));
-			else this.item = new BlockItem(this, new QuiltItemSettings());
-		}
+		if (hasItem) this.item = new BlockItem(this, itemSettings);
 	}
 
 	@Override

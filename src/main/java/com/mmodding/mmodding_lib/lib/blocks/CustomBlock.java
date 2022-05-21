@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.lib.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -16,15 +17,16 @@ public class CustomBlock extends Block implements BlockRegistrable, BlockWithIte
     }
 
     public CustomBlock(Settings settings, boolean hasItem) {
-        this(settings, hasItem, null);
+        this(settings, hasItem, (ItemGroup) null);
     }
 
-    public CustomBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
+	public CustomBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
+		this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+	}
+
+    public CustomBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
         super(settings);
-        if (hasItem) {
-            if (itemGroup != null) this.item = new BlockItem(this, new QuiltItemSettings().group(itemGroup));
-            else this.item = new BlockItem(this, new QuiltItemSettings());
-        }
+        if (hasItem) this.item = new BlockItem(this, itemSettings);
     }
 
 	@Override

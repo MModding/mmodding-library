@@ -15,7 +15,7 @@ public interface MModdingModInitializer extends ModInitializer {
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	default void onInitialize(ModContainer mod) {
-		MModdingLib.mmoddingMods.add(mod);
+		MModdingLib.mmoddingMods.add(MModdingModContainer.from(mod));
 		for (ElementsInitializer elementsInitializer: this.getElementsInitializers()) elementsInitializer.register();
 	}
 
