@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.entities;
+package com.mmodding.mmodding_lib.library.entities;
 
 import com.google.common.collect.ImmutableSet;
 import net.fabricmc.fabric.impl.object.builder.FabricEntityType;

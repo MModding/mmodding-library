@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib;
 
-import com.mmodding.mmodding_lib.lib.base.MModdingModContainer;
+import com.mmodding.mmodding_lib.library.base.MModdingModContainer;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;

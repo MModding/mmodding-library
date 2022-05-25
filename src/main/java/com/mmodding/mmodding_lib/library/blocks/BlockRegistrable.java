@@ -1,8 +1,8 @@
-package com.mmodding.mmodding_lib.lib.blocks;
+package com.mmodding.mmodding_lib.library.blocks;
 
-import com.mmodding.mmodding_lib.lib.utils.Registrable;
-import com.mmodding.mmodding_lib.lib.utils.RegistrationUtils;
-import com.mmodding.mmodding_lib.lib.utils.RenderLayerUtils;
+import com.mmodding.mmodding_lib.library.utils.Registrable;
+import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
+import com.mmodding.mmodding_lib.library.utils.RenderLayerUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.Identifier;

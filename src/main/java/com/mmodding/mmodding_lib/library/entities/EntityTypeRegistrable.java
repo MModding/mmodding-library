@@ -1,7 +1,7 @@
-package com.mmodding.mmodding_lib.lib.entities;
+package com.mmodding.mmodding_lib.library.entities;
 
-import com.mmodding.mmodding_lib.lib.utils.Registrable;
-import com.mmodding.mmodding_lib.lib.utils.RegistrationUtils;
+import com.mmodding.mmodding_lib.library.utils.Registrable;
+import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 

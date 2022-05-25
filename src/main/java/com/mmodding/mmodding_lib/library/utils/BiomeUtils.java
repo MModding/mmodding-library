@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.utils;
+package com.mmodding.mmodding_lib.library.utils;
 
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;

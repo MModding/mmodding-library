@@ -1,7 +1,7 @@
-package com.mmodding.mmodding_lib.lib.items;
+package com.mmodding.mmodding_lib.library.items;
 
-import com.mmodding.mmodding_lib.lib.utils.Registrable;
-import com.mmodding.mmodding_lib.lib.utils.RegistrationUtils;
+import com.mmodding.mmodding_lib.library.utils.Registrable;
+import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 

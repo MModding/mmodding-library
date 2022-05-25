@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.base;
+package com.mmodding.mmodding_lib.library.base;
 
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.Version;

@@ -1,8 +1,7 @@
-package com.mmodding.mmodding_lib.lib.utils;
+package com.mmodding.mmodding_lib.library.utils;
 
-import com.mmodding.mmodding_lib.lib.blocks.BlockWithItem;
-import com.mmodding.mmodding_lib.lib.blocks.CustomBlock;
-import com.mmodding.mmodding_lib.lib.structures.CustomStructure;
+import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
+import com.mmodding.mmodding_lib.library.structures.CustomStructure;
 import com.mmodding.mmodding_lib.mixin.StructureFeatureAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;

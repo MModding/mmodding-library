@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.initializers;
+package com.mmodding.mmodding_lib.library.initializers;
 
 public interface ClientElementsInitializer {
 

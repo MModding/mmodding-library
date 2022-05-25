@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.items;
+package com.mmodding.mmodding_lib.library.items;
 
 import net.minecraft.item.Item;
 

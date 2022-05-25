@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.structures;
+package com.mmodding.mmodding_lib.library.structures;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.structure.PostPlacementProcessor;

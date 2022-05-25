@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.lib.blocks;
+package com.mmodding.mmodding_lib.library.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
