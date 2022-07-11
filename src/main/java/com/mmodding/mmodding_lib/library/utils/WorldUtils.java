@@ -9,6 +9,6 @@ import net.minecraft.world.explosion.Explosion;
 public class WorldUtils {
 
 	public static void pushExplosion(WorldAccess world, BlockPos pos, float power) {
-		new Explosion((World) world, null, DamageSources.PUSH, null, pos.getX(), pos.getY(), pos.getZ(), power, false, Explosion.DestructionType.NONE);
+		new Explosion((World) world, null, DamageSources.PUSH, null, pos.getX(), pos.getY(), pos.getZ(), power, false, Explosion.DestructionType.NONE).collectBlocksAndDamageEntities();
 	}
 }
