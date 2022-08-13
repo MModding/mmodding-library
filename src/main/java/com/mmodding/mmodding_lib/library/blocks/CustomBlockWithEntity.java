@@ -13,7 +13,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomBlockWithEntity extends BlockWithEntity implements BlockRegistrable, BlockWithItem {
+public abstract class CustomBlockWithEntity extends BlockWithEntity implements BlockRegistrable, BlockWithItem {
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 	private BlockItem item = null;
 
@@ -47,11 +47,5 @@ public class CustomBlockWithEntity extends BlockWithEntity implements BlockRegis
 	@Override
 	public void setRegistered() {
 		this.registered.set(true);
-	}
-
-	@Nullable
-	@Override
-	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return new CustomBlockEntity(pos, state);
 	}
 }
