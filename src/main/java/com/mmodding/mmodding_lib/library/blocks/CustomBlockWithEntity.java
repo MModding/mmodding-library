@@ -1,14 +1,9 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
-import com.mmodding.mmodding_lib.library.blockentities.CustomBlockEntity;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.util.math.BlockPos;
-import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
