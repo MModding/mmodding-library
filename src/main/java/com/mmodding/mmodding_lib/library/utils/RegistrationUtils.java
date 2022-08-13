@@ -3,10 +3,9 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.library.structures.CustomStructure;
 import com.mmodding.mmodding_lib.mixin.StructureFeatureAccessor;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
@@ -33,13 +32,6 @@ public class RegistrationUtils {
 	public static void registerNormalBlock(Identifier identifier, Block block, BlockItem blockItem) {
 		Registry.register(Registry.BLOCK, identifier, block);
 		Registry.register(Registry.ITEM, identifier, blockItem);
-	}
-
-	public static void registerBlockEntity(Identifier identifier, BlockEntity blockEntity) {
-		/*
-		Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier,
-			FabricBlockEntityTypeBuilder.create(DemoBlockEntity::new, DEMO_BLOCK).build());
-		*/
 	}
 
 	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {

@@ -30,6 +30,10 @@ dependencies {
 	modImplementation libs.quilted.fabric.api
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/mmodding_lib.accesswidener")
+}
+
 processResources {
 	inputs.property "version", version
 
