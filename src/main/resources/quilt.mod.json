@@ -36,6 +36,6 @@
 			}
 		]
 	},
-	"accessWidener" : "mmodding_lib.accesswidener",
+	"access_widener" : "mmodding_lib.accesswidener",
 	"mixin": "mmodding_lib.mixins.json"
 }
