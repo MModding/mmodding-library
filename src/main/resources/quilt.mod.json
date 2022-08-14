@@ -17,6 +17,7 @@
 			},
 			"icon": "assets/mmodding_lib/icon.png"
 		},
+		"accessWidener" : "mmodding_lib.accesswidener",
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"init": "com.mmodding.mmodding_lib.MModdingLib"
