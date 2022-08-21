@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +13,19 @@ public class MModdingLib implements ModInitializer {
 
 	public static MModdingModContainer mmoddingLib;
 
+	public static MModdingLibConfig config = new MModdingLibConfig();
+
 	public static final List<MModdingModContainer> mmoddingMods = new ArrayList<>();
 
 	@Override
 	public void onInitialize(ModContainer mod) {
 		mmoddingLib = MModdingModContainer.from(mod);
+
+		try {
+			config.initializeConfig();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
 		mmoddingLib.getLogger().info("Initialize {}", mmoddingLib.getName());
 
