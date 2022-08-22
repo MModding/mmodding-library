@@ -7,7 +7,6 @@ import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.io.IOException;
 import java.util.List;
 
 public interface MModdingClientModInitializer extends ClientModInitializer {
@@ -22,11 +21,7 @@ public interface MModdingClientModInitializer extends ClientModInitializer {
 	default void onInitializeClient(ModContainer mod) {
 		this.getClientElementsInitializers().forEach(ClientElementsInitializer::registerClient);
 		if (this.getClientConfig() != null) {
-			try {
-				this.getClientConfig().initializeConfig();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			this.getClientConfig().initializeConfig();
 		}
 	}
 

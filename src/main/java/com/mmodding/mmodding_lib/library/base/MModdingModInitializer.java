@@ -8,7 +8,6 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.io.IOException;
 import java.util.List;
 
 public interface MModdingModInitializer extends ModInitializer {
@@ -24,11 +23,7 @@ public interface MModdingModInitializer extends ModInitializer {
 		MModdingLib.mmoddingMods.add(MModdingModContainer.from(mod));
 		this.getElementsInitializers().forEach(ElementsInitializer::register);
 		if (this.getConfig() != null) {
-			try {
-				this.getConfig().initializeConfig();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			this.getConfig().initializeConfig();
 		}
 	}
 
