@@ -12,6 +12,7 @@ public class MModdingLibConfig implements Config {
 
 	@Override
 	public ConfigBuilder defaultConfig() {
-		return new ConfigBuilder();
+		return new ConfigBuilder()
+				.addBooleanParameter("showMModdingLibraryMods", true);
 	}
 }

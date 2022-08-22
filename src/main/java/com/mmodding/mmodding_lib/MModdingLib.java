@@ -21,20 +21,18 @@ public class MModdingLib implements ModInitializer {
 	public void onInitialize(ModContainer mod) {
 		mmoddingLib = MModdingModContainer.from(mod);
 
-		try {
-			config.initializeConfig();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		config.initializeConfig();
 
 		mmoddingLib.getLogger().info("Initialize {}", mmoddingLib.getName());
 
-		String mods = "MModding Library Mods :";
-		for (MModdingModContainer mmoddingMod: mmoddingMods) {
-			mods = mods.concat(" " + mmoddingMod.getName() + " [" + mmoddingMod.getIdentifier() + "],");
-		}
+		if (config.getContent().getBoolean("showMModdingLibraryMods")) {
+			String mods = "MModding Library Mods :";
+			for (MModdingModContainer mmoddingMod : mmoddingMods) {
+				mods = mods.concat(" " + mmoddingMod.getName() + " [" + mmoddingMod.getIdentifier() + "],");
+			}
 
-		mods = StringUtils.chop(mods);
-		mmoddingLib.getLogger().info(mods);
+			mods = StringUtils.chop(mods);
+			mmoddingLib.getLogger().info(mods);
+		}
 	}
 }

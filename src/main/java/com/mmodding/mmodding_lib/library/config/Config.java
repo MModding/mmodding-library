@@ -13,12 +13,16 @@ public interface Config {
 
 	ConfigBuilder defaultConfig();
 
-	default ConfigObject getContent() throws FileNotFoundException {
+	default ConfigObject getContent() {
 		return new ConfigObject(this.getReader().getAsJsonObject());
 	}
 
-	private JsonElement getReader() throws FileNotFoundException {
-		return JsonParser.parseReader(new FileReader(this.getPath()));
+	private JsonElement getReader() {
+		try {
+			return JsonParser.parseReader(new FileReader(this.getPath()));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private String getPath() {
@@ -29,7 +33,7 @@ public interface Config {
 				+ ".json";
 	}
 
-	default void initializeConfig() throws IOException {
+	default void initializeConfig() {
 		if (this.getFileName().contains("\\") || this.getFileName().contains("/")) {
 			String path = this.getFileName().replace("\\", "/");
 			String[] strings = path.split("/");
@@ -45,11 +49,15 @@ public interface Config {
 		}
 		File configFile = new File(this.getPath());
 		System.out.println(configFile.getPath());
-		if (configFile.createNewFile()) {
-			FileWriter configWriter = new FileWriter(configFile);
-			String json = new GsonBuilder().setPrettyPrinting().create().toJson(this.defaultConfig().getJsonObject());
-			configWriter.write(json);
-			configWriter.close();
+		try {
+			if (configFile.createNewFile()) {
+				FileWriter configWriter = new FileWriter(configFile);
+				String json = new GsonBuilder().setPrettyPrinting().create().toJson(this.defaultConfig().getJsonObject());
+				configWriter.write(json);
+				configWriter.close();
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

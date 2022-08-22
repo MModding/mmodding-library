@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.library.config;
 
 import com.google.gson.JsonObject;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
