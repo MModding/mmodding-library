@@ -5,6 +5,7 @@ quilt_mappings = "1.18.2+build.23"
 quilt_loader = "0.16.0-beta.16"
 
 quilted_fabric_api = "1.0.0-beta.13+0.51.1-1.18.2"
+modmenu = "3.2.3"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -12,6 +13,7 @@ quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_m
 quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
 
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 
 # If you have multiple similar dependencies, you can declare a dependency bundle and reference it on the build script with "libs.bundles.example".
 # [bundles]

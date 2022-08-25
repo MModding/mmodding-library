@@ -19,7 +19,8 @@
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "com.mmodding.mmodding_lib.MModdingLib"
+			"init": "com.mmodding.mmodding_lib.MModdingLib",
+			"modmenu": "com.mmodding.mmodding_lib.impl.ModMenuApiImpl"
 		},
 		"depends": [
 			{

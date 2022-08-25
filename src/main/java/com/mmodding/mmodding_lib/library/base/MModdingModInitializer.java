@@ -24,6 +24,7 @@ public interface MModdingModInitializer extends ModInitializer {
 		this.getElementsInitializers().forEach(ElementsInitializer::register);
 		if (this.getConfig() != null) {
 			this.getConfig().initializeConfig();
+			MModdingLib.configs.put(mod.metadata().id(), this.getConfig());
 		}
 	}
 

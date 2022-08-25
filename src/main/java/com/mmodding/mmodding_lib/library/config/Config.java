@@ -13,6 +13,8 @@ public interface Config {
 
 	ConfigBuilder defaultConfig();
 
+	ConfigScreenOptions getConfigOptions();
+
 	default ConfigObject getContent() {
 		return new ConfigObject(this.getReader().getAsJsonObject());
 	}

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.base;
 
+import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.initializers.ClientElementsInitializer;
 import org.quiltmc.loader.api.ModContainer;
@@ -22,6 +23,7 @@ public interface MModdingClientModInitializer extends ClientModInitializer {
 		this.getClientElementsInitializers().forEach(ClientElementsInitializer::registerClient);
 		if (this.getClientConfig() != null) {
 			this.getClientConfig().initializeConfig();
+			MModdingLib.configs.put(mod.metadata().id(), this.getClientConfig());
 		}
 	}
 
