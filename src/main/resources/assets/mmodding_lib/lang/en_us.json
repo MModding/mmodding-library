@@ -1,0 +1,6 @@
+{
+  "mmodding_lib.configs.string": "String",
+  "mmodding_lib.configs.integer": "Integer",
+  "mmodding_lib.configs.boolean": "Boolean",
+  "mmodding_lib.configs.null": "Null"
+}
