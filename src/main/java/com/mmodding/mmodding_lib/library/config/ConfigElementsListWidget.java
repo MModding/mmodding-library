@@ -6,7 +6,7 @@ import net.minecraft.text.TranslatableText;
 
 import java.util.Map;
 
-public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<ConfigElementListEntry> {
+public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<ConfigElementsListEntry> {
 	private final Config config;
 	private final ConfigScreen screen;
 
@@ -33,8 +33,13 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 
 	public void addConfigContent(Map<String, Object> configContentMap) {
 		configContentMap.forEach((string, configElement) -> {
-			this.addEntry(new ConfigElementListEntry(this.screen, new TranslatableText("config." + this.screen.getModId() + "." + string), configElement));
+			this.addEntry(new ConfigElementsListEntry(this.screen, new TranslatableText("config." + this.screen.getModId() + "." + string), configElement));
 		});
+	}
+
+	public void refreshConfigContent(Map<String, Object> configContentMap) {
+		this.clearEntries();
+		this.addConfigContent(configContentMap);
 	}
 
 	public Config getConfig() {

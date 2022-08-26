@@ -6,14 +6,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 
-public class ConfigElementListEntry extends AlwaysSelectedEntryListWidget.Entry<ConfigElementListEntry> {
+public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry<ConfigElementsListEntry> {
 
 	private final MinecraftClient client;
 	private final ConfigScreen screen;
 	private final Text fieldText;
 	private final Object fieldValue;
 
-	public ConfigElementListEntry(ConfigScreen screen, Text fieldText, Object fieldValue) {
+	public ConfigElementsListEntry(ConfigScreen screen, Text fieldText, Object fieldValue) {
 		this.client = MinecraftClient.getInstance();
 		this.screen = screen;
 		this.fieldText = fieldText;

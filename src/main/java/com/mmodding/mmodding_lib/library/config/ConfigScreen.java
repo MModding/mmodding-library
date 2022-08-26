@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ConfigScreen extends Screen {
@@ -16,7 +17,10 @@ public class ConfigScreen extends Screen {
 	private boolean initialized;
 
 	private ConfigElementsListWidget configElementsList;
-	private ButtonWidget doneButton;
+	private ButtonWidget modifyValueButton;
+	private ButtonWidget resetValueButton;
+	private ButtonWidget saveButton;
+	private ButtonWidget refreshButton;
 	private ButtonWidget cancelButton;
 
 	public ConfigScreen(String modId, Config config, Screen lastScreen) {
@@ -31,40 +35,50 @@ public class ConfigScreen extends Screen {
 		assert this.client != null;
 		this.client.keyboard.setRepeatEvents(true);
 		if (this.initialized) {
-			this.configElementsList.updateSize(this.width, this.height, 10, this.height - 40);
+			this.configElementsList.updateSize(this.width, this.height, 10, this.height - 60);
 		}
 		else {
 			this.initialized = true;
-			this.configElementsList = new ConfigElementsListWidget(this.config, this, this.client, this.width, this.height, 10, this.height - 40, 30);
+			this.configElementsList = new ConfigElementsListWidget(this.config, this, this.client, this.width, this.height, 10, this.height - 60, 30);
 			this.configElementsList.addConfigContent(this.config.getContent().getConfigElementsMap());
 		}
+		int w0 = this.width / 2 - 155;
+		int w1 = this.width / 2 + 5;
+		int w2 = this.width / 2 - 50;
+		int w3 = this.width / 2 + 55;
+		int h0 = this.height - 55;
+		int h1 = this.height - 30;
 		this.addSelectableChild(this.configElementsList);
-		this.doneButton = this.addDrawableChild(new ButtonWidget(
-				this.width / 2 - 155,
-				this.height - 30,
-				150,
-				20,
-				ScreenTexts.DONE,
-				button -> this.saveAndClose()
-		));
-		this.cancelButton = this.addDrawableChild(new ButtonWidget(
-				this.width / 2 + 5,
-				this.height - 30,
-				150,
-				20,
-				ScreenTexts.CANCEL,
-				button -> this.close()
-		));
+		this.modifyValueButton = this.addDrawableChild(new ButtonWidget(w0, h0, 150, 20, Text.of("Modify Value"), button -> this.modifyEntryValue()));
+		this.resetValueButton = this.addDrawableChild(new ButtonWidget(w1, h0, 150, 20, Text.of("Reset Value"), button -> this.resetEntryValue()));
+		this.saveButton = this.addDrawableChild(new ButtonWidget(w0, h1, 100, 20, Text.of("Save"), button -> this.saveAndClose()));
+		this.refreshButton = this.addDrawableChild(new ButtonWidget(w2, h1, 100, 20, Text.of("Refresh Config"), button -> this.refreshConfig()));
+		this.cancelButton = this.addDrawableChild(new ButtonWidget(w3, h1, 100, 20, ScreenTexts.CANCEL, button -> this.close()));
+		this.updateButtons();
 	}
 
-	public void select(ConfigElementListEntry entry) {
+	public void select(ConfigElementsListEntry entry) {
 		this.configElementsList.setSelected(entry);
+		this.updateButtons();
+	}
+
+	public void updateButtons() {
+		this.modifyValueButton.active = false;
+		this.resetValueButton.active = false;
+		ConfigElementsListEntry entry = this.configElementsList.getSelectedOrNull();
+		if (entry != null) {
+			this.modifyValueButton.active = true;
+			this.resetValueButton.active = true;
+		}
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.configElementsList.render(matrices, mouseX, mouseY, delta);
-		this.doneButton.render(matrices, mouseX, mouseY, delta);
+		this.modifyValueButton.render(matrices, mouseX, mouseY, delta);
+		this.resetValueButton.render(matrices, mouseX, mouseY, delta);
+		this.saveButton.render(matrices, mouseX, mouseY, delta);
+		this.refreshButton.render(matrices, mouseX, mouseY, delta);
 		this.cancelButton.render(matrices, mouseX, mouseY, delta);
 	}
 
@@ -103,8 +117,16 @@ public class ConfigScreen extends Screen {
 		tessellator.draw();
 	}
 
+	public void modifyEntryValue() {}
+
+	public void resetEntryValue() {}
+
 	public void saveAndClose() {
 		this.close();
+	}
+
+	public void refreshConfig() {
+		this.configElementsList.refreshConfigContent(this.config.getContent().getConfigElementsMap());
 	}
 
 	public void close() {
