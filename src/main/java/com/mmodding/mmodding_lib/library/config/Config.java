@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.config;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
 import org.quiltmc.loader.api.QuiltLoader;
 
 import java.io.*;
@@ -11,7 +12,7 @@ public interface Config {
 
 	String getFileName();
 
-	ConfigBuilder defaultConfig();
+	ConfigObject.Builder defaultConfig();
 
 	ConfigScreenOptions getConfigOptions();
 
@@ -28,10 +29,10 @@ public interface Config {
 	}
 
 	private String getPath() {
-		return QuiltLoader.getConfigDir().toString() + ConfigBuilder.getSeparator() +
+		return QuiltLoader.getConfigDir().toString() + ConfigUtils.getSeparator() +
 				this.getFileName()
-						.replace("\\", ConfigBuilder.getSeparator())
-						.replace("/", ConfigBuilder.getSeparator())
+						.replace("\\", ConfigUtils.getSeparator())
+						.replace("/", ConfigUtils.getSeparator())
 				+ ".json";
 	}
 
@@ -44,8 +45,8 @@ public interface Config {
 			for (String string: strings) {
 				counter ++;
 				if (strings.length > counter) {
-					new File(QuiltLoader.getConfigDir().toString() + ConfigBuilder.getSeparator() + temp + string).mkdirs();
-					temp.append(string).append(ConfigBuilder.getSeparator());
+					new File(QuiltLoader.getConfigDir().toString() + ConfigUtils.getSeparator() + temp + string).mkdirs();
+					temp.append(string).append(ConfigUtils.getSeparator());
 				}
 			}
 		}

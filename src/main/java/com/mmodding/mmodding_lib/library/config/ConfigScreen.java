@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class ConfigScreen extends Screen {
 
+	private final String modId;
 	private final Config config;
 	private final Screen lastScreen;
 	private boolean initialized;
@@ -18,8 +19,9 @@ public class ConfigScreen extends Screen {
 	private ButtonWidget doneButton;
 	private ButtonWidget cancelButton;
 
-	public ConfigScreen(Config config, Screen lastScreen) {
+	public ConfigScreen(String modId, Config config, Screen lastScreen) {
 		super(config.getConfigOptions().name());
+		this.modId = modId;
 		this.config = config;
 		this.lastScreen = lastScreen;
 	}
@@ -33,9 +35,10 @@ public class ConfigScreen extends Screen {
 		}
 		else {
 			this.initialized = true;
-			this.configElementsList = new ConfigElementsListWidget(this.config, this.client, this.width, this.height, 10, this.height - 40, 30);
+			this.configElementsList = new ConfigElementsListWidget(this.config, this, this.client, this.width, this.height, 10, this.height - 40, 30);
 			this.configElementsList.addConfigContent(this.config.getContent().getConfigElementsMap());
 		}
+		this.addSelectableChild(this.configElementsList);
 		this.doneButton = this.addDrawableChild(new ButtonWidget(
 				this.width / 2 - 155,
 				this.height - 30,
@@ -52,6 +55,10 @@ public class ConfigScreen extends Screen {
 				ScreenTexts.CANCEL,
 				button -> this.close()
 		));
+	}
+
+	public void select(ConfigElementListEntry entry) {
+		this.configElementsList.setSelected(entry);
 	}
 
 	@Override
@@ -103,6 +110,10 @@ public class ConfigScreen extends Screen {
 	public void close() {
 		assert this.client != null;
 		this.client.setScreen(lastScreen);
+	}
+
+	public String getModId() {
+		return this.modId;
 	}
 
 	public static class BlockTextureLocation extends Identifier {

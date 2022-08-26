@@ -16,7 +16,7 @@ public class MModdingScreen extends ConfigScreen {
 	private ButtonWidget returnButton;
 
 	public MModdingScreen(Screen lastScreen) {
-		super(MModdingLib.config, lastScreen);
+		super("mmodding", MModdingLib.config, lastScreen);
 		this.lastScreen = lastScreen;
 	}
 

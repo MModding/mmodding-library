@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.config;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class ConfigObject {
 
@@ -71,11 +73,66 @@ public class ConfigObject {
 		}
 	}
 
-	public enum ElementType {
-		STRING,
-		INTEGER,
-		BOOLEAN,
-		ARRAY,
-		CATEGORY
+	public static class Builder {
+
+		private final JsonObject jsonObject;
+
+		public Builder() {
+			this.jsonObject = new JsonObject();
+		}
+
+		private Builder(ConfigObject from) {
+			this.jsonObject = from.jsonObject;
+		}
+
+		public static Builder fromConfigObject(ConfigObject configObject) {
+			return new Builder(configObject);
+		}
+
+		public Builder addStringParameter(String parameter, String value) {
+			this.jsonObject.addProperty(parameter, value);
+			return this;
+		}
+
+		public Builder addIntegerParameter(String parameter, int value) {
+			this.jsonObject.addProperty(parameter, value);
+			return this;
+		}
+
+		public Builder addBooleanParameter(String parameter, boolean value) {
+			this.jsonObject.addProperty(parameter, value);
+			return this;
+		}
+
+		public Builder addArray(String arrayName, Consumer<List<Object>> listConsumer) {
+			List<Object> list = new ArrayList<>();
+			listConsumer.accept(list);
+			this.jsonObject.add(arrayName, new JsonArray());
+			list.forEach((element) -> {
+				if (element instanceof String string) {
+					this.jsonObject.getAsJsonArray(arrayName).add(string);
+				}
+				else if (element instanceof Number number) {
+					this.jsonObject.getAsJsonArray(arrayName).add(number);
+				}
+				else if (element instanceof Boolean bool) {
+					this.jsonObject.getAsJsonArray(arrayName).add(bool);
+				}
+			});
+			return this;
+		}
+
+		public Builder addCategory(String categoryName, Builder category) {
+			this.jsonObject.add(categoryName, category.getJsonObject());
+			return this;
+		}
+
+		public JsonObject getJsonObject() {
+			return this.jsonObject;
+		}
+
+		public ConfigObject build() {
+			return new ConfigObject(this.jsonObject);
+		}
 	}
 }

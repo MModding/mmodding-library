@@ -1,9 +1,6 @@
 package com.mmodding.mmodding_lib;
 
-import com.mmodding.mmodding_lib.library.config.ConfigBuilder;
-import com.mmodding.mmodding_lib.library.config.Config;
-import com.mmodding.mmodding_lib.library.config.ConfigScreen;
-import com.mmodding.mmodding_lib.library.config.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.library.config.*;
 import net.minecraft.text.Text;
 
 public class MModdingLibConfig implements Config {
@@ -14,8 +11,8 @@ public class MModdingLibConfig implements Config {
 	}
 
 	@Override
-	public ConfigBuilder defaultConfig() {
-		return new ConfigBuilder()
+	public ConfigObject.Builder defaultConfig() {
+		return new ConfigObject.Builder()
 				.addBooleanParameter("showMModdingLibraryMods", true);
 	}
 
