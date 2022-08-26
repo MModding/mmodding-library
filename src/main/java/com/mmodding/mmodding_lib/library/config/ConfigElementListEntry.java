@@ -24,6 +24,6 @@ public class ConfigElementListEntry extends AlwaysSelectedEntryListWidget.Entry<
 
 	@Override
 	public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-		this.client.textRenderer.draw(matrices, this.fieldText, (float) entryWidth / 8, (float) entryHeight / 2, 16777215);
+		this.client.textRenderer.draw(matrices, this.fieldText, (float) x + 3, (float) y + 1, 16777215);
 	}
 }

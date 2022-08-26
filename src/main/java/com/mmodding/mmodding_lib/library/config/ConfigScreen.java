@@ -2,17 +2,21 @@ package com.mmodding.mmodding_lib.library.config;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class ConfigScreen extends Screen implements AutoCloseable {
+public class ConfigScreen extends Screen {
 
-	private Config config;
-	private Screen lastScreen;
+	private final Config config;
+	private final Screen lastScreen;
 	private boolean initialized;
 
 	private ConfigElementsListWidget configElementsList;
+	private ButtonWidget doneButton;
+	private ButtonWidget cancelButton;
 
 	public ConfigScreen(Config config, Screen lastScreen) {
 		super(config.getConfigOptions().name());
@@ -25,17 +29,40 @@ public class ConfigScreen extends Screen implements AutoCloseable {
 		assert this.client != null;
 		this.client.keyboard.setRepeatEvents(true);
 		if (this.initialized) {
-			this.configElementsList.updateSize(this.width, this.height, 32, this.height - 64);
+			this.configElementsList.updateSize(this.width, this.height, 10, this.height - 40);
 		}
 		else {
 			this.initialized = true;
-			this.configElementsList = new ConfigElementsListWidget(this.client, this.width, this.height, 32, this.height - 64, 36);
+			this.configElementsList = new ConfigElementsListWidget(this.config, this.client, this.width, this.height, 10, this.height - 40, 30);
 			this.configElementsList.addConfigContent(this.config.getContent().getConfigElementsMap());
 		}
+		this.doneButton = this.addDrawableChild(new ButtonWidget(
+				this.width / 2 - 155,
+				this.height - 30,
+				150,
+				20,
+				ScreenTexts.DONE,
+				button -> this.saveAndClose()
+		));
+		this.cancelButton = this.addDrawableChild(new ButtonWidget(
+				this.width / 2 + 5,
+				this.height - 30,
+				150,
+				20,
+				ScreenTexts.CANCEL,
+				button -> this.close()
+		));
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.configElementsList.render(matrices, mouseX, mouseY, delta);
+		this.doneButton.render(matrices, mouseX, mouseY, delta);
+		this.cancelButton.render(matrices, mouseX, mouseY, delta);
+	}
+
+	@Override
+	public void renderBackground(MatrixStack matrices) {
 		this.renderBlockTextureAsBackgroundTexture(this.config.getConfigOptions().blockTextureLocation());
 	}
 
@@ -69,7 +96,10 @@ public class ConfigScreen extends Screen implements AutoCloseable {
 		tessellator.draw();
 	}
 
-	@Override
+	public void saveAndClose() {
+		this.close();
+	}
+
 	public void close() {
 		assert this.client != null;
 		this.client.setScreen(lastScreen);
