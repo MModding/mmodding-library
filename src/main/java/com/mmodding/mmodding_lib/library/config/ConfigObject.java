@@ -127,6 +127,21 @@ public class ConfigObject {
 			return this;
 		}
 
+		public Builder setStringParameter(String parameter, String value) {
+			this.jsonObject.remove(parameter);
+			return this.addStringParameter(parameter, value);
+		}
+
+		public Builder setIntegerParameter(String parameter, int value) {
+			this.jsonObject.remove(parameter);
+			return this.addIntegerParameter(parameter, value);
+		}
+
+		public Builder setBooleanParameter(String parameter, boolean value) {
+			this.jsonObject.remove(parameter);
+			return this.addBooleanParameter(parameter, value);
+		}
+
 		public JsonObject getJsonObject() {
 			return this.jsonObject;
 		}

@@ -12,7 +12,7 @@ public interface Config {
 
 	String getFileName();
 
-	ConfigObject.Builder defaultConfig();
+	ConfigObject defaultConfig();
 
 	ConfigScreenOptions getConfigOptions();
 
@@ -36,6 +36,22 @@ public interface Config {
 				+ ".json";
 	}
 
+	default void saveConfig(ConfigObject configObject) {
+		File configFile = new File(this.getPath());
+		System.out.println(configFile.getPath());
+		try {
+			if (configFile.createNewFile()) {
+				FileWriter configWriter = new FileWriter(configFile);
+				String json = new GsonBuilder().setPrettyPrinting().create()
+						.toJson(ConfigObject.Builder.fromConfigObject(configObject).getJsonObject());
+				configWriter.write(json);
+				configWriter.close();
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	default void initializeConfig() {
 		if (this.getFileName().contains("\\") || this.getFileName().contains("/")) {
 			String path = this.getFileName().replace("\\", "/");
@@ -50,17 +66,6 @@ public interface Config {
 				}
 			}
 		}
-		File configFile = new File(this.getPath());
-		System.out.println(configFile.getPath());
-		try {
-			if (configFile.createNewFile()) {
-				FileWriter configWriter = new FileWriter(configFile);
-				String json = new GsonBuilder().setPrettyPrinting().create().toJson(this.defaultConfig().getJsonObject());
-				configWriter.write(json);
-				configWriter.close();
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		this.saveConfig(this.defaultConfig());
 	}
 }
