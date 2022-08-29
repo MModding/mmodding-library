@@ -8,7 +8,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class CustomFallingBlock extends FallingBlock implements BlockRegistrable, BlockWithItem {
+public class CustomFallingBlock extends FallingBlock implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 	private BlockItem item = null;
