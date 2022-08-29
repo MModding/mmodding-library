@@ -16,7 +16,7 @@ public class RenderLayerUtils {
 		BlockRenderLayerMap.put(RenderLayer.getTranslucent(), block);
     }
 
-	public void addEntityBuilder(RenderLayer layer) {
+	public static void addEntityBuilder(RenderLayer layer) {
 		((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).getEntityBuilders().put(layer, new BufferBuilder(layer.getExpectedBufferSize()));
 	}
 }
