@@ -9,6 +9,7 @@
     "StructureFeatureAccessor"
   ],
   "client": [
+    "BufferBuilderStorageAccessor",
     "EntryListWidgetMixin"
   ],
   "injectors": {
