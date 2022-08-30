@@ -8,10 +8,10 @@ public interface TickOperations {
 
 	default void checkTickForOperation(int tick, Runnable runnable) {
 		if (this.getTickValue() >= tick) {
-			this.setTickValue(tick + 1);
-		} else {
 			runnable.run();
 			this.setTickValue(0);
+		} else {
+			this.setTickValue(tick + 1);
 		}
 	}
 }
