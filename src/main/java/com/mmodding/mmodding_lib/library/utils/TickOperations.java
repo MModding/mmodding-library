@@ -11,7 +11,7 @@ public interface TickOperations {
 			runnable.run();
 			this.setTickValue(0);
 		} else {
-			this.setTickValue(tick + 1);
+			this.setTickValue(this.getTickValue() + 1);
 		}
 	}
 }
