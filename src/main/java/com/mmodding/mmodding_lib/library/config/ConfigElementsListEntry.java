@@ -10,25 +10,25 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 
 	private final MinecraftClient client;
 	private final ConfigScreen screen;
-	private final Text fieldText;
+	private final String fieldString;
 	private final Object fieldValue;
 
-	public ConfigElementsListEntry(ConfigScreen screen, Text fieldText, Object fieldValue) {
+	public ConfigElementsListEntry(ConfigScreen screen, String fieldString, Object fieldValue) {
 		this.client = MinecraftClient.getInstance();
 		this.screen = screen;
-		this.fieldText = fieldText;
+		this.fieldString = fieldString;
 		this.fieldValue = fieldValue;
 	}
 
 	@Override
 	public Text getNarration() {
-		return fieldText;
+		return Text.of(this.fieldString);
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 		float yEntry = (float) entryHeight / 3 + y;
-		this.client.textRenderer.draw(matrices, this.fieldText, (float) 5 + x, yEntry, 16777215);
+		this.client.textRenderer.draw(matrices, new TranslatableText("config." + this.screen.getModId() + "." + this.fieldString), (float) 5 + x, yEntry, 16777215);
 		Text fieldType;
 		int color;
 		String stringValue;
@@ -60,5 +60,9 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		this.screen.select(this);
 		return true;
+	}
+
+	public String getFieldName() {
+		return this.fieldString;
 	}
 }

@@ -6,7 +6,7 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "MModding Library",
-			"description": "None",
+			"description": "The MModding Library is the Main Library for MModding Mods.",
 			"contributors": {
 				"MModding Team": "Owner"
 			},

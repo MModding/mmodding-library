@@ -117,11 +117,23 @@ public class ConfigScreen extends Screen {
 		tessellator.draw();
 	}
 
-	public void modifyEntryValue() {}
+	public void modifyEntryValue() {
+		ConfigElementsListEntry entry = this.configElementsList.getSelectedOrNull();
+		if (entry != null) {
+			this.configElementsList.modifyParameter(entry);
+		}
+	}
 
-	public void resetEntryValue() {}
+	public void resetEntryValue() {
+		ConfigElementsListEntry entry = this.configElementsList.getSelectedOrNull();
+		if (entry != null) {
+			this.configElementsList.resetParameter(entry);
+			this.disableRefreshing();
+		}
+	}
 
 	public void saveAndClose() {
+		this.config.saveConfig(this.configElementsList.getMutableConfig());
 		this.close();
 	}
 
@@ -132,6 +144,10 @@ public class ConfigScreen extends Screen {
 	public void close() {
 		assert this.client != null;
 		this.client.setScreen(lastScreen);
+	}
+
+	public void disableRefreshing() {
+		this.refreshButton.active = false;
 	}
 
 	public String getModId() {

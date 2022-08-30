@@ -37,16 +37,12 @@ public interface Config {
 	}
 
 	default void saveConfig(ConfigObject configObject) {
-		File configFile = new File(this.getPath());
-		System.out.println(configFile.getPath());
 		try {
-			if (configFile.createNewFile()) {
-				FileWriter configWriter = new FileWriter(configFile);
-				String json = new GsonBuilder().setPrettyPrinting().create()
-						.toJson(ConfigObject.Builder.fromConfigObject(configObject).getJsonObject());
-				configWriter.write(json);
-				configWriter.close();
-			}
+			FileWriter configWriter = new FileWriter(this.getPath());
+			String json = new GsonBuilder().setPrettyPrinting().create()
+					.toJson(ConfigObject.Builder.fromConfigObject(this.defaultConfig()).getJsonObject());
+			configWriter.write(json);
+			configWriter.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -66,6 +62,18 @@ public interface Config {
 				}
 			}
 		}
-		this.saveConfig(this.defaultConfig());
+		File configFile = new File(this.getPath());
+		System.out.println(configFile.getPath());
+		try {
+			if (configFile.createNewFile()) {
+				FileWriter configWriter = new FileWriter(configFile);
+				String json = new GsonBuilder().setPrettyPrinting().create()
+						.toJson(ConfigObject.Builder.fromConfigObject(this.defaultConfig()).getJsonObject());
+				configWriter.write(json);
+				configWriter.close();
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
