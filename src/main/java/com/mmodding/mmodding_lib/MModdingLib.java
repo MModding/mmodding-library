@@ -2,12 +2,9 @@ package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.library.base.MModdingModContainer;
 import com.mmodding.mmodding_lib.library.config.Config;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +28,8 @@ public class MModdingLib implements ModInitializer {
 		config.initializeConfig();
 
 		mmoddingLib.getLogger().info("Initialize {}", mmoddingLib.getName());
+
+		Events.register();
 
 		if (config.getContent().getBoolean("showMModdingLibraryMods")) {
 			String mods = "MModding Library Mods :";

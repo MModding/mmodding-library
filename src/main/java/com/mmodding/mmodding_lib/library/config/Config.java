@@ -40,7 +40,7 @@ public interface Config {
 		try {
 			FileWriter configWriter = new FileWriter(this.getPath());
 			String json = new GsonBuilder().setPrettyPrinting().create()
-					.toJson(ConfigObject.Builder.fromConfigObject(this.defaultConfig()).getJsonObject());
+					.toJson(ConfigObject.Builder.fromConfigObject(configObject).getJsonObject());
 			configWriter.write(json);
 			configWriter.close();
 		} catch (IOException e) {
