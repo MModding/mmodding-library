@@ -1,11 +1,14 @@
 package com.mmodding.mmodding_lib.library.items;
 
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
+import net.minecraft.world.World;
 import org.quiltmc.qsl.item.setting.api.CustomDamageHandler;
 import org.quiltmc.qsl.item.setting.api.CustomItemSetting;
 import org.quiltmc.qsl.item.setting.api.EquipmentSlotProvider;
@@ -15,13 +18,18 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(() -> false);
+	public static final CustomItemSetting<ItemUseSetting> ITEM_USE = CustomItemSetting.create(() -> null);
 
 	public CustomItemSettings descriptionLines(Text... descriptionLines) {
 		return this.customSetting(DESCRIPTION_LINES, descriptionLines);
 	}
 
-	public CustomItemSettings glint(boolean glint) {
-		return this.customSetting(GLINT, glint);
+	public CustomItemSettings glint() {
+		return this.customSetting(GLINT, true);
+	}
+
+	public CustomItemSettings itemUse(ItemUseSetting itemUseSetting) {
+		return this.customSetting(ITEM_USE, itemUseSetting);
 	}
 
 	@Override
@@ -94,5 +102,10 @@ public class CustomItemSettings extends QuiltItemSettings {
 	public CustomItemSettings fireproof() {
 		super.fireproof();
 		return this;
+	}
+
+	public interface ItemUseSetting {
+
+		void apply(World world, PlayerEntity user, Hand hand);
 	}
 }
