@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin;
+package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.items.CustomItemSettings;
 import net.minecraft.entity.player.PlayerEntity;

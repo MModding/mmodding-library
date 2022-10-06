@@ -4,14 +4,15 @@
   "package": "com.mmodding.mmodding_lib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BlockEntityTypeAccessor",
-    "ExplosionMixin",
-    "ItemMixin",
-    "StructureFeatureAccessor"
+    "accessors.BlockEntityTypeAccessor",
+    "accessors.BrewingRecipeRegistryAccessor",
+    "accessors.StructureFeatureAccessor",
+    "injectors.ExplosionMixin",
+    "injectors.ItemMixin"
   ],
   "client": [
-    "BufferBuilderStorageAccessor",
-    "EntryListWidgetMixin"
+    "accessors.BufferBuilderStorageAccessor",
+    "injectors.EntryListWidgetMixin"
   ],
   "injectors": {
     "defaultRequire": 1

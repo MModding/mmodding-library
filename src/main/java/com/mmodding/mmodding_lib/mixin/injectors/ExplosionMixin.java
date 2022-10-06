@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin;
+package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.DamageSources;
 import net.minecraft.entity.Entity;

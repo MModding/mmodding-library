@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.blockentities;
 
-import com.mmodding.mmodding_lib.mixin.BlockEntityTypeAccessor;
+import com.mmodding.mmodding_lib.mixin.accessors.BlockEntityTypeAccessor;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;

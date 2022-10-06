@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin;
+package com.mmodding.mmodding_lib.mixin.accessors;
 
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.StructureFeature;

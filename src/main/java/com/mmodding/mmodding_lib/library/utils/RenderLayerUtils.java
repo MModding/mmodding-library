@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.utils;
 
-import com.mmodding.mmodding_lib.mixin.BufferBuilderStorageAccessor;
+import com.mmodding.mmodding_lib.mixin.accessors.BufferBuilderStorageAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;

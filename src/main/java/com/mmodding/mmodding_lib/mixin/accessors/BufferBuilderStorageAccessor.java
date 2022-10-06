@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin;
+package com.mmodding.mmodding_lib.mixin.accessors;
 
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferBuilderStorage;

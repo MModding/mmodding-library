@@ -2,14 +2,14 @@ package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.library.structures.CustomStructure;
-import com.mmodding.mmodding_lib.mixin.StructureFeatureAccessor;
+import com.mmodding.mmodding_lib.mixin.accessors.StructureFeatureAccessor;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -20,6 +20,10 @@ import net.minecraft.world.gen.GenerationStep;
 public class RegistrationUtils {
 	public static void registerItem(Identifier identifier, Item item) {
 		Registry.register(Registry.ITEM, identifier, item);
+	}
+
+	public static void registerPotion(Identifier identifier, Potion potion) {
+		Registry.register(Registry.POTION, identifier, potion);
 	}
 
 	public static void registerBlock(Identifier identifier, BlockWithItem blockWithItem) {

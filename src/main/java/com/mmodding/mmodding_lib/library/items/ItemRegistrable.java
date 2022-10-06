@@ -6,9 +6,10 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
 public interface ItemRegistrable extends Registrable {
+
     default void register(Identifier identifier) {
-        if (this instanceof Item && this.isNotRegistered()) {
-            RegistrationUtils.registerItem(identifier, (Item) this);
+        if (this instanceof Item item && this.isNotRegistered()) {
+            RegistrationUtils.registerItem(identifier, item);
             this.setRegistered();
         }
     }
