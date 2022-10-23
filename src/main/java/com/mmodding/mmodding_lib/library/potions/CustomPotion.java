@@ -20,6 +20,12 @@ public class CustomPotion extends Potion implements PotionRegistrable {
 		super(string, statusEffectInstances);
 	}
 
+	/**
+	 * @apiNote Must be used in a class that extends MModdingBootStrapInitializer
+	 * @param basePotion the potion at the start of the potion creation
+	 * @param ingredient the ingredient needed to make the potion
+	 * @see com.mmodding.mmodding_lib.library.base.MModdingBootStrapInitializer
+	*/
 	public CustomPotion addBrewingRecipe(Potion basePotion, Item ingredient) {
 		BrewingRecipeRegistryAccessor.registerPotionRecipe(basePotion, ingredient, this);
 		return this;

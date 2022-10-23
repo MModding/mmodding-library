@@ -23,7 +23,7 @@ public interface MModdingClientModInitializer extends ClientModInitializer {
 		this.getClientElementsInitializers().forEach(ClientElementsInitializer::registerClient);
 		if (this.getClientConfig() != null) {
 			this.getClientConfig().initializeConfig();
-			MModdingLib.configs.put(mod.metadata().id(), this.getClientConfig());
+			MModdingLib.configs.put(mod.metadata().id() + "_client", this.getClientConfig());
 		}
 	}
 

@@ -8,11 +8,5 @@ import java.util.List;
 
 public class Events {
 
-	public static void register() {
-
-		ItemTooltipCallback.EVENT.register((stack, player, context, lines) -> {
-			Text[] texts = CustomItemSettings.DESCRIPTION_LINES.get(stack.getItem());
-			if (texts != null) lines.addAll(List.of(texts));
-		});
-	}
+	public static void register() {}
 }

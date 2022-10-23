@@ -6,6 +6,11 @@ import net.minecraft.text.Text;
 public class MModdingLibConfig implements Config {
 
 	@Override
+	public String getConfigName() {
+		return "mmodding_lib";
+	}
+
+	@Override
 	public String getFileName() {
 		return "mmodding/common";
 	}
