@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.client.events;
+package com.mmodding.mmodding_lib.library.client.events;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import net.fabricmc.api.EnvType;

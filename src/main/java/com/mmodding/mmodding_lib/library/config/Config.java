@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.library.config;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mmodding.mmodding_lib.client.ServerOperations;
+import com.mmodding.mmodding_lib.library.client.ServerOperations;
 import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

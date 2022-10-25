@@ -1,8 +1,8 @@
-package com.mmodding.mmodding_lib.client;
+package com.mmodding.mmodding_lib.library.client;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.server.events.ServerConfigNetworkingEvents;
+import com.mmodding.mmodding_lib.library.server.events.ServerConfigNetworkingEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
