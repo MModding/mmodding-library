@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.events.config.ConfigNetworkingEvents;
+import com.mmodding.mmodding_lib.server.events.ServerConfigNetworkingEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
@@ -19,8 +19,10 @@ public class ServerOperations {
 		packet.writeString(config.getConfigName());
 		packet.writeString(ConfigObject.Builder.fromConfigObject(config.getContent()).getJsonObject().toString());
 
-		ConfigNetworkingEvents.BEFORE.invoker().beforeConfigSent(config);
+		ServerConfigNetworkingEvents.BEFORE.invoker().beforeConfigSent(config);
 
 		ServerPlayNetworking.send(player, new Identifier("configs-channel"), packet);
+
+		ServerConfigNetworkingEvents.AFTER.invoker().afterConfigSent(config);
 	}
 }
