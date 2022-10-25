@@ -3,15 +3,12 @@ package com.mmodding.mmodding_lib.library.config;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import com.mmodding.mmodding_lib.client.ClientPacketReceivers;
+import com.mmodding.mmodding_lib.client.ServerOperations;
 import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
-import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.world.WorldAccess;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 import java.io.*;
 
@@ -29,16 +26,9 @@ public interface Config {
 		return new ConfigObject(this.getReader().getAsJsonObject());
 	}
 
-	default ConfigObject getServerContent() {
-		PacketByteBuf packet = PacketByteBufs.create();
-		packet.writeString(this.getConfigName());
-		ClientPlayNetworking.send(new MModdingIdentifier("config-requests"), packet);
-		return new ConfigObject(JsonParser.parseString(ClientPacketReceivers.FROM_SERVER_CONFIG).getAsJsonObject());
-	}
-
-	default ConfigObject getContentDynamically(WorldAccess world) {
-		if (world.isClient()) return this.getContent();
-		else return this.getServerContent();
+	@Environment(EnvType.SERVER)
+	default void sendServerConfigToClient(ServerPlayerEntity player) {
+		ServerOperations.sendConfigToClient(this, player);
 	}
 
 	private JsonElement getReader() {

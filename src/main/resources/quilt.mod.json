@@ -20,6 +20,7 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
 			"init": "com.mmodding.mmodding_lib.MModdingLib",
+			"client_init": "com.mmodding.mmodding_lib.client.MModdingLibClient",
 			"modmenu": "com.mmodding.mmodding_lib.impl.ModMenuApiImpl"
 		},
 		"depends": [
