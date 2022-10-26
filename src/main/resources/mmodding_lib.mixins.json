@@ -8,6 +8,7 @@
     "accessors.BrewingRecipeRegistryAccessor",
     "accessors.StructureFeatureAccessor",
     "injectors.BootStrapMixin",
+    "injectors.EnchantmentHelperMixin",
     "injectors.ExplosionMixin",
     "injectors.ItemMixin"
   ],

@@ -26,6 +26,10 @@ public class RegistrationUtils {
 		Registry.register(Registry.POTION, identifier, potion);
 	}
 
+	public static void registerEnchantment(Identifier identifier, Enchantment enchantment) {
+		Registry.register(Registry.ENCHANTMENT, identifier, enchantment);
+	}
+
 	public static void registerBlock(Identifier identifier, BlockWithItem blockWithItem) {
 		if (blockWithItem instanceof Block block) {
 			Registry.register(Registry.BLOCK, identifier, block);
