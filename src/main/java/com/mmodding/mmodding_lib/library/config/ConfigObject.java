@@ -73,6 +73,10 @@ public class ConfigObject {
 		}
 	}
 
+	public ConfigObject copy() {
+		return new ConfigObject(this.jsonObject);
+	}
+
 	public static class Builder {
 
 		private final JsonObject jsonObject;

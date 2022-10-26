@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.base;
 
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.MModdingLibClient;
+import com.mmodding.mmodding_lib.client.TemporaryConfig;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.initializers.ElementsInitializer;
 import net.fabricmc.api.EnvType;
@@ -29,9 +30,8 @@ public interface MModdingModInitializer extends ModInitializer {
 			this.getConfig().initializeConfig();
 			MModdingLib.configs.put(this.getConfig().getConfigName(), this.getConfig());
 			if (MinecraftQuiltLoader.getEnvironmentType() == EnvType.CLIENT) {
-				MModdingLibClient.clientConfigs.put(this.getConfig().getConfigName(), this.getConfig());
+				MModdingLibClient.clientConfigs.put(this.getConfig().getConfigName(), TemporaryConfig.fromConfig(this.getConfig()));
 			}
 		}
 	}
-
 }
