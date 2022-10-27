@@ -3,12 +3,11 @@ package com.mmodding.mmodding_lib.library.config;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mmodding.mmodding_lib.library.client.ServerOperations;
+import com.mmodding.mmodding_lib.library.server.ServerOperations;
 import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.quiltmc.loader.api.QuiltLoader;
+import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 
 import java.io.*;
 
@@ -26,7 +25,7 @@ public interface Config {
 		return new ConfigObject(this.getReader().getAsJsonObject());
 	}
 
-	@Environment(EnvType.SERVER)
+	@DedicatedServerOnly
 	default void sendServerConfigToClient(ServerPlayerEntity player) {
 		ServerOperations.sendConfigToClient(this, player);
 	}

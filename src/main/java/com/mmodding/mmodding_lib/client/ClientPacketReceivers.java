@@ -4,12 +4,11 @@ import com.google.gson.JsonParser;
 import com.mmodding.mmodding_lib.library.client.events.ClientConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class ClientPacketReceivers {
 
 	public static void register() {

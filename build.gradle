@@ -27,6 +27,8 @@ dependencies {
 	modImplementation libs.quilt.loader
 
 	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
+	modImplementation libs.qsl
+
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation libs.quilted.fabric.api
 

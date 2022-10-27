@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.client;
+package com.mmodding.mmodding_lib.library.client;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;

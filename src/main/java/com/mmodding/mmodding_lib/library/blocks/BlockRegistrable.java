@@ -9,6 +9,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.util.Identifier;
 
 public interface BlockRegistrable extends Registrable {
+
 	default void register(Identifier identifier) {
 		if ((this instanceof BlockWithEntity || this instanceof Block) && this instanceof BlockWithItem blockWithItem && this.isNotRegistered()) {
 			RegistrationUtils.registerBlock(identifier, blockWithItem);

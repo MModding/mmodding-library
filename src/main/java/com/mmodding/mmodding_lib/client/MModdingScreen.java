@@ -1,14 +1,14 @@
-package com.mmodding.mmodding_lib;
+package com.mmodding.mmodding_lib.client;
 
+import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.config.ConfigScreen;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class MModdingScreen extends ConfigScreen {
 
 	private final Screen lastScreen;

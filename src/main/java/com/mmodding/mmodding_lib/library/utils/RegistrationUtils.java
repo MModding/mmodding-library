@@ -18,6 +18,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStep;
 
 public class RegistrationUtils {
+
 	public static void registerItem(Identifier identifier, Item item) {
 		Registry.register(Registry.ITEM, identifier, item);
 	}

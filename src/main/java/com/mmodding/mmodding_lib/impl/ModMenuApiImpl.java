@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.impl;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.MModdingScreen;
+import com.mmodding.mmodding_lib.client.MModdingScreen;
 import com.mmodding.mmodding_lib.library.config.ConfigScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

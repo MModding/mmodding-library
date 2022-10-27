@@ -1,11 +1,10 @@
 package com.mmodding.mmodding_lib.library.client.events;
 
 import com.mmodding.mmodding_lib.library.config.Config;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.base.api.event.Event;
 
-@Environment(EnvType.CLIENT)
+@ClientOnly
 public class ClientConfigNetworkingEvents {
 
 	public static final Event<Before> BEFORE = Event.create(Before.class, callbacks -> config -> {
@@ -20,14 +19,14 @@ public class ClientConfigNetworkingEvents {
 		}
 	});
 
-	@Environment(EnvType.CLIENT)
+	@ClientOnly
 	@FunctionalInterface
 	public interface Before {
 
 		void beforeConfigReceived(Config config);
 	}
 
-	@Environment(EnvType.CLIENT)
+	@ClientOnly
 	@FunctionalInterface
 	public interface After {
 

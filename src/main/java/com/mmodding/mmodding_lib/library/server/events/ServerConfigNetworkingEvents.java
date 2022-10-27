@@ -1,11 +1,10 @@
 package com.mmodding.mmodding_lib.library.server.events;
 
 import com.mmodding.mmodding_lib.library.config.Config;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.base.api.event.Event;
 
-@Environment(EnvType.SERVER)
+@DedicatedServerOnly
 public class ServerConfigNetworkingEvents {
 
 	public static final Event<Before> BEFORE = Event.create(Before.class, callbacks -> config -> {
@@ -20,14 +19,14 @@ public class ServerConfigNetworkingEvents {
 		}
 	});
 
-	@Environment(EnvType.SERVER)
+	@DedicatedServerOnly
 	@FunctionalInterface
 	public interface Before {
 
 		void beforeConfigSent(Config config);
 	}
 
-	@Environment(EnvType.SERVER)
+	@DedicatedServerOnly
 	@FunctionalInterface
 	public interface After {
 
