@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class ConfigObject {
@@ -120,41 +119,6 @@ public class ConfigObject {
 			this.jsonObject.add(categoryName, category.getJsonObject());
 			*/
 			return this;
-		}
-
-		public Builder setParameter(String parameter, Value<?> value) {
-
-			int index = this.jsonObject.keySet().stream().toList().indexOf(parameter);
-
-			AtomicInteger temp = new AtomicInteger();
-			Map<String, Value<?>> configElementsMap = this.build().getConfigElementsMap();
-			Map<String, Value<?>> map = new HashMap<>();
-
-			this.jsonObject.remove(parameter);
-
-			configElementsMap.forEach(((elementParameter, elementValue) -> {
-				temp.set(temp.get() + 1);
-				if (temp.get() > index) {
-					map.put(elementParameter, elementValue);
-					this.jsonObject.remove(elementParameter);
-				}
-			}));
-
-			map.forEach(this::addParameter);
-
-			return this;
-		}
-
-		public Builder setStringParameter(String parameter, String value) {
-			return this.setParameter(parameter, new Value<>(value));
-		}
-
-		public Builder setIntegerParameter(String parameter, int value) {
-			return this.setParameter(parameter, new Value<>(value));
-		}
-
-		public Builder setBooleanParameter(String parameter, boolean value) {
-			return this.setParameter(parameter, new Value<>(value));
 		}
 
 		public JsonObject getJsonObject() {
