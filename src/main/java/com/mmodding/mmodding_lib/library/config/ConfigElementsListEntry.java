@@ -11,9 +11,9 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 	private final MinecraftClient client;
 	private final ConfigScreen screen;
 	private final String fieldString;
-	private final Object fieldValue;
+	private final ConfigObject.Value<?> fieldValue;
 
-	public ConfigElementsListEntry(ConfigScreen screen, String fieldString, Object fieldValue) {
+	public ConfigElementsListEntry(ConfigScreen screen, String fieldString, ConfigObject.Value<?> fieldValue) {
 		this.client = MinecraftClient.getInstance();
 		this.screen = screen;
 		this.fieldString = fieldString;
@@ -32,25 +32,27 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 		Text fieldType;
 		int color;
 		String stringValue;
-		if (this.fieldValue instanceof String) {
-			fieldType = new TranslatableText("mmodding_lib.configs.string");
-			color = 4781378;
-			stringValue = (String) this.fieldValue;
-		}
-		else if (this.fieldValue instanceof Integer) {
-			fieldType = new TranslatableText("mmodding_lib.configs.integer");
-			color = 1641430;
-			stringValue = ((Integer) this.fieldValue).toString();
-		}
-		else if (this.fieldValue instanceof Boolean) {
-			fieldType = new TranslatableText("mmodding_lib.configs.boolean");
-			color = 14027531;
-			stringValue = ((Boolean) this.fieldValue).toString();
-		}
-		else {
-			fieldType = new TranslatableText("mmodding_lib.configs.null");
-			color = 0;
-			stringValue = "null";
+		switch (this.fieldValue.getType()) {
+			case "string" -> {
+				fieldType = new TranslatableText("mmodding_lib.configs.string");
+				color = 4781378;
+				stringValue = this.fieldValue.getValue();
+			}
+			case "number" -> {
+				fieldType = new TranslatableText("mmodding_lib.configs.integer");
+				color = 1641430;
+				stringValue = this.fieldValue.getValue();
+			}
+			case "boolean" -> {
+				fieldType = new TranslatableText("mmodding_lib.configs.boolean");
+				color = 14027531;
+				stringValue = this.fieldValue.getValue();
+			}
+			default -> {
+				fieldType = new TranslatableText("mmodding_lib.configs.null");
+				color = 0;
+				stringValue = "null";
+			}
 		}
 		this.client.textRenderer.draw(matrices, fieldType, (float) entryWidth / 2 - 10, yEntry, color);
 		this.client.textRenderer.draw(matrices, stringValue, (float) entryWidth / 4 * 3, yEntry, 16777215);

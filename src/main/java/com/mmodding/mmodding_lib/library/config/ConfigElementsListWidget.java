@@ -34,12 +34,12 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 		return this.width - 20;
 	}
 
-	public void addConfigContent(Map<String, Object> configContentMap) {
+	public void addConfigContent(Map<String, ConfigObject.Value<?>> configContentMap) {
 		configContentMap.forEach((string, configElement) ->
 				this.addEntry(new ConfigElementsListEntry(this.screen, string, configElement)));
 	}
 
-	public void refreshConfigContent(Map<String, Object> configContentMap) {
+	public void refreshConfigContent(Map<String, ConfigObject.Value<?>> configContentMap) {
 		this.clearEntries();
 		this.addConfigContent(configContentMap);
 	}
@@ -53,19 +53,15 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 	public void resetParameter(ConfigElementsListEntry entry) {
 		ConfigObject defaultConfig = this.config.defaultConfig();
 		String defaultFieldName = entry.getFieldName();
-		Object defaultFieldValue = defaultConfig.getConfigElementsMap().get(defaultFieldName);
+		ConfigObject.Value<?> defaultFieldValue = defaultConfig.getConfigElementsMap().get(defaultFieldName);
 		int index = this.children().indexOf(entry);
 		this.removeParameter(entry);
 		this.children().add(index, new ConfigElementsListEntry(this.screen, defaultFieldName, defaultFieldValue));
 		ConfigObject.Builder builder = ConfigObject.Builder.fromConfigObject(this.mutableConfig);
-		if (defaultFieldValue instanceof String) {
-			builder.setStringParameter(defaultFieldName, (String) defaultFieldValue);
-		} else if (defaultFieldValue instanceof Integer) {
-			builder.setIntegerParameter(defaultFieldName, (int) defaultFieldValue);
-		} else if (defaultFieldValue instanceof Boolean) {
-			builder.setBooleanParameter(defaultFieldName, (boolean) defaultFieldValue);
-		}
+		System.out.println(ConfigObject.Builder.fromConfigObject(this.mutableConfig).getJsonObject().toString());
+		builder.addParameter(defaultFieldName, defaultFieldValue);
 		this.mutableConfig = builder.build();
+		System.out.println(ConfigObject.Builder.fromConfigObject(this.mutableConfig).getJsonObject().toString());
 	}
 
 	public Config getConfig() {

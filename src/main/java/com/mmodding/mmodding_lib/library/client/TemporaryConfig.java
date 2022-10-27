@@ -18,7 +18,9 @@ public abstract class TemporaryConfig implements Config {
 	}
 
 	public static TemporaryConfig fromConfig(Config config) {
+
 		return new TemporaryConfig() {
+
 			@Override
 			public String getConfigName() {
 				return config.getConfigName();
@@ -40,5 +42,4 @@ public abstract class TemporaryConfig implements Config {
 			}
 		};
 	}
-
 }

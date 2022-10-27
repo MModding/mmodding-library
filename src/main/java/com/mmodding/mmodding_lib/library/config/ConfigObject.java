@@ -1,14 +1,15 @@
 package com.mmodding.mmodding_lib.library.config;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class ConfigObject {
@@ -41,36 +42,10 @@ public class ConfigObject {
 		return new ConfigObject(this.jsonObject.getAsJsonObject(parameter));
 	}
 
-	public Map<String, Object> getConfigElementsMap() {
-		Map<String, Object> configElements = new HashMap<>();
-		this.jsonObject.entrySet().forEach(entry -> configElements.put(entry.getKey(), getElementAsObject(entry.getValue())));
+	public Map<String, Value<?>> getConfigElementsMap() {
+		Map<String, Value<?>> configElements = new HashMap<>();
+		this.jsonObject.entrySet().forEach(entry -> configElements.put(entry.getKey(), Value.fromJsonElement(entry.getValue())));
 		return configElements;
-	}
-
-	public static Object getElementAsObject(JsonElement element) {
-		if (element.isJsonPrimitive()) {
-			JsonPrimitive primitiveElement = element.getAsJsonPrimitive();
-			if (primitiveElement.isString()) {
-				return primitiveElement.getAsString();
-			} else if (primitiveElement.isNumber()) {
-				return primitiveElement.getAsInt();
-			} else {
-				return primitiveElement.getAsBoolean();
-			}
-		}
-		else if (element.isJsonArray()) {
-			List<Object> list = new ArrayList<>();
-			element.getAsJsonArray().forEach(listElement -> list.add(getElementAsObject(listElement)));
-			return list;
-		}
-		else if (element.isJsonObject()) {
-			Map<String, Object> map = new HashMap<>();
-			element.getAsJsonObject().entrySet().forEach(entry -> map.put(entry.getKey(), getElementAsObject(entry.getValue())));
-			return map;
-		}
-		else {
-			return null;
-		}
 	}
 
 	public ConfigObject copy() {
@@ -93,22 +68,33 @@ public class ConfigObject {
 			return new Builder(configObject);
 		}
 
-		public Builder addStringParameter(String parameter, String value) {
-			this.jsonObject.addProperty(parameter, value);
+		public Builder addParameter(String parameter, Value<?> value) {
+			switch (value.getType()) {
+				case "string" -> this.jsonObject.addProperty(parameter, value.getValue());
+				case "number" -> this.jsonObject.addProperty(parameter, Integer.valueOf(value.getValue()));
+				case "boolean" -> {
+					this.jsonObject.addProperty(parameter, Boolean.valueOf(value.getValue()));
+					System.out.println("String Value : " + value.getValue() + ". Boolean Value : " + Boolean.valueOf(value.getValue()) + ".");
+				}
+			}
 			return this;
+		}
+
+		public Builder addStringParameter(String parameter, String value) {
+			return this.addParameter(parameter, new Value<>(value));
 		}
 
 		public Builder addIntegerParameter(String parameter, int value) {
-			this.jsonObject.addProperty(parameter, value);
-			return this;
+			return this.addParameter(parameter, new Value<>(value));
 		}
 
 		public Builder addBooleanParameter(String parameter, boolean value) {
-			this.jsonObject.addProperty(parameter, value);
-			return this;
+			return this.addParameter(parameter, new Value<>(value));
 		}
 
+		@ApiStatus.Experimental
 		public Builder addArray(String arrayName, Consumer<List<Object>> listConsumer) {
+			/*
 			List<Object> list = new ArrayList<>();
 			listConsumer.accept(list);
 			this.jsonObject.add(arrayName, new JsonArray());
@@ -123,27 +109,52 @@ public class ConfigObject {
 					this.jsonObject.getAsJsonArray(arrayName).add(bool);
 				}
 			});
+			*/
 			return this;
 		}
 
+		@ApiStatus.Experimental
 		public Builder addCategory(String categoryName, Builder category) {
+			/*
+			int index = this.jsonObject.keySet().stream().toList().indexOf(categoryName);
 			this.jsonObject.add(categoryName, category.getJsonObject());
+			*/
+			return this;
+		}
+
+		public Builder setParameter(String parameter, Value<?> value) {
+
+			int index = this.jsonObject.keySet().stream().toList().indexOf(parameter);
+
+			AtomicInteger temp = new AtomicInteger();
+			Map<String, Value<?>> configElementsMap = this.build().getConfigElementsMap();
+			Map<String, Value<?>> map = new HashMap<>();
+
+			this.jsonObject.remove(parameter);
+
+			configElementsMap.forEach(((elementParameter, elementValue) -> {
+				temp.set(temp.get() + 1);
+				if (temp.get() > index) {
+					map.put(elementParameter, elementValue);
+					this.jsonObject.remove(elementParameter);
+				}
+			}));
+
+			map.forEach(this::addParameter);
+
 			return this;
 		}
 
 		public Builder setStringParameter(String parameter, String value) {
-			this.jsonObject.remove(parameter);
-			return this.addStringParameter(parameter, value);
+			return this.setParameter(parameter, new Value<>(value));
 		}
 
 		public Builder setIntegerParameter(String parameter, int value) {
-			this.jsonObject.remove(parameter);
-			return this.addIntegerParameter(parameter, value);
+			return this.setParameter(parameter, new Value<>(value));
 		}
 
 		public Builder setBooleanParameter(String parameter, boolean value) {
-			this.jsonObject.remove(parameter);
-			return this.addBooleanParameter(parameter, value);
+			return this.setParameter(parameter, new Value<>(value));
 		}
 
 		public JsonObject getJsonObject() {
@@ -152,6 +163,43 @@ public class ConfigObject {
 
 		public ConfigObject build() {
 			return new ConfigObject(this.jsonObject);
+		}
+	}
+
+	public static class Value <T> {
+
+		private final T value;
+		private final String type;
+
+		public static Value<?> fromJsonElement(JsonElement element) {
+			if (element instanceof JsonPrimitive primitive) {
+				if (primitive.isString()) return new Value<>(primitive.getAsString());
+				else if (primitive.isNumber()) return new Value<>(primitive.getAsNumber());
+				else return new Value<>(primitive.getAsBoolean());
+			} else {
+				throw new IllegalArgumentException("Invalid Parameter Type");
+			}
+		}
+
+		public Value(T value) {
+			this.value = value;
+			if (value instanceof String) {
+				this.type = "string";
+			} else if (value instanceof Number) {
+				this.type = "number";
+			} else if (value instanceof Boolean) {
+				this.type = "boolean";
+			} else {
+				throw new IllegalArgumentException("Invalid Parameter Type");
+			}
+		}
+
+		public String getValue() {
+			return String.valueOf(value);
+		}
+
+		public String getType() {
+			return this.type;
 		}
 	}
 }
