@@ -58,10 +58,8 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 		this.removeParameter(entry);
 		this.children().add(index, new ConfigElementsListEntry(this.screen, defaultFieldName, defaultFieldValue));
 		ConfigObject.Builder builder = ConfigObject.Builder.fromConfigObject(this.mutableConfig);
-		System.out.println(ConfigObject.Builder.fromConfigObject(this.mutableConfig).getJsonObject().toString());
 		builder.addParameter(defaultFieldName, defaultFieldValue);
 		this.mutableConfig = builder.build();
-		System.out.println(ConfigObject.Builder.fromConfigObject(this.mutableConfig).getJsonObject().toString());
 	}
 
 	public Config getConfig() {

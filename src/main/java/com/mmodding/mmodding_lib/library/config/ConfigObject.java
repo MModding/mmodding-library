@@ -73,7 +73,6 @@ public class ConfigObject {
 				case "number" -> this.jsonObject.addProperty(parameter, Integer.valueOf(value.getValue()));
 				case "boolean" -> {
 					this.jsonObject.addProperty(parameter, Boolean.valueOf(value.getValue()));
-					System.out.println("String Value : " + value.getValue() + ". Boolean Value : " + Boolean.valueOf(value.getValue()) + ".");
 				}
 			}
 			return this;

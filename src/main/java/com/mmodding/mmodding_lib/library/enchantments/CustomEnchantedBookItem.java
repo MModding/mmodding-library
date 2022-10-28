@@ -1,11 +1,13 @@
 package com.mmodding.mmodding_lib.library.enchantments;
 
+import com.mmodding.mmodding_lib.library.items.CustomItemSettings;
 import com.mmodding.mmodding_lib.library.items.ItemRegistrable;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
@@ -17,7 +19,7 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 
 	private EnchantmentType type;
 
-	public CustomEnchantedBookItem(Settings settings) {
+	public CustomEnchantedBookItem(CustomItemSettings settings) {
 		super(settings);
 	}
 
@@ -27,6 +29,7 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 
 	public ItemStack forCustomEnchantment(EnchantmentLevelEntry info) {
 		ItemStack stack = new ItemStack(this.type.bookItem());
+		stack.setCustomName(Text.of(this.type.prefix() + " " + stack.getName()));
 		addEnchantment(stack, info);
 		return stack;
 	}
