@@ -4,7 +4,7 @@ MModding-Library is a custom library mainly used in the MModdingTeam's mods.
 
 ## About
 [![](https://jitpack.io/v/MModding/MModding-Library.svg)](https://jitpack.io/#MModding/MModding-Library)
-[![curseforge](http://cf.way2muchnoise.eu/versions/624239.svg)](https://www.curseforge.com/minecraft/mc-mods/maxilib)
+[![curseforge](http://cf.way2muchnoise.eu/versions/694928.svg)](https://www.curseforge.com/minecraft/mc-mods/mmodding-library)
 ![Java CI with Gradle](https://github.com/MModding/MModding-Library/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=main)
 
 ## Documentation
