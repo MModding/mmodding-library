@@ -3,11 +3,11 @@ package com.mmodding.mmodding_lib.library.base;
 import com.mmodding.mmodding_lib.client.MModdingLibClient;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.initializers.ClientElementsInitializer;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
+import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.List;
 
 public interface MModdingClientModInitializer extends ClientModInitializer {
@@ -18,7 +18,7 @@ public interface MModdingClientModInitializer extends ClientModInitializer {
 	Config getClientConfig();
 
 	@Override
-	@OverridingMethodsMustInvokeSuper
+	@MustBeInvokedByOverriders
 	default void onInitializeClient(ModContainer mod) {
 		this.getClientElementsInitializers().forEach(ClientElementsInitializer::registerClient);
 		if (this.getClientConfig() != null) {

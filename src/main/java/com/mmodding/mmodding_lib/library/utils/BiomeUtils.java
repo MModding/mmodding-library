@@ -12,7 +12,7 @@ public class BiomeUtils {
 
 	public static void changeBiomeForBlock(WorldAccess world, BlockPos pos, Biome biome) {
 		Chunk chunk = world.getChunk(pos);
-		chunk.getSection(chunk.getSectionIndex(pos.getY())).getBiomeContainer().setUnsafe(
+		chunk.getSection(chunk.getSectionIndex(pos.getY())).getBiomeContainer().m_enhkzepj().setUnsafe(
 				pos.getX() & 3, pos.getY() & 3, pos.getZ() & 3, Holder.createDirect(biome)
 		);
 		chunk.setNeedsSaving(true);

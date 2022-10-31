@@ -9,10 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
-import org.quiltmc.qsl.item.setting.api.CustomDamageHandler;
-import org.quiltmc.qsl.item.setting.api.CustomItemSetting;
-import org.quiltmc.qsl.item.setting.api.EquipmentSlotProvider;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
+import org.quiltmc.qsl.item.setting.api.*;
 
 public class CustomItemSettings extends QuiltItemSettings {
 
@@ -30,6 +27,30 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public CustomItemSettings itemUse(ItemUseSetting itemUseSetting) {
 		return this.customSetting(ITEM_USE, itemUseSetting);
+	}
+
+	@Override
+	public QuiltItemSettings recipeRemainder(RecipeRemainderProvider provider) {
+		super.recipeRemainder(provider);
+		return this;
+	}
+
+	@Override
+	public QuiltItemSettings recipeDamageRemainder() {
+		super.recipeDamageRemainder();
+		return this;
+	}
+
+	@Override
+	public QuiltItemSettings recipeSelfRemainder() {
+		super.recipeSelfRemainder();
+		return this;
+	}
+
+	@Override
+	public QuiltItemSettings recipeDamageRemainder(int by) {
+		super.recipeDamageRemainder(by);
+		return this;
 	}
 
 	@Override

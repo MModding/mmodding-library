@@ -1,8 +1,6 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
-import com.mmodding.mmodding_lib.library.structures.CustomStructure;
-import com.mmodding.mmodding_lib.mixin.accessors.StructureFeatureAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -15,7 +13,6 @@ import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStep;
 
 public class RegistrationUtils {
 
@@ -45,10 +42,6 @@ public class RegistrationUtils {
 
 	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {
 		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
-	}
-
-	public static void registerStructure(Identifier identifier, CustomStructure<?> structure) {
-		StructureFeatureAccessor.callRegister(identifier.toString(), structure, GenerationStep.Feature.SURFACE_STRUCTURES);
 	}
 
 	public static void registerBiome(Identifier identifier, Biome biome) {

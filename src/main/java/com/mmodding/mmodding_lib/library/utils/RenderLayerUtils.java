@@ -1,9 +1,9 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.mixin.accessors.BufferBuilderStorageAccessor;
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.RenderLayer;
 import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 

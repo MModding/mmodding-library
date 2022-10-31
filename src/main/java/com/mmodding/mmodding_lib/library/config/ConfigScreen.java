@@ -1,8 +1,12 @@
 package com.mmodding.mmodding_lib.library.config;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tessellator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormats;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
+import net.minecraft.text.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -93,25 +97,25 @@ public class ConfigScreen extends Screen {
 
 	public void renderBlockTextureAsBackgroundTexture(Identifier identifier, int red, int green, int blue, int alpha) {
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBuffer();
+		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderTexture(0, identifier);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 		bufferBuilder.vertex(0.0, this.height, 0.0)
-				.texture(0.0F, this.height / 32.0F)
+				.uv(0.0F, this.height / 32.0F)
 				.color(red, green, blue, alpha)
 				.next();
 		bufferBuilder.vertex(this.width, this.height, 0.0)
-				.texture(this.width / 32.0F, this.height / 32.0F)
+				.uv(this.width / 32.0F, this.height / 32.0F)
 				.color(red, green, blue, alpha)
 				.next();
 		bufferBuilder.vertex(this.width, 0.0, 0.0)
-				.texture(this.width / 32.0F, 0)
+				.uv(this.width / 32.0F, 0)
 				.color(red, green, blue, alpha)
 				.next();
 		bufferBuilder.vertex(0.0, 0.0, 0.0)
-				.texture(0.0F, 0)
+				.uv(0.0F, 0)
 				.color(red, green, blue, alpha)
 				.next();
 		tessellator.draw();

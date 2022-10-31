@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry<ConfigElementsListEntry> {
 
@@ -28,28 +27,28 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 	@Override
 	public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
 		float yEntry = (float) entryHeight / 3 + y;
-		this.client.textRenderer.draw(matrices, new TranslatableText("config." + this.screen.getModId() + "." + this.fieldString), (float) 5 + x, yEntry, 16777215);
+		this.client.textRenderer.draw(matrices, Text.translatable("config." + this.screen.getModId() + "." + this.fieldString), (float) 5 + x, yEntry, 16777215);
 		Text fieldType;
 		int color;
 		String stringValue;
 		switch (this.fieldValue.getType()) {
 			case "string" -> {
-				fieldType = new TranslatableText("mmodding_lib.configs.string");
+				fieldType = Text.translatable("mmodding_lib.configs.string");
 				color = 4781378;
 				stringValue = this.fieldValue.getValue();
 			}
 			case "number" -> {
-				fieldType = new TranslatableText("mmodding_lib.configs.integer");
+				fieldType = Text.translatable("mmodding_lib.configs.integer");
 				color = 1641430;
 				stringValue = this.fieldValue.getValue();
 			}
 			case "boolean" -> {
-				fieldType = new TranslatableText("mmodding_lib.configs.boolean");
+				fieldType = Text.translatable("mmodding_lib.configs.boolean");
 				color = 14027531;
 				stringValue = this.fieldValue.getValue();
 			}
 			default -> {
-				fieldType = new TranslatableText("mmodding_lib.configs.null");
+				fieldType = Text.translatable("mmodding_lib.configs.null");
 				color = 0;
 				stringValue = "null";
 			}

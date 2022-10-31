@@ -1,19 +1,17 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
-minecraft = "1.18.2"
-quilt_mappings = "1.18.2+build.24"
-quilt_loader = "0.17.6-beta.2"
+minecraft = "1.19.2"
+quilt_mappings = "1.19.2+build.21"
+quilt_loader = "0.17.6"
 
-qsl = "1.1.0-beta.26+1.18.2"
-quilted_fabric_api = "1.0.0-beta.26+0.59.1-1.18.2"
-modmenu = "3.2.3"
+quilted_fabric_api = "4.0.0-beta.18+0.64.0-1.19.2"
+modmenu = "4.0.6"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
 quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
 
-qsl = { module = "org.quiltmc:qsl", version.ref = "qsl" }
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 
@@ -22,4 +20,4 @@ modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 # example = ["example-a", "example-b", "example-c"]
 
 [plugins]
-quilt_loom = { id = "org.quiltmc.loom", version = "0.12.+" }
+quilt_loom = { id = "org.quiltmc.loom", version = "1.0.+" }

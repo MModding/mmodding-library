@@ -6,7 +6,6 @@
   "mixins": [
     "accessors.BlockEntityTypeAccessor",
     "accessors.BrewingRecipeRegistryAccessor",
-    "accessors.StructureFeatureAccessor",
     "injectors.BootStrapMixin",
     "injectors.EnchantmentHelperMixin",
     "injectors.ExplosionMixin",
