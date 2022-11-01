@@ -9,7 +9,7 @@ public class CustomHoeItem extends HoeItem implements ItemRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	protected CustomHoeItem(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
+	public CustomHoeItem(ToolMaterial material, int attackDamage, float attackSpeed, Settings settings) {
 		super(material, attackDamage, attackSpeed, settings);
 	}
 
