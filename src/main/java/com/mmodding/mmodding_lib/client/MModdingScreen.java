@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.library.config.ConfigScreen;
+import com.mmodding.mmodding_lib.library.config.screen.ConfigScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
