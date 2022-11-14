@@ -1,5 +1,6 @@
-package com.mmodding.mmodding_lib.library.config;
+package com.mmodding.mmodding_lib.library.config.screen;
 
+import com.mmodding.mmodding_lib.library.config.Config;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;

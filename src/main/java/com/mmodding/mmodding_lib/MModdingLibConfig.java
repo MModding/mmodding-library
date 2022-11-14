@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.library.config.*;
+import com.mmodding.mmodding_lib.library.config.screen.ConfigScreen;
+import com.mmodding.mmodding_lib.library.config.screen.ConfigScreenOptions;
 import net.minecraft.text.Text;
 
 public class MModdingLibConfig implements Config {

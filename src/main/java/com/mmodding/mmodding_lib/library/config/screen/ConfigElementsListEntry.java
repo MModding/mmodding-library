@@ -1,5 +1,6 @@
-package com.mmodding.mmodding_lib.library.config;
+package com.mmodding.mmodding_lib.library.config.screen;
 
+import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -65,5 +66,9 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 
 	public String getFieldName() {
 		return this.fieldString;
+	}
+
+	public ConfigObject.Value<?> getFieldValue() {
+		return this.fieldValue;
 	}
 }

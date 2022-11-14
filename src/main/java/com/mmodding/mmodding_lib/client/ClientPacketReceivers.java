@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.client;
 
 import com.google.gson.JsonParser;
-import com.mmodding.mmodding_lib.library.client.events.ClientConfigNetworkingEvents;
+import com.mmodding.mmodding_lib.library.events.client.ClientConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import net.minecraft.util.Identifier;

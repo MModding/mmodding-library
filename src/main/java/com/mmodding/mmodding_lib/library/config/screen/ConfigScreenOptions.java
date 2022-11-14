@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.config;
+package com.mmodding.mmodding_lib.library.config.screen;
 
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;

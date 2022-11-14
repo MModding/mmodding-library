@@ -1,35 +1,35 @@
-package com.mmodding.mmodding_lib.library.server.events;
+package com.mmodding.mmodding_lib.library.events.client;
 
 import com.mmodding.mmodding_lib.library.config.Config;
-import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.base.api.event.Event;
 
-@DedicatedServerOnly
-public class ServerConfigNetworkingEvents {
+@ClientOnly
+public class ClientConfigNetworkingEvents {
 
 	public static final Event<Before> BEFORE = Event.create(Before.class, callbacks -> config -> {
 		for (Before callback : callbacks) {
-			callback.beforeConfigSent(config);
+			callback.beforeConfigReceived(config);
 		}
 	});
 
 	public static final Event<After> AFTER = Event.create(After.class, callbacks -> config -> {
 		for (After callback : callbacks) {
-			callback.afterConfigSent(config);
+			callback.afterConfigReceived(config);
 		}
 	});
 
-	@DedicatedServerOnly
+	@ClientOnly
 	@FunctionalInterface
 	public interface Before {
 
-		void beforeConfigSent(Config config);
+		void beforeConfigReceived(Config config);
 	}
 
-	@DedicatedServerOnly
+	@ClientOnly
 	@FunctionalInterface
 	public interface After {
 
-		void afterConfigSent(Config config);
+		void afterConfigReceived(Config config);
 	}
 }

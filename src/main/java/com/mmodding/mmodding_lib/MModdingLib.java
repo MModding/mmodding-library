@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.library.base.MModdingModContainer;
 import com.mmodding.mmodding_lib.library.config.Config;
+import com.mmodding.mmodding_lib.library.events.MModdingInitializationEvents;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -23,7 +24,10 @@ public class MModdingLib implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
+
 		mmoddingLib = MModdingModContainer.from(mod);
+
+		MModdingInitializationEvents.START.invoker().onMModdingInitializationStart(mmoddingLib);
 
 		config.initializeConfig();
 
@@ -40,5 +44,7 @@ public class MModdingLib implements ModInitializer {
 			mods = StringUtils.chop(mods);
 			mmoddingLib.getLogger().info(mods);
 		}
+
+		MModdingInitializationEvents.END.invoker().onMModdingInitializationEnd(mmoddingLib);
 	}
 }

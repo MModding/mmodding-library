@@ -1,5 +1,10 @@
-package com.mmodding.mmodding_lib.library.config;
+package com.mmodding.mmodding_lib.library.config.screen;
 
+import com.mmodding.mmodding_lib.library.config.Config;
+import com.mmodding.mmodding_lib.library.config.ConfigObject;
+import com.mmodding.mmodding_lib.library.config.screen.edit.BooleanEditScreen;
+import com.mmodding.mmodding_lib.library.config.screen.edit.NumberEditScreen;
+import com.mmodding.mmodding_lib.library.config.screen.edit.StringEditScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 
@@ -48,7 +53,14 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 		this.removeEntry(entry);
 	}
 
-	public void modifyParameter(ConfigElementsListEntry entry) {}
+	public void modifyParameter(ConfigElementsListEntry entry) {
+		String stringValue = entry.getFieldValue().getValue();
+		switch (entry.getFieldValue().getType()) {
+			case "string" -> this.client.setScreen(new StringEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(stringValue)));
+			case "number" -> this.client.setScreen(new NumberEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(Integer.valueOf(stringValue))));
+			case "boolean" -> this.client.setScreen(new BooleanEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(Boolean.valueOf(stringValue))));
+		}
+	}
 
 	public void resetParameter(ConfigElementsListEntry entry) {
 		ConfigObject defaultConfig = this.config.defaultConfig();

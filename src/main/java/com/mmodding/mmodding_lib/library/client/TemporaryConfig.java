@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.library.client;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.config.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.library.config.screen.ConfigScreenOptions;
 
 public abstract class TemporaryConfig implements Config {
 

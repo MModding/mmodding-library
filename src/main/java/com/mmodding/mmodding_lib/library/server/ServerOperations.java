@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.library.server;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.server.events.ServerConfigNetworkingEvents;
+import com.mmodding.mmodding_lib.library.events.server.ServerConfigNetworkingEvents;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
