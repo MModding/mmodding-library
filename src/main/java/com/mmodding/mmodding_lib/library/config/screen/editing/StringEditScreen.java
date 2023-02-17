@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.config.screen.edit;
+package com.mmodding.mmodding_lib.library.config.screen.editing;
 
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.config.screen.ConfigElementsListEntry;
@@ -19,7 +19,9 @@ public class StringEditScreen extends EditScreen<String> {
 	@Override
 	protected void init() {
 		super.init();
-		this.addSelectableChild(this.stringBox = new TextFieldWidget(this.textRenderer, this.height / 2, this.width / 2 - 75, 150, 20, Text.of(this.baseValue.getValue())));
+		assert this.client != null;
+		this.client.keyboard.setRepeatEvents(true);
+		this.addSelectableChild(this.stringBox = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, this.height / 2, 200, 20, Text.of(this.baseValue.getValue())));
 	}
 
 	@Override

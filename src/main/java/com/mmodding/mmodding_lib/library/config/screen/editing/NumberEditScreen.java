@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.config.screen.edit;
+package com.mmodding.mmodding_lib.library.config.screen.editing;
 
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.config.screen.ConfigElementsListEntry;

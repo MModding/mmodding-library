@@ -10,12 +10,14 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 
 	private final MinecraftClient client;
 	private final ConfigScreen screen;
+	private final int index;
 	private final String fieldString;
 	private final ConfigObject.Value<?> fieldValue;
 
-	public ConfigElementsListEntry(ConfigScreen screen, String fieldString, ConfigObject.Value<?> fieldValue) {
+	public ConfigElementsListEntry(ConfigScreen screen, int index, String fieldString, ConfigObject.Value<?> fieldValue) {
 		this.client = MinecraftClient.getInstance();
 		this.screen = screen;
+		this.index = index;
 		this.fieldString = fieldString;
 		this.fieldValue = fieldValue;
 	}
@@ -62,6 +64,10 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		this.screen.select(this);
 		return true;
+	}
+
+	public int getIndex() {
+		return this.index;
 	}
 
 	public String getFieldName() {

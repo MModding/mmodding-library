@@ -2,13 +2,14 @@ package com.mmodding.mmodding_lib.library.config.screen;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.config.screen.edit.BooleanEditScreen;
-import com.mmodding.mmodding_lib.library.config.screen.edit.NumberEditScreen;
-import com.mmodding.mmodding_lib.library.config.screen.edit.StringEditScreen;
+import com.mmodding.mmodding_lib.library.config.screen.editing.BooleanEditScreen;
+import com.mmodding.mmodding_lib.library.config.screen.editing.NumberEditScreen;
+import com.mmodding.mmodding_lib.library.config.screen.editing.StringEditScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<ConfigElementsListEntry> {
 
@@ -40,8 +41,11 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 	}
 
 	public void addConfigContent(Map<String, ConfigObject.Value<?>> configContentMap) {
-		configContentMap.forEach((string, configElement) ->
-				this.addEntry(new ConfigElementsListEntry(this.screen, string, configElement)));
+		AtomicInteger atomicIndex = new AtomicInteger();
+		configContentMap.forEach((string, configElement) -> {
+			this.addEntry(new ConfigElementsListEntry(this.screen, atomicIndex.get(), string, configElement));
+			atomicIndex.addAndGet(1);
+		});
 	}
 
 	public void refreshConfigContent(Map<String, ConfigObject.Value<?>> configContentMap) {
@@ -66,9 +70,8 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 		ConfigObject defaultConfig = this.config.defaultConfig();
 		String defaultFieldName = entry.getFieldName();
 		ConfigObject.Value<?> defaultFieldValue = defaultConfig.getConfigElementsMap().get(defaultFieldName);
-		int index = this.children().indexOf(entry);
 		this.removeParameter(entry);
-		this.children().add(index, new ConfigElementsListEntry(this.screen, defaultFieldName, defaultFieldValue));
+		this.children().add(entry.getIndex(), new ConfigElementsListEntry(this.screen, entry.getIndex(), defaultFieldName, defaultFieldValue));
 		ConfigObject.Builder builder = ConfigObject.Builder.fromConfigObject(this.mutableConfig);
 		builder.addParameter(defaultFieldName, defaultFieldValue);
 		this.mutableConfig = builder.build();
