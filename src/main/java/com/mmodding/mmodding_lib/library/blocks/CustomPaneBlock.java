@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.PaneBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -8,7 +8,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomPaneBlock extends Block implements BlockRegistrable, BlockWithItem {
+public class CustomPaneBlock extends PaneBlock implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 	private BlockItem item = null;
