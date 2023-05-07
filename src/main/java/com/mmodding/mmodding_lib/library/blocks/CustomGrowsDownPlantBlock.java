@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
+import com.mmodding.mmodding_lib.library.utils.RenderLayerUtils;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -69,9 +70,17 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		this.registered.set(true);
 	}
 
-	private static class Head extends AbstractPlantStemBlock implements BlockRegistrable {
+	public void cutout() {
+		RenderLayerUtils.setCutout(this.head);
+		RenderLayerUtils.setCutout(this.body);
+	}
 
-		private final AtomicBoolean registered = new AtomicBoolean(false);
+	public void translucent() {
+		RenderLayerUtils.setTranslucent(this.head);
+		RenderLayerUtils.setTranslucent(this.body);
+	}
+
+	private static class Head extends AbstractPlantStemBlock {
 
 		private final CustomGrowsDownPlantBlock plant;
 		private final int growLength;
@@ -98,21 +107,9 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		protected Block getPlant() {
 			return this.plant.body;
 		}
-
-		@Override
-		public boolean isNotRegistered() {
-			return !this.registered.get();
-		}
-
-		@Override
-		public void setRegistered() {
-			this.registered.set(true);
-		}
 	}
 
-	private static class Body extends AbstractPlantBlock implements BlockRegistrable {
-
-		private final AtomicBoolean registered = new AtomicBoolean(false);
+	private static class Body extends AbstractPlantBlock {
 
 		private final CustomGrowsDownPlantBlock plant;
 
@@ -124,16 +121,6 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		@Override
 		protected AbstractPlantStemBlock getStem() {
 			return this.plant.head;
-		}
-
-		@Override
-		public boolean isNotRegistered() {
-			return !this.registered.get();
-		}
-
-		@Override
-		public void setRegistered() {
-			this.registered.set(true);
 		}
 	}
 }
