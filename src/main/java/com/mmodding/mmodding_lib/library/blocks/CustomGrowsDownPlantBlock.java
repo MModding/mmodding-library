@@ -63,7 +63,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	}
 
 	public boolean isNotRegistered() {
-		return this.registered.get();
+		return !this.registered.get();
 	}
 
 	public void setRegistered() {
