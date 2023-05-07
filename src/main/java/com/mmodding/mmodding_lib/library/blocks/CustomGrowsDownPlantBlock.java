@@ -37,7 +37,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, Item.Settings itemSettings) {
 		this.head = new Head(settings, this, tickWater, growthChance, growLength, chooseStemState);
 		this.body = new Body(settings, this, tickWater);
-		if (hasItem) this.item = new BlockItem(this.body, itemSettings);
+		if (hasItem) this.item = new BlockItem(this.head, itemSettings);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		RenderLayerUtils.setTranslucent(this.body);
 	}
 
-	private static class Head extends AbstractPlantStemBlock {
+	public static class Head extends AbstractPlantStemBlock {
 
 		private final CustomGrowsDownPlantBlock plant;
 		private final int growLength;
@@ -109,7 +109,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		}
 	}
 
-	private static class Body extends AbstractPlantBlock {
+	public static class Body extends AbstractPlantBlock {
 
 		private final CustomGrowsDownPlantBlock plant;
 
