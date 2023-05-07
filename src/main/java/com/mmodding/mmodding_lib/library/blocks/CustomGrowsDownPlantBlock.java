@@ -1,9 +1,11 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.random.RandomGenerator;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
@@ -11,20 +13,71 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-public class CustomGrowsDownPlantBlock {
+public class CustomGrowsDownPlantBlock implements BlockWithItem {
 
-	public static class Head extends AbstractPlantStemBlock implements BlockRegistrable {
+	private final AtomicBoolean registered = new AtomicBoolean(false);
+	private BlockItem item = null;
+
+	private final Head head;
+	private final Body body;
+
+	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
+		this(settings, tickWater, growthChance, growLength, chooseStemState, false);
+	}
+
+	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem) {
+		this(settings, tickWater, growthChance, growLength, chooseStemState, hasItem, (ItemGroup) null);
+	}
+
+	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, ItemGroup itemGroup) {
+		this(settings, tickWater, growthChance, growLength, chooseStemState, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+	}
+
+	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, Item.Settings itemSettings) {
+		this.head = new Head(settings, this, tickWater, growthChance, growLength, chooseStemState);
+		this.body = new Body(settings, this, tickWater);
+		if (hasItem) this.item = new BlockItem(this.body, itemSettings);
+	}
+
+	@Override
+	public BlockItem getItem() {
+		return this.item;
+	}
+
+	public Head getHead() {
+		return this.head;
+	}
+
+	public Body getBody() {
+		return this.body;
+	}
+
+	public void register(Identifier identifier) {
+		RegistrationUtils.registerBlockWithoutItem(new Identifier(identifier.getNamespace(), identifier.getPath() + "_head"), this.head);
+		RegistrationUtils.registerBlockWithoutItem(identifier, this.body);
+		if (item != null) RegistrationUtils.registerItem(identifier, this.getItem());
+	}
+
+	public boolean isNotRegistered() {
+		return this.registered.get();
+	}
+
+	public void setRegistered() {
+		this.registered.set(true);
+	}
+
+	private static class Head extends AbstractPlantStemBlock implements BlockRegistrable {
 
 		private final AtomicBoolean registered = new AtomicBoolean(false);
 
+		private final CustomGrowsDownPlantBlock plant;
 		private final int growLength;
-		private final Block bodyBlock;
 		private final Predicate<BlockState> chooseStemState;
 
-		public Head(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Block bodyBlock, Predicate<BlockState> chooseStemState) {
+		private Head(AbstractBlock.Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
 			super(settings, Direction.DOWN, Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater, growthChance);
+			this.plant = plant;
 			this.growLength = growLength;
-			this.bodyBlock = bodyBlock;
 			this.chooseStemState = chooseStemState;
 		}
 
@@ -40,7 +93,7 @@ public class CustomGrowsDownPlantBlock {
 
 		@Override
 		protected Block getPlant() {
-			return this.bodyBlock;
+			return this.plant.body;
 		}
 
 		@Override
@@ -54,39 +107,20 @@ public class CustomGrowsDownPlantBlock {
 		}
 	}
 
-	public static class Body extends AbstractPlantBlock implements BlockRegistrable, BlockWithItem {
+	private static class Body extends AbstractPlantBlock implements BlockRegistrable {
 
 		private final AtomicBoolean registered = new AtomicBoolean(false);
-		private BlockItem item = null;
 
-		private final Head headBlock;
+		private final CustomGrowsDownPlantBlock plant;
 
-		public Body(Settings settings, boolean tickWater, Head headBlock) {
-			this(settings, tickWater, headBlock, false);
-		}
-
-		public Body(Settings settings, boolean tickWater, Head headBlock, boolean hasItem) {
-			this(settings, tickWater, headBlock, hasItem, (ItemGroup) null);
-		}
-
-		public Body(Settings settings, boolean tickWater, Head headBlock, boolean hasItem, ItemGroup itemGroup) {
-			this(settings, tickWater, headBlock, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
-		}
-
-		public Body(Settings settings, boolean tickWater, Head headBlock, boolean hasItem, Item.Settings itemSettings) {
+		public Body(Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater) {
 			super(settings, Direction.DOWN, Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater);
-			if (hasItem) this.item = new BlockItem(this, itemSettings);
-			this.headBlock = headBlock;
+			this.plant = plant;
 		}
 
 		@Override
 		protected AbstractPlantStemBlock getStem() {
-			return this.headBlock;
-		}
-
-		@Override
-		public BlockItem getItem() {
-			return this.item;
+			return this.plant.head;
 		}
 
 		@Override

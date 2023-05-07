@@ -35,9 +35,15 @@ public class RegistrationUtils {
 		}
 	}
 
-	public static void registerNormalBlock(Identifier identifier, Block block, BlockItem blockItem) {
+	@Deprecated
+	public static void registerBlockAndItem(Identifier identifier, Block block, BlockItem blockItem) {
 		Registry.register(Registry.BLOCK, identifier, block);
 		Registry.register(Registry.ITEM, identifier, blockItem);
+	}
+
+	@Deprecated
+	public static void registerBlockWithoutItem(Identifier identifier, Block block) {
+		Registry.register(Registry.BLOCK, identifier, block);
 	}
 
 	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {
