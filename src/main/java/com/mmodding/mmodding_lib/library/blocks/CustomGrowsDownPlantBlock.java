@@ -53,9 +53,12 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	}
 
 	public void register(Identifier identifier) {
-		RegistrationUtils.registerBlockWithoutItem(new Identifier(identifier.getNamespace(), identifier.getPath() + "_head"), this.head);
-		RegistrationUtils.registerBlockWithoutItem(identifier, this.body);
-		if (item != null) RegistrationUtils.registerItem(identifier, this.getItem());
+		if (this.isNotRegistered()) {
+			RegistrationUtils.registerBlockWithoutItem(new Identifier(identifier.getNamespace(), identifier.getPath() + "_head"), this.head);
+			RegistrationUtils.registerBlockWithoutItem(identifier, this.body);
+			if (item != null) RegistrationUtils.registerItem(identifier, this.getItem());
+			this.setRegistered();
+		}
 	}
 
 	public boolean isNotRegistered() {

@@ -20,7 +20,7 @@ public interface BlockRegistrable extends Registrable {
 	@Deprecated
 	default void register(Identifier identifier, BlockItem blockItem) {
 		if (this instanceof Block block && this.isNotRegistered()) {
-			RegistrationUtils.registerNormalBlock(identifier, block, blockItem);
+			RegistrationUtils.registerBlockAndItem(identifier, block, blockItem);
 			this.setRegistered();
 		}
 	}
