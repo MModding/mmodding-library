@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.items.CustomItemSettings;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,8 +32,18 @@ public class ItemMixin {
 		}
 	}
 
+	@Inject(method = "finishUsing", at = @At("HEAD"), cancellable = true)
+	private void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+		CustomItemSettings.ItemFinishUsingSetting itemFinishUsing = CustomItemSettings.ITEM_FINISH_USING.get((Item) (Object) this);
+		if (itemFinishUsing != null) {
+			itemFinishUsing.apply(stack, world, user, cir);
+		}
+	}
+
 	@Inject(method = "getUseAction", at = @At("TAIL"), cancellable = true)
 	private void getUseAction(ItemStack stack, CallbackInfoReturnable<UseAction> cir) {
+		boolean eatable = CustomItemSettings.EATABLE.get((Item) (Object) this);
+		if (eatable) cir.setReturnValue(UseAction.EAT);
 		boolean drinkable = CustomItemSettings.DRINKABLE.get((Item) (Object) this);
 		if (drinkable) cir.setReturnValue(UseAction.DRINK);
 	}
