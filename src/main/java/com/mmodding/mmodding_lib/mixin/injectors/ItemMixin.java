@@ -43,7 +43,7 @@ public abstract class ItemMixin {
 	private void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
 		CustomItemSettings.ItemFinishUsingSetting itemFinishUsing = CustomItemSettings.ITEM_FINISH_USING.get((Item) (Object) this);
 		if (itemFinishUsing != null) {
-			cir.setReturnValue(itemFinishUsing.apply(this.isFood() ? user.eatFood(world, stack) : stack, world, user, cir));
+			cir.setReturnValue(itemFinishUsing.apply(this.isFood() ? user.eatFood(world, stack) : stack, world, user));
 		}
 	}
 

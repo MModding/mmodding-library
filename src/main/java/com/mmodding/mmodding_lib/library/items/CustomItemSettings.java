@@ -170,6 +170,6 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public interface ItemFinishUsingSetting {
 
-		ItemStack apply(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir);
+		ItemStack apply(ItemStack stack, World world, LivingEntity user);
 	}
 }
