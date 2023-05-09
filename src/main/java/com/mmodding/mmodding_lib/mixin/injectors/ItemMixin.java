@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,9 +25,15 @@ public class ItemMixin {
 
 	@Inject(method = "use", at = @At("HEAD"))
 	private void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-		CustomItemSettings.ItemUseSetting setting = CustomItemSettings.ITEM_USE.get((Item) (Object) this);
-		if (setting != null) {
-			setting.apply(world, user, hand);
+		CustomItemSettings.ItemUseSetting itemUse = CustomItemSettings.ITEM_USE.get((Item) (Object) this);
+		if (itemUse != null) {
+			itemUse.apply(world, user, hand);
 		}
+	}
+
+	@Inject(method = "getUseAction", at = @At("TAIL"), cancellable = true)
+	private void getUseAction(ItemStack stack, CallbackInfoReturnable<UseAction> cir) {
+		boolean drinkable = CustomItemSettings.DRINKABLE.get((Item) (Object) this);
+		if (drinkable) cir.setReturnValue(UseAction.DRINK);
 	}
 }

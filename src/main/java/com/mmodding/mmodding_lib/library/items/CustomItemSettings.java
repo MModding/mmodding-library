@@ -14,8 +14,9 @@ import org.quiltmc.qsl.item.setting.api.*;
 public class CustomItemSettings extends QuiltItemSettings {
 
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
-	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(() -> false);
+	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<ItemUseSetting> ITEM_USE = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
 
 	public CustomItemSettings descriptionLines(Text... descriptionLines) {
 		return this.customSetting(DESCRIPTION_LINES, descriptionLines);
@@ -27,6 +28,10 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public CustomItemSettings itemUse(ItemUseSetting itemUseSetting) {
 		return this.customSetting(ITEM_USE, itemUseSetting);
+	}
+
+	public CustomItemSettings drinkable() {
+		return this.customSetting(DRINKABLE, true);
 	}
 
 	@Override
