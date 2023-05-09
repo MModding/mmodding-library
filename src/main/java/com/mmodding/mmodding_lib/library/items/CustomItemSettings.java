@@ -47,19 +47,19 @@ public class CustomItemSettings extends QuiltItemSettings {
 		return this.customSetting(DRINKABLE, true);
 	}
 
-	public CustomItemSettings foodStats(int hunger, float saturation) {
-		return this.foodStats(hunger, saturation, false);
+	public CustomItemSettings food(int hunger, float saturation) {
+		return this.food(hunger, saturation, false);
 	}
 
-	public CustomItemSettings foodStats(int hunger, float saturation, boolean meat) {
-		return this.foodStats(hunger, saturation, meat, false);
+	public CustomItemSettings food(int hunger, float saturation, boolean meat) {
+		return this.food(hunger, saturation, meat, false);
 	}
 
-	public CustomItemSettings foodStats(int hunger, float saturation, boolean meat, boolean alwaysEdible) {
-		return this.foodStats(hunger, saturation, meat, alwaysEdible, false);
+	public CustomItemSettings food(int hunger, float saturation, boolean meat, boolean alwaysEdible) {
+		return this.food(hunger, saturation, meat, alwaysEdible, false);
 	}
 
-	public CustomItemSettings foodStats(int hunger, float saturation, boolean meat, boolean alwaysEdible, boolean snack) {
+	public CustomItemSettings food(int hunger, float saturation, boolean meat, boolean alwaysEdible, boolean snack) {
 		FoodComponent.Builder builder = new FoodComponent.Builder().hunger(hunger).saturationModifier(saturation);
 		if (meat) builder.meat();
 		if (alwaysEdible) builder.alwaysEdible();
@@ -170,6 +170,6 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public interface ItemFinishUsingSetting {
 
-		void apply(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir);
+		ItemStack apply(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir);
 	}
 }

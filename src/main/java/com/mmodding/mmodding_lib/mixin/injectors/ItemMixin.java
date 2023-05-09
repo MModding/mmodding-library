@@ -10,12 +10,19 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
-public class ItemMixin {
+public abstract class ItemMixin {
+
+	@Shadow
+	public abstract ItemStack finishUsing(ItemStack stack, World world, LivingEntity user);
+
+	@Shadow
+	public abstract boolean isFood();
 
 	@Inject(method = "hasGlint", at = @At("TAIL"), cancellable = true)
 	private void hasGlint(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
@@ -36,7 +43,7 @@ public class ItemMixin {
 	private void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
 		CustomItemSettings.ItemFinishUsingSetting itemFinishUsing = CustomItemSettings.ITEM_FINISH_USING.get((Item) (Object) this);
 		if (itemFinishUsing != null) {
-			itemFinishUsing.apply(stack, world, user, cir);
+			cir.setReturnValue(itemFinishUsing.apply(this.isFood() ? user.eatFood(world, stack) : stack, world, user, cir));
 		}
 	}
 
