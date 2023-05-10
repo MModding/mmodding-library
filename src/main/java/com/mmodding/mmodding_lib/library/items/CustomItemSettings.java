@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.items;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.quiltmc.qsl.item.setting.api.*;
 
@@ -18,11 +20,13 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(Boolean.FALSE);
+	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
+	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<ItemUseSetting> ITEM_USE = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemFinishUsingSetting> ITEM_FINISH_USING = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemDropped> ITEM_DROPPED = CustomItemSetting.create(() -> null);
-	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
-	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
+	public static final CustomItemSetting<ItemPostHit> ITEM_POST_HIT = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<ItemPostMine> ITEM_POST_MINE = CustomItemSetting.create(() -> null);
 
 	public CustomItemSettings descriptionLines(Text... descriptionLines) {
 		return this.customSetting(DESCRIPTION_LINES, descriptionLines);
@@ -30,6 +34,14 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public CustomItemSettings glint() {
 		return this.customSetting(GLINT, true);
+	}
+
+	public CustomItemSettings eatable() {
+		return this.customSetting(EATABLE, true);
+	}
+
+	public CustomItemSettings drinkable() {
+		return this.customSetting(DRINKABLE, true);
 	}
 
 	public CustomItemSettings itemUse(ItemUseSetting itemUseSetting) {
@@ -44,12 +56,12 @@ public class CustomItemSettings extends QuiltItemSettings {
 		return this.customSetting(ITEM_DROPPED, itemDropped);
 	}
 
-	public CustomItemSettings eatable() {
-		return this.customSetting(EATABLE, true);
+	public CustomItemSettings itemPostHit(ItemPostHit itemPostHit) {
+		return this.customSetting(ITEM_POST_HIT, itemPostHit);
 	}
 
-	public CustomItemSettings drinkable() {
-		return this.customSetting(DRINKABLE, true);
+	public CustomItemSettings itemPostMine(ItemPostMine itemPostMine) {
+		return this.customSetting(ITEM_POST_MINE, itemPostMine);
 	}
 
 	public CustomItemSettings food(int hunger, float saturation) {
@@ -181,5 +193,15 @@ public class CustomItemSettings extends QuiltItemSettings {
 	public interface ItemDropped {
 
 		void apply(ItemStack stack, World world, PlayerEntity user, ItemEntity droppedItem);
+	}
+
+	public interface ItemPostHit {
+
+		void apply(ItemStack stack, LivingEntity target, LivingEntity attacker);
+	}
+
+	public interface ItemPostMine {
+
+		void apply(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner);
 	}
 }

@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.items.CustomItemSettings;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -8,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,6 +47,18 @@ public abstract class ItemMixin {
 		if (itemFinishUsing != null) {
 			cir.setReturnValue(itemFinishUsing.apply(this.isFood() ? user.eatFood(world, stack) : stack, world, user));
 		}
+	}
+
+	@Inject(method = "postHit", at = @At("TAIL"))
+	private void postHit(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfoReturnable<Boolean> cir) {
+		CustomItemSettings.ItemPostHit itemPostHit = CustomItemSettings.ITEM_POST_HIT.get((Item) (Object) this);
+		if (itemPostHit != null) itemPostHit.apply(stack, target, attacker);
+	}
+
+	@Inject(method = "postMine", at = @At("TAIL"))
+	private void postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, CallbackInfoReturnable<Boolean> cir) {
+		CustomItemSettings.ItemPostMine itemPostMine = CustomItemSettings.ITEM_POST_MINE.get((Item) (Object) this);
+		if (itemPostMine != null) itemPostMine.apply(stack, world, state, pos, miner);
 	}
 
 	@Inject(method = "getUseAction", at = @At("TAIL"), cancellable = true)
