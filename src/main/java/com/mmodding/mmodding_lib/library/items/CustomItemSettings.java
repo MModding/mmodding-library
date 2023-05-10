@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.items;
 
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
@@ -12,7 +13,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
 import org.quiltmc.qsl.item.setting.api.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class CustomItemSettings extends QuiltItemSettings {
 
@@ -20,6 +20,7 @@ public class CustomItemSettings extends QuiltItemSettings {
 	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<ItemUseSetting> ITEM_USE = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemFinishUsingSetting> ITEM_FINISH_USING = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<ItemDropped> ITEM_DROPPED = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
 
@@ -37,6 +38,10 @@ public class CustomItemSettings extends QuiltItemSettings {
 
 	public CustomItemSettings itemFinishUsing(ItemFinishUsingSetting itemFinishUsingSetting) {
 		return this.customSetting(ITEM_FINISH_USING, itemFinishUsingSetting);
+	}
+
+	public CustomItemSettings itemDropped(ItemDropped itemDropped) {
+		return this.customSetting(ITEM_DROPPED, itemDropped);
 	}
 
 	public CustomItemSettings eatable() {
@@ -171,5 +176,10 @@ public class CustomItemSettings extends QuiltItemSettings {
 	public interface ItemFinishUsingSetting {
 
 		ItemStack apply(ItemStack stack, World world, LivingEntity user);
+	}
+
+	public interface ItemDropped {
+
+		void apply(ItemStack stack, World world, PlayerEntity user, ItemEntity droppedItem);
 	}
 }

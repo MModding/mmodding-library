@@ -8,8 +8,10 @@
     "accessors.BrewingRecipeRegistryAccessor",
     "injectors.BootStrapMixin",
     "injectors.EnchantmentHelperMixin",
+    "injectors.EntityMixin",
     "injectors.ExplosionMixin",
-    "injectors.ItemMixin"
+    "injectors.ItemMixin",
+    "injectors.PlayerEntityMixin"
   ],
   "client": [
     "accessors.BufferBuilderStorageAccessor",
