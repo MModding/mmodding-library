@@ -1,82 +1,84 @@
-package com.mmodding.mmodding_lib.library.items;
+package com.mmodding.mmodding_lib.library.items.settings;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.quiltmc.qsl.item.setting.api.*;
 
-public class CustomItemSettings extends QuiltItemSettings {
+public class AdvancedItemSettings extends QuiltItemSettings {
 
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
-	public static final CustomItemSetting<ItemUseSetting> ITEM_USE = CustomItemSetting.create(() -> null);
-	public static final CustomItemSetting<ItemFinishUsingSetting> ITEM_FINISH_USING = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<ItemUse> ITEM_USE = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<ItemFinishUsing> ITEM_FINISH_USING = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<ItemUseOnBlock> ITEM_USE_ON_BLOCK = CustomItemSetting.create(() -> null);
+	public static final CustomItemSetting<ItemUseOnEntity> ITEM_USE_ON_ENTITY = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemDropped> ITEM_DROPPED = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemPostHit> ITEM_POST_HIT = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemPostMine> ITEM_POST_MINE = CustomItemSetting.create(() -> null);
 
-	public CustomItemSettings descriptionLines(Text... descriptionLines) {
+	public AdvancedItemSettings descriptionLines(Text... descriptionLines) {
 		return this.customSetting(DESCRIPTION_LINES, descriptionLines);
 	}
 
-	public CustomItemSettings glint() {
+	public AdvancedItemSettings glint() {
 		return this.customSetting(GLINT, true);
 	}
 
-	public CustomItemSettings eatable() {
+	public AdvancedItemSettings eatable() {
 		return this.customSetting(EATABLE, true);
 	}
 
-	public CustomItemSettings drinkable() {
+	public AdvancedItemSettings drinkable() {
 		return this.customSetting(DRINKABLE, true);
 	}
 
-	public CustomItemSettings itemUse(ItemUseSetting itemUseSetting) {
+	public AdvancedItemSettings itemUse(ItemUse itemUseSetting) {
 		return this.customSetting(ITEM_USE, itemUseSetting);
 	}
 
-	public CustomItemSettings itemFinishUsing(ItemFinishUsingSetting itemFinishUsingSetting) {
+	public AdvancedItemSettings itemFinishUsing(ItemFinishUsing itemFinishUsingSetting) {
 		return this.customSetting(ITEM_FINISH_USING, itemFinishUsingSetting);
 	}
 
-	public CustomItemSettings itemDropped(ItemDropped itemDropped) {
+	public AdvancedItemSettings itemUseOnBlock(ItemUseOnBlock itemUseOnBlock) {
+		return this.customSetting(ITEM_USE_ON_BLOCK, itemUseOnBlock);
+	}
+
+	public AdvancedItemSettings itemUseOnEntity(ItemUseOnEntity itemUseOnEntity) {
+		return this.customSetting(ITEM_USE_ON_ENTITY, itemUseOnEntity);
+	}
+
+	public AdvancedItemSettings itemDropped(ItemDropped itemDropped) {
 		return this.customSetting(ITEM_DROPPED, itemDropped);
 	}
 
-	public CustomItemSettings itemPostHit(ItemPostHit itemPostHit) {
+	public AdvancedItemSettings itemPostHit(ItemPostHit itemPostHit) {
 		return this.customSetting(ITEM_POST_HIT, itemPostHit);
 	}
 
-	public CustomItemSettings itemPostMine(ItemPostMine itemPostMine) {
+	public AdvancedItemSettings itemPostMine(ItemPostMine itemPostMine) {
 		return this.customSetting(ITEM_POST_MINE, itemPostMine);
 	}
 
-	public CustomItemSettings food(int hunger, float saturation) {
+	public AdvancedItemSettings food(int hunger, float saturation) {
 		return this.food(hunger, saturation, false);
 	}
 
-	public CustomItemSettings food(int hunger, float saturation, boolean meat) {
+	public AdvancedItemSettings food(int hunger, float saturation, boolean meat) {
 		return this.food(hunger, saturation, meat, false);
 	}
 
-	public CustomItemSettings food(int hunger, float saturation, boolean meat, boolean alwaysEdible) {
+	public AdvancedItemSettings food(int hunger, float saturation, boolean meat, boolean alwaysEdible) {
 		return this.food(hunger, saturation, meat, alwaysEdible, false);
 	}
 
-	public CustomItemSettings food(int hunger, float saturation, boolean meat, boolean alwaysEdible, boolean snack) {
+	public AdvancedItemSettings food(int hunger, float saturation, boolean meat, boolean alwaysEdible, boolean snack) {
 		FoodComponent.Builder builder = new FoodComponent.Builder().hunger(hunger).saturationModifier(saturation);
 		if (meat) builder.meat();
 		if (alwaysEdible) builder.alwaysEdible();
@@ -109,99 +111,74 @@ public class CustomItemSettings extends QuiltItemSettings {
 	}
 
 	@Override
-	public CustomItemSettings equipmentSlot(EquipmentSlotProvider equipmentSlotProvider) {
+	public AdvancedItemSettings equipmentSlot(EquipmentSlotProvider equipmentSlotProvider) {
 		super.equipmentSlot(equipmentSlotProvider);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings equipmentSlot(EquipmentSlot equipmentSlot) {
+	public AdvancedItemSettings equipmentSlot(EquipmentSlot equipmentSlot) {
 		super.equipmentSlot(equipmentSlot);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings customDamage(CustomDamageHandler handler) {
+	public AdvancedItemSettings customDamage(CustomDamageHandler handler) {
 		super.customDamage(handler);
 		return this;
 	}
 
 	@Override
-	public <T> CustomItemSettings customSetting(CustomItemSetting<T> setting, T value) {
+	public <T> AdvancedItemSettings customSetting(CustomItemSetting<T> setting, T value) {
 		super.customSetting(setting, value);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings food(FoodComponent foodComponent) {
+	public AdvancedItemSettings food(FoodComponent foodComponent) {
 		super.food(foodComponent);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings maxCount(int maxCount) {
+	public AdvancedItemSettings maxCount(int maxCount) {
 		super.maxCount(maxCount);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings maxDamageIfAbsent(int maxDamage) {
+	public AdvancedItemSettings maxDamageIfAbsent(int maxDamage) {
 		super.maxDamageIfAbsent(maxDamage);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings maxDamage(int maxDamage) {
+	public AdvancedItemSettings maxDamage(int maxDamage) {
 		super.maxDamage(maxDamage);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings recipeRemainder(Item recipeRemainder) {
+	public AdvancedItemSettings recipeRemainder(Item recipeRemainder) {
 		super.recipeRemainder(recipeRemainder);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings group(ItemGroup group) {
+	public AdvancedItemSettings group(ItemGroup group) {
 		super.group(group);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings rarity(Rarity rarity) {
+	public AdvancedItemSettings rarity(Rarity rarity) {
 		super.rarity(rarity);
 		return this;
 	}
 
 	@Override
-	public CustomItemSettings fireproof() {
+	public AdvancedItemSettings fireproof() {
 		super.fireproof();
 		return this;
-	}
-
-	public interface ItemUseSetting {
-
-		void apply(World world, PlayerEntity user, Hand hand);
-	}
-
-	public interface ItemFinishUsingSetting {
-
-		ItemStack apply(ItemStack stack, World world, LivingEntity user);
-	}
-
-	public interface ItemDropped {
-
-		void apply(ItemStack stack, World world, PlayerEntity user, ItemEntity droppedItem);
-	}
-
-	public interface ItemPostHit {
-
-		void apply(ItemStack stack, LivingEntity target, LivingEntity attacker);
-	}
-
-	public interface ItemPostMine {
-
-		void apply(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner);
 	}
 }

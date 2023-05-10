@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.enchantments;
 
-import com.mmodding.mmodding_lib.library.items.CustomItemSettings;
+import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
@@ -18,7 +18,7 @@ public record EnchantmentType(String name, Text prefix, EnchantedBookItem bookIt
 		}
 	}
 
-	public static EnchantmentType createWithCustomBook(String name, Text prefix, boolean inEnchantingTable, Identifier bookIdentifier, CustomItemSettings bookSettings) {
+	public static EnchantmentType createWithCustomBook(String name, Text prefix, boolean inEnchantingTable, Identifier bookIdentifier, AdvancedItemSettings bookSettings) {
 		CustomEnchantedBookItem enchantedBookItem = new CustomEnchantedBookItem(bookSettings);
 		enchantedBookItem.register(bookIdentifier);
 		return new EnchantmentType(name, prefix, enchantedBookItem, inEnchantingTable);

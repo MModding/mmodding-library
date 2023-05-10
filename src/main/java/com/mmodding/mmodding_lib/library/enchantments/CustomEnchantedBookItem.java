@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.enchantments;
 
-import com.mmodding.mmodding_lib.library.items.CustomItemSettings;
+import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.ItemRegistrable;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -19,7 +19,7 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 
 	private EnchantmentType type;
 
-	public CustomEnchantedBookItem(CustomItemSettings settings) {
+	public CustomEnchantedBookItem(AdvancedItemSettings settings) {
 		super(settings);
 	}
 
