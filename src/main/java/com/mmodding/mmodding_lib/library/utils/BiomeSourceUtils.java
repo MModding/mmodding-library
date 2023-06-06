@@ -11,6 +11,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.MultiNoiseBiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import com.google.common.collect.ImmutableList.Builder;
+import net.minecraft.world.biome.source.util.OverworldBiomeParameters;
 
 import java.util.function.Consumer;
 
@@ -41,60 +42,62 @@ public class BiomeSourceUtils {
 
 	public static class DefaultRanges {
 
+		private static final OverworldBiomeParametersAccessor INSTANCE = (OverworldBiomeParametersAccessor) (Object) new OverworldBiomeParameters();
+
 		public static MultiNoiseUtil.ParameterRange fullRange() {
-			return OverworldBiomeParametersAccessor.getFullRange();
+			return INSTANCE.getFullRange();
 		}
 
 		public static MultiNoiseUtil.ParameterRange[] temperatures() {
-			return OverworldBiomeParametersAccessor.getTemperatures();
+			return INSTANCE.getTemperatures();
 		}
 
 		public static MultiNoiseUtil.ParameterRange[] humidities() {
-			return OverworldBiomeParametersAccessor.getHumidities();
+			return INSTANCE.getHumidities();
 		}
 
 		public static MultiNoiseUtil.ParameterRange[] erosions() {
-			return OverworldBiomeParametersAccessor.getErosions();
+			return INSTANCE.getErosions();
 		}
 
 		public static MultiNoiseUtil.ParameterRange frozenTemperature() {
-			return OverworldBiomeParametersAccessor.getFrozenTemperature();
+			return INSTANCE.getFrozenTemperature();
 		}
 
 		public static MultiNoiseUtil.ParameterRange unfrozenTemperature() {
-			return OverworldBiomeParametersAccessor.getUnfrozenTemperature();
+			return INSTANCE.getUnfrozenTemperature();
 		}
 
 		public static MultiNoiseUtil.ParameterRange offCoastContinentalness() {
-			return OverworldBiomeParametersAccessor.getOffCoastContinentalness();
+			return INSTANCE.getOffCoastContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange deepOceanContinentalness() {
-			return OverworldBiomeParametersAccessor.getDeepOceanContinentalness();
+			return INSTANCE.getDeepOceanContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange oceanContinentalness() {
-			return OverworldBiomeParametersAccessor.getOceanContinentalness();
+			return INSTANCE.getOceanContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange coastContinentalness() {
-			return OverworldBiomeParametersAccessor.getCoastContinentalness();
+			return INSTANCE.getCoastContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange inlandContinentalness() {
-			return OverworldBiomeParametersAccessor.getInlandContinentalness();
+			return INSTANCE.getInlandContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange nearInlandContinentalness() {
-			return OverworldBiomeParametersAccessor.getNearInlandContinentalness();
+			return INSTANCE.getNearInlandContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange midInlandContinentalness() {
-			return OverworldBiomeParametersAccessor.getMidInlandContinentalness();
+			return INSTANCE.getMidInlandContinentalness();
 		}
 
 		public static MultiNoiseUtil.ParameterRange farInlandContinentalness() {
-			return OverworldBiomeParametersAccessor.getFarInlandContinentalness();
+			return INSTANCE.getFarInlandContinentalness();
 		}
 	}
 }

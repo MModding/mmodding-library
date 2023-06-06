@@ -9,72 +9,44 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface OverworldBiomeParametersAccessor {
 
 	@Accessor("FULL_RANGE")
-	static MultiNoiseUtil.ParameterRange getFullRange() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getFullRange();
 
 	@Accessor("TEMPERATURES")
-	static MultiNoiseUtil.ParameterRange[] getTemperatures() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange[] getTemperatures();
 
 	@Accessor("HUMIDITIES")
-	static MultiNoiseUtil.ParameterRange[] getHumidities() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange[] getHumidities();
 
 	@Accessor("EROSIONS")
-	static MultiNoiseUtil.ParameterRange[] getErosions() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange[] getErosions();
 
 	@Accessor("FROZEN_TEMPERATURE")
-	static MultiNoiseUtil.ParameterRange getFrozenTemperature() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getFrozenTemperature();
 
 	@Accessor("UNFROZEN_TEMPERATURE")
-	static MultiNoiseUtil.ParameterRange getUnfrozenTemperature() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getUnfrozenTemperature();
 
 	@Accessor("MUSHROOM_FIELDS_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getOffCoastContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getOffCoastContinentalness();
 
 	@Accessor("DEEP_OCEAN_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getDeepOceanContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getDeepOceanContinentalness();
 
 	@Accessor("OCEAN_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getOceanContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getOceanContinentalness();
 
 	@Accessor("COAST_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getCoastContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getCoastContinentalness();
 
 	@Accessor("INLAND_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getInlandContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getInlandContinentalness();
 
 	@Accessor("NEAR_INLAND_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getNearInlandContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getNearInlandContinentalness();
 
 	@Accessor("MID_INLAND_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getMidInlandContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getMidInlandContinentalness();
 
 	@Accessor("FAR_INLAND_CONTINENTALNESS")
-	static MultiNoiseUtil.ParameterRange getFarInlandContinentalness() {
-		throw new AssertionError();
-	}
+	MultiNoiseUtil.ParameterRange getFarInlandContinentalness();
 }
