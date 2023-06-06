@@ -4,6 +4,7 @@ import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -20,5 +21,9 @@ public class BiomeUtils {
 
 	public static Biome getBiome(WorldAccess world, Identifier identifier) {
 		return world.getRegistryManager().get(Registry.BIOME_KEY).get(identifier);
+	}
+
+	public static RegistryKey<Biome> getBiomeKey(Identifier identifier) {
+		return RegistryKey.of(Registry.BIOME_KEY, identifier);
 	}
 }

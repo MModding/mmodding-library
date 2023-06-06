@@ -6,10 +6,12 @@
   "mixins": [
     "accessors.BlockEntityTypeAccessor",
     "accessors.BrewingRecipeRegistryAccessor",
+    "accessors.OverworldBiomeParametersAccessor",
     "injectors.BootStrapMixin",
     "injectors.EnchantmentHelperMixin",
     "injectors.EntityMixin",
     "injectors.ExplosionMixin",
+    "injectors.FishingBobberEntityMixin",
     "injectors.ItemMixin",
     "injectors.PlayerEntityMixin"
   ],

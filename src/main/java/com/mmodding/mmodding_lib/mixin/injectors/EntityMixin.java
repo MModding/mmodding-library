@@ -9,5 +9,8 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class EntityMixin {
 
 	@Shadow
+	public abstract double squaredDistanceTo(Entity entity);
+
+	@Shadow
 	public abstract World getWorld();
 }
