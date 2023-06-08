@@ -13,6 +13,10 @@ import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.gen.feature.PlacedFeature;
 
 public class RegistrationUtils {
 
@@ -52,5 +56,30 @@ public class RegistrationUtils {
 
 	public static void registerBiome(Identifier identifier, Biome biome) {
 		Registry.register(BuiltinRegistries.BIOME, RegistryKey.of(Registry.BIOME_KEY, identifier), biome);
+	}
+
+	public static <C extends FeatureConfig, F extends Feature<C>> void registerFeature(Identifier identifier, Feature<C> feature, ConfiguredFeature<C, F> configuredFeature, PlacedFeature placedFeature) {
+		Registry.register(Registry.FEATURE, identifier, feature);
+		registerConfiguredFeature(identifier, configuredFeature);
+		registerPlacedFeature(identifier, placedFeature);
+	}
+
+	@Deprecated
+	public static <C extends FeatureConfig, F extends Feature<C>> void registerFeatureWithoutPlaced(Identifier identifier, Feature<C> feature, ConfiguredFeature<C, F> configuredFeature) {
+		Registry.register(Registry.FEATURE, identifier, feature);
+		registerConfiguredFeature(identifier, configuredFeature);
+	}
+
+	@Deprecated
+	public static <C extends FeatureConfig> void registerFeatureWithoutConfiguredAndPlaced(Identifier identifier, Feature<C> feature) {
+		Registry.register(Registry.FEATURE, identifier, feature);
+	}
+
+	public static <C extends FeatureConfig, F extends Feature<C>> void registerConfiguredFeature(Identifier identifier, ConfiguredFeature<C, F> configuredFeature) {
+		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, identifier, configuredFeature);
+	}
+
+	public static void registerPlacedFeature(Identifier identifier, PlacedFeature placedFeature) {
+		Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, placedFeature);
 	}
 }
