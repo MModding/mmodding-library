@@ -13,7 +13,8 @@
     "injectors.ExplosionMixin",
     "injectors.FishingBobberEntityMixin",
     "injectors.ItemMixin",
-    "injectors.PlayerEntityMixin"
+    "injectors.PlayerEntityMixin",
+    "injectors.ServerWorldMixin"
   ],
   "client": [
     "accessors.BufferBuilderStorageAccessor",
