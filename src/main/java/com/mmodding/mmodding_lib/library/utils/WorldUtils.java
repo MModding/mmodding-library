@@ -11,7 +11,6 @@ import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 
 public class WorldUtils {
 
-	@DedicatedServerOnly
 	public static void doTaskAfter(ServerWorld serverWorld, long ticksToWait, Runnable task) {
 		((WorldUtils.TickTask) serverWorld).doTaskAfter(ticksToWait, task);
 	}
