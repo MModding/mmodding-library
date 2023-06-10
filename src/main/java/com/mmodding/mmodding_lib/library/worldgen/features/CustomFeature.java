@@ -18,7 +18,7 @@ public abstract class CustomFeature<FC extends FeatureConfig> extends Feature<FC
 		super(configCodec);
 	}
 
-	public abstract <F extends CustomFeature<FC>> ConfiguredFeature<FC, F> getDefaultConfigured();
+	public abstract ConfiguredFeature<FC, CustomFeature<FC>> getDefaultConfigured();
 
 	public abstract PlacedFeature getDefaultPlaced();
 
