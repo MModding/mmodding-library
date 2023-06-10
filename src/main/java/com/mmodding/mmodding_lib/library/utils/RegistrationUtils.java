@@ -55,7 +55,7 @@ public class RegistrationUtils {
 	}
 
 	public static void registerBiome(Identifier identifier, Biome biome) {
-		Registry.register(BuiltinRegistries.BIOME, RegistryKey.of(Registry.BIOME_KEY, identifier), biome);
+		BuiltinRegistries.register(BuiltinRegistries.BIOME, identifier, biome);
 	}
 
 	public static <C extends FeatureConfig, F extends Feature<C>> void registerFeature(Identifier identifier, Feature<C> feature, ConfiguredFeature<C, F> configuredFeature, PlacedFeature placedFeature) {
