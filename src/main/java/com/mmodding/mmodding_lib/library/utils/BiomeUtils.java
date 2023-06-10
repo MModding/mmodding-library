@@ -4,7 +4,6 @@ import com.mmodding.mmodding_lib.mixin.accessors.ChunkSectionAccessor;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.WorldAccess;
@@ -19,7 +18,7 @@ public class BiomeUtils {
 		Chunk chunk = world.getChunk(pos);
 		ChunkSection section = chunk.getSection(chunk.getSectionIndex(pos.getY()));
 		PalettedContainer<Holder<Biome>> biomeContainer = section.getBiomeContainer().m_enhkzepj();
-		biomeContainer.setUnsafe(pos.getX() & 3, pos.getY() & 3, pos.getZ() & 3, BiomeUtils.getBiomeHolder(biomeKey));
+		biomeContainer.setUnsafe(pos.getX() & 3, pos.getY() & 3, pos.getZ() & 3, BiomeUtils.getBiomeHolder(world, biomeKey));
 		((ChunkSectionAccessor) section).setBiomeContainer(biomeContainer);
 		chunk.setNeedsSaving(true);
 	}
@@ -28,8 +27,8 @@ public class BiomeUtils {
 		return world.getRegistryManager().get(Registry.BIOME_KEY).get(identifier);
 	}
 
-	public static Holder<Biome> getBiomeHolder(RegistryKey<Biome> biomeKey) {
-		return BuiltinRegistries.BIOME.getHolderOrThrow(biomeKey);
+	public static Holder<Biome> getBiomeHolder(WorldAccess world, RegistryKey<Biome> biomeKey) {
+		return world.getRegistryManager().get(Registry.BIOME_KEY).getHolderOrThrow(biomeKey);
 	}
 
 	public static RegistryKey<Biome> getBiomeKey(Identifier identifier) {
