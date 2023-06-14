@@ -10,15 +10,15 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class CustomFeature<FC extends FeatureConfig> extends Feature<FC> {
+public abstract class AdvancedFeature<FC extends FeatureConfig> extends Feature<FC> {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	public CustomFeature(Codec<FC> configCodec) {
+	public AdvancedFeature(Codec<FC> configCodec) {
 		super(configCodec);
 	}
 
-	public abstract ConfiguredFeature<FC, CustomFeature<FC>> getDefaultConfigured();
+	public abstract ConfiguredFeature<FC, AdvancedFeature<FC>> getDefaultConfigured();
 
 	public abstract PlacedFeature getDefaultPlaced();
 
