@@ -6,7 +6,7 @@ import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 public class DefaultBlockSettings {
 
-	private static final QuiltBlockSettings STONE_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.STONE).strength(1.5f, 6.0f).requiresTool();
+	public static final QuiltBlockSettings STONE_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.STONE).strength(1.5f, 6.0f).requiresTool();
 	public static final QuiltBlockSettings DEEPSLATE_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.DEEPSLATE).strength(3.0f, 6.0f).requiresTool();
 	public static final QuiltBlockSettings WOOD_SETTINGS = QuiltBlockSettings.of(Material.WOOD).sounds(BlockSoundGroup.WOOD).strength(2.0f);
 	public static final QuiltBlockSettings DIRT_SETTINGS = QuiltBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRAVEL).strength(0.5f);
