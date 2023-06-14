@@ -11,9 +11,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.palette.PalettedContainer;
+import org.jetbrains.annotations.ApiStatus;
 
 public class BiomeUtils {
 
+	@ApiStatus.Experimental
 	public static void changeBiomeForBlock(WorldAccess world, BlockPos pos, RegistryKey<Biome> biomeKey) {
 		Chunk chunk = world.getChunk(pos);
 		ChunkSection section = chunk.getSection(chunk.getSectionIndex(pos.getY()));
