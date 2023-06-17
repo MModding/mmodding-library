@@ -64,8 +64,8 @@ public class CustomRandomPatchFeature implements CustomFeature, FeatureRegistrab
 	public PlacedFeature getPlacedFeature() {
 
 		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		if (this.rarity.get() != 0) placementModifiers.add(RarityFilterPlacementModifier.create(this.rarity.get()));
 		if (this.count.get() != 0) placementModifiers.add(CountPlacementModifier.create(this.count.get()));
+		if (this.rarity.get() != 0) placementModifiers.add(RarityFilterPlacementModifier.create(this.rarity.get()));
 		placementModifiers.add(InSquarePlacementModifier.getInstance());
 		placementModifiers.add(PlacedFeatureUtil.WORLD_SURFACE_WG_HEIGHTMAP);
 		placementModifiers.add(BiomePlacementModifier.getInstance());

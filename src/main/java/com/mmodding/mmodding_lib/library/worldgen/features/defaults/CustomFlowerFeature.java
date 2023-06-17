@@ -94,7 +94,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public CustomFlowerFeature setCount(int count) {
-		this.rarity.set(count);
+		this.count.set(count);
 		return this;
 	}
 
@@ -110,7 +110,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 		if (this.count.get() != 0) placementModifiers.add(CountPlacementModifier.create(this.count.get()));
 		if (this.rarity.get() != 0) placementModifiers.add(RarityFilterPlacementModifier.create(this.rarity.get()));
 		placementModifiers.add(InSquarePlacementModifier.getInstance());
-		placementModifiers.add(PlacedFeatureUtil.WORLD_SURFACE_WG_HEIGHTMAP);
+		placementModifiers.add(PlacedFeatureUtil.MOTION_BLOCKING_HEIGHTMAP);
 		placementModifiers.add(BiomePlacementModifier.getInstance());
 
 		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), placementModifiers);
