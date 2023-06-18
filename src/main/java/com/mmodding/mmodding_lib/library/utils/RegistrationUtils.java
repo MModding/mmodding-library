@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
+import com.mmodding.mmodding_lib.library.worldgen.ChunkGeneratorRegistration;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -11,8 +12,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
@@ -81,5 +82,9 @@ public class RegistrationUtils {
 
 	public static void registerPlacedFeature(Identifier identifier, PlacedFeature placedFeature) {
 		Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, placedFeature);
+	}
+
+	public static void registerChunkGeneratorSettings(Identifier identifier, ChunkGeneratorSettings settings) {
+		ChunkGeneratorRegistration.register(identifier, settings);
 	}
 }
