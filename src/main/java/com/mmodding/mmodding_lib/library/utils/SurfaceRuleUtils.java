@@ -38,7 +38,7 @@ public class SurfaceRuleUtils {
 		return SurfaceRules.waterWithStoneDepth(-6, -1);
 	}
 
-	public static SurfaceRules.MaterialRule getPrimaryBlocks(SurfaceRules.MaterialCondition condition, Block firstPrimary, Block secondPrimary) {
+	public static SurfaceRules.MaterialRule getConditionalBlock(SurfaceRules.MaterialCondition condition, Block firstPrimary, Block secondPrimary) {
 		return SurfaceRules.sequence(SurfaceRules.condition(condition, SurfaceRuleUtils.getBlock(firstPrimary)), SurfaceRuleUtils.getBlock(secondPrimary));
 	}
 
@@ -46,6 +46,14 @@ public class SurfaceRuleUtils {
 		return SurfaceRules.condition(SurfaceRules.not(
 			SurfaceRules.verticalGradient("bedrock_roof", YOffset.belowTop(5), YOffset.getTop())
 		), SurfaceRuleUtils.getBlock(Blocks.BEDROCK));
+	}
+
+	public static SurfaceRules.MaterialRule getDeep(String randomName, Block deepBlock) {
+		return SurfaceRules.condition(SurfaceRules.verticalGradient(
+			randomName,
+			YOffset.fixed(0),
+			YOffset.fixed(8)
+		), SurfaceRuleUtils.getBlock(deepBlock));
 	}
 
 	public static SurfaceRules.MaterialRule getBedrockFloor() {
