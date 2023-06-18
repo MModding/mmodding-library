@@ -57,8 +57,10 @@ public class SurfaceRuleUtils {
 	}
 
 	public static SurfaceRules.MaterialRule getBedrockFloor() {
-		return SurfaceRules.condition(SurfaceRules.not(
-			SurfaceRules.verticalGradient("bedrock_floor", YOffset.getBottom(), YOffset.aboveBottom(5))
+		return SurfaceRules.condition(SurfaceRules.verticalGradient(
+			"bedrock_floor",
+			YOffset.getBottom(),
+			YOffset.aboveBottom(5)
 		), SurfaceRuleUtils.getBlock(Blocks.BEDROCK));
 	}
 }

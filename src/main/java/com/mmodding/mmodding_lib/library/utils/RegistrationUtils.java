@@ -1,7 +1,6 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
-import com.mmodding.mmodding_lib.library.worldgen.ChunkGeneratorRegistration;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -85,6 +84,6 @@ public class RegistrationUtils {
 	}
 
 	public static void registerChunkGeneratorSettings(Identifier identifier, ChunkGeneratorSettings settings) {
-		ChunkGeneratorRegistration.register(identifier, settings);
+		Registry.register(BuiltinRegistries.CHUNK_GENERATOR_SETTINGS, identifier, settings);
 	}
 }

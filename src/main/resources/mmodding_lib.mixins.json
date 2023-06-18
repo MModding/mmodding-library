@@ -10,7 +10,6 @@
     "accessors.OverworldBiomeParametersAccessor",
     "injectors.BootStrapMixin",
     "injectors.BuiltinChunkGeneratorsMixin",
-    "injectors.ChunkGeneratorSettingsMixin",
     "injectors.EnchantmentHelperMixin",
     "injectors.EntityMixin",
     "injectors.ExplosionMixin",
