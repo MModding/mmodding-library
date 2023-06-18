@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.worldgen;
+package com.mmodding.mmodding_lib.library.worldgen.chunkgenerators;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
