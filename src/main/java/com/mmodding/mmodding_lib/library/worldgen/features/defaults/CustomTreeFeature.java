@@ -19,6 +19,7 @@ import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,7 +33,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
 	private final AtomicReference<Block> groundBlock = new AtomicReference<>(Blocks.DIRT);
-	private final AtomicReference<TreeDecorator> treeDecorator = new AtomicReference<>();
+	private final List<TreeDecorator> treeDecorator = new ArrayList<>();
 	private final Block trunkBlock;
 	private final TrunkPlacer trunkPlacer;
 	private final Block foliageBlock;
@@ -78,7 +79,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 			new TwoLayersFeatureSize(this.heightLimit, this.minSize, this.maxSize)
 		);
 
-		if (this.treeDecorator.get() != null) builder.decorators(List.of(this.treeDecorator.get()));
+		if (!this.treeDecorator.isEmpty()) builder.decorators(this.treeDecorator);
 
 		return new ConfiguredFeature<>(Feature.TREE, builder.dirtProvider(BlockStateProvider.of(this.groundBlock.get())).build());
 	}
@@ -88,8 +89,8 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 		return this;
 	}
 
-	public CustomTreeFeature setTreeDecorator(TreeDecorator treeDecorator) {
-		this.treeDecorator.set(treeDecorator);
+	public CustomTreeFeature addTreeDecorators(TreeDecorator... treeDecorator) {
+		this.treeDecorator.addAll(Arrays.stream(treeDecorator).toList());
 		return this;
 	}
 
