@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -30,6 +31,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
+	private final AtomicReference<Block> groundBlock = new AtomicReference<>(Blocks.DIRT);
 	private final AtomicReference<TreeDecorator> treeDecorator = new AtomicReference<>();
 	private final Block trunkBlock;
 	private final TrunkPlacer trunkPlacer;
@@ -78,7 +80,12 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 
 		if (this.treeDecorator.get() != null) builder.decorators(List.of(this.treeDecorator.get()));
 
-		return new ConfiguredFeature<>(Feature.TREE, builder.build());
+		return new ConfiguredFeature<>(Feature.TREE, builder.dirtProvider(BlockStateProvider.of(this.groundBlock.get())).build());
+	}
+
+	public CustomTreeFeature setGroundBlock(Block block) {
+		this.groundBlock.set(block);
+		return this;
 	}
 
 	public CustomTreeFeature setTreeDecorator(TreeDecorator treeDecorator) {
