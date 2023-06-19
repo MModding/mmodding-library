@@ -34,6 +34,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
+	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
 	private final AtomicInteger count = new AtomicInteger();
 	private final AtomicInteger rarity = new AtomicInteger();
@@ -103,12 +104,11 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 		return this;
 	}
 
-	@Override
-	public PlacedFeature getPlacedFeature() {
+	public PlacedFeature createPlacedFeature(int count, int rarity) {
 
 		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		if (this.count.get() != 0) placementModifiers.add(CountPlacementModifier.create(this.count.get()));
-		if (this.rarity.get() != 0) placementModifiers.add(RarityFilterPlacementModifier.create(this.rarity.get()));
+		if (count != 0) placementModifiers.add(CountPlacementModifier.create(count));
+		if (rarity != 0) placementModifiers.add(RarityFilterPlacementModifier.create(rarity));
 		placementModifiers.add(InSquarePlacementModifier.getInstance());
 		placementModifiers.add(PlacedFeatureUtil.MOTION_BLOCKING_HEIGHTMAP);
 		placementModifiers.add(BiomePlacementModifier.getInstance());
@@ -117,11 +117,31 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	@Override
-	public void addToBiomes(Predicate<BiomeSelectionContext> ctx) {
+	public PlacedFeature getDefaultPlacedFeature() {
+		return this.createPlacedFeature(this.count.get(), this.rarity.get());
+	}
+
+	public CustomFlowerFeature addPlacedFeature(int count, int rarity, String idExt) {
+		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(count, rarity), idExt));
+		return this;
+	}
+
+	@Override
+	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+		return this.additionalPlacedFeatures;
+	}
+
+	@Override
+	public void addDefaultToBiomes(Predicate<BiomeSelectionContext> ctx) {
+		this.addAdditionalToBiomes(ctx, "");
+	}
+
+	@Override
+	public void addAdditionalToBiomes(Predicate<BiomeSelectionContext> ctx, String idExt) {
 		if (this.registered.get()) {
 			BiomeModifications.addFeature(
 				ctx, GenerationStep.Feature.VEGETAL_DECORATION,
-				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.identifier.get())
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.addIdExt(this.identifier.get(), idExt))
 			);
 		}
 	}

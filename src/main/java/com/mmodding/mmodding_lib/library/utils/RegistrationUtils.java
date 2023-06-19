@@ -17,6 +17,12 @@ import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
+import net.minecraft.world.gen.foliage.FoliagePlacer;
+import net.minecraft.world.gen.foliage.FoliagePlacerType;
+import net.minecraft.world.gen.treedecorator.TreeDecorator;
+import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
+import net.minecraft.world.gen.trunk.TrunkPlacer;
+import net.minecraft.world.gen.trunk.TrunkPlacerType;
 
 public class RegistrationUtils {
 
@@ -85,5 +91,17 @@ public class RegistrationUtils {
 
 	public static void registerChunkGeneratorSettings(Identifier identifier, ChunkGeneratorSettings settings) {
 		Registry.register(BuiltinRegistries.CHUNK_GENERATOR_SETTINGS, identifier, settings);
+	}
+
+	public static <P extends TrunkPlacer> void registerTrunkPlacerType(Identifier identifier, TrunkPlacerType<P> trunkPlacerType) {
+		Registry.register(Registry.TRUNK_PLACER_TYPE, identifier, trunkPlacerType);
+	}
+
+	public static <P extends FoliagePlacer> void registerFoliagePlacerType(Identifier identifier, FoliagePlacerType<P> foliagePlacerType) {
+		Registry.register(Registry.FOLIAGE_PLACER_TYPE, identifier, foliagePlacerType);
+	}
+
+	public static <P extends TreeDecorator> void registerTreeDecoratorType(Identifier identifier, TreeDecoratorType<P> treeDecoratorType) {
+		Registry.register(Registry.TREE_DECORATOR_TYPE, identifier, treeDecoratorType);
 	}
 }

@@ -13,13 +13,22 @@ public interface FeatureRegistrable extends Registrable {
 	default void register(Identifier identifier) {
 		if (this instanceof CustomFeature customFeature && this.isNotRegistered()) {
 			Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, identifier, customFeature.getConfiguredFeature());
-			Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, customFeature.getPlacedFeature());
+			Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, customFeature.getDefaultPlacedFeature());
+			customFeature.getAdditionalPlacedFeatures().forEach(
+				pair -> Registry.register(BuiltinRegistries.PLACED_FEATURE, this.addIdExt(identifier, pair.getRight()), pair.getLeft())
+			);
 			this.setRegistered();
 			this.setIdentifier(identifier);
 		}
 	}
 
-	void addToBiomes(Predicate<BiomeSelectionContext> ctx);
+	default Identifier addIdExt(Identifier identifier, String idExt) {
+		return new Identifier(identifier.getNamespace(), identifier.getPath() + idExt);
+	}
+
+	void addDefaultToBiomes(Predicate<BiomeSelectionContext> ctx);
+
+	void addAdditionalToBiomes(Predicate<BiomeSelectionContext> ctx, String idExt);
 
 	void setIdentifier(Identifier identifier);
 }

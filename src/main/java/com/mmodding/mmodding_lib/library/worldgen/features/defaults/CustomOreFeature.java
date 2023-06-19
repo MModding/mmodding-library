@@ -2,13 +2,12 @@ package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.YOffset;
-import net.minecraft.world.gen.decorator.CountPlacementModifier;
-import net.minecraft.world.gen.decorator.HeightRangePlacementModifier;
-import net.minecraft.world.gen.decorator.InSquarePlacementModifier;
+import net.minecraft.world.gen.decorator.*;
 import net.minecraft.world.gen.feature.*;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
@@ -23,6 +22,7 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
+	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
 	private final int veinSize;
 	private final int veinNumber;
@@ -54,23 +54,42 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 		return new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(this.targets, this.veinSize, this.discardOnAirChance));
 	}
 
-	@Override
-	public PlacedFeature getPlacedFeature() {
+	public PlacedFeature createPlacedFeature(int veinNumber, int minHeight, int maxHeight) {
 
 		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		placementModifiers.add(CountPlacementModifier.create(this.veinNumber));
+		placementModifiers.add(CountPlacementModifier.create(veinNumber));
 		placementModifiers.add(InSquarePlacementModifier.getInstance());
-		placementModifiers.add(HeightRangePlacementModifier.createUniform(YOffset.fixed(this.minHeight), YOffset.fixed(this.maxHeight)));
+		placementModifiers.add(HeightRangePlacementModifier.createUniform(YOffset.fixed(minHeight), YOffset.fixed(maxHeight)));
 
 		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), placementModifiers);
 	}
 
 	@Override
-	public void addToBiomes(Predicate<BiomeSelectionContext> ctx) {
+	public PlacedFeature getDefaultPlacedFeature() {
+		return this.createPlacedFeature(this.veinNumber, this.minHeight, this.maxHeight);
+	}
+
+	public CustomOreFeature addPlacedFeature(int veinNumber, int minHeight, int maxHeight, String idExt) {
+		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(veinNumber, minHeight, maxHeight), idExt));
+		return this;
+	}
+
+	@Override
+	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+		return this.additionalPlacedFeatures;
+	}
+
+	@Override
+	public void addDefaultToBiomes(Predicate<BiomeSelectionContext> ctx) {
+		this.addAdditionalToBiomes(ctx, "");
+	}
+
+	@Override
+	public void addAdditionalToBiomes(Predicate<BiomeSelectionContext> ctx, String idExt) {
 		if (this.registered.get()) {
 			BiomeModifications.addFeature(
 				ctx, GenerationStep.Feature.UNDERGROUND_ORES,
-				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.identifier.get())
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.addIdExt(this.identifier.get(), idExt))
 			);
 		}
 	}
