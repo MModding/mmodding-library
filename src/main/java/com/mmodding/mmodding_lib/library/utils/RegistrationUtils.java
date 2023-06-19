@@ -19,6 +19,8 @@ import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.foliage.FoliagePlacer;
 import net.minecraft.world.gen.foliage.FoliagePlacerType;
+import net.minecraft.world.gen.root.RootPlacer;
+import net.minecraft.world.gen.root.RootPlacerType;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
@@ -103,5 +105,9 @@ public class RegistrationUtils {
 
 	public static <P extends TreeDecorator> void registerTreeDecoratorType(Identifier identifier, TreeDecoratorType<P> treeDecoratorType) {
 		Registry.register(Registry.TREE_DECORATOR_TYPE, identifier, treeDecoratorType);
+	}
+
+	public static <P extends RootPlacer> void registerRootPlacerType(Identifier identifier, RootPlacerType<P> rootPlacerType) {
+		Registry.register(Registry.ROOT_PLACER_TYPE, identifier, rootPlacerType);
 	}
 }
