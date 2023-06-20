@@ -19,7 +19,6 @@ import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -90,7 +89,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public CustomTreeFeature addTreeDecorators(TreeDecorator... treeDecorator) {
-		this.treeDecorator.addAll(Arrays.stream(treeDecorator).toList());
+		this.treeDecorator.addAll(List.of(treeDecorator));
 		return this;
 	}
 
