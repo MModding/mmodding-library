@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FishingBobberEntity.class)
 public abstract class FishingBobberEntityMixin extends EntityMixin {
 
-	@Inject(method = "removeIfInvalid", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/FishingBobberEntity;discard()V", shift = At.Shift.BEFORE), cancellable = true)
+	@Inject(method = "removeIfInvalid", at = @At(value = "HEAD"), cancellable = true)
 	private void removeIfInvalid(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
 		boolean hasRodInMainHand = (player.getMainHandStack().getItem() instanceof CustomFishingRodItem);
 		boolean hasRodInOffHand = (player.getOffHandStack().getItem() instanceof CustomFishingRodItem);
