@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib;
 import com.mmodding.mmodding_lib.library.base.MModdingModContainer;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.events.MModdingInitializationEvents;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -46,5 +47,13 @@ public class MModdingLib implements ModInitializer {
 		}
 
 		MModdingInitializationEvents.END.invoker().onMModdingInitializationEnd(mmoddingLib);
+	}
+
+	public static String id() {
+		return "mmodding_lib";
+	}
+
+	public static Identifier createId(String path) {
+		return new Identifier(MModdingLib.id(), path);
 	}
 }

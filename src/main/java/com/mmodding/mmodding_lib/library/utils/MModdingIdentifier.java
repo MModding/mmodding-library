@@ -5,6 +5,6 @@ import net.minecraft.util.Identifier;
 public class MModdingIdentifier extends Identifier {
 
 	public MModdingIdentifier(String path) {
-		super("mmodding_lib", path);
+		super("mmodding", path);
 	}
 }

@@ -12,6 +12,7 @@
     "accessors.RootPlacerTypeAccessor",
     "accessors.TreeDecoratorTypeAccessor",
     "accessors.TrunkPlacerTypeAccessor",
+    "injectors.AnimalEntityMixin",
     "injectors.BootStrapMixin",
     "injectors.BuiltinChunkGeneratorsMixin",
     "injectors.EnchantmentHelperMixin",
