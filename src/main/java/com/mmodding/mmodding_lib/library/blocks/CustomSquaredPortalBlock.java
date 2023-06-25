@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.library.portals.CustomPortalAreaHelper;
+import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -8,6 +9,7 @@ import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
@@ -39,6 +41,10 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
         if (hasItem) this.item = new BlockItem(this, itemSettings);
 		this.frameBlock = frameBlock;
     }
+
+	public void registerPortal(Identifier identifier) {
+		RegistrationUtils.registerCustomPortal(identifier, this.frameBlock, this);
+	}
 
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
