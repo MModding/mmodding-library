@@ -17,7 +17,6 @@ public class CustomPortalAreaHelper extends AreaHelper {
 
 	private final Block frameBlock;
 	private final CustomSquaredPortalBlock portalBlock;
-	private final AbstractBlock.ContextPredicate framePredicate;
 
 	public static Optional<CustomPortalAreaHelper> getNewCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Direction.Axis axis) {
 		return CustomPortalAreaHelper.getCustomOrEmpty(frameBlock, portalBlock, world, pos, areaHelper -> areaHelper.isValid() && ((AreaHelperAccessor) areaHelper).getFoundPortalBlocks() == 0, axis);
@@ -37,11 +36,14 @@ public class CustomPortalAreaHelper extends AreaHelper {
 		super(world, pos, axis);
 		this.frameBlock = frameBlock;
 		this.portalBlock = portalBlock;
-		this.framePredicate = (predicatedState, predicatedWorld, predicatedPos) -> predicatedState.isOf(this.frameBlock);
 	}
 
 	public AreaHelperAccessor accessor() {
 		return (AreaHelperAccessor) this;
+	}
+
+	public boolean isFrame(BlockState blockstate) {
+		return blockstate.isOf(this.frameBlock);
 	}
 
 	@Override
@@ -82,14 +84,14 @@ public class CustomPortalAreaHelper extends AreaHelper {
 			mutable.set(pos).move(direction, i);
 			BlockState blockState = this.accessor().getWorld().getBlockState(mutable);
 			if (!validStateInsideCustomPortal(blockState, this.portalBlock)) {
-				if (this.framePredicate.test(blockState, this.accessor().getWorld(), mutable)) {
+				if (this.isFrame(blockState)) {
 					return i;
 				}
 				break;
 			}
 
-			BlockState blockState2 = this.accessor().getWorld().getBlockState(mutable.move(Direction.DOWN));
-			if (!this.framePredicate.test(blockState2, this.accessor().getWorld(), mutable)) {
+			BlockState downBlockState = this.accessor().getWorld().getBlockState(mutable.move(Direction.DOWN));
+			if (!this.isFrame(downBlockState)) {
 				break;
 			}
 		}
@@ -102,7 +104,7 @@ public class CustomPortalAreaHelper extends AreaHelper {
 
 		for(int j = 0; j < this.accessor().getWidth(); ++j) {
 			BlockPos.Mutable mutable = pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), j);
-			if (!this.framePredicate.test(this.accessor().getWorld().getBlockState(mutable), this.accessor().getWorld(), mutable)) {
+			if (!this.isFrame(this.accessor().getWorld().getBlockState(mutable))) {
 				return false;
 			}
 		}
@@ -115,12 +117,12 @@ public class CustomPortalAreaHelper extends AreaHelper {
 
 		for(int i = 0; i < 21; ++i) {
 			pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), -1);
-			if (!this.framePredicate.test(this.accessor().getWorld().getBlockState(pos), this.accessor().getWorld(), pos)) {
+			if (!this.isFrame(this.accessor().getWorld().getBlockState(pos))) {
 				return i;
 			}
 
 			pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), this.accessor().getWidth());
-			if (!this.framePredicate.test(this.accessor().getWorld().getBlockState(pos), this.accessor().getWorld(), pos)) {
+			if (!this.isFrame(this.accessor().getWorld().getBlockState(pos))) {
 				return i;
 			}
 
