@@ -1,3 +1,8 @@
 accessWidener v1 named
 
 extendable class net/minecraft/world/gen/chunk/NoiseChunkGenerator
+
+extendable method net/minecraft/world/dimension/AreaHelper getLowerCorner (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos;
+extendable method net/minecraft/world/dimension/AreaHelper getWidth (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)I
+extendable method net/minecraft/world/dimension/AreaHelper m_beqllhzk (Lnet/minecraft/util/math/BlockPos$Mutable;I)Z
+extendable method net/minecraft/world/dimension/AreaHelper m_fqjhrxgm (Lnet/minecraft/util/math/BlockPos$Mutable;)I

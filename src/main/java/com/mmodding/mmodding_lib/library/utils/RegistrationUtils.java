@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
+import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -9,6 +10,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -25,6 +27,7 @@ import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class RegistrationUtils {
 
@@ -109,5 +112,9 @@ public class RegistrationUtils {
 
 	public static <P extends RootPlacer> void registerRootPlacerType(Identifier identifier, RootPlacerType<P> rootPlacerType) {
 		Registry.register(Registry.ROOT_PLACER_TYPE, identifier, rootPlacerType);
+	}
+
+	public static void registerCustomPortal(Identifier identifier, Block frameBlock, CustomSquaredPortalBlock portalBlock) {
+		MModdingGlobalMaps.customSquaredPortals.put(identifier, new Pair<>(frameBlock, portalBlock));
 	}
 }

@@ -4,6 +4,7 @@
   "package": "com.mmodding.mmodding_lib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "accessors.AreaHelperAccessor",
     "accessors.BlockEntityTypeAccessor",
     "accessors.BrewingRecipeRegistryAccessor",
     "accessors.ChunkSectionAccessor",
@@ -12,6 +13,8 @@
     "accessors.RootPlacerTypeAccessor",
     "accessors.TreeDecoratorTypeAccessor",
     "accessors.TrunkPlacerTypeAccessor",
+    "injectors.AbstractFireBlockMixin",
+    "injectors.AreaHelperMixin",
     "injectors.BootStrapMixin",
     "injectors.BuiltinChunkGeneratorsMixin",
     "injectors.EnchantmentHelperMixin",
