@@ -18,7 +18,6 @@ public class CustomPortalAreaHelper extends AreaHelper {
 	private final Block frameBlock;
 	private final CustomSquaredPortalBlock portalBlock;
 	private final AbstractBlock.ContextPredicate framePredicate;
-	private final AreaHelperAccessor accessor = (AreaHelperAccessor) this;
 
 	public static Optional<CustomPortalAreaHelper> getNewCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Direction.Axis axis) {
 		return CustomPortalAreaHelper.getCustomOrEmpty(frameBlock, portalBlock, world, pos, areaHelper -> areaHelper.isValid() && ((AreaHelperAccessor) areaHelper).getFoundPortalBlocks() == 0, axis);
@@ -41,14 +40,18 @@ public class CustomPortalAreaHelper extends AreaHelper {
 		this.framePredicate = (predicatedState, predicatedWorld, predicatedPos) -> predicatedState.isOf(this.frameBlock);
 	}
 
+	public AreaHelperAccessor accessor() {
+		return (AreaHelperAccessor) this;
+	}
+
 	@Override
 	public void createPortal() {
-		BlockState blockState = this.portalBlock.getDefaultState().with(NetherPortalBlock.AXIS, this.accessor.getAxis());
+		BlockState blockState = this.portalBlock.getDefaultState().with(NetherPortalBlock.AXIS, this.accessor().getAxis());
 		BlockPos.iterate(
-			this.accessor.getLowerCorner(), this.accessor.getLowerCorner()
-				.offset(Direction.UP, this.accessor.getHeight() - 1)
-				.offset(this.accessor.getNegativeDir(), this.accessor.getWidth() - 1)
-		).forEach(pos -> this.accessor.getWorld().setBlockState(pos, blockState, Block.NOTIFY_LISTENERS | Block.FORCE_STATE));
+			this.accessor().getLowerCorner(), this.accessor().getLowerCorner()
+				.offset(Direction.UP, this.accessor().getHeight() - 1)
+				.offset(this.accessor().getNegativeDir(), this.accessor().getWidth() - 1)
+		).forEach(pos -> this.accessor().getWorld().setBlockState(pos, blockState, Block.NOTIFY_LISTENERS | Block.FORCE_STATE));
 	}
 
 	public static boolean validStateInsideCustomPortal(BlockState state, CustomSquaredPortalBlock portalBlock) {
@@ -59,13 +62,13 @@ public class CustomPortalAreaHelper extends AreaHelper {
 	@Override
 	protected BlockPos getLowerCorner(BlockPos pos) {
 
-		int i = Math.max(this.accessor.getWorld().getBottomY(), pos.getY() - 21);
+		int i = Math.max(this.accessor().getWorld().getBottomY(), pos.getY() - 21);
 
-		while(pos.getY() > i && validStateInsideCustomPortal(this.accessor.getWorld().getBlockState(pos.down()), this.portalBlock)) {
+		while(pos.getY() > i && validStateInsideCustomPortal(this.accessor().getWorld().getBlockState(pos.down()), this.portalBlock)) {
 			pos = pos.down();
 		}
 
-		Direction direction = this.accessor.getNegativeDir().getOpposite();
+		Direction direction = this.accessor().getNegativeDir().getOpposite();
 		int j = this.getWidth(pos, direction) - 1;
 		return j < 0 ? null : pos.offset(direction, j);
 	}
@@ -77,16 +80,16 @@ public class CustomPortalAreaHelper extends AreaHelper {
 
 		for(int i = 0; i <= 21; ++i) {
 			mutable.set(pos).move(direction, i);
-			BlockState blockState = this.accessor.getWorld().getBlockState(mutable);
+			BlockState blockState = this.accessor().getWorld().getBlockState(mutable);
 			if (!validStateInsideCustomPortal(blockState, this.portalBlock)) {
-				if (this.framePredicate.test(blockState, this.accessor.getWorld(), mutable)) {
+				if (this.framePredicate.test(blockState, this.accessor().getWorld(), mutable)) {
 					return i;
 				}
 				break;
 			}
 
-			BlockState blockState2 = this.accessor.getWorld().getBlockState(mutable.move(Direction.DOWN));
-			if (!this.framePredicate.test(blockState2, this.accessor.getWorld(), mutable)) {
+			BlockState blockState2 = this.accessor().getWorld().getBlockState(mutable.move(Direction.DOWN));
+			if (!this.framePredicate.test(blockState2, this.accessor().getWorld(), mutable)) {
 				break;
 			}
 		}
@@ -97,9 +100,9 @@ public class CustomPortalAreaHelper extends AreaHelper {
 	@Override
 	protected boolean m_beqllhzk(BlockPos.Mutable pos, int i) {
 
-		for(int j = 0; j < this.accessor.getWidth(); ++j) {
-			BlockPos.Mutable mutable = pos.set(this.accessor.getLowerCorner()).move(Direction.UP, i).move(this.accessor.getNegativeDir(), j);
-			if (!this.framePredicate.test(this.accessor.getWorld().getBlockState(mutable), this.accessor.getWorld(), mutable)) {
+		for(int j = 0; j < this.accessor().getWidth(); ++j) {
+			BlockPos.Mutable mutable = pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), j);
+			if (!this.framePredicate.test(this.accessor().getWorld().getBlockState(mutable), this.accessor().getWorld(), mutable)) {
 				return false;
 			}
 		}
@@ -111,25 +114,25 @@ public class CustomPortalAreaHelper extends AreaHelper {
 	protected int m_fqjhrxgm(BlockPos.Mutable pos) {
 
 		for(int i = 0; i < 21; ++i) {
-			pos.set(this.accessor.getLowerCorner()).move(Direction.UP, i).move(this.accessor.getNegativeDir(), -1);
-			if (!this.framePredicate.test(this.accessor.getWorld().getBlockState(pos), this.accessor.getWorld(), pos)) {
+			pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), -1);
+			if (!this.framePredicate.test(this.accessor().getWorld().getBlockState(pos), this.accessor().getWorld(), pos)) {
 				return i;
 			}
 
-			pos.set(this.accessor.getLowerCorner()).move(Direction.UP, i).move(this.accessor.getNegativeDir(), this.accessor.getWidth());
-			if (!this.framePredicate.test(this.accessor.getWorld().getBlockState(pos), this.accessor.getWorld(), pos)) {
+			pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), this.accessor().getWidth());
+			if (!this.framePredicate.test(this.accessor().getWorld().getBlockState(pos), this.accessor().getWorld(), pos)) {
 				return i;
 			}
 
-			for(int j = 0; j < this.accessor.getWidth(); ++j) {
-				pos.set(this.accessor.getLowerCorner()).move(Direction.UP, i).move(this.accessor.getNegativeDir(), j);
-				BlockState blockState = this.accessor.getWorld().getBlockState(pos);
+			for(int j = 0; j < this.accessor().getWidth(); ++j) {
+				pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), j);
+				BlockState blockState = this.accessor().getWorld().getBlockState(pos);
 				if (!validStateInsideCustomPortal(blockState, this.portalBlock)) {
 					return i;
 				}
 
 				if (blockState.isOf(this.portalBlock)) {
-					this.accessor.setFoundPortalBlocks(this.accessor.getFoundPortalBlocks() + 1);
+					this.accessor().setFoundPortalBlocks(this.accessor().getFoundPortalBlocks() + 1);
 				}
 			}
 		}
