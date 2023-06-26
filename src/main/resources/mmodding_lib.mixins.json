@@ -23,6 +23,8 @@
     "injectors.FishingBobberEntityMixin",
     "injectors.ItemMixin",
     "injectors.PlayerEntityMixin",
+    "injectors.PortalForcerMixin",
+    "injectors.ServerPlayerEntityMixin",
     "injectors.ServerWorldMixin"
   ],
   "client": [
