@@ -43,6 +43,7 @@ public class AbstractFireBlockMixin {
 			for (Direction defaultDirection : Direction.values()) {
 				if (world.getBlockState(mutable.set(pos).move(defaultDirection)).isOf(pair.getLeft())) {
 					bl = true;
+					break;
 				}
 			}
 

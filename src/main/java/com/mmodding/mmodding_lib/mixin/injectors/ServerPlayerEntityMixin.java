@@ -1,30 +1,45 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
+import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
+import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
+import net.minecraft.world.PortalForcer;
 import net.minecraft.world.border.WorldBorder;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Optional;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends EntityMixin {
+public abstract class ServerPlayerEntityMixin extends EntityMixin implements ServerPlayerDuckInterface {
 
-	@Inject(method = "getPortalRect", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/PortalForcer;createPortal(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction$Axis;)Ljava/util/Optional;", shift = At.Shift.BEFORE))
-	private void createPortal(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
-		PortalForcerDuckInterface duck = (PortalForcerDuckInterface) destWorld.getPortalForcer();
-		duck.setUseCustomPortalElements(this.useCustomPortalElements);
-		duck.setCustomPortalElements(this.customPortalElements.getFirst(), this.customPortalElements.getSecond());
-	}
+	@Shadow
+	public abstract ServerWorld getWorld();
 
-	@Inject(method = "getPortalRect", at = @At("TAIL"))
-	private void getPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
-		this.useCustomPortalElements = false;
+	@Unique
+	public Optional<BlockLocating.Rectangle> getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder) {
+		// TODO : Make Automatically Register a POI for Each Portal in order to research them
+		Optional<BlockLocating.Rectangle> optional = super.getPortalRect(destWorld, destPos, destIsNether, worldBorder);
+		if (optional.isPresent()) {
+			return optional;
+		} else {
+			Direction.Axis axis = this.getWorld().getBlockState(this.lastCustomPortalPosition).getOrEmpty(NetherPortalBlock.AXIS).orElse(Direction.Axis.X);
+			PortalForcer forcer = destWorld.getPortalForcer();
+			PortalForcerDuckInterface duckedForcer = (PortalForcerDuckInterface) forcer;
+
+			duckedForcer.setUseCustomPortalElements(this.useCustomPortalElements);
+			duckedForcer.setCustomPortalElements(this.customPortalElements.getFirst(), this.customPortalElements.getSecond());
+
+			Optional<BlockLocating.Rectangle> optionalPortal = forcer.createPortal(destPos, axis);
+
+			this.useCustomPortalElements = false;
+			return optionalPortal;
+		}
 	}
 }

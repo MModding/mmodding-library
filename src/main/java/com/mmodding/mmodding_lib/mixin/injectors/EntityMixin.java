@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
+import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
 import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
@@ -9,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
@@ -16,21 +18,22 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockLocating;
+import net.minecraft.world.Heightmap;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.AreaHelper;
 import net.minecraft.world.dimension.DimensionType;
-import org.jetbrains.annotations.Nullable;
+import org.quiltmc.qsl.worldgen.dimension.api.QuiltDimensions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements EntityDuckInterface {
@@ -69,9 +72,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	protected int netherPortalTime;
 
 	@Shadow
-	public abstract @Nullable Entity moveToWorld(ServerWorld destination);
-
-	@Shadow
 	protected abstract void tickNetherPortalCooldown();
 
 	@Shadow
@@ -84,7 +84,9 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	public abstract double getZ();
 
 	@Shadow
-	protected abstract Optional<BlockLocating.Rectangle> getPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder);
+	protected Optional<BlockLocating.Rectangle> getPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder) {
+		return Optional.empty();
+	}
 
 	@Shadow
 	protected abstract Vec3d positionInPortal(Direction.Axis portalAxis, BlockLocating.Rectangle portalRect);
@@ -104,23 +106,36 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Shadow
 	public abstract float getPitch();
 
+	@Shadow
+	protected boolean inNetherPortal;
+
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
 	}
 
-	@Inject(method = "getTeleportTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getRegistryKey()Lnet/minecraft/util/registry/RegistryKey;", shift = At.Shift.AFTER, ordinal = 2), cancellable = true)
-	private void getTeleportTarget(ServerWorld destination, CallbackInfoReturnable<TeleportTarget> cir) {
+	@Inject(method = "tickNetherPortal", at = @At("HEAD"), cancellable = true)
+	private void tickNetherPortal(CallbackInfo ci) {
+		if (this.getWorld() instanceof ServerWorld) {
+			if (this.inCustomPortal) {
+				this.tickNetherPortalCooldown();
+				ci.cancel();
+			}
+		}
+	}
+
+	@Unique
+	private TeleportTarget getCustomPortalTarget(ServerWorld destination) {
 		boolean overworldToNether = this.getWorld().getRegistryKey() != World.OVERWORLD && destination.getRegistryKey() != World.NETHER;
 		boolean netherToOverworld = this.getWorld().getRegistryKey() != World.NETHER && destination.getRegistryKey() != World.OVERWORLD;
-		if (!overworldToNether && !netherToOverworld) {
+		if (true) {
 
 			WorldBorder worldBorder = destination.getWorldBorder();
 			double coordScaleFactor = DimensionType.getCoordinateScaleFactor(this.getWorld().getDimension(), destination.getDimension());
 			BlockPos blockPos2 = worldBorder.m_kgymprsy(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
 			this.useCustomPortalElements = true;
 
-			cir.setReturnValue(this.getPortalRect(destination, blockPos2, false, worldBorder).map(rectangle -> {
+			Function<BlockLocating.Rectangle, TeleportTarget> func = rectangle -> {
 				BlockState lastCustomPortalState = this.getWorld().getBlockState(this.lastCustomPortalPosition);
 				Direction.Axis axisTarget;
 				Vec3d vec3dTarget;
@@ -144,7 +159,23 @@ public abstract class EntityMixin implements EntityDuckInterface {
 				return AreaHelper.getNetherTeleportTarget(
 					destination, rectangle, axisTarget, vec3dTarget, this.getDimensions(this.getPose()), this.getVelocity(), this.getYaw(), this.getPitch()
 				);
-			}).orElse(null));
+			};
+
+			Entity thisEntity = (Entity) (Object) this;
+
+			if (thisEntity instanceof ServerPlayerEntity player) {
+				return ((ServerPlayerDuckInterface) player).getCustomPortalRect(destination, blockPos2, false, worldBorder).map(func).orElse(null);
+			}
+			else {
+				return this.getPortalRect(destination, blockPos2, false, worldBorder).map(func).orElse(null);
+			}
+		}
+		else {
+			BlockPos pos = destination.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destination.getSpawnPos());
+
+			return new TeleportTarget(
+				new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), this.getVelocity(), this.getYaw(), this.getPitch()
+			);
 		}
 	}
 
@@ -166,17 +197,23 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Unique
 	public void tickCustomPortal() {
 		if (this.getWorld() instanceof ServerWorld serverWorld) {
+			if (this.inNetherPortal) {
+				this.tickNetherPortalCooldown();
+				return;
+			}
 			int i = this.getMaxNetherPortalTime();
 			if (this.inCustomPortal) {
 				MinecraftServer minecraftServer = serverWorld.getServer();
 				RegistryKey<World> registryKey = this.customPortalElements.getSecond().getWorldKey();
 				ServerWorld destinationWorld = minecraftServer.getWorld(registryKey);
-				if (destinationWorld != null && minecraftServer.isNetherAllowed() && !this.hasVehicle() && this.netherPortalTime++ >= i) {
-					this.getWorld().getProfiler().push("customPortal");
+				System.out.println(this.netherPortalTime + " / " + i);
+				if (destinationWorld != null && !this.hasVehicle() && this.netherPortalTime++ >= i) {
+					this.getWorld().getProfiler().push("portal");
 					this.netherPortalTime = i;
 					this.resetNetherPortalCooldown();
-					this.moveToWorld(destinationWorld);
+					QuiltDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
 					this.getWorld().getProfiler().pop();
+					System.out.println("d");
 				}
 
 				this.inCustomPortal = false;
@@ -189,8 +226,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 					this.netherPortalTime = 0;
 				}
 			}
-
-			this.tickNetherPortalCooldown();
 		}
 	}
 }
