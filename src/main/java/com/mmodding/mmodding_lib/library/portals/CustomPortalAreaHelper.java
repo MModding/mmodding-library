@@ -22,7 +22,7 @@ public class CustomPortalAreaHelper extends AreaHelper {
 		return CustomPortalAreaHelper.getCustomOrEmpty(frameBlock, portalBlock, world, pos, areaHelper -> areaHelper.isValid() && ((AreaHelperAccessor) areaHelper).getFoundPortalBlocks() == 0, axis);
 	}
 
-	public static Optional<CustomPortalAreaHelper> getCustomOrEmpty(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Predicate<AreaHelper> predicate, Direction.Axis axis) {
+	public static Optional<CustomPortalAreaHelper> getCustomOrEmpty(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Predicate<CustomPortalAreaHelper> predicate, Direction.Axis axis) {
 		Optional<CustomPortalAreaHelper> optional = Optional.of(new CustomPortalAreaHelper(frameBlock, portalBlock, world, pos, axis)).filter(predicate);
 		if (optional.isPresent()) {
 			return optional;
@@ -36,6 +36,17 @@ public class CustomPortalAreaHelper extends AreaHelper {
 		super(world, pos, axis);
 		this.frameBlock = frameBlock;
 		this.portalBlock = portalBlock;
+		this.accessor().setLowerCorner(this.getLowerCorner(pos));
+		if (this.accessor().getLowerCorner() == null) {
+			this.accessor().setLowerCorner(pos);
+			this.accessor().setWidth(1);
+			this.accessor().setHeight(1);
+		} else {
+			this.accessor().setWidth(this.accessor().invokeGetWidth());
+			if (this.accessor().getWidth() > 0) {
+				this.accessor().setHeight(this.accessor().invokeGetHeight());
+			}
+		}
 	}
 
 	public AreaHelperAccessor accessor() {
@@ -48,16 +59,16 @@ public class CustomPortalAreaHelper extends AreaHelper {
 
 	@Override
 	public void createPortal() {
-		BlockState blockState = this.portalBlock.getDefaultState().with(NetherPortalBlock.AXIS, this.accessor().getAxis());
+		BlockState portalBlockState = this.portalBlock.getDefaultState().with(NetherPortalBlock.AXIS, this.accessor().getAxis());
 		BlockPos.iterate(
 			this.accessor().getLowerCorner(), this.accessor().getLowerCorner()
 				.offset(Direction.UP, this.accessor().getHeight() - 1)
 				.offset(this.accessor().getNegativeDir(), this.accessor().getWidth() - 1)
-		).forEach(pos -> this.accessor().getWorld().setBlockState(pos, blockState, Block.NOTIFY_LISTENERS | Block.FORCE_STATE));
+		).forEach(pos -> this.accessor().getWorld().setBlockState(pos, portalBlockState, Block.NOTIFY_LISTENERS | Block.FORCE_STATE));
 	}
 
-	public static boolean validStateInsideCustomPortal(BlockState state, CustomSquaredPortalBlock portalBlock) {
-		return state.isAir() || state.isIn(BlockTags.FIRE) || state.isOf(portalBlock);
+	public boolean validStateInsideCustomPortal(BlockState state) {
+		return state.isAir() || state.isIn(BlockTags.FIRE) || state.isOf(this.portalBlock);
 	}
 
 	@Nullable
@@ -66,7 +77,7 @@ public class CustomPortalAreaHelper extends AreaHelper {
 
 		int i = Math.max(this.accessor().getWorld().getBottomY(), pos.getY() - 21);
 
-		while(pos.getY() > i && validStateInsideCustomPortal(this.accessor().getWorld().getBlockState(pos.down()), this.portalBlock)) {
+		while(pos.getY() > i && this.validStateInsideCustomPortal(this.accessor().getWorld().getBlockState(pos.down()))) {
 			pos = pos.down();
 		}
 
@@ -83,7 +94,7 @@ public class CustomPortalAreaHelper extends AreaHelper {
 		for(int i = 0; i <= 21; ++i) {
 			mutable.set(pos).move(direction, i);
 			BlockState blockState = this.accessor().getWorld().getBlockState(mutable);
-			if (!validStateInsideCustomPortal(blockState, this.portalBlock)) {
+			if (!this.validStateInsideCustomPortal(blockState)) {
 				if (this.isFrame(blockState)) {
 					return i;
 				}
@@ -129,7 +140,7 @@ public class CustomPortalAreaHelper extends AreaHelper {
 			for(int j = 0; j < this.accessor().getWidth(); ++j) {
 				pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), j);
 				BlockState blockState = this.accessor().getWorld().getBlockState(pos);
-				if (!validStateInsideCustomPortal(blockState, this.portalBlock)) {
+				if (!this.validStateInsideCustomPortal(blockState)) {
 					return i;
 				}
 

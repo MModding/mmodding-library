@@ -1,12 +1,10 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
-import com.mmodding.mmodding_lib.ducks.EntityDuck;
+import com.mmodding.mmodding_lib.ducks.NetherPortalBlockDuckInterface;
+import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.library.portals.CustomPortalAreaHelper;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.NetherPortalBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -60,13 +58,13 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 		boolean bl = stateAxis != directionAxis && directionAxis.isHorizontal();
 		return !bl && !neighborState.isOf(this) && !new CustomPortalAreaHelper(this.frameBlock, this, world, pos, stateAxis).wasAlreadyValid()
 			? Blocks.AIR.getDefaultState()
-			: super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+			: ((NetherPortalBlockDuckInterface) this).getAbstractStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if (!entity.hasVehicle() && !entity.hasPassengers() && entity.canUsePortals()) {
-			((EntityDuck) entity).setInCustomPortal(this.frameBlock, this, pos);
+			((EntityDuckInterface) entity).setInCustomPortal(this.frameBlock, this, pos);
 		}
 	}
 

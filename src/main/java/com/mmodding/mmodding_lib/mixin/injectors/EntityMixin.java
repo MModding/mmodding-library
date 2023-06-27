@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
-import com.mmodding.mmodding_lib.ducks.EntityDuck;
+import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin implements EntityDuck {
+public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Unique
 	boolean inCustomPortal;
@@ -111,9 +111,9 @@ public abstract class EntityMixin implements EntityDuck {
 
 	@Inject(method = "getTeleportTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;getRegistryKey()Lnet/minecraft/util/registry/RegistryKey;", shift = At.Shift.AFTER, ordinal = 2), cancellable = true)
 	private void getTeleportTarget(ServerWorld destination, CallbackInfoReturnable<TeleportTarget> cir) {
-		boolean notOverworldToNether = this.getWorld().getRegistryKey() != World.OVERWORLD && destination.getRegistryKey() != World.NETHER;
-		boolean notNetherToOverworld = this.getWorld().getRegistryKey() != World.NETHER && destination.getRegistryKey() != World.OVERWORLD;
-		if (notOverworldToNether && notNetherToOverworld) {
+		boolean overworldToNether = this.getWorld().getRegistryKey() != World.OVERWORLD && destination.getRegistryKey() != World.NETHER;
+		boolean netherToOverworld = this.getWorld().getRegistryKey() != World.NETHER && destination.getRegistryKey() != World.OVERWORLD;
+		if (!overworldToNether && !netherToOverworld) {
 
 			WorldBorder worldBorder = destination.getWorldBorder();
 			double coordScaleFactor = DimensionType.getCoordinateScaleFactor(this.getWorld().getDimension(), destination.getDimension());

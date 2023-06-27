@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
-import com.mmodding.mmodding_lib.ducks.PortalForcerDuck;
+import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(PortalForcer.class)
-public abstract class PortalForcerMixin implements PortalForcerDuck {
+public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 
 	@Shadow
 	@Final

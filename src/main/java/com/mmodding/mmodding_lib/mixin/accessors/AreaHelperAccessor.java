@@ -6,6 +6,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.AreaHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(AreaHelper.class)
 public interface AreaHelperAccessor {
@@ -28,9 +29,24 @@ public interface AreaHelperAccessor {
 	@Accessor
 	BlockPos getLowerCorner();
 
+	@Accessor("lowerCorner")
+	void setLowerCorner(BlockPos lowerCorner);
+
 	@Accessor
 	int getHeight();
 
+	@Accessor("height")
+	void setHeight(int height);
+
 	@Accessor
 	int getWidth();
+
+	@Accessor("width")
+	void setWidth(int width);
+
+	@Invoker("getHeight")
+	int invokeGetHeight();
+
+	@Invoker("getWidth")
+	int invokeGetWidth();
 }
