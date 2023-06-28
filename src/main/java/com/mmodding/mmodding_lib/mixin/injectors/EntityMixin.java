@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
+import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
 import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
 import com.mojang.datafixers.util.Pair;
@@ -18,7 +19,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockLocating;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
@@ -32,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Optional;
 import java.util.function.Function;
 
 @Mixin(Entity.class)
@@ -84,11 +83,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	public abstract double getZ();
 
 	@Shadow
-	protected Optional<BlockLocating.Rectangle> getPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder) {
-		return Optional.empty();
-	}
-
-	@Shadow
 	protected abstract Vec3d positionInPortal(Direction.Axis portalAxis, BlockLocating.Rectangle portalRect);
 
 	@Shadow
@@ -126,56 +120,44 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Unique
 	private TeleportTarget getCustomPortalTarget(ServerWorld destination) {
-		boolean overworldToNether = this.getWorld().getRegistryKey() != World.OVERWORLD && destination.getRegistryKey() != World.NETHER;
-		boolean netherToOverworld = this.getWorld().getRegistryKey() != World.NETHER && destination.getRegistryKey() != World.OVERWORLD;
-		if (true) {
+		WorldBorder worldBorder = destination.getWorldBorder();
+		double coordScaleFactor = DimensionType.getCoordinateScaleFactor(this.getWorld().getDimension(), destination.getDimension());
+		BlockPos blockPos2 = worldBorder.m_kgymprsy(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
+		this.useCustomPortalElements = true;
 
-			WorldBorder worldBorder = destination.getWorldBorder();
-			double coordScaleFactor = DimensionType.getCoordinateScaleFactor(this.getWorld().getDimension(), destination.getDimension());
-			BlockPos blockPos2 = worldBorder.m_kgymprsy(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
-			this.useCustomPortalElements = true;
+		Function<BlockLocating.Rectangle, TeleportTarget> func = rectangle -> {
+			BlockState lastCustomPortalState = this.getWorld().getBlockState(this.lastCustomPortalPosition);
+			Direction.Axis axisTarget;
+			Vec3d vec3dTarget;
 
-			Function<BlockLocating.Rectangle, TeleportTarget> func = rectangle -> {
-				BlockState lastCustomPortalState = this.getWorld().getBlockState(this.lastCustomPortalPosition);
-				Direction.Axis axisTarget;
-				Vec3d vec3dTarget;
-
-				if (lastCustomPortalState.contains(Properties.HORIZONTAL_AXIS)) {
-					axisTarget = lastCustomPortalState.get(Properties.HORIZONTAL_AXIS);
-					BlockLocating.Rectangle rectangle2 = BlockLocating.getLargestRectangle(
-						this.lastCustomPortalPosition,
-						axisTarget,
-						21,
-						Direction.Axis.Y,
-						21,
-						pos -> this.getWorld().getBlockState(pos) == lastCustomPortalState
-					);
-					vec3dTarget = this.positionInPortal(axisTarget, rectangle2);
-				} else {
-					axisTarget = Direction.Axis.X;
-					vec3dTarget = new Vec3d(0.5, 0.0, 0.0);
-				}
-
-				return AreaHelper.getNetherTeleportTarget(
-					destination, rectangle, axisTarget, vec3dTarget, this.getDimensions(this.getPose()), this.getVelocity(), this.getYaw(), this.getPitch()
+			if (lastCustomPortalState.contains(Properties.HORIZONTAL_AXIS)) {
+				axisTarget = lastCustomPortalState.get(Properties.HORIZONTAL_AXIS);
+				BlockLocating.Rectangle rectangle2 = BlockLocating.getLargestRectangle(
+					this.lastCustomPortalPosition,
+					axisTarget,
+					21,
+					Direction.Axis.Y,
+					21,
+					pos -> this.getWorld().getBlockState(pos) == lastCustomPortalState
 				);
-			};
-
-			Entity thisEntity = (Entity) (Object) this;
-
-			if (thisEntity instanceof ServerPlayerEntity player) {
-				return ((ServerPlayerDuckInterface) player).getCustomPortalRect(destination, blockPos2, false, worldBorder).map(func).orElse(null);
+				vec3dTarget = this.positionInPortal(axisTarget, rectangle2);
+			} else {
+				axisTarget = Direction.Axis.X;
+				vec3dTarget = new Vec3d(0.5, 0.0, 0.0);
 			}
-			else {
-				return this.getPortalRect(destination, blockPos2, false, worldBorder).map(func).orElse(null);
-			}
+
+			return AreaHelper.getNetherTeleportTarget(
+				destination, rectangle, axisTarget, vec3dTarget, this.getDimensions(this.getPose()), this.getVelocity(), this.getYaw(), this.getPitch()
+			);
+		};
+
+		Entity thisEntity = (Entity) (Object) this;
+
+		if (thisEntity instanceof ServerPlayerEntity player) {
+			return ((ServerPlayerDuckInterface) player).getCustomPortalRect(destination, blockPos2, worldBorder).map(func).orElse(null);
 		}
 		else {
-			BlockPos pos = destination.getTopPosition(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, destination.getSpawnPos());
-
-			return new TeleportTarget(
-				new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), this.getVelocity(), this.getYaw(), this.getPitch()
-			);
+			return ((PortalForcerDuckInterface) destination.getPortalForcer()).searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), blockPos2, worldBorder).map(func).orElse(null);
 		}
 	}
 
@@ -204,16 +186,17 @@ public abstract class EntityMixin implements EntityDuckInterface {
 			int i = this.getMaxNetherPortalTime();
 			if (this.inCustomPortal) {
 				MinecraftServer minecraftServer = serverWorld.getServer();
-				RegistryKey<World> registryKey = this.customPortalElements.getSecond().getWorldKey();
+				RegistryKey<World> portalWorldKey = this.customPortalElements.getSecond().getWorldKey();
+				RegistryKey<World> registryKey = serverWorld.getRegistryKey() == portalWorldKey ? World.OVERWORLD : portalWorldKey;
 				ServerWorld destinationWorld = minecraftServer.getWorld(registryKey);
 				System.out.println(this.netherPortalTime + " / " + i);
+
 				if (destinationWorld != null && !this.hasVehicle() && this.netherPortalTime++ >= i) {
 					this.getWorld().getProfiler().push("portal");
 					this.netherPortalTime = i;
 					this.resetNetherPortalCooldown();
 					QuiltDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
 					this.getWorld().getProfiler().pop();
-					System.out.println("d");
 				}
 
 				this.inCustomPortal = false;

@@ -23,15 +23,15 @@ public abstract class ServerPlayerEntityMixin extends EntityMixin implements Ser
 	public abstract ServerWorld getWorld();
 
 	@Unique
-	public Optional<BlockLocating.Rectangle> getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder) {
-		// TODO : Make Automatically Register a POI for Each Portal in order to research them
-		Optional<BlockLocating.Rectangle> optional = super.getPortalRect(destWorld, destPos, destIsNether, worldBorder);
+	public Optional<BlockLocating.Rectangle> getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, WorldBorder worldBorder) {
+		PortalForcer forcer = destWorld.getPortalForcer();
+		PortalForcerDuckInterface duckedForcer = (PortalForcerDuckInterface) forcer;
+		Optional<BlockLocating.Rectangle> optional = duckedForcer.searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), destPos, worldBorder);
+
 		if (optional.isPresent()) {
 			return optional;
 		} else {
 			Direction.Axis axis = this.getWorld().getBlockState(this.lastCustomPortalPosition).getOrEmpty(NetherPortalBlock.AXIS).orElse(Direction.Axis.X);
-			PortalForcer forcer = destWorld.getPortalForcer();
-			PortalForcerDuckInterface duckedForcer = (PortalForcerDuckInterface) forcer;
 
 			duckedForcer.setUseCustomPortalElements(this.useCustomPortalElements);
 			duckedForcer.setCustomPortalElements(this.customPortalElements.getFirst(), this.customPortalElements.getSecond());

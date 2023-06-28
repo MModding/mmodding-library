@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface ServerPlayerDuckInterface {
 
-	Optional<BlockLocating.Rectangle> getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, boolean destIsNether, WorldBorder worldBorder);
+	Optional<BlockLocating.Rectangle> getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, WorldBorder worldBorder);
 }

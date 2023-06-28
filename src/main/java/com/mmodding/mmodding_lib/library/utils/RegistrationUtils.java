@@ -27,6 +27,7 @@ import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacerType;
+import net.minecraft.world.poi.PointOfInterestType;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class RegistrationUtils {
@@ -116,5 +117,9 @@ public class RegistrationUtils {
 
 	public static void registerCustomPortal(Identifier identifier, Block frameBlock, CustomSquaredPortalBlock portalBlock) {
 		MModdingGlobalMaps.customSquaredPortals.put(identifier, new Pair<>(frameBlock, portalBlock));
+	}
+
+	public static void registerPointOfInterestType(Identifier identifier, PointOfInterestType type) {
+		Registry.register(Registry.POINT_OF_INTEREST_TYPE, identifier, type);
 	}
 }

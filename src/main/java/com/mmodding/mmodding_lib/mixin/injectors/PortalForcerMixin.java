@@ -7,14 +7,21 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.PortalForcer;
 import net.minecraft.world.border.WorldBorder;
+import net.minecraft.world.poi.PointOfInterest;
+import net.minecraft.world.poi.PointOfInterestStorage;
+import net.minecraft.world.poi.PointOfInterestType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 @Mixin(PortalForcer.class)
@@ -49,6 +57,40 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 	@Override
 	public void setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock) {
 		this.customPortalElements = new Pair<>(frameBlock, portalBlock);
+	}
+
+	@Unique
+	@Override
+	public Optional<BlockLocating.Rectangle> searchCustomPortal(RegistryKey<PointOfInterestType> poiKey, BlockPos destPos, WorldBorder worldBorder) {
+		PointOfInterestStorage storage = this.world.getPointOfInterestStorage();
+		storage.preloadChunks(this.world, destPos, 128);
+
+		Optional<PointOfInterest> optional = storage.getInSquare(
+			holder -> holder.isRegistryKey(poiKey),
+			destPos,
+			128,
+			PointOfInterestStorage.OccupationStatus.ANY
+		).filter(
+			pointOfInterest -> worldBorder.contains(pointOfInterest.getPos())
+		).sorted(
+			Comparator.comparingDouble(pointOfInterest -> ((PointOfInterest) pointOfInterest).getPos().getSquaredDistance(destPos))
+				.thenComparingInt(object -> ((PointOfInterest) object).getPos().getY())
+		).filter(pointOfInterest -> this.world.getBlockState(pointOfInterest.getPos()).contains(Properties.HORIZONTAL_AXIS)).findFirst();
+
+		return optional.map(pointOfInterest -> {
+			BlockPos blockPos = pointOfInterest.getPos();
+			this.world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(blockPos), 3, blockPos);
+			BlockState blockState = this.world.getBlockState(blockPos);
+
+			return BlockLocating.getLargestRectangle(
+				blockPos,
+				blockState.get(Properties.HORIZONTAL_AXIS),
+				21,
+				Direction.Axis.Y,
+				21,
+				pos -> this.world.getBlockState(pos) == blockState
+			);
+		});
 	}
 
 	@Inject(method = "createPortal", at = @At(value = "HEAD"), cancellable = true)

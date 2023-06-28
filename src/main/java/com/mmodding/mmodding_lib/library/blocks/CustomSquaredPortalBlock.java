@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.ducks.NetherPortalBlockDuckInterface;
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
+import com.mmodding.mmodding_lib.library.pois.CustomPOI;
 import com.mmodding.mmodding_lib.library.portals.CustomPortalAreaHelper;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.block.*;
@@ -16,6 +17,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.poi.PointOfInterestType;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,6 +29,7 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 
 	private final Block frameBlock;
 	private final RegistryKey<World> worldKey;
+	private final RegistryKey<PointOfInterestType> poiKey;
 
     public CustomSquaredPortalBlock(Block frameBlock, Identifier dimensionId, Settings settings) {
         this(frameBlock, dimensionId, settings, false);
@@ -45,6 +48,9 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
         if (hasItem) this.item = new BlockItem(this, itemSettings);
 		this.frameBlock = frameBlock;
 		this.worldKey = RegistryKey.of(Registry.WORLD_KEY, dimensionId);
+		Identifier poiId = new Identifier(dimensionId.getNamespace(), dimensionId.getPath() + "_portal_poi");
+		this.poiKey = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, poiId);
+		new CustomPOI(this, 0, 1).register(poiId);
     }
 
 	public void registerPortal(Identifier identifier) {
@@ -70,6 +76,10 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 
 	public RegistryKey<World> getWorldKey() {
 		return this.worldKey;
+	}
+
+	public RegistryKey<PointOfInterestType> getPoiKey() {
+		return this.poiKey;
 	}
 
 	@Override
