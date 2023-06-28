@@ -17,6 +17,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.TeleportTarget;
@@ -25,6 +26,7 @@ import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.AreaHelper;
 import net.minecraft.world.dimension.DimensionType;
 import org.quiltmc.qsl.worldgen.dimension.api.QuiltDimensions;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -48,6 +50,16 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Unique
 	BlockPos lastCustomPortalPosition;
+
+	@Override
+	public boolean isInCustomPortal() {
+		return this.inCustomPortal;
+	}
+
+	@Override
+	public Pair<Block, CustomSquaredPortalBlock> getCustomPortalElements() {
+		return this.customPortalElements;
+	}
 
 	@Shadow
 	public abstract double squaredDistanceTo(Entity entity);
@@ -102,6 +114,10 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Shadow
 	protected boolean inNetherPortal;
+
+	@Shadow
+	@Final
+	protected RandomGenerator random;
 
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {

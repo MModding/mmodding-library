@@ -31,7 +31,9 @@
   ],
   "client": [
     "accessors.BufferBuilderStorageAccessor",
-    "injectors.EntryListWidgetMixin"
+    "injectors.ClientPlayerEntityMixin",
+    "injectors.EntryListWidgetMixin",
+    "injectors.InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
