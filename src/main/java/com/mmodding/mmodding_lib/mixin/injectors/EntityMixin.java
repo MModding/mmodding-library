@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
-import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

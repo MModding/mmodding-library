@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
-import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
-import com.mmodding.mmodding_lib.library.portals.CustomPortalAreaHelper;
+import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalAreaHelper;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.Block;
@@ -27,8 +27,12 @@ public class AbstractFireBlockMixin {
 		if(!state.isOf(oldState.getBlock())) {
 			for (Identifier identifier : MModdingGlobalMaps.getCustomSquaredPortalKeys()) {
 				Pair<? extends Block, ? extends CustomSquaredPortalBlock> pair = MModdingGlobalMaps.getCustomSquaredPortal(identifier);
-				Optional<CustomPortalAreaHelper> optional = CustomPortalAreaHelper.getNewCustomPortal(pair.getLeft(), pair.getRight(), world, pos, Direction.Axis.X);
-				optional.ifPresent(CustomPortalAreaHelper::createPortal);
+				if (pair.getRight().shouldLightLikeVanilla()) {
+					Optional<CustomSquaredPortalAreaHelper> optional = CustomSquaredPortalAreaHelper.getNewCustomPortal(
+						pair.getLeft(), pair.getRight(), world, pos, Direction.Axis.X
+					);
+					optional.ifPresent(CustomSquaredPortalAreaHelper::createPortal);
+				}
 			}
 		}
 	}
@@ -37,25 +41,27 @@ public class AbstractFireBlockMixin {
 	private static void shouldLightPortal(World world, BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
 		for (Identifier identifier : MModdingGlobalMaps.getCustomSquaredPortalKeys()) {
 			Pair<? extends  Block, ? extends CustomSquaredPortalBlock> pair = MModdingGlobalMaps.getCustomSquaredPortal(identifier);
-			boolean bl = false;
-			BlockPos.Mutable mutable = pos.mutableCopy();
 
-			for (Direction defaultDirection : Direction.values()) {
-				if (world.getBlockState(mutable.set(pos).move(defaultDirection)).isOf(pair.getLeft())) {
-					bl = true;
-					break;
-				}
-			}
+			if (pair.getRight().shouldLightLikeVanilla()) {
+				boolean bl = false;
+				BlockPos.Mutable mutable = pos.mutableCopy();
 
-			if (bl) {
-				Direction.Axis axis;
-				if (direction.getAxis().isHorizontal()) {
-					axis = direction.rotateYCounterclockwise().getAxis();
+				for (Direction defaultDirection : Direction.values()) {
+					if (world.getBlockState(mutable.set(pos).move(defaultDirection)).isOf(pair.getLeft())) {
+						bl = true;
+						break;
+					}
 				}
-				else {
-					axis = Direction.Type.HORIZONTAL.randomAxis(world.random);
+
+				if (bl) {
+					Direction.Axis axis;
+					if (direction.getAxis().isHorizontal()) {
+						axis = direction.rotateYCounterclockwise().getAxis();
+					} else {
+						axis = Direction.Type.HORIZONTAL.randomAxis(world.random);
+					}
+					cir.setReturnValue(CustomSquaredPortalAreaHelper.getNewCustomPortal(pair.getLeft(), pair.getRight(), world, pos, axis).isPresent());
 				}
-				cir.setReturnValue(CustomPortalAreaHelper.getNewCustomPortal(pair.getLeft(), pair.getRight(), world, pos, axis).isPresent());
 			}
 		}
 	}

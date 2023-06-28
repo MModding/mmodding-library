@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
-import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -28,7 +28,6 @@ import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacerType;
 import net.minecraft.world.poi.PointOfInterestType;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class RegistrationUtils {
 

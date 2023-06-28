@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.library.portals;
 
-import com.mmodding.mmodding_lib.library.blocks.CustomSquaredPortalBlock;
 import com.mmodding.mmodding_lib.mixin.accessors.AreaHelperAccessor;
 import net.minecraft.block.*;
 import net.minecraft.tag.BlockTags;
@@ -13,26 +12,26 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class CustomPortalAreaHelper extends AreaHelper {
+public class CustomSquaredPortalAreaHelper extends AreaHelper {
 
 	private final Block frameBlock;
 	private final CustomSquaredPortalBlock portalBlock;
 
-	public static Optional<CustomPortalAreaHelper> getNewCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Direction.Axis axis) {
-		return CustomPortalAreaHelper.getCustomOrEmpty(frameBlock, portalBlock, world, pos, areaHelper -> areaHelper.isValid() && ((AreaHelperAccessor) areaHelper).getFoundPortalBlocks() == 0, axis);
+	public static Optional<CustomSquaredPortalAreaHelper> getNewCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Direction.Axis axis) {
+		return CustomSquaredPortalAreaHelper.getCustomOrEmpty(frameBlock, portalBlock, world, pos, areaHelper -> areaHelper.isValid() && ((AreaHelperAccessor) areaHelper).getFoundPortalBlocks() == 0, axis);
 	}
 
-	public static Optional<CustomPortalAreaHelper> getCustomOrEmpty(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Predicate<CustomPortalAreaHelper> predicate, Direction.Axis axis) {
-		Optional<CustomPortalAreaHelper> optional = Optional.of(new CustomPortalAreaHelper(frameBlock, portalBlock, world, pos, axis)).filter(predicate);
+	public static Optional<CustomSquaredPortalAreaHelper> getCustomOrEmpty(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Predicate<CustomSquaredPortalAreaHelper> predicate, Direction.Axis axis) {
+		Optional<CustomSquaredPortalAreaHelper> optional = Optional.of(new CustomSquaredPortalAreaHelper(frameBlock, portalBlock, world, pos, axis)).filter(predicate);
 		if (optional.isPresent()) {
 			return optional;
 		} else {
 			Direction.Axis axis2 = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-			return Optional.of(new CustomPortalAreaHelper(frameBlock, portalBlock, world, pos, axis2)).filter(predicate);
+			return Optional.of(new CustomSquaredPortalAreaHelper(frameBlock, portalBlock, world, pos, axis2)).filter(predicate);
 		}
 	}
 
-	public CustomPortalAreaHelper(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Direction.Axis axis) {
+	public CustomSquaredPortalAreaHelper(Block frameBlock, CustomSquaredPortalBlock portalBlock, WorldAccess world, BlockPos pos, Direction.Axis axis) {
 		super(world, pos, axis);
 		this.frameBlock = frameBlock;
 		this.portalBlock = portalBlock;

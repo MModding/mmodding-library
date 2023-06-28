@@ -1,9 +1,10 @@
-package com.mmodding.mmodding_lib.library.blocks;
+package com.mmodding.mmodding_lib.library.portals;
 
 import com.mmodding.mmodding_lib.ducks.NetherPortalBlockDuckInterface;
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
+import com.mmodding.mmodding_lib.library.blocks.BlockRegistrable;
+import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.library.pois.CustomPOI;
-import com.mmodding.mmodding_lib.library.portals.CustomPortalAreaHelper;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -31,6 +32,8 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 	private final RegistryKey<World> worldKey;
 	private final RegistryKey<PointOfInterestType> poiKey;
 
+	private final AtomicBoolean shouldLightLikeVanilla = new AtomicBoolean();
+
     public CustomSquaredPortalBlock(Block frameBlock, Identifier dimensionId, Settings settings) {
         this(frameBlock, dimensionId, settings, false);
     }
@@ -53,6 +56,11 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 		new CustomPOI(this, 0, 1).register(poiId);
     }
 
+	public CustomSquaredPortalBlock lightLikeVanilla() {
+		this.shouldLightLikeVanilla.set(true);
+		return this;
+	}
+
 	public void registerPortal(Identifier identifier) {
 		RegistrationUtils.registerCustomPortal(identifier, this.frameBlock, this);
 	}
@@ -62,7 +70,7 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 		Direction.Axis directionAxis = direction.getAxis();
 		Direction.Axis stateAxis = state.get(AXIS);
 		boolean bl = stateAxis != directionAxis && directionAxis.isHorizontal();
-		return !bl && !neighborState.isOf(this) && !new CustomPortalAreaHelper(this.frameBlock, this, world, pos, stateAxis).wasAlreadyValid()
+		return !bl && !neighborState.isOf(this) && !new CustomSquaredPortalAreaHelper(this.frameBlock, this, world, pos, stateAxis).wasAlreadyValid()
 			? Blocks.AIR.getDefaultState()
 			: ((NetherPortalBlockDuckInterface) this).getAbstractStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
@@ -72,6 +80,10 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 		if (!entity.hasVehicle() && !entity.hasPassengers() && entity.canUsePortals()) {
 			((EntityDuckInterface) entity).setInCustomPortal(this.frameBlock, this, pos);
 		}
+	}
+
+	public boolean shouldLightLikeVanilla() {
+		return this.shouldLightLikeVanilla.get();
 	}
 
 	public RegistryKey<World> getWorldKey() {
