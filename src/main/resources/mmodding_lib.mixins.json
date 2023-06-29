@@ -32,6 +32,7 @@
   "client": [
     "accessors.BufferBuilderStorageAccessor",
     "injectors.ClientPlayerEntityMixin",
+    "injectors.ClientWorldMixin",
     "injectors.EntryListWidgetMixin",
     "injectors.InGameHudMixin"
   ],

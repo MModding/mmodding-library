@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerWorld.class)
-public class ServerWorldMixin implements WorldUtils.TickTaskServer {
+public class ClientWorldMixin implements WorldUtils.TickTaskClient {
 
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
