@@ -35,8 +35,6 @@ public class InGameHudMixin {
 		EntityDuckInterface duckedEntity = (EntityDuckInterface) this.client.player;
 
 		if (duckedEntity.isInCustomPortal() || duckedEntity.getCustomPortalCache() != null) {
-			System.out.println("In Custom Portal : " + duckedEntity.isInCustomPortal());
-			System.out.println("Has Custom Portal Cache : " + (duckedEntity.getCustomPortalCache() != null));
 			Sprite sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(
 				!duckedEntity.isInCustomPortal()
 					? duckedEntity.getCustomPortalCache().getDefaultState()
