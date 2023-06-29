@@ -4,6 +4,7 @@ import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public interface EntityDuckInterface {
 
@@ -11,7 +12,9 @@ public interface EntityDuckInterface {
 
 	Pair<Block, CustomSquaredPortalBlock> getCustomPortalElements();
 
-	void setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, BlockPos pos);
+	CustomSquaredPortalBlock getCustomPortalCache();
+
+	void setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos);
 
 	void tickCustomPortal();
 }

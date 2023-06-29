@@ -78,7 +78,7 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if (!entity.hasVehicle() && !entity.hasPassengers() && entity.canUsePortals()) {
-			((EntityDuckInterface) entity).setInCustomPortal(this.frameBlock, this, pos);
+			((EntityDuckInterface) entity).setInCustomPortal(this.frameBlock, this, world, pos);
 		}
 	}
 

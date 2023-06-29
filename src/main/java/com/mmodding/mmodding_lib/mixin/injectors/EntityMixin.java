@@ -4,9 +4,12 @@ import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
 import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
@@ -33,7 +36,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.function.Function;
 
@@ -55,6 +57,9 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Unique
 	BlockPos lastCustomPortalPosition;
 
+	@Unique
+	CustomSquaredPortalBlock customPortalCache;
+
 	@Override
 	public boolean isInCustomPortal() {
 		return this.inCustomPortal;
@@ -63,6 +68,11 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Override
 	public Pair<Block, CustomSquaredPortalBlock> getCustomPortalElements() {
 		return this.customPortalElements;
+	}
+
+	@Override
+	public CustomSquaredPortalBlock getCustomPortalCache() {
+		return this.customPortalCache;
 	}
 
 	@Shadow
@@ -82,9 +92,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Shadow
 	public abstract boolean hasVehicle();
-
-	@Shadow
-	protected int netherPortalTime;
 
 	@Shadow
 	protected abstract void tickNetherPortalCooldown();
@@ -117,15 +124,68 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	public abstract float getPitch();
 
 	@Shadow
-	protected boolean inNetherPortal;
-
-	@Shadow
 	@Final
 	protected RandomGenerator random;
 
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
+	}
+
+	@Unique
+	public void setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos) {
+		if (this.hasNetherPortalCooldown()) {
+			this.resetNetherPortalCooldown();
+		}
+		else {
+			if (!this.getWorld().isClient() && !pos.equals(this.lastCustomPortalPosition)) {
+				this.lastCustomPortalPosition = pos.toImmutable();
+			}
+
+			this.inCustomPortal = true;
+			this.customPortalElements = new Pair<>(frameBlock, portalBlock);
+
+			if (world instanceof ClientWorld clientWorld) {
+				Entity thisEntity = ((Entity) (Object) this);
+				if (thisEntity instanceof ClientPlayerEntity playerEntity) {
+					this.customPortalCache = portalBlock;
+					WorldUtils.repeatTaskUntil(clientWorld, 39, () -> this.customPortalCache = playerEntity.lastNauseaStrength > 0 ? portalBlock : null);
+					WorldUtils.doTaskAfter(clientWorld, 40, () -> this.customPortalCache = null);
+				}
+			}
+		}
+	}
+
+	@Unique
+	public void tickCustomPortal() {
+		if (this.getWorld() instanceof ServerWorld serverWorld) {
+			int i = this.getMaxNetherPortalTime();
+			if (this.inCustomPortal) {
+				MinecraftServer minecraftServer = serverWorld.getServer();
+				RegistryKey<World> portalWorldKey = this.customPortalElements.getSecond().getWorldKey();
+				RegistryKey<World> registryKey = serverWorld.getRegistryKey() == portalWorldKey ? World.OVERWORLD : portalWorldKey;
+				ServerWorld destinationWorld = minecraftServer.getWorld(registryKey);
+
+				if (destinationWorld != null && !this.hasVehicle() && this.customPortalTime++ >= i) {
+					this.getWorld().getProfiler().push("portal");
+					this.customPortalTime = i;
+					this.resetNetherPortalCooldown();
+					QuiltDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
+					this.getWorld().getProfiler().pop();
+				}
+
+				this.inCustomPortal = false;
+			}
+			else {
+				if (this.customPortalTime > 0) {
+					this.customPortalTime -= 4;
+				}
+
+				if (this.customPortalTime < 0) {
+					this.customPortalTime = 0;
+				}
+			}
+		}
 	}
 
 	@Unique
@@ -168,53 +228,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 		}
 		else {
 			return ((PortalForcerDuckInterface) destination.getPortalForcer()).searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), posFactorScaled, worldBorder).map(func).orElse(null);
-		}
-	}
-
-	@Unique
-	public void setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, BlockPos pos) {
-		if (this.hasNetherPortalCooldown()) {
-			this.resetNetherPortalCooldown();
-		}
-		else {
-			if (!this.getWorld().isClient() && !pos.equals(this.lastCustomPortalPosition)) {
-				this.lastCustomPortalPosition = pos.toImmutable();
-			}
-
-			this.inCustomPortal = true;
-			this.customPortalElements = new Pair<>(frameBlock, portalBlock);
-		}
-	}
-
-	@Unique
-	public void tickCustomPortal() {
-		if (this.getWorld() instanceof ServerWorld serverWorld) {
-			int i = this.getMaxNetherPortalTime();
-			if (this.inCustomPortal) {
-				MinecraftServer minecraftServer = serverWorld.getServer();
-				RegistryKey<World> portalWorldKey = this.customPortalElements.getSecond().getWorldKey();
-				RegistryKey<World> registryKey = serverWorld.getRegistryKey() == portalWorldKey ? World.OVERWORLD : portalWorldKey;
-				ServerWorld destinationWorld = minecraftServer.getWorld(registryKey);
-
-				if (destinationWorld != null && !this.hasVehicle() && this.customPortalTime++ >= i) {
-					this.getWorld().getProfiler().push("portal");
-					this.customPortalTime = i;
-					this.resetNetherPortalCooldown();
-					QuiltDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
-					this.getWorld().getProfiler().pop();
-				}
-
-				this.inCustomPortal = false;
-			}
-			else {
-				if (this.customPortalTime > 0) {
-					this.customPortalTime -= 4;
-				}
-
-				if (this.customPortalTime < 0) {
-					this.customPortalTime = 0;
-				}
-			}
 		}
 	}
 }
