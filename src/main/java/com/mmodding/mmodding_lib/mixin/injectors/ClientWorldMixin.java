@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-@Mixin(ServerWorld.class)
+@Mixin(ClientWorld.class)
 public class ClientWorldMixin implements WorldUtils.TickTaskClient {
 
 	@Unique
