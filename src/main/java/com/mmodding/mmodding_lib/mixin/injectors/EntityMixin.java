@@ -33,6 +33,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.function.Function;
 
@@ -41,6 +42,9 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Unique
 	boolean inCustomPortal;
+
+	@Unique
+	int customPortalTime;
 
 	@Unique
 	boolean useCustomPortalElements;
@@ -124,21 +128,11 @@ public abstract class EntityMixin implements EntityDuckInterface {
 		this.tickCustomPortal();
 	}
 
-	@Inject(method = "tickNetherPortal", at = @At("HEAD"), cancellable = true)
-	private void tickNetherPortal(CallbackInfo ci) {
-		if (this.getWorld() instanceof ServerWorld) {
-			if (this.inCustomPortal) {
-				this.tickNetherPortalCooldown();
-				ci.cancel();
-			}
-		}
-	}
-
 	@Unique
 	private TeleportTarget getCustomPortalTarget(ServerWorld destination) {
 		WorldBorder worldBorder = destination.getWorldBorder();
 		double coordScaleFactor = DimensionType.getCoordinateScaleFactor(this.getWorld().getDimension(), destination.getDimension());
-		BlockPos blockPos2 = worldBorder.m_kgymprsy(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
+		BlockPos posFactorScaled = worldBorder.m_kgymprsy(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
 		this.useCustomPortalElements = true;
 
 		Function<BlockLocating.Rectangle, TeleportTarget> func = rectangle -> {
@@ -170,10 +164,10 @@ public abstract class EntityMixin implements EntityDuckInterface {
 		Entity thisEntity = (Entity) (Object) this;
 
 		if (thisEntity instanceof ServerPlayerEntity player) {
-			return ((ServerPlayerDuckInterface) player).getCustomPortalRect(destination, blockPos2, worldBorder).map(func).orElse(null);
+			return ((ServerPlayerDuckInterface) player).getCustomPortalRect(destination, posFactorScaled, worldBorder).map(func).orElse(null);
 		}
 		else {
-			return ((PortalForcerDuckInterface) destination.getPortalForcer()).searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), blockPos2, worldBorder).map(func).orElse(null);
+			return ((PortalForcerDuckInterface) destination.getPortalForcer()).searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), posFactorScaled, worldBorder).map(func).orElse(null);
 		}
 	}
 
@@ -195,34 +189,30 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Unique
 	public void tickCustomPortal() {
 		if (this.getWorld() instanceof ServerWorld serverWorld) {
-			if (this.inNetherPortal) {
-				this.tickNetherPortalCooldown();
-				return;
-			}
 			int i = this.getMaxNetherPortalTime();
 			if (this.inCustomPortal) {
 				MinecraftServer minecraftServer = serverWorld.getServer();
 				RegistryKey<World> portalWorldKey = this.customPortalElements.getSecond().getWorldKey();
 				RegistryKey<World> registryKey = serverWorld.getRegistryKey() == portalWorldKey ? World.OVERWORLD : portalWorldKey;
 				ServerWorld destinationWorld = minecraftServer.getWorld(registryKey);
-				System.out.println(this.netherPortalTime + " / " + i);
 
-				if (destinationWorld != null && !this.hasVehicle() && this.netherPortalTime++ >= i) {
+				if (destinationWorld != null && !this.hasVehicle() && this.customPortalTime++ >= i) {
 					this.getWorld().getProfiler().push("portal");
-					this.netherPortalTime = i;
+					this.customPortalTime = i;
 					this.resetNetherPortalCooldown();
 					QuiltDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
 					this.getWorld().getProfiler().pop();
 				}
 
 				this.inCustomPortal = false;
-			} else {
-				if (this.netherPortalTime > 0) {
-					this.netherPortalTime -= 4;
+			}
+			else {
+				if (this.customPortalTime > 0) {
+					this.customPortalTime -= 4;
 				}
 
-				if (this.netherPortalTime < 0) {
-					this.netherPortalTime = 0;
+				if (this.customPortalTime < 0) {
+					this.customPortalTime = 0;
 				}
 			}
 		}
