@@ -48,7 +48,7 @@ public class GeneratorOptionsMixin implements GeneratorOptionsDuckInterface {
 
 	@Override
 	public DifferedSeedsState createDifferedSeedsState() {
-		return new DifferedSeedsState((GeneratorOptions) (Object) this);
+		return new DifferedSeedsState(this);
 	}
 
 	@Override

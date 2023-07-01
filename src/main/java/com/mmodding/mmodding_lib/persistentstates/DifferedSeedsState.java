@@ -6,39 +6,35 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.PersistentState;
-import net.minecraft.world.gen.GeneratorOptions;
 
 public class DifferedSeedsState extends PersistentState {
 
-	private final GeneratorOptions generatorOptions;
+	private final GeneratorOptionsDuckInterface generatorOptions;
 
-	public DifferedSeedsState(GeneratorOptions generatorOptions) {
+	public DifferedSeedsState(GeneratorOptionsDuckInterface generatorOptions) {
 		this.generatorOptions = generatorOptions;
-	}
-
-	private GeneratorOptionsDuckInterface ducked() {
-		return (GeneratorOptionsDuckInterface) this.generatorOptions;
+		this.markDirty();
 	}
 
 	public DifferedSeedsState readNbt(NbtCompound nbt) {
-		this.ducked().fillDimensionSeedAddendsNbt(nbt.getList("dimensionSeedAddends", NbtElement.COMPOUND_TYPE));
+		this.generatorOptions.fillDimensionSeedAddendsNbt(nbt.getList("dimensionSeedAddends", NbtElement.COMPOUND_TYPE));
 		return this;
 	}
 
 	@Override
 	public NbtCompound writeNbt(NbtCompound nbt) {
 		nbt.put("dimensionSeedAddends", this.dimensionSeedAddendsToNbt());
-		return null;
+		return nbt;
 	}
 
 	public NbtList dimensionSeedAddendsToNbt() {
 		NbtList nbtList = new NbtList();
 
 		MModdingGlobalMaps.getDifferedDimensionSeeds().forEach(worldKey -> {
-			if (this.ducked().containsDimensionSeedAddend(worldKey)) {
+			if (this.generatorOptions.containsDimensionSeedAddend(worldKey)) {
 				NbtCompound nbt = new NbtCompound();
 				nbt.putString("dimensionIdentifier", worldKey.getValue().toString());
-				nbt.putLong("differed", this.ducked().getDimensionSeedAddend(worldKey));
+				nbt.putLong("differed", this.generatorOptions.getDimensionSeedAddend(worldKey));
 				nbtList.add(nbt);
 			}
 		});

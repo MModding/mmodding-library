@@ -81,7 +81,6 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 				}
 				long normalSeed = this.getServer().getSaveProperties().getGeneratorOptions().getSeed();
 				long differedSeed = Long.sum(normalSeed, ducked.getDimensionSeedAddend(worldKey));
-				System.out.println(differedSeed);
 				cir.setReturnValue(differedSeed);
 			}
 		});
