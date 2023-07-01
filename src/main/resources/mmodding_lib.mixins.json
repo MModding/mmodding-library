@@ -22,12 +22,15 @@
     "injectors.EntityMixin",
     "injectors.ExplosionMixin",
     "injectors.FishingBobberEntityMixin",
+    "injectors.GeneratorOptionsMixin",
     "injectors.ItemMixin",
+    "injectors.MinecraftServerMixin",
     "injectors.NetherPortalBlockMixin",
     "injectors.PlayerEntityMixin",
     "injectors.PortalForcerMixin",
     "injectors.ServerPlayerEntityMixin",
-    "injectors.ServerWorldMixin"
+    "injectors.ServerWorldMixin",
+    "injectors.WorldMixin"
   ],
   "client": [
     "accessors.BufferBuilderStorageAccessor",

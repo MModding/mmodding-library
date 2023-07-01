@@ -3,12 +3,19 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.DamageSources;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
 
 public class WorldUtils {
+
+	public static void addDifferedSeed(Identifier dimensionIdentifier) {
+		MModdingGlobalMaps.differedDimensionSeeds.add(RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier));
+	}
 
 	public static void doTaskAfter(ServerWorld serverWorld, long ticksToWait, Runnable task) {
 		((TickTaskServer) serverWorld).doTaskAfter(ticksToWait, task);

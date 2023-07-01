@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ClientWorld.class)
-public class ClientWorldMixin implements WorldUtils.TickTaskClient {
+public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskClient {
 
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
