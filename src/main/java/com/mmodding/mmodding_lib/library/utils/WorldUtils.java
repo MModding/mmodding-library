@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.DamageSources;
+import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -11,10 +12,17 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class WorldUtils {
 
 	public static void addDifferedSeed(Identifier dimensionIdentifier) {
 		MModdingGlobalMaps.differedDimensionSeeds.add(RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier));
+	}
+
+	public static void addCustomVeinTypes(Identifier chunkGeneratorSettingsIdentifier, CustomVeinType... customVeinTypes) {
+		MModdingGlobalMaps.customVeinTypes.put(chunkGeneratorSettingsIdentifier, List.of(customVeinTypes));
 	}
 
 	public static void doTaskAfter(ServerWorld serverWorld, long ticksToWait, Runnable task) {

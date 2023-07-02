@@ -1,9 +1,13 @@
 accessWidener v1 named
 
+accessible class net/minecraft/world/gen/DensityFunctions$StructureWeightSamplerMarker
 extendable class net/minecraft/world/gen/chunk/NoiseChunkGenerator
 
+
+mutable field net/minecraft/world/gen/chunk/ChunkNoiseSampler blockStateSampler Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler$BlockStateSampler;
 mutable field net/minecraft/world/dimension/AreaHelper width I
 
+accessible method net/minecraft/world/gen/OreVeinCreator create (Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/util/random/PositionalRandomFactory;)Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler$BlockStateSampler;
 extendable method net/minecraft/world/dimension/AreaHelper getLowerCorner (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos;
 extendable method net/minecraft/world/dimension/AreaHelper getWidth (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)I
 extendable method net/minecraft/world/dimension/AreaHelper m_beqllhzk (Lnet/minecraft/util/math/BlockPos$Mutable;I)Z
