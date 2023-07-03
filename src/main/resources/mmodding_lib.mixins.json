@@ -27,6 +27,7 @@
     "injectors.GeneratorOptionsMixin",
     "injectors.ItemMixin",
     "injectors.NetherPortalBlockMixin",
+    "injectors.NoiseChunkGeneratorMixin",
     "injectors.PlayerEntityMixin",
     "injectors.PortalForcerMixin",
     "injectors.ServerPlayerEntityMixin",
