@@ -1,8 +1,11 @@
 package com.mmodding.mmodding_lib.library.entities;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -25,6 +28,13 @@ public interface Winged {
 	AtomicDouble flapSpeed();
 
 	AtomicDouble nextFlap();
+
+	default boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+		return false;
+	}
+
+	default void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
+	}
 
 	default boolean hasWings() {
 		return this.entity().flyDistance > this.nextFlap().get();

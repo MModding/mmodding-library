@@ -1,8 +1,11 @@
 package com.mmodding.mmodding_lib.library.entities;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class WingedAnimalEntity extends AnimalEntity implements Winged {
@@ -46,6 +49,16 @@ public abstract class WingedAnimalEntity extends AnimalEntity implements Winged 
 	@Override
 	public AtomicDouble nextFlap() {
 		return this.nextFlap;
+	}
+
+	@Override
+	public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+		return Winged.super.handleFallDamage(fallDistance, damageMultiplier, damageSource);
+	}
+
+	@Override
+	public void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
+		Winged.super.fall(heightDifference, onGround, landedState, landedPosition);
 	}
 
 	@Override
