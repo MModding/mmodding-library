@@ -1,4 +1,7 @@
 {
+  "mmodding_lib.commands.redirections.weather": "The weather command only works when executed in the overworld, use this instead:",
+  "mmodding_lib.commands.redirections.weather.fixed": "Fixed Command",
+  "mmodding_lib.commands.redirections.weather.hover": "Execute fixed weather %s command",
   "mmodding_lib.configs.string": "String",
   "mmodding_lib.configs.integer": "Integer",
   "mmodding_lib.configs.boolean": "Boolean",

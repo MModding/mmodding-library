@@ -36,6 +36,7 @@
     "injectors.ShearsItemMixin",
     "injectors.SwordItemMixin",
     "injectors.TridentItemMixin",
+    "injectors.WeatherCommandMixin",
     "injectors.WorldMixin"
   ],
   "client": [
