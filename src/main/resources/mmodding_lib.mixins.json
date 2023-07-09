@@ -26,12 +26,16 @@
     "injectors.FishingBobberEntityMixin",
     "injectors.GeneratorOptionsMixin",
     "injectors.ItemMixin",
+    "injectors.MiningToolItemMixin",
     "injectors.NetherPortalBlockMixin",
     "injectors.NoiseChunkGeneratorMixin",
     "injectors.PlayerEntityMixin",
     "injectors.PortalForcerMixin",
     "injectors.ServerPlayerEntityMixin",
     "injectors.ServerWorldMixin",
+    "injectors.ShearsItemMixin",
+    "injectors.SwordItemMixin",
+    "injectors.TridentItemMixin",
     "injectors.WorldMixin"
   ],
   "client": [
