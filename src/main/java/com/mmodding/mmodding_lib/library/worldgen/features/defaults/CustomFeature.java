@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;

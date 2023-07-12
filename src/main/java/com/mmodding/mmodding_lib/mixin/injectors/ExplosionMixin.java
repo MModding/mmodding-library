@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
-import com.mmodding.mmodding_lib.library.DamageSources;
+import com.mmodding.mmodding_lib.library.MModdingDamageSources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.world.explosion.Explosion;
@@ -17,7 +17,7 @@ public abstract class ExplosionMixin {
 
 	@Redirect(method = "collectBlocksAndDamageEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
 	private boolean injected(Entity entity, DamageSource source, float amount) {
-		if (this.getDamageSource() != DamageSources.PUSH) {
+		if (this.getDamageSource() != MModdingDamageSources.PUSH) {
 			return entity.damage(source, amount);
 		}
 		return false;

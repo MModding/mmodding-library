@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.library.worldgen.veins;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.MathHelper;
@@ -8,6 +7,8 @@ import net.minecraft.util.random.PositionalRandomFactory;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.gen.DensityFunction;
 import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
+import org.apache.commons.lang3.mutable.MutableDouble;
+import org.apache.commons.lang3.mutable.MutableFloat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +21,15 @@ public class CustomVeinType {
 	private final VeinStateGroup oreStates;
 	private final VeinStateGroup rawOreStates;
 	private final VeinStateGroup fillerStates;
-	private final AtomicDouble veinThreshold = new AtomicDouble(0.4f);
+	private final MutableFloat veinThreshold = new MutableFloat(0.4f);
 	private final AtomicInteger beginEdgeRoundoff = new AtomicInteger(20);
-	private final AtomicDouble maxEdgeRoundoff = new AtomicDouble(0.2);
-	private final AtomicDouble veinSolidness = new AtomicDouble(0.7f);
-	private final AtomicDouble minRichness = new AtomicDouble(0.1f);
-	private final AtomicDouble maxRichness = new AtomicDouble(0.3f);
-	private final AtomicDouble maxRichnessThreshold = new AtomicDouble(0.6f);
-	private final AtomicDouble rawOreBlockChance = new AtomicDouble(0.02f);
-	private final AtomicDouble minGapNoiseOreSkipThreshold = new AtomicDouble(-0.3f);
+	private final MutableDouble maxEdgeRoundoff = new MutableDouble(0.2);
+	private final MutableFloat veinSolidness = new MutableFloat(0.7f);
+	private final MutableFloat minRichness = new MutableFloat(0.1f);
+	private final MutableFloat maxRichness = new MutableFloat(0.3f);
+	private final MutableFloat maxRichnessThreshold = new MutableFloat(0.6f);
+	private final MutableFloat rawOreBlockChance = new MutableFloat(0.02f);
+	private final MutableFloat minGapNoiseOreSkipThreshold = new MutableFloat(-0.3f);
 
 	public CustomVeinType(int minY, int maxY, VeinStateGroup oreStates, VeinStateGroup rawOreStates, VeinStateGroup fillerStates) {
 		this.minY = minY;
@@ -39,7 +40,7 @@ public class CustomVeinType {
 	}
 
 	public CustomVeinType setVeinThreshold(float veinThreshold) {
-		this.veinThreshold.set(veinThreshold);
+		this.veinThreshold.setValue(veinThreshold);
 		return this;
 	}
 
@@ -49,37 +50,37 @@ public class CustomVeinType {
 	}
 
 	public CustomVeinType setMaxEdgeRoundoff(double maxEdgeRoundoff) {
-		this.maxEdgeRoundoff.set(maxEdgeRoundoff);
+		this.maxEdgeRoundoff.setValue(maxEdgeRoundoff);
 		return this;
 	}
 
 	public CustomVeinType setVeinSolidness(float veinSolidness) {
-		this.veinSolidness.set(veinSolidness);
+		this.veinSolidness.setValue(veinSolidness);
 		return this;
 	}
 
 	public CustomVeinType setMinRichness(float minRichness) {
-		this.minRichness.set(minRichness);
+		this.minRichness.setValue(minRichness);
 		return this;
 	}
 
 	public CustomVeinType setMaxRichness(float maxRichness) {
-		this.maxRichness.set(maxRichness);
+		this.maxRichness.setValue(maxRichness);
 		return this;
 	}
 
 	public CustomVeinType setMaxRichnessThreshold(float maxRichnessThreshold) {
-		this.maxRichnessThreshold.set(maxRichnessThreshold);
+		this.maxRichnessThreshold.setValue(maxRichnessThreshold);
 		return this;
 	}
 
 	public CustomVeinType setRawOreBlockChance(float rawOreBlockChance) {
-		this.rawOreBlockChance.set(rawOreBlockChance);
+		this.rawOreBlockChance.setValue(rawOreBlockChance);
 		return this;
 	}
 
 	public CustomVeinType setMinGapNoiseOreSkipThreshold(float minGapNoiseOreSkipThreshold) {
-		this.minGapNoiseOreSkipThreshold.set(minGapNoiseOreSkipThreshold);
+		this.minGapNoiseOreSkipThreshold.setValue(minGapNoiseOreSkipThreshold);
 		return this;
 	}
 
@@ -112,13 +113,13 @@ public class CustomVeinType {
 			int minSub = y - this.getMinY();
 			if (maxSub >= 0 && minSub >= 0) {
 				int minBetweenSubs = Math.min(maxSub, minSub);
-				double clampedA = MathHelper.clampedMap(minBetweenSubs, 0.0, this.beginEdgeRoundoff.get(), -this.maxEdgeRoundoff.get(), 0.0);
-				if (absToggle + clampedA >= this.veinThreshold.get()) {
+				double clampedA = MathHelper.clampedMap(minBetweenSubs, 0.0, this.beginEdgeRoundoff.get(), -this.maxEdgeRoundoff.getValue(), 0.0);
+				if (absToggle + clampedA >= this.veinThreshold.getValue()) {
 					RandomGenerator random = posRandom.create(ctx.blockX(), y, ctx.blockZ());
-					if (random.nextFloat() <= this.veinSolidness.get() && veinRidged.compute(ctx) < 0) {
-						double clampedB = MathHelper.clampedMap(absToggle, this.veinThreshold.get(), this.maxRichnessThreshold.get(), this.minRichness.get(), this.maxRichness.get());
-						if (random.nextFloat() < clampedB && veinGap.compute(ctx) > this.minGapNoiseOreSkipThreshold.get()) {
-							return random.nextFloat() < this.rawOreBlockChance.get() ? this.pickRawOreState(random) : this.pickOreState(random);
+					if (random.nextFloat() <= this.veinSolidness.getValue() && veinRidged.compute(ctx) < 0) {
+						double clampedB = MathHelper.clampedMap(absToggle, this.veinThreshold.getValue(), this.maxRichnessThreshold.getValue(), this.minRichness.getValue(), this.maxRichness.getValue());
+						if (random.nextFloat() < clampedB && veinGap.compute(ctx) > this.minGapNoiseOreSkipThreshold.getValue()) {
+							return random.nextFloat() < this.rawOreBlockChance.getValue() ? this.pickRawOreState(random) : this.pickOreState(random);
 						}
 						else {
 							return this.pickFillerState(random);
