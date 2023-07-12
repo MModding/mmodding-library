@@ -43,24 +43,28 @@ public class SurfaceRuleUtils {
 	}
 
 	public static SurfaceRules.MaterialRule getBedrockRoof() {
+		return SurfaceRuleUtils.getRoof("bedrock_roof", Blocks.BEDROCK);
+	}
+
+	public static SurfaceRules.MaterialRule getBedrockFloor() {
+		return SurfaceRuleUtils.getFloor("bedrock_floor", Blocks.BEDROCK);
+	}
+
+	public static SurfaceRules.MaterialRule getRoof(String randomName, Block roofBlock) {
 		return SurfaceRules.condition(SurfaceRules.not(
-			SurfaceRules.verticalGradient("bedrock_roof", YOffset.belowTop(5), YOffset.getTop())
-		), SurfaceRuleUtils.getBlock(Blocks.BEDROCK));
+			SurfaceRules.verticalGradient(randomName, YOffset.belowTop(5), YOffset.getTop())
+		), SurfaceRuleUtils.getBlock(roofBlock));
 	}
 
 	public static SurfaceRules.MaterialRule getDeep(String randomName, Block deepBlock) {
 		return SurfaceRules.condition(SurfaceRules.verticalGradient(
-			randomName,
-			YOffset.fixed(0),
-			YOffset.fixed(8)
+			randomName, YOffset.fixed(0), YOffset.fixed(8)
 		), SurfaceRuleUtils.getBlock(deepBlock));
 	}
 
-	public static SurfaceRules.MaterialRule getBedrockFloor() {
+	public static SurfaceRules.MaterialRule getFloor(String randomName, Block floorBlock) {
 		return SurfaceRules.condition(SurfaceRules.verticalGradient(
-			"bedrock_floor",
-			YOffset.getBottom(),
-			YOffset.aboveBottom(5)
-		), SurfaceRuleUtils.getBlock(Blocks.BEDROCK));
+			randomName, YOffset.getBottom(), YOffset.aboveBottom(5)
+		), SurfaceRuleUtils.getBlock(floorBlock));
 	}
 }
