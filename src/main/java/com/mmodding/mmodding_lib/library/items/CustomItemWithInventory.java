@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.items;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.containers.AdvancedInventory;
 import com.mmodding.mmodding_lib.library.containers.DefaultContainer;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -10,13 +11,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.*;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class CustomItemWithInventory extends Item implements ItemRegistrable, NamedScreenHandlerFactory {
@@ -28,7 +32,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 	private final AdvancedInventory inventory;
 
     public CustomItemWithInventory(Settings settings, DefaultContainer defaultContainer) {
-        super(settings);
+        super(settings.maxCount(1));
 		this.defaultContainer = defaultContainer;
 		this.screenHandlerFunc = null;
 		this.inventory = new AdvancedInventory(defaultContainer.getSize());
@@ -36,7 +40,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
     }
 
 	public CustomItemWithInventory(Settings settings, int size, TriFunction<Integer, PlayerInventory, Inventory, ScreenHandler> screenHandlerFunc) {
-		super(settings);
+		super(settings.maxCount(1));
 		this.defaultContainer = DefaultContainer.NULL;
 		this.screenHandlerFunc = screenHandlerFunc;
 		this.inventory = new AdvancedInventory(size);
@@ -44,8 +48,19 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 	}
 
 	@Override
-	public void postProcessNbt(NbtCompound nbt) {
-		super.postProcessNbt(nbt);
+	public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+		super.appendTooltip(stack, world, tooltip, context);
+		if (stack.getNbt() != null) {
+			if (stack.getNbt().contains("Items", NbtElement.LIST_TYPE)) {
+				NbtList nbtList = stack.getNbt().getList("Items", NbtElement.COMPOUND_TYPE);
+				for (int i = 0; i < nbtList.size(); i++) {
+					ItemStack itemStack = ItemStack.fromNbt(nbtList.getCompound(i));
+					if (!itemStack.isEmpty()) {
+						tooltip.add(itemStack.getName().copy().append(" x").append(String.valueOf(itemStack.getCount())));
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -53,7 +68,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		ItemStack stack = user.getStackInHand(hand);
 		if (stack.getNbt() != null) {
 			if (stack.getNbt().contains("Items", NbtElement.LIST_TYPE)) {
-				this.inventory.readNbtList(stack.getNbt().getList("Items", NbtElement.COMPOUND_TYPE));
+				this.inventory.readSortedNbtList(stack.getNbt().getList("Items", NbtElement.COMPOUND_TYPE));
 			}
 		}
 		user.openHandledScreen(this);
@@ -65,7 +80,8 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() instanceof CustomItemWithInventory) {
 			NbtCompound nbt = stack.getOrCreateNbt();
-			nbt.put("Items", this.inventory.toNbtList());
+			if (nbt.contains("Items", NbtElement.LIST_TYPE)) nbt.remove("Items");
+			nbt.put("Items", this.inventory.toSortedNbtList());
 			this.inventory.clear();
 		}
 		else {

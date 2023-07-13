@@ -4,6 +4,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,36 @@ public class AdvancedInventory extends SimpleInventory {
 	@Override
 	public void onClose(PlayerEntity player) {
 		this.inventoryClosedListeners.forEach(listener -> listener.onInventoryInteracted(player, this));
+	}
+
+	public void readSortedNbtList(NbtList nbtList) {
+		for(int i = 0; i < this.size(); ++i) {
+			this.setStack(i, ItemStack.EMPTY);
+		}
+
+		for(int i = 0; i < nbtList.size(); ++i) {
+			NbtCompound nbt = nbtList.getCompound(i);
+			int slotIndex = nbt.getByte("Slot") & 255;
+			if (slotIndex < this.size()) {
+				this.setStack(slotIndex, ItemStack.fromNbt(nbt));
+			}
+		}
+	}
+
+	public NbtList toSortedNbtList() {
+		NbtList nbtList = new NbtList();
+
+		for(int i = 0; i < this.size(); ++i) {
+			ItemStack itemStack = this.getStack(i);
+			if (!itemStack.isEmpty()) {
+				NbtCompound nbtCompound = new NbtCompound();
+				nbtCompound.putByte("Slot", (byte) i);
+				itemStack.writeNbt(nbtCompound);
+				nbtList.add(nbtCompound);
+			}
+		}
+
+		return nbtList;
 	}
 
 	public interface InventoryInteractionListener {
