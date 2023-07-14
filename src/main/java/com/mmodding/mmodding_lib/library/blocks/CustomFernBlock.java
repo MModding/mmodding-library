@@ -17,11 +17,11 @@ import java.util.function.Predicate;
 
 public class CustomFernBlock extends FernBlock implements BlockRegistrable, BlockWithItem {
 
-	private final Predicate<BlockState> placementConditions;
-
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
 	private BlockItem item = null;
+
+	private final Predicate<BlockState> placementConditions;
 
 	public CustomFernBlock(Settings settings) {
 		this(settings, false);

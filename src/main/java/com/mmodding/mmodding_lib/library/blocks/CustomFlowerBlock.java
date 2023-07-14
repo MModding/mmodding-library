@@ -17,11 +17,11 @@ import java.util.function.Predicate;
 
 public class CustomFlowerBlock extends FlowerBlock implements BlockRegistrable, BlockWithItem {
 
-	private final Predicate<BlockState> placementConditions;
-
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
 	private BlockItem item = null;
+
+	private final Predicate<BlockState> placementConditions;
 
 	public CustomFlowerBlock(StatusEffect suspiciousStewEffect, int effectDuration, Settings settings) {
 		this(suspiciousStewEffect, effectDuration, settings, false);

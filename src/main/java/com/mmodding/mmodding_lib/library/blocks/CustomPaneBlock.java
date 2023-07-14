@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CustomPaneBlock extends PaneBlock implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
+
 	private BlockItem item = null;
 
 	public CustomPaneBlock(Settings settings) {

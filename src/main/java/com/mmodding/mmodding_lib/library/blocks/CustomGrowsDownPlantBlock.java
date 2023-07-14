@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 public class CustomGrowsDownPlantBlock implements BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
+
 	private BlockItem item = null;
 
 	private final Head head;

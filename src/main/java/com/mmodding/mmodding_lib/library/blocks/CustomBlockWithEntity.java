@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class CustomBlockWithEntity extends BlockWithEntity implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
+
 	private BlockItem item = null;
 
 	public CustomBlockWithEntity(Settings settings) {

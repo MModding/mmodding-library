@@ -3,7 +3,6 @@ package com.mmodding.mmodding_lib.library.blocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallFlowerBlock;
-import net.minecraft.block.TallPlantBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -17,11 +16,11 @@ import java.util.function.Predicate;
 
 public class CustomTallFlowerBlock extends TallFlowerBlock implements BlockRegistrable, BlockWithItem {
 
-	private final Predicate<BlockState> placementConditions;
-
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
 	private BlockItem item = null;
+
+	private final Predicate<BlockState> placementConditions;
 
 	public CustomTallFlowerBlock(Settings settings) {
 		this(settings, false);

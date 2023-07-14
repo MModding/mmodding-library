@@ -8,6 +8,8 @@ public class DefaultBlockSettings {
 
 	public static final QuiltBlockSettings STONE_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.STONE).strength(1.5f, 6.0f).requiresTool();
 	public static final QuiltBlockSettings DEEPSLATE_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.DEEPSLATE).strength(3.0f, 6.0f).requiresTool();
+	public static final QuiltBlockSettings BEDROCK_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.STONE).strength(-1.0F, 3600000.0F).dropsNothing().allowsSpawning((state, world, pos, type) -> false);
+	public static final QuiltBlockSettings DEEP_BEDROCK_SETTINGS = QuiltBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.DEEPSLATE).strength(-1.0F, 3600000.0F).dropsNothing().allowsSpawning((state, world, pos, type) -> false);
 	public static final QuiltBlockSettings WOOD_SETTINGS = QuiltBlockSettings.of(Material.WOOD).sounds(BlockSoundGroup.WOOD).strength(2.0f);
 	public static final QuiltBlockSettings DIRT_SETTINGS = QuiltBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRAVEL).strength(0.5f);
 	public static final QuiltBlockSettings GRASS_SETTINGS = QuiltBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRASS).strength(0.6f);

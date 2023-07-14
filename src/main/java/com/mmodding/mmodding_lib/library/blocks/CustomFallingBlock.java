@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CustomFallingBlock extends FallingBlock implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
+
 	private BlockItem item = null;
 
 	public CustomFallingBlock(Settings settings) {
