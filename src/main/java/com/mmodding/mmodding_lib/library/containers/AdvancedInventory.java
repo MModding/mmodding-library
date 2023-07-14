@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.containers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -16,12 +17,31 @@ public class AdvancedInventory extends SimpleInventory {
 
 	private final List<InventoryInteractionListener> inventoryClosedListeners = new ArrayList<>();
 
+	private final boolean nestedFiltered;
+
 	public AdvancedInventory(int size) {
-		super(size);
+		this(false, size);
 	}
 
 	public AdvancedInventory(ItemStack... stacks) {
+		this(false, stacks);
+	}
+
+	public AdvancedInventory(boolean nestedFiltered, int size) {
+		super(size);
+		this.nestedFiltered = nestedFiltered;
+	}
+
+	public AdvancedInventory(boolean nestedFiltered, ItemStack... stacks) {
 		super(stacks);
+		this.nestedFiltered = nestedFiltered;
+	}
+
+	/**
+	 * @return a boolean that indicates if the {@link AdvancedInventory} Instance filters items with {@link Item#canBeNested()}
+	 */
+	public boolean isNestedFiltered() {
+		return this.nestedFiltered;
 	}
 
 	public void addInventoryOpenedListener(InventoryInteractionListener listener) {

@@ -34,6 +34,7 @@
     "injectors.ServerPlayerEntityMixin",
     "injectors.ServerWorldMixin",
     "injectors.ShearsItemMixin",
+    "injectors.SlotMixin",
     "injectors.SwordItemMixin",
     "injectors.TridentItemMixin",
     "injectors.WeatherCommandMixin",

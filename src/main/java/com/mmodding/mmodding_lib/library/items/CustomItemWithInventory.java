@@ -13,6 +13,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.*;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -21,6 +22,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class CustomItemWithInventory extends Item implements ItemRegistrable, NamedScreenHandlerFactory {
@@ -30,12 +32,14 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 	private final DefaultContainer defaultContainer;
 	private final TriFunction<Integer, PlayerInventory, Inventory, ScreenHandler> screenHandlerFunc;
 	private final AdvancedInventory inventory;
+	private boolean opened = false;
 
     public CustomItemWithInventory(Settings settings, DefaultContainer defaultContainer) {
         super(settings.maxCount(1));
 		this.defaultContainer = defaultContainer;
 		this.screenHandlerFunc = null;
-		this.inventory = new AdvancedInventory(defaultContainer.getSize());
+		this.inventory = new AdvancedInventory(true, defaultContainer.getSize());
+		this.inventory.addInventoryOpenedListener(this::inventoryOpened);
 		this.inventory.addInventoryClosedListener(this::inventoryClosed);
     }
 
@@ -43,8 +47,14 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		super(settings.maxCount(1));
 		this.defaultContainer = DefaultContainer.NULL;
 		this.screenHandlerFunc = screenHandlerFunc;
-		this.inventory = new AdvancedInventory(size);
+		this.inventory = new AdvancedInventory(true, size);
+		this.inventory.addInventoryOpenedListener(this::inventoryOpened);
 		this.inventory.addInventoryClosedListener(this::inventoryClosed);
+	}
+
+	@Override
+	public boolean canBeNested() {
+		return false;
 	}
 
 	@Override
@@ -63,6 +73,11 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		}
 	}
 
+	@Nullable
+	public SoundEvent getUseSound() {
+		return null;
+	}
+
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack stack = user.getStackInHand(hand);
@@ -72,7 +87,18 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 			}
 		}
 		user.openHandledScreen(this);
+		Optional.ofNullable(this.getUseSound()).ifPresent(
+			useSound -> user.playSound(useSound, 0.8f, 0.8f + user.getRandom().nextFloat() * 0.4f)
+		);
 		return TypedActionResult.success(user.getStackInHand(hand));
+	}
+
+	public boolean isOpened() {
+		return this.opened;
+	}
+
+	private void inventoryOpened(PlayerEntity player, Inventory inventory) {
+		this.opened = true;
 	}
 
 	private void inventoryClosed(PlayerEntity player, Inventory inventory) {
@@ -87,6 +113,12 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		else {
 			MModdingLib.mmoddingLib.getLogger().error("ItemStack in Active Player Hand is not an CustomItemWithInventory!");
 		}
+		this.opened = false;
+	}
+
+	@Override
+	public Text getDisplayName() {
+		return this.getName();
 	}
 
 	@Nullable
