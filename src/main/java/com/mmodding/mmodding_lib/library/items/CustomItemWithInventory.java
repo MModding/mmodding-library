@@ -32,6 +32,8 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 	private final DefaultContainer defaultContainer;
 	private final TriFunction<Integer, PlayerInventory, Inventory, ScreenHandler> screenHandlerFunc;
 	private final AdvancedInventory inventory;
+
+	private Hand hand = null;
 	private boolean opened = false;
 
     public CustomItemWithInventory(Settings settings, DefaultContainer defaultContainer) {
@@ -80,7 +82,8 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack stack = user.getStackInHand(hand);
+		this.hand = hand;
+		ItemStack stack = user.getStackInHand(this.hand);
 		if (stack.getNbt() != null) {
 			if (stack.getNbt().contains("Items", NbtElement.LIST_TYPE)) {
 				this.inventory.readSortedNbtList(stack.getNbt().getList("Items", NbtElement.COMPOUND_TYPE));
@@ -90,7 +93,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		Optional.ofNullable(this.getUseSound()).ifPresent(
 			useSound -> user.playSound(useSound, 0.8f, 0.8f + user.getRandom().nextFloat() * 0.4f)
 		);
-		return TypedActionResult.success(user.getStackInHand(hand));
+		return TypedActionResult.success(user.getStackInHand(this.hand));
 	}
 
 	public boolean isOpened() {
@@ -102,8 +105,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 	}
 
 	private void inventoryClosed(PlayerEntity player, Inventory inventory) {
-		Hand hand = player.getActiveHand();
-		ItemStack stack = player.getStackInHand(hand);
+		ItemStack stack = player.getStackInHand(this.hand);
 		if (stack.getItem() instanceof CustomItemWithInventory) {
 			NbtCompound nbt = stack.getOrCreateNbt();
 			if (nbt.contains("Items", NbtElement.LIST_TYPE)) nbt.remove("Items");
@@ -113,6 +115,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		else {
 			MModdingLib.mmoddingLib.getLogger().error("ItemStack in Active Player Hand is not an CustomItemWithInventory!");
 		}
+		this.hand = null;
 		this.opened = false;
 	}
 

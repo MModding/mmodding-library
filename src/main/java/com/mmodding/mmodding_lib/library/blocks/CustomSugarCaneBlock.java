@@ -51,18 +51,22 @@ public class CustomSugarCaneBlock extends SugarCaneBlock implements BlockRegistr
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		BlockState floorState = world.getBlockState(pos.down());
 
-		boolean isFloorValid = floorState.isOf(this) || (this.validFloor != null ? this.validFloor.test(floorState) : (
-			floorState.isIn(BlockTags.DIRT) || floorState.isOf(Blocks.SAND) || floorState.isOf(Blocks.RED_SAND)
-		));
+		if (floorState.isOf(this)) {
+			return true;
+		}
 
-		if (isFloorValid) {
+		if (this.validFloor != null ? this.validFloor.test(floorState) : (
+			floorState.isIn(BlockTags.DIRT) || floorState.isOf(Blocks.SAND) || floorState.isOf(Blocks.RED_SAND)
+		)) {
 			for(Direction direction : Direction.Type.HORIZONTAL) {
 				BlockState blockState = world.getBlockState(pos.down().offset(direction));
 				FluidState fluidState = world.getFluidState(pos.down().offset(direction));
 
-				return this.validFluid != null ? this.validFluid.test(blockState, fluidState) : (
+				if (this.validFluid != null ? this.validFluid.test(blockState, fluidState) : (
 					fluidState.isIn(FluidTags.WATER) || blockState.isOf(Blocks.FROSTED_ICE)
-				);
+				)) {
+					return true;
+				}
 			}
 		}
 

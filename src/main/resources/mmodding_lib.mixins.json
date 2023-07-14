@@ -45,6 +45,7 @@
     "injectors.ClientPlayerEntityMixin",
     "injectors.ClientWorldMixin",
     "injectors.EntryListWidgetMixin",
+    "injectors.FishingBobberEntityRendererMixin",
     "injectors.InGameHudMixin"
   ],
   "injectors": {

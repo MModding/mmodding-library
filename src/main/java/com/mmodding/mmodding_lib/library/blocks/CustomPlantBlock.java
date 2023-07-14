@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 public class CustomPlantBlock extends PlantBlock implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
+
 	private BlockItem item = null;
 
 	private final Predicate<BlockState> placementConditions;
