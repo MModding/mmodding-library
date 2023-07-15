@@ -14,6 +14,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.DensityFunction;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
@@ -96,6 +97,10 @@ public class RegistrationUtils {
 
 	public static void registerChunkGeneratorSettings(Identifier identifier, ChunkGeneratorSettings settings) {
 		Registry.register(BuiltinRegistries.CHUNK_GENERATOR_SETTINGS, identifier, settings);
+	}
+
+	public static void registerDensityFunction(Identifier identifier, DensityFunction densityFunction) {
+		Registry.register(BuiltinRegistries.DENSITY_FUNCTION, identifier, densityFunction);
 	}
 
 	public static <P extends TrunkPlacer> void registerTrunkPlacerType(Identifier identifier, TrunkPlacerType<P> trunkPlacerType) {
