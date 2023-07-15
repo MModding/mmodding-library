@@ -30,23 +30,23 @@ public class DefaultNoiseRouters extends NoiseRouterData {
 	public static class Builders {
 
 		public static NoiseRouterBuilder getOverworld(Registry<DensityFunction> registry, boolean largeBiome, boolean amplified) {
-			return NoiseRouterBuilder.of(DefaultNoiseRouters.getOverworld(registry, largeBiome, amplified));
+			return NoiseRouterBuilder.of(registry, largeBiome, amplified, DefaultNoiseRouters.getOverworld(registry, largeBiome, amplified));
 		}
 
 		public static NoiseRouterBuilder getNether(Registry<DensityFunction> registry) {
-			return NoiseRouterBuilder.of(DefaultNoiseRouters.getNether(registry));
+			return NoiseRouterBuilder.of(registry, DefaultNoiseRouters.getNether(registry));
 		}
 
 		public static NoiseRouterBuilder getEnd(Registry<DensityFunction> registry) {
-			return NoiseRouterBuilder.of(DefaultNoiseRouters.getEnd(registry));
+			return NoiseRouterBuilder.of(registry, DefaultNoiseRouters.getEnd(registry));
 		}
 
 		public static NoiseRouterBuilder getCaves(Registry<DensityFunction> registry) {
-			return NoiseRouterBuilder.of(DefaultNoiseRouters.getCaves(registry));
+			return NoiseRouterBuilder.of(registry, DefaultNoiseRouters.getCaves(registry));
 		}
 
 		public static NoiseRouterBuilder getFloatingIslands(Registry<DensityFunction> registry) {
-			return NoiseRouterBuilder.of(DefaultNoiseRouters.getFloatingIslands(registry));
+			return NoiseRouterBuilder.of(registry, DefaultNoiseRouters.getFloatingIslands(registry));
 		}
 	}
 }
