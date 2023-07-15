@@ -10,6 +10,7 @@
     "accessors.ChunkNoiseSamplerAccessor",
     "accessors.ChunkSectionAccessor",
     "accessors.FoliagePlacerTypeAccessor",
+    "accessors.NoiseRouterDataAccessor",
     "accessors.OverworldBiomeParametersAccessor",
     "accessors.PointOfInterestTypesAccessor",
     "accessors.RootPlacerTypeAccessor",
