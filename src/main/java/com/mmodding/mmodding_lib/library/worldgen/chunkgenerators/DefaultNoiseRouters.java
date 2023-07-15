@@ -26,4 +26,27 @@ public class DefaultNoiseRouters extends NoiseRouterData {
 	public static NoiseRouter getFloatingIslands(Registry<DensityFunction> registry) {
 		return NoiseRouterData.m_zaglzone(registry);
 	}
+
+	public static class Builders {
+
+		public static NoiseRouterBuilder getOverworld(Registry<DensityFunction> registry, boolean largeBiome, boolean amplified) {
+			return NoiseRouterBuilder.of(DefaultNoiseRouters.getOverworld(registry, largeBiome, amplified));
+		}
+
+		public static NoiseRouterBuilder getNether(Registry<DensityFunction> registry) {
+			return NoiseRouterBuilder.of(DefaultNoiseRouters.getNether(registry));
+		}
+
+		public static NoiseRouterBuilder getEnd(Registry<DensityFunction> registry) {
+			return NoiseRouterBuilder.of(DefaultNoiseRouters.getEnd(registry));
+		}
+
+		public static NoiseRouterBuilder getCaves(Registry<DensityFunction> registry) {
+			return NoiseRouterBuilder.of(DefaultNoiseRouters.getCaves(registry));
+		}
+
+		public static NoiseRouterBuilder getFloatingIslands(Registry<DensityFunction> registry) {
+			return NoiseRouterBuilder.of(DefaultNoiseRouters.getFloatingIslands(registry));
+		}
+	}
 }
