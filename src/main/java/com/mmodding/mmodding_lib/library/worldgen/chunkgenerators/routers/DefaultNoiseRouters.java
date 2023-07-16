@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.worldgen.chunkgenerators;
+package com.mmodding.mmodding_lib.library.worldgen.chunkgenerators.routers;
 
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.DensityFunction;
@@ -20,11 +20,11 @@ public class DefaultNoiseRouters extends NoiseRouterData {
 	}
 
 	public static NoiseRouter getCaves(Registry<DensityFunction> registry) {
-		return NoiseRouterData.m_zifycqqm(registry);
+		return NoiseRouterData.method_41549(registry);
 	}
 
 	public static NoiseRouter getFloatingIslands(Registry<DensityFunction> registry) {
-		return NoiseRouterData.m_zaglzone(registry);
+		return NoiseRouterData.method_41552(registry);
 	}
 
 	public static class Builders {

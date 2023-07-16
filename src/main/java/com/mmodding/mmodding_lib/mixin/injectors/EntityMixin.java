@@ -192,7 +192,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	private TeleportTarget getCustomPortalTarget(ServerWorld destination) {
 		WorldBorder worldBorder = destination.getWorldBorder();
 		double coordScaleFactor = DimensionType.getCoordinateScaleFactor(this.getWorld().getDimension(), destination.getDimension());
-		BlockPos posFactorScaled = worldBorder.m_kgymprsy(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
+		BlockPos posFactorScaled = worldBorder.method_39538(this.getX() * coordScaleFactor, this.getY(), this.getZ() * coordScaleFactor);
 		this.useCustomPortalElements = true;
 
 		Function<BlockLocating.Rectangle, TeleportTarget> func = rectangle -> {

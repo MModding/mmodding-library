@@ -6,9 +6,11 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
+import org.jetbrains.annotations.ApiStatus;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 @ClientOnly
+@ApiStatus.Internal
 public class MModdingScreen extends ConfigScreen {
 
 	private final Screen lastScreen;

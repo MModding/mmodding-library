@@ -13,7 +13,7 @@ import net.minecraft.world.gen.structure.StructureSet;
 
 public class BiomeBasedChunkGenerator extends NoiseChunkGenerator {
 
-	public static final Codec<BiomeBasedChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> m_asjkihmg(instance)
+	public static final Codec<BiomeBasedChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> method_41042(instance)
 		.and(instance.group(
 			RegistryOps.getRegistry(Registry.NOISE_KEY).forGetter(generator -> generator.noises),
 			BiomeSource.CODEC.fieldOf("biome_source").forGetter(generator -> generator.populationSource),

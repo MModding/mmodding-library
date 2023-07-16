@@ -52,7 +52,7 @@ public abstract class ChunkNoiseSamplerMixin implements ChunkNoiseSamplerDuckInt
 			Identifier id = key.getValue();
 			if (MModdingGlobalMaps.hasCustomVeinTypes(id)) {
 
-				NoiseRouter router = this.randomState.getRouter().m_vekvzbgt(this::getWrappedFunction);
+				NoiseRouter router = this.randomState.getRouter().method_41544(this::getWrappedFunction);
 
 				ImmutableList.Builder<ChunkNoiseSampler.BlockStateSampler> builder = ImmutableList.builder();
 

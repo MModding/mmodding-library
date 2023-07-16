@@ -5,10 +5,12 @@ import com.mmodding.mmodding_lib.library.events.client.ClientConfigNetworkingEve
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.ApiStatus;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 @ClientOnly
+@ApiStatus.Internal
 public class ClientPacketReceivers {
 
 	public static void register() {

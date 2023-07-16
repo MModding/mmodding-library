@@ -10,5 +10,5 @@ mutable field net/minecraft/world/dimension/AreaHelper width I
 accessible method net/minecraft/world/gen/OreVeinCreator create (Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/util/random/PositionalRandomFactory;)Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler$BlockStateSampler;
 extendable method net/minecraft/world/dimension/AreaHelper getLowerCorner (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos;
 extendable method net/minecraft/world/dimension/AreaHelper getWidth (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)I
-extendable method net/minecraft/world/dimension/AreaHelper m_beqllhzk (Lnet/minecraft/util/math/BlockPos$Mutable;I)Z
-extendable method net/minecraft/world/dimension/AreaHelper m_fqjhrxgm (Lnet/minecraft/util/math/BlockPos$Mutable;)I
+extendable method net/minecraft/world/dimension/AreaHelper method_30491 (Lnet/minecraft/util/math/BlockPos$Mutable;I)Z
+extendable method net/minecraft/world/dimension/AreaHelper method_30490 (Lnet/minecraft/util/math/BlockPos$Mutable;)I

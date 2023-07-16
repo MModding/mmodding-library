@@ -103,7 +103,7 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 			double double1 = -1.0;
 			BlockPos secondPos = null;
 			WorldBorder border = this.world.getWorldBorder();
-			int integer0 = Math.min(this.world.getTopY(), this.world.getBottomY() + this.world.m_aqoiocut()) - 1;
+			int integer0 = Math.min(this.world.getTopY(), this.world.getBottomY() + this.world.method_32819()) - 1;
 			BlockPos.Mutable mutable = pos.mutableCopy();
 
 			for (BlockPos.Mutable actualMutable : BlockPos.iterateInSquare(pos, 16, Direction.EAST, Direction.SOUTH)) {

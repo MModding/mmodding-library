@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.worldgen.chunkgenerators;
+package com.mmodding.mmodding_lib.library.worldgen.chunkgenerators.routers;
 
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.DensityFunction;
@@ -202,6 +202,6 @@ public class NoiseRouterBuilder {
 
 	public interface DensityFunctionReplacementContext {
 
-		DensityFunction apply(DensityFunction old, Registry<DensityFunction> registry, OverworldParams params);
+		DensityFunction apply(DensityFunction old, Registry<DensityFunction> functions, OverworldParams params);
 	}
 }

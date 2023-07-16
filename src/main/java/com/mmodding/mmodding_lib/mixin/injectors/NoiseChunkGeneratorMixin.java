@@ -28,7 +28,7 @@ public class NoiseChunkGeneratorMixin {
 	@Final
 	protected Holder<ChunkGeneratorSettings> settings;
 
-	@Inject(method = "m_axjzlpfy", at = @At("TAIL"), cancellable = true)
+	@Inject(method = "method_41537", at = @At("TAIL"), cancellable = true)
 	private void createChunkNoiseSampler(Chunk chunk, StructureManager structureManager, Blender blender, RandomState randomState, CallbackInfoReturnable<ChunkNoiseSampler> cir) {
 		ChunkNoiseSampler sampler = cir.getReturnValue();
 		ChunkNoiseSamplerDuckInterface ducked = ((ChunkNoiseSamplerDuckInterface) sampler);

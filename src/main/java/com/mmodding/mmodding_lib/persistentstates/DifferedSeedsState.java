@@ -6,7 +6,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.world.PersistentState;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class DifferedSeedsState extends PersistentState {
 
 	private final GeneratorOptionsDuckInterface generatorOptions;

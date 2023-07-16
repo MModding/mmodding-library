@@ -110,7 +110,7 @@ public class CustomSquaredPortalAreaHelper extends AreaHelper {
 	}
 
 	@Override
-	protected boolean m_beqllhzk(BlockPos.Mutable pos, int i) {
+	protected boolean method_30491(BlockPos.Mutable pos, int i) {
 
 		for(int j = 0; j < this.accessor().getWidth(); ++j) {
 			BlockPos.Mutable mutable = pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), j);
@@ -123,7 +123,7 @@ public class CustomSquaredPortalAreaHelper extends AreaHelper {
 	}
 
 	@Override
-	protected int m_fqjhrxgm(BlockPos.Mutable pos) {
+	protected int method_30490(BlockPos.Mutable pos) {
 
 		for(int i = 0; i < 21; ++i) {
 			pos.set(this.accessor().getLowerCorner()).move(Direction.UP, i).move(this.accessor().getNegativeDir(), -1);

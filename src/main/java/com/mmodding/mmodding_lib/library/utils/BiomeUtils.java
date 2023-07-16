@@ -19,7 +19,7 @@ public class BiomeUtils {
 	public static void changeBiomeForBlock(WorldAccess world, BlockPos pos, RegistryKey<Biome> biomeKey) {
 		Chunk chunk = world.getChunk(pos);
 		ChunkSection section = chunk.getSection(chunk.getSectionIndex(pos.getY()));
-		PalettedContainer<Holder<Biome>> biomeContainer = section.getBiomeContainer().m_enhkzepj();
+		PalettedContainer<Holder<Biome>> biomeContainer = section.getBiomeContainer().method_44350();
 		biomeContainer.setUnsafe(pos.getX() & 3, pos.getY() & 3, pos.getZ() & 3, BiomeUtils.getBiomeHolder(world, biomeKey));
 		((ChunkSectionAccessor) section).setBiomeContainer(biomeContainer);
 		chunk.setNeedsSaving(true);
