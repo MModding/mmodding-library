@@ -6,6 +6,7 @@ import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,6 +33,9 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 	@Unique
 	private final List<MutablePair<Long, Runnable>> repeatingTasks = new ArrayList<>();
 
+	@Unique
+	private final List<MutablePair<MutableTriple<Integer, Long, Runnable>, Integer>> eachTasks = new ArrayList<>();
+
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
 
@@ -39,6 +43,7 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 			MutablePair<Long, Runnable> task = this.tasks.get(i);
 
 			task.setLeft(task.getLeft() - 1);
+
 			if (task.getLeft() <= 0L) {
 				task.getRight().run();
 
@@ -58,6 +63,25 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 				i--;
 			}
 		}
+
+		for (int i = 0 ; i < this.eachTasks.size(); i++) {
+			MutablePair<MutableTriple<Integer, Long, Runnable>, Integer> task = this.eachTasks.get(i);
+
+			MutableTriple<Integer, Long, Runnable> params = task.getLeft();
+
+			params.setMiddle(params.getMiddle() - 1);
+			task.setRight(task.getRight() + 1);
+
+			if (task.getRight() >= params.getLeft()) {
+				params.getRight().run();
+				task.setRight(0);
+			}
+
+			if (params.getMiddle() <= 0L) {
+				this.eachTasks.remove(i);
+				i--;
+			}
+		}
 	}
 
 	@Override
@@ -68,6 +92,11 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 	@Override
 	public void repeatTaskUntil(long ticksUntil, Runnable run) {
 		this.repeatingTasks.add(new MutablePair<>(ticksUntil, run));
+	}
+
+	@Override
+	public void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
+		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
 	}
 
 	@Inject(method = "getSeed", at = @At("HEAD"), cancellable = true)

@@ -24,6 +24,33 @@ public class WorldUtils {
 		MModdingGlobalMaps.customVeinTypes.put(chunkGeneratorSettingsIdentifier, List.of(customVeinTypes));
 	}
 
+	public static void doSyncedTaskAfter(World world, long ticksToWait, Runnable task) {
+		if (!world.isClient()) {
+			WorldUtils.doTaskAfter((ServerWorld) world, ticksToWait, task);
+		}
+		else {
+			WorldUtils.doTaskAfter((ClientWorld) world, ticksToWait, task);
+		}
+	}
+
+	public static void repeatSyncedTaskUntil(World world, long ticksUntil, Runnable task) {
+		if (!world.isClient()) {
+			WorldUtils.repeatTaskUntil((ServerWorld) world, ticksUntil, task);
+		}
+		else {
+			WorldUtils.repeatTaskUntil((ClientWorld) world, ticksUntil, task);
+		}
+	}
+
+	public static void repeatSyncedTaskEachTimeUntil(World world, int ticksBetween, long ticksUntil, Runnable task) {
+		if (!world.isClient()) {
+			WorldUtils.repeatTaskEachTimeUntil((ServerWorld) world, ticksBetween, ticksUntil, task);
+		}
+		else {
+			WorldUtils.repeatTaskEachTimeUntil((ClientWorld) world, ticksBetween, ticksUntil, task);
+		}
+	}
+
 	public static void doTaskAfter(ServerWorld serverWorld, long ticksToWait, Runnable task) {
 		((TickTaskServer) serverWorld).doTaskAfter(ticksToWait, task);
 	}
@@ -32,12 +59,20 @@ public class WorldUtils {
 		((TickTaskServer) serverWorld).repeatTaskUntil(ticksUntil, task);
 	}
 
+	public static void repeatTaskEachTimeUntil(ServerWorld serverWorld, int ticksBetween, long ticksUntil, Runnable task) {
+		((TickTaskServer) serverWorld).repeatTaskEachTimeUntil(ticksBetween, ticksUntil, task);
+	}
+
 	public static void doTaskAfter(ClientWorld clientWorld, long ticksToWait, Runnable task) {
 		((TickTaskClient) clientWorld).doTaskAfter(ticksToWait, task);
 	}
 
 	public static void repeatTaskUntil(ClientWorld clientWorld, long ticksUntil, Runnable task) {
 		((TickTaskClient) clientWorld).repeatTaskUntil(ticksUntil, task);
+	}
+
+	public static void repeatTaskEachTimeUntil(ClientWorld clientWorld, int ticksBetween, long ticksUntil, Runnable task) {
+		((TickTaskClient) clientWorld).repeatTaskEachTimeUntil(ticksBetween, ticksUntil, task);
 	}
 
 	public static void pushExplosion(WorldAccess world, BlockPos pos, float power) {
@@ -51,6 +86,8 @@ public class WorldUtils {
 		void doTaskAfter(long ticksToWait, Runnable run);
 
 		void repeatTaskUntil(long ticksUntil, Runnable run);
+
+		void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run);
 	}
 
 	public interface TickTaskClient {
@@ -58,5 +95,7 @@ public class WorldUtils {
 		void doTaskAfter(long ticksToWait, Runnable run);
 
 		void repeatTaskUntil(long ticksUntil, Runnable run);
+
+		void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run);
 	}
 }

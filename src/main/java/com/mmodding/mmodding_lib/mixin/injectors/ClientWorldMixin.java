@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import net.minecraft.client.world.ClientWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.MutableTriple;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +23,9 @@ public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskC
 	@Unique
 	private final List<MutablePair<Long, Runnable>> repeatingTasks = new ArrayList<>();
 
+	@Unique
+	private final List<MutablePair<MutableTriple<Integer, Long, Runnable>, Integer>> eachTasks = new ArrayList<>();
+
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
 
@@ -29,6 +33,7 @@ public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskC
 			MutablePair<Long, Runnable> task = this.tasks.get(i);
 
 			task.setLeft(task.getLeft() - 1);
+
 			if (task.getLeft() <= 0L) {
 				task.getRight().run();
 
@@ -48,6 +53,25 @@ public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskC
 				i--;
 			}
 		}
+
+		for (int i = 0 ; i < this.eachTasks.size(); i++) {
+			MutablePair<MutableTriple<Integer, Long, Runnable>, Integer> task = this.eachTasks.get(i);
+
+			MutableTriple<Integer, Long, Runnable> params = task.getLeft();
+
+			params.setMiddle(params.getMiddle() - 1);
+			task.setRight(task.getRight() + 1);
+
+			if (task.getRight() >= params.getLeft()) {
+				params.getRight().run();
+				task.setRight(0);
+			}
+
+			if (params.getMiddle() <= 0L) {
+				this.eachTasks.remove(i);
+				i--;
+			}
+		}
 	}
 
 	@Override
@@ -58,5 +82,10 @@ public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskC
 	@Override
 	public void repeatTaskUntil(long ticksUntil, Runnable run) {
 		this.repeatingTasks.add(new MutablePair<>(ticksUntil, run));
+	}
+
+	@Override
+	public void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
+		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
 	}
 }
