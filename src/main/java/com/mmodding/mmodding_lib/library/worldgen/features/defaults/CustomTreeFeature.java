@@ -62,7 +62,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	@Override
-	public Feature<?> getFeature() {
+	public Feature<TreeFeatureConfig> getFeature() {
 		return Feature.TREE;
 	}
 
@@ -80,7 +80,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 
 		if (!this.treeDecorator.isEmpty()) builder.decorators(this.treeDecorator);
 
-		return new ConfiguredFeature<>(Feature.TREE, builder.dirtProvider(BlockStateProvider.of(this.groundBlock.get())).build());
+		return new ConfiguredFeature<>(this.getFeature(), builder.dirtProvider(BlockStateProvider.of(this.groundBlock.get())).build());
 	}
 
 	public CustomTreeFeature setGroundBlock(Block block) {

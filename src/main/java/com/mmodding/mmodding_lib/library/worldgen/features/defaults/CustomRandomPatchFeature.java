@@ -40,13 +40,13 @@ public class CustomRandomPatchFeature implements CustomFeature, FeatureRegistrab
 	}
 
 	@Override
-	public Feature<?> getFeature() {
+	public Feature<RandomPatchFeatureConfig> getFeature() {
 		return Feature.RANDOM_PATCH;
 	}
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
-		return new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(this.tries, this.spreadXZ, this.spreadY, this.feature));
+		return new ConfiguredFeature<>(this.getFeature(), new RandomPatchFeatureConfig(this.tries, this.spreadXZ, this.spreadY, this.feature));
 	}
 
 	public CustomRandomPatchFeature setCount(int count) {

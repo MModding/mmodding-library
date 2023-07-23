@@ -45,13 +45,13 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	@Override
-	public Feature<?> getFeature() {
+	public Feature<OreFeatureConfig> getFeature() {
 		return Feature.ORE;
 	}
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
-		return new ConfiguredFeature<>(Feature.ORE, new OreFeatureConfig(this.targets, this.veinSize, this.discardOnAirChance));
+		return new ConfiguredFeature<>(this.getFeature(), new OreFeatureConfig(this.targets, this.veinSize, this.discardOnAirChance));
 	}
 
 	public PlacedFeature createPlacedFeature(int veinNumber, int minHeight, int maxHeight) {

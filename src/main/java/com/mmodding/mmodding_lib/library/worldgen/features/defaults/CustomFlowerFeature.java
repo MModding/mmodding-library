@@ -61,7 +61,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	@Override
-	public Feature<?> getFeature() {
+	public Feature<RandomPatchFeatureConfig> getFeature() {
 		return Feature.FLOWER;
 	}
 
@@ -88,7 +88,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 			provider = new WeightedBlockStateProvider(builder);
 		}
 
-		return new ConfiguredFeature<>(Feature.FLOWER, new RandomPatchFeatureConfig(this.tries, this.spreadXZ, this.spreadY, PlacedFeatureUtil.onlyWhenEmpty(
+		return new ConfiguredFeature<>(this.getFeature(), new RandomPatchFeatureConfig(this.tries, this.spreadXZ, this.spreadY, PlacedFeatureUtil.onlyWhenEmpty(
 			Feature.SIMPLE_BLOCK,
 			new SimpleBlockFeatureConfig(provider)
 		)));
