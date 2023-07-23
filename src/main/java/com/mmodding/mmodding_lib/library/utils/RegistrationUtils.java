@@ -76,13 +76,11 @@ public class RegistrationUtils {
 		registerPlacedFeature(identifier, placedFeature);
 	}
 
-	@Deprecated
 	public static <C extends FeatureConfig, F extends Feature<C>> void registerFeatureWithoutPlaced(Identifier identifier, Feature<C> feature, ConfiguredFeature<C, F> configuredFeature) {
 		Registry.register(Registry.FEATURE, identifier, feature);
 		registerConfiguredFeature(identifier, configuredFeature);
 	}
 
-	@Deprecated
 	public static <C extends FeatureConfig> void registerFeatureWithoutConfiguredAndPlaced(Identifier identifier, Feature<C> feature) {
 		Registry.register(Registry.FEATURE, identifier, feature);
 	}

@@ -1,5 +1,8 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
+import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedPointedDripstoneFeature;
+import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.HolderSet;
 import net.minecraft.util.Identifier;
@@ -14,6 +17,7 @@ import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.decorator.*;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.util.PlacedFeatureUtil;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
@@ -29,6 +33,8 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
+	private final Block pointedDripstoneBlock;
+	private final Block dripstoneBlock;
 	private final IntProvider countRange;
 	private final IntProvider numberRange;
 	private final IntProvider spreadXZ;
@@ -38,8 +44,10 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 	private final DripstoneValue spreadRadius2Chance;
 	private final DripstoneValue spreadRadius3Chance;
 
-	public CustomPointedDripstoneFeature(IntProvider countRange, IntProvider numberRange, IntProvider spreadXZ, IntProvider spreadY, float tallerDripstoneChance, float directionalSpreadChance, float spreadRadius2Chance, float spreadRadius3Chance) {
+	public CustomPointedDripstoneFeature(Block pointedDripstoneBlock, Block dripstoneBlock, IntProvider countRange, IntProvider numberRange, IntProvider spreadXZ, IntProvider spreadY, float tallerDripstoneChance, float directionalSpreadChance, float spreadRadius2Chance, float spreadRadius3Chance) {
 		this(
+			pointedDripstoneBlock,
+			dripstoneBlock,
 			countRange,
 			numberRange,
 			spreadXZ,
@@ -51,7 +59,9 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 		);
 	}
 
-	public CustomPointedDripstoneFeature(IntProvider countRange, IntProvider numberRange, IntProvider spreadXZ, IntProvider spreadY, DripstoneValue tallerDripstoneChance, DripstoneValue directionalSpreadChance, DripstoneValue spreadRadius2Chance, DripstoneValue spreadRadius3Chance) {
+	public CustomPointedDripstoneFeature(Block pointedDripstoneBlock, Block dripstoneBlock, IntProvider countRange, IntProvider numberRange, IntProvider spreadXZ, IntProvider spreadY, DripstoneValue tallerDripstoneChance, DripstoneValue directionalSpreadChance, DripstoneValue spreadRadius2Chance, DripstoneValue spreadRadius3Chance) {
+		this.pointedDripstoneBlock = pointedDripstoneBlock;
+		this.dripstoneBlock = dripstoneBlock;
 		this.countRange = countRange;
 		this.numberRange = numberRange;
 		this.spreadXZ = spreadXZ;
@@ -71,8 +81,10 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
 		return new ConfiguredFeature<>(this.getFeature(), new SimpleRandomFeatureConfig(HolderSet.createDirect(
 			PlacedFeatureUtil.placedInline(
-				Feature.POINTED_DRIPSTONE,
-				new PointedDripstoneFeatureConfig(
+				MModdingFeatures.DIFFERED_POINTED_DRIPSTONE,
+				new DifferedPointedDripstoneFeature.Config(
+					BlockStateProvider.of(this.pointedDripstoneBlock),
+					BlockStateProvider.of(this.dripstoneBlock),
 					this.tallerDripstoneChance.stalagmiteValue(),
 					this.directionalSpreadChance.stalagmiteValue(),
 					this.spreadRadius2Chance.stalagmiteValue(),
@@ -82,8 +94,10 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 				RandomOffsetPlacementModifier.vertical(ConstantIntProvider.create(1))
 			),
 			PlacedFeatureUtil.placedInline(
-				Feature.POINTED_DRIPSTONE,
-				new PointedDripstoneFeatureConfig(
+				MModdingFeatures.DIFFERED_POINTED_DRIPSTONE,
+				new DifferedPointedDripstoneFeature.Config(
+					BlockStateProvider.of(this.pointedDripstoneBlock),
+					BlockStateProvider.of(this.dripstoneBlock),
 					this.tallerDripstoneChance.stalactiteValue(),
 					this.directionalSpreadChance.stalactiteValue(),
 					this.spreadRadius2Chance.stalactiteValue(),

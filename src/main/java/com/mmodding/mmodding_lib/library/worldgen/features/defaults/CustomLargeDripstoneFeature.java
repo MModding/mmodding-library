@@ -1,5 +1,8 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
+import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLargeDripstoneFeature;
+import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -13,6 +16,7 @@ import net.minecraft.world.gen.decorator.CountPlacementModifier;
 import net.minecraft.world.gen.decorator.InSquarePlacementModifier;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.util.PlacedFeatureUtil;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
@@ -28,6 +32,7 @@ public class CustomLargeDripstoneFeature implements CustomFeature, FeatureRegist
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
+	private final Block dripstoneBlock;
 	private final IntProvider countRange;
 	private final int floorToCeilingSearchRange;
 	public final IntProvider columnRadius;
@@ -39,7 +44,8 @@ public class CustomLargeDripstoneFeature implements CustomFeature, FeatureRegist
 	public final int minRadiusForWind;
 	public final float minBluntnessForWind;
 
-	public CustomLargeDripstoneFeature(IntProvider countRange, int floorToCeilingSearchRange, IntProvider columnRadius, FloatProvider heightScale, float maxColumnRadiusToCaveHeightRatio, FloatProvider stalactiteBluntness, FloatProvider stalagmiteBluntness, FloatProvider windSpeed, int minRadiusForWind, float minBluntnessForWind) {
+	public CustomLargeDripstoneFeature(Block dripstoneBlock, IntProvider countRange, int floorToCeilingSearchRange, IntProvider columnRadius, FloatProvider heightScale, float maxColumnRadiusToCaveHeightRatio, FloatProvider stalactiteBluntness, FloatProvider stalagmiteBluntness, FloatProvider windSpeed, int minRadiusForWind, float minBluntnessForWind) {
+		this.dripstoneBlock = dripstoneBlock;
 		this.countRange = countRange;
 		this.floorToCeilingSearchRange = floorToCeilingSearchRange;
 		this.columnRadius = columnRadius;
@@ -53,13 +59,14 @@ public class CustomLargeDripstoneFeature implements CustomFeature, FeatureRegist
 	}
 
 	@Override
-	public Feature<LargeDripstoneFeatureConfig> getFeature() {
-		return Feature.LARGE_DRIPSTONE;
+	public Feature<DifferedLargeDripstoneFeature.Config> getFeature() {
+		return MModdingFeatures.DIFFERED_LARGE_DRIPSTONE;
 	}
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
-		return new ConfiguredFeature<>(this.getFeature(), new LargeDripstoneFeatureConfig(
+		return new ConfiguredFeature<>(this.getFeature(), new DifferedLargeDripstoneFeature.Config(
+			BlockStateProvider.of(this.dripstoneBlock),
 			this.floorToCeilingSearchRange,
 			this.columnRadius,
 			this.heightScale,

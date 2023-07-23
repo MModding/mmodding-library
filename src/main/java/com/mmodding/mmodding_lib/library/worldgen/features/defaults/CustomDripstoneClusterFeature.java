@@ -1,5 +1,8 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
+import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedDripstoneClusterFeature;
+import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -13,6 +16,7 @@ import net.minecraft.world.gen.decorator.CountPlacementModifier;
 import net.minecraft.world.gen.decorator.InSquarePlacementModifier;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.util.PlacedFeatureUtil;
+import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
@@ -28,6 +32,8 @@ public class CustomDripstoneClusterFeature implements CustomFeature, FeatureRegi
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
 
+	private final Block pointedDripstoneBlock;
+	private final Block dripstoneBlock;
 	private final IntProvider countRange;
 	private final int floorToCeilingSearchRange;
 	private final IntProvider height;
@@ -41,7 +47,9 @@ public class CustomDripstoneClusterFeature implements CustomFeature, FeatureRegi
 	private final int maxDistanceFromCenterAffectingChanceOfDripstoneColumn;
 	private final int maxDistanceFromCenterAffectingHeightBias;
 
-	public CustomDripstoneClusterFeature(IntProvider countRange, int floorToCeilingSearchRange, IntProvider height, IntProvider radius, int maxStalagmiteStalactiteHeightDiff, int heightDeviation, IntProvider dripstoneBlockLayerThickness, FloatProvider density, FloatProvider wetness, float chanceOfDripstoneColumnAtMaxDistanceFromCenter, int maxDistanceFromCenterAffectingChanceOfDripstoneColumn, int maxDistanceFromCenterAffectingHeightBias) {
+	public CustomDripstoneClusterFeature(Block pointedDripstoneBlock, Block dripstoneBlock, IntProvider countRange, int floorToCeilingSearchRange, IntProvider height, IntProvider radius, int maxStalagmiteStalactiteHeightDiff, int heightDeviation, IntProvider dripstoneBlockLayerThickness, FloatProvider density, FloatProvider wetness, float chanceOfDripstoneColumnAtMaxDistanceFromCenter, int maxDistanceFromCenterAffectingChanceOfDripstoneColumn, int maxDistanceFromCenterAffectingHeightBias) {
+		this.pointedDripstoneBlock = pointedDripstoneBlock;
+		this.dripstoneBlock = dripstoneBlock;
 		this.countRange = countRange;
 		this.floorToCeilingSearchRange = floorToCeilingSearchRange;
 		this.height = height;
@@ -57,13 +65,15 @@ public class CustomDripstoneClusterFeature implements CustomFeature, FeatureRegi
 	}
 
 	@Override
-	public Feature<DripstoneClusterFeatureConfig> getFeature() {
-		return Feature.DRIPSTONE_CLUSTER;
+	public Feature<DifferedDripstoneClusterFeature.Config> getFeature() {
+		return MModdingFeatures.DIFFERED_DRIPSTONE_CLUSTER;
 	}
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
-		return new ConfiguredFeature<>(this.getFeature(), new DripstoneClusterFeatureConfig(
+		return new ConfiguredFeature<>(this.getFeature(), new DifferedDripstoneClusterFeature.Config(
+			BlockStateProvider.of(this.pointedDripstoneBlock),
+			BlockStateProvider.of(this.dripstoneBlock),
 			this.floorToCeilingSearchRange,
 			this.height,
 			this.radius,
