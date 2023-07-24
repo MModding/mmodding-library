@@ -38,9 +38,7 @@ public class DifferedLargeDripstoneFeature extends Feature<DifferedLargeDripston
 		BlockPos blockPos = context.getOrigin();
 		LargeDripstoneFeatureConfig largeDripstoneFeatureConfig = context.getConfig();
 		RandomGenerator randomGenerator = context.getRandom();
-		if (!CustomDripstoneHelper.canGenerate(structureWorldAccess, blockPos)) {
-			return false;
-		} else {
+		if (CustomDripstoneHelper.canGenerate(structureWorldAccess, blockPos)) {
 			Optional<CaveSurface> optional = CaveSurface.create(
 				structureWorldAccess, blockPos, largeDripstoneFeatureConfig.floorToCeilingSearchRange, CustomDripstoneHelper::canGenerate, CustomDripstoneHelper::canReplaceOrLava
 			);
@@ -89,6 +87,9 @@ public class DifferedLargeDripstoneFeature extends Feature<DifferedLargeDripston
 			} else {
 				return false;
 			}
+		}
+		else {
+			return false;
 		}
 	}
 

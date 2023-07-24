@@ -43,9 +43,7 @@ public class DifferedDripstoneClusterFeature extends Feature<DifferedDripstoneCl
 		BlockPos blockPos = context.getOrigin();
 		DripstoneClusterFeatureConfig dripstoneClusterFeatureConfig = context.getConfig();
 		RandomGenerator random = context.getRandom();
-		if (!CustomDripstoneHelper.canGenerate(structureWorldAccess, blockPos)) {
-			return false;
-		} else {
+		if (CustomDripstoneHelper.canGenerate(structureWorldAccess, blockPos)) {
 			int i = dripstoneClusterFeatureConfig.height.get(random);
 			float f = dripstoneClusterFeatureConfig.wetness.get(random);
 			float g = dripstoneClusterFeatureConfig.density.get(random);
@@ -61,6 +59,9 @@ public class DifferedDripstoneClusterFeature extends Feature<DifferedDripstoneCl
 			}
 
 			return true;
+		}
+		else {
+			return false;
 		}
 	}
 

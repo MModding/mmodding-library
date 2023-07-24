@@ -49,12 +49,12 @@ public class CustomDripstoneHelper extends DripstoneHelper {
 		}
 	}
 
-	public static void generatePointedDripstone(Block dripstoneBlock, WorldAccess world, BlockPos pos, Direction direction, int height, boolean merge) {
-		if (CustomDripstoneHelper.canReplace(dripstoneBlock, world.getBlockState(pos.offset(direction.getOpposite())))) {
+	public static void generatePointedDripstone(Block pointedDripstoneBlock, WorldAccess world, BlockPos pos, Direction direction, int height, boolean merge) {
+		if (CustomDripstoneHelper.canReplace(pointedDripstoneBlock, world.getBlockState(pos.offset(direction.getOpposite())))) {
 			BlockPos.Mutable mutable = pos.mutableCopy();
 
-			CustomDripstoneHelper.getDripstoneThickness(direction, height, merge, state -> {
-				if (state.isOf(dripstoneBlock)) {
+			CustomDripstoneHelper.getDripstoneThickness(pointedDripstoneBlock, direction, height, merge, state -> {
+				if (state.isOf(pointedDripstoneBlock)) {
 					state = state.with(PointedDripstoneBlock.WATERLOGGED, world.isWater(mutable));
 				}
 
