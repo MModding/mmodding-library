@@ -36,7 +36,7 @@ public abstract class AbstractBlockMixin {
 	private void isSideInvisible(BlockState state, BlockState stateFrom, Direction direction, CallbackInfoReturnable<Boolean> cir) {
 		AbstractBlock thisObject = (AbstractBlock) (Object) this;
 		if (thisObject instanceof Block thisBlock) {
-			if (this.duckedSettings().getInvisibleSides() && state.isOf(thisBlock)) {
+			if (this.duckedSettings().getInvisibleSides() && stateFrom.isOf(thisBlock)) {
 				cir.setReturnValue(true);
 			}
 		}
