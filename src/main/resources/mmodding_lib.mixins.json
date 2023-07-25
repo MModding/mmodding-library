@@ -6,6 +6,7 @@
   "mixins": [
     "accessors.AreaHelperAccessor",
     "accessors.BlockEntityTypeAccessor",
+    "accessors.BlocksAccessor",
     "accessors.BrewingRecipeRegistryAccessor",
     "accessors.BuiltinNoiseParametersAccessor",
     "accessors.ChunkNoiseSamplerAccessor",
@@ -19,7 +20,9 @@
     "accessors.TreeDecoratorTypeAccessor",
     "accessors.TrunkPlacerTypeAccessor",
     "injectors.AbstractBlockMixin",
+    "injectors.AbstractBlockSettingsMixin",
     "injectors.AbstractFireBlockMixin",
+    "injectors.BlockMixin",
     "injectors.BootStrapMixin",
     "injectors.BuiltinChunkGeneratorsMixin",
     "injectors.ChunkNoiseSamplerMixin",

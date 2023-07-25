@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.blocks;
+package com.mmodding.mmodding_lib.library.blocks.settings;
 
 import net.minecraft.block.Material;
 import net.minecraft.sound.BlockSoundGroup;
@@ -55,5 +55,9 @@ public enum DefaultBlockSettings {
 			case LEAVES_CARPET -> QuiltBlockSettings.of(Material.CARPET).sounds(BlockSoundGroup.GRASS).nonOpaque().strength(0.2f);
 			case NETHERITE_SETTINGS -> QuiltBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).strength(50.0f, 1200.0f);
 		};
+	}
+
+	public static BlockSettingsModifiers ofDefaultForModifiers(DefaultBlockSettings defaultBlockSettings) {
+		return BlockSettingsModifiers.ofSettings(DefaultBlockSettings.ofDefault(defaultBlockSettings));
 	}
 }
