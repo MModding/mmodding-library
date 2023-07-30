@@ -9,12 +9,12 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 public class ConfigUtils {
 
 	public static Config getConfig(String configName) {
-		return MModdingLib.configs.get(configName);
+		return MModdingLib.CONFIGS.get(configName);
 	}
 
 	@ClientOnly
 	public static Config getClientConfig(String configName) {
-		return MModdingLibClient.clientConfigs.get(configName);
+		return MModdingLibClient.CLIENT_CONFIGS.get(configName);
 	}
 
 	public static String getSeparator() {

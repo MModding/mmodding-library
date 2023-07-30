@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier;
 
 public class ConfigScreen extends Screen {
 
-	private final String modId;
+	private final String qualifier;
 	private final Config config;
 	private final Screen lastScreen;
 	private boolean initialized;
@@ -28,9 +28,9 @@ public class ConfigScreen extends Screen {
 	private ButtonWidget refreshButton;
 	private ButtonWidget cancelButton;
 
-	public ConfigScreen(String modId, Config config, Screen lastScreen) {
+	public ConfigScreen(String qualifier, Config config, Screen lastScreen) {
 		super(config.getConfigOptions().name());
-		this.modId = modId;
+		this.qualifier = qualifier;
 		this.config = config;
 		this.lastScreen = lastScreen;
 	}
@@ -148,15 +148,15 @@ public class ConfigScreen extends Screen {
 
 	public void close() {
 		assert this.client != null;
-		this.client.setScreen(lastScreen);
+		this.client.setScreen(this.lastScreen);
 	}
 
 	public void disableRefreshing() {
 		this.refreshButton.active = false;
 	}
 
-	public String getModId() {
-		return this.modId;
+	public String getQualifier() {
+		return this.qualifier;
 	}
 
 	public static class BlockTextureLocation extends Identifier {

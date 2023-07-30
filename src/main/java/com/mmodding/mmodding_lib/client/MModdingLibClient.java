@@ -11,7 +11,7 @@ import java.util.Map;
 @ClientOnly
 public class MModdingLibClient implements ClientModInitializer {
 
-	public static final Map<String, Config> clientConfigs = new HashMap<>();
+	public static final Map<String, Config> CLIENT_CONFIGS = new HashMap<>();
 
 	@Override
 	public void onInitializeClient(ModContainer mod) {

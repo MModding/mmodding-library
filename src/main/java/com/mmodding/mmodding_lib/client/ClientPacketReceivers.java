@@ -19,10 +19,10 @@ public class ClientPacketReceivers {
 			String configName = buf.readString();
 			String configContent = buf.readString();
 
-			ClientConfigNetworkingEvents.BEFORE.invoker().beforeConfigReceived(MModdingLibClient.clientConfigs.get(configName));
+			ClientConfigNetworkingEvents.BEFORE.invoker().beforeConfigReceived(MModdingLibClient.CLIENT_CONFIGS.get(configName));
 
-			MModdingLibClient.clientConfigs.get(configName).saveConfig(new ConfigObject(JsonParser.parseString(configContent).getAsJsonObject()));
-			Config config = MModdingLibClient.clientConfigs.get(configName);
+			MModdingLibClient.CLIENT_CONFIGS.get(configName).saveConfig(new ConfigObject(JsonParser.parseString(configContent).getAsJsonObject()));
+			Config config = MModdingLibClient.CLIENT_CONFIGS.get(configName);
 
 			ClientConfigNetworkingEvents.AFTER.invoker().afterConfigReceived(config);
 		}));

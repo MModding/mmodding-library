@@ -19,11 +19,11 @@ public class MModdingLib implements ModInitializer {
 
 	public static MModdingModContainer mmoddingLib;
 
-	public static MModdingLibConfig config = new MModdingLibConfig();
+	public static final MModdingLibConfig MMODDING_LIBRARY_CONFIG = new MModdingLibConfig();
 
-	public static final List<MModdingModContainer> mmoddingMods = new ArrayList<>();
+	public static final List<MModdingModContainer> MMODDING_MODS = new ArrayList<>();
 
-	public static final Map<String, Config> configs = new HashMap<>();
+	public static final Map<String, Config> CONFIGS = new HashMap<>();
 
 	@Override
 	public void onInitialize(ModContainer mod) {
@@ -32,7 +32,7 @@ public class MModdingLib implements ModInitializer {
 
 		MModdingInitializationEvents.START.invoker().onMModdingInitializationStart(mmoddingLib);
 
-		config.initializeConfig();
+		MMODDING_LIBRARY_CONFIG.initializeConfig();
 
 		mmoddingLib.getLogger().info("Initialize {}", mmoddingLib.getName());
 
@@ -40,9 +40,9 @@ public class MModdingLib implements ModInitializer {
 		MModdingNoiseParameters.initialize();
 		MModdingDensityFunctions.initialize();
 
-		if (config.getContent().getBoolean("showMModdingLibraryMods")) {
+		if (MMODDING_LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryMods")) {
 			String mods = "MModding Library Mods :";
-			for (MModdingModContainer mmoddingMod : mmoddingMods) {
+			for (MModdingModContainer mmoddingMod : MMODDING_MODS) {
 				mods = mods.concat(" " + mmoddingMod.getName() + " [" + mmoddingMod.getIdentifier() + "],");
 			}
 

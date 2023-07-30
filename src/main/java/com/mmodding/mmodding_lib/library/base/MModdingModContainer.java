@@ -19,9 +19,9 @@ public class MModdingModContainer {
 
 	public static MModdingModContainer from(ModContainer mod) {
 		return new MModdingModContainer(
-				mod.metadata().name(),
-				mod.metadata().id(),
-				mod.metadata().version()
+			mod.metadata().name(),
+			mod.metadata().id(),
+			mod.metadata().version()
 		);
 	}
 

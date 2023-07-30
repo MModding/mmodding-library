@@ -23,13 +23,13 @@ public interface MModdingModInitializer extends ModInitializer {
 	@Override
 	@MustBeInvokedByOverriders
 	default void onInitialize(ModContainer mod) {
-		MModdingLib.mmoddingMods.add(MModdingModContainer.from(mod));
+		MModdingLib.MMODDING_MODS.add(MModdingModContainer.from(mod));
 		this.getElementsInitializers().forEach(ElementsInitializer::register);
 		if (this.getConfig() != null) {
 			this.getConfig().initializeConfig();
-			MModdingLib.configs.put(this.getConfig().getConfigName(), this.getConfig());
+			MModdingLib.CONFIGS.put(this.getConfig().getConfigName(), this.getConfig());
 			if (MinecraftQuiltLoader.getEnvironmentType() == EnvType.CLIENT) {
-				MModdingLibClient.clientConfigs.put(this.getConfig().getConfigName(), TemporaryConfig.fromConfig(this.getConfig()));
+				MModdingLibClient.CLIENT_CONFIGS.put(this.getConfig().getConfigName(), TemporaryConfig.fromConfig(this.getConfig()));
 			}
 		}
 	}
