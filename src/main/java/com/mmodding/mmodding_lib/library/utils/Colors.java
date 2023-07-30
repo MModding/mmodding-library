@@ -9,9 +9,9 @@ public class Colors {
 
     public static abstract class ColorFormat {
 
-        private ColorComponent a = this.createAComponent();
-        private ColorComponent b = this.createBComponent();
-        private ColorComponent c = this.createCComponent();
+        private final ColorComponent a = this.createAComponent();
+        private final ColorComponent b = this.createBComponent();
+        private final ColorComponent c = this.createCComponent();
 
         private ColorFormat(int a, int b, int c) {
             this.a.setValue(a);
@@ -144,18 +144,18 @@ public class Colors {
             return new ARGB(alpha, this);
         }
 
-        public Color toJavaColor() {
-            return new Color(this.getRed(), this.getGreen(), this.getBlue());
-        }
-
         public int toDecimal() {
             return ColorUtil.ARGB32.getArgb(255, this.getRed(), this.getGreen(), this.getBlue());
+        }
+
+        public Color toJavaColor() {
+            return new Color(this.getRed(), this.getGreen(), this.getBlue());
         }
     }
 
     public static class ARGB extends RGB {
 
-        private ColorComponent alpha = new ColorComponent(0, 255);
+        private final ColorComponent alpha = new ColorComponent(0, 255);
 
         public ARGB(int alpha, RGB rgb) {
             this(alpha, rgb.getRed(), rgb.getGreen(), rgb.getBlue());
@@ -189,12 +189,14 @@ public class Colors {
             return this.setAlpha(this.getAlpha() + alteration);
         }
 
-        public Color toJavaColor() {
-            return new Color(this.getAlpha(), this.getRed(), this.getGreen(), this.getBlue());
-        }
-
+        @Override
         public int toDecimal() {
             return ColorUtil.ARGB32.getArgb(this.getAlpha(), this.getRed(), this.getGreen(), this.getBlue());
+        }
+
+        @Override
+        public Color toJavaColor() {
+            return new Color(this.getAlpha(), this.getRed(), this.getGreen(), this.getBlue());
         }
     }
 }
