@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.screens.widgets;
+package com.mmodding.mmodding_lib.library.client.screen.widgets;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.Text;

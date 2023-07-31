@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.config.screen;
+package com.mmodding.mmodding_lib.library.config.client.screen;
 
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import net.minecraft.client.MinecraftClient;
@@ -35,17 +35,17 @@ public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry
 		int color;
 		String stringValue;
 		switch (this.fieldValue.getType()) {
-			case "string" -> {
+			case STRING -> {
 				fieldType = Text.translatable("mmodding_lib.configs.string");
 				color = 4781378;
 				stringValue = this.fieldValue.getValue();
 			}
-			case "number" -> {
+			case NUMBER -> {
 				fieldType = Text.translatable("mmodding_lib.configs.integer");
 				color = 1641430;
 				stringValue = this.fieldValue.getValue();
 			}
-			case "boolean" -> {
+			case BOOLEAN -> {
 				fieldType = Text.translatable("mmodding_lib.configs.boolean");
 				color = 14027531;
 				stringValue = this.fieldValue.getValue();

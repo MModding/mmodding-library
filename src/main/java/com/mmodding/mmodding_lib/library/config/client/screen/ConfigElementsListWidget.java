@@ -1,10 +1,10 @@
-package com.mmodding.mmodding_lib.library.config.screen;
+package com.mmodding.mmodding_lib.library.config.client.screen;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.config.screen.editing.BooleanEditScreen;
-import com.mmodding.mmodding_lib.library.config.screen.editing.NumberEditScreen;
-import com.mmodding.mmodding_lib.library.config.screen.editing.StringEditScreen;
+import com.mmodding.mmodding_lib.library.config.client.screen.editing.BooleanEditScreen;
+import com.mmodding.mmodding_lib.library.config.client.screen.editing.NumberEditScreen;
+import com.mmodding.mmodding_lib.library.config.client.screen.editing.StringEditScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 
@@ -60,9 +60,9 @@ public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<Conf
 	public void modifyParameter(ConfigElementsListEntry entry) {
 		String stringValue = entry.getFieldValue().getValue();
 		switch (entry.getFieldValue().getType()) {
-			case "string" -> this.client.setScreen(new StringEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(stringValue)));
-			case "number" -> this.client.setScreen(new NumberEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(Integer.valueOf(stringValue))));
-			case "boolean" -> this.client.setScreen(new BooleanEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(Boolean.valueOf(stringValue))));
+			case STRING -> this.client.setScreen(new StringEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(stringValue)));
+			case NUMBER -> this.client.setScreen(new NumberEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(Integer.valueOf(stringValue))));
+			case BOOLEAN -> this.client.setScreen(new BooleanEditScreen(this.screen, this, entry, this.mutableConfig, entry.getFieldName(), new ConfigObject.Value<>(Boolean.valueOf(stringValue))));
 		}
 	}
 

@@ -1,8 +1,8 @@
-package com.mmodding.mmodding_lib.library.client;
+package com.mmodding.mmodding_lib.library.config.client;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
 
 public abstract class TemporaryConfig implements Config {
 
@@ -22,13 +22,13 @@ public abstract class TemporaryConfig implements Config {
 		return new TemporaryConfig() {
 
 			@Override
-			public String getConfigName() {
-				return config.getConfigName();
+			public String getQualifier() {
+				return config.getQualifier();
 			}
 
 			@Override
-			public String getFileName() {
-				return config.getFileName();
+			public String getFilePath() {
+				return config.getFilePath();
 			}
 
 			@Override

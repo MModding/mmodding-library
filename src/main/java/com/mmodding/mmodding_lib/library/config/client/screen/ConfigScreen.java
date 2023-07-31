@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.config.screen;
+package com.mmodding.mmodding_lib.library.config.client.screen;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mojang.blaze3d.systems.RenderSystem;

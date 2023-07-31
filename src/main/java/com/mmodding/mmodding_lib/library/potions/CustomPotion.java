@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.potions;
 
+import com.mmodding.mmodding_lib.library.base.MModdingBootStrapInitializer;
 import com.mmodding.mmodding_lib.mixin.accessors.BrewingRecipeRegistryAccessor;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
@@ -24,7 +25,7 @@ public class CustomPotion extends Potion implements PotionRegistrable {
 	 * @apiNote Must be used in a class that extends MModdingBootStrapInitializer
 	 * @param basePotion the potion at the start of the potion creation
 	 * @param ingredient the ingredient needed to make the potion
-	 * @see com.mmodding.mmodding_lib.library.base.MModdingBootStrapInitializer
+	 * @see MModdingBootStrapInitializer
 	 */
 	public CustomPotion addBrewingRecipe(Potion basePotion, Item ingredient) {
 		BrewingRecipeRegistryAccessor.registerPotionRecipe(basePotion, ingredient, this);

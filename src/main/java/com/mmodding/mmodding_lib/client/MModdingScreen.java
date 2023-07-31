@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreen;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import com.mmodding.mmodding_lib.library.utils.Colors;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;

@@ -2,9 +2,9 @@ package com.mmodding.mmodding_lib.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.library.client.TemporaryConfig;
+import com.mmodding.mmodding_lib.library.config.client.TemporaryConfig;
 import com.mmodding.mmodding_lib.library.config.Config;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreen;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;

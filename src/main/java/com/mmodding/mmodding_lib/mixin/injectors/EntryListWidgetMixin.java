@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.MModdingModConfigsScreen;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigElementsListWidget;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigElementsListWidget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;

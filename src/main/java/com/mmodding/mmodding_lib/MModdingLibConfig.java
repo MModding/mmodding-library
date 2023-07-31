@@ -1,19 +1,19 @@
 package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.library.config.*;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreen;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
 import net.minecraft.text.Text;
 
 public class MModdingLibConfig implements Config {
 
 	@Override
-	public String getConfigName() {
+	public String getQualifier() {
 		return "mmodding_lib";
 	}
 
 	@Override
-	public String getFileName() {
+	public String getFilePath() {
 		return "mmodding/common";
 	}
 

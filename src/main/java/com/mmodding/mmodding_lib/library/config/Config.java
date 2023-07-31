@@ -3,8 +3,9 @@ package com.mmodding.mmodding_lib.library.config;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreenOptions;
-import com.mmodding.mmodding_lib.library.server.ServerOperations;
+import com.mmodding.mmodding_lib.MModdingLibConfig;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.networking.server.ServerOperations;
 import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.quiltmc.loader.api.QuiltLoader;
@@ -14,18 +15,50 @@ import java.io.*;
 
 public interface Config {
 
-	String getConfigName();
+	/**
+	 * The "identifier" of the config. Used to define the translations keys of the config.
+	 * You can take example on {@link MModdingLibConfig#getQualifier()}.
+	 * @return the qualifier of the config
+	 */
+	String getQualifier();
 
-	String getFileName();
+	/**
+	 * The file path.
+	 * You can take example on {@link MModdingLibConfig#getPath()}.
+	 * @return the path of the file (from the config directory and without file extension)
+	 */
+	String getFilePath();
 
+	/**
+	 * The default config object.
+	 * You can take example on {@link MModdingLibConfig#defaultConfig()}.
+	 * @return the config object in its default state
+	 * @see ConfigObject.Builder
+	 */
 	ConfigObject defaultConfig();
 
+	/**
+	 * Some options used in the config screen.
+	 * You can take example on {@link MModdingLibConfig#getConfigOptions()}
+	 * @return the config screen options
+	 * @see ConfigScreenOptions
+	 */
 	ConfigScreenOptions getConfigOptions();
 
+	/**
+	 * The config content directly read from the config json file
+	 * @return the config content
+	 * @see ConfigObject
+	 */
 	default ConfigObject getContent() {
 		return new ConfigObject(this.getReader().getAsJsonObject());
 	}
 
+	/**
+	 * This method allows to send a config from a server to a client
+	 * @param player the targeted player
+	 * @see ServerOperations
+	 */
 	@DedicatedServerOnly
 	default void sendServerConfigToClient(ServerPlayerEntity player) {
 		ServerOperations.sendConfigToClient(this, player);
@@ -41,17 +74,17 @@ public interface Config {
 
 	private String getPath() {
 		return QuiltLoader.getConfigDir().toString() + ConfigUtils.getSeparator() +
-				this.getFileName()
-						.replace("\\", ConfigUtils.getSeparator())
-						.replace("/", ConfigUtils.getSeparator())
-				+ ".json";
+			this.getFilePath()
+				.replace("\\", ConfigUtils.getSeparator())
+				.replace("/", ConfigUtils.getSeparator())
+			+ ".json";
 	}
 
 	default void saveConfig(ConfigObject configObject) {
 		try {
 			FileWriter configWriter = new FileWriter(this.getPath());
 			String json = new GsonBuilder().setPrettyPrinting().create()
-					.toJson(ConfigObject.Builder.fromConfigObject(configObject).getJsonObject());
+				.toJson(ConfigObject.Builder.fromConfigObject(configObject).getJsonObject());
 			configWriter.write(json);
 			configWriter.close();
 		} catch (IOException e) {
@@ -60,8 +93,8 @@ public interface Config {
 	}
 
 	default void initializeConfig() {
-		if (this.getFileName().contains("\\") || this.getFileName().contains("/")) {
-			String path = this.getFileName().replace("\\", "/");
+		if (this.getFilePath().contains("\\") || this.getFilePath().contains("/")) {
+			String path = this.getFilePath().replace("\\", "/");
 			String[] strings = path.split("/");
 			int counter = 0;
 			StringBuilder temp = new StringBuilder();

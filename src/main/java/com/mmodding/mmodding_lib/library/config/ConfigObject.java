@@ -69,11 +69,9 @@ public class ConfigObject {
 
 		public Builder addParameter(String parameter, Value<?> value) {
 			switch (value.getType()) {
-				case "string" -> this.jsonObject.addProperty(parameter, value.getValue());
-				case "number" -> this.jsonObject.addProperty(parameter, Integer.valueOf(value.getValue()));
-				case "boolean" -> {
-					this.jsonObject.addProperty(parameter, Boolean.valueOf(value.getValue()));
-				}
+				case STRING -> this.jsonObject.addProperty(parameter, value.getValue());
+				case NUMBER -> this.jsonObject.addProperty(parameter, Integer.valueOf(value.getValue()));
+				case BOOLEAN -> this.jsonObject.addProperty(parameter, Boolean.valueOf(value.getValue()));
 			}
 			return this;
 		}
@@ -132,7 +130,7 @@ public class ConfigObject {
 	public static class Value <T> {
 
 		private final T value;
-		private final String type;
+		private final Type type;
 
 		public static Value<?> fromJsonElement(JsonElement element) {
 			if (element instanceof JsonPrimitive primitive) {
@@ -147,11 +145,11 @@ public class ConfigObject {
 		public Value(T value) {
 			this.value = value;
 			if (value instanceof String) {
-				this.type = "string";
+				this.type = Type.STRING;
 			} else if (value instanceof Number) {
-				this.type = "number";
+				this.type = Type.NUMBER;
 			} else if (value instanceof Boolean) {
-				this.type = "boolean";
+				this.type = Type.BOOLEAN;
 			} else {
 				throw new IllegalArgumentException("Invalid Parameter Type");
 			}
@@ -161,8 +159,14 @@ public class ConfigObject {
 			return String.valueOf(value);
 		}
 
-		public String getType() {
+		public Type getType() {
 			return this.type;
+		}
+
+		public enum Type {
+			STRING,
+			NUMBER,
+			BOOLEAN
 		}
 	}
 }

@@ -1,10 +1,10 @@
-package com.mmodding.mmodding_lib.library.config.screen.editing;
+package com.mmodding.mmodding_lib.library.config.client.screen.editing;
 
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigElementsListEntry;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigElementsListWidget;
-import com.mmodding.mmodding_lib.library.config.screen.ConfigScreen;
-import com.mmodding.mmodding_lib.library.screens.widgets.NumberFieldWidget;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigElementsListEntry;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigElementsListWidget;
+import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
+import com.mmodding.mmodding_lib.library.client.screen.widgets.NumberFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
