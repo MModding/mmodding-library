@@ -13,7 +13,7 @@ public class Colors {
         private final ColorComponent b = this.createBComponent();
         private final ColorComponent c = this.createCComponent();
 
-        private ColorFormat(int a, int b, int c) {
+        private ColorFormat(float a, float b, float c) {
             this.a.setValue(a);
             this.b.setValue(b);
             this.c.setValue(c);
@@ -25,47 +25,47 @@ public class Colors {
 
         protected abstract ColorComponent createCComponent();
 
-        protected int getA() {
+        protected float getA() {
             return this.a.getValue();
         }
 
-        protected int getB() {
+        protected float getB() {
             return this.b.getValue();
         }
 
-        protected int getC() {
+        protected float getC() {
             return this.c.getValue();
         }
 
-        protected int setA(int a) {
+        protected float setA(float a) {
             return this.a.setValue(a);
         }
 
-        protected int setB(int b) {
+        protected float setB(float b) {
             return this.b.setValue(b);
         }
 
-        protected int setC(int c) {
+        protected float setC(float c) {
             return this.c.setValue(c);
         }
 
         public static class ColorComponent {
 
-            private final int minValue;
-            private final int maxValue;
+            private final float minValue;
+            private final float maxValue;
 
-            private int value;
+            private float value;
 
-            public ColorComponent(int minValue, int maxValue) {
+            public ColorComponent(float minValue, float maxValue) {
                 this.minValue = minValue;
                 this.maxValue = maxValue;
             }
 
-            public int getValue() {
+            public float getValue() {
                 return this.value;
             }
 
-            public int setValue(int value) {
+            public float setValue(float value) {
                 return this.value = MathHelper.clamp(value, this.minValue, this.maxValue);
             }
         }
@@ -105,27 +105,27 @@ public class Colors {
         }
 
         public int getRed() {
-            return this.getA();
+            return (int) this.getA();
         }
 
         public int getGreen() {
-            return this.getB();
+            return (int) this.getB();
         }
 
         public int getBlue() {
-            return this.getC();
+            return (int) this.getC();
         }
 
         public int setRed(int red) {
-            return this.setA(red);
+            return (int) this.setA(red);
         }
 
         public int setGreen(int green) {
-            return this.setB(green);
+            return (int) this.setB(green);
         }
 
         public int setBlue(int blue) {
-            return this.setC(blue);
+            return (int) this.setC(blue);
         }
 
         public int alterRed(int alteration) {
@@ -143,6 +143,11 @@ public class Colors {
         public ARGB toARGB(int alpha) {
             return new ARGB(alpha, this);
         }
+
+		public HSB toHSB() {
+			float[] hsb = Color.RGBtoHSB(this.getRed(), this.getGreen(), this.getBlue(), null);
+			return new HSB(hsb[0], hsb[1], hsb[2]);
+		}
 
         public int toDecimal() {
             return ColorUtil.ARGB32.getArgb(255, this.getRed(), this.getGreen(), this.getBlue());
@@ -178,11 +183,11 @@ public class Colors {
         }
 
         public int getAlpha() {
-            return this.alpha.getValue();
+            return (int) this.alpha.getValue();
         }
 
         public int setAlpha(int alpha) {
-            return this.alpha.setValue(alpha);
+            return (int) this.alpha.setValue(alpha);
         }
 
         public int alterAlpha(int alteration) {
@@ -199,4 +204,83 @@ public class Colors {
             return new Color(this.getAlpha(), this.getRed(), this.getGreen(), this.getBlue());
         }
     }
+
+	public static class HSB extends ColorFormat {
+
+		@Override
+		protected ColorComponent createAComponent() {
+			return new ColorComponent(0, 360);
+		}
+
+		@Override
+		protected ColorComponent createBComponent() {
+			return new ColorComponent(0, 100);
+		}
+
+		@Override
+		protected ColorComponent createCComponent() {
+			return new ColorComponent(0, 100);
+		}
+
+		private HSB(float hue, float saturation, float brightness) {
+			super(hue, saturation, brightness);
+		}
+
+		public static HSB fromDecimal(int decimal) {
+			return RGB.fromDecimal(decimal).toHSB();
+		}
+
+		public static HSB fromJavaColor(Color color) {
+			return RGB.fromJavaColor(color).toHSB();
+		}
+
+		public float getHue() {
+			return this.getA();
+		}
+
+		public float getSaturation() {
+			return this.getB();
+		}
+
+		public float getBrightness() {
+			return this.getC();
+		}
+
+		public float setHue(float hue) {
+			return this.setA(hue);
+		}
+
+		public float setSaturation(float saturation) {
+			return this.setB(saturation);
+		}
+
+		public float setBrightness(float brightness) {
+			return this.setC(brightness);
+		}
+
+		public float alterHue(float alteration) {
+			return this.setHue(this.getHue() + alteration);
+		}
+
+		public float alterSaturation(float alteration) {
+			return this.setSaturation(this.getSaturation() + alteration);
+		}
+
+		public float alterBrightness(float alteration) {
+			return this.setBrightness(this.getBrightness() + alteration);
+		}
+
+		public RGB toRGB() {
+			int rgb = Color.HSBtoRGB(this.getHue(), this.getSaturation(), this.getBrightness());
+			return RGB.fromDecimal(rgb);
+		}
+
+		public int toDecimal() {
+			return this.toRGB().toDecimal();
+		}
+
+		public Color toJavaColor() {
+			return this.toRGB().toJavaColor();
+		}
+	}
 }

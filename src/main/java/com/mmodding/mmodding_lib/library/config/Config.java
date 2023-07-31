@@ -39,14 +39,14 @@ public interface Config {
 
 	/**
 	 * Some options used in the config screen.
-	 * You can take example on {@link MModdingLibConfig#getConfigOptions()}
+	 * You can take example on {@link MModdingLibConfig#getConfigOptions()}.
 	 * @return the config screen options
 	 * @see ConfigScreenOptions
 	 */
 	ConfigScreenOptions getConfigOptions();
 
 	/**
-	 * The config content directly read from the config json file
+	 * The config content directly read from the config json file.
 	 * @return the config content
 	 * @see ConfigObject
 	 */
@@ -55,7 +55,7 @@ public interface Config {
 	}
 
 	/**
-	 * This method allows to send a config from a server to a client
+	 * This method allows to send a config from a server to a client.
 	 * @param player the targeted player
 	 * @see ServerOperations
 	 */
