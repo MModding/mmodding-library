@@ -24,7 +24,6 @@ public interface MModdingModInitializer extends ModInitializer {
 	@MustBeInvokedByOverriders
 	default void onInitialize(ModContainer mod) {
 		MModdingLib.MMODDING_MODS.add(MModdingModContainer.from(mod));
-		this.getElementsInitializers().forEach(ElementsInitializer::register);
 		if (this.getConfig() != null) {
 			this.getConfig().initializeConfig();
 			MModdingLib.CONFIGS.put(this.getConfig().getQualifier(), this.getConfig());
@@ -32,5 +31,6 @@ public interface MModdingModInitializer extends ModInitializer {
 				MModdingLibClient.CLIENT_CONFIGS.put(this.getConfig().getQualifier(), TemporaryConfig.fromConfig(this.getConfig()));
 			}
 		}
+		this.getElementsInitializers().forEach(ElementsInitializer::register);
 	}
 }

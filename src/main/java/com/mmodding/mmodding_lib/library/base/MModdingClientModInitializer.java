@@ -20,11 +20,10 @@ public interface MModdingClientModInitializer extends ClientModInitializer {
 	@Override
 	@MustBeInvokedByOverriders
 	default void onInitializeClient(ModContainer mod) {
-		this.getClientElementsInitializers().forEach(ClientElementsInitializer::registerClient);
 		if (this.getClientConfig() != null) {
 			this.getClientConfig().initializeConfig();
 			MModdingLibClient.CLIENT_CONFIGS.put(this.getClientConfig().getQualifier(), this.getClientConfig());
 		}
+		this.getClientElementsInitializers().forEach(ClientElementsInitializer::registerClient);
 	}
-
 }
