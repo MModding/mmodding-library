@@ -222,7 +222,7 @@ public class Colors {
 			return new ColorComponent(0, 100);
 		}
 
-		private HSB(float hue, float saturation, float brightness) {
+		public HSB(float hue, float saturation, float brightness) {
 			super(hue, saturation, brightness);
 		}
 
