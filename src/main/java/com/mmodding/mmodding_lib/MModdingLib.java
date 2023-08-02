@@ -37,8 +37,6 @@ public class MModdingLib implements ModInitializer {
 		mmoddingLib.getLogger().info("Initialize {}", mmoddingLib.getName());
 
 		Events.register();
-		MModdingNoiseParameters.initialize();
-		MModdingDensityFunctions.initialize();
 
 		if (MMODDING_LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryMods")) {
 			String mods = "MModding Library Mods :";

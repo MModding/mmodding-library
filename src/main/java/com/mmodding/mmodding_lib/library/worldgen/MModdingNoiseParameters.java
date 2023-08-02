@@ -18,7 +18,7 @@ public class MModdingNoiseParameters {
 		return RegistryKey.of(Registry.NOISE_KEY, new MModdingIdentifier(path));
 	}
 
-	public static void initialize() {
+	static {
 		NoiseParametersUtils.registerGroupedBiomeNoises(
 			BuiltinRegistries.NOISE_PARAMETERS,
 			2,

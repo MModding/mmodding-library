@@ -34,7 +34,7 @@ public class MModdingDensityFunctions {
 		return RegistryKey.of(Registry.DENSITY_FUNCTION_WORLDGEN, new MModdingIdentifier(path));
 	}
 
-	public static void initialize() {
+	static {
 		DensityFunction jaggedDensityFunction = DensityFunctions.noise(NoiseRouterUtils.getNoise(NoiseParametersKeys.JAGGED), 1500.0, 0.0);
 
 		DensityFunction shiftX = NoiseRouterUtils.getFunction(BuiltinRegistries.DENSITY_FUNCTION, MModdingDensityFunctions.SHIFT_X);
