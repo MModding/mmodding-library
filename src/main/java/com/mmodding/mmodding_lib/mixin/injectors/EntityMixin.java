@@ -127,6 +127,9 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Final
 	protected RandomGenerator random;
 
+	@Shadow
+	public float fallDistance;
+
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
