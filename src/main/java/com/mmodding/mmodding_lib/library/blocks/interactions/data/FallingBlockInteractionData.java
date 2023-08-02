@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks.interactions.data;
 
+import com.mmodding.mmodding_lib.ducks.FallingBlockEntityDuckInterface;
 import com.mmodding.mmodding_lib.mixin.accessors.FallingBlockEntityAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.FallingBlockEntity;
@@ -45,7 +46,7 @@ public class FallingBlockInteractionData {
 			accessor.getHurtEntities(),
 			accessor.getFallHurtMax(),
 			accessor.getFallHurtAmount(),
-			fallingBlockEntity.fallDistance
+			((FallingBlockEntityDuckInterface) fallingBlockEntity).getFinalFallDistance()
 		);
 	}
 
