@@ -53,7 +53,9 @@ public abstract class FallingBlockEntityMixin extends EntityMixin implements Fal
 
 	@Inject(method = "handleFallDamage", at = @At("HEAD"))
 	private void handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
-		this.setFinalFallDistance(fallDistance);
+		if (fallDistance > 0) {
+			this.setFinalFallDistance(fallDistance);
+		}
 	}
 
 	@Override
