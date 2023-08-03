@@ -18,6 +18,7 @@
     "accessors.PointedDripstoneBlockAccessor",
     "accessors.PointOfInterestTypesAccessor",
     "accessors.RootPlacerTypeAccessor",
+    "accessors.ScreenHandlerAccessor",
     "accessors.TreeDecoratorTypeAccessor",
     "accessors.TrunkPlacerTypeAccessor",
     "injectors.AbstractBlockMixin",
