@@ -15,7 +15,7 @@ public class CustomAxeItem extends AxeItem implements ItemRegistrable {
 
 	@Override
 	public boolean isNotRegistered() {
-		return !registered.get();
+		return !this.registered.get();
 	}
 
 	@Override

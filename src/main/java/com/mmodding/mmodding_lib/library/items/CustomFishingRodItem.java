@@ -14,11 +14,11 @@ public class CustomFishingRodItem extends FishingRodItem implements ItemRegistra
 
     @Override
     public boolean isNotRegistered() {
-        return !registered.get();
+        return !this.registered.get();
     }
 
     @Override
     public void setRegistered() {
-        registered.set(true);
+		this.registered.set(true);
     }
 }

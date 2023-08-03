@@ -16,7 +16,7 @@ public class CustomArmorItem extends ArmorItem implements ItemRegistrable {
 
 	@Override
 	public boolean isNotRegistered() {
-		return !registered.get();
+		return !this.registered.get();
 	}
 
 	@Override

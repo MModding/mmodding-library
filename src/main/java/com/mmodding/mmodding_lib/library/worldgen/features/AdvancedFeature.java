@@ -30,7 +30,7 @@ public abstract class AdvancedFeature<FC extends FeatureConfig> extends Feature<
 	}
 
 	public boolean isNotRegistered() {
-		return !registered.get();
+		return !this.registered.get();
 	}
 
 	public void setRegistered() {

@@ -15,7 +15,7 @@ public class CustomShovelItem extends ShovelItem implements ItemRegistrable {
 
 	@Override
 	public boolean isNotRegistered() {
-		return !registered.get();
+		return !this.registered.get();
 	}
 
 	@Override

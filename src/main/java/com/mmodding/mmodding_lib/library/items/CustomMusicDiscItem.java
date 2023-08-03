@@ -15,7 +15,7 @@ public class CustomMusicDiscItem extends MusicDiscItem implements ItemRegistrabl
 
 	@Override
 	public boolean isNotRegistered() {
-		return !registered.get();
+		return !this.registered.get();
 	}
 
 	@Override

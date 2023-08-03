@@ -26,7 +26,7 @@ public class CustomEnchantment extends Enchantment implements EnchantmentRegistr
 
 	@Override
 	public boolean isNotRegistered() {
-		return !registered.get();
+		return !this.registered.get();
 	}
 
 	@Override

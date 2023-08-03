@@ -9,6 +9,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.BuiltinRegistries;
@@ -64,6 +66,10 @@ public class RegistrationUtils {
 
 	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {
 		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
+	}
+
+	public static <T extends ScreenHandler> void registerScreenHandlerType(Identifier identifier, ScreenHandlerType<T> screenHandlerType) {
+		Registry.register(Registry.SCREEN_HANDLER, identifier, screenHandlerType);
 	}
 
 	public static void registerBiome(Identifier identifier, Biome biome) {
