@@ -3,7 +3,6 @@ package com.mmodding.mmodding_lib.library.screenhandlers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -14,9 +13,10 @@ public class BasicScreenHandler extends ScreenHandler {
 
 	protected final Inventory inventory;
 
-	protected BasicScreenHandler(int inventorySize, @Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory) {
+	protected BasicScreenHandler(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, Inventory inventory, int inventorySize) {
 		super(type, syncId);
-		this.inventory = new SimpleInventory(inventorySize);
+		this.inventory = inventory;
+		ScreenHandler.checkSize(this.inventory, inventorySize);
 		this.inventory.onOpen(playerInventory.player);
 	}
 
