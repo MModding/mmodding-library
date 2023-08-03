@@ -20,7 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(FallingBlockEntity.class)
 public abstract class FallingBlockEntityMixin extends EntityMixin implements FallingBlockEntityDuckInterface {
 
-	@Unique float finalFallDistance;
+	@Unique
+	BlockState initialBlockState;
+
+	@Unique
+	float finalFallDistance;
 
 	@Shadow
     private BlockState block;
@@ -54,18 +58,32 @@ public abstract class FallingBlockEntityMixin extends EntityMixin implements Fal
 	@Inject(method = "handleFallDamage", at = @At("HEAD"))
 	private void handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
 		if (fallDistance > 0) {
-			this.setFinalFallDistance(fallDistance);
+			this.mmodding_lib$setInitialBlockState(this.block);
+			this.mmodding_lib$setFinalFallDistance(fallDistance);
 		}
 	}
 
+	@Unique
 	@Override
-	public float getFinalFallDistance() {
+	public BlockState mmodding_lib$getInitialBlockState() {
+		return this.initialBlockState;
+	}
+
+	@Unique
+	@Override
+	public float mmodding_lib$getFinalFallDistance() {
 		return this.finalFallDistance;
 	}
 
-	@Override
 	@Unique
-	public void setFinalFallDistance(float finalFallDistance) {
+	@Override
+	public void mmodding_lib$setInitialBlockState(BlockState initialBlockState) {
+		this.initialBlockState = initialBlockState;
+	}
+
+	@Unique
+	@Override
+	public void mmodding_lib$setFinalFallDistance(float finalFallDistance) {
 		this.finalFallDistance = finalFallDistance;
 	}
 }

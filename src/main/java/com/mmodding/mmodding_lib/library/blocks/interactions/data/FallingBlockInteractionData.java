@@ -13,6 +13,7 @@ public class FallingBlockInteractionData {
 	private final World world;
 	private final BlockPos originPos;
 	private final BlockPos interactPos;
+	private final BlockState initialBlockState;
 	private final BlockState fallingBlockState;
 	private final BlockState currentBlockState;
 	private final boolean destroyedOnLanding;
@@ -21,10 +22,11 @@ public class FallingBlockInteractionData {
 	private final float fallHurtMultiplier;
 	private final float fallDistance;
 
-	private FallingBlockInteractionData(World world, BlockPos originPos, BlockPos interactPos, BlockState fallingBlockState, BlockState currentBlockState, boolean destroyedOnLanding, boolean hurtEntities, int fallHurtMax, float fallHurtMultiplier, float fallDistance) {
+	private FallingBlockInteractionData(World world, BlockPos originPos, BlockPos interactPos, BlockState initialBlockState, BlockState fallingBlockState, BlockState currentBlockState, boolean destroyedOnLanding, boolean hurtEntities, int fallHurtMax, float fallHurtMultiplier, float fallDistance) {
 		this.world = world;
 		this.originPos = originPos;
 		this.interactPos = interactPos;
+		this.initialBlockState = initialBlockState;
 		this.fallingBlockState = fallingBlockState;
 		this.currentBlockState = currentBlockState;
 		this.destroyedOnLanding = destroyedOnLanding;
@@ -35,18 +37,20 @@ public class FallingBlockInteractionData {
 	}
 
 	public static FallingBlockInteractionData of(World world, BlockPos pos, BlockState fallingBlockState, BlockState currentBlockState, FallingBlockEntity fallingBlockEntity) {
+		FallingBlockEntityDuckInterface ducked = (FallingBlockEntityDuckInterface) fallingBlockEntity;
 		FallingBlockEntityAccessor accessor = (FallingBlockEntityAccessor) fallingBlockEntity;
 		return new FallingBlockInteractionData(
 			world,
 			pos,
 			pos.down(),
+			ducked.mmodding_lib$getInitialBlockState(),
 			fallingBlockState,
 			currentBlockState,
 			accessor.getDestroyedOnLanding(),
 			accessor.getHurtEntities(),
 			accessor.getFallHurtMax(),
 			accessor.getFallHurtAmount(),
-			((FallingBlockEntityDuckInterface) fallingBlockEntity).getFinalFallDistance()
+			ducked.mmodding_lib$getFinalFallDistance()
 		);
 	}
 
@@ -60,6 +64,10 @@ public class FallingBlockInteractionData {
 
 	public BlockPos getInteractPos() {
 		return this.interactPos;
+	}
+
+	public BlockState getInitialBlockState() {
+		return this.initialBlockState;
 	}
 
 	public BlockState getFallingBlockState() {
