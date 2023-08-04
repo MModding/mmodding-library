@@ -10,6 +10,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.math.Direction;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,6 +35,7 @@ public class CustomFacingBlock extends FacingBlock implements BlockRegistrable, 
 
     public CustomFacingBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
         super(settings);
+		this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH));
         if (hasItem) this.item = new BlockItem(this, itemSettings);
     }
 

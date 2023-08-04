@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.AbstractBlockSettingsDuckInterface;
 import net.minecraft.block.AbstractBlock;
-import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

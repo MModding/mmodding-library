@@ -19,6 +19,7 @@
     "accessors.PointOfInterestTypesAccessor",
     "accessors.RootPlacerTypeAccessor",
     "accessors.ScreenHandlerAccessor",
+    "accessors.ShapelessRecipeSerializerAccessor",
     "accessors.TreeDecoratorTypeAccessor",
     "accessors.TrunkPlacerTypeAccessor",
     "injectors.AbstractBlockMixin",
