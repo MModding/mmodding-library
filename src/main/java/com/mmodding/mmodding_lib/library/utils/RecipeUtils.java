@@ -9,7 +9,7 @@ import net.minecraft.util.collection.DefaultedList;
 
 public class RecipeUtils {
 
-	public static boolean ingredientMatches(Inventory inventory, Recipe<?> recipe, DefaultedList<Ingredient> ingredients) {
+	public static boolean ingredientMatches(Inventory inventory, Recipe<?> recipe, DefaultedList<Ingredient> ingredients, int outputCount) {
 		RecipeMatcher matcher = new RecipeMatcher();
 		int counter = 0;
 
@@ -21,6 +21,6 @@ public class RecipeUtils {
 			}
 		}
 
-		return ingredients.size() == counter && matcher.match(recipe, null);
+		return ingredients.size() == counter && matcher.match(recipe, null, outputCount);
 	}
 }
