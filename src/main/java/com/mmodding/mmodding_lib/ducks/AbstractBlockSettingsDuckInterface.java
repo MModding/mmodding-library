@@ -2,15 +2,15 @@ package com.mmodding.mmodding_lib.ducks;
 
 public interface AbstractBlockSettingsDuckInterface {
 
-	boolean getTranslucent();
+	boolean mmodding_lib$getTranslucent();
 
-	boolean getNotTranslucent();
+	boolean mmodding_lib$getNotTranslucent();
 
-	boolean getInvisibleSides();
+	boolean mmodding_lib$getInvisibleSides();
 
-	void setTranslucent(boolean translucent);
+	void mmodding_lib$setTranslucent(boolean translucent);
 
-	void setNotTranslucent(boolean notTranslucent);
+	void mmodding_lib$setNotTranslucent(boolean notTranslucent);
 
-	void setInvisibleSides(boolean invisibleSides);
+	void mmodding_lib$setInvisibleSides(boolean invisibleSides);
 }

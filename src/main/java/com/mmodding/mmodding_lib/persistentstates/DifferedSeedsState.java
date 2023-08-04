@@ -19,7 +19,7 @@ public class DifferedSeedsState extends PersistentState {
 	}
 
 	public DifferedSeedsState readNbt(NbtCompound nbt) {
-		this.generatorOptions.fillDimensionSeedAddendsNbt(nbt.getList("dimensionSeedAddends", NbtElement.COMPOUND_TYPE));
+		this.generatorOptions.mmodding_lib$fillDimensionSeedAddendsNbt(nbt.getList("dimensionSeedAddends", NbtElement.COMPOUND_TYPE));
 		return this;
 	}
 
@@ -33,10 +33,10 @@ public class DifferedSeedsState extends PersistentState {
 		NbtList nbtList = new NbtList();
 
 		MModdingGlobalMaps.getDifferedDimensionSeeds().forEach(worldKey -> {
-			if (this.generatorOptions.containsDimensionSeedAddend(worldKey)) {
+			if (this.generatorOptions.mmodding_lib$containsDimensionSeedAddend(worldKey)) {
 				NbtCompound nbt = new NbtCompound();
 				nbt.putString("dimensionIdentifier", worldKey.getValue().toString());
-				nbt.putLong("differed", this.generatorOptions.getDimensionSeedAddend(worldKey));
+				nbt.putLong("differed", this.generatorOptions.mmodding_lib$getDimensionSeedAddend(worldKey));
 				nbtList.add(nbt);
 			}
 		});

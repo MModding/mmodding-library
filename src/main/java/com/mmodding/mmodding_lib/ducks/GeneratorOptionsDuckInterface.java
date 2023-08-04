@@ -8,15 +8,15 @@ import net.minecraft.world.World;
 
 public interface GeneratorOptionsDuckInterface {
 
-	void fillDimensionSeedAddendsNbt(NbtList list);
+	void mmodding_lib$fillDimensionSeedAddendsNbt(NbtList list);
 
-	boolean containsDimensionSeedAddend(RegistryKey<World> worldKey);
+	boolean mmodding_lib$containsDimensionSeedAddend(RegistryKey<World> worldKey);
 
-	void addDimensionSeedAddend(RegistryKey<World> worldKey, long differed);
+	void mmodding_lib$addDimensionSeedAddend(RegistryKey<World> worldKey, long differed);
 
-	long getDimensionSeedAddend(RegistryKey<World> worldKey);
+	long mmodding_lib$getDimensionSeedAddend(RegistryKey<World> worldKey);
 
-	DifferedSeedsState createDifferedSeedsState();
+	DifferedSeedsState mmodding_lib$createDifferedSeedsState();
 
-	DifferedSeedsState stateFromNbt(NbtCompound nbt);
+	DifferedSeedsState mmodding_lib$stateFromNbt(NbtCompound nbt);
 }

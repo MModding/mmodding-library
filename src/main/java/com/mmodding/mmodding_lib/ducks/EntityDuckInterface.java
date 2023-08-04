@@ -8,13 +8,11 @@ import net.minecraft.world.World;
 
 public interface EntityDuckInterface {
 
-	boolean isInCustomPortal();
+	boolean mmodding_lib$isInCustomPortal();
 
-	Pair<Block, CustomSquaredPortalBlock> getCustomPortalElements();
+	Pair<Block, CustomSquaredPortalBlock> mmodding_lib$getCustomPortalElements();
 
-	CustomSquaredPortalBlock getCustomPortalCache();
+	CustomSquaredPortalBlock mmodding_lib$getCustomPortalCache();
 
-	void setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos);
-
-	void tickCustomPortal();
+	void mmodding_lib$setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos);
 }

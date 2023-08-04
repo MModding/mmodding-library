@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public interface PortalForcerDuckInterface {
 
-	void setUseCustomPortalElements(boolean useCustomPortalElements);
+	void mmodding_lib$setUseCustomPortalElements(boolean useCustomPortalElements);
 
-	Optional<BlockLocating.Rectangle> searchCustomPortal(RegistryKey<PointOfInterestType> poiKey, BlockPos destPos, WorldBorder worldBorder);
+	Optional<BlockLocating.Rectangle> mmodding_lib$searchCustomPortal(RegistryKey<PointOfInterestType> poiKey, BlockPos destPos, WorldBorder worldBorder);
 
-	void setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock);
+	void mmodding_lib$setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock);
 }

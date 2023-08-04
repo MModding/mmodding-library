@@ -15,7 +15,7 @@ public class Events {
 		GeneratorOptions generatorOptions = server.getSaveProperties().getGeneratorOptions();
 		GeneratorOptionsDuckInterface ducked = (GeneratorOptionsDuckInterface) generatorOptions;
 		PersistentStateManager stateManager = world.getPersistentStateManager();
-		stateManager.getOrCreate(ducked::stateFromNbt, ducked::createDifferedSeedsState, "differedSeedsState");
+		stateManager.getOrCreate(ducked::mmodding_lib$stateFromNbt, ducked::mmodding_lib$createDifferedSeedsState, "differedSeedsState");
 	}
 
 	public static void register() {

@@ -63,25 +63,21 @@ public abstract class FallingBlockEntityMixin extends EntityMixin implements Fal
 		}
 	}
 
-	@Unique
 	@Override
 	public BlockState mmodding_lib$getInitialBlockState() {
 		return this.initialBlockState;
 	}
 
-	@Unique
 	@Override
 	public float mmodding_lib$getFinalFallDistance() {
 		return this.finalFallDistance;
 	}
 
-	@Unique
 	@Override
 	public void mmodding_lib$setInitialBlockState(BlockState initialBlockState) {
 		this.initialBlockState = initialBlockState;
 	}
 
-	@Unique
 	@Override
 	public void mmodding_lib$setFinalFallDistance(float finalFallDistance) {
 		this.finalFallDistance = finalFallDistance;

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class NetherPortalBlockMixin extends AbstractBlockMixin implements NetherPortalBlockDuckInterface {
 
 	@Unique
-	public BlockState getAbstractStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState mmodding_lib$getAbstractStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 }

@@ -7,6 +7,7 @@ import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -14,6 +15,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(WeatherCommand.class)
 public class WeatherCommandMixin {
 
+	@Inject(method = "executeClear", at = @At("HEAD"), cancellable = true)
+	private static void executeClear(ServerCommandSource source, int duration, CallbackInfoReturnable<Integer> cir) {
+		WeatherCommandMixin.redirectingMessage(source, "clear", duration, cir);
+	}
+
+	@Inject(method = "executeRain", at = @At("HEAD"), cancellable = true)
+	private static void executeRain(ServerCommandSource source, int duration, CallbackInfoReturnable<Integer> cir) {
+		WeatherCommandMixin.redirectingMessage(source, "rain", duration, cir);
+	}
+
+	@Inject(method = "executeThunder", at = @At("HEAD"), cancellable = true)
+	private static void executeThunder(ServerCommandSource source, int duration, CallbackInfoReturnable<Integer> cir) {
+		WeatherCommandMixin.redirectingMessage(source, "thunder", duration, cir);
+	}
+
+	@Unique
 	private static void redirectingMessage(ServerCommandSource source, String weatherStatus, int duration, CallbackInfoReturnable<Integer> cir) {
 		if (source.getWorld().getRegistryKey() != World.OVERWORLD) {
 			String baseRedirectedCommand = "/execute in minecraft:overworld run weather " + weatherStatus;
@@ -31,20 +48,5 @@ public class WeatherCommandMixin {
 			source.sendFeedback(TextUtils.spaceBetween(mmoddingLibrary, notInOverworld, fixedCommand), false);
 			cir.setReturnValue(duration);
 		}
-	}
-
-	@Inject(method = "executeClear", at = @At("HEAD"), cancellable = true)
-	private static void executeClear(ServerCommandSource source, int duration, CallbackInfoReturnable<Integer> cir) {
-		WeatherCommandMixin.redirectingMessage(source, "clear", duration, cir);
-	}
-
-	@Inject(method = "executeRain", at = @At("HEAD"), cancellable = true)
-	private static void executeRain(ServerCommandSource source, int duration, CallbackInfoReturnable<Integer> cir) {
-		WeatherCommandMixin.redirectingMessage(source, "rain", duration, cir);
-	}
-
-	@Inject(method = "executeThunder", at = @At("HEAD"), cancellable = true)
-	private static void executeThunder(ServerCommandSource source, int duration, CallbackInfoReturnable<Integer> cir) {
-		WeatherCommandMixin.redirectingMessage(source, "thunder", duration, cir);
 	}
 }

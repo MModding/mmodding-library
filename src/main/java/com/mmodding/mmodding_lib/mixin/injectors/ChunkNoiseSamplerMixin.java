@@ -41,12 +41,12 @@ public abstract class ChunkNoiseSamplerMixin implements ChunkNoiseSamplerDuckInt
 		this.randomState = randomState;
 	}
 
-	@Unique
-	public void reloadBlockStateSampler() {
+	@Override
+	public void mmodding_lib$reloadBlockStateSampler() {
 
 		ChunkNoiseSampler thisSampler = (ChunkNoiseSampler) (Object) this;
 
-		Holder<ChunkGeneratorSettings> holder = this.getSettingsHolder();
+		Holder<ChunkGeneratorSettings> holder = this.mmodding_lib$getSettingsHolder();
 
 		holder.getKey().ifPresent(key -> {
 			Identifier id = key.getValue();
@@ -72,12 +72,12 @@ public abstract class ChunkNoiseSamplerMixin implements ChunkNoiseSamplerDuckInt
 	}
 
 	@Override
-	public Holder<ChunkGeneratorSettings> getSettingsHolder() {
+	public Holder<ChunkGeneratorSettings> mmodding_lib$getSettingsHolder() {
 		return this.settingsHolder;
 	}
 
 	@Override
-	public void setSettingsHolder(Holder<ChunkGeneratorSettings> holder) {
+	public void mmodding_lib$setSettingsHolder(Holder<ChunkGeneratorSettings> holder) {
 		this.settingsHolder = holder;
 	}
 }

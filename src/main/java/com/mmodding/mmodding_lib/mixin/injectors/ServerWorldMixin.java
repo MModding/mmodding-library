@@ -23,10 +23,6 @@ import java.util.function.BooleanSupplier;
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.TickTaskServer {
 
-	@Shadow
-	@NotNull
-	public abstract MinecraftServer getServer();
-
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
 
@@ -35,6 +31,10 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 
 	@Unique
 	private final List<MutablePair<MutableTriple<Integer, Long, Runnable>, Integer>> eachTasks = new ArrayList<>();
+
+	@Shadow
+	@NotNull
+	public abstract MinecraftServer getServer();
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
@@ -84,34 +84,34 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 		}
 	}
 
-	@Override
-	public void doTaskAfter(long ticksToWait, Runnable run) {
-		this.tasks.add(new MutablePair<>(ticksToWait, run));
-	}
-
-	@Override
-	public void repeatTaskUntil(long ticksUntil, Runnable run) {
-		this.repeatingTasks.add(new MutablePair<>(ticksUntil, run));
-	}
-
-	@Override
-	public void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
-		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
-	}
-
 	@Inject(method = "getSeed", at = @At("HEAD"), cancellable = true)
 	private void getDifferedSeed(CallbackInfoReturnable<Long> cir) {
 		MModdingGlobalMaps.getDifferedDimensionSeeds().forEach(worldKey -> {
 			ServerWorld thisWorld = (ServerWorld) (Object) this;
 			if (thisWorld.getRegistryKey().equals(worldKey)) {
 				GeneratorOptionsDuckInterface ducked = (GeneratorOptionsDuckInterface) this.getServer().getSaveProperties().getGeneratorOptions();
-				if (!ducked.containsDimensionSeedAddend(worldKey)) {
-					ducked.addDimensionSeedAddend(worldKey, this.random.nextInt(100000) + 1);
+				if (!ducked.mmodding_lib$containsDimensionSeedAddend(worldKey)) {
+					ducked.mmodding_lib$addDimensionSeedAddend(worldKey, this.random.nextInt(100000) + 1);
 				}
 				long normalSeed = this.getServer().getSaveProperties().getGeneratorOptions().getSeed();
-				long differedSeed = Long.sum(normalSeed, ducked.getDimensionSeedAddend(worldKey));
+				long differedSeed = Long.sum(normalSeed, ducked.mmodding_lib$getDimensionSeedAddend(worldKey));
 				cir.setReturnValue(differedSeed);
 			}
 		});
+	}
+
+	@Override
+	public void mmodding_lib$doTaskAfter(long ticksToWait, Runnable run) {
+		this.tasks.add(new MutablePair<>(ticksToWait, run));
+	}
+
+	@Override
+	public void mmodding_lib$repeatTaskUntil(long ticksUntil, Runnable run) {
+		this.repeatingTasks.add(new MutablePair<>(ticksUntil, run));
+	}
+
+	@Override
+	public void mmodding_lib$repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
+		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
 	}
 }

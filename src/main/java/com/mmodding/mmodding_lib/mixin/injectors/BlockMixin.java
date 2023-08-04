@@ -14,9 +14,9 @@ public class BlockMixin extends AbstractBlockMixin {
 
 	@Inject(method = "isTranslucent", at = @At("HEAD"), cancellable = true)
 	private void isTranslucent(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-		if (this.duckedSettings().getTranslucent()) {
+		if (this.duckedSettings().mmodding_lib$getTranslucent()) {
 			cir.setReturnValue(true);
-		} else if (this.duckedSettings().getNotTranslucent()) {
+		} else if (this.duckedSettings().mmodding_lib$getNotTranslucent()) {
 			cir.setReturnValue(false);
 		}
 	}

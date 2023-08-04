@@ -23,18 +23,18 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 	public abstract ServerWorld getWorld();
 
 	@Unique
-	public Optional<BlockLocating.Rectangle> getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, WorldBorder worldBorder) {
+	public Optional<BlockLocating.Rectangle> mmodding_lib$getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, WorldBorder worldBorder) {
 		PortalForcer forcer = destWorld.getPortalForcer();
-		PortalForcerDuckInterface duckedForcer = (PortalForcerDuckInterface) forcer;
-		Optional<BlockLocating.Rectangle> optional = duckedForcer.searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), destPos, worldBorder);
+		PortalForcerDuckInterface ducked = (PortalForcerDuckInterface) forcer;
+		Optional<BlockLocating.Rectangle> optional = ducked.mmodding_lib$searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), destPos, worldBorder);
 
 		if (optional.isPresent()) {
 			return optional;
 		} else {
 			Direction.Axis axis = this.getWorld().getBlockState(this.lastCustomPortalPosition).getOrEmpty(NetherPortalBlock.AXIS).orElse(Direction.Axis.X);
 
-			duckedForcer.setUseCustomPortalElements(this.useCustomPortalElements);
-			duckedForcer.setCustomPortalElements(this.customPortalElements.getFirst(), this.customPortalElements.getSecond());
+			ducked.mmodding_lib$setUseCustomPortalElements(this.useCustomPortalElements);
+			ducked.mmodding_lib$setCustomPortalElements(this.customPortalElements.getFirst(), this.customPortalElements.getSecond());
 
 			Optional<BlockLocating.Rectangle> optionalPortal = forcer.createPortal(destPos, axis);
 

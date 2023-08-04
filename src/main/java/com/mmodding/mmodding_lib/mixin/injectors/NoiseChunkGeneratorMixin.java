@@ -32,15 +32,15 @@ public class NoiseChunkGeneratorMixin {
 	private void createChunkNoiseSampler(Chunk chunk, StructureManager structureManager, Blender blender, RandomState randomState, CallbackInfoReturnable<ChunkNoiseSampler> cir) {
 		ChunkNoiseSampler sampler = cir.getReturnValue();
 		ChunkNoiseSamplerDuckInterface ducked = ((ChunkNoiseSamplerDuckInterface) sampler);
-		ducked.setSettingsHolder(this.settings);
-		ducked.reloadBlockStateSampler();
+		ducked.mmodding_lib$setSettingsHolder(this.settings);
+		ducked.mmodding_lib$reloadBlockStateSampler();
 		cir.setReturnValue(sampler);
 	}
 
 	@Inject(method = "sampleHeightmap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler;sampleStartNoise()V", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
 	private void sampleHeightmap(HeightLimitView world, RandomState randomState, int x, int z, @Nullable MutableObject<VerticalBlockSample> mutableObject, @Nullable Predicate<BlockState> predicate, CallbackInfoReturnable<OptionalInt> cir, GenerationShapeConfig generationShapeConfig, int i, int j, int k, int l, BlockState[] blockStates, int m, int n, int o, int p, int q, int r, int s, double d, double e, ChunkNoiseSampler chunkNoiseSampler) {
 		ChunkNoiseSamplerDuckInterface ducked = ((ChunkNoiseSamplerDuckInterface) chunkNoiseSampler);
-		ducked.setSettingsHolder(this.settings);
-		ducked.reloadBlockStateSampler();
+		ducked.mmodding_lib$setSettingsHolder(this.settings);
+		ducked.mmodding_lib$reloadBlockStateSampler();
 	}
 }

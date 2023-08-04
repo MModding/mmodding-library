@@ -7,5 +7,5 @@ import net.minecraft.world.WorldAccess;
 
 public interface NetherPortalBlockDuckInterface {
 
-	BlockState getAbstractStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos);
+	BlockState mmodding_lib$getAbstractStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos);
 }

@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.AbstractBlockSettingsDuckInterface;
 import net.minecraft.block.AbstractBlock;
+import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -18,32 +19,32 @@ public class AbstractBlockSettingsMixin implements AbstractBlockSettingsDuckInte
 	boolean invisibleSides = false;
 
 	@Override
-	public boolean getTranslucent() {
+	public boolean mmodding_lib$getTranslucent() {
 		return this.translucent;
 	}
 
 	@Override
-	public boolean getNotTranslucent() {
+	public boolean mmodding_lib$getNotTranslucent() {
 		return this.notTranslucent;
 	}
 
 	@Override
-	public boolean getInvisibleSides() {
+	public boolean mmodding_lib$getInvisibleSides() {
 		return this.invisibleSides;
 	}
 
 	@Override
-	public void setTranslucent(boolean transparent) {
+	public void mmodding_lib$setTranslucent(boolean transparent) {
 		this.translucent = transparent;
 	}
 
 	@Override
-	public void setNotTranslucent(boolean notTranslucent) {
+	public void mmodding_lib$setNotTranslucent(boolean notTranslucent) {
 		this.notTranslucent = notTranslucent;
 	}
 
 	@Override
-	public void setInvisibleSides(boolean invisibleSides) {
+	public void mmodding_lib$setInvisibleSides(boolean invisibleSides) {
 		this.invisibleSides = invisibleSides;
 	}
 }

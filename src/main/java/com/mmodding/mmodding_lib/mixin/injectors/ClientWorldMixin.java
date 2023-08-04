@@ -75,17 +75,17 @@ public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskC
 	}
 
 	@Override
-	public void doTaskAfter(long ticksToWait, Runnable run) {
+	public void mmodding_lib$doTaskAfter(long ticksToWait, Runnable run) {
 		this.tasks.add(new MutablePair<>(ticksToWait, run));
 	}
 
 	@Override
-	public void repeatTaskUntil(long ticksUntil, Runnable run) {
+	public void mmodding_lib$repeatTaskUntil(long ticksUntil, Runnable run) {
 		this.repeatingTasks.add(new MutablePair<>(ticksUntil, run));
 	}
 
 	@Override
-	public void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
+	public void mmodding_lib$repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
 		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
 	}
 }

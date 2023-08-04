@@ -5,9 +5,9 @@ import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 public interface ChunkNoiseSamplerDuckInterface {
 
-	Holder<ChunkGeneratorSettings> getSettingsHolder();
+	Holder<ChunkGeneratorSettings> mmodding_lib$getSettingsHolder();
 
-	void setSettingsHolder(Holder<ChunkGeneratorSettings> holder);
+	void mmodding_lib$setSettingsHolder(Holder<ChunkGeneratorSettings> holder);
 
-	void reloadBlockStateSampler();
+	void mmodding_lib$reloadBlockStateSampler();
 }

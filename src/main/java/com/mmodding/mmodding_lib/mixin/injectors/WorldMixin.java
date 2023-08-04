@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(World.class)
 public class WorldMixin {
+
 	@Shadow
 	@Final
 	public RandomGenerator random;

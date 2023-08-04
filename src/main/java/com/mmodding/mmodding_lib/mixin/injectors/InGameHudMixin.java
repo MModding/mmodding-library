@@ -34,11 +34,11 @@ public class InGameHudMixin {
 		assert client.player != null;
 		EntityDuckInterface duckedEntity = (EntityDuckInterface) this.client.player;
 
-		if (duckedEntity.isInCustomPortal() || duckedEntity.getCustomPortalCache() != null) {
+		if (duckedEntity.mmodding_lib$isInCustomPortal() || duckedEntity.mmodding_lib$getCustomPortalCache() != null) {
 			Sprite sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(
-				!duckedEntity.isInCustomPortal()
-					? duckedEntity.getCustomPortalCache().getDefaultState()
-					: duckedEntity.getCustomPortalElements().getSecond().getDefaultState()
+				!duckedEntity.mmodding_lib$isInCustomPortal()
+					? duckedEntity.mmodding_lib$getCustomPortalCache().getDefaultState()
+					: duckedEntity.mmodding_lib$getCustomPortalElements().getSecond().getDefaultState()
 			);
 			float f = sprite.getMinU();
 			float g = sprite.getMinV();

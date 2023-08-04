@@ -60,21 +60,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Unique
 	CustomSquaredPortalBlock customPortalCache;
 
-	@Override
-	public boolean isInCustomPortal() {
-		return this.inCustomPortal;
-	}
-
-	@Override
-	public Pair<Block, CustomSquaredPortalBlock> getCustomPortalElements() {
-		return this.customPortalElements;
-	}
-
-	@Override
-	public CustomSquaredPortalBlock getCustomPortalCache() {
-		return this.customPortalCache;
-	}
-
 	@Shadow
 	public abstract double squaredDistanceTo(Entity entity);
 
@@ -127,16 +112,28 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Final
 	protected RandomGenerator random;
 
-	@Shadow
-	public float fallDistance;
-
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
 	}
 
-	@Unique
-	public void setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos) {
+	@Override
+	public boolean mmodding_lib$isInCustomPortal() {
+		return this.inCustomPortal;
+	}
+
+	@Override
+	public Pair<Block, CustomSquaredPortalBlock> mmodding_lib$getCustomPortalElements() {
+		return this.customPortalElements;
+	}
+
+	@Override
+	public CustomSquaredPortalBlock mmodding_lib$getCustomPortalCache() {
+		return this.customPortalCache;
+	}
+
+	@Override
+	public void mmodding_lib$setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos) {
 		if (this.hasNetherPortalCooldown()) {
 			this.resetNetherPortalCooldown();
 		}
@@ -227,10 +224,10 @@ public abstract class EntityMixin implements EntityDuckInterface {
 		Entity thisEntity = (Entity) (Object) this;
 
 		if (thisEntity instanceof ServerPlayerEntity player) {
-			return ((ServerPlayerDuckInterface) player).getCustomPortalRect(destination, posFactorScaled, worldBorder).map(func).orElse(null);
+			return ((ServerPlayerDuckInterface) player).mmodding_lib$getCustomPortalRect(destination, posFactorScaled, worldBorder).map(func).orElse(null);
 		}
 		else {
-			return ((PortalForcerDuckInterface) destination.getPortalForcer()).searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), posFactorScaled, worldBorder).map(func).orElse(null);
+			return ((PortalForcerDuckInterface) destination.getPortalForcer()).mmodding_lib$searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), posFactorScaled, worldBorder).map(func).orElse(null);
 		}
 	}
 }

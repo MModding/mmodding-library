@@ -72,13 +72,13 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Block
 		boolean bl = stateAxis != directionAxis && directionAxis.isHorizontal();
 		return !bl && !neighborState.isOf(this) && !new CustomSquaredPortalAreaHelper(this.frameBlock, this, world, pos, stateAxis).wasAlreadyValid()
 			? Blocks.AIR.getDefaultState()
-			: ((NetherPortalBlockDuckInterface) this).getAbstractStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+			: ((NetherPortalBlockDuckInterface) this).mmodding_lib$getAbstractStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if (!entity.hasVehicle() && !entity.hasPassengers() && entity.canUsePortals()) {
-			((EntityDuckInterface) entity).setInCustomPortal(this.frameBlock, this, world, pos);
+			((EntityDuckInterface) entity).mmodding_lib$setInCustomPortal(this.frameBlock, this, world, pos);
 		}
 	}
 

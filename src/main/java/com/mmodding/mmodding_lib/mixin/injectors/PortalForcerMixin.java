@@ -36,62 +36,18 @@ import java.util.Optional;
 @Mixin(PortalForcer.class)
 public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 
-	@Shadow
-	@Final
-	private ServerWorld world;
-
-	@Shadow
-	protected abstract boolean isValidPortalPos(BlockPos pos, BlockPos.Mutable temp, Direction portalDirection, int distanceOrthogonalToPortal);
-
 	@Unique
 	boolean useCustomPortalElements;
 
 	@Unique
 	Pair<Block, CustomSquaredPortalBlock> customPortalElements;
 
-	@Override
-	public void setUseCustomPortalElements(boolean useCustomPortalElements) {
-		this.useCustomPortalElements = useCustomPortalElements;
-	}
+	@Shadow
+	@Final
+	private ServerWorld world;
 
-	@Override
-	public void setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock) {
-		this.customPortalElements = new Pair<>(frameBlock, portalBlock);
-	}
-
-	@Unique
-	@Override
-	public Optional<BlockLocating.Rectangle> searchCustomPortal(RegistryKey<PointOfInterestType> poiKey, BlockPos destPos, WorldBorder worldBorder) {
-		PointOfInterestStorage storage = this.world.getPointOfInterestStorage();
-		storage.preloadChunks(this.world, destPos, 128);
-
-		Optional<PointOfInterest> optional = storage.getInSquare(
-			holder -> holder.isRegistryKey(poiKey),
-			destPos,
-			128,
-			PointOfInterestStorage.OccupationStatus.ANY
-		).filter(
-			pointOfInterest -> worldBorder.contains(pointOfInterest.getPos())
-		).sorted(
-			Comparator.comparingDouble(pointOfInterest -> ((PointOfInterest) pointOfInterest).getPos().getSquaredDistance(destPos))
-				.thenComparingInt(object -> ((PointOfInterest) object).getPos().getY())
-		).filter(pointOfInterest -> this.world.getBlockState(pointOfInterest.getPos()).contains(Properties.HORIZONTAL_AXIS)).findFirst();
-
-		return optional.map(pointOfInterest -> {
-			BlockPos blockPos = pointOfInterest.getPos();
-			this.world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(blockPos), 3, blockPos);
-			BlockState blockState = this.world.getBlockState(blockPos);
-
-			return BlockLocating.getLargestRectangle(
-				blockPos,
-				blockState.get(Properties.HORIZONTAL_AXIS),
-				21,
-				Direction.Axis.Y,
-				21,
-				pos -> this.world.getBlockState(pos) == blockState
-			);
-		});
-	}
+	@Shadow
+	protected abstract boolean isValidPortalPos(BlockPos pos, BlockPos.Mutable temp, Direction portalDirection, int distanceOrthogonalToPortal);
 
 	@Inject(method = "createPortal", at = @At(value = "HEAD"), cancellable = true)
 	private void createPortal(BlockPos pos, Direction.Axis axis, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
@@ -197,5 +153,48 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 
 			cir.setReturnValue(Optional.of(new BlockLocating.Rectangle(firstPos.toImmutable(), 2, 3)));
 		}
+	}
+
+	@Override
+	public void mmodding_lib$setUseCustomPortalElements(boolean useCustomPortalElements) {
+		this.useCustomPortalElements = useCustomPortalElements;
+	}
+
+	@Override
+	public void mmodding_lib$setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock) {
+		this.customPortalElements = new Pair<>(frameBlock, portalBlock);
+	}
+
+	@Override
+	public Optional<BlockLocating.Rectangle> mmodding_lib$searchCustomPortal(RegistryKey<PointOfInterestType> poiKey, BlockPos destPos, WorldBorder worldBorder) {
+		PointOfInterestStorage storage = this.world.getPointOfInterestStorage();
+		storage.preloadChunks(this.world, destPos, 128);
+
+		Optional<PointOfInterest> optional = storage.getInSquare(
+			holder -> holder.isRegistryKey(poiKey),
+			destPos,
+			128,
+			PointOfInterestStorage.OccupationStatus.ANY
+		).filter(
+			pointOfInterest -> worldBorder.contains(pointOfInterest.getPos())
+		).sorted(
+			Comparator.comparingDouble(pointOfInterest -> ((PointOfInterest) pointOfInterest).getPos().getSquaredDistance(destPos))
+				.thenComparingInt(object -> ((PointOfInterest) object).getPos().getY())
+		).filter(pointOfInterest -> this.world.getBlockState(pointOfInterest.getPos()).contains(Properties.HORIZONTAL_AXIS)).findFirst();
+
+		return optional.map(pointOfInterest -> {
+			BlockPos blockPos = pointOfInterest.getPos();
+			this.world.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(blockPos), 3, blockPos);
+			BlockState blockState = this.world.getBlockState(blockPos);
+
+			return BlockLocating.getLargestRectangle(
+				blockPos,
+				blockState.get(Properties.HORIZONTAL_AXIS),
+				21,
+				Direction.Axis.Y,
+				21,
+				pos -> this.world.getBlockState(pos) == blockState
+			);
+		});
 	}
 }

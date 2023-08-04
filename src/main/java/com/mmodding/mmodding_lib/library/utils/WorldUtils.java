@@ -52,27 +52,27 @@ public class WorldUtils {
 	}
 
 	public static void doTaskAfter(ServerWorld serverWorld, long ticksToWait, Runnable task) {
-		((TickTaskServer) serverWorld).doTaskAfter(ticksToWait, task);
+		((TickTaskServer) serverWorld).mmodding_lib$doTaskAfter(ticksToWait, task);
 	}
 
 	public static void repeatTaskUntil(ServerWorld serverWorld, long ticksUntil, Runnable task) {
-		((TickTaskServer) serverWorld).repeatTaskUntil(ticksUntil, task);
+		((TickTaskServer) serverWorld).mmodding_lib$repeatTaskUntil(ticksUntil, task);
 	}
 
 	public static void repeatTaskEachTimeUntil(ServerWorld serverWorld, int ticksBetween, long ticksUntil, Runnable task) {
-		((TickTaskServer) serverWorld).repeatTaskEachTimeUntil(ticksBetween, ticksUntil, task);
+		((TickTaskServer) serverWorld).mmodding_lib$repeatTaskEachTimeUntil(ticksBetween, ticksUntil, task);
 	}
 
 	public static void doTaskAfter(ClientWorld clientWorld, long ticksToWait, Runnable task) {
-		((TickTaskClient) clientWorld).doTaskAfter(ticksToWait, task);
+		((TickTaskClient) clientWorld).mmodding_lib$doTaskAfter(ticksToWait, task);
 	}
 
 	public static void repeatTaskUntil(ClientWorld clientWorld, long ticksUntil, Runnable task) {
-		((TickTaskClient) clientWorld).repeatTaskUntil(ticksUntil, task);
+		((TickTaskClient) clientWorld).mmodding_lib$repeatTaskUntil(ticksUntil, task);
 	}
 
 	public static void repeatTaskEachTimeUntil(ClientWorld clientWorld, int ticksBetween, long ticksUntil, Runnable task) {
-		((TickTaskClient) clientWorld).repeatTaskEachTimeUntil(ticksBetween, ticksUntil, task);
+		((TickTaskClient) clientWorld).mmodding_lib$repeatTaskEachTimeUntil(ticksBetween, ticksUntil, task);
 	}
 
 	public static void pushExplosion(WorldAccess world, BlockPos pos, float power) {
@@ -83,19 +83,19 @@ public class WorldUtils {
 
 	public interface TickTaskServer {
 
-		void doTaskAfter(long ticksToWait, Runnable run);
+		void mmodding_lib$doTaskAfter(long ticksToWait, Runnable run);
 
-		void repeatTaskUntil(long ticksUntil, Runnable run);
+		void mmodding_lib$repeatTaskUntil(long ticksUntil, Runnable run);
 
-		void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run);
+		void mmodding_lib$repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run);
 	}
 
 	public interface TickTaskClient {
 
-		void doTaskAfter(long ticksToWait, Runnable run);
+		void mmodding_lib$doTaskAfter(long ticksToWait, Runnable run);
 
-		void repeatTaskUntil(long ticksUntil, Runnable run);
+		void mmodding_lib$repeatTaskUntil(long ticksUntil, Runnable run);
 
-		void repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run);
+		void mmodding_lib$repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run);
 	}
 }

@@ -22,37 +22,37 @@ public class GeneratorOptionsMixin implements GeneratorOptionsDuckInterface {
 	public final Map<RegistryKey<World>, Long> dimensionSeedAddends = new HashMap<>();
 
 	@Override
-	public void fillDimensionSeedAddendsNbt(NbtList list) {
+	public void mmodding_lib$fillDimensionSeedAddendsNbt(NbtList list) {
 		for (int i = 0; i < list.size(); i++) {
 			NbtCompound nbt = list.getCompound(i);
 			String dimensionIdentifier = nbt.getString("dimensionIdentifier");
 			long differed = nbt.getLong("differed");
-			this.addDimensionSeedAddend(RegistryKey.of(Registry.WORLD_KEY, new Identifier(dimensionIdentifier)), differed);
+			this.mmodding_lib$addDimensionSeedAddend(RegistryKey.of(Registry.WORLD_KEY, new Identifier(dimensionIdentifier)), differed);
 		}
 	}
 
 	@Override
-	public boolean containsDimensionSeedAddend(RegistryKey<World> worldKey) {
+	public boolean mmodding_lib$containsDimensionSeedAddend(RegistryKey<World> worldKey) {
 		return this.dimensionSeedAddends.containsKey(worldKey);
 	}
 
 	@Override
-	public void addDimensionSeedAddend(RegistryKey<World> worldKey, long differed) {
+	public void mmodding_lib$addDimensionSeedAddend(RegistryKey<World> worldKey, long differed) {
 		this.dimensionSeedAddends.put(worldKey, differed);
 	}
 
 	@Override
-	public long getDimensionSeedAddend(RegistryKey<World> worldKey) {
+	public long mmodding_lib$getDimensionSeedAddend(RegistryKey<World> worldKey) {
 		return this.dimensionSeedAddends.get(worldKey);
 	}
 
 	@Override
-	public DifferedSeedsState createDifferedSeedsState() {
+	public DifferedSeedsState mmodding_lib$createDifferedSeedsState() {
 		return new DifferedSeedsState(this);
 	}
 
 	@Override
-	public DifferedSeedsState stateFromNbt(NbtCompound nbt) {
-		return this.createDifferedSeedsState().readNbt(nbt);
+	public DifferedSeedsState mmodding_lib$stateFromNbt(NbtCompound nbt) {
+		return this.mmodding_lib$createDifferedSeedsState().readNbt(nbt);
 	}
 }

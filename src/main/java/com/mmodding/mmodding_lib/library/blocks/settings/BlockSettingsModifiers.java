@@ -28,17 +28,17 @@ public class BlockSettingsModifiers {
 	}
 
 	public BlockSettingsModifiers translucent() {
-		this.ducked().setTranslucent(true);
+		this.ducked().mmodding_lib$setTranslucent(true);
 		return this;
 	}
 
 	public BlockSettingsModifiers notTranslucent() {
-		this.ducked().setNotTranslucent(true);
+		this.ducked().mmodding_lib$setNotTranslucent(true);
 		return this;
 	}
 
 	public BlockSettingsModifiers invisibleSides() {
-		this.ducked().setInvisibleSides(true);
+		this.ducked().mmodding_lib$setInvisibleSides(true);
 		return this;
 	}
 
