@@ -13,6 +13,7 @@
     "accessors.ChunkSectionAccessor",
     "accessors.FallingBlockEntityAccessor",
     "accessors.FoliagePlacerTypeAccessor",
+    "accessors.IngredientAccessor",
     "accessors.NoiseRouterDataAccessor",
     "accessors.OverworldBiomeParametersAccessor",
     "accessors.PointedDripstoneBlockAccessor",
