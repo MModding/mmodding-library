@@ -15,7 +15,13 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
+import java.util.stream.Stream;
+
 public class RecipeSerializationUtils {
+
+	public static Ingredient getIngredient(Stream<Ingredient.Entry> entries) {
+		return IngredientAccessor.ofEntries(entries);
+	}
 
 	public static Ingredient.StackEntry getIngredientStack(JsonObject json) {
 		if (json.has("item")) {
