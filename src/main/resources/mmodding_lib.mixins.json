@@ -6,6 +6,7 @@
   "mixins": [
     "accessors.AreaHelperAccessor",
     "accessors.BlockEntityTypeAccessor",
+    "accessors.BlockEntityTypeBuilderAccessor",
     "accessors.BlocksAccessor",
     "accessors.BrewingRecipeRegistryAccessor",
     "accessors.BuiltinNoiseParametersAccessor",
@@ -43,6 +44,7 @@
     "injectors.PlayerEntityMixin",
     "injectors.PointedDripstoneBlockMixin",
     "injectors.PortalForcerMixin",
+    "injectors.QuiltEntityTypeBuilderMixin",
     "injectors.ServerPlayerEntityMixin",
     "injectors.ServerWorldMixin",
     "injectors.ShearsItemMixin",

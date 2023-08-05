@@ -3,6 +3,8 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -66,6 +68,10 @@ public class RegistrationUtils {
 
 	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {
 		Registry.register(Registry.ENTITY_TYPE, identifier, entityType);
+	}
+
+	public static <T extends BlockEntity> void registerBlockEntityType(Identifier identifier, BlockEntityType<T> blockEntityType) {
+		Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier, blockEntityType);
 	}
 
 	public static <T extends ScreenHandler> void registerScreenHandlerType(Identifier identifier, ScreenHandlerType<T> screenHandlerType) {
