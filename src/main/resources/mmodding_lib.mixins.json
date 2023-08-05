@@ -45,6 +45,8 @@
     "injectors.PointedDripstoneBlockMixin",
     "injectors.PortalForcerMixin",
     "injectors.QuiltEntityTypeBuilderMixin",
+    "injectors.QuiltEntityTypeBuilderMixin$Living",
+    "injectors.QuiltEntityTypeBuilderMixin$Mob",
     "injectors.ServerPlayerEntityMixin",
     "injectors.ServerWorldMixin",
     "injectors.ShearsItemMixin",

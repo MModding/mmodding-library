@@ -4,10 +4,11 @@ import com.google.common.collect.ImmutableSet;
 import com.mmodding.mmodding_lib.ducks.QuiltEntityTypeBuilderDuckInterface;
 import com.mmodding.mmodding_lib.library.entities.CustomEntityType;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.*;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.DefaultAttributeRegistry;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.Heightmap;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 import org.spongepowered.asm.mixin.Mixin;
@@ -66,4 +67,46 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements QuiltEntit
             this.alwaysUpdateVelocity
         );
     }
+
+	@Mixin(value = QuiltEntityTypeBuilder.Living.class, remap = false)
+	public static class Living<T extends LivingEntity> extends QuiltEntityTypeBuilderMixin<T> {
+
+		@Shadow
+		private DefaultAttributeContainer.Builder defaultAttributeBuilder;
+
+		@Override
+		public CustomEntityType<T> mmodding_lib$buildCustom() {
+			final CustomEntityType<T> type = super.mmodding_lib$buildCustom();
+
+			if (this.defaultAttributeBuilder != null) {
+				DefaultAttributeRegistry.DEFAULT_ATTRIBUTE_REGISTRY.put(type, this.defaultAttributeBuilder.build());
+			}
+
+			return type;
+		}
+	}
+
+	@Mixin(value = QuiltEntityTypeBuilder.Mob.class, remap = false)
+	public static class Mob<T extends MobEntity> extends Living<T> {
+
+		@Shadow
+		private SpawnRestriction.SpawnPredicate<T> spawnPredicate;
+
+		@Shadow
+		private SpawnRestriction.Location restrictionLocation;
+
+		@Shadow
+		private Heightmap.Type restrictionHeightmap;
+
+		@Override
+		public CustomEntityType<T> mmodding_lib$buildCustom() {
+			CustomEntityType<T> type = super.mmodding_lib$buildCustom();
+
+			if (this.spawnPredicate != null) {
+				SpawnRestriction.register(type, this.restrictionLocation, this.restrictionHeightmap, this.spawnPredicate);
+			}
+
+			return type;
+		}
+	}
 }
