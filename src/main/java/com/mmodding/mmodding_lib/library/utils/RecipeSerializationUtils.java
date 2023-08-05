@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.mmodding.mmodding_lib.mixin.accessors.IngredientAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.ShapelessRecipeSerializerAccessor;
 import net.minecraft.item.Item;
@@ -46,8 +47,22 @@ public class RecipeSerializationUtils {
 		return IngredientAccessor.entryFromJson(json);
 	}
 
-	public static ItemStack getResult(JsonObject json) {
-		return ShapedRecipe.outputFromJson(json);
+	public static ItemStack getStackWithoutData(JsonObject json) {
+		if (json.has("data")) {
+			throw new JsonParseException("Disallowed Data Member Found");
+		} else {
+			return RecipeSerializationUtils.getStack(json);
+		}
+	}
+
+	public static ItemStack getStack(JsonObject json) {
+		Item item = RecipeSerializationUtils.getItem(json);
+		int count = JsonHelper.getInt(json, "count", 1);
+		if (count < 1) {
+			throw new JsonSyntaxException("Count Can Not Be " + count);
+		} else {
+			return new ItemStack(item, count);
+		}
 	}
 
 	public static Item getItem(JsonObject json) {
