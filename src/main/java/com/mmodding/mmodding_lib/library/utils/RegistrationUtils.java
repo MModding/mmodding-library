@@ -130,7 +130,7 @@ public class RegistrationUtils {
 	}
 
 	public static void registerCustomPortal(Identifier identifier, Block frameBlock, CustomSquaredPortalBlock portalBlock) {
-		MModdingGlobalMaps.customSquaredPortals.put(identifier, new Pair<>(frameBlock, portalBlock));
+		MModdingGlobalMaps.CUSTOM_SQUARED_PORTALS.put(identifier, new Pair<>(frameBlock, portalBlock));
 	}
 
 	public static void registerPointOfInterestType(Identifier identifier, PointOfInterestType type) {

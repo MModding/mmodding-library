@@ -10,18 +10,24 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.explosion.Explosion;
 
 import java.util.List;
+import java.util.function.IntFunction;
 
 public class WorldUtils {
 
+	public static void addDefaultBiomes(Identifier dimensionIdentifier, IntFunction<RegistryKey<Biome>> func) {
+		MModdingGlobalMaps.DEFAULT_BIOMES.put(dimensionIdentifier, func);
+	}
+
 	public static void addDifferedSeed(Identifier dimensionIdentifier) {
-		MModdingGlobalMaps.differedDimensionSeeds.add(RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier));
+		MModdingGlobalMaps.DIFFERED_DIMENSION_SEEDS.add(RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier));
 	}
 
 	public static void addCustomVeinTypes(Identifier chunkGeneratorSettingsIdentifier, CustomVeinType... customVeinTypes) {
-		MModdingGlobalMaps.customVeinTypes.put(chunkGeneratorSettingsIdentifier, List.of(customVeinTypes));
+		MModdingGlobalMaps.CUSTOM_VEIN_TYPES.put(chunkGeneratorSettingsIdentifier, List.of(customVeinTypes));
 	}
 
 	public static void doSyncedTaskAfter(World world, long ticksToWait, Runnable task) {

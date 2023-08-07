@@ -3,7 +3,6 @@ package com.mmodding.mmodding_lib.library.blocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FernBlock;
-import net.minecraft.block.PlantBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;

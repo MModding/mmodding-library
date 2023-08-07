@@ -42,6 +42,16 @@ public abstract class ChunkNoiseSamplerMixin implements ChunkNoiseSamplerDuckInt
 	}
 
 	@Override
+	public Holder<ChunkGeneratorSettings> mmodding_lib$getSettingsHolder() {
+		return this.settingsHolder;
+	}
+
+	@Override
+	public void mmodding_lib$setSettingsHolder(Holder<ChunkGeneratorSettings> holder) {
+		this.settingsHolder = holder;
+	}
+
+	@Override
 	public void mmodding_lib$reloadBlockStateSampler() {
 
 		ChunkNoiseSampler thisSampler = (ChunkNoiseSampler) (Object) this;
@@ -69,15 +79,5 @@ public abstract class ChunkNoiseSamplerMixin implements ChunkNoiseSamplerDuckInt
 				((ChunkNoiseSamplerAccessor) thisSampler).setBlockStateSampler(new MaterialRuleList(builder.build()));
 			}
 		});
-	}
-
-	@Override
-	public Holder<ChunkGeneratorSettings> mmodding_lib$getSettingsHolder() {
-		return this.settingsHolder;
-	}
-
-	@Override
-	public void mmodding_lib$setSettingsHolder(Holder<ChunkGeneratorSettings> holder) {
-		this.settingsHolder = holder;
 	}
 }
