@@ -10,11 +10,9 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.explosion.Explosion;
 
 import java.util.List;
-import java.util.function.IntFunction;
 
 public class WorldUtils {
 
@@ -81,12 +79,6 @@ public class WorldUtils {
 		Explosion explosion = new Explosion((World) world, null, MModdingDamageSources.PUSH, null, pos.getX(), pos.getY(), pos.getZ(), power, false, Explosion.DestructionType.NONE);
 		explosion.collectBlocksAndDamageEntities();
 		explosion.affectWorld(false);
-	}
-
-	// Not Working As Excepted Causing DeSync
-	@Deprecated
-	private static void addDefaultBiomes(Identifier dimensionIdentifier, IntFunction<RegistryKey<Biome>> func) {
-		MModdingGlobalMaps.DEFAULT_BIOMES.put(dimensionIdentifier, func);
 	}
 
 	public interface TickTaskServer {
