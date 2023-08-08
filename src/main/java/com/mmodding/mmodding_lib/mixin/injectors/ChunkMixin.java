@@ -11,17 +11,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Chunk.class)
 public class ChunkMixin {
 
-    @Inject(method = "fillSectionArray", at = @At(value = "NEW", target = "(ILnet/minecraft/util/registry/Registry;)Lnet/minecraft/world/chunk/ChunkSection;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private static void fillSectionArray(HeightLimitView view, Registry<Biome> biomeRegistry, ChunkSection[] sectionArray, CallbackInfo ci, int i) {
-        if (view instanceof World world) {
-            ChunkSectionDuckInterface ducked = ((ChunkSectionDuckInterface) sectionArray[i]);
-            ducked.mmodding_lib$setWorld(world);
-            ducked.mmodding_lib$reloadBiomeContainer();
-        }
+    @Inject(method = "fillSectionArray", at = @At("TAIL"))
+    private static void fillSectionArray(HeightLimitView view, Registry<Biome> biomeRegistry, ChunkSection[] sectionArray, CallbackInfo ci) {
+		if (view instanceof World world) {
+            for (ChunkSection section : sectionArray) {
+                ChunkSectionDuckInterface ducked = ((ChunkSectionDuckInterface) section);
+				ducked.mmodding_lib$setWorld(world);
+				ducked.mmodding_lib$reloadBiomeContainer();
+            }
+		}
     }
 }
