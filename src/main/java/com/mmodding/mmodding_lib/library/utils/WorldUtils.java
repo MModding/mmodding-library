@@ -18,10 +18,6 @@ import java.util.function.IntFunction;
 
 public class WorldUtils {
 
-	public static void addDefaultBiomes(Identifier dimensionIdentifier, IntFunction<RegistryKey<Biome>> func) {
-		MModdingGlobalMaps.DEFAULT_BIOMES.put(dimensionIdentifier, func);
-	}
-
 	public static void addDifferedSeed(Identifier dimensionIdentifier) {
 		MModdingGlobalMaps.DIFFERED_DIMENSION_SEEDS.add(RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier));
 	}
@@ -85,6 +81,12 @@ public class WorldUtils {
 		Explosion explosion = new Explosion((World) world, null, MModdingDamageSources.PUSH, null, pos.getX(), pos.getY(), pos.getZ(), power, false, Explosion.DestructionType.NONE);
 		explosion.collectBlocksAndDamageEntities();
 		explosion.affectWorld(false);
+	}
+
+	// Not Working As Excepted Causing DeSync
+	@Deprecated
+	private static void addDefaultBiomes(Identifier dimensionIdentifier, IntFunction<RegistryKey<Biome>> func) {
+		MModdingGlobalMaps.DEFAULT_BIOMES.put(dimensionIdentifier, func);
 	}
 
 	public interface TickTaskServer {
