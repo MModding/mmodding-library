@@ -32,8 +32,8 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 		return this.customSetting(GLINT, true);
 	}
 
-	public AdvancedItemSettings glint(GlintPackView view) {
-		return this.glint().customSetting(GLINT_PACK, view);
+	public AdvancedItemSettings glintPack(GlintPackView view) {
+		return this.customSetting(GLINT_PACK, view);
 	}
 
 	public AdvancedItemSettings eatable() {
