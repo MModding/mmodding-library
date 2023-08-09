@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.items.settings;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
@@ -12,6 +13,7 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(Boolean.FALSE);
+	public static final CustomItemSetting<GlintPackView> GLINT_PACK = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<ItemUse> ITEM_USE = CustomItemSetting.create(() -> null);
@@ -28,6 +30,10 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 
 	public AdvancedItemSettings glint() {
 		return this.customSetting(GLINT, true);
+	}
+
+	public AdvancedItemSettings glint(GlintPackView view) {
+		return this.glint().customSetting(GLINT_PACK, view);
 	}
 
 	public AdvancedItemSettings eatable() {

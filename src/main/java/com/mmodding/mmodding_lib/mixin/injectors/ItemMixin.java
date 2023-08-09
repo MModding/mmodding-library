@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
 import com.mmodding.mmodding_lib.library.items.settings.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +15,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
-public abstract class ItemMixin {
+public abstract class ItemMixin implements ItemGlintPack {
 
 	@Shadow
 	public abstract boolean isFood();
@@ -32,7 +35,7 @@ public abstract class ItemMixin {
 		}
 	}
 
-	@Inject(method = "use", at = @At("HEAD"))
+    @Inject(method = "use", at = @At("HEAD"))
 	private void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
 		ItemUse itemUse = AdvancedItemSettings.ITEM_USE.get((Item) (Object) this);
 		if (itemUse != null) {
@@ -82,5 +85,11 @@ public abstract class ItemMixin {
 		if (eatable) cir.setReturnValue(UseAction.EAT);
 		boolean drinkable = AdvancedItemSettings.DRINKABLE.get((Item) (Object) this);
 		if (drinkable) cir.setReturnValue(UseAction.DRINK);
+	}
+
+	@Nullable
+	@Override
+	public GlintPackView getGlintPackView() {
+		return AdvancedItemSettings.GLINT_PACK.get((Item) (Object) this);
 	}
 }

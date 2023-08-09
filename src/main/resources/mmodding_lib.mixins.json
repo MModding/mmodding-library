@@ -22,6 +22,7 @@
     "accessors.ScreenHandlerAccessor",
     "accessors.ShapelessRecipeSerializerAccessor",
     "accessors.TreeDecoratorTypeAccessor",
+    "accessors.TridentEntityAccessor",
     "accessors.TrunkPlacerTypeAccessor",
     "injectors.AbstractBlockMixin",
     "injectors.AbstractBlockSettingsMixin",
@@ -37,6 +38,7 @@
     "injectors.FishingBobberEntityMixin",
     "injectors.GeneratorOptionsMixin",
     "injectors.ItemMixin",
+    "injectors.ItemStackMixin",
     "injectors.MiningToolItemMixin",
     "injectors.NetherPortalBlockMixin",
     "injectors.NoiseChunkGeneratorMixin",
@@ -56,12 +58,23 @@
     "injectors.WorldMixin"
   ],
   "client": [
-    "accessors.BufferBuilderStorageAccessor",
-    "injectors.ClientPlayerEntityMixin",
-    "injectors.ClientWorldMixin",
-    "injectors.EntryListWidgetMixin",
-    "injectors.FishingBobberEntityRendererMixin",
-    "injectors.InGameHudMixin"
+    "accessors.client.BufferBuilderStorageAccessor",
+    "accessors.client.RenderLayerFirstAccessor",
+    "accessors.client.RenderLayerSecondAccessor",
+    "accessors.client.RenderPhaseAccessor",
+    "injectors.client.ArmorFeatureRendererMixin",
+    "injectors.client.ArmorRendererMixin",
+    "injectors.client.BuiltinModelItemRendererMixin",
+    "injectors.client.ClientPlayerEntityMixin",
+    "injectors.client.ClientWorldMixin",
+    "injectors.client.ElytraFeatureRendererMixin",
+    "injectors.client.EntityRendererMixin",
+    "injectors.client.EntryListWidgetMixin",
+    "injectors.client.FishingBobberEntityRendererMixin",
+    "injectors.client.InGameHudMixin",
+    "injectors.client.ItemRenderContextMixin",
+    "injectors.client.ItemRendererMixin",
+    "injectors.client.TridentEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

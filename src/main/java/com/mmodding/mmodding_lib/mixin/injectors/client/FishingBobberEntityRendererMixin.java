@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin.injectors;
+package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.mmodding.mmodding_lib.library.items.CustomFishingRodItem;
 import net.minecraft.client.render.entity.FishingBobberEntityRenderer;

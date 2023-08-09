@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin.accessors;
+package com.mmodding.mmodding_lib.mixin.accessors.client;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import net.minecraft.client.render.BufferBuilderStorage;

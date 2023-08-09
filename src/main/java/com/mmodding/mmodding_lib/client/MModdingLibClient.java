@@ -17,5 +17,6 @@ public class MModdingLibClient implements ClientModInitializer {
 	public void onInitializeClient(ModContainer mod) {
 		ClientEvents.register();
 		ClientPacketReceivers.register();
+		ClientGlintPacks.register();
 	}
 }

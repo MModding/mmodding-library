@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
-import com.mmodding.mmodding_lib.library.utils.RenderLayerUtils;
+import com.mmodding.mmodding_lib.library.client.render.RenderLayerOperations;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -72,13 +72,18 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	}
 
 	public void cutout() {
-		RenderLayerUtils.setCutout(this.head);
-		RenderLayerUtils.setCutout(this.body);
+		RenderLayerOperations.setCutout(this.head);
+		RenderLayerOperations.setCutout(this.body);
 	}
 
 	public void translucent() {
-		RenderLayerUtils.setTranslucent(this.head);
-		RenderLayerUtils.setTranslucent(this.body);
+		RenderLayerOperations.setTranslucent(this.head);
+		RenderLayerOperations.setTranslucent(this.body);
+	}
+
+	public void transparent() {
+		RenderLayerOperations.setTransparent(this.head);
+		RenderLayerOperations.setTransparent(this.body);
 	}
 
 	public static class Head extends AbstractPlantStemBlock {

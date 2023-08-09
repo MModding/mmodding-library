@@ -43,22 +43,22 @@ import java.util.function.Function;
 public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Unique
-	boolean inCustomPortal;
+	protected boolean inCustomPortal;
 
 	@Unique
-	int customPortalTime;
+	protected int customPortalTime;
 
 	@Unique
-	boolean useCustomPortalElements;
+	protected boolean useCustomPortalElements;
 
 	@Unique
-	Pair<Block, CustomSquaredPortalBlock> customPortalElements;
+	protected Pair<Block, CustomSquaredPortalBlock> customPortalElements;
 
 	@Unique
-	BlockPos lastCustomPortalPosition;
+	protected BlockPos lastCustomPortalPosition;
 
 	@Unique
-	CustomSquaredPortalBlock customPortalCache;
+	protected CustomSquaredPortalBlock customPortalCache;
 
 	@Shadow
 	public abstract double squaredDistanceTo(Entity entity);

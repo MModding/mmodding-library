@@ -3,8 +3,6 @@ package com.mmodding.mmodding_lib;
 import com.mmodding.mmodding_lib.library.base.MModdingModContainer;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.events.MModdingInitializationEvents;
-import com.mmodding.mmodding_lib.library.worldgen.MModdingDensityFunctions;
-import com.mmodding.mmodding_lib.library.worldgen.MModdingNoiseParameters;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;

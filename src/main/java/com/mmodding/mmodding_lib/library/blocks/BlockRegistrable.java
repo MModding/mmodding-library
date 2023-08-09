@@ -2,11 +2,12 @@ package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.library.utils.Registrable;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
-import com.mmodding.mmodding_lib.library.utils.RenderLayerUtils;
+import com.mmodding.mmodding_lib.library.client.render.RenderLayerOperations;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.Identifier;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 public interface BlockRegistrable extends Registrable {
 
@@ -25,11 +26,18 @@ public interface BlockRegistrable extends Registrable {
 		}
 	}
 
+	@ClientOnly
 	default void cutout() {
-		if (this instanceof Block block) RenderLayerUtils.setCutout(block);
+		if (this instanceof Block block) RenderLayerOperations.setCutout(block);
 	}
 
+	@ClientOnly
 	default void translucent() {
-		if (this instanceof Block block) RenderLayerUtils.setTranslucent(block);
+		if (this instanceof Block block) RenderLayerOperations.setTranslucent(block);
+	}
+
+	@ClientOnly
+	default void transparent() {
+		if (this instanceof Block block) RenderLayerOperations.setTransparent(block);
 	}
 }

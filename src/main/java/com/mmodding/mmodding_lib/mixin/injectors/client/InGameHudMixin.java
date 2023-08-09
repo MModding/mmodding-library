@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin.injectors;
+package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mojang.blaze3d.systems.RenderSystem;

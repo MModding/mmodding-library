@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.mixin.injectors;
+package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.MModdingModConfigsScreen;

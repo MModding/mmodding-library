@@ -1,5 +1,6 @@
-package com.mmodding.mmodding_lib.mixin.injectors;
+package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.mixin.injectors.PlayerEntityMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;

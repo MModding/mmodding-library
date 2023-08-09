@@ -1,6 +1,7 @@
-package com.mmodding.mmodding_lib.mixin.injectors;
+package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
+import com.mmodding.mmodding_lib.mixin.injectors.WorldMixin;
 import net.minecraft.client.world.ClientWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;

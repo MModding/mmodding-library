@@ -43,6 +43,16 @@
 			}
 		]
 	},
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_1799": [
+				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
+			],
+			"net/minecraft/class_1792": [
+				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
+			]
+		}
+	},
 	"access_widener" : "mmodding_lib.accesswidener",
 	"mixin": "mmodding_lib.mixins.json"
 }
