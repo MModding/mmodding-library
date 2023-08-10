@@ -4,12 +4,9 @@ import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
 import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
-import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
@@ -144,15 +141,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 			this.inCustomPortal = true;
 			this.customPortalElements = new Pair<>(frameBlock, portalBlock);
-
-			if (world instanceof ClientWorld clientWorld) {
-				Entity thisEntity = ((Entity) (Object) this);
-				if (thisEntity instanceof ClientPlayerEntity playerEntity) {
-					this.customPortalCache = portalBlock;
-					WorldUtils.repeatTaskUntil(clientWorld, 39, () -> this.customPortalCache = playerEntity.lastNauseaStrength > 0 ? portalBlock : null);
-					WorldUtils.doTaskAfter(clientWorld, 40, () -> this.customPortalCache = null);
-				}
-			}
 		}
 	}
 

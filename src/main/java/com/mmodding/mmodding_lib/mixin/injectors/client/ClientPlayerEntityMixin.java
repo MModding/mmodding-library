@@ -1,13 +1,20 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.PlayerEntityMixin;
+import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -60,6 +67,17 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 			this.tickNetherPortalCooldown();
 
 			ci.cancel();
+		}
+	}
+
+	@Override
+	public void mmodding_lib$setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos) {
+		super.mmodding_lib$setInCustomPortal(frameBlock, portalBlock, world, pos);
+
+		if (world instanceof ClientWorld clientWorld) {
+			this.customPortalCache = portalBlock;
+			WorldUtils.repeatTaskUntil(clientWorld, 39, () -> this.customPortalCache = this.lastNauseaStrength > 0 ? portalBlock : null);
+			WorldUtils.doTaskAfter(clientWorld, 40, () -> this.customPortalCache = null);
 		}
 	}
 }
