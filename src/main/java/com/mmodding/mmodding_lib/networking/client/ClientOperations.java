@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.networking.client;
 import com.google.gson.JsonParser;
 import com.mmodding.mmodding_lib.client.ClientCaches;
 import com.mmodding.mmodding_lib.client.MModdingLibClient;
-import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.events.client.ClientConfigNetworkingEvents;

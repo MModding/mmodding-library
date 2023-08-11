@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
-import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import net.minecraft.item.Item;
 import org.jetbrains.annotations.ApiStatus;
 import org.quiltmc.loader.api.minecraft.ClientOnly;

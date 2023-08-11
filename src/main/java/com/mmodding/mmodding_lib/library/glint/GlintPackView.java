@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.glint;
 
 import com.mmodding.mmodding_lib.client.ClientCaches;
-import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
