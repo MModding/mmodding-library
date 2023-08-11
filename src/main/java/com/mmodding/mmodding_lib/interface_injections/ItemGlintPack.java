@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.interface_injections;
 
-import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;

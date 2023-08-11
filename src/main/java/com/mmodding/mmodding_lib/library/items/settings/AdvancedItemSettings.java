@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.items.settings;
 
-import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;

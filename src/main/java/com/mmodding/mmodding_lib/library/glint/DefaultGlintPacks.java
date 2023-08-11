@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.glint;
+package com.mmodding.mmodding_lib.library.glint;
 
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 

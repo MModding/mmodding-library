@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.client;
 
-import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import net.minecraft.client.MinecraftClient;

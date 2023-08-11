@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.client;
 
-import com.mmodding.mmodding_lib.glint.DefaultGlintPacks;
+import com.mmodding.mmodding_lib.library.glint.DefaultGlintPacks;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;

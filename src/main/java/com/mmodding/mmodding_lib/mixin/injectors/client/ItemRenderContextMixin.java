@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;

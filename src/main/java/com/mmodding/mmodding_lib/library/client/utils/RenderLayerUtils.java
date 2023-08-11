@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.client.utils;
 
-import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
 import com.mmodding.mmodding_lib.mixin.accessors.client.BufferBuilderStorageAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerFirstAccessor;

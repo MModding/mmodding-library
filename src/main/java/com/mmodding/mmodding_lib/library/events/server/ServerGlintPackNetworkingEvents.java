@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.events.server;
 
-import com.mmodding.mmodding_lib.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import net.minecraft.item.Item;
 import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.base.api.event.Event;
