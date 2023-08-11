@@ -21,6 +21,7 @@ public class MModdingLibConfig implements Config {
 	public ConfigObject defaultConfig() {
 		return new ConfigObject.Builder()
 				.addBooleanParameter("showMModdingLibraryMods", true)
+				.addBooleanParameter("showMModdingLibraryLocalCaches", false)
 				.build();
 	}
 

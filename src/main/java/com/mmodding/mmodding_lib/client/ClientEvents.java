@@ -40,7 +40,7 @@ public class ClientEvents {
 	}
 
 	private static void serverDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
-		ClientCaches.avoidCaches();
+		ClientCaches.clearCaches();
 	}
 
 	private static void itemTooltipCallback(ItemStack stack, PlayerEntity player, TooltipContext context, List<Text> lines) {

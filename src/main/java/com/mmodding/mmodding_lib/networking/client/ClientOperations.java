@@ -1,8 +1,9 @@
 package com.mmodding.mmodding_lib.networking.client;
 
 import com.google.gson.JsonParser;
+import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.ClientCaches;
-import com.mmodding.mmodding_lib.client.MModdingLibClient;
+import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
@@ -17,14 +18,16 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 public class ClientOperations {
 
 	public static void receiveConfigOnClient(PacketByteBuf packet) {
-		String configName = packet.readString();
-		String configContent = packet.readString();
+		String qualifier = packet.readString();
+		String content = packet.readString();
 
-		ClientConfigNetworkingEvents.BEFORE.invoker().beforeConfigReceived(MModdingLibClient.CLIENT_CONFIGS.get(configName));
+		ClientConfigNetworkingEvents.BEFORE.invoker().beforeConfigReceived(ClientCaches.CONFIGS);
 
-		MModdingLibClient.CLIENT_CONFIGS.get(configName).saveConfig(new ConfigObject(JsonParser.parseString(configContent).getAsJsonObject()));
+		StaticConfig staticConfig = StaticConfig.of(MModdingLib.CONFIGS.get(qualifier));
+		staticConfig.saveConfig(new ConfigObject(JsonParser.parseString(content).getAsJsonObject()));
+		ClientCaches.CONFIGS.put(qualifier, staticConfig);
 
-		ClientConfigNetworkingEvents.AFTER.invoker().afterConfigReceived(MModdingLibClient.CLIENT_CONFIGS.get(configName));
+		ClientConfigNetworkingEvents.AFTER.invoker().afterConfigReceived(ClientCaches.CONFIGS);
 	}
 
 	public static void receiveGlintPackOnClient(PacketByteBuf packet) {

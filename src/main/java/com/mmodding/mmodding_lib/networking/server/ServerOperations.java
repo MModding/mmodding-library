@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.networking.server;
 
+import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
@@ -31,6 +32,21 @@ public class ServerOperations {
 		ServerPlayNetworking.send(player, MModdingPackets.CONFIGS, packet);
 
 		ServerConfigNetworkingEvents.AFTER.invoker().afterConfigSent(config);
+	}
+
+	public static void sendConfigsToClient(ServerPlayerEntity player) {
+
+		ServerConfigNetworkingEvents.BEFORE_ALL.invoker().beforeAllConfigsSent(MModdingLib.CONFIGS);
+
+		MModdingLib.CONFIGS.forEach((qualifier, config) -> {
+			boolean isLocalCache = config.getNetworkingSate() == Config.NetworkingState.LOCAL_CACHES;
+			boolean isClientCache = config.getNetworkingSate() == Config.NetworkingState.CLIENT_CACHES;
+			if (isLocalCache || isClientCache) {
+				ServerOperations.sendConfigToClient(config, player);
+			}
+		});
+
+		ServerConfigNetworkingEvents.AFTER_ALL.invoker().afterAllConfigsSent(MModdingLib.CONFIGS);
 	}
 
 	public static void sendGlintPackToClient(Item item, GlintPackView view, ServerPlayerEntity player) {

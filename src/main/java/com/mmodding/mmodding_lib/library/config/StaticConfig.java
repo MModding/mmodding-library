@@ -1,25 +1,24 @@
-package com.mmodding.mmodding_lib.library.config.client;
+package com.mmodding.mmodding_lib.library.config;
 
-import com.mmodding.mmodding_lib.library.config.Config;
-import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
 
-public abstract class TemporaryConfig implements Config {
+public abstract class StaticConfig implements Config {
 
 	private ConfigObject configObject = Config.super.getContent();
-	@Override
-	public void saveConfig(ConfigObject configObject) {
-		this.configObject = configObject;
-	}
 
 	@Override
 	public ConfigObject getContent() {
 		return this.configObject;
 	}
 
-	public static TemporaryConfig fromConfig(Config config) {
+	@Override
+	public void saveConfig(ConfigObject configObject) {
+		this.configObject = configObject;
+	}
 
-		return new TemporaryConfig() {
+	public static StaticConfig of(Config config) {
+
+		return new StaticConfig() {
 
 			@Override
 			public String getQualifier() {
@@ -39,6 +38,11 @@ public abstract class TemporaryConfig implements Config {
 			@Override
 			public ConfigScreenOptions getConfigOptions() {
 				return config.getConfigOptions();
+			}
+
+			@Override
+			public NetworkingState getNetworkingSate() {
+				return config.getNetworkingSate();
 			}
 		};
 	}

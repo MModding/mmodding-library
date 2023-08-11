@@ -17,21 +17,21 @@ public interface Config {
 
 	/**
 	 * The "identifier" of the config. Used to define the translations keys of the config.
-	 * You can take example on {@link MModdingLibConfig#getQualifier()}.
+	 * <br>You can take example on {@link MModdingLibConfig#getQualifier()}.
 	 * @return the qualifier of the config
 	 */
 	String getQualifier();
 
 	/**
 	 * The file path.
-	 * You can take example on {@link MModdingLibConfig#getPath()}.
+	 * <br>You can take example on {@link MModdingLibConfig#getPath()}.
 	 * @return the path of the file (from the config directory and without file extension)
 	 */
 	String getFilePath();
 
 	/**
 	 * The default config object.
-	 * You can take example on {@link MModdingLibConfig#defaultConfig()}.
+	 * <br>You can take example on {@link MModdingLibConfig#defaultConfig()}.
 	 * @return the config object in its default state
 	 * @see ConfigObject.Builder
 	 */
@@ -39,11 +39,15 @@ public interface Config {
 
 	/**
 	 * Some options used in the config screen.
-	 * You can take example on {@link MModdingLibConfig#getConfigOptions()}.
+	 * <br>You can take example on {@link MModdingLibConfig#getConfigOptions()}.
 	 * @return the config screen options
 	 * @see ConfigScreenOptions
 	 */
 	ConfigScreenOptions getConfigOptions();
+
+	default NetworkingState getNetworkingSate() {
+		return NetworkingState.CLIENT_CACHES;
+	}
 
 	/**
 	 * The config content directly read from the config json file.
@@ -119,5 +123,30 @@ public interface Config {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+
+	/**
+	 * Refers to the current config networking state
+	 * @see Config#getNetworkingSate()
+	 */
+	enum NetworkingState {
+
+		/**
+		 * When a world is joined, the current configuration is statically stored locally.
+		 * <br>When a server is joined, the current configuration is sent to the client.
+		 */
+		LOCAL_CACHES,
+
+		/**
+		 * When a server is joined, the current configuration is sent to the client.
+		 * @apiNote Default value of {@link Config#getNetworkingSate()}
+		 */
+		CLIENT_CACHES,
+
+		/**
+		 * The current configuration is never cached.
+		 */
+		WITHOUT_CACHES
 	}
 }

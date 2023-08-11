@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
+import com.mmodding.mmodding_lib.library.config.Config;
+import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.networking.server.ServerOperations;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -22,13 +24,29 @@ public class Events {
 	}
 
 	private static void serverInit(ServerPlayNetworkHandler handler, MinecraftServer server) {
+		MModdingLib.CONFIGS.forEach((qualifier, config) -> {
+			if (config.getNetworkingSate() == Config.NetworkingState.LOCAL_CACHES) {
+				LocalCaches.CONFIGS.put(qualifier, StaticConfig.of(config));
+			}
+		});
+
+		if (MModdingLib.MMODDING_LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryLocalCaches")) {
+			LocalCaches.debugCaches();
+		}
+
 		if (server.isDedicated()) {
+			ServerOperations.sendConfigsToClient(handler.getPlayer());
 			ServerOperations.sendGlintPacksToClient(handler.getPlayer());
 		}
+	}
+
+	private static void serverDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
+		LocalCaches.clearCaches();
 	}
 
 	public static void register() {
 		ServerWorldLoadEvents.LOAD.register(Events::serverLoad);
 		ServerPlayConnectionEvents.INIT.register(Events::serverInit);
+		ServerPlayConnectionEvents.DISCONNECT.register(Events::serverDisconnect);
 	}
 }

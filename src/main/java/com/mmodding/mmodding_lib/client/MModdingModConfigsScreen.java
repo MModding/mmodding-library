@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.client;
 
 import com.google.common.collect.ImmutableList;
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.library.config.client.TemporaryConfig;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import net.minecraft.client.MinecraftClient;
@@ -59,11 +58,7 @@ public class MModdingModConfigsScreen extends Screen {
         public MModdingModConfigsListWidget(MModdingModConfigsScreen screen, MinecraftClient client, boolean clientConfigs, int width, int height, int top, int bottom, int itemHeight) {
             super(client, width, height, top, bottom, itemHeight);
             if (clientConfigs) {
-                MModdingLibClient.CLIENT_CONFIGS.forEach((qualifier, config) -> {
-                    if (!(config instanceof TemporaryConfig)) {
-                        this.addEntry(new MModdingModConfigsListEntry(screen, qualifier, config));
-                    }
-                });
+                MModdingLibClient.CLIENT_CONFIGS.forEach((qualifier, config) -> this.addEntry(new MModdingModConfigsListEntry(screen, qualifier, config)));
             }
             else {
                 MModdingLib.CONFIGS.forEach((qualifier, config) -> this.addEntry(new MModdingModConfigsListEntry(screen, qualifier, config)));
