@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.entity.BannerBlockEntity;
@@ -37,12 +38,12 @@ public class BuiltinModelItemRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;"), cancellable = true)
     private void changeFirstDirectItemConsumer(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
-        if (stack.getGlintPackView() != null) {
+        if (GlintPackView.ofStack(stack) != null) {
             boolean hasBlockEntity = BlockItem.getBlockEntityNbtFromStack(stack) != null;
             SpriteIdentifier spriteIdentifier = hasBlockEntity ? ModelLoader.SHIELD_BASE : ModelLoader.SHIELD_BASE_NO_PATTERN;
 
             VertexConsumer vertexConsumer = spriteIdentifier.getSprite().getTextureSpecificVertexConsumer(
-                stack.getGlintPackView().getGlintPack().getDirectItemConsumer(
+				GlintPackView.ofStack(stack).getGlintPack().getDirectItemConsumer(
                     vertexConsumers,
                     this.modelShield.getLayer(spriteIdentifier.getAtlasId()),
                     true,
@@ -71,8 +72,8 @@ public class BuiltinModelItemRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 1), cancellable = true)
     private void changeSecondDirectItemConsumer(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
-        if (stack.getGlintPackView() != null) {
-            VertexConsumer vertexConsumer = stack.getGlintPackView().getGlintPack().getDirectItemConsumer(
+        if (GlintPackView.ofStack(stack) != null) {
+            VertexConsumer vertexConsumer = GlintPackView.ofStack(stack).getGlintPack().getDirectItemConsumer(
                 vertexConsumers,
                 this.modelTrident.getLayer(TridentEntityModel.TEXTURE),
                 false,

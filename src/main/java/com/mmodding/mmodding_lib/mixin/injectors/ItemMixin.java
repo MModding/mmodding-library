@@ -1,8 +1,10 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.mmodding.mmodding_lib.client.ClientCaches;
 import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
 import com.mmodding.mmodding_lib.library.items.settings.*;
+import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,5 +1,6 @@
 {
   "config.mmodding_lib.showMModdingLibraryMods": "Show MModding Library Mods",
+  "config.mmodding_lib_client.showMModdingLibraryClientCaches": "Show MModding Library Client Caches",
   "mmodding_lib.commands.redirections.weather": "The weather command only works when executed in the overworld, use this instead:",
   "mmodding_lib.commands.redirections.weather.fixed": "Fixed Command",
   "mmodding_lib.commands.redirections.weather.hover": "Execute fixed weather %s command",
@@ -7,6 +8,7 @@
   "mmodding_lib.configs.integer": "Integer",
   "mmodding_lib.configs.boolean": "Boolean",
   "mmodding_lib.configs.null": "Null",
+  "mmodding_lib.settings.library_client_config": "MModding Library Client Configuration",
   "mmodding_lib.settings.library_config": "MModding Library Configuration",
   "mmodding_lib.settings.mod_client_configs": "MModding Mod Client Configurations",
   "mmodding_lib.settings.mod_configs": "MModding Mod Configurations",

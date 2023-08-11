@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -28,8 +29,8 @@ public abstract class ItemRendererMixin {
 
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectCompassGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/util/math/MatrixStack$Entry;)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
     private VertexConsumer redirectDirectCompassConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry) {
-        if (this.stack.getGlintPackView() != null) {
-            return this.stack.getGlintPackView().getGlintPack().getDirectCompassConsumer(provider, layer, entry);
+        if (GlintPackView.ofStack(this.stack) != null) {
+            return GlintPackView.ofStack(this.stack).getGlintPack().getDirectCompassConsumer(provider, layer, entry);
         }
         else {
             return ItemRenderer.getDirectCompassGlintConsumer(provider, layer, entry);
@@ -38,8 +39,8 @@ public abstract class ItemRendererMixin {
 
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getCompassGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/util/math/MatrixStack$Entry;)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
     private VertexConsumer redirectCompassConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry) {
-        if (this.stack.getGlintPackView() != null) {
-            return this.stack.getGlintPackView().getGlintPack().getCompassConsumer(provider, layer, entry);
+        if (GlintPackView.ofStack(this.stack) != null) {
+            return GlintPackView.ofStack(this.stack).getGlintPack().getCompassConsumer(provider, layer, entry);
         }
         else {
             return ItemRenderer.getCompassGlintConsumer(provider, layer, entry);
@@ -48,8 +49,8 @@ public abstract class ItemRendererMixin {
 
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
     private VertexConsumer redirectDirectItemConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint) {
-        if (this.stack.getGlintPackView() != null) {
-            return this.stack.getGlintPackView().getGlintPack().getDirectItemConsumer(provider, layer, solid, glint);
+        if (GlintPackView.ofStack(this.stack) != null) {
+            return GlintPackView.ofStack(this.stack).getGlintPack().getDirectItemConsumer(provider, layer, solid, glint);
         }
         else {
             return ItemRenderer.getDirectItemGlintConsumer(provider, layer, solid, glint);
@@ -58,8 +59,8 @@ public abstract class ItemRendererMixin {
 
     @Redirect(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
     private VertexConsumer changeItemConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint) {
-        if (this.stack.getGlintPackView() != null) {
-            return this.stack.getGlintPackView().getGlintPack().getItemConsumer(provider, layer, solid, glint);
+        if (GlintPackView.ofStack(this.stack) != null) {
+            return GlintPackView.ofStack(this.stack).getGlintPack().getItemConsumer(provider, layer, solid, glint);
         }
         else {
             return ItemRenderer.getItemGlintConsumer(provider, layer, solid, glint);

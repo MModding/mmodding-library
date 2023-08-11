@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;
@@ -29,8 +30,8 @@ public class ItemRenderContextMixin {
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 0), cancellable = true)
 	private void changeFirstItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (this.itemStack.getGlintPackView() != null) {
-			this.translucentVertexConsumer = this.itemStack.getGlintPackView().getGlintPack().getItemConsumer(
+		if (GlintPackView.ofStack(this.itemStack) != null) {
+			this.translucentVertexConsumer = GlintPackView.ofStack(this.itemStack).getGlintPack().getItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getItemEntityTranslucentCull(),
 				true,
@@ -42,8 +43,8 @@ public class ItemRenderContextMixin {
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 1), cancellable = true)
 	private void changeSecondItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (this.itemStack.getGlintPackView() != null) {
-			this.translucentVertexConsumer = this.itemStack.getGlintPackView().getGlintPack().getItemConsumer(
+		if (GlintPackView.ofStack(this.itemStack) != null) {
+			this.translucentVertexConsumer = GlintPackView.ofStack(this.itemStack).getGlintPack().getItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getEntityTranslucentCull(),
 				true,
@@ -55,8 +56,8 @@ public class ItemRenderContextMixin {
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 0), cancellable = true)
 	private void changeFirstDirectItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (this.itemStack.getGlintPackView() != null) {
-			this.translucentVertexConsumer = this.itemStack.getGlintPackView().getGlintPack().getDirectItemConsumer(
+		if (GlintPackView.ofStack(this.itemStack) != null) {
+			this.translucentVertexConsumer = GlintPackView.ofStack(this.itemStack).getGlintPack().getDirectItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getEntityTranslucentCull(),
 				true,
@@ -68,8 +69,8 @@ public class ItemRenderContextMixin {
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 1), cancellable = true)
 	private void changeSecondDirectItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (this.itemStack.getGlintPackView() != null) {
-			this.cutoutVertexConsumer = this.itemStack.getGlintPackView().getGlintPack().getDirectItemConsumer(
+		if (GlintPackView.ofStack(this.itemStack) != null) {
+			this.cutoutVertexConsumer = GlintPackView.ofStack(this.itemStack).getGlintPack().getDirectItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getEntityCutout(),
 				true,

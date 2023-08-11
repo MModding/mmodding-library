@@ -1,11 +1,49 @@
 package com.mmodding.mmodding_lib.glint;
 
+import com.mmodding.mmodding_lib.client.ClientCaches;
 import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
+import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
+import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-public record GlintPackView(Identifier identifier) {
+public class GlintPackView {
+
+	private final Identifier identifier;
+
+	public GlintPackView(Identifier identifier) {
+		this.identifier = identifier;
+	}
+
+	public static GlintPackView ofStack(ItemStack stack) {
+
+		if (!EnvironmentUtils.isInSinglePlayer() && EnvironmentUtils.isClient()) {
+			if (ClientCaches.GLINT_PACKS.containsKey(stack.getItem())) {
+				return GlintPackView.ofClientCache(ClientCaches.GLINT_PACKS.get(stack.getItem()));
+			}
+		}
+
+		return stack.getGlintPackView();
+	}
+
+	public static GlintPackView ofItem(Item item) {
+
+		if (!EnvironmentUtils.isInSinglePlayer() && EnvironmentUtils.isClient()) {
+			if (ClientCaches.GLINT_PACKS.containsKey(item)) {
+				return GlintPackView.ofClientCache(ClientCaches.GLINT_PACKS.get(item));
+			}
+		}
+
+		return item.getGlintPackView();
+	}
+
+	@ClientOnly
+	public static GlintPackView ofClientCache(GlintPack glintPack) {
+		return new FalseGlintPackView(glintPack);
+	}
 
     @ClientOnly
     public GlintPack getGlintPack() {
@@ -16,4 +54,24 @@ public record GlintPackView(Identifier identifier) {
             throw new IllegalArgumentException("Glint Pack With Identifier " + this.identifier + "Does Not Exist");
         }
     }
+
+	public Identifier getIdentifier() {
+		return this.identifier;
+	}
+
+	@ClientOnly
+	private static class FalseGlintPackView extends GlintPackView {
+
+		private final GlintPack glintPack;
+
+		public FalseGlintPackView(GlintPack glintPack) {
+			super(new MModdingIdentifier("unused"));
+			this.glintPack = glintPack;
+		}
+
+		@Override
+		public GlintPack getGlintPack() {
+			return this.glintPack;
+		}
+	}
 }

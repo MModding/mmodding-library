@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.model.Model;
@@ -19,8 +20,8 @@ public interface ArmorRendererMixin {
 
     @Inject(method = "renderPart", at = @At(value = "HEAD"), cancellable = true)
     private static void renderParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture, CallbackInfo ci) {
-        if (stack.getGlintPackView() != null) {
-            VertexConsumer vertexConsumer = stack.getGlintPackView().getGlintPack().getArmorConsumer(
+        if (GlintPackView.ofStack(stack) != null) {
+            VertexConsumer vertexConsumer = GlintPackView.ofStack(stack).getGlintPack().getArmorConsumer(
                 vertexConsumers,
                 RenderLayer.getArmorCutoutNoCull(texture),
                 false,

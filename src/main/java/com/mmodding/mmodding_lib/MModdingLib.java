@@ -15,24 +15,24 @@ import java.util.Map;
 
 public class MModdingLib implements ModInitializer {
 
-	public static MModdingModContainer mmoddingLib;
-
 	public static final MModdingLibConfig MMODDING_LIBRARY_CONFIG = new MModdingLibConfig();
 
 	public static final List<MModdingModContainer> MMODDING_MODS = new ArrayList<>();
 
 	public static final Map<String, Config> CONFIGS = new HashMap<>();
 
+	public static MModdingModContainer container;
+
 	@Override
 	public void onInitialize(ModContainer mod) {
 
-		mmoddingLib = MModdingModContainer.from(mod);
+		MModdingLib.container = MModdingModContainer.from(mod);
 
-		MModdingInitializationEvents.START.invoker().onMModdingInitializationStart(mmoddingLib);
+		MModdingInitializationEvents.START.invoker().onMModdingInitializationStart(MModdingLib.container);
 
 		MMODDING_LIBRARY_CONFIG.initializeConfig();
 
-		mmoddingLib.getLogger().info("Initialize {}", mmoddingLib.getName());
+		MModdingLib.container.getLogger().info("Initialize {}", MModdingLib.container.getName());
 
 		Events.register();
 
@@ -43,10 +43,10 @@ public class MModdingLib implements ModInitializer {
 			}
 
 			mods = StringUtils.chop(mods);
-			mmoddingLib.getLogger().info(mods);
+			MModdingLib.container.getLogger().info(mods);
 		}
 
-		MModdingInitializationEvents.END.invoker().onMModdingInitializationEnd(mmoddingLib);
+		MModdingInitializationEvents.END.invoker().onMModdingInitializationEnd(MModdingLib.container);
 	}
 
 	public static String id() {

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mmodding.mmodding_lib.mixin.accessors.TridentEntityAccessor;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.OverlayTexture;
@@ -31,8 +32,8 @@ public abstract class TridentEntityRendererMixin extends EntityRendererMixin<Tri
     private void render(TridentEntity tridentEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         ItemStack stack = ((TridentEntityAccessor) tridentEntity).getTridentStack();
 
-        if (stack.getGlintPackView() != null) {
-            VertexConsumer vertexConsumer = stack.getGlintPackView().getGlintPack().getDirectItemConsumer(
+        if (GlintPackView.ofStack(stack) != null) {
+            VertexConsumer vertexConsumer = GlintPackView.ofStack(stack).getGlintPack().getDirectItemConsumer(
                 vertexConsumerProvider,
                 this.model.getLayer(this.getTexture(tridentEntity)),
                 false,

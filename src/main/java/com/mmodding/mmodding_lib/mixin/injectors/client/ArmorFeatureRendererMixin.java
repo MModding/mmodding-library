@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -25,8 +26,8 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extend
 
 	@Inject(method = "renderArmorParts", at = @At(value = "HEAD"), cancellable = true)
 	private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, boolean usesSecondLayer, A model, boolean legs, float red, float green, float blue, @Nullable String overlay, CallbackInfo ci) {
-		if (item.getGlintPackView() != null) {
-			VertexConsumer vertexConsumer = item.getGlintPackView().getGlintPack().getArmorConsumer(
+		if (GlintPackView.ofItem(item) != null) {
+			VertexConsumer vertexConsumer = GlintPackView.ofItem(item).getGlintPack().getArmorConsumer(
 				vertexConsumers,
 				RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(item, legs, overlay)),
 				false,

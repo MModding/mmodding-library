@@ -20,6 +20,7 @@ public class MModdingScreen extends Screen {
 	private final Screen lastScreen;
 
 	private ButtonWidget libraryConfigButton;
+	private ButtonWidget libraryClientConfigButton;
 	private ButtonWidget modConfigsButton;
 	private ButtonWidget modClientConfigsButton;
 	private ButtonWidget returnButton;
@@ -41,9 +42,17 @@ public class MModdingScreen extends Screen {
 			Text.translatable("mmodding_lib.settings.library_config"),
 			button -> this.client.setScreen(new ConfigScreen("mmodding_lib", MModdingLib.MMODDING_LIBRARY_CONFIG, this))
 		));
-		this.modConfigsButton = this.addDrawableChild(new ButtonWidget(
+		this.libraryClientConfigButton = this.addDrawableChild(new ButtonWidget(
 			this.width / 2 - 102,
 			this.height / 4 + 96 - 16,
+			204,
+			20,
+			Text.translatable("mmodding_lib.settings.library_client_config"),
+			button -> this.client.setScreen(new ConfigScreen("mmodding_lib_client", MModdingLibClient.MMODDING_LIBRARY_CLIENT_CONFIG, this))
+		));
+		this.modConfigsButton = this.addDrawableChild(new ButtonWidget(
+			this.width / 2 - 102,
+			this.height / 4 + 120 - 16,
 			204,
 			20,
 			Text.translatable("mmodding_lib.settings.mod_configs"),
@@ -51,7 +60,7 @@ public class MModdingScreen extends Screen {
 		));
 		this.modClientConfigsButton = this.addDrawableChild(new ButtonWidget(
 			this.width / 2 - 102,
-			this.height / 4 + 120 - 16,
+			this.height / 4 + 144 - 16,
 			204,
 			20,
 			Text.translatable("mmodding_lib.settings.mod_client_configs"),
@@ -59,7 +68,7 @@ public class MModdingScreen extends Screen {
 		));
 		this.returnButton = this.addDrawableChild(new ButtonWidget(
 			this.width / 2 - 102,
-			this.height / 4 + 144 - 16,
+			this.height / 4 + 168 - 16,
 			204,
 			20,
 			ScreenTexts.DONE,
@@ -74,6 +83,7 @@ public class MModdingScreen extends Screen {
 		RenderSystem.setShaderTexture(0, MModdingLib.createId("title.png"));
 		Screen.drawTexture(matrices, this.width / 2 - 102, 30, 0, 0, 204, 73, 204, 73);
 		this.libraryConfigButton.render(matrices, mouseX, mouseY, delta);
+		this.libraryClientConfigButton.render(matrices, mouseX, mouseY, delta);
 		this.modConfigsButton.render(matrices, mouseX, mouseY, delta);
 		this.modClientConfigsButton.render(matrices, mouseX, mouseY, delta);
 		this.returnButton.render(matrices, mouseX, mouseY, delta);
