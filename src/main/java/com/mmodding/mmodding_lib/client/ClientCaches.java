@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.client;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
 import net.minecraft.item.Item;
 import org.jetbrains.annotations.ApiStatus;
@@ -13,12 +14,16 @@ public class ClientCaches {
 
 	public static final ClientCache<Item, GlintPack> GLINT_PACKS = new ClientCache<>("Glint Packs", "Item", "Glint Pack");
 
+	public static final ClientCache<Item, GlintPackView> GLINT_PACK_OVERRIDES = new ClientCache<>("Glint Pack Overrides", "Item", "Glint Pack View");
+
 	public static void debugCaches() {
 		GLINT_PACKS.debug();
+		GLINT_PACK_OVERRIDES.debug();
 	}
 
 	public static void avoidCaches() {
 		GLINT_PACKS.clear();
+		GLINT_PACK_OVERRIDES.clear();
 	}
 
 	public static class ClientCache<K, V> extends HashMap<K, V> {

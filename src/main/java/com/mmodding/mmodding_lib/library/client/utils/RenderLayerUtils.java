@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.client.utils;
 
+import com.mmodding.mmodding_lib.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.glint.GlintPack;
 import com.mmodding.mmodding_lib.mixin.accessors.client.BufferBuilderStorageAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerFirstAccessor;
@@ -8,8 +9,12 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
+
+import java.util.function.Predicate;
 
 @ClientOnly
 public class RenderLayerUtils {
@@ -17,6 +22,14 @@ public class RenderLayerUtils {
     public static void addGlintPack(Identifier identifier, GlintPack glintPack) {
         MModdingClientGlobalMaps.GLINT_PACKS.put(identifier, glintPack);
     }
+
+    public static void addGlintPackOverride(Item target, GlintPackView view) {
+        RenderLayerUtils.addGlintPackOverride(target, view, (item) -> true);
+    }
+
+	public static void addGlintPackOverride(Item target, GlintPackView view, Predicate<Item> canApply) {
+		MModdingClientGlobalMaps.GLINT_PACK_OVERRIDES.put(target, new Pair<>(view, canApply));
+	}
 
     public static void addEntityBuilder(RenderLayer layer) {
         ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).getEntityBuilders().put(layer, new BufferBuilder(layer.getExpectedBufferSize()));

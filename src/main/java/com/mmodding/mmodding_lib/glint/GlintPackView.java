@@ -20,9 +20,14 @@ public class GlintPackView {
 
 	public static GlintPackView ofStack(ItemStack stack) {
 
-		if (!EnvironmentUtils.isInSinglePlayer() && EnvironmentUtils.isClient()) {
-			if (ClientCaches.GLINT_PACKS.containsKey(stack.getItem())) {
-				return GlintPackView.ofClientCache(ClientCaches.GLINT_PACKS.get(stack.getItem()));
+		if (EnvironmentUtils.isClient()) {
+			if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(stack.getItem())) {
+				return ClientCaches.GLINT_PACK_OVERRIDES.get(stack.getItem());
+			}
+			else if (!EnvironmentUtils.isInSinglePlayer()) {
+				if (ClientCaches.GLINT_PACKS.containsKey(stack.getItem())) {
+					return GlintPackView.of(ClientCaches.GLINT_PACKS.get(stack.getItem()));
+				}
 			}
 		}
 
@@ -31,9 +36,14 @@ public class GlintPackView {
 
 	public static GlintPackView ofItem(Item item) {
 
-		if (!EnvironmentUtils.isInSinglePlayer() && EnvironmentUtils.isClient()) {
-			if (ClientCaches.GLINT_PACKS.containsKey(item)) {
-				return GlintPackView.ofClientCache(ClientCaches.GLINT_PACKS.get(item));
+		if (EnvironmentUtils.isClient()) {
+			if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(item)) {
+				return ClientCaches.GLINT_PACK_OVERRIDES.get(item);
+			}
+			else if (!EnvironmentUtils.isInSinglePlayer()) {
+				if (ClientCaches.GLINT_PACKS.containsKey(item)) {
+					return GlintPackView.of(ClientCaches.GLINT_PACKS.get(item));
+				}
 			}
 		}
 
@@ -41,7 +51,7 @@ public class GlintPackView {
 	}
 
 	@ClientOnly
-	public static GlintPackView ofClientCache(GlintPack glintPack) {
+	public static GlintPackView of(GlintPack glintPack) {
 		return new FalseGlintPackView(glintPack);
 	}
 

@@ -1,5 +1,6 @@
 {
   "config.mmodding_lib.showMModdingLibraryMods": "Show MModding Library Mods",
+  "config.mmodding_lib_client.applyGlintPackOverridesToVanillaItems": "Apply Glint Pack Overrides To Vanilla Items",
   "config.mmodding_lib_client.showMModdingLibraryClientCaches": "Show MModding Library Client Caches",
   "mmodding_lib.commands.redirections.weather": "The weather command only works when executed in the overworld, use this instead:",
   "mmodding_lib.commands.redirections.weather.fixed": "Fixed Command",

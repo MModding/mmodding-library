@@ -19,6 +19,7 @@ public class MModdingLibClientConfig implements Config {
 	@Override
 	public ConfigObject defaultConfig() {
 		return new ConfigObject.Builder()
+			.addBooleanParameter("applyGlintPackOverridesToVanillaItems", false)
 			.addBooleanParameter("showMModdingLibraryClientCaches", false)
 			.build();
 	}
