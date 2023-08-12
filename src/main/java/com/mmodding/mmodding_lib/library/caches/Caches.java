@@ -2,36 +2,21 @@ package com.mmodding.mmodding_lib.library.caches;
 
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Caches {
 
-	public abstract static class Cache<K, V> extends HashMap<K, V> {
+	public static final List<CacheAccess> LOCAL = new ArrayList<>();
 
-		protected final String cache;
-		protected final String key;
-		protected final String value;
+	@ClientOnly
+	public static final List<CacheAccess> CLIENT = new ArrayList<>();
 
-		private Cache(String cache, String key, String value) {
-			this.cache = cache;
-			this.key = key;
-			this.value = value;
-		}
-
-		abstract public boolean clientReserved();
-
-		public void debug() {
-			System.out.println((this.clientReserved() ? "Client " : "Local ") + "Cache {" + this.cache + "} :");
-			this.forEach((key, value) -> System.out.println(
-				"- " + this.key + " : " + key + " | " + this.value + " : " + value
-			));
-		}
-	}
-
-	public static class Local<K, V> extends Cache<K, V> {
+	public static class Local<K, V> extends AbstractCache<K, V> {
 
 		public Local(String cache, String key, String value) {
 			super(cache, key, value);
+			LOCAL.add(CacheAccess.ofCache(this));
 		}
 
 		@Override
@@ -41,10 +26,11 @@ public class Caches {
 	}
 
 	@ClientOnly
-	public static class Client<K, V> extends Cache<K, V> {
+	public static class Client<K, V> extends AbstractCache<K, V> {
 
 		public Client(String cache, String key, String value) {
 			super(cache, key, value);
+			CLIENT.add(CacheAccess.ofCache(this));
 		}
 
 		@Override

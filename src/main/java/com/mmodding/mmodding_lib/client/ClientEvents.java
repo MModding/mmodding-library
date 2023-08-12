@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.client;
 
+import com.mmodding.mmodding_lib.library.caches.CacheAccess;
+import com.mmodding.mmodding_lib.library.caches.Caches;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
@@ -35,12 +37,12 @@ public class ClientEvents {
 
 	private static void serverJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
 		if (MModdingLibClient.MMODDING_LIBRARY_CLIENT_CONFIG.getContent().getBoolean("showMModdingLibraryClientCaches")) {
-			ClientCaches.debugCaches();
+			Caches.CLIENT.forEach(CacheAccess::debugCache);
 		}
 	}
 
 	private static void serverDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
-		ClientCaches.clearCaches();
+		Caches.CLIENT.forEach(CacheAccess::clearCache);
 	}
 
 	private static void itemTooltipCallback(ItemStack stack, PlayerEntity player, TooltipContext context, List<Text> lines) {

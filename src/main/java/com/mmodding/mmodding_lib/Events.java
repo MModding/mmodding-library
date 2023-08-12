@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
+import com.mmodding.mmodding_lib.library.caches.CacheAccess;
+import com.mmodding.mmodding_lib.library.caches.Caches;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.networking.server.ServerOperations;
@@ -31,7 +33,7 @@ public class Events {
 		});
 
 		if (MModdingLib.MMODDING_LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryLocalCaches")) {
-			LocalCaches.debugCaches();
+			Caches.LOCAL.forEach(CacheAccess::debugCache);
 		}
 
 		if (server.isDedicated()) {
@@ -41,7 +43,7 @@ public class Events {
 	}
 
 	private static void serverDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
-		LocalCaches.clearCaches();
+		Caches.LOCAL.forEach(CacheAccess::clearCache);
 	}
 
 	public static void register() {

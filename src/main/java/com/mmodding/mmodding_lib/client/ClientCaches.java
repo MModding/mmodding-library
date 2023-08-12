@@ -17,16 +17,4 @@ public class ClientCaches {
 	public static final Caches.Client<Item, GlintPack> GLINT_PACKS = new Caches.Client<>("Glint Packs", "Item", "Glint Pack");
 
 	public static final Caches.Client<Item, GlintPackView> GLINT_PACK_OVERRIDES = new Caches.Client<>("Glint Pack Overrides", "Item", "Glint Pack View");
-
-	public static void debugCaches() {
-		CONFIGS.debug();
-		GLINT_PACKS.debug();
-		GLINT_PACK_OVERRIDES.debug();
-	}
-
-	public static void clearCaches() {
-		CONFIGS.clear();
-		GLINT_PACKS.clear();
-		GLINT_PACK_OVERRIDES.clear();
-	}
 }

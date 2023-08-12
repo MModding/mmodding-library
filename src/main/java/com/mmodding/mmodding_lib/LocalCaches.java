@@ -8,12 +8,4 @@ import org.jetbrains.annotations.ApiStatus;
 public class LocalCaches {
 
 	public static final Caches.Local<String, Config> CONFIGS = new Caches.Local<>("Configs", "Qualifier", "Config");
-
-	public static void debugCaches() {
-		CONFIGS.debug();
-	}
-
-	public static void clearCaches() {
-		CONFIGS.clear();
-	}
 }
