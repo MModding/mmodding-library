@@ -3,9 +3,8 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
-import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Block;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -49,7 +48,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	protected boolean useCustomPortalElements;
 
 	@Unique
-	protected Pair<Block, CustomSquaredPortalBlock> customPortalElements;
+	protected CustomSquaredPortal customPortal;
 
 	@Unique
 	protected BlockPos lastCustomPortalPosition;
@@ -120,8 +119,8 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	}
 
 	@Override
-	public Pair<Block, CustomSquaredPortalBlock> mmodding_lib$getCustomPortalElements() {
-		return this.customPortalElements;
+	public CustomSquaredPortal mmodding_lib$getCustomPortal() {
+		return this.customPortal;
 	}
 
 	@Override
@@ -130,7 +129,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	}
 
 	@Override
-	public void mmodding_lib$setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos) {
+	public void mmodding_lib$setInCustomPortal(CustomSquaredPortal squaredPortal, World world, BlockPos pos) {
 		if (this.hasNetherPortalCooldown()) {
 			this.resetNetherPortalCooldown();
 		}
@@ -140,7 +139,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 			}
 
 			this.inCustomPortal = true;
-			this.customPortalElements = new Pair<>(frameBlock, portalBlock);
+			this.customPortal = squaredPortal;
 		}
 	}
 
@@ -150,7 +149,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 			int i = this.getMaxNetherPortalTime();
 			if (this.inCustomPortal) {
 				MinecraftServer minecraftServer = serverWorld.getServer();
-				RegistryKey<World> portalWorldKey = this.customPortalElements.getSecond().getWorldKey();
+				RegistryKey<World> portalWorldKey = this.customPortal.getPortalLink().getWorldKey();
 				RegistryKey<World> registryKey = serverWorld.getRegistryKey() == portalWorldKey ? World.OVERWORLD : portalWorldKey;
 				ServerWorld destinationWorld = minecraftServer.getWorld(registryKey);
 
@@ -215,7 +214,7 @@ public abstract class EntityMixin implements EntityDuckInterface {
 			return ((ServerPlayerDuckInterface) player).mmodding_lib$getCustomPortalRect(destination, posFactorScaled, worldBorder).map(func).orElse(null);
 		}
 		else {
-			return ((PortalForcerDuckInterface) destination.getPortalForcer()).mmodding_lib$searchCustomPortal(this.customPortalElements.getSecond().getPoiKey(), posFactorScaled, worldBorder).map(func).orElse(null);
+			return ((PortalForcerDuckInterface) destination.getPortalForcer()).mmodding_lib$searchCustomPortal(this.customPortal.getPortalLink().getPoiKey(), posFactorScaled, worldBorder).map(func).orElse(null);
 		}
 	}
 }

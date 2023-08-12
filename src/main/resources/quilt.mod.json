@@ -50,6 +50,9 @@
 			],
 			"net/minecraft/class_1792": [
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
+			],
+			"net/minecraft/class_4770": [
+				"com/mmodding/mmodding_lib/interface_injections/ShouldLightCustomPortal"
 			]
 		}
 	},

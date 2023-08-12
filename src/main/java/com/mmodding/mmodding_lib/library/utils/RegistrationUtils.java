@@ -1,7 +1,8 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
-import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,7 +15,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
@@ -129,11 +129,15 @@ public class RegistrationUtils {
 		Registry.register(Registry.ROOT_PLACER_TYPE, identifier, rootPlacerType);
 	}
 
-	public static void registerCustomPortal(Identifier identifier, Block frameBlock, CustomSquaredPortalBlock portalBlock) {
-		MModdingGlobalMaps.CUSTOM_SQUARED_PORTALS.put(identifier, new Pair<>(frameBlock, portalBlock));
-	}
-
 	public static void registerPointOfInterestType(Identifier identifier, PointOfInterestType type) {
 		Registry.register(Registry.POINT_OF_INTEREST_TYPE, identifier, type);
+	}
+
+	public static void registerSquaredPortal(Identifier identifier, CustomSquaredPortal squaredPortal) {
+		MModdingGlobalMaps.CUSTOM_SQUARED_PORTALS.put(identifier, squaredPortal);
+	}
+
+	public static void registerUnlinkedSquaredPortal(Identifier identifier, UnlinkedCustomSquaredPortal squaredPortal) {
+		MModdingGlobalMaps.UNLINKED_CUSTOM_SQUARED_PORTALS.put(identifier, squaredPortal);
 	}
 }

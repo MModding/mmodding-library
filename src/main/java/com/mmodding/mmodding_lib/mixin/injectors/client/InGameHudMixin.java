@@ -38,7 +38,7 @@ public class InGameHudMixin {
 			Sprite sprite = this.client.getBlockRenderManager().getModels().getModelParticleSprite(
 				!duckedEntity.mmodding_lib$isInCustomPortal()
 					? duckedEntity.mmodding_lib$getCustomPortalCache().getDefaultState()
-					: duckedEntity.mmodding_lib$getCustomPortalElements().getSecond().getDefaultState()
+					: duckedEntity.mmodding_lib$getCustomPortal().getPortalBlock().getDefaultState()
 			);
 			float f = sprite.getMinU();
 			float g = sprite.getMinV();

@@ -1,9 +1,10 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.portals.CustomPortals;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.PlayerEntityMixin;
-import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
@@ -11,7 +12,6 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -71,12 +71,12 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 	}
 
 	@Override
-	public void mmodding_lib$setInCustomPortal(Block frameBlock, CustomSquaredPortalBlock portalBlock, World world, BlockPos pos) {
-		super.mmodding_lib$setInCustomPortal(frameBlock, portalBlock, world, pos);
+	public void mmodding_lib$setInCustomPortal(CustomSquaredPortal squaredPortal, World world, BlockPos pos) {
+		super.mmodding_lib$setInCustomPortal(squaredPortal, world, pos);
 
 		if (world instanceof ClientWorld clientWorld) {
-			this.customPortalCache = portalBlock;
-			WorldUtils.repeatTaskUntil(clientWorld, 39, () -> this.customPortalCache = this.lastNauseaStrength > 0 ? portalBlock : null);
+			this.customPortalCache = squaredPortal.getPortalBlock();
+			WorldUtils.repeatTaskUntil(clientWorld, 39, () -> this.customPortalCache = this.lastNauseaStrength > 0 ? squaredPortal.getPortalBlock() : null);
 			WorldUtils.doTaskAfter(clientWorld, 40, () -> this.customPortalCache = null);
 		}
 	}

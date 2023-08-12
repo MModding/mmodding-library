@@ -1,10 +1,10 @@
 package com.mmodding.mmodding_lib.library.utils;
 
-import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
-import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 
@@ -12,16 +12,39 @@ import java.util.*;
 
 public class MModdingGlobalMaps {
 
-	static final Map<Identifier, Pair<? extends Block, ? extends CustomSquaredPortalBlock>> CUSTOM_SQUARED_PORTALS = new HashMap<>();
+	static final Map<Identifier, CustomSquaredPortal> CUSTOM_SQUARED_PORTALS = new HashMap<>();
+
+	static final Map<Identifier, UnlinkedCustomSquaredPortal> UNLINKED_CUSTOM_SQUARED_PORTALS = new HashMap<>();
+
 	static final Map<Identifier, List<CustomVeinType>> CUSTOM_VEIN_TYPES = new HashMap<>();
+
 	static final List<RegistryKey<World>> DIFFERED_DIMENSION_SEEDS = new ArrayList<>();
 
 	public static Set<Identifier> getCustomSquaredPortalKeys() {
 		return CUSTOM_SQUARED_PORTALS.keySet();
 	}
 
-	public static Pair<? extends Block, ? extends CustomSquaredPortalBlock> getCustomSquaredPortal(Identifier identifier) {
-		return CUSTOM_SQUARED_PORTALS.getOrDefault(identifier, null);
+	public static Set<Identifier> getUnlinkedCustomSquaredPortalKeys() {
+		return UNLINKED_CUSTOM_SQUARED_PORTALS.keySet();
+	}
+
+	public static Set<Identifier> getAllCustomSquaredPortalKeys() {
+		Set<Identifier> set = new HashSet<>();
+		set.addAll(MModdingGlobalMaps.getCustomSquaredPortalKeys());
+		set.addAll(MModdingGlobalMaps.getUnlinkedCustomSquaredPortalKeys());
+		return set;
+	}
+
+	public static CustomSquaredPortal getCustomSquaredPortal(Identifier identifier) {
+		return CUSTOM_SQUARED_PORTALS.get(identifier);
+	}
+
+	public static UnlinkedCustomSquaredPortal getCustomUnlinkedPortal(Identifier identifier) {
+		return UNLINKED_CUSTOM_SQUARED_PORTALS.get(identifier);
+	}
+
+	public static AbstractSquaredPortal getAbstractSquaredPortal(Identifier identifier) {
+		return CUSTOM_SQUARED_PORTALS.containsKey(identifier) ? MModdingGlobalMaps.getCustomSquaredPortal(identifier) : MModdingGlobalMaps.getCustomUnlinkedPortal(identifier);
 	}
 
 	public static boolean hasCustomVeinTypes(Identifier chunkGeneratorSettingsIdentifier) {

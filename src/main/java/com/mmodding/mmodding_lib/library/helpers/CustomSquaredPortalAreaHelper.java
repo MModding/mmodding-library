@@ -1,5 +1,6 @@
-package com.mmodding.mmodding_lib.library.portals;
+package com.mmodding.mmodding_lib.library.helpers;
 
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import com.mmodding.mmodding_lib.mixin.accessors.AreaHelperAccessor;
 import net.minecraft.block.*;
 import net.minecraft.tag.BlockTags;

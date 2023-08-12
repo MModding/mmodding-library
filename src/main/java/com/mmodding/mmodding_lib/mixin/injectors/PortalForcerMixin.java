@@ -1,8 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
-import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
-import com.mojang.datafixers.util.Pair;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -37,10 +36,10 @@ import java.util.Optional;
 public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 
 	@Unique
-	boolean useCustomPortalElements;
+	boolean useCustomPortal;
 
 	@Unique
-	Pair<Block, CustomSquaredPortalBlock> customPortalElements;
+	CustomSquaredPortal customPortal;
 
 	@Shadow
 	@Final
@@ -51,7 +50,7 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 
 	@Inject(method = "createPortal", at = @At(value = "HEAD"), cancellable = true)
 	private void createPortal(BlockPos pos, Direction.Axis axis, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
-		if (this.useCustomPortalElements) {
+		if (this.useCustomPortal) {
 
 			Direction direction = Direction.get(Direction.AxisDirection.POSITIVE, axis);
 			double double0 = -1.0;
@@ -125,7 +124,7 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 				for (int k = -1; k < 2; k++) {
 					for (int l = 0; l < 2; l++) {
 						for (int m = -1; m < 3; m++) {
-							BlockState obsidianOrAirState = m < 0 ? this.customPortalElements.getFirst().getDefaultState() : Blocks.AIR.getDefaultState();
+							BlockState obsidianOrAirState = m < 0 ? this.customPortal.getFrameBlock().getDefaultState() : Blocks.AIR.getDefaultState();
 							mutable.set(firstPos, l * direction.getOffsetX() + k * direction2.getOffsetX(), m, l * direction.getOffsetZ() + k * direction2.getOffsetZ());
 							this.world.setBlockState(mutable, obsidianOrAirState);
 						}
@@ -137,12 +136,12 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 				for (int p = -1; p < 4; p++) {
 					if (o == -1 || o == 2 || p == -1 || p == 3) {
 						mutable.set(firstPos, o * direction.getOffsetX(), p, o * direction.getOffsetZ());
-						this.world.setBlockState(mutable, this.customPortalElements.getFirst().getDefaultState(), Block.NOTIFY_ALL);
+						this.world.setBlockState(mutable, this.customPortal.getFrameBlock().getDefaultState(), Block.NOTIFY_ALL);
 					}
 				}
 			}
 
-			BlockState blockState2 = this.customPortalElements.getSecond().getDefaultState().with(NetherPortalBlock.AXIS, axis);
+			BlockState blockState2 = this.customPortal.getPortalBlock().getDefaultState().with(NetherPortalBlock.AXIS, axis);
 
 			for (int p = 0; p < 2; p++) {
 				for (int j = 0; j < 3; j++) {
@@ -157,12 +156,12 @@ public abstract class PortalForcerMixin implements PortalForcerDuckInterface {
 
 	@Override
 	public void mmodding_lib$setUseCustomPortalElements(boolean useCustomPortalElements) {
-		this.useCustomPortalElements = useCustomPortalElements;
+		this.useCustomPortal = useCustomPortalElements;
 	}
 
 	@Override
-	public void mmodding_lib$setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock) {
-		this.customPortalElements = new Pair<>(frameBlock, portalBlock);
+	public void mmodding_lib$setCustomPortal(CustomSquaredPortal portal) {
+		this.customPortal = portal;
 	}
 
 	@Override

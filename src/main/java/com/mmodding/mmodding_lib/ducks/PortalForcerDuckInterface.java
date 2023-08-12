@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.ducks;
 
-import com.mmodding.mmodding_lib.library.portals.CustomSquaredPortalBlock;
-import net.minecraft.block.Block;
+import com.mmodding.mmodding_lib.library.portals.CustomPortals;
+import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockLocating;
@@ -16,5 +16,5 @@ public interface PortalForcerDuckInterface {
 
 	Optional<BlockLocating.Rectangle> mmodding_lib$searchCustomPortal(RegistryKey<PointOfInterestType> poiKey, BlockPos destPos, WorldBorder worldBorder);
 
-	void mmodding_lib$setCustomPortalElements(Block frameBlock, CustomSquaredPortalBlock portalBlock);
+	void mmodding_lib$setCustomPortal(CustomSquaredPortal customPortal);
 }
