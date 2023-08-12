@@ -1,7 +1,5 @@
 package com.mmodding.mmodding_lib.ducks;
 
-import com.mmodding.mmodding_lib.library.portals.CustomPortals;
-import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import net.minecraft.util.math.BlockPos;

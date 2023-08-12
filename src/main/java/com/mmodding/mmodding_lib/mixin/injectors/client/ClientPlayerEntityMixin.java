@@ -1,8 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.portals.CustomPortals;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
-import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.PlayerEntityMixin;
 import net.minecraft.client.MinecraftClient;

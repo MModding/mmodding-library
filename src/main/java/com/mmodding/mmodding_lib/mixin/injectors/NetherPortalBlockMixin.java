@@ -19,13 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(NetherPortalBlock.class)
 public class NetherPortalBlockMixin extends AbstractBlockMixin implements NetherPortalBlockDuckInterface {
 
-	@Inject(method = "randomDisplayTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+	@Inject(method = "randomDisplayTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)V"), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
 	private void randomDisplayTick(BlockState state, World world, BlockPos pos, RandomGenerator random, CallbackInfo ci, int i, double d, double e, double f, double g, double h, double j) {
 
 		NetherPortalBlock thisObject = (NetherPortalBlock) (Object) this;
 
 		if (thisObject instanceof CustomSquaredPortalBlock portalBlock) {
 			world.addParticle(portalBlock.getParticleType(), d, e, f, g, h, j);
+			ci.cancel();
 		}
 	}
 

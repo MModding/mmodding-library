@@ -23,7 +23,7 @@ public class CustomPortalLink {
 
 	public static CustomPortalLink create(Identifier dimensionIdentifier) {
 
-		Identifier poiId = new Identifier(dimensionIdentifier.getNamespace(), dimensionIdentifier.getPath() + "_portal_poi");
+		Identifier poiId = new Identifier(dimensionIdentifier.getNamespace(), dimensionIdentifier.getPath() + "_portal");
 
 		RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier);
 		RegistryKey<PointOfInterestType> poiKey = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, poiId);
