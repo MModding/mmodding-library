@@ -26,6 +26,7 @@
 		"entrypoints": {
 			"init": "com.mmodding.mmodding_lib.MModdingLib",
 			"client_init": "com.mmodding.mmodding_lib.client.MModdingLibClient",
+			"server_init": "com.mmodding.mmodding_lib.server.MModdingLibServer",
 			"modmenu": "com.mmodding.mmodding_lib.impl.ModMenuApiImpl"
 		},
 		"depends": [
