@@ -1,27 +1,26 @@
-package com.mmodding.mmodding_lib.client;
+package com.mmodding.mmodding_lib.server;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.library.config.*;
+import com.mmodding.mmodding_lib.library.config.Config;
+import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
 
-public class MModdingLibClientConfig implements Config {
+public class MModdingLibServerConfig implements Config {
 
 	@Override
 	public String getQualifier() {
-		return "mmodding_lib_client";
+		return "mmodding_lib_server";
 	}
 
 	@Override
 	public String getFilePath() {
-		return "mmodding/client";
+		return "mmodding/server";
 	}
 
 	@Override
 	public ConfigObject defaultConfig() {
 		return new ConfigObject.Builder()
-			.addBooleanParameter("showMModdingLibraryClientMods", true)
-			.addBooleanParameter("applyGlintPackOverridesToVanillaItems", false)
-			.addBooleanParameter("showMModdingLibraryClientCaches", false)
+			.addBooleanParameter("showMModdingLibraryServerMods", true)
 			.build();
 	}
 

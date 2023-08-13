@@ -36,7 +36,7 @@ public class ClientEvents {
 	}
 
 	private static void serverJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
-		if (MModdingLibClient.MMODDING_LIBRARY_CLIENT_CONFIG.getContent().getBoolean("showMModdingLibraryClientCaches")) {
+		if (MModdingLibClient.LIBRARY_CLIENT_CONFIG.getContent().getBoolean("showMModdingLibraryClientCaches")) {
 			Caches.CLIENT.forEach(CacheAccess::debugCache);
 		}
 	}

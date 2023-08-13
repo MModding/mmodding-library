@@ -32,7 +32,7 @@ public class Events {
 			}
 		});
 
-		if (MModdingLib.MMODDING_LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryLocalCaches")) {
+		if (MModdingLib.LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryLocalCaches")) {
 			Caches.LOCAL.forEach(CacheAccess::debugCache);
 		}
 

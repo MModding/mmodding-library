@@ -1,31 +1,33 @@
-package com.mmodding.mmodding_lib.library.events;
+package com.mmodding.mmodding_lib.library.events.server;
 
 import com.mmodding.mmodding_lib.library.base.AdvancedModContainer;
+import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.base.api.event.Event;
 
-public class MModdingInitializationEvents {
+@DedicatedServerOnly
+public class MModdingServerInitializationEvents {
 
 	public static final Event<Start> START = Event.create(Start.class, callbacks -> mod -> {
 		for (Start callback: callbacks) {
-			callback.onMModdingInitializationStart(mod);
+			callback.onMModdingServerInitializationStart(mod);
 		}
 	});
 
 	public static final Event<End> END = Event.create(End.class, callbacks -> mod -> {
 		for (End callback: callbacks) {
-			callback.onMModdingInitializationEnd(mod);
+			callback.onMModdingServerInitializationEnd(mod);
 		}
 	});
 
 	@FunctionalInterface
 	public interface Start {
 
-		void onMModdingInitializationStart(AdvancedModContainer mod);
+		void onMModdingServerInitializationStart(AdvancedModContainer mod);
 	}
 
 	@FunctionalInterface
 	public interface End {
 
-		void onMModdingInitializationEnd(AdvancedModContainer mod);
+		void onMModdingServerInitializationEnd(AdvancedModContainer mod);
 	}
 }

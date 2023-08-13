@@ -40,7 +40,7 @@ public class MModdingScreen extends Screen {
 			204,
 			20,
 			Text.translatable("mmodding_lib.settings.library_config"),
-			button -> this.client.setScreen(new ConfigScreen("mmodding_lib", MModdingLib.MMODDING_LIBRARY_CONFIG, this))
+			button -> this.client.setScreen(new ConfigScreen("mmodding_lib", MModdingLib.LIBRARY_CONFIG, this))
 		));
 		this.libraryClientConfigButton = this.addDrawableChild(new ButtonWidget(
 			this.width / 2 - 102,
@@ -48,7 +48,7 @@ public class MModdingScreen extends Screen {
 			204,
 			20,
 			Text.translatable("mmodding_lib.settings.library_client_config"),
-			button -> this.client.setScreen(new ConfigScreen("mmodding_lib_client", MModdingLibClient.MMODDING_LIBRARY_CLIENT_CONFIG, this))
+			button -> this.client.setScreen(new ConfigScreen("mmodding_lib_client", MModdingLibClient.LIBRARY_CLIENT_CONFIG, this))
 		));
 		this.modConfigsButton = this.addDrawableChild(new ButtonWidget(
 			this.width / 2 - 102,

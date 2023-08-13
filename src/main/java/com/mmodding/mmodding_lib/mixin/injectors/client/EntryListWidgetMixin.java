@@ -17,7 +17,7 @@ public class EntryListWidgetMixin {
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", shift = At.Shift.AFTER))
 	private void changeBackgroundTexture(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
 		if (((EntryListWidget<?>) (Object) this) instanceof MModdingModConfigsScreen.MModdingModConfigsListWidget mmoddingModConfigsList) {
-			RenderSystem.setShaderTexture(0, MModdingLib.MMODDING_LIBRARY_CONFIG.getConfigOptions().blockTextureLocation());
+			RenderSystem.setShaderTexture(0, MModdingLib.LIBRARY_CONFIG.getConfigOptions().blockTextureLocation());
 		}
 		if (((EntryListWidget<?>) (Object) this) instanceof ConfigElementsListWidget configElementsList) {
 			RenderSystem.setShaderTexture(0, configElementsList.getConfig().getConfigOptions().blockTextureLocation());

@@ -113,7 +113,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 			this.inventory.clear();
 		}
 		else {
-			MModdingLib.container.getLogger().error("ItemStack in Active Player Hand is not an CustomItemWithInventory!");
+			MModdingLib.LIBRARY_CONTAINER.getLogger().error("ItemStack in Active Player Hand is not an CustomItemWithInventory!");
 		}
 		this.hand = null;
 		this.opened = false;

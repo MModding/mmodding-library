@@ -15,7 +15,7 @@ public class ClientGlintPackOverrides {
 
     public static void register() {
 
-        Predicate<Item> canApply = item -> MModdingLibClient.MMODDING_LIBRARY_CLIENT_CONFIG.getContent().getBoolean("applyGlintPackOverridesToVanillaItems");
+        Predicate<Item> canApply = item -> MModdingLibClient.LIBRARY_CLIENT_CONFIG.getContent().getBoolean("applyGlintPackOverridesToVanillaItems");
 
         RenderLayerUtils.addGlintPackOverride(Items.TURTLE_HELMET, DefaultGlintPacks.GREEN, canApply);
         RenderLayerUtils.addGlintPackOverride(Items.WOODEN_SWORD, DefaultGlintPacks.BROWN, canApply);
