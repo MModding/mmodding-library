@@ -5,7 +5,7 @@ import net.minecraft.util.math.*;
 
 public class OrientedBlockPos extends BlockPos {
 
-	private Direction direction;
+	private final Direction direction;
 
 	private OrientedBlockPos(Direction direction, int i, int j, int k) {
 		super(i, j, k);
@@ -53,73 +53,71 @@ public class OrientedBlockPos extends BlockPos {
 	}
 
 	public OrientedBlockPos top() {
-		super.offset(NonOriented.TOP.transform(this.direction));
-		return this;
+		Direction transformed = NonOriented.TOP.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed));
 	}
 
 	public OrientedBlockPos top(int i) {
-		super.offset(NonOriented.TOP.transform(this.direction), i);
-		return this;
+		Direction transformed = NonOriented.TOP.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed, i));
 	}
 
 	public OrientedBlockPos bottom() {
-		super.offset(NonOriented.BOTTOM.transform(this.direction));
-		return this;
+		Direction transformed = NonOriented.BOTTOM.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed));
 	}
 
 	public OrientedBlockPos bottom(int i) {
-		super.offset(NonOriented.BOTTOM.transform(this.direction), i);
-		return this;
+		Direction transformed = NonOriented.BOTTOM.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed, i));
 	}
 
 	public OrientedBlockPos front() {
-		super.offset(NonOriented.FRONT.transform(this.direction));
-		return this;
+		Direction transformed = NonOriented.FRONT.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed));
 	}
 
 	public OrientedBlockPos front(int i) {
-		super.offset(NonOriented.FRONT.transform(this.direction), i);
-		return this;
+		Direction transformed = NonOriented.FRONT.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed, i));
 	}
 
 	public OrientedBlockPos behind() {
-		super.offset(NonOriented.BEHIND.transform(this.direction));
-		return this;
+		Direction transformed = NonOriented.BEHIND.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed));
 	}
 
 	public OrientedBlockPos behind(int i) {
-		super.offset(NonOriented.BEHIND.transform(this.direction), i);
-		return this;
+		Direction transformed = NonOriented.BEHIND.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed, i));
 	}
 
 	public OrientedBlockPos left() {
-		super.offset(NonOriented.LEFT.transform(this.direction));
-		return this;
+		Direction transformed = NonOriented.LEFT.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed));
 	}
 
 	public OrientedBlockPos left(int i) {
-		super.offset(NonOriented.LEFT.transform(this.direction), i);
-		return this;
+		Direction transformed = NonOriented.LEFT.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed, i));
 	}
 
 	public OrientedBlockPos right() {
-		super.offset(NonOriented.RIGHT.transform(this.direction));
-		return this;
+		Direction transformed = NonOriented.RIGHT.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed));
 	}
 
 	public OrientedBlockPos right(int i) {
-		super.offset(NonOriented.RIGHT.transform(this.direction), i);
-		return this;
+		Direction transformed = NonOriented.RIGHT.transform(this.direction);
+		return new OrientedBlockPos(transformed, super.offset(transformed, i));
 	}
 
 	public OrientedBlockPos rotateClockwise(Direction.Axis axis) {
-		this.direction = this.direction.rotateClockwise(axis);
-		return this;
+		return new OrientedBlockPos(this.direction.rotateClockwise(axis), this);
 	}
 
 	public OrientedBlockPos rotateCounterClockWise(Direction.Axis axis) {
-		this.direction = this.direction.rotateCounterclockwise(axis);
-		return this;
+		return new OrientedBlockPos(this.direction.rotateCounterclockwise(axis), this);
 	}
 
 	@Override
@@ -196,6 +194,12 @@ public class OrientedBlockPos extends BlockPos {
 
 	@Override
 	@Deprecated
+	public BlockPos offset(Direction direction) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	@Deprecated
 	public BlockPos offset(Direction direction, int i) {
 		throw new UnsupportedOperationException();
 	}
@@ -208,11 +212,6 @@ public class OrientedBlockPos extends BlockPos {
 
 	@Override
 	@Deprecated
-	public BlockPos offset(Direction direction) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public OrientedBlockPos rotate(BlockRotation rotation) {
 		throw new UnsupportedOperationException();
 	}
