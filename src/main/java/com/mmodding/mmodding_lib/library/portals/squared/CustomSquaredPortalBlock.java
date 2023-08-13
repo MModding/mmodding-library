@@ -69,14 +69,11 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Custo
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		if (!entity.hasVehicle() && !entity.hasPassengers() && entity.canUsePortals()) {
-			for (Identifier identifier : MModdingGlobalMaps.getAllCustomSquaredPortalKeys()) {
-				AbstractSquaredPortal abstractPortal = MModdingGlobalMaps.getAbstractSquaredPortal(identifier);
+			for (Identifier identifier : MModdingGlobalMaps.getCustomSquaredPortalKeys()) {
+				CustomSquaredPortal squaredPortal = MModdingGlobalMaps.getCustomSquaredPortal(identifier);
 
-				if (abstractPortal.getPortalBlock() == this) {
-
-					if (abstractPortal instanceof CustomSquaredPortal squaredPortal) {
-						((EntityDuckInterface) entity).mmodding_lib$setInCustomPortal(squaredPortal, world, pos);
-					}
+				if (squaredPortal.getPortalBlock() == this) {
+					((EntityDuckInterface) entity).mmodding_lib$setInCustomPortal(squaredPortal, world, pos);
 				}
 			}
 		}
