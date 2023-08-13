@@ -111,7 +111,6 @@ public interface Config {
 			}
 		}
 		File configFile = new File(this.getPath());
-		System.out.println(configFile.getPath());
 		try {
 			if (configFile.createNewFile()) {
 				FileWriter configWriter = new FileWriter(configFile);

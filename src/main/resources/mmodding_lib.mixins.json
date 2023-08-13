@@ -31,6 +31,7 @@
     "injectors.BootStrapMixin",
     "injectors.BuiltinChunkGeneratorsMixin",
     "injectors.ChunkNoiseSamplerMixin",
+    "injectors.CraftingScreenHandlerMixin",
     "injectors.EnchantmentHelperMixin",
     "injectors.EntityMixin",
     "injectors.ExplosionMixin",

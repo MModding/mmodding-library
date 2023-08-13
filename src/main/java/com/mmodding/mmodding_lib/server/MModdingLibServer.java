@@ -34,7 +34,7 @@ public class MModdingLibServer implements DedicatedServerModInitializer {
 
 		LIBRARY_SERVER_CONFIG.initializeConfig();
 
-		LIBRARY_CONTAINER.getLogger().info("Initialize {}", LIBRARY_CONTAINER.metadata().name());
+		LIBRARY_CONTAINER.getLogger().info("Initialize {} Server", LIBRARY_CONTAINER.metadata().name());
 
 		if (LIBRARY_SERVER_CONFIG.getContent().getBoolean("showMModdingLibraryServerMods")) {
 			String mods = "MModding Library Server Mods :";

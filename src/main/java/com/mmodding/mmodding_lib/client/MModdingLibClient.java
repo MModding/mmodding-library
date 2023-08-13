@@ -34,7 +34,7 @@ public class MModdingLibClient implements ClientModInitializer {
 
 		LIBRARY_CLIENT_CONFIG.initializeConfig();
 
-		LIBRARY_CONTAINER.getLogger().info("Initialize {}", LIBRARY_CONTAINER.metadata().name());
+		LIBRARY_CONTAINER.getLogger().info("Initialize {} Client", LIBRARY_CONTAINER.metadata().name());
 
 		ClientEvents.register();
 		ClientPacketReceivers.register();
