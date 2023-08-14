@@ -4,7 +4,9 @@ import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.qsl.base.api.util.InjectedInterface;
 
+@InjectedInterface({Item.class, ItemStack.class})
 public interface ItemGlintPack {
 
 	/**

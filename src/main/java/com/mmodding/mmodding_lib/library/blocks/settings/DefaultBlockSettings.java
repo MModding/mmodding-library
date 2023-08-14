@@ -13,6 +13,7 @@ public enum DefaultBlockSettings {
 	DIRT_SETTINGS,
 	GRASS_SETTINGS,
 	PLANT_SETTINGS,
+	SAPLING_SETTINGS,
 	REPLACEABLE_PLANT_SETTINGS,
 	LEAVES_SETTINGS,
 	SNOW_SETTINGS,
@@ -38,6 +39,7 @@ public enum DefaultBlockSettings {
 			case WOOD_SETTINGS -> QuiltBlockSettings.of(Material.WOOD).sounds(BlockSoundGroup.WOOD).strength(2.0f);
 			case DIRT_SETTINGS -> QuiltBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRAVEL).strength(0.5f);
 			case GRASS_SETTINGS -> QuiltBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRASS).strength(0.6f);
+			case SAPLING_SETTINGS -> QuiltBlockSettings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS);
 			case PLANT_SETTINGS -> QuiltBlockSettings.of(Material.PLANT).sounds(BlockSoundGroup.GRASS).noCollision().breakInstantly();
 			case REPLACEABLE_PLANT_SETTINGS -> QuiltBlockSettings.of(Material.REPLACEABLE_PLANT).sounds(BlockSoundGroup.GRASS).noCollision().breakInstantly();
 			case LEAVES_SETTINGS -> QuiltBlockSettings.of(Material.LEAVES).sounds(BlockSoundGroup.GRASS).nonOpaque().strength(0.2f);
