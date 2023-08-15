@@ -9,11 +9,12 @@ import net.minecraft.world.gen.feature.ConfiguredFeature;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public class SaplingGeneratorUtils {
 
-	public static SaplingGenerator of(CustomTreeFeature treeFeature) {
-		return SaplingGeneratorUtils.of(value -> treeFeature);
+	public static SaplingGenerator of(Supplier<CustomTreeFeature> treeFeature) {
+		return SaplingGeneratorUtils.of(value -> treeFeature.get());
 	}
 
 	public static SaplingGenerator of(BooleanFunction<CustomTreeFeature> function) {
@@ -24,8 +25,8 @@ public class SaplingGeneratorUtils {
 		return SaplingGeneratorUtils.ofConfigured((random, value) -> biFunction.apply(random, value).getConfiguredFeature());
 	}
 
-	public static SaplingGenerator ofConfigured(ConfiguredFeature<?, ?> treeFeature) {
-		return SaplingGeneratorUtils.ofConfigured(value -> treeFeature);
+	public static SaplingGenerator ofConfigured(Supplier<ConfiguredFeature<?, ?>> treeFeature) {
+		return SaplingGeneratorUtils.ofConfigured(value -> treeFeature.get());
 	}
 
 	public static SaplingGenerator ofConfigured(BooleanFunction<ConfiguredFeature<?, ?>> function) {
@@ -36,8 +37,8 @@ public class SaplingGeneratorUtils {
 		return SaplingGeneratorUtils.ofHolder((random, value) -> Holder.createDirect(biFunction.apply(random, value)));
 	}
 
-    public static SaplingGenerator ofHolder(Holder<? extends ConfiguredFeature<?, ?>> treeConfiguredFeature) {
-        return SaplingGeneratorUtils.ofHolder(value -> treeConfiguredFeature);
+    public static SaplingGenerator ofHolder(Supplier<Holder<? extends ConfiguredFeature<?, ?>>> treeConfiguredFeature) {
+        return SaplingGeneratorUtils.ofHolder(value -> treeConfiguredFeature.get());
     }
 
     public static SaplingGenerator ofHolder(BooleanFunction<Holder<? extends ConfiguredFeature<?, ?>>> function) {
