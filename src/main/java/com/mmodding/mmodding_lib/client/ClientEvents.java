@@ -2,11 +2,15 @@ package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.library.caches.CacheAccess;
 import com.mmodding.mmodding_lib.library.caches.Caches;
+import com.mmodding.mmodding_lib.library.client.tooltip.InventoryTooltipComponent;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
+import com.mmodding.mmodding_lib.library.items.tooltipdata.InventoryTooltipData;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -18,6 +22,7 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.networking.api.PacketSender;
 import org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents;
 import org.quiltmc.qsl.tooltip.api.client.ItemTooltipCallback;
+import org.quiltmc.qsl.tooltip.api.client.TooltipComponentCallback;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -45,6 +50,15 @@ public class ClientEvents {
 		Caches.CLIENT.forEach(CacheAccess::clearCache);
 	}
 
+	private static TooltipComponent tooltipComponentCallback(TooltipData data) {
+		if (data instanceof InventoryTooltipData inventoryTooltipData) {
+			return new InventoryTooltipComponent(inventoryTooltipData);
+		}
+		else {
+			return null;
+		}
+	}
+
 	private static void itemTooltipCallback(ItemStack stack, PlayerEntity player, TooltipContext context, List<Text> lines) {
 		Text[] texts = AdvancedItemSettings.DESCRIPTION_LINES.get(stack.getItem());
 		if (texts != null) lines.addAll(List.of(texts));
@@ -54,6 +68,7 @@ public class ClientEvents {
 		ClientPlayConnectionEvents.INIT.register(ClientEvents::serverInit);
 		ClientPlayConnectionEvents.JOIN.register(ClientEvents::serverJoin);
 		ClientPlayConnectionEvents.DISCONNECT.register(ClientEvents::serverDisconnect);
+		TooltipComponentCallback.EVENT.register(ClientEvents::tooltipComponentCallback);
 		ItemTooltipCallback.EVENT.register(ClientEvents::itemTooltipCallback);
 	}
 }
