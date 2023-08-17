@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.client.tooltip;
 
-import com.mmodding.mmodding_lib.library.items.tooltipdata.InventoryTooltipData;
+import com.mmodding.mmodding_lib.library.items.tooltip.data.InventoryTooltipData;
 import net.minecraft.client.gui.tooltip.BundleTooltipComponent;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 

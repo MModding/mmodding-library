@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.items.tooltipdata;
+package com.mmodding.mmodding_lib.library.items.tooltip.data;
 
 import com.mmodding.mmodding_lib.library.inventories.BasicInventory;
 import com.mmodding.mmodding_lib.library.utils.InventoryUtils;
@@ -16,8 +16,8 @@ public class InventoryTooltipData implements TooltipData {
     private final Inventory inventory;
     private final DefaultedList<ItemStack> content;
     private final boolean shaped;
-    private final int rows;
-    private final int columns;
+	private final int columns;
+	private final int rows;
     private final boolean excludeEmptyItems;
     private final boolean groupItems;
 
@@ -41,18 +41,18 @@ public class InventoryTooltipData implements TooltipData {
         this.inventory = inventory;
         this.content = content;
         this.shaped = false;
-        this.rows = 0;
-        this.columns = 0;
+		this.columns = 0;
+		this.rows = 0;
         this.excludeEmptyItems = excludeEmptyItems;
         this.groupItems = excludeEmptyItems && groupItems;
     }
 
-    public InventoryTooltipData(Inventory inventory, DefaultedList<ItemStack> content, int rows, int columns) {
+    public InventoryTooltipData(Inventory inventory, DefaultedList<ItemStack> content, int columns, int rows) {
         this.inventory = inventory;
         this.content = content;
         this.shaped = true;
-        this.rows = rows;
-        this.columns = columns;
+		this.columns = columns;
+		this.rows = rows;
         this.excludeEmptyItems = false;
         this.groupItems = false;
     }
@@ -77,13 +77,13 @@ public class InventoryTooltipData implements TooltipData {
         return this.groupItems;
     }
 
-    public OptionalInt getRows() {
-        return this.shaped ? OptionalInt.of(this.rows) : OptionalInt.empty();
-    }
+	public OptionalInt getColumns() {
+		return this.shaped ? OptionalInt.of(this.columns) : OptionalInt.empty();
+	}
 
-    public OptionalInt getColumns() {
-        return this.shaped ? OptionalInt.of(this.columns) : OptionalInt.empty();
-    }
+	public OptionalInt getRows() {
+		return this.shaped ? OptionalInt.of(this.rows) : OptionalInt.empty();
+	}
 
     public BundleTooltipData toBundleTooltipData() {
         if (this.excludeEmptyItems) {

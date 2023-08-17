@@ -6,7 +6,7 @@ import com.mmodding.mmodding_lib.library.client.tooltip.InventoryTooltipComponen
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
-import com.mmodding.mmodding_lib.library.items.tooltipdata.InventoryTooltipData;
+import com.mmodding.mmodding_lib.library.items.tooltip.data.InventoryTooltipData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipContext;
