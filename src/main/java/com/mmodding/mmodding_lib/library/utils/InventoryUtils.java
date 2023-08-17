@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class InventoryUtils {
 
-    public DefaultedList<ItemStack> sort(DefaultedList<ItemStack> content) {
+    public static DefaultedList<ItemStack> sort(DefaultedList<ItemStack> content) {
         Map<Pair<Item, NbtCompound>, Integer> items = new HashMap<>();
 
         content.stream().filter(stack -> !stack.isEmpty()).forEach(stack -> {
