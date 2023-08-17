@@ -93,7 +93,7 @@ public class InventoryTooltipData implements TooltipData {
             }
             else {
                 content = DefaultedList.of();
-                this.content.stream().filter(stack -> !stack.isEmpty()).forEach(content::add);
+                this.content.stream().filter(stack -> !stack.isEmpty()).forEachOrdered(content::add);
             }
             BasicInventory inventory = BasicInventory.of(content);
             return new BundleTooltipData(inventory.getContent(), this.inventory.getMaxCountPerStack() * this.inventory.size());

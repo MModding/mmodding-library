@@ -49,7 +49,7 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		this.inventory.addInventoryClosedListener(this::inventoryClosed);
     }
 
-	public CustomItemWithInventory(int size, TriFunction<Integer, PlayerInventory, Inventory, ScreenHandler> screenHandlerFunc, Settings settings) {
+	public CustomItemWithInventory(TriFunction<Integer, PlayerInventory, Inventory, ScreenHandler> screenHandlerFunc, int size, Settings settings) {
 		super(settings.maxCount(1));
 		this.defaultContainer = DefaultContainer.NULL;
 		this.screenHandlerFunc = screenHandlerFunc;

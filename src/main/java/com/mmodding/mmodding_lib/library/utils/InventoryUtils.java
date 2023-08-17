@@ -14,7 +14,7 @@ public class InventoryUtils {
     public static DefaultedList<ItemStack> sort(DefaultedList<ItemStack> content) {
         Map<Pair<Item, NbtCompound>, Integer> items = new HashMap<>();
 
-        content.stream().filter(stack -> !stack.isEmpty()).forEach(stack -> {
+        content.stream().filter(stack -> !stack.isEmpty()).forEachOrdered(stack -> {
             Pair<Item, NbtCompound> item = Pair.of(stack.getItem(), stack.getNbt());
             int count = items.getOrDefault(item, 0);
             items.put(item, count + stack.getCount());
