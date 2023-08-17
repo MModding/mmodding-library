@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class CustomItemWithInventory extends Item implements ItemRegistrable, NamedScreenHandlerFactory {
@@ -88,7 +89,10 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 	public Optional<TooltipData> appendTooltipSlots(DefaultedList<ItemStack> content) {
 		if (this.getTooltipMode().isSlotsOverview()) {
 			if (this.getTooltipMode().equals(TooltipMode.ALL_SLOTS_OVERVIEW)) {
-				if (this.defaultContainer != DefaultContainer.NULL) {
+				if (this.getOptionalRows().isPresent() && this.getOptionalColumns().isPresent()) {
+					return Optional.of(new InventoryTooltipData(this.inventory, content, this.getOptionalRows().getAsInt(), this.getOptionalColumns().getAsInt()));
+				}
+				else if (this.defaultContainer != DefaultContainer.NULL) {
 					int rows = switch (this.defaultContainer) {
 						case DEFAULT_9X1 -> 1;
 						case DEFAULT_9X2 -> 2;
@@ -99,6 +103,9 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 					};
 					int columns = !this.defaultContainer.equals(DefaultContainer.DEFAULT_3X3) ? 9 : 3;
 					return Optional.of(new InventoryTooltipData(this.inventory, content, rows, columns));
+				}
+				else {
+					return Optional.of(new InventoryTooltipData(this.inventory, content, false, false));
 				}
 			}
 			else if (this.getTooltipMode().equals(TooltipMode.FILLED_SLOTS_OVERVIEW)) {
@@ -174,11 +181,6 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		this.opened = false;
 	}
 
-	@Override
-	public Text getDisplayName() {
-		return this.getName();
-	}
-
 	@Nullable
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
@@ -198,6 +200,14 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 		return TooltipMode.LIMITED_LINES;
 	}
 
+	public OptionalInt getOptionalRows() {
+		return OptionalInt.empty();
+	}
+
+	public OptionalInt getOptionalColumns() {
+		return OptionalInt.empty();
+	}
+
 	@Nullable
 	public SoundEvent getUseSound() {
 		return null;
@@ -205,6 +215,11 @@ public abstract class CustomItemWithInventory extends Item implements ItemRegist
 
 	public boolean isOpened() {
 		return this.opened;
+	}
+
+	@Override
+	public Text getDisplayName() {
+		return this.getName();
 	}
 
 	@Override
