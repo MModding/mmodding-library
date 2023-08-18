@@ -89,7 +89,7 @@ public class ConfigScreen extends Screen {
 
 	@Override
 	public void renderBackground(MatrixStack matrices) {
-		this.renderBlockTextureAsBackgroundTexture(this.config.getConfigOptions().blockTextureLocation());
+		this.renderBlockTextureAsBackgroundTexture(this.config.getConfigOptions().textureLocation());
 	}
 
 	public void renderBlockTextureAsBackgroundTexture(Identifier identifier) {
@@ -157,16 +157,5 @@ public class ConfigScreen extends Screen {
 
 	public String getQualifier() {
 		return this.qualifier;
-	}
-
-	public static class BlockTextureLocation extends Identifier {
-
-		public BlockTextureLocation(String location) {
-			this("minecraft", location);
-		}
-
-		public BlockTextureLocation(String namespace, String location) {
-			super(namespace, "textures/block/" + location);
-		}
 	}
 }

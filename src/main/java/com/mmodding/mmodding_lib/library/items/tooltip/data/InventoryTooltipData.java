@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.items.tooltip.data;
 
 import com.mmodding.mmodding_lib.library.inventories.BasicInventory;
 import com.mmodding.mmodding_lib.library.utils.InventoryUtils;
+import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import net.minecraft.client.item.BundleTooltipData;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.inventory.Inventory;
@@ -9,6 +10,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
+import java.util.Optional;
 import java.util.OptionalInt;
 
 public class InventoryTooltipData implements TooltipData {
@@ -20,6 +22,8 @@ public class InventoryTooltipData implements TooltipData {
 	private final int rows;
     private final boolean excludeEmptyItems;
     private final boolean groupItems;
+
+	private Optional<TextureLocation> textureLocation = Optional.empty();
 
     public InventoryTooltipData(SimpleInventory inventory, boolean excludeEmptyItems, boolean groupItems) {
         this(inventory, inventory.stacks, excludeEmptyItems, groupItems);
@@ -57,6 +61,10 @@ public class InventoryTooltipData implements TooltipData {
         this.groupItems = false;
     }
 
+	public void setTexture(TextureLocation location) {
+		this.textureLocation = Optional.of(location);
+	}
+
     public Inventory getInventory() {
         return this.inventory;
     }
@@ -76,6 +84,10 @@ public class InventoryTooltipData implements TooltipData {
     public boolean isGroupingItems() {
         return this.groupItems;
     }
+
+	public Optional<TextureLocation> getTexture() {
+		return this.textureLocation;
+	}
 
 	public OptionalInt getColumns() {
 		return this.shaped ? OptionalInt.of(this.columns) : OptionalInt.empty();

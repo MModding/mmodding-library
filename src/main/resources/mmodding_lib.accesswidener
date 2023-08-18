@@ -1,5 +1,6 @@
 accessWidener v1 named
 
+accessible class net/minecraft/client/gui/tooltip/BundleTooltipComponent$Sprite
 accessible class net/minecraft/client/render/RenderPhase$Cull
 accessible class net/minecraft/client/render/RenderPhase$DepthTest
 accessible class net/minecraft/client/render/RenderPhase$Layering

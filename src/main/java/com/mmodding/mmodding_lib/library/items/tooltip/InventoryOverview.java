@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.items.tooltip;
 
 import com.mmodding.mmodding_lib.library.containers.DefaultContainer;
 import com.mmodding.mmodding_lib.library.items.tooltip.data.InventoryTooltipData;
+import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.inventory.Inventories;
@@ -40,9 +41,11 @@ public interface InventoryOverview {
 
 	default Optional<TooltipData> appendTooltipSlots(DefaultedList<ItemStack> content) {
 		if (this.getTooltipMode().isSlotsOverview()) {
+			InventoryTooltipData data = null;
+
 			if (this.getTooltipMode().equals(TooltipMode.ALL_SLOTS_OVERVIEW)) {
 				if (this.getOptionalColumns().isPresent() && this.getOptionalRows().isPresent()) {
-					return Optional.of(new InventoryTooltipData(this.getInventory(), content, this.getOptionalColumns().getAsInt(), this.getOptionalRows().getAsInt()));
+					data = new InventoryTooltipData(this.getInventory(), content, this.getOptionalColumns().getAsInt(), this.getOptionalRows().getAsInt());
 				}
 				else if (this.getDefaultContainer() != DefaultContainer.NULL) {
 					int rows = switch (this.getDefaultContainer()) {
@@ -54,17 +57,24 @@ public interface InventoryOverview {
 						default -> 3;
 					};
 					int columns = !this.getDefaultContainer().equals(DefaultContainer.DEFAULT_3X3) ? 9 : 3;
-					return Optional.of(new InventoryTooltipData(this.getInventory(), content, rows, columns));
+					data = new InventoryTooltipData(this.getInventory(), content, rows, columns);
 				}
 				else {
-					return Optional.of(new InventoryTooltipData(this.getInventory(), content, false, false));
+					data = new InventoryTooltipData(this.getInventory(), content, false, false);
 				}
 			}
 			else if (this.getTooltipMode().equals(TooltipMode.FILLED_SLOTS_OVERVIEW)) {
-				return Optional.of(new InventoryTooltipData(this.getInventory(), content, true, false));
+				data = new InventoryTooltipData(this.getInventory(), content, true, false);
 			}
 			else if (this.getTooltipMode().equals(TooltipMode.GROUPED_SLOTS_OVERVIEW)) {
-				return Optional.of(new InventoryTooltipData(this.getInventory(), content, true, true));
+				data = new InventoryTooltipData(this.getInventory(), content, true, true);
+			}
+
+			if (data != null) {
+				if (this.getOptionalTexture().isPresent()) {
+					data.setTexture(this.getOptionalTexture().get());
+				}
+				return Optional.of(data);
 			}
 		}
 		return Optional.empty();
@@ -95,6 +105,9 @@ public interface InventoryOverview {
 		return TooltipMode.LIMITED_LINES;
 	}
 
+	default Optional<TextureLocation> getOptionalTexture() {
+		return Optional.empty();
+	}
 	default OptionalInt getOptionalColumns() {
 		return OptionalInt.empty();
 	}

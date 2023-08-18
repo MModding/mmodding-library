@@ -59,7 +59,7 @@ public abstract class EditScreen<T> extends Screen {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		RenderSystem.setShaderTexture(0, this.list.getConfig().getConfigOptions().blockTextureLocation());
+		RenderSystem.setShaderTexture(0, this.list.getConfig().getConfigOptions().textureLocation());
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 		bufferBuilder.vertex(0.0, this.height, 0.0)
