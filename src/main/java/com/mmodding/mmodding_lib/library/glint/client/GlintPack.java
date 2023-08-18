@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.glint.client;
 
 import com.mmodding.mmodding_lib.library.client.render.RenderLayerElements;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
+import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -38,7 +39,7 @@ public class GlintPack {
 	@Nullable
 	private final RenderLayer directEntity;
 
-	public GlintPack(Identifier texture, boolean armor, boolean armorEntity, boolean translucent, boolean base, boolean direct, boolean entity, boolean directEntity) {
+	public GlintPack(TextureLocation texture, boolean armor, boolean armorEntity, boolean translucent, boolean base, boolean direct, boolean entity, boolean directEntity) {
 		this.armor = GlintPack.createArmor(texture, armor);
 		this.armorEntity = GlintPack.createArmorEntity(texture, armorEntity);
 		this.translucent = GlintPack.createTranslucent(texture, translucent);
@@ -48,12 +49,12 @@ public class GlintPack {
 		this.directEntity = GlintPack.createDirectEntity(texture, directEntity);
 	}
 
-	public static GlintPack create(Identifier texture) {
+	public static GlintPack create(TextureLocation texture) {
 		return new GlintPack(texture, true, true, true, true, true, true, true);
 	}
 
 	@Nullable
-	public static RenderLayer createArmor(Identifier texture, boolean canCreate) {
+	public static RenderLayer createArmor(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			"armor_" + texture.getPath(),
 			VertexFormats.POSITION_TEXTURE,
@@ -73,7 +74,7 @@ public class GlintPack {
 	}
 
 	@Nullable
-	public static RenderLayer createArmorEntity(Identifier texture, boolean canCreate) {
+	public static RenderLayer createArmorEntity(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			"armor_entity_" + texture.getPath(),
 			VertexFormats.POSITION_TEXTURE,
@@ -93,7 +94,7 @@ public class GlintPack {
 	}
 
 	@Nullable
-	public static RenderLayer createTranslucent(Identifier texture, boolean canCreate) {
+	public static RenderLayer createTranslucent(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			texture.getPath() + "_translucent",
 			VertexFormats.POSITION_TEXTURE,
@@ -113,7 +114,7 @@ public class GlintPack {
 	}
 
 	@Nullable
-	public static RenderLayer createBase(Identifier texture, boolean canCreate) {
+	public static RenderLayer createBase(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			texture.getPath(),
 			VertexFormats.POSITION_TEXTURE,
@@ -132,7 +133,7 @@ public class GlintPack {
 	}
 
 	@Nullable
-	public static RenderLayer createDirect(Identifier texture, boolean canCreate) {
+	public static RenderLayer createDirect(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			texture.getPath() + "_direct",
 			VertexFormats.POSITION_TEXTURE,
@@ -151,7 +152,7 @@ public class GlintPack {
 	}
 
 	@Nullable
-	public static RenderLayer createEntity(Identifier texture, boolean canCreate) {
+	public static RenderLayer createEntity(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			"entity_" + texture.getPath(),
 			VertexFormats.POSITION_TEXTURE,
@@ -171,7 +172,7 @@ public class GlintPack {
 	}
 
 	@Nullable
-	public static RenderLayer createDirectEntity(Identifier texture, boolean canCreate) {
+	public static RenderLayer createDirectEntity(TextureLocation texture, boolean canCreate) {
 		return canCreate ? RenderLayerUtils.of(
 			"entity_" + texture.getPath() + "_direct",
 			VertexFormats.POSITION_TEXTURE,

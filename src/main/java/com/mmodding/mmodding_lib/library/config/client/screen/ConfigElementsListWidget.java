@@ -7,10 +7,12 @@ import com.mmodding.mmodding_lib.library.config.client.screen.editing.NumberEdit
 import com.mmodding.mmodding_lib.library.config.client.screen.editing.StringEditScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@ClientOnly
 public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<ConfigElementsListEntry> {
 
 	private final Config config;

@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mmodding.mmodding_lib.MModdingLibConfig;
-import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
 import com.mmodding.mmodding_lib.networking.server.ServerOperations;
 import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -41,9 +40,9 @@ public interface Config {
 	 * Some options used in the config screen.
 	 * <br>You can take example on {@link MModdingLibConfig#getConfigOptions()}.
 	 * @return the config screen options
-	 * @see ConfigScreenOptions
+	 * @see ConfigOptions
 	 */
-	ConfigScreenOptions getConfigOptions();
+	ConfigOptions getConfigOptions();
 
 	default NetworkingState getNetworkingSate() {
 		return NetworkingState.CLIENT_CACHES;

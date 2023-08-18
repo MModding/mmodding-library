@@ -14,7 +14,9 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+@ClientOnly
 public abstract class EditScreen<T> extends Screen {
 
 	protected final ConfigScreen lastScreen;

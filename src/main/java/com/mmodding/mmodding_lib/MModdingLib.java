@@ -4,6 +4,7 @@ import com.mmodding.mmodding_lib.library.base.AdvancedModContainer;
 import com.mmodding.mmodding_lib.library.base.MModdingModInitializer;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.events.MModdingInitializationEvents;
+import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
@@ -65,5 +66,9 @@ public class MModdingLib implements ModInitializer {
 
 	public static Identifier createId(String path) {
 		return new Identifier(MModdingLib.id(), path);
+	}
+
+	public static TextureLocation getTextureLocation(String path) {
+		return new TextureLocation(MModdingLib.id(), path);
 	}
 }

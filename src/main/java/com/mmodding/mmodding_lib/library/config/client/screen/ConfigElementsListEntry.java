@@ -5,7 +5,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+@ClientOnly
 public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry<ConfigElementsListEntry> {
 
 	private final MinecraftClient client;

@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.config.client.screen;
 
 import com.mmodding.mmodding_lib.library.config.Config;
+import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tessellator;
@@ -12,8 +13,9 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+@ClientOnly
 public class ConfigScreen extends Screen {
 
 	private final String qualifier;
@@ -92,15 +94,15 @@ public class ConfigScreen extends Screen {
 		this.renderBlockTextureAsBackgroundTexture(this.config.getConfigOptions().textureLocation());
 	}
 
-	public void renderBlockTextureAsBackgroundTexture(Identifier identifier) {
-		this.renderBlockTextureAsBackgroundTexture(identifier, 64, 64, 64, 255);
+	public void renderBlockTextureAsBackgroundTexture(TextureLocation textureLocation) {
+		this.renderBlockTextureAsBackgroundTexture(textureLocation, 64, 64, 64, 255);
 	}
 
-	public void renderBlockTextureAsBackgroundTexture(Identifier identifier, int red, int green, int blue, int alpha) {
+	public void renderBlockTextureAsBackgroundTexture(TextureLocation textureLocation, int red, int green, int blue, int alpha) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBufferBuilder();
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-		RenderSystem.setShaderTexture(0, identifier);
+		RenderSystem.setShaderTexture(0, textureLocation);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 		bufferBuilder.vertex(0.0, this.height, 0.0)

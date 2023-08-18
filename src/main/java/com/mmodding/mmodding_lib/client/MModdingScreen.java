@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.client;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import com.mmodding.mmodding_lib.library.utils.Colors;
+import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -80,7 +81,7 @@ public class MModdingScreen extends Screen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, MModdingLib.createId("title.png"));
+		RenderSystem.setShaderTexture(0, TextureLocation.withoutPath(MModdingLib.id(), "title"));
 		Screen.drawTexture(matrices, this.width / 2 - 102, 30, 0, 0, 204, 73, 204, 73);
 		this.libraryConfigButton.render(matrices, mouseX, mouseY, delta);
 		this.libraryClientConfigButton.render(matrices, mouseX, mouseY, delta);

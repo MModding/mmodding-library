@@ -7,7 +7,9 @@ import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+@ClientOnly
 public class BooleanEditScreen extends EditScreen<Boolean> {
 
 	private ButtonWidget booleanValueButton;

@@ -11,23 +11,23 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 public class ClientGlintPacks {
 
 	public static void register() {
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/white.png")).register(new MModdingIdentifier("white"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/orange.png")).register(new MModdingIdentifier("orange"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/magenta.png")).register(new MModdingIdentifier("magenta"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/light_blue.png")).register(new MModdingIdentifier("light_blue"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/yellow.png")).register(new MModdingIdentifier("yellow"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/lime.png")).register(new MModdingIdentifier("lime"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/pink.png")).register(new MModdingIdentifier("pink"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/gray.png")).register(new MModdingIdentifier("gray"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/light_gray.png")).register(new MModdingIdentifier("light_gray"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/cyan.png")).register(new MModdingIdentifier("cyan"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/purple.png")).register(new MModdingIdentifier("purple"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/blue.png")).register(new MModdingIdentifier("blue"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/brown.png")).register(new MModdingIdentifier("brown"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/green.png")).register(new MModdingIdentifier("green"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/red.png")).register(new MModdingIdentifier("red"));
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/black.png")).register(new MModdingIdentifier("black"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/white")).register(new MModdingIdentifier("white"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/orange")).register(new MModdingIdentifier("orange"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/magenta")).register(new MModdingIdentifier("magenta"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/light_blue")).register(new MModdingIdentifier("light_blue"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/yellow")).register(new MModdingIdentifier("yellow"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lime")).register(new MModdingIdentifier("lime"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/pink")).register(new MModdingIdentifier("pink"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/gray")).register(new MModdingIdentifier("gray"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/light_gray")).register(new MModdingIdentifier("light_gray"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/cyan")).register(new MModdingIdentifier("cyan"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/purple")).register(new MModdingIdentifier("purple"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/blue")).register(new MModdingIdentifier("blue"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/brown")).register(new MModdingIdentifier("brown"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/green")).register(new MModdingIdentifier("green"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/red")).register(new MModdingIdentifier("red"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/black")).register(new MModdingIdentifier("black"));
 
-		GlintPack.create(MModdingLib.createId("textures/glint_pack/blank.png")).register(new MModdingIdentifier("blank"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/blank")).register(new MModdingIdentifier("blank"));
 	}
 }

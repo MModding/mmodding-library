@@ -14,9 +14,13 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.ApiStatus;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.List;
 
+@ClientOnly
+@ApiStatus.Internal
 public class MModdingModConfigsScreen extends Screen {
 
     private final Screen lastScreen;

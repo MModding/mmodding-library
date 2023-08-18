@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.library.config.*;
-import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.library.config.ConfigOptions;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import net.minecraft.text.Text;
 
@@ -26,7 +26,7 @@ public class MModdingLibConfig implements Config {
 	}
 
 	@Override
-	public ConfigScreenOptions getConfigOptions() {
-		return new ConfigScreenOptions(Text.of("MModding Screen"), new TextureLocation.Block("blue_terracotta"));
+	public ConfigOptions getConfigOptions() {
+		return new ConfigOptions(Text.of("MModding Screen"), new TextureLocation.Block("blue_terracotta"));
 	}
 }

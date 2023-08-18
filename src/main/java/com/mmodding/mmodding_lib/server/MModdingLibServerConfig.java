@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.server;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
+import com.mmodding.mmodding_lib.library.config.ConfigOptions;
 
 public class MModdingLibServerConfig implements Config {
 
@@ -25,7 +25,7 @@ public class MModdingLibServerConfig implements Config {
 	}
 
 	@Override
-	public ConfigScreenOptions getConfigOptions() {
+	public ConfigOptions getConfigOptions() {
 		return MModdingLib.LIBRARY_CONFIG.getConfigOptions();
 	}
 }

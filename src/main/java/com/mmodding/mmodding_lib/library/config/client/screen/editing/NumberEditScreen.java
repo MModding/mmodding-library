@@ -7,7 +7,9 @@ import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import com.mmodding.mmodding_lib.library.client.screen.widgets.NumberFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+@ClientOnly
 public class NumberEditScreen extends EditScreen<Number> {
 
 	private NumberFieldWidget numberBox;

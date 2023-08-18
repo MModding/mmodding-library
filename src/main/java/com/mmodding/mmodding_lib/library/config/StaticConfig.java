@@ -1,7 +1,5 @@
 package com.mmodding.mmodding_lib.library.config;
 
-import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreenOptions;
-
 public abstract class StaticConfig implements Config {
 
 	private ConfigObject configObject = Config.super.getContent();
@@ -36,7 +34,7 @@ public abstract class StaticConfig implements Config {
 			}
 
 			@Override
-			public ConfigScreenOptions getConfigOptions() {
+			public ConfigOptions getConfigOptions() {
 				return config.getConfigOptions();
 			}
 
