@@ -76,7 +76,8 @@
     "injectors.client.InGameHudMixin",
     "injectors.client.ItemRenderContextMixin",
     "injectors.client.ItemRendererMixin",
-    "injectors.client.TridentEntityRendererMixin"
+    "injectors.client.TridentEntityRendererMixin",
+    "injectors.client.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

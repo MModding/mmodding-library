@@ -13,5 +13,6 @@ public class ClientPacketReceivers {
 	public static void register() {
 		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.CONFIGS, ((client, handler, buf, responseSender) -> ClientOperations.receiveConfigOnClient(buf)));
 		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.GLINT_PACKS, ((client, handler, buf, responseSender) -> ClientOperations.receiveGlintPackOnClient(buf)));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.STELLAR_STATUS, (((client, handler, buf, responseSender) -> ClientOperations.receiveStellarStatusOnClient(handler, buf))));
 	}
 }

@@ -1,15 +1,18 @@
 package com.mmodding.mmodding_lib.networking.server;
 
 import com.mmodding.mmodding_lib.MModdingLib;
+import com.mmodding.mmodding_lib.ducks.ServerStellarStatusDuckInterface;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.events.server.ServerConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.library.events.server.ServerGlintPackNetworkingEvents;
+import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
@@ -63,6 +66,7 @@ public class ServerOperations {
 	}
 
 	public static void sendGlintPacksToClient(ServerPlayerEntity player) {
+
 		Map<Item, GlintPackView> glintPacks = new HashMap<>();
 
 		Registry.ITEM.stream().filter(item -> item.getGlintPackView() != null).forEach(item -> glintPacks.put(item, item.getGlintPackView()));
@@ -72,5 +76,30 @@ public class ServerOperations {
 		glintPacks.forEach((item, view) -> ServerOperations.sendGlintPackToClient(item, view, player));
 
 		ServerGlintPackNetworkingEvents.AFTER_ALL.invoker().afterAllGlintPacksSent(glintPacks);
+	}
+
+	public static void sendStellarStatusToClient(Identifier identifier, StellarStatus status, ServerPlayerEntity player) {
+		PacketByteBuf packet = PacketByteBufs.create();
+
+		packet.writeIdentifier(identifier);
+		packet.writeLong(status.getCurrentTime());
+		packet.writeLong(status.getFullTime());
+
+		// TODO : Before Event
+
+		ServerPlayNetworking.send(player, MModdingPackets.STELLAR_STATUS, packet);
+
+		// TODO : After Event
+	}
+
+	public static void sendAllStellarStatusToClient(ServerPlayerEntity player) {
+
+		// TODO : Before All Event
+
+		((ServerStellarStatusDuckInterface) player.getWorld()).mmodding_lib$getAllStellarStatus().forEach((identifier, stellarStatus) -> {
+			ServerOperations.sendStellarStatusToClient(identifier, stellarStatus, player);
+		});
+
+		// TODO : After All Event
 	}
 }

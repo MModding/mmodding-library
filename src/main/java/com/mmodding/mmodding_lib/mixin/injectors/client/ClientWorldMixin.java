@@ -1,8 +1,12 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.ducks.ClientStellarStatusDuckInterface;
+import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
+import com.mmodding.mmodding_lib.library.stellar.client.ClientStellarStatus;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.WorldMixin;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,11 +16,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ClientWorld.class)
-public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskClient {
+public abstract class ClientWorldMixin extends WorldMixin implements ClientStellarStatusDuckInterface, WorldUtils.TickTaskClient {
+
+	@Unique
+	private final Map<Identifier, ClientStellarStatus> allClientStellarStatus = new HashMap<>();
 
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
@@ -73,6 +82,21 @@ public class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskC
 				i--;
 			}
 		}
+	}
+
+	@Inject(method = "tickTime", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;setTimeOfDay(J)V"))
+	private void tickTime(CallbackInfo ci) {
+		this.allClientStellarStatus.forEach((key, value) -> value.tick());
+	}
+
+	@Override
+	public void mmodding_lib$setStellarStatus(Identifier identifier, ClientStellarStatus stellarStatus) {
+		this.allClientStellarStatus.put(identifier, stellarStatus);
+	}
+
+	@Override
+	public StellarStatus mmodding_lib$getStellarStatus(Identifier identifier) {
+		return this.allClientStellarStatus.get(identifier);
 	}
 
 	@Override

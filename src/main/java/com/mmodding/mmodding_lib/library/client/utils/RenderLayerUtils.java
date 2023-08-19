@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.client.utils;
 
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
+import com.mmodding.mmodding_lib.library.stellar.StellarObject;
 import com.mmodding.mmodding_lib.mixin.accessors.client.BufferBuilderStorageAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerFirstAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerSecondAccessor;
@@ -18,6 +19,10 @@ import java.util.function.Predicate;
 
 @ClientOnly
 public class RenderLayerUtils {
+
+    public static void addStellarObject(StellarObject stellarObject) {
+        MModdingClientGlobalMaps.STELLAR_OBJECTS.add(stellarObject);
+    }
 
     public static void addGlintPack(Identifier identifier, GlintPack glintPack) {
         MModdingClientGlobalMaps.GLINT_PACKS.put(identifier, glintPack);

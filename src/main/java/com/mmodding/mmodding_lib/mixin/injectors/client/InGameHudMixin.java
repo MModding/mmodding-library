@@ -54,7 +54,7 @@ public class InGameHudMixin {
 			tessellator.draw();
 			RenderSystem.depthMask(true);
 			RenderSystem.enableDepthTest();
-			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 			ci.cancel();
 		}
 	}

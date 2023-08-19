@@ -28,7 +28,7 @@ public class BundleTooltipComponentMixin implements Self<BundleTooltipComponent>
 	private void draw(MatrixStack matrices, int x, int y, int z, BundleTooltipComponent.Sprite sprite, CallbackInfo ci) {
 		if (this.getObject() instanceof InventoryTooltipComponent component) {
 			if (component.getData().getTexture().isPresent()) {
-				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+				RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 				RenderSystem.setShaderTexture(0, component.getData().getTexture().get());
 				DrawableHelper.drawTexture(matrices, x, y, z, sprite.u, sprite.v, sprite.width, sprite.height, 128, 128);
 				ci.cancel();

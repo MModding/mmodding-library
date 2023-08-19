@@ -1,15 +1,19 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(World.class)
-public class WorldMixin {
+public abstract class WorldMixin {
 
-	@Shadow
+    @Shadow
+    public abstract RegistryKey<World> getRegistryKey();
+
+    @Shadow
 	@Final
 	public RandomGenerator random;
 }

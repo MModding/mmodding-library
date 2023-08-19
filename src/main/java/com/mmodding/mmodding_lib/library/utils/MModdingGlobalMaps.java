@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
@@ -12,6 +13,8 @@ import java.util.*;
 
 public class MModdingGlobalMaps {
 
+	static final Map<Identifier, StellarCycle> STELLAR_CYCLES = new HashMap<>();
+
 	static final Map<Identifier, CustomSquaredPortal> CUSTOM_SQUARED_PORTALS = new HashMap<>();
 
 	static final Map<Identifier, UnlinkedCustomSquaredPortal> UNLINKED_CUSTOM_SQUARED_PORTALS = new HashMap<>();
@@ -19,6 +22,14 @@ public class MModdingGlobalMaps {
 	static final Map<Identifier, List<CustomVeinType>> CUSTOM_VEIN_TYPES = new HashMap<>();
 
 	static final List<RegistryKey<World>> DIFFERED_DIMENSION_SEEDS = new ArrayList<>();
+
+	public static Set<Identifier> getStellarCycleKeys() {
+		return STELLAR_CYCLES.keySet();
+	}
+
+	public static StellarCycle getStellarCycle(Identifier identifier) {
+		return STELLAR_CYCLES.get(identifier);
+	}
 
 	public static Set<Identifier> getCustomSquaredPortalKeys() {
 		return CUSTOM_SQUARED_PORTALS.keySet();

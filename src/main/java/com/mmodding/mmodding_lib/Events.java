@@ -40,6 +40,8 @@ public class Events {
 			ServerOperations.sendConfigsToClient(handler.getPlayer());
 			ServerOperations.sendGlintPacksToClient(handler.getPlayer());
 		}
+
+		ServerOperations.sendAllStellarStatusToClient(handler.getPlayer());
 	}
 
 	private static void serverDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {
