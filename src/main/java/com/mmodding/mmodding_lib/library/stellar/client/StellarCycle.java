@@ -5,6 +5,7 @@ import com.mmodding.mmodding_lib.library.math.MathFunction;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 
@@ -14,18 +15,18 @@ public class StellarCycle {
 	private final long fullRotationTime;
 	private final RegistryKey<World> worldKey;
 
-	public StellarCycle(LinearFunction trajectory, long fullRotationTime, RegistryKey<World> worldKey) {
+	public StellarCycle(LinearFunction trajectory, long fullRotationTime, Identifier dimensionIdentifier) {
 		this.trajectory = trajectory;
 		this.fullRotationTime = fullRotationTime;
-		this.worldKey = worldKey;
+		this.worldKey = RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier);
 	}
 
-	private StellarCycle of(float a, long fullRotationTime, RegistryKey<World> worldKey) {
-		return new StellarCycle(MathFunction.linear(a), fullRotationTime, worldKey);
+	private StellarCycle of(float a, long fullRotationTime, Identifier dimensionIdentifier) {
+		return new StellarCycle(MathFunction.linear(a), fullRotationTime, dimensionIdentifier);
 	}
 
-	private StellarCycle of(float a, float b, long fullRotationTime, RegistryKey<World> worldKey) {
-		return new StellarCycle(MathFunction.linear(a, b), fullRotationTime, worldKey);
+	private StellarCycle of(float a, float b, long fullRotationTime, Identifier dimensionIdentifier) {
+		return new StellarCycle(MathFunction.linear(a, b), fullRotationTime, dimensionIdentifier);
 	}
 
 	public void register(Identifier identifier) {
