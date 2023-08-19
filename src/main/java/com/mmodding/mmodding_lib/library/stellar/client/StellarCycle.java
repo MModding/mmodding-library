@@ -2,6 +2,8 @@ package com.mmodding.mmodding_lib.library.stellar.client;
 
 import com.mmodding.mmodding_lib.library.math.LinearFunction;
 import com.mmodding.mmodding_lib.library.math.MathFunction;
+import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -24,6 +26,10 @@ public class StellarCycle {
 
 	private StellarCycle of(float a, float b, long fullRotationTime, RegistryKey<World> worldKey) {
 		return new StellarCycle(MathFunction.linear(a, b), fullRotationTime, worldKey);
+	}
+
+	public void register(Identifier identifier) {
+		RegistrationUtils.registerStellarCycle(identifier, this);
 	}
 
 	public long getFullRotationTime() {

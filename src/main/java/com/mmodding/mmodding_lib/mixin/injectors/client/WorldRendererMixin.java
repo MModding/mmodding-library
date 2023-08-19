@@ -35,7 +35,11 @@ public abstract class WorldRendererMixin {
         if (this.world != null && !bl) {
             CameraSubmersionType cameraSubmersionType = preStep.getSubmersionType();
             if (cameraSubmersionType != CameraSubmersionType.POWDER_SNOW && cameraSubmersionType != CameraSubmersionType.LAVA && !this.method_43788(preStep)) {
-                MModdingClientGlobalMaps.getStellarObjects().forEachOrdered(stellarObject -> stellarObject.render(matrices, this.world, tickDelta));
+                MModdingClientGlobalMaps.getStellarObjects().forEachOrdered(stellarObject -> {
+					if (stellarObject.getCycle().getWorldKey().equals(this.world.getRegistryKey())) {
+						stellarObject.render(matrices, this.world, tickDelta);
+					}
+				});
             }
         }
     }
