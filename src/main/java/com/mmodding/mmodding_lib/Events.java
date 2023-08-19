@@ -39,9 +39,8 @@ public class Events {
 		if (server.isDedicated()) {
 			ServerOperations.sendConfigsToClient(handler.getPlayer());
 			ServerOperations.sendGlintPacksToClient(handler.getPlayer());
+			ServerOperations.sendAllStellarStatusToClient(handler.getPlayer());
 		}
-
-		ServerOperations.sendAllStellarStatusToClient(handler.getPlayer());
 	}
 
 	private static void serverDisconnect(ServerPlayNetworkHandler handler, MinecraftServer server) {

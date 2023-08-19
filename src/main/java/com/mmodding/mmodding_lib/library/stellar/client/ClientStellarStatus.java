@@ -10,6 +10,10 @@ public class ClientStellarStatus extends StellarStatus {
         super(fullRotationTime);
     }
 
+	public static ClientStellarStatus of(StellarCycle stellarCycle) {
+		return new ClientStellarStatus(stellarCycle.getFullRotationTime());
+	}
+
     public static ClientStellarStatus of(long currentTime, long totalTime) {
         ClientStellarStatus clientStellarStatus = new ClientStellarStatus(totalTime);
         clientStellarStatus.setCurrentTime(currentTime);

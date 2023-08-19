@@ -57,7 +57,7 @@ public abstract class ServerWorldMixin extends WorldMixin implements ServerStell
 	private void init(MinecraftServer server, Executor executor, LevelStorage.Session session, ServerWorldProperties worldProperties, RegistryKey<World> registryKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean bl, long l, List<Spawner> spawners, boolean bl2, CallbackInfo ci) {
 		MModdingGlobalMaps.getStellarCycleKeys().forEach((identifier) -> {
 			StellarCycle stellarCycle = MModdingGlobalMaps.getStellarCycle(identifier);
-			if (stellarCycle.getWorldKey() == this.getRegistryKey()) {
+			if (stellarCycle.getWorldKey().equals(this.getRegistryKey())) {
 				this.allStellarStatus.put(identifier, StellarStatus.of(stellarCycle));
 			}
 		});

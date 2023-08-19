@@ -3,10 +3,19 @@ package com.mmodding.mmodding_lib.mixin.injectors.client;
 import com.mmodding.mmodding_lib.ducks.ClientStellarStatusDuckInterface;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.library.stellar.client.ClientStellarStatus;
+import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
+import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.WorldMixin;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.profiler.Profiler;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 @Mixin(ClientWorld.class)
 public abstract class ClientWorldMixin extends WorldMixin implements ClientStellarStatusDuckInterface, WorldUtils.TickTaskClient {
@@ -35,6 +45,16 @@ public abstract class ClientWorldMixin extends WorldMixin implements ClientStell
 
 	@Unique
 	private final List<MutablePair<MutableTriple<Integer, Long, Runnable>, Integer>> eachTasks = new ArrayList<>();
+
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void init(ClientPlayNetworkHandler netHandler, ClientWorld.Properties clientWorldProperties, RegistryKey<World> registryKey, Holder<DimensionType> dimensionType, int chunkManager, int simulationDistance, Supplier<Profiler> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
+		MModdingGlobalMaps.getStellarCycleKeys().forEach((identifier) -> {
+			StellarCycle stellarCycle = MModdingGlobalMaps.getStellarCycle(identifier);
+			if (stellarCycle.getWorldKey().equals(this.getRegistryKey())) {
+				this.allClientStellarStatus.putIfAbsent(identifier, ClientStellarStatus.of(stellarCycle));
+			}
+		});
+	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {

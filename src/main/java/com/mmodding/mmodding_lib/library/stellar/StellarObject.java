@@ -5,6 +5,7 @@ import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
 import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.render.GameRenderer;
@@ -22,16 +23,12 @@ public class StellarObject {
 	private final TextureLocation textureLocation;
 	private final float width;
 	private final float height;
-    private final float u;
-    private final float v;
 
-    public StellarObject(Identifier stellarCycle, TextureLocation textureLocation, float width, float height, float u, float v) {
+    public StellarObject(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
         this.stellarCycle = stellarCycle;
 		this.textureLocation = textureLocation;
         this.width = width;
         this.height = height;
-        this.u = u;
-        this.v = v;
     }
 
 	public void register() {
@@ -47,6 +44,12 @@ public class StellarObject {
 	}
 
     public void render(MatrixStack matrices, ClientWorld world, float tickDelta) {
+
+		RenderSystem.enableTexture();
+		RenderSystem.blendFuncSeparate(
+			GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
+		);
+
         matrices.push();
 
         float i = 1.0f - world.getRainGradient(tickDelta);
@@ -63,18 +66,17 @@ public class StellarObject {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
 
-        float minU = 0;
-        float minV = 0;
-        float maxU = this.u;
-        float maxV = this.v;
+		bufferBuilder.vertex(matrix4f, -this.width, 100.0f, -this.height).uv(0.0f, 0.0f).next();
+		bufferBuilder.vertex(matrix4f, this.width, 100.0f, -this.height).uv(1.0f, 0.0f).next();
+		bufferBuilder.vertex(matrix4f, this.width, 100.0f, this.height).uv(1.0f, 1.0f).next();
+		bufferBuilder.vertex(matrix4f, -this.width, 100.0f, this.height).uv(0.0f, 1.0f).next();
 
-        bufferBuilder.vertex(matrix4f, -this.width, 100.0f, -this.height).uv(minU, maxV).next();
-        bufferBuilder.vertex(matrix4f, this.width, 100.0f, -this.height).uv(maxU, maxV).next();
-        bufferBuilder.vertex(matrix4f, this.width, 100.0f, this.height).uv(maxU, minV).next();
-        bufferBuilder.vertex(matrix4f, -this.width, 100.0f, this.height).uv(minU, minV).next();
-
-        BufferRenderer.draw(bufferBuilder.end());
+        BufferRenderer.drawWithShader(bufferBuilder.end());
 
         matrices.pop();
+
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+		RenderSystem.disableBlend();
+		RenderSystem.depthMask(true);
     }
 }
