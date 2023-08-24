@@ -24,15 +24,15 @@ public class StellarObject {
 	private final float width;
 	private final float height;
 
-    public StellarObject(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
+    private StellarObject(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
         this.stellarCycle = stellarCycle;
 		this.textureLocation = textureLocation;
         this.width = width;
         this.height = height;
     }
 
-	public void register() {
-		RenderLayerUtils.addStellarObject(this);
+	public static void load(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
+		RenderLayerUtils.addStellarObject(new StellarObject(stellarCycle, textureLocation, width, height));
 	}
 
 	public StellarCycle getCycle() {
@@ -57,7 +57,7 @@ public class StellarObject {
 
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
         matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getXSkyAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.getCycle().getYSkyAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.getCycle().getYSkyAngle() * 360.0f));
 
         Matrix4f matrix4f = matrices.peek().getModel();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
