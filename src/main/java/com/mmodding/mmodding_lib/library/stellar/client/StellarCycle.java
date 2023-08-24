@@ -19,11 +19,12 @@ public abstract class StellarCycle {
 		this.worldKey = RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier);
 	}
 
-	public StellarCycle ofAngle(float angle, long fullRotationTime, Identifier dimensionIdentifier) {
+	public static StellarCycle ofAngle(float angle, long fullRotationTime, Identifier dimensionIdentifier) {
 		return new WithAngle(angle, fullRotationTime, dimensionIdentifier);
 	}
 
-	public StellarCycle ofTrajectory(MathFunction trajectory, long fullRotationTime, Identifier dimensionIdentifier) {
+	@ApiStatus.Experimental
+	public static StellarCycle ofTrajectory(MathFunction trajectory, long fullRotationTime, Identifier dimensionIdentifier) {
 		return new WithTrajectory(trajectory, fullRotationTime, dimensionIdentifier);
 	}
 
