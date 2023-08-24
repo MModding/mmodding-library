@@ -52,12 +52,13 @@ public class StellarObject {
 
         matrices.push();
 
-        float i = 1.0f - world.getRainGradient(tickDelta);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, i);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f - world.getRainGradient(tickDelta));
 
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getXSkyAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.getCycle().getYSkyAngle() * 360.0f));
+		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.getCycle().getBaseZAngle()));
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getBaseXAngle()));
+
+		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(this.getCycle().getSkyYAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getSkyXAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
 
         Matrix4f matrix4f = matrices.peek().getModel();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);

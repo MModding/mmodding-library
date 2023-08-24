@@ -11,25 +11,37 @@ import org.jetbrains.annotations.ApiStatus;
 
 public abstract class StellarCycle {
 
+	protected final float baseXAngle;
+	protected final float baseZAngle;
 	protected final long fullRotationTime;
 	protected final RegistryKey<World> worldKey;
 
-	private StellarCycle(long fullRotationTime, Identifier dimensionIdentifier) {
+	private StellarCycle(float baseXAngle, float baseZAngle, long fullRotationTime, Identifier dimensionIdentifier) {
+		this.baseXAngle = baseXAngle;
+		this.baseZAngle = baseZAngle;
 		this.fullRotationTime = fullRotationTime;
 		this.worldKey = RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier);
 	}
 
-	public static StellarCycle ofAngle(float angle, long fullRotationTime, Identifier dimensionIdentifier) {
-		return new WithAngle(angle, fullRotationTime, dimensionIdentifier);
+	public static StellarCycle ofAngle(float baseXAngle, float baseZAngle, float angle, long fullRotationTime, Identifier dimensionIdentifier) {
+		return new WithAngle(angle, baseXAngle, baseZAngle, fullRotationTime, dimensionIdentifier);
 	}
 
 	@ApiStatus.Experimental
-	public static StellarCycle ofTrajectory(MathFunction trajectory, long fullRotationTime, Identifier dimensionIdentifier) {
-		return new WithTrajectory(trajectory, fullRotationTime, dimensionIdentifier);
+	public static StellarCycle ofTrajectory(float baseXAngle, float baseZAngle, MathFunction trajectory, long fullRotationTime, Identifier dimensionIdentifier) {
+		return new WithTrajectory(trajectory, baseXAngle, baseZAngle, fullRotationTime, dimensionIdentifier);
 	}
 
 	public void register(Identifier identifier) {
 		RegistrationUtils.registerStellarCycle(identifier, this);
+	}
+
+	public float getBaseXAngle() {
+		return this.baseXAngle;
+	}
+
+	public float getBaseZAngle() {
+		return this.baseZAngle;
 	}
 
 	public long getFullRotationTime() {
@@ -40,25 +52,25 @@ public abstract class StellarCycle {
 		return this.worldKey;
 	}
 
-	public float getXSkyAngle(long time) {
+	public float getSkyXAngle(long time) {
 		double a = MathHelper.fractionalPart((double) time / this.fullRotationTime - 0.25);
 		double b = 0.5 - Math.cos(a * Math.PI) / 2.0;
 		return (float) (a * 2.0 + b) / 3.0f;
 	}
 
-	public abstract float getYSkyAngle();
+	public abstract float getSkyYAngle(long time);
 
 	public static class WithAngle extends StellarCycle {
 
 		private final float angle;
 
-		private WithAngle(float angle, long fullRotationTime, Identifier dimensionIdentifier) {
-			super(fullRotationTime, dimensionIdentifier);
+		private WithAngle(float angle, float baseXAngle, float baseZAngle, long fullRotationTime, Identifier dimensionIdentifier) {
+			super(baseXAngle, baseZAngle, fullRotationTime, dimensionIdentifier);
 			this.angle = angle / 360.0f;
 		}
 
 		@Override
-		public float getYSkyAngle() {
+		public float getSkyYAngle(long time) {
 			return this.angle;
 		}
 	}
@@ -68,17 +80,19 @@ public abstract class StellarCycle {
 
 		private final MathFunction trajectory;
 
-		private WithTrajectory(MathFunction trajectory, long fullRotationTime, Identifier dimensionIdentifier) {
-			super(fullRotationTime, dimensionIdentifier);
+		private WithTrajectory(MathFunction trajectory, float baseXAngle, float baseZAngle, long fullRotationTime, Identifier dimensionIdentifier) {
+			super(baseXAngle, baseZAngle, fullRotationTime, dimensionIdentifier);
 			this.trajectory = trajectory;
 		}
 
 		@Override
-		public float getYSkyAngle() {
-			/* double a = MathHelper.fractionalPart(this.trajectory.getY(1) / 360.0f - 0.25);
-			double b = 0.5 - Math.cos(a * Math.PI) / 2.0;
-			return (float) (a * 2.0 + b) / 3.0f; */
-			return 0;
+		public float getSkyYAngle(long time) {
+			if (time >= this.fullRotationTime / 2) {
+				return (float) (this.trajectory.getY(this.getSkyYAngle(this.fullRotationTime - time)) / 360.0f);
+			}
+			else {
+				return (float) (this.trajectory.getY(this.getSkyXAngle(time) * 360.0f) / 360.0f);
+			}
 		}
 	}
 }
