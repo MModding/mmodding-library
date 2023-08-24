@@ -88,10 +88,10 @@ public abstract class StellarCycle {
 		@Override
 		public float getSkyYAngle(long time) {
 			if (time >= this.fullRotationTime / 2) {
-				return (float) (this.trajectory.getY(this.getSkyYAngle(this.fullRotationTime - time)) / 360.0f);
+				return (float) (this.trajectory.getY(this.getSkyXAngle(this.fullRotationTime - time)));
 			}
 			else {
-				return (float) (this.trajectory.getY(this.getSkyXAngle(time) * 360.0f) / 360.0f);
+				return (float) (this.trajectory.getY(this.getSkyXAngle(time)));
 			}
 		}
 	}
