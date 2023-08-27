@@ -10,6 +10,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
@@ -65,6 +66,10 @@ public class RegistrationUtils {
 	@Deprecated
 	public static void registerBlockWithoutItem(Identifier identifier, Block block) {
 		Registry.register(Registry.BLOCK, identifier, block);
+	}
+
+	public static void registerFluid(Identifier identifier, Fluid fluid) {
+		Registry.register(Registry.FLUID, identifier, fluid);
 	}
 
 	public static <T extends Entity> void registerEntityType(Identifier identifier, EntityType<T> entityType) {

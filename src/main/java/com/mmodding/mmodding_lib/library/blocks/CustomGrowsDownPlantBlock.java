@@ -9,6 +9,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.random.RandomGenerator;
+import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -71,16 +72,19 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		this.registered.set(true);
 	}
 
+	@ClientOnly
 	public void cutout() {
 		RenderLayerOperations.setCutout(this.head);
 		RenderLayerOperations.setCutout(this.body);
 	}
 
+	@ClientOnly
 	public void translucent() {
 		RenderLayerOperations.setTranslucent(this.head);
 		RenderLayerOperations.setTranslucent(this.body);
 	}
 
+	@ClientOnly
 	public void transparent() {
 		RenderLayerOperations.setTransparent(this.head);
 		RenderLayerOperations.setTransparent(this.body);

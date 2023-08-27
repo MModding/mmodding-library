@@ -37,6 +37,8 @@
     "injectors.ExplosionMixin",
     "injectors.FallingBlockEntityMixin",
     "injectors.FishingBobberEntityMixin",
+    "injectors.FluidBlockMixin",
+    "injectors.FluidStateMixin",
     "injectors.GeneratorOptionsMixin",
     "injectors.ItemMixin",
     "injectors.ItemStackMixin",
