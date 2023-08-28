@@ -29,10 +29,12 @@ public class CauldronBehaviorMap extends HashMap<Item, CauldronBehavior> {
 	}
 
 	public static CauldronBehaviorMap create() {
-		return CauldronBehaviorMap.of(CauldronBehavior.createMap());
+		Map<Item, CauldronBehavior> behavior = CauldronBehavior.createMap();
+		CauldronBehavior.registerBucketBehavior(behavior);
+		return CauldronBehaviorMap.of(behavior);
 	}
 
-	public void addFillCauldronBehavior(Item bucketItem, BlockState cauldronState, SoundEvent soundEvent) {
+	public static void addFillCauldronBehavior(Item bucketItem, BlockState cauldronState, SoundEvent soundEvent) {
 		CauldronBehaviorMap.FILL_BEHAVIORS.put(bucketItem, (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
 			world, pos, player, hand, stack, cauldronState, soundEvent
 		));
