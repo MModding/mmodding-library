@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.fluids.FluidExtensions;
+import com.mmodding.mmodding_lib.mixin.accessors.FluidAccessor;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +22,7 @@ public abstract class FluidStateMixin {
     @Inject(method = "getVelocity", at = @At("HEAD"), cancellable = true)
     private void getVelocity(BlockView world, BlockPos pos, CallbackInfoReturnable<Vec3d> cir) {
         if (this.getFluid() instanceof FluidExtensions extensions) {
-            cir.setReturnValue(cir.getReturnValue().multiply(extensions.getVelocityMultiplier()));
+            cir.setReturnValue(((FluidAccessor) this.getFluid()).getVelocity(world, pos, (FluidState) (Object) this).multiply(extensions.getVelocityMultiplier()));
         }
     }
 }

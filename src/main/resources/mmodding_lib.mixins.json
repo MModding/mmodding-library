@@ -12,6 +12,7 @@
     "accessors.ChunkNoiseSamplerAccessor",
     "accessors.ChunkSectionAccessor",
     "accessors.FallingBlockEntityAccessor",
+    "accessors.FluidAccessor",
     "accessors.FoliagePlacerTypeAccessor",
     "accessors.IngredientAccessor",
     "accessors.NoiseRouterDataAccessor",

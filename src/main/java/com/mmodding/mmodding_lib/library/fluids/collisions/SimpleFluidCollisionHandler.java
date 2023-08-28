@@ -20,6 +20,12 @@ public class SimpleFluidCollisionHandler implements FluidCollisionHandler {
     private BlockState blockCache;
     private FluidState fluidCache;
 
+
+    /**
+     * @apiNote Instantiable at {@link FluidCollisionHandler#ofSimple()}
+     */
+    SimpleFluidCollisionHandler() {}
+
     public SimpleFluidCollisionHandler addHandling(BlockState collided, BiFunction<WorldAccess, BlockState, BlockState> result, BiConsumer<WorldAccess, BlockState> after) {
         this.blockHandlers.put(collided, result, after);
         return this;

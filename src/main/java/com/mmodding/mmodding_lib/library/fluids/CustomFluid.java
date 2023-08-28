@@ -8,7 +8,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
-import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -17,16 +17,16 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
 	private final boolean source;
-	private final AbstractBlock.Settings settings;
+	private final FluidBlock block;
 
-	public CustomFluid(QuiltBlockSettings settings) {
+	public CustomFluid(AbstractBlock.Settings settings) {
 		this.source = true;
-		this.settings = settings;
+		this.block = new FluidBlock(this, settings);
 	}
 
 	public CustomFluid() {
 		this.source = false;
-		this.settings = null;
+		this.block = null;
 	}
 
 	@Override
@@ -68,8 +68,9 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 		return this.source;
 	}
 
-	public AbstractBlock.Settings getBlockSettings() {
-        return this.settings;
+	@Nullable
+	public FluidBlock getBlock() {
+        return this.block;
     }
 
     @Override

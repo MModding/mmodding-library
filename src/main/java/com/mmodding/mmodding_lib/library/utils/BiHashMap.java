@@ -9,12 +9,14 @@ import java.util.function.BiConsumer;
 
 public class BiHashMap<K, V1, V2> extends HashMap<K, Pair<V1, V2>> {
 
+    public final Pair<V1, V2> nullValue = new ImmutablePair<>(null, null);
+
     public V1 getFirstValue(K key) {
-        return this.get(key).getLeft();
+        return this.getOrDefault(key, this.nullValue).getLeft();
     }
 
     public V2 getSecondValue(K key) {
-        return this.get(key).getRight();
+        return this.getOrDefault(key, this.nullValue).getRight();
     }
 
     public Pair<V1, V2> put(K key, V1 firstValue, V2 secondValue) {

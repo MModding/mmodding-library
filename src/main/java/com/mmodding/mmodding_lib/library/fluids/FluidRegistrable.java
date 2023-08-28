@@ -5,7 +5,6 @@ import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
 import com.mmodding.mmodding_lib.library.utils.Registrable;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.Identifier;
@@ -17,7 +16,7 @@ public interface FluidRegistrable extends Registrable {
         if (this instanceof FlowableFluid fluid && this.isNotRegistered()) {
             RegistrationUtils.registerFluid(identifier, fluid);
             if (this instanceof CustomFluid custom && custom.isSource()) {
-                RegistrationUtils.registerBlockWithoutItem(identifier, new FluidBlock(fluid, custom.getBlockSettings()));
+                RegistrationUtils.registerBlockWithoutItem(identifier, custom.getBlock());
             }
             if (this instanceof FluidExtensions extensions) {
                 if (EnvironmentUtils.isClient()) {
