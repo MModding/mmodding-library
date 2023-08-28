@@ -21,27 +21,25 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
 	private final boolean source;
-	private final FluidBlock block;
-	private final BucketItem bucket;
+	private FluidBlock block;
+	private BucketItem bucket;
 
-	public CustomFluid(AbstractBlock.Settings settings) {
-		this(settings, false);
+	public CustomFluid(boolean source) {
+		this.source = source;
 	}
 
-	public CustomFluid(AbstractBlock.Settings settings, boolean hasBucket) {
-		this(settings, hasBucket ? new AdvancedItemSettings().recipeRemainder(Items.BUCKET).maxCount(1) : null);
-	}
-
-	public CustomFluid(AbstractBlock.Settings settings, Item.Settings bucketSettings) {
-		this.source = true;
+	public CustomFluid createBlock(AbstractBlock.Settings settings) {
 		this.block = new FluidBlock(this, settings);
-		this.bucket = bucketSettings != null ? new BucketItem(this, bucketSettings) : null;
+		return this;
 	}
 
-	public CustomFluid() {
-		this.source = false;
-		this.block = null;
-		this.bucket = null;
+	public CustomFluid createBucket() {
+		return this.createBucket(new AdvancedItemSettings().recipeRemainder(Items.BUCKET).maxCount(1));
+	}
+
+	public CustomFluid createBucket(Item.Settings bucketSettings) {
+		this.bucket = bucketSettings != null ? new BucketItem(this, bucketSettings) : null;
+		return this;
 	}
 
 	@Override
@@ -60,6 +58,11 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 	@Override
 	public boolean isSource(FluidState state) {
 		return this.isSource();
+	}
+
+	@Override
+	public Item getBucketItem() {
+		return this.bucket;
 	}
 
 	@Override
@@ -87,11 +90,6 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 	public FluidBlock getBlock() {
         return this.block;
     }
-
-	@Nullable
-	public BucketItem getBucket() {
-		return this.bucket;
-	}
 
     @Override
     public boolean isNotRegistered() {
