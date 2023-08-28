@@ -17,6 +17,9 @@ public interface FluidRegistrable extends Registrable {
             RegistrationUtils.registerFluid(identifier, fluid);
             if (this instanceof CustomFluid custom && custom.isSource()) {
                 RegistrationUtils.registerBlockWithoutItem(identifier, custom.getBlock());
+				if (custom.getBucket() != null) {
+					RegistrationUtils.registerItem(identifier, custom.getBucket());
+				}
             }
             if (this instanceof FluidExtensions extensions) {
                 if (EnvironmentUtils.isClient()) {

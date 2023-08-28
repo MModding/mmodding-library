@@ -1,9 +1,13 @@
 package com.mmodding.mmodding_lib.library.fluids;
 
+import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import net.minecraft.block.*;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -18,15 +22,26 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 
 	private final boolean source;
 	private final FluidBlock block;
+	private final BucketItem bucket;
 
 	public CustomFluid(AbstractBlock.Settings settings) {
+		this(settings, false);
+	}
+
+	public CustomFluid(AbstractBlock.Settings settings, boolean hasBucket) {
+		this(settings, hasBucket ? new AdvancedItemSettings().recipeRemainder(Items.BUCKET).maxCount(1) : null);
+	}
+
+	public CustomFluid(AbstractBlock.Settings settings, Item.Settings bucketSettings) {
 		this.source = true;
 		this.block = new FluidBlock(this, settings);
+		this.bucket = bucketSettings != null ? new BucketItem(this, bucketSettings) : null;
 	}
 
 	public CustomFluid() {
 		this.source = false;
 		this.block = null;
+		this.bucket = null;
 	}
 
 	@Override
@@ -72,6 +87,11 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 	public FluidBlock getBlock() {
         return this.block;
     }
+
+	@Nullable
+	public BucketItem getBucket() {
+		return this.bucket;
+	}
 
     @Override
     public boolean isNotRegistered() {
