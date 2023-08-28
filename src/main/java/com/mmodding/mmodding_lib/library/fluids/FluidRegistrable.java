@@ -14,11 +14,11 @@ public interface FluidRegistrable extends Registrable {
 
     default void register(Identifier identifier) {
         if (this instanceof FlowableFluid fluid && this.isNotRegistered()) {
-            // RegistrationUtils.registerFluid(identifier, fluid);
+            RegistrationUtils.registerFluid(identifier, fluid);
             if (this instanceof CustomFluid custom && custom.isSource()) {
                 RegistrationUtils.registerBlockWithoutItem(identifier, custom.getBlock());
-				if (custom.getBucketItem() != null) {
-					RegistrationUtils.registerItem(identifier, custom.getBucketItem());
+				if (custom.getBucket() != null) {
+					RegistrationUtils.registerItem(identifier, custom.getBucket());
 				}
             }
             if (this instanceof FluidExtensions extensions) {
