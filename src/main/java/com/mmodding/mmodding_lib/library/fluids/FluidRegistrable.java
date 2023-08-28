@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.library.fluids;
 
 import com.mmodding.mmodding_lib.library.client.render.RenderLayerOperations;
 import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.Registrable;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -18,12 +19,12 @@ public interface FluidRegistrable extends Registrable {
             if (this instanceof CustomFluid custom && custom.isSource()) {
                 RegistrationUtils.registerBlockWithoutItem(identifier, custom.getBlock());
 				if (custom.getBucket() != null) {
-					RegistrationUtils.registerItem(identifier, custom.getBucket());
+					RegistrationUtils.registerItem(IdentifierUtils.extend(identifier, "bucket"), custom.getBucket());
 				}
             }
             if (this instanceof FluidExtensions extensions) {
                 if (EnvironmentUtils.isClient()) {
-                    FluidRenderHandlerRegistry.INSTANCE.register(fluid, extensions.getFluidRenderHandler());
+                    FluidRenderHandlerRegistry.INSTANCE.register(fluid, extensions.getRenderHandler());
                 }
             }
             this.setRegistered();

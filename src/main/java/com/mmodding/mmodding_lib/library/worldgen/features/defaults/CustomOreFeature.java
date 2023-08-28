@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -89,7 +90,7 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 		if (this.registered.get()) {
 			BiomeModifications.addFeature(
 				ctx, GenerationStep.Feature.UNDERGROUND_ORES,
-				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.addIdExt(this.identifier.get(), idExt))
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, IdentifierUtils.extend(this.identifier.get(), idExt))
 			);
 		}
 	}

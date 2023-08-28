@@ -66,7 +66,7 @@ public class MModdingGlobalMaps {
 		return new HashSet<>(CUSTOM_VEIN_TYPES.get(chunkGeneratorSettingsIdentifier));
 	}
 
-	public static Set<RegistryKey<World>> getDifferedDimensionSeeds() {
-		return new HashSet<>(DIFFERED_DIMENSION_SEEDS);
+	public static List<RegistryKey<World>> getDifferedDimensionSeeds() {
+        return new ArrayList<>(DIFFERED_DIMENSION_SEEDS);
 	}
 }

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLargeDripstoneFeature;
 import net.minecraft.block.Block;
@@ -115,7 +116,7 @@ public class CustomLargeDripstoneFeature implements CustomFeature, FeatureRegist
 		if (this.registered.get()) {
 			BiomeModifications.addFeature(
 				ctx, GenerationStep.Feature.LOCAL_MODIFICATIONS,
-				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.addIdExt(this.identifier.get(), idExt))
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, IdentifierUtils.extend(this.identifier.get(), idExt))
 			);
 		}
 	}

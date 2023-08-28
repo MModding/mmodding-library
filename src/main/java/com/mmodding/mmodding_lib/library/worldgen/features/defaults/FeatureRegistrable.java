@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.Registrable;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
@@ -15,15 +16,11 @@ public interface FeatureRegistrable extends Registrable {
 			Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, identifier, customFeature.getConfiguredFeature());
 			Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, customFeature.getDefaultPlacedFeature());
 			customFeature.getAdditionalPlacedFeatures().forEach(
-				pair -> Registry.register(BuiltinRegistries.PLACED_FEATURE, this.addIdExt(identifier, pair.getRight()), pair.getLeft())
+				pair -> Registry.register(BuiltinRegistries.PLACED_FEATURE, IdentifierUtils.extend(identifier, pair.getRight()), pair.getLeft())
 			);
 			this.setRegistered();
 			this.setIdentifier(identifier);
 		}
-	}
-
-	default Identifier addIdExt(Identifier identifier, String idExt) {
-		return new Identifier(identifier.getNamespace(), identifier.getPath() + idExt);
 	}
 
 	void addDefaultToBiomes(Predicate<BiomeSelectionContext> ctx);

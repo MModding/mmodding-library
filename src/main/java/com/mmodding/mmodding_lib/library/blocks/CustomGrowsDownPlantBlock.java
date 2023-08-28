@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import com.mmodding.mmodding_lib.library.client.render.RenderLayerOperations;
 import net.minecraft.block.*;
@@ -57,7 +58,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 
 	public void register(Identifier identifier) {
 		if (this.isNotRegistered()) {
-			RegistrationUtils.registerBlockWithoutItem(new Identifier(identifier.getNamespace(), identifier.getPath() + "_head"), this.head);
+			RegistrationUtils.registerBlockWithoutItem(IdentifierUtils.extend(identifier, "head"), this.head);
 			RegistrationUtils.registerBlockWithoutItem(identifier, this.body);
 			if (item != null) RegistrationUtils.registerItem(identifier, this.getItem());
 			this.setRegistered();

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedPointedDripstoneFeature;
 import net.minecraft.block.Block;
@@ -147,7 +148,7 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 		if (this.registered.get()) {
 			BiomeModifications.addFeature(
 				ctx, GenerationStep.Feature.UNDERGROUND_DECORATION,
-				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.addIdExt(this.identifier.get(), idExt))
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, IdentifierUtils.extend(this.identifier.get(), idExt))
 			);
 		}
 	}

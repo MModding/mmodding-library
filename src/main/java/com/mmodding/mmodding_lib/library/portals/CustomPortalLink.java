@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.portals;
 
 import com.mmodding.mmodding_lib.library.pois.CustomPOI;
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -23,7 +24,7 @@ public class CustomPortalLink {
 
 	public static CustomPortalLink create(Identifier dimensionIdentifier) {
 
-		Identifier poiId = new Identifier(dimensionIdentifier.getNamespace(), dimensionIdentifier.getPath() + "_portal");
+		Identifier poiId = IdentifierUtils.extend(dimensionIdentifier, "portal");
 
 		RegistryKey<World> worldKey = RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier);
 		RegistryKey<PointOfInterestType> poiKey = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, poiId);

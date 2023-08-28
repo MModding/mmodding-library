@@ -14,5 +14,5 @@ public interface FluidExtensions {
 	FluidCollisionHandler getCollisionHandler();
 
 	@ClientOnly
-	FluidRenderHandler getFluidRenderHandler();
+	FluidRenderHandler getRenderHandler();
 }

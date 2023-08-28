@@ -18,31 +18,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FluidBlock.class)
 public class FluidBlockMixin {
 
-    @Shadow
-    @Final
-    protected FlowableFluid fluid;
+	@Shadow
+	@Final
+	protected FlowableFluid fluid;
 
-    @Inject(method = "receiveNeighborFluids", at = @At("HEAD"), cancellable = true)
-    private void receiveNeighborFluids(World world, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
-        if (this.fluid instanceof FluidExtensions extensions) {
-            FluidCollisionHandler handler = extensions.getCollisionHandler();
-            for (Direction direction : FluidBlock.FLOW_DIRECTIONS) {
-                BlockPos blockPos = pos.offset(direction.getOpposite());
-                BlockState blockState = handler.getCollisionResult(world, pos, state, blockPos, world.getBlockState(blockPos));
-                if (blockState.isAir()) {
-                    BlockState fluidState = handler.getCollisionResult(world, pos, state, blockPos, world.getFluidState(blockPos));
-                    if (!fluidState.isAir()) {
-                        world.setBlockState(pos, fluidState);
-                        handler.afterCollision(world, pos, state, blockPos, world.getFluidState(blockPos));
-                        cir.setReturnValue(false);
-                    }
-                }
-                else {
-                    world.setBlockState(pos, blockState);
-                    handler.afterCollision(world, pos, state, blockPos, world.getBlockState(blockPos));
-                    cir.setReturnValue(false);
-                }
-            }
-        }
-    }
+	@Inject(method = "receiveNeighborFluids", at = @At("HEAD"), cancellable = true)
+	private void receiveNeighborFluids(World world, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
+		if (this.fluid instanceof FluidExtensions extensions) {
+			FluidCollisionHandler handler = extensions.getCollisionHandler();
+            for (Direction direction : Direction.values()) {
+				BlockPos blockPos = pos.offset(direction.getOpposite());
+				BlockState blockState = handler.getCollisionResult(world, pos, state, blockPos, world.getBlockState(blockPos));
+				if (blockState.isAir()) {
+					BlockState fluidState = handler.getCollisionResult(world, pos, state, blockPos, world.getFluidState(blockPos));
+					if (!fluidState.isAir()) {
+						world.setBlockState(pos, fluidState);
+						handler.afterCollision(world, pos, state, blockPos, world.getFluidState(blockPos));
+						cir.setReturnValue(false);
+					}
+				}
+				else {
+					world.setBlockState(pos, blockState);
+					handler.afterCollision(world, pos, state, blockPos, world.getBlockState(blockPos));
+					cir.setReturnValue(false);
+				}
+			}
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -96,7 +97,7 @@ public class CustomRandomPatchFeature implements CustomFeature, FeatureRegistrab
 		if (this.registered.get()) {
 			BiomeModifications.addFeature(
 				ctx, GenerationStep.Feature.VEGETAL_DECORATION,
-				RegistryKey.of(Registry.PLACED_FEATURE_KEY, this.addIdExt(this.identifier.get(), idExt))
+				RegistryKey.of(Registry.PLACED_FEATURE_KEY, IdentifierUtils.extend(this.identifier.get(), idExt))
 			);
 		}
 	}

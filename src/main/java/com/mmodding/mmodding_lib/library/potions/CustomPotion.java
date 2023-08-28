@@ -22,7 +22,7 @@ public class CustomPotion extends Potion implements PotionRegistrable {
 	}
 
 	/**
-	 * @apiNote Must be used in a class that extends MModdingBootStrapInitializer
+	 * @apiNote Must be used in a BootStrap Entrypoint
 	 * @param basePotion the potion at the start of the potion creation
 	 * @param ingredient the ingredient needed to make the potion
 	 * @see MModdingBootStrapInitializer
