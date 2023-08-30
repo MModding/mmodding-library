@@ -1,18 +1,18 @@
 package com.mmodding.mmodding_lib.library.fluids;
 
-import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -21,25 +21,34 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
 	private final boolean source;
-	private FluidBlock block;
-	private BucketItem bucket;
 
 	public CustomFluid(boolean source) {
 		this.source = source;
 	}
 
-	public CustomFluid createBlock(AbstractBlock.Settings settings) {
-		this.block = new FluidBlock(this, settings);
-		return this;
+	@Override
+	public Item getBucketItem() {
+		return this.getGroup().getBucket() != null ? this.getGroup().getBucket() : Items.AIR;
 	}
 
-	public CustomFluid createBucket() {
-		return this.createBucket(new AdvancedItemSettings().recipeRemainder(Items.BUCKET).maxCount(1));
+	@Override
+	protected boolean canBeReplacedWith(FluidState state, BlockView world, BlockPos pos, Fluid fluid, Direction direction) {
+		return false;
 	}
 
-	public CustomFluid createBucket(Item.Settings bucketSettings) {
-		this.bucket = bucketSettings != null ? new BucketItem(this, bucketSettings) : null;
-		return this;
+	@Override
+	protected BlockState toBlockState(FluidState state) {
+		return this.getGroup().getBlock().getDefaultState().with(Properties.LEVEL_15, FlowableFluid.getBlockStateLevel(state));
+	}
+
+	@Override
+	public boolean isSource(FluidState state) {
+		return this.source;
+	}
+
+	@Override
+	public boolean matchesType(Fluid fluid) {
+		return this.getGroup().getStill() == fluid || this.getGroup().getFlowing() == fluid;
 	}
 
 	@Override
@@ -51,13 +60,13 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 	}
 
 	@Override
-	public int getLevel(FluidState state) {
-		return !this.source ? state.get(FlowableFluid.LEVEL) : 8;
+	public Fluid getStill() {
+		return this.getGroup().getStill();
 	}
 
 	@Override
-	public boolean isSource(FluidState state) {
-		return this.isSource();
+	public Fluid getFlowing() {
+		return this.getGroup().getFlowing();
 	}
 
 	@Override
@@ -77,18 +86,15 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 		super.flow(world, pos, blockState, direction, fluidState);
 	}
 
-	public boolean isSource() {
-		return this.source;
+	@Override
+	protected void beforeBreakingBlock(WorldAccess world, BlockPos pos, BlockState state) {
+		final BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+		Block.dropStacks(state, world, pos, blockEntity);
 	}
 
-	@Nullable
-	public FluidBlock getBlock() {
-        return this.block;
-    }
-
-	@Nullable
-	public BucketItem getBucket() {
-		return this.bucket;
+	@Override
+	public int getLevel(FluidState state) {
+		return !this.source ? state.get(FlowableFluid.LEVEL) : 8;
 	}
 
     @Override

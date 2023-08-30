@@ -11,13 +11,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * @apiNote Must be used in a BootStrap Entrypoint
@@ -25,7 +22,7 @@ import java.util.function.Supplier;
  */
 public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, CauldronBehavior> {
 
-	public static final BiList<Supplier<Item>, CauldronBehavior> FILL_BEHAVIORS = new BiArrayList<>();
+	public static final BiList<Item, CauldronBehavior> FILL_BEHAVIORS = new BiArrayList<>();
 
 	private CauldronBehaviorMap() {
 		super();
@@ -42,22 +39,14 @@ public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, Cauldron
 	}
 
 	public void addFillCauldronBehavior(Item bucketItem, BlockState cauldronState, SoundEvent soundEvent) {
-		this.addFillCauldronBehavior(Registry.ITEM.getId(bucketItem), cauldronState, soundEvent);
-	}
-
-	public void addEmptyCauldronBehavior(Item bucketItem, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
-		this.addEmptyCauldronBehavior(Registry.ITEM.getId(bucketItem), emptyCondition, soundEvent);
-	}
-
-	public void addFillCauldronBehavior(Identifier bucketIdentifier, BlockState cauldronState, SoundEvent soundEvent) {
-		CauldronBehaviorMap.FILL_BEHAVIORS.add(() -> Registry.ITEM.get(bucketIdentifier), (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
+		CauldronBehaviorMap.FILL_BEHAVIORS.add(bucketItem, (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
 			world, pos, player, hand, stack, cauldronState, soundEvent
 		));
 	}
 
-	public void addEmptyCauldronBehavior(Identifier bucketIdentifier, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
+	public void addEmptyCauldronBehavior(Item bucketItem, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
 		this.put(Items.BUCKET, (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(
-			state, world, pos, player, hand, stack, new ItemStack(Registry.ITEM.get(bucketIdentifier)), emptyCondition, soundEvent
+			state, world, pos, player, hand, stack, new ItemStack(bucketItem), emptyCondition, soundEvent
 		));
 	}
 

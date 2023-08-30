@@ -63,7 +63,6 @@ public class RegistrationUtils {
 		Registry.register(Registry.ITEM, identifier, blockItem);
 	}
 
-	@Deprecated
 	public static void registerBlockWithoutItem(Identifier identifier, Block block) {
 		Registry.register(Registry.BLOCK, identifier, block);
 	}

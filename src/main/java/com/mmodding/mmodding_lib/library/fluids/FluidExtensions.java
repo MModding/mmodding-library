@@ -7,6 +7,8 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 public interface FluidExtensions {
 
+	FluidGroup getGroup();
+
 	float getVelocityMultiplier();
 
 	DefaultParticleType getDrippingParticle();
