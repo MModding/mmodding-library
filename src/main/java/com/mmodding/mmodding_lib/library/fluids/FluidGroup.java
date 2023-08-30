@@ -10,7 +10,6 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 public class FluidGroup {
@@ -31,7 +30,7 @@ public class FluidGroup {
 			this.still,
 			blockSettings,
 			this.still.getDefaultState().with(FlowableFluid.FALLING, Boolean.FALSE),
-			value -> this.flowing.getDefaultState().with(FlowableFluid.LEVEL, value == 8 ? 8 : 8 - value).with(FlowableFluid.FALLING, Boolean.TRUE)
+			value -> this.flowing.getDefaultState().with(FlowableFluid.LEVEL, value == 8 ? 8 : 8 - value).with(FlowableFluid.FALLING, value == 8 ? Boolean.TRUE : Boolean.FALSE)
 		);
 		this.bucket = new CustomBucketItem(this.still, itemSettings);
 	}

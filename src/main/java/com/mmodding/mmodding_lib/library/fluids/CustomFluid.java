@@ -8,7 +8,6 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -38,7 +37,7 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 
 	@Override
 	protected BlockState toBlockState(FluidState state) {
-		return this.getGroup().getBlock().getDefaultState().with(Properties.LEVEL_15, FlowableFluid.getBlockStateLevel(state));
+		return this.getGroup().getBlock().getDefaultState().with(FluidBlock.LEVEL, FlowableFluid.getBlockStateLevel(state));
 	}
 
 	@Override

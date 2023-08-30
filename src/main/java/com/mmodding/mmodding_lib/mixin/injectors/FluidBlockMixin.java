@@ -2,6 +2,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mmodding.mmodding_lib.ducks.FlowableFluidDuckInterface;
 import com.mmodding.mmodding_lib.library.fluids.FluidExtensions;
 import com.mmodding.mmodding_lib.library.fluids.collisions.FluidCollisionHandler;
@@ -21,20 +22,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(FluidBlock.class)
 public class FluidBlockMixin {
-
-	@Unique
-	private final ThreadLocal<Integer> stateIndex = ThreadLocal.withInitial(() -> 0);
 
 	@Shadow
 	@Final
 	protected FlowableFluid fluid;
 
 	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/fluid/FlowableFluid;getStill(Z)Lnet/minecraft/fluid/FluidState;", ordinal = 0))
-	private FluidState first(FlowableFluid fluid, boolean falling, Operation<FluidState> original) {
+	private FluidState initFirst(FlowableFluid fluid, boolean falling, Operation<FluidState> original) {
 		if (this.getDuckedFlowableFluid(fluid).mmodding_lib$hasStillState()) {
 			return this.getDuckedFlowableFluid(fluid).mmodding_lib$getStillState();
 		}
@@ -43,15 +40,10 @@ public class FluidBlockMixin {
 		}
 	}
 
-	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 1), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-	private void hook(FlowableFluid fluid, AbstractBlock.Settings settings, CallbackInfo ci, int i) {
-		this.stateIndex.set(i);
-	}
-
 	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/fluid/FlowableFluid;getFlowing(IZ)Lnet/minecraft/fluid/FluidState;", ordinal = 0))
-	private FluidState second(FlowableFluid fluid, int level, boolean falling, Operation<FluidState> original) {
+	private FluidState initSecond(FlowableFluid fluid, int level, boolean falling, Operation<FluidState> original, @Local int i) {
 		if (this.getDuckedFlowableFluid(fluid).mmodding_lib$hasFlowingStates()) {
-			return this.getDuckedFlowableFluid(fluid).mmodding_lib$getFlowingStates().apply(this.stateIndex.get());
+			return this.getDuckedFlowableFluid(fluid).mmodding_lib$getFlowingStates().apply(i);
 		}
 		else {
 			return original.call(fluid, level, falling);
@@ -59,7 +51,7 @@ public class FluidBlockMixin {
 	}
 
 	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/fluid/FlowableFluid;getFlowing(IZ)Lnet/minecraft/fluid/FluidState;", ordinal = 1))
-	private FluidState third(FlowableFluid fluid, int level, boolean falling, Operation<FluidState> original) {
+	private FluidState initThird(FlowableFluid fluid, int level, boolean falling, Operation<FluidState> original) {
 		if (this.getDuckedFlowableFluid(fluid).mmodding_lib$hasStillState()) {
 			return this.getDuckedFlowableFluid(fluid).mmodding_lib$getFlowingStates().apply(8);
 		}
