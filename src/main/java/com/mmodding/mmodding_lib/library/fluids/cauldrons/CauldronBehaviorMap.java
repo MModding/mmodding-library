@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib.library.fluids.cauldrons;
 
 import com.mmodding.mmodding_lib.library.base.MModdingBootStrapInitializer;
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.cauldron.CauldronBehavior;
@@ -13,9 +15,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.registry.Registry;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @apiNote Must be used in a BootStrap Entrypoint
@@ -23,7 +25,7 @@ import java.util.function.Predicate;
  */
 public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, CauldronBehavior> {
 
-	public static final Map<Item, CauldronBehavior> FILL_BEHAVIORS = new HashMap<>();
+	public static final BiList<Supplier<Item>, CauldronBehavior> FILL_BEHAVIORS = new BiArrayList<>();
 
 	private CauldronBehaviorMap() {
 		super();
@@ -48,7 +50,7 @@ public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, Cauldron
 	}
 
 	public void addFillCauldronBehavior(Identifier bucketIdentifier, BlockState cauldronState, SoundEvent soundEvent) {
-		CauldronBehaviorMap.FILL_BEHAVIORS.put(Registry.ITEM.get(bucketIdentifier), (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
+		CauldronBehaviorMap.FILL_BEHAVIORS.add(() -> Registry.ITEM.get(bucketIdentifier), (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
 			world, pos, player, hand, stack, cauldronState, soundEvent
 		));
 	}

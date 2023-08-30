@@ -15,6 +15,6 @@ public interface CauldronBehaviorMixin {
 
 	@Inject(method = "registerBucketBehavior", at = @At("TAIL"))
 	private static void registerBucketBehavior(Map<Item, CauldronBehavior> behavior, CallbackInfo ci) {
-		behavior.putAll(CauldronBehaviorMap.FILL_BEHAVIORS);
+		CauldronBehaviorMap.FILL_BEHAVIORS.forEach((itemSupplier, cauldronBehavior) -> behavior.put(itemSupplier.get(), cauldronBehavior));
 	}
 }
