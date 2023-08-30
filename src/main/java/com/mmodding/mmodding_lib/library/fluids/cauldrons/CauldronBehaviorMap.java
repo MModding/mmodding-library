@@ -9,7 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,15 +39,23 @@ public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, Cauldron
 		return cauldronBehaviorMap;
 	}
 
-	public static void addFillCauldronBehavior(Item bucketItem, BlockState cauldronState, SoundEvent soundEvent) {
-		CauldronBehaviorMap.FILL_BEHAVIORS.put(bucketItem, (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
+	public void addFillCauldronBehavior(Item bucketItem, BlockState cauldronState, SoundEvent soundEvent) {
+		this.addFillCauldronBehavior(Registry.ITEM.getId(bucketItem), cauldronState, soundEvent);
+	}
+
+	public void addEmptyCauldronBehavior(Item bucketItem, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
+		this.addEmptyCauldronBehavior(Registry.ITEM.getId(bucketItem), emptyCondition, soundEvent);
+	}
+
+	public void addFillCauldronBehavior(Identifier bucketIdentifier, BlockState cauldronState, SoundEvent soundEvent) {
+		CauldronBehaviorMap.FILL_BEHAVIORS.put(Registry.ITEM.get(bucketIdentifier), (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
 			world, pos, player, hand, stack, cauldronState, soundEvent
 		));
 	}
 
-	public void addEmptyCauldronBehavior(Item bucketItem, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
+	public void addEmptyCauldronBehavior(Identifier bucketIdentifier, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
 		this.put(Items.BUCKET, (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(
-			state, world, pos, player, hand, stack, new ItemStack(bucketItem), emptyCondition, soundEvent
+			state, world, pos, player, hand, stack, new ItemStack(Registry.ITEM.get(bucketIdentifier)), emptyCondition, soundEvent
 		));
 	}
 
