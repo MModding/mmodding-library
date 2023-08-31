@@ -21,7 +21,7 @@ public class EnchantmentHelperMixin {
 	@Inject(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
 	private static void  getPossibleEntries(int power, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir, List<EnchantmentLevelEntry> list, Item item, boolean bl, Iterator<Enchantment> iterator, Enchantment enchantment, int i) {
 		if (enchantment instanceof CustomEnchantment customEnchantment) {
-			if (!customEnchantment.getType().inEnchantingTable()) {
+			if (!customEnchantment.getType().isInEnchantingTable()) {
 				if (iterator.hasNext()) iterator.next(); cir.setReturnValue(list);
 			}
 		}

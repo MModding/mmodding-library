@@ -32,7 +32,7 @@ public class FluidGroup {
 			this.still.getDefaultState().with(FlowableFluid.FALLING, Boolean.FALSE),
 			value -> this.flowing.getDefaultState().with(FlowableFluid.LEVEL, value == 8 ? 8 : 8 - value).with(FlowableFluid.FALLING, value == 8 ? Boolean.TRUE : Boolean.FALSE)
 		);
-		this.bucket = new CustomBucketItem(this.still, itemSettings);
+		this.bucket = itemSettings != null ? new CustomBucketItem(this.still, itemSettings) : null;
 	}
 
 	public CustomFluid getStill() {

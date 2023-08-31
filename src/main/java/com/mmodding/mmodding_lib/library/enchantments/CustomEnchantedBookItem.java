@@ -1,13 +1,13 @@
 package com.mmodding.mmodding_lib.library.enchantments;
 
-import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
+import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
 import com.mmodding.mmodding_lib.library.items.ItemRegistrable;
+import com.mmodding.mmodding_lib.library.utils.TextUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
@@ -17,20 +17,17 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	private EnchantmentType type;
+	private final EnchantmentType type;
 
-	public CustomEnchantedBookItem(AdvancedItemSettings settings) {
+	public CustomEnchantedBookItem(EnchantmentType type, Settings settings) {
 		super(settings);
-	}
-
-	public void setType(EnchantmentType type) {
 		this.type = type;
 	}
 
 	public ItemStack forCustomEnchantment(EnchantmentLevelEntry info) {
-		ItemStack stack = new ItemStack(this.type.bookItem());
-		stack.setCustomName(Text.of(this.type.prefix() + " " + stack.getName()));
-		addEnchantment(stack, info);
+		ItemStack stack = new ItemStack(this.type.getEnchantedBook());
+		stack.setCustomName(TextUtils.spaceBetween(this.type.getPrefix().copy(), stack.getName()));
+		CustomEnchantedBookItem.addEnchantment(stack, info);
 		return stack;
 	}
 
@@ -48,7 +45,8 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 					}
 				}
 			}
-		} else if (group.getEnchantments().length != 0) {
+		}
+		else if (group.getEnchantments().length != 0) {
 			for(Enchantment enchantment : Registry.ENCHANTMENT) {
 				if (group.containsEnchantments(enchantment.type)) {
 					if (enchantment instanceof CustomEnchantment customEnchantment) {

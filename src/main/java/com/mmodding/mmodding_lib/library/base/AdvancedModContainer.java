@@ -33,6 +33,11 @@ public interface AdvancedModContainer extends ModContainer {
 			public BasicSourceType getSourceType() {
 				return mod.getSourceType();
 			}
+
+			@Override
+			public ClassLoader getClassLoader() {
+				return mod.getClassLoader();
+			}
 		};
 	}
 

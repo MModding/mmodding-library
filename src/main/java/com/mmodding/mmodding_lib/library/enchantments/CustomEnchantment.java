@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.enchantments;
 
+import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
@@ -9,6 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CustomEnchantment extends Enchantment implements EnchantmentRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
+
 	private final EnchantmentType type;
 
 	public CustomEnchantment(Rarity rarity, EnchantmentTarget enchantmentTarget, EquipmentSlot... equipmentSlots) {
