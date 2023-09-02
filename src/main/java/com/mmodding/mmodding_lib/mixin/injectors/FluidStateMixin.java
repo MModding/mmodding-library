@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.mmodding.mmodding_lib.interface_injections.FluidGroupComparable;
 import com.mmodding.mmodding_lib.library.fluids.FluidExtensions;
+import com.mmodding.mmodding_lib.library.fluids.FluidGroup;
 import com.mmodding.mmodding_lib.mixin.accessors.FluidAccessor;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -14,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FluidState.class)
-public abstract class FluidStateMixin {
+public abstract class FluidStateMixin implements FluidGroupComparable {
 
     @Shadow
     public abstract Fluid getFluid();
@@ -25,4 +27,9 @@ public abstract class FluidStateMixin {
             cir.setReturnValue(((FluidAccessor) this.getFluid()).getVelocity(world, pos, (FluidState) (Object) this).multiply(extensions.getVelocityMultiplier()));
         }
     }
+
+	@Override
+	public boolean isOf(FluidGroup group) {
+		return this.getFluid() == group.getStill() || this.getFluid() == group.getFlowing();
+	}
 }

@@ -7,15 +7,15 @@ import net.minecraft.world.WorldAccess;
 
 public interface FluidCollisionHandler {
 
-    static SimpleFluidCollisionHandler ofSimple() {
-        return new SimpleFluidCollisionHandler();
-    }
+	static SimpleFluidCollisionHandler ofSimple() {
+		return new SimpleFluidCollisionHandler();
+	}
 
-    BlockState getCollisionResult(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, BlockState collidedBlock);
+	BlockState getCollisionResult(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, BlockState collidedBlock);
 
-    void afterCollision(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, FluidState collidedFluid);
+	void afterCollision(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, FluidState collidedFluid);
 
-    BlockState getCollisionResult(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, FluidState collidedFluid);
+	BlockState getCollisionResult(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, FluidState collidedFluid);
 
-    void afterCollision(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, BlockState collidedBlock);
+	void afterCollision(WorldAccess world, BlockPos originPos, BlockState originFluid, BlockPos collidedPos, BlockState collidedBlock);
 }
