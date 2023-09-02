@@ -25,14 +25,26 @@ public class SimpleFluidCollisionHandler implements FluidCollisionHandler {
 	 */
 	SimpleFluidCollisionHandler() {}
 
+	public SimpleFluidCollisionHandler addHandling(BlockState collided, BiFunction<WorldAccess, BlockState, BlockState> result) {
+		return this.addHandling(collided, result, (world, state) -> {});
+	}
+
 	public SimpleFluidCollisionHandler addHandling(BlockState collided, BiFunction<WorldAccess, BlockState, BlockState> result, BiConsumer<WorldAccess, BlockState> after) {
 		this.blockHandlers.put(collided, result, after);
 		return this;
 	}
 
+	public SimpleFluidCollisionHandler addHandling(FluidState collided, BiFunction<WorldAccess, FluidState, BlockState> result) {
+		return this.addHandling(collided, result, (world, state) -> {});
+	}
+
 	public SimpleFluidCollisionHandler addHandling(FluidState collided, BiFunction<WorldAccess, FluidState, BlockState> result, BiConsumer<WorldAccess, FluidState> after) {
 		this.fluidHandlers.put(collided, result, after);
 		return this;
+	}
+
+	public SimpleFluidCollisionHandler addHandling(FluidGroup collided, BiFunction<WorldAccess, FluidState, BlockState> result) {
+		return this.addHandling(collided, result, (world, state) -> {});
 	}
 
 	public SimpleFluidCollisionHandler addHandling(FluidGroup collided, BiFunction<WorldAccess, FluidState, BlockState> result, BiConsumer<WorldAccess, FluidState> after) {
