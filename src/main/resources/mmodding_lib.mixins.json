@@ -49,6 +49,7 @@
     "injectors.GeneratorOptionsMixin",
     "injectors.ItemMixin",
     "injectors.ItemStackMixin",
+    "injectors.LavaFluidMixin",
     "injectors.MiningToolItemMixin",
     "injectors.NetherPortalBlockMixin",
     "injectors.NoiseChunkGeneratorMixin",

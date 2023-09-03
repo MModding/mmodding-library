@@ -1,12 +1,15 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mmodding.mmodding_lib.ducks.FlowableFluidDuckInterface;
+import com.mmodding.mmodding_lib.library.events.VanillaFluidCollisionEvents;
 import com.mmodding.mmodding_lib.library.fluids.FluidExtensions;
 import com.mmodding.mmodding_lib.library.fluids.collisions.FluidCollisionHandler;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
@@ -14,6 +17,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -69,7 +73,7 @@ public class FluidBlockMixin {
 	private void receiveNeighborFluids(World world, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
 		if (this.fluid instanceof FluidExtensions extensions) {
 			FluidCollisionHandler handler = extensions.getCollisionHandler();
-            for (Direction direction : Direction.values()) {
+            for (Direction direction : FluidBlock.FLOW_DIRECTIONS) {
 				BlockPos blockPos = pos.offset(direction.getOpposite());
 				BlockState blockState = handler.getCollisionResult(world, pos, state, blockPos, world.getBlockState(blockPos));
 				if (blockState.isAir()) {
@@ -87,6 +91,24 @@ public class FluidBlockMixin {
 				}
 			}
 		}
+	}
+
+	@ModifyExpressionValue(method = "receiveNeighborFluids", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;OBSIDIAN:Lnet/minecraft/block/Block;", opcode = Opcodes.GETSTATIC))
+	private Block changeObsidianValue(Block original, World world, BlockPos pos, BlockState state, @Local Direction direction, @Local(ordinal = 1) BlockPos offsetPos) {
+		Block block = VanillaFluidCollisionEvents.OBSIDIAN_GENERATION_CALLBACK.invoker().apply(world, pos, state, direction, offsetPos);
+		return block != null ? block : original;
+	}
+
+	@ModifyExpressionValue(method = "receiveNeighborFluids", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;COBBLESTONE:Lnet/minecraft/block/Block;", opcode = Opcodes.GETSTATIC))
+	private Block changeCobblestoneValue(Block original, World world, BlockPos pos, BlockState state, @Local Direction direction, @Local(ordinal = 1) BlockPos offsetPos) {
+		Block block = VanillaFluidCollisionEvents.COBBLESTONE_GENERATION_CALLBACK.invoker().apply(world, pos, state, direction, offsetPos);
+		return block != null ? block : original;
+	}
+
+	@ModifyExpressionValue(method = "receiveNeighborFluids", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDefaultState()Lnet/minecraft/block/BlockState;"))
+	private BlockState changeBasaltValue(BlockState original, World world, BlockPos pos, BlockState blockState, @Local Direction direction, @Local(ordinal = 1) BlockPos offsetPos) {
+		BlockState state = VanillaFluidCollisionEvents.BASALT_GENERATION_CALLBACK.invoker().apply(world, pos, blockState, direction, offsetPos);
+		return state != null ? state : original;
 	}
 
 	@Unique
