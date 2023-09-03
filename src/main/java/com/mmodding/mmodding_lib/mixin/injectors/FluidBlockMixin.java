@@ -105,7 +105,7 @@ public class FluidBlockMixin {
 		return block != null ? block : original;
 	}
 
-	@ModifyExpressionValue(method = "receiveNeighborFluids", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDefaultState()Lnet/minecraft/block/BlockState;"))
+	@ModifyExpressionValue(method = "receiveNeighborFluids", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDefaultState()Lnet/minecraft/block/BlockState;", ordinal = 1))
 	private BlockState changeBasaltValue(BlockState original, World world, BlockPos pos, BlockState blockState, @Local Direction direction, @Local(ordinal = 1) BlockPos offsetPos) {
 		BlockState state = VanillaFluidCollisionEvents.BASALT_GENERATION_CALLBACK.invoker().apply(world, pos, blockState, direction, offsetPos);
 		return state != null ? state : original;

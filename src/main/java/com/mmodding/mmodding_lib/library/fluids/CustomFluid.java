@@ -70,15 +70,17 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 
 	@Override
 	protected void flow(WorldAccess world, BlockPos pos, BlockState blockState, Direction direction, FluidState fluidState) {
-		if (direction == Direction.DOWN) {
-			BlockState state = this.getCollisionHandler().getCollisionResult(world, pos, world.getBlockState(pos), pos, world.getFluidState(pos));
-			if (!state.isAir()) {
-				if (blockState.getBlock() instanceof FluidBlock) {
-					world.setBlockState(pos, state, Block.NOTIFY_ALL);
-					this.getCollisionHandler().afterCollision(world, pos, world.getBlockState(pos), pos, world.getFluidState(pos));
-				}
+		if (fluidState.getFluid() instanceof FluidExtensions extensions) {
+			if (direction == Direction.DOWN) {
+				BlockState state = extensions.getCollisionHandler().getCollisionResult(world, pos, world.getBlockState(pos), pos, world.getFluidState(pos));
+				if (!state.isAir()) {
+					if (blockState.getBlock() instanceof FluidBlock) {
+						world.setBlockState(pos, state, Block.NOTIFY_ALL);
+						this.getCollisionHandler().afterCollision(world, pos, world.getBlockState(pos), pos, world.getFluidState(pos));
+					}
 
-				return;
+					return;
+				}
 			}
 		}
 
