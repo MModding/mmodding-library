@@ -39,6 +39,7 @@
     "injectors.EnchantedBookItemMixin",
     "injectors.EnchantmentHelperMixin",
     "injectors.EnchantmentMixin",
+    "injectors.EnchantmentScreenHandlerMixin",
     "injectors.EntityMixin",
     "injectors.ExplosionMixin",
     "injectors.FallingBlockEntityMixin",

@@ -73,7 +73,7 @@ public class FluidBlockMixin {
 	private void receiveNeighborFluids(World world, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
 		if (this.fluid instanceof FluidExtensions extensions) {
 			FluidCollisionHandler handler = extensions.getCollisionHandler();
-            for (Direction direction : FluidBlock.FLOW_DIRECTIONS) {
+			for (Direction direction : FluidBlock.FLOW_DIRECTIONS) {
 				BlockPos blockPos = pos.offset(direction.getOpposite());
 				BlockState blockState = handler.getCollisionResult(world, pos, state, blockPos, world.getBlockState(blockPos));
 				if (blockState.isAir()) {
