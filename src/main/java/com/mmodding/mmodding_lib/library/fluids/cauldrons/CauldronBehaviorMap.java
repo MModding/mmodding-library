@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.fluids.cauldrons;
 
-import com.mmodding.mmodding_lib.library.base.MModdingBootStrapInitializer;
+import com.mmodding.mmodding_lib.library.base.MModdingBootstrapInitializer;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 /**
  * @apiNote Must be used in a BootStrap Entrypoint
- * @see MModdingBootStrapInitializer
+ * @see MModdingBootstrapInitializer
  */
 public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, CauldronBehavior> {
 

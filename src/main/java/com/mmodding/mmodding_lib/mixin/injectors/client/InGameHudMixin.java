@@ -29,7 +29,7 @@ public class InGameHudMixin {
 	@Final
 	private MinecraftClient client;
 
-	@Inject(method = "renderPortalOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockModels;getModelParticleSprite(Lnet/minecraft/block/BlockState;)Lnet/minecraft/client/texture/Sprite;", shift = At.Shift.BEFORE), cancellable = true)
+	@Inject(method = "renderPortalOverlay", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShader(Ljava/util/function/Supplier;)V"), cancellable = true)
 	private void renderPortalOverlay(float nauseaStrength, CallbackInfo ci) {
 		assert client.player != null;
 		EntityDuckInterface duckedEntity = (EntityDuckInterface) this.client.player;
