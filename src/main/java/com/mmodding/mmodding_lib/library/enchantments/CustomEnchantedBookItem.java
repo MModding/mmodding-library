@@ -8,6 +8,7 @@ import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
@@ -26,7 +27,6 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 
 	public ItemStack forCustomEnchantment(EnchantmentLevelEntry info) {
 		ItemStack stack = new ItemStack(this.type.getEnchantedBook());
-		stack.setCustomName(TextUtils.spaceBetween(this.type.getPrefix().copy(), stack.getName()));
 		CustomEnchantedBookItem.addEnchantment(stack, info);
 		return stack;
 	}
@@ -57,6 +57,11 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 				}
 			}
 		}
+	}
+
+	@Override
+	public Text getName() {
+		return this.type.getPrefix().isSpaced() ? TextUtils.spaceBetween(this.type.getPrefix(), super.getName()) : type.getPrefix().append(super.getName());
 	}
 
 	@Override

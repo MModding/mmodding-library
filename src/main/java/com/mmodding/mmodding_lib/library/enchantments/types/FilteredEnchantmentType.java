@@ -8,7 +8,7 @@ public class FilteredEnchantmentType extends TableExclusionEnchantmentType {
 
 	private final FilterList<EnchantmentType> filterList;
 
-	FilteredEnchantmentType(String qualifier, Text prefix, Item.Settings enchantedBookSettings, boolean inEnchantingTable, FilterList<EnchantmentType> filterList) {
+	FilteredEnchantmentType(String qualifier, Prefix prefix, Item.Settings enchantedBookSettings, boolean inEnchantingTable, FilterList<EnchantmentType> filterList) {
 		super(qualifier, prefix, enchantedBookSettings, inEnchantingTable);
 		this.filterList = filterList;
 	}

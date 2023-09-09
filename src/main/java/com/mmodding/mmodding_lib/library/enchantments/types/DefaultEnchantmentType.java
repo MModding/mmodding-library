@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.library.enchantments.types;
 
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 
 public class DefaultEnchantmentType implements EnchantmentType {
 
@@ -14,8 +13,8 @@ public class DefaultEnchantmentType implements EnchantmentType {
     }
 
     @Override
-    public Text getPrefix() {
-        return Text.of("");
+    public Prefix getPrefix() {
+        return Prefix.of("");
     }
 
     @Override

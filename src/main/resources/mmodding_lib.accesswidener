@@ -36,6 +36,7 @@ accessible method net/minecraft/recipe/Ingredient$StackEntry <init> (Lnet/minecr
 accessible method net/minecraft/recipe/Ingredient$TagEntry <init> (Lnet/minecraft/tag/TagKey;)V
 accessible method net/minecraft/world/gen/OreVeinCreator create (Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/util/random/PositionalRandomFactory;)Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler$BlockStateSampler;
 
+extendable method net/minecraft/text/MutableText <init> (Lnet/minecraft/text/component/TextComponent;Ljava/util/List;Lnet/minecraft/text/Style;)V
 extendable method net/minecraft/world/dimension/AreaHelper getLowerCorner (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos;
 extendable method net/minecraft/world/dimension/AreaHelper getWidth (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)I
 extendable method net/minecraft/world/dimension/AreaHelper method_30491 (Lnet/minecraft/util/math/BlockPos$Mutable;I)Z
