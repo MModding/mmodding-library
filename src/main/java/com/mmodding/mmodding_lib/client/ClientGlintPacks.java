@@ -28,6 +28,23 @@ public class ClientGlintPacks {
 		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/red")).register(new MModdingIdentifier("red"));
 		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/black")).register(new MModdingIdentifier("black"));
 
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/white")).register(new MModdingIdentifier("lightened_white"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/orange")).register(new MModdingIdentifier("lightened_orange"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/magenta")).register(new MModdingIdentifier("lightened_magenta"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/light_blue")).register(new MModdingIdentifier("lightened_light_blue"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/yellow")).register(new MModdingIdentifier("lightened_yellow"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/lime")).register(new MModdingIdentifier("lightened_lime"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/pink")).register(new MModdingIdentifier("lightened_pink"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/gray")).register(new MModdingIdentifier("lightened_gray"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/light_gray")).register(new MModdingIdentifier("lightened_light_gray"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/cyan")).register(new MModdingIdentifier("lightened_cyan"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/purple")).register(new MModdingIdentifier("lightened_purple"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/blue")).register(new MModdingIdentifier("lightened_blue"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/brown")).register(new MModdingIdentifier("lightened_brown"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/green")).register(new MModdingIdentifier("lightened_green"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/red")).register(new MModdingIdentifier("lightened_red"));
+		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/lightened/black")).register(new MModdingIdentifier("lightened_black"));
+
 		GlintPack.create(MModdingLib.getTextureLocation("glint_pack/blank")).register(new MModdingIdentifier("blank"));
 	}
 }
