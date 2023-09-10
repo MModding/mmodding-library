@@ -83,6 +83,10 @@ public interface EnchantmentType {
 			return new Prefix(new LiteralComponent(text), new ArrayList<>(), Style.EMPTY, false);
 		}
 
+		public MutableText asMutable() {
+			return Text.empty().append(this);
+		}
+
 		public boolean isSpaced() {
 			return this.spaced;
 		}

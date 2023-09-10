@@ -42,7 +42,9 @@ public class CustomEnchantment extends Enchantment implements EnchantmentRegistr
 			TextUtils.spaceBetween(enchantment, Text.translatable("enchantment.level." + level));
 		}
 
-		return this.type.getPrefix().isSpaced() ? TextUtils.spaceBetween(this.type.getPrefix().copy(), enchantment) : this.type.getPrefix().copy().append(enchantment);
+		return this.type.getPrefix().isSpaced()
+			? TextUtils.spaceBetween(this.type.getPrefix().asMutable(), enchantment)
+			: this.type.getPrefix().asMutable().append(enchantment);
 	}
 
 	@Override
