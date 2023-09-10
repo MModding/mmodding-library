@@ -2,13 +2,11 @@ package com.mmodding.mmodding_lib.library.enchantments;
 
 import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
 import com.mmodding.mmodding_lib.library.items.ItemRegistrable;
-import com.mmodding.mmodding_lib.library.utils.TextUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
@@ -57,11 +55,6 @@ public class CustomEnchantedBookItem extends EnchantedBookItem implements ItemRe
 				}
 			}
 		}
-	}
-
-	@Override
-	public Text getName() {
-		return this.type.getPrefix().isSpaced() ? TextUtils.spaceBetween(this.type.getPrefix(), super.getName()) : type.getPrefix().append(super.getName());
 	}
 
 	@Override

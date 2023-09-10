@@ -1,7 +1,6 @@
 package com.mmodding.mmodding_lib.library.enchantments.types;
 
 import net.minecraft.item.Item;
-import net.minecraft.text.Text;
 
 public class TableExclusionEnchantmentType extends SimpleEnchantmentType {
 

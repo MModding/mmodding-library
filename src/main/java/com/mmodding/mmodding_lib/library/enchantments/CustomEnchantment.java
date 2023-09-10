@@ -1,9 +1,13 @@
 package com.mmodding.mmodding_lib.library.enchantments;
 
 import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
+import com.mmodding.mmodding_lib.library.utils.TextUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,6 +28,21 @@ public class CustomEnchantment extends Enchantment implements EnchantmentRegistr
 
 	public EnchantmentType getType() {
 		return this.type;
+	}
+
+	@Override
+	public Text getName(int level) {
+		MutableText enchantment = Text.translatable(this.getTranslationKey());
+
+		if (this.isCursed()) {
+			enchantment.formatted(Formatting.RED);
+		}
+
+		if (level != 1 || this.getMaxLevel() != 1) {
+			TextUtils.spaceBetween(enchantment, Text.translatable("enchantment.level." + level));
+		}
+
+		return this.type.getPrefix().isSpaced() ? TextUtils.spaceBetween(this.type.getPrefix().copy(), enchantment) : this.type.getPrefix().copy().append(enchantment);
 	}
 
 	@Override

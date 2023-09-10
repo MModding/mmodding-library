@@ -6,11 +6,16 @@ import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 import org.quiltmc.qsl.item.setting.api.*;
 
+import java.util.Collections;
+import java.util.List;
+
 public class AdvancedItemSettings extends QuiltItemSettings {
 
+	public static final CustomItemSetting<List<Formatting>> NAME_FORMATTINGS = CustomItemSetting.create(Collections::emptyList);
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> GLINT = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<GlintPackView> GLINT_PACK = CustomItemSetting.create(() -> null);
@@ -23,6 +28,10 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 	public static final CustomItemSetting<ItemDropped> ITEM_DROPPED = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemPostHit> ITEM_POST_HIT = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemPostMine> ITEM_POST_MINE = CustomItemSetting.create(() -> null);
+
+	public AdvancedItemSettings nameFormattings(Formatting... formattings) {
+		return this.customSetting(NAME_FORMATTINGS, List.of(formattings));
+	}
 
 	public AdvancedItemSettings descriptionLines(Text... descriptionLines) {
 		return this.customSetting(DESCRIPTION_LINES, descriptionLines);

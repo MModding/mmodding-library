@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.library.enchantments.types;
 
 import com.mmodding.mmodding_lib.library.utils.FilterList;
 import net.minecraft.item.Item;
-import net.minecraft.text.Text;
 
 public class FilteredEnchantmentType extends TableExclusionEnchantmentType {
 
