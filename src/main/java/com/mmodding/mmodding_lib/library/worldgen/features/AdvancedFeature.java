@@ -34,6 +34,6 @@ public abstract class AdvancedFeature<FC extends FeatureConfig> extends Feature<
 	}
 
 	public void setRegistered() {
-		registered.set(true);
+		this.registered.set(true);
 	}
 }

@@ -7,7 +7,6 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -33,15 +32,10 @@ public class CustomEnchantment extends Enchantment implements EnchantmentRegistr
 	@Override
 	public Text getName(int level) {
 		MutableText enchantment = Text.translatable(this.getTranslationKey());
-
-		if (this.isCursed()) {
-			this.type.getFormattings(this).forEach(enchantment::formatted);
-		}
-
+		this.type.getFormattings(this).forEach(enchantment::formatted);
 		if (level != 1 || this.getMaxLevel() != 1) {
 			TextUtils.spaceBetween(enchantment, Text.translatable("enchantment.level." + level));
 		}
-
 		return this.type.getPrefix().isSpaced()
 			? TextUtils.spaceBetween(this.type.getPrefix().asMutable(), enchantment)
 			: this.type.getPrefix().asMutable().append(enchantment);
@@ -54,6 +48,6 @@ public class CustomEnchantment extends Enchantment implements EnchantmentRegistr
 
 	@Override
 	public void setRegistered() {
-		registered.set(true);
+		this.registered.set(true);
 	}
 }

@@ -21,6 +21,6 @@ public class CustomArmorItem extends ArmorItem implements ItemRegistrable {
 
 	@Override
 	public void setRegistered() {
-		registered.set(true);
+		this.registered.set(true);
 	}
 }

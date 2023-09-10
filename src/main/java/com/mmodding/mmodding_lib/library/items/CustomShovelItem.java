@@ -20,6 +20,6 @@ public class CustomShovelItem extends ShovelItem implements ItemRegistrable {
 
 	@Override
 	public void setRegistered() {
-		registered.set(true);
+		this.registered.set(true);
 	}
 }

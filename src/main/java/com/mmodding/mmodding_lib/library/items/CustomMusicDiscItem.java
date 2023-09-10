@@ -20,6 +20,6 @@ public class CustomMusicDiscItem extends MusicDiscItem implements ItemRegistrabl
 
 	@Override
 	public void setRegistered() {
-		registered.set(true);
+		this.registered.set(true);
 	}
 }
