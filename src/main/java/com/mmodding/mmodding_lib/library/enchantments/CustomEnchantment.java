@@ -35,7 +35,7 @@ public class CustomEnchantment extends Enchantment implements EnchantmentRegistr
 		MutableText enchantment = Text.translatable(this.getTranslationKey());
 
 		if (this.isCursed()) {
-			enchantment.formatted(Formatting.RED);
+			this.type.getFormattings(this).forEach(enchantment::formatted);
 		}
 
 		if (level != 1 || this.getMaxLevel() != 1) {

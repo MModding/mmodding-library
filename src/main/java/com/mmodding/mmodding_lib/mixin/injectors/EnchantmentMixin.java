@@ -17,7 +17,7 @@ public class EnchantmentMixin implements Self<Enchantment> {
         EnchantmentType thisType = this.getObject() instanceof CustomEnchantment enchantment ? enchantment.getType() : EnchantmentType.DEFAULT;
         EnchantmentType otherType = other instanceof CustomEnchantment enchantment ? enchantment.getType() : EnchantmentType.DEFAULT;
         if (thisType != otherType) {
-            if (!thisType.typeCompatibilities().check(otherType) || !otherType.typeCompatibilities().check(thisType)) {
+            if (!thisType.getTypeCompatibilities().check(otherType) || !otherType.getTypeCompatibilities().check(thisType)) {
                 cir.setReturnValue(false);
             }
         }

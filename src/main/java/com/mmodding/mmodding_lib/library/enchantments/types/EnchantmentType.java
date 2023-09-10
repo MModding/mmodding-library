@@ -1,64 +1,43 @@
 package com.mmodding.mmodding_lib.library.enchantments.types;
 
 import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantedBookItem;
+import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantment;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.utils.FilterList;
+import com.mmodding.mmodding_lib.library.utils.Prefix;
+import com.mmodding.mmodding_lib.library.utils.TweakFunction;
 import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.Item;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.component.LiteralComponent;
-import net.minecraft.text.component.TextComponent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 public interface EnchantmentType {
 
 	EnchantmentType DEFAULT = new DefaultEnchantmentType();
 
-	static EnchantmentType of(String qualifier, Prefix prefix) {
-		return EnchantmentType.of(qualifier, prefix, new AdvancedItemSettings().maxCount(1).rarity(Rarity.UNCOMMON));
+	static EnchantmentType of(String qualifier) {
+		return EnchantmentType.builder(qualifier).build();
 	}
 
-	static EnchantmentType of(String qualifier, Prefix prefix, boolean inEnchantingTable) {
-		return new TableExclusionEnchantmentType(qualifier, prefix, new AdvancedItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), inEnchantingTable);
-	}
-
-	static EnchantmentType of(String qualifier, Prefix prefix, boolean inEnchantingTable, FilterList<EnchantmentType> filter) {
-		return new FilteredEnchantmentType(qualifier, prefix, new AdvancedItemSettings().maxCount(1).rarity(Rarity.UNCOMMON), inEnchantingTable, filter);
-	}
-
-	static EnchantmentType of(String qualifier, Prefix prefix, Item.Settings enchantedBookSettings) {
-		return new SimpleEnchantmentType(qualifier, prefix, enchantedBookSettings);
-	}
-
-	static EnchantmentType of(String qualifier, Prefix prefix, Item.Settings enchantedBookSettings, boolean inEnchantingTable) {
-		return new TableExclusionEnchantmentType(qualifier, prefix, enchantedBookSettings, inEnchantingTable);
-	}
-
-	static EnchantmentType of(String qualifier, Prefix prefix, Item.Settings enchantedBookSettings, boolean inEnchantingTable, FilterList<EnchantmentType> filter) {
-		return new FilteredEnchantmentType(qualifier, prefix, enchantedBookSettings, inEnchantingTable, filter);
+	static Builder builder(String qualifier) {
+		return new Builder(qualifier);
 	}
 
 	String getQualifier();
 
-	Prefix getPrefix();
-
 	EnchantedBookItem getEnchantedBook();
 
-	default boolean isInEnchantingTable() {
-		return true;
-	}
+	Prefix getPrefix();
 
-	default FilterList<EnchantmentType> typeCompatibilities() {
-		return FilterList.always();
-	}
+	List<Formatting> getFormattings(CustomEnchantment enchantment);
+
+	boolean isInEnchantingTable();
+
+	FilterList<EnchantmentType> getTypeCompatibilities();
 
 	default void register(Identifier identifier) {
 		if (this.getEnchantedBook() instanceof CustomEnchantedBookItem item) {
@@ -66,81 +45,97 @@ public interface EnchantmentType {
 		}
 	}
 
-	class Prefix extends MutableText {
+	class Builder {
 
-		private final boolean spaced;
+		private final String qualifier;
 
-		private Prefix(TextComponent component, List<Text> siblings, Style style, boolean spaced) {
-			super(component, siblings, style);
-			this.spaced = spaced;
+		private AdvancedItemSettings enchantedBookItemSettings = new AdvancedItemSettings().maxCount(1).rarity(Rarity.UNCOMMON);
+		private Prefix prefix = Prefix.empty();
+		private Function<CustomEnchantment, List<Formatting>> formattings = enchantment -> List.of(enchantment.isCursed() ? Formatting.RED : Formatting.GRAY);
+		private boolean inEnchantingTable = true;
+		private FilterList<EnchantmentType> typeCompatibilities = FilterList.always();
+
+		private Builder(String qualifier) {
+			this.qualifier = qualifier;
 		}
 
-		public static Prefix spaced(String text) {
-			return new Prefix(new LiteralComponent(text), new ArrayList<>(), Style.EMPTY, true);
-		}
-
-		public static Prefix of(String text) {
-			return new Prefix(new LiteralComponent(text), new ArrayList<>(), Style.EMPTY, false);
-		}
-
-		public MutableText asMutable() {
-			return Text.empty().append(this);
-		}
-
-		public boolean isSpaced() {
-			return this.spaced;
-		}
-
-		@Override
-		public Prefix copyContentOnly() {
-			return new Prefix(this.asComponent(), new ArrayList<>(), Style.EMPTY, this.isSpaced());
-		}
-
-		@Override
-		public Prefix copy() {
-			return new Prefix(this.asComponent(), this.getSiblings(), this.getStyle(), this.isSpaced());
-		}
-
-		@Override
-		public Prefix setStyle(Style style) {
-			super.setStyle(style);
+		public Builder enchantedBookItemSettings(TweakFunction<AdvancedItemSettings> tweak) {
+			this.enchantedBookItemSettings = tweak.apply(this.enchantedBookItemSettings);
 			return this;
 		}
 
-		@Override
-		public Prefix append(String text) {
-			super.append(text);
+		public Builder prefix(Prefix prefix) {
+			this.prefix = prefix;
 			return this;
 		}
 
-		@Override
-		public Prefix append(Text text) {
-			super.append(text);
+		public Builder formattings(Function<CustomEnchantment, List<Formatting>> formattings) {
+			this.formattings = formattings;
 			return this;
 		}
 
-		@Override
-		public Prefix styled(UnaryOperator<Style> styleUpdater) {
-			super.styled(styleUpdater);
+		public Builder inEnchantingTable(boolean inEnchantingTable) {
+			this.inEnchantingTable = inEnchantingTable;
 			return this;
 		}
 
-		@Override
-		public Prefix fillStyle(Style styleOverride) {
-			super.fillStyle(styleOverride);
+		public Builder typeCompatibilities(FilterList<EnchantmentType> typeCompatibilities) {
+			this.typeCompatibilities = typeCompatibilities;
 			return this;
 		}
 
-		@Override
-		public Prefix formatted(Formatting... formattings) {
-			super.formatted(formattings);
-			return this;
+		public EnchantmentType build() {
+			return new Impl(this.qualifier, this.enchantedBookItemSettings, this.prefix, this.formattings, this.inEnchantingTable, this.typeCompatibilities);
 		}
 
-		@Override
-		public Prefix formatted(Formatting formatting) {
-			super.formatted(formatting);
-			return this;
+		@ApiStatus.Internal
+		private static class Impl implements EnchantmentType {
+
+			private final String qualifier;
+			private final CustomEnchantedBookItem enchantedBook;
+			private final Prefix prefix;
+			private final Function<CustomEnchantment, List<Formatting>> formattings;
+			private final boolean inEnchantingTable;
+			private final FilterList<EnchantmentType> typeCompatibilities;
+
+			private Impl(String qualifier, AdvancedItemSettings enchantedBookItemSettings, Prefix prefix, Function<CustomEnchantment, List<Formatting>> formattings, boolean inEnchantingTable, FilterList<EnchantmentType> typeCompatibilities) {
+				this.qualifier = qualifier;
+				this.enchantedBook = new CustomEnchantedBookItem(this, enchantedBookItemSettings);
+				this.prefix = prefix;
+				this.formattings = formattings;
+				this.inEnchantingTable = inEnchantingTable;
+				this.typeCompatibilities = typeCompatibilities;
+			}
+
+			@Override
+			public String getQualifier() {
+				return this.qualifier;
+			}
+
+			@Override
+			public EnchantedBookItem getEnchantedBook() {
+				return this.enchantedBook;
+			}
+
+			@Override
+			public Prefix getPrefix() {
+				return this.prefix;
+			}
+
+			@Override
+			public List<Formatting> getFormattings(CustomEnchantment enchantment) {
+				return this.formattings.apply(enchantment);
+			}
+
+			@Override
+			public boolean isInEnchantingTable() {
+				return this.inEnchantingTable;
+			}
+
+			@Override
+			public FilterList<EnchantmentType> getTypeCompatibilities() {
+				return this.typeCompatibilities;
+			}
 		}
 	}
 }
