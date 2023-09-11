@@ -76,6 +76,7 @@
     "accessors.client.RenderPhaseAccessor",
     "injectors.client.ArmorFeatureRendererMixin",
     "injectors.client.ArmorRendererMixin",
+    "injectors.client.BackgroundRendererMixin",
     "injectors.client.BuiltinModelItemRendererMixin",
     "injectors.client.BundleTooltipComponentMixin",
     "injectors.client.ClientPlayerEntityMixin",
