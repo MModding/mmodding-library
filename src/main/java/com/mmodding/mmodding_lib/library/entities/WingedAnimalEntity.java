@@ -22,6 +22,12 @@ public abstract class WingedAnimalEntity extends AnimalEntity implements Winged 
 	}
 
 	@Override
+	public void tickMovement() {
+		super.tickMovement();
+		this.flapWings();
+	}
+
+	@Override
 	public MutableFloat flapProgress() {
 		return this.flapProgress;
 	}
