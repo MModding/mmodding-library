@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.fluids;
 
 import com.mmodding.mmodding_lib.library.blocks.CustomFluidBlock;
-import com.mmodding.mmodding_lib.library.items.CustomBucketItem;
+import com.mmodding.mmodding_lib.library.fluids.buckets.CustomBucketItem;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.block.AbstractBlock;

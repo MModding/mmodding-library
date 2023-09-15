@@ -32,6 +32,7 @@
     "injectors.AnvilScreenHandlerMixin",
     "injectors.BlockMixin",
     "injectors.BootstrapMixin",
+    "injectors.BucketItemMixin",
     "injectors.BuiltinChunkGeneratorsMixin",
     "injectors.CauldronBehaviorMixin",
     "injectors.ChunkNoiseSamplerMixin",
