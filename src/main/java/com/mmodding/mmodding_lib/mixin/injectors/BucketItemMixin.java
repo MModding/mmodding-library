@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 public class BucketItemMixin implements Self<BucketItem> {
 
 	@ModifyExpressionValue(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/FluidDrainable;tryDrainFluid(Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/item/ItemStack;"))
-	private ItemStack use(ItemStack original, @Local(ordinal = 0) ItemStack stack) {
-		return this.getObject() instanceof CustomBucketItem bucket && !stack.isEmpty() ? bucket.getManager().getFilledItem(stack) : stack;
+	private ItemStack use(ItemStack original) {
+		return this.getObject() instanceof CustomBucketItem bucket && !original.isEmpty() ? bucket.getManager().getFilledItem(original) : original;
 	}
 
 	@WrapOperation(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BucketItem;getEmptiedStack(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/item/ItemStack;"))
