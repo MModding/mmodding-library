@@ -7,12 +7,15 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class CustomFluid extends FlowableFluid implements FluidExtensions, FluidRegistrable {
@@ -48,6 +51,11 @@ public abstract class CustomFluid extends FlowableFluid implements FluidExtensio
 	@Override
 	public boolean matchesType(Fluid fluid) {
 		return this.getGroup().getStill() == fluid || this.getGroup().getFlowing() == fluid;
+	}
+
+	@Override
+	public Optional<SoundEvent> getBucketFillSound() {
+		return Optional.of(SoundEvents.ITEM_BUCKET_FILL);
 	}
 
 	@Override

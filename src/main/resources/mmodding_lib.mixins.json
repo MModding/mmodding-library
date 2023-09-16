@@ -13,6 +13,7 @@
     "accessors.ChunkSectionAccessor",
     "accessors.FallingBlockEntityAccessor",
     "accessors.FluidAccessor",
+    "accessors.FluidBlockAccessor",
     "accessors.FoliagePlacerTypeAccessor",
     "accessors.IngredientAccessor",
     "accessors.LeveledCauldronBlockAccessor",
