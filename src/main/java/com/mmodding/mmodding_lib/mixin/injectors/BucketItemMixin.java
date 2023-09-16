@@ -13,6 +13,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(BucketItem.class)
@@ -31,7 +32,9 @@ public class BucketItemMixin implements Self<BucketItem> {
 			else if (drainable instanceof PowderSnowBlock) {
 				check = bucket.getManager().getFilledItem(new ItemStack(Items.POWDER_SNOW_BUCKET));
 			}
-			return !check.isEmpty() ? bucket.getManager().getFilledItem(original.call(drainable, world, pos, state)) : ItemStack.EMPTY;
+			return !check.isEmpty()
+				? bucket.getManager().getFilledItem(original.call(drainable, world, pos, state))
+				: this.defaultResult(bucket, drainable, world, pos, state, original);
 		}
 		return original.call(drainable, world, pos, state);
 	}
@@ -39,5 +42,10 @@ public class BucketItemMixin implements Self<BucketItem> {
 	@WrapOperation(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/BucketItem;getEmptiedStack(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/item/ItemStack;"))
 	private ItemStack use(ItemStack stack, PlayerEntity player, Operation<ItemStack> original) {
 		return this.getObject() instanceof CustomBucketItem bucket ? bucket.getRemainderStack(stack, player) : original.call(stack, player);
+	}
+
+	@Unique
+	private ItemStack defaultResult(CustomBucketItem bucket, FluidDrainable drainable, WorldAccess world, BlockPos pos, BlockState state, Operation<ItemStack> original) {
+		return bucket.getManager().safeMode() ? original.call(drainable, world, pos, state) : ItemStack.EMPTY;
 	}
 }
