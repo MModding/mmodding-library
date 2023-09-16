@@ -38,16 +38,20 @@ public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, Cauldron
 		return cauldronBehaviorMap;
 	}
 
-	public void addFillCauldronBehavior(Item bucketItem, BlockState cauldronState, SoundEvent soundEvent) {
-		CauldronBehaviorMap.FILL_BEHAVIORS.add(bucketItem, (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
-			world, pos, player, hand, stack, cauldronState, soundEvent
-		));
+	public void addFillCauldronBehavior(BlockState cauldronState, SoundEvent soundEvent, Item... bucketItems) {
+		for (Item bucketItem : bucketItems) {
+			CauldronBehaviorMap.FILL_BEHAVIORS.add(bucketItem, (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
+				world, pos, player, hand, stack, cauldronState, soundEvent
+			));
+		}
 	}
 
-	public void addEmptyCauldronBehavior(Item bucketItem, Predicate<BlockState> emptyCondition, SoundEvent soundEvent) {
-		this.put(Items.BUCKET, (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(
-			state, world, pos, player, hand, stack, new ItemStack(bucketItem), emptyCondition, soundEvent
-		));
+	public void addEmptyCauldronBehavior(Predicate<BlockState> emptyCondition, SoundEvent soundEvent, Item... bucketItems) {
+		for (Item bucketItem : bucketItems) {
+			this.put(Items.BUCKET, (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(
+				state, world, pos, player, hand, stack, new ItemStack(bucketItem), emptyCondition, soundEvent
+			));
+		}
 	}
 
 	public void addBucketBehaviors() {

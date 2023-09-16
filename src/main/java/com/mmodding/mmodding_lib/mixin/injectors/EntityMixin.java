@@ -57,6 +57,13 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	protected CustomSquaredPortalBlock customPortalCache;
 
 	@Shadow
+	public World world;
+
+	@Shadow
+	@Final
+	protected RandomGenerator random;
+
+	@Shadow
 	public abstract double squaredDistanceTo(Entity entity);
 
 	@Shadow
@@ -103,10 +110,6 @@ public abstract class EntityMixin implements EntityDuckInterface {
 
 	@Shadow
 	public abstract float getPitch();
-
-	@Shadow
-	@Final
-	protected RandomGenerator random;
 
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {

@@ -21,8 +21,4 @@ public interface BucketManager {
 	ItemStack getEmptiedItem(ItemStack stack);
 
 	ItemStack getFilledItem(ItemStack stack);
-
-	default boolean safeMode() {
-		return false;
-	}
 }
