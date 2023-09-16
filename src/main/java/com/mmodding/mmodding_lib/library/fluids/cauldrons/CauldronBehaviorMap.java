@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.fluids.cauldrons;
 
 import com.mmodding.mmodding_lib.library.base.MModdingBootstrapInitializer;
+import com.mmodding.mmodding_lib.library.fluids.buckets.CustomBucketItem;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -40,17 +41,23 @@ public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, Cauldron
 
 	public void addFillCauldronBehavior(BlockState cauldronState, SoundEvent soundEvent, Item... bucketItems) {
 		for (Item bucketItem : bucketItems) {
-			CauldronBehaviorMap.FILL_BEHAVIORS.add(bucketItem, (state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
-				world, pos, player, hand, stack, cauldronState, soundEvent
-			));
+			CauldronBehaviorMap.FILL_BEHAVIORS.add(
+				bucketItem instanceof CustomBucketItem bucket ? bucket.getManager().getFilledItemOrDefault(new ItemStack(bucketItem)).getItem() : bucketItem,
+				(state, world, pos, player, hand, stack) -> CauldronBehavior.fillCauldron(
+					world, pos, player, hand, stack, cauldronState, soundEvent
+				)
+			);
 		}
 	}
 
 	public void addEmptyCauldronBehavior(Predicate<BlockState> emptyCondition, SoundEvent soundEvent, Item... bucketItems) {
 		for (Item bucketItem : bucketItems) {
-			this.put(Items.BUCKET, (state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(
-				state, world, pos, player, hand, stack, new ItemStack(bucketItem), emptyCondition, soundEvent
-			));
+			this.put(
+				bucketItem instanceof CustomBucketItem bucket ? bucket.getManager().getEmptiedItemOrDefault(new ItemStack(Items.BUCKET)).getItem() : Items.BUCKET,
+				(state, world, pos, player, hand, stack) -> CauldronBehavior.emptyCauldron(
+					state, world, pos, player, hand, stack, bucketItem instanceof CustomBucketItem bucket ? bucket.getManager().getFilledItemOrDefault(new ItemStack(bucketItem)) : new ItemStack(bucketItem), emptyCondition, soundEvent
+				)
+			);
 		}
 	}
 

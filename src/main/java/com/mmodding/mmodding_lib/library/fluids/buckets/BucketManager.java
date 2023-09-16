@@ -18,7 +18,25 @@ public interface BucketManager {
 		}
 	};
 
+	ItemStack getFilledItem(ItemStack stack);
+
 	ItemStack getEmptiedItem(ItemStack stack);
 
-	ItemStack getFilledItem(ItemStack stack);
+	default ItemStack getFilledItemOrElse(ItemStack stack, ItemStack or) {
+		ItemStack check = this.getFilledItem(stack);
+		return !check.isEmpty() ? check : or;
+	}
+
+	default ItemStack getEmptiedItemOrElse(ItemStack stack, ItemStack or) {
+		ItemStack check = this.getEmptiedItem(stack);
+		return !check.isEmpty() ? check : or;
+	}
+
+	default ItemStack getFilledItemOrDefault(ItemStack stack) {
+		return this.getFilledItemOrElse(stack, stack);
+	}
+
+	default ItemStack getEmptiedItemOrDefault(ItemStack stack) {
+		return this.getEmptiedItemOrElse(stack, stack);
+	}
 }

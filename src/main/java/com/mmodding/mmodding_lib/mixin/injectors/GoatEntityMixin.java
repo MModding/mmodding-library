@@ -29,7 +29,7 @@ public abstract class GoatEntityMixin extends AnimalEntityMixin implements Self<
 	private void interactMob(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() instanceof CustomMilkBucketItem bucket) {
-			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
 			ItemStack check = bucket.getManager().getFilledItem(new ItemStack(Items.MILK_BUCKET));
 			if (!check.isEmpty()) {
 				ItemStack result = ItemUsage.exchangeStack(stack, player, check);
@@ -45,7 +45,7 @@ public abstract class GoatEntityMixin extends AnimalEntityMixin implements Self<
 						this.getEatSound(stack),
 						SoundCategory.NEUTRAL,
 						1.0F,
-						MathHelper.nextBetween(this.world.random, 0.8F, 1.2F)
+						MathHelper.nextBetween(this.world.random, 0.8f, 1.2f)
 					);
 				}
 				cir.setReturnValue(actionResult);
