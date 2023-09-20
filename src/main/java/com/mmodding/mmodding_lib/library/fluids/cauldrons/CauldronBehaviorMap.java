@@ -25,7 +25,7 @@ public class CauldronBehaviorMap extends Object2ObjectOpenHashMap<Item, Cauldron
 
 	public static final BiList<Item, CauldronBehavior> FILL_BEHAVIORS = new BiArrayList<>();
 
-	private CauldronBehaviorMap() {
+	CauldronBehaviorMap() {
 		super();
 	}
 
