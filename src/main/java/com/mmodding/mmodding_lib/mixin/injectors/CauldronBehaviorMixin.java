@@ -51,6 +51,6 @@ public interface CauldronBehaviorMixin {
 
 	@ModifyExpressionValue(method = "fillCauldron", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Items;BUCKET:Lnet/minecraft/item/Item;", opcode = Opcodes.GETSTATIC))
 	private static Item fillCauldron(Item original, World world, BlockPos pos, PlayerEntity player, Hand hand, ItemStack stack, BlockState state, SoundEvent soundEvent) {
-		return stack.getItem() instanceof CustomBucketItem bucket ? bucket.getManager().getEmptiedItemOrDefault(stack).getItem() : stack.getItem();
+		return stack.getItem() instanceof CustomBucketItem bucket ? bucket.getManager().getEmptiedItemOrDefault(stack).getItem() : original;
 	}
 }

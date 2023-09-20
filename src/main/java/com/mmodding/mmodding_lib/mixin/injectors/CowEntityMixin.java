@@ -21,9 +21,9 @@ public abstract class CowEntityMixin extends AnimalEntityMixin {
 	private void interactMob(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
 		ItemStack stack = player.getStackInHand(hand);
 		if (stack.getItem() instanceof CustomBucketItem bucket) {
-			player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
 			ItemStack check = bucket.getManager().getFilledItem(new ItemStack(Items.MILK_BUCKET));
 			if (!check.isEmpty()) {
+				player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0f, 1.0f);
 				ItemStack result = ItemUsage.exchangeStack(stack, player, check);
 				player.setStackInHand(hand, result);
 				cir.setReturnValue(ActionResult.success(this.world.isClient));
