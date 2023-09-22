@@ -8,12 +8,12 @@ import com.mmodding.mmodding_lib.library.base.MModdingBootstrapInitializer;
  */
 public class VanillaCauldronBehaviors {
 
-	public static final VanillaCauldronBehaviorMap EMPTY_BEHAVIOR = new VanillaCauldronBehaviorMap();
-	public static final VanillaCauldronBehaviorMap WATER_BEHAVIOR = new VanillaCauldronBehaviorMap();
-	public static final VanillaCauldronBehaviorMap LAVA_BEHAVIOR = new VanillaCauldronBehaviorMap();
-	public static final VanillaCauldronBehaviorMap SNOW_POWDER_BEHAVIOR = new VanillaCauldronBehaviorMap();
+	public static final CauldronBehaviorMap EMPTY_BEHAVIOR = new VanillaCauldronBehaviorMap();
+	public static final CauldronBehaviorMap WATER_BEHAVIOR = new VanillaCauldronBehaviorMap();
+	public static final CauldronBehaviorMap LAVA_BEHAVIOR = new VanillaCauldronBehaviorMap();
+	public static final CauldronBehaviorMap SNOW_POWDER_BEHAVIOR = new VanillaCauldronBehaviorMap();
 
-	public static class VanillaCauldronBehaviorMap extends CauldronBehaviorMap {
+	private static class VanillaCauldronBehaviorMap extends CauldronBehaviorMap {
 
 		@Override
 		@Deprecated

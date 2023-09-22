@@ -6,9 +6,9 @@ public interface TickOperations {
 
 	void setTickValue(int tickValue);
 
-	default void checkTickForOperation(int tick, Runnable runnable) {
+	default void checkTickForOperation(int tick, Runnable run) {
 		if (this.getTickValue() >= tick) {
-			runnable.run();
+			run.run();
 			this.setTickValue(0);
 		} else {
 			this.setTickValue(this.getTickValue() + 1);
