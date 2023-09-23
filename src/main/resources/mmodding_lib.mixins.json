@@ -98,6 +98,7 @@
     "injectors.client.InGameHudMixin",
     "injectors.client.ItemRenderContextMixin",
     "injectors.client.ItemRendererMixin",
+    "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",
     "injectors.client.WorldRendererMixin"
   ],
