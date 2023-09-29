@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.events.server;
+package com.mmodding.mmodding_lib.library.events.networking.server;
 
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import net.minecraft.item.Item;

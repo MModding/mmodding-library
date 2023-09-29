@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.base.AdvancedModContainer;
 import com.mmodding.mmodding_lib.library.base.MModdingServerModInitializer;
 import com.mmodding.mmodding_lib.library.config.Config;
-import com.mmodding.mmodding_lib.library.events.server.MModdingServerInitializationEvents;
+import com.mmodding.mmodding_lib.library.events.initialization.server.MModdingServerInitializationEvents;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.loader.api.QuiltLoader;

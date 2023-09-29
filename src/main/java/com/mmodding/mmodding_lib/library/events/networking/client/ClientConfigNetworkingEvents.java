@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.events.client;
+package com.mmodding.mmodding_lib.library.events.networking.client;
 
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import org.quiltmc.loader.api.minecraft.ClientOnly;

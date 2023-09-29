@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.events.server;
+package com.mmodding.mmodding_lib.library.events.networking.server;
 
 import com.mmodding.mmodding_lib.library.config.Config;
 import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;

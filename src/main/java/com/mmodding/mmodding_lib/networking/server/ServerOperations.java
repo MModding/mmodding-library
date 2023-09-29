@@ -2,11 +2,12 @@ package com.mmodding.mmodding_lib.networking.server;
 
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.ducks.ServerStellarStatusDuckInterface;
+import com.mmodding.mmodding_lib.library.events.networking.server.ServerStellarStatusNetworkingEvents;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
-import com.mmodding.mmodding_lib.library.events.server.ServerConfigNetworkingEvents;
-import com.mmodding.mmodding_lib.library.events.server.ServerGlintPackNetworkingEvents;
+import com.mmodding.mmodding_lib.library.events.networking.server.ServerConfigNetworkingEvents;
+import com.mmodding.mmodding_lib.library.events.networking.server.ServerGlintPackNetworkingEvents;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
 import net.minecraft.item.Item;
@@ -85,21 +86,21 @@ public class ServerOperations {
 		packet.writeLong(status.getCurrentTime());
 		packet.writeLong(status.getFullTime());
 
-		// TODO : Before Event
+		ServerStellarStatusNetworkingEvents.BEFORE.invoker().beforeStellarStatusSent(identifier, status);
 
 		ServerPlayNetworking.send(player, MModdingPackets.STELLAR_STATUS, packet);
 
-		// TODO : After Event
+		ServerStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusSent(identifier, status);
 	}
 
 	public static void sendAllStellarStatusToClient(ServerPlayerEntity player) {
 
-		// TODO : Before All Event
+        Map<Identifier, StellarStatus> stellarStatus = new HashMap<>(((ServerStellarStatusDuckInterface) player.getWorld()).mmodding_lib$getAllStellarStatus());
 
-		((ServerStellarStatusDuckInterface) player.getWorld()).mmodding_lib$getAllStellarStatus().forEach((identifier, stellarStatus) -> {
-			ServerOperations.sendStellarStatusToClient(identifier, stellarStatus, player);
-		});
+		ServerStellarStatusNetworkingEvents.BEFORE_ALL.invoker().beforeAllStellarStatusSent(stellarStatus);
 
-		// TODO : After All Event
+		stellarStatus.forEach((identifier, status) -> ServerOperations.sendStellarStatusToClient(identifier, status, player));
+
+		ServerStellarStatusNetworkingEvents.AFTER_ALL.invoker().afterAllStellarStatusSent(stellarStatus);
 	}
 }

@@ -11,8 +11,9 @@ import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 public class ClientPacketReceivers {
 
 	public static void register() {
-		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.CONFIGS, ((client, handler, buf, responseSender) -> ClientOperations.receiveConfigOnClient(buf)));
-		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.GLINT_PACKS, ((client, handler, buf, responseSender) -> ClientOperations.receiveGlintPackOnClient(buf)));
-		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.STELLAR_STATUS, (((client, handler, buf, responseSender) -> ClientOperations.receiveStellarStatusOnClient(handler, buf))));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.LIVING_ENTITY_STUCK_ARROW_TYPES, (((client, handler, buf, sender) -> ClientOperations.receiveLivingEntityStuckArrowTypesToClient(client, buf))));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.CONFIGS, ((client, handler, buf, sender) -> ClientOperations.receiveConfigOnClient(buf)));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.GLINT_PACKS, ((client, handler, buf, sender) -> ClientOperations.receiveGlintPackOnClient(buf)));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.STELLAR_STATUS, (((client, handler, buf, sender) -> ClientOperations.receiveStellarStatusOnClient(handler, buf))));
 	}
 }

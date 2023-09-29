@@ -64,6 +64,7 @@
     "injectors.NoiseChunkGeneratorMixin",
     "injectors.PassiveEntityMixin",
     "injectors.PathAwareEntityMixin",
+    "injectors.PersistentProjectileEntityMixin",
     "injectors.PlayerEntityMixin",
     "injectors.PointedDripstoneBlockMixin",
     "injectors.PortalForcerMixin",
@@ -99,6 +100,7 @@
     "injectors.client.ItemRenderContextMixin",
     "injectors.client.ItemRendererMixin",
     "injectors.client.StuckArrowsFeatureRendererMixin",
+    "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",
     "injectors.client.WorldRendererMixin"
   ],
