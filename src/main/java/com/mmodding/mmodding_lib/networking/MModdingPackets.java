@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 
 public class MModdingPackets {
 
-	public static final MModdingIdentifier LIVING_ENTITY_STUCK_ARROW_TYPES = new MModdingIdentifier("networking/entity/living/stuck_arrow_types");
+	public static final MModdingIdentifier SYNCABLE_DATA = new MModdingIdentifier("networking/entity/data/syncable");
 
 	public static final MModdingIdentifier CONFIGS = new MModdingIdentifier("networking/configs");
 

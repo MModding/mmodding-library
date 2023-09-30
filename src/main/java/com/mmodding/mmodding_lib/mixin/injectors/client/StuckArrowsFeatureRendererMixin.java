@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Map;
+import java.util.List;
 
 @Mixin(StuckArrowsFeatureRenderer.class)
 public class StuckArrowsFeatureRendererMixin<T extends LivingEntity> extends StuckObjectsFeatureRendererMixin<T> {
@@ -31,8 +31,9 @@ public class StuckArrowsFeatureRendererMixin<T extends LivingEntity> extends Stu
 	@Inject(method = "renderObject", at = @At(value = "HEAD"), cancellable = true)
 	private void renderObject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, Entity entity, float directionX, float directionY, float directionZ, float tickDelta, CallbackInfo ci) {
 		if (entity instanceof LivingEntity livingEntity) {
-			Map<Integer, Identifier> map = ((LivingEntityDuckInterface) livingEntity).mmodding_lib$getStuckArrowTypes();
-			Entity check = Registry.ENTITY_TYPE.get(map.get(this.currentIndex)).create(entity.world);
+			List<Identifier> stuckArrowTypes = ((LivingEntityDuckInterface) livingEntity).mmodding_lib$getStuckArrowTypes();
+			Identifier identifier = stuckArrowTypes.size() > this.currentIndex ? stuckArrowTypes.get(this.currentIndex) : new Identifier("arrow");
+			Entity check = Registry.ENTITY_TYPE.get(identifier).create(entity.world);
 			if (check != null) {
 				if (check instanceof StuckArrowDisplay<?> display) {
 					float f = MathHelper.sqrt(directionX * directionX + directionZ * directionZ);

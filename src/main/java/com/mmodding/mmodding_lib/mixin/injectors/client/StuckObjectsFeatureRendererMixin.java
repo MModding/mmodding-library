@@ -1,7 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mmodding.mmodding_lib.ducks.LivingEntityDuckInterface;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.StuckObjectsFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;

@@ -4,7 +4,9 @@ import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrackedDataHandlerUtils {
 
@@ -31,6 +33,27 @@ public class TrackedDataHandlerUtils {
 			@Override
 			public List<T> copy(List<T> value) {
 				return new ArrayList<>(value);
+			}
+		};
+	}
+
+	public static <K, V> TrackedDataHandler<Map<K, V>> createTrackedDataMapHandler(WriteAction<K> writeKeyAction, WriteAction<V> writeValueAction, ReadAction<K> readKeyAction, ReadAction<V> readValueAction) {
+
+		return new TrackedDataHandler<>() {
+
+			@Override
+			public void write(PacketByteBuf buf, Map<K, V> value) {
+				buf.writeMap(value, writeKeyAction::write, writeValueAction::write);
+			}
+
+			@Override
+			public Map<K, V> read(PacketByteBuf buf) {
+				return buf.readMap(readKeyAction::read, readValueAction::read);
+			}
+
+			@Override
+			public Map<K, V> copy(Map<K, V> value) {
+				return new HashMap<>(value);
 			}
 		};
 	}

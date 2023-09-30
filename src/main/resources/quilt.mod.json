@@ -46,6 +46,9 @@
 	},
 	"quilt_loom": {
 		"injected_interfaces": {
+			"net/minecraft/class_1297": [
+				"com/mmodding/mmodding_lib/interface_injections/EntitySyncableDataRegistry"
+			],
 			"net/minecraft/class_1799": [
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
 			],

@@ -3,6 +3,8 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
+import com.mmodding.mmodding_lib.interface_injections.EntitySyncableDataRegistry;
+import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import net.minecraft.block.BlockState;
@@ -36,7 +38,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Function;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin implements EntityDuckInterface {
+public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityDuckInterface {
+
+	@Unique
+	protected final SyncableData.Registry syncableDataRegistry = new SyncableData.Registry((Entity) (Object) this);
 
 	@Unique
 	protected boolean inCustomPortal;
@@ -114,6 +119,11 @@ public abstract class EntityMixin implements EntityDuckInterface {
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
+	}
+
+	@Override
+	public SyncableData.Registry getSyncableDataRegistry() {
+		return this.syncableDataRegistry;
 	}
 
 	@Override

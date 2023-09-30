@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mmodding.mmodding_lib.ducks.LivingEntityDuckInterface;
-import com.mmodding.mmodding_lib.library.entities.projectiles.StuckArrowDisplay;
 import com.mmodding.mmodding_lib.library.utils.Self;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -18,11 +17,6 @@ public class PersistentProjectileEntityMixin implements Self<PersistentProjectil
 
 	@Inject(method = "onEntityHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setStuckArrowCount(I)V"))
 	private void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci, @Local LivingEntity livingEntity) {
-		if (this.getObject() instanceof StuckArrowDisplay<?>) {
-			((LivingEntityDuckInterface) livingEntity).mmodding_lib$putStuckArrowType(
-				livingEntity.getStuckArrowCount(),
-				Registry.ENTITY_TYPE.getId(this.getObject().getType())
-			);
-		}
+		((LivingEntityDuckInterface) livingEntity).mmodding_lib$addStuckArrowType(Registry.ENTITY_TYPE.getId(this.getObject().getType()));
 	}
 }

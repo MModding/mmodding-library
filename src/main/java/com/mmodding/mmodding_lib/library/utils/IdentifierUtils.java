@@ -15,9 +15,13 @@ public class IdentifierUtils {
 	}
 
 	public static Identifier extend(Identifier identifier, String extension, boolean before) {
+		return IdentifierUtils.extend(identifier, extension, before, '_');
+	}
+
+	public static Identifier extend(Identifier identifier, String extension, boolean before, char separator) {
 		return !Objects.equals(extension, "") ? new Identifier(
 			identifier.getNamespace(),
-			!before ? identifier.getPath() + "_" + extension : extension + "_" + identifier.getPath()
+			!before ? identifier.getPath() + separator + extension : extension + separator + identifier.getPath()
 		) : identifier;
 	}
 }

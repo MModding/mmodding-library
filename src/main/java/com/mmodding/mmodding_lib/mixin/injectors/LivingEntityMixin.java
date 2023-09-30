@@ -1,9 +1,11 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.LivingEntityDuckInterface;
-import com.mmodding.mmodding_lib.networking.CommonOperations;
+import com.mmodding.mmodding_lib.library.entities.data.MModdingTrackedDataHandlers;
+import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
+import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
+import com.mmodding.mmodding_lib.library.utils.ObjectUtils;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -11,14 +13,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends EntityMixin implements LivingEntityDuckInterface {
 
 	@Unique
-	private Map<Integer, Identifier> stuckArrowTypes = new HashMap<>();
+	private final SyncableData<List<Identifier>> stuckArrowTypes = new SyncableData<>(
+		new ArrayList<>(),
+		(LivingEntity) (Object) this,
+		new MModdingIdentifier("stuck_arrow_types"),
+		MModdingTrackedDataHandlers.IDENTIFIER_LIST
+	);
 
 	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setStuckArrowCount(I)V"))
 	private void tick(CallbackInfo ci) {
@@ -26,41 +33,30 @@ public abstract class LivingEntityMixin extends EntityMixin implements LivingEnt
 	}
 
 	@Override
-	public Map<Integer, Identifier> mmodding_lib$getStuckArrowTypes() {
-		return new HashMap<>(this.stuckArrowTypes);
+	public List<Identifier> mmodding_lib$getStuckArrowTypes() {
+		return new ArrayList<>(this.stuckArrowTypes.get());
 	}
 
 	@Override
-	public void mmodding_lib$setStuckArrowTypes(Map<Integer, Identifier> stuckArrowTypes) {
-		this.stuckArrowTypes = stuckArrowTypes;
-		this.syncStuckArrowTypes();
+	public void mmodding_lib$setStuckArrowTypes(List<Identifier> stuckArrowTypes) {
+		this.stuckArrowTypes.set(stuckArrowTypes);
+		this.stuckArrowTypes.synchronize();
 	}
 
 	@Override
-	public void mmodding_lib$putStuckArrowType(int index, Identifier arrowEntityId) {
-		this.stuckArrowTypes.put(index, arrowEntityId);
-		this.syncStuckArrowTypes();
+	public void mmodding_lib$addStuckArrowType(Identifier arrowEntityId) {
+		this.stuckArrowTypes.get().add(arrowEntityId);
+		this.stuckArrowTypes.synchronize();
 	}
 
 	@Unique
 	private void deleteStuckArrowType() {
-		Map<Integer, Identifier> oldStuckArrowTypes = this.mmodding_lib$getStuckArrowTypes();
-		Map<Integer, Identifier> newStuckArrowTypes = new HashMap<>();
-		int smallest = !oldStuckArrowTypes.isEmpty() ? Integer.MAX_VALUE : 0;
-		for (int current : oldStuckArrowTypes.keySet()) {
-			smallest = Math.min(smallest, current);
-		}
-		oldStuckArrowTypes.remove(smallest);
-		oldStuckArrowTypes.forEach((index, arrowEntityId) -> newStuckArrowTypes.put(index - 1, arrowEntityId));
-		this.mmodding_lib$setStuckArrowTypes(newStuckArrowTypes);
+		List<Identifier> stuckArrowTypes = this.mmodding_lib$getStuckArrowTypes();
+		stuckArrowTypes.remove(stuckArrowTypes.size() - 1);
+		this.mmodding_lib$setStuckArrowTypes(stuckArrowTypes);
 	}
 
-	@Unique
-	private void syncStuckArrowTypes() {
-		if (!this.world.isClient()) {
-			this.world.getPlayers().forEach(playerEntity -> CommonOperations.sendLivingEntityStuckArrowTypesToClient(
-				(LivingEntity) (Object) this, this.stuckArrowTypes, (ServerPlayerEntity) playerEntity
-			));
-		}
+	static {
+		ObjectUtils.load(MModdingTrackedDataHandlers.IDENTIFIER_LIST);
 	}
 }
