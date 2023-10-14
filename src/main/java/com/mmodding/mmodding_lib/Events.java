@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
+import com.mmodding.mmodding_lib.ducks.WorldDuckInterface;
 import com.mmodding.mmodding_lib.library.caches.CacheAccess;
 import com.mmodding.mmodding_lib.library.caches.Caches;
 import com.mmodding.mmodding_lib.library.config.Config;
@@ -20,9 +21,19 @@ public class Events {
 
 	private static void serverLoad(MinecraftServer server, ServerWorld world) {
 		GeneratorOptions generatorOptions = server.getSaveProperties().getGeneratorOptions();
-		GeneratorOptionsDuckInterface ducked = (GeneratorOptionsDuckInterface) generatorOptions;
+		GeneratorOptionsDuckInterface duckedOptions = (GeneratorOptionsDuckInterface) generatorOptions;
 		PersistentStateManager stateManager = world.getPersistentStateManager();
-		stateManager.getOrCreate(ducked::mmodding_lib$stateFromNbt, ducked::mmodding_lib$createDifferedSeedsState, "differedSeedsState");
+		stateManager.getOrCreate(
+			duckedOptions::mmodding_lib$differedSeedsStateFromNbt,
+			duckedOptions::mmodding_lib$createDifferedSeedsState,
+			"differed_seeds_state"
+		);
+		WorldDuckInterface duckedWorld = (WorldDuckInterface) world;
+		stateManager.getOrCreate(
+			duckedWorld::mmodding_lib$stellarStatusStateFromNbt,
+			duckedWorld::mmodding_lib$createStellarStatusState,
+			"stellar_status_state"
+		);
 	}
 
 	private static void serverInit(ServerPlayNetworkHandler handler, MinecraftServer server) {

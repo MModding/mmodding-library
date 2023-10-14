@@ -1,21 +1,10 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
-import com.mmodding.mmodding_lib.ducks.ServerStellarStatusDuckInterface;
-import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
-import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionOptions;
-import net.minecraft.world.gen.Spawner;
-import net.minecraft.world.level.ServerWorldProperties;
-import net.minecraft.world.level.storage.LevelStorage;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.jetbrains.annotations.NotNull;
@@ -28,17 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends WorldMixin implements ServerStellarStatusDuckInterface, WorldUtils.TickTaskServer {
-
-	@Unique
-	private final Map<Identifier, StellarStatus> allStellarStatus = new HashMap<>();
+public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.TickTaskServer {
 
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
@@ -52,16 +35,6 @@ public abstract class ServerWorldMixin extends WorldMixin implements ServerStell
 	@Shadow
 	@NotNull
 	public abstract MinecraftServer getServer();
-
-	@Inject(method = "<init>", at = @At("TAIL"))
-	private void init(MinecraftServer server, Executor executor, LevelStorage.Session session, ServerWorldProperties worldProperties, RegistryKey<World> registryKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean bl, long l, List<Spawner> spawners, boolean bl2, CallbackInfo ci) {
-		MModdingGlobalMaps.getStellarCycleKeys().forEach((identifier) -> {
-			StellarCycle stellarCycle = MModdingGlobalMaps.getStellarCycle(identifier);
-			if (stellarCycle.getWorldKey().equals(this.getRegistryKey())) {
-				this.allStellarStatus.put(identifier, StellarStatus.of(stellarCycle));
-			}
-		});
-	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
@@ -111,7 +84,7 @@ public abstract class ServerWorldMixin extends WorldMixin implements ServerStell
 		}
 	}
 
-	@Inject(method = "tickTime", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;setTimeOfDay(J)V"))
+	@Inject(method = "tickTime", at = @At(value = "TAIL"))
 	private void tickTime(CallbackInfo ci) {
 		this.allStellarStatus.forEach((key, value) -> value.tick());
 	}
@@ -130,16 +103,6 @@ public abstract class ServerWorldMixin extends WorldMixin implements ServerStell
 				cir.setReturnValue(differedSeed);
 			}
 		});
-	}
-
-	@Override
-	public Map<Identifier, StellarStatus> mmodding_lib$getAllStellarStatus() {
-		return this.allStellarStatus;
-	}
-
-	@Override
-	public StellarStatus mmodding_lib$getStellarStatus(Identifier identifier) {
-		return this.allStellarStatus.get(identifier);
 	}
 
 	@Override

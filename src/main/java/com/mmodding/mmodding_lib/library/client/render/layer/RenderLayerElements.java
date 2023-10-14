@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.client.render;
+package com.mmodding.mmodding_lib.library.client.render.layer;
 
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderPhaseAccessor;
 import net.minecraft.client.render.RenderPhase;

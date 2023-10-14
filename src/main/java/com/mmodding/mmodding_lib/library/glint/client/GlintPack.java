@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.glint.client;
 
-import com.mmodding.mmodding_lib.library.client.render.RenderLayerElements;
+import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerElements;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.vertex.*;

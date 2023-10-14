@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.library.enchantments.types;
 
 import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantment;
 import com.mmodding.mmodding_lib.library.utils.FilterList;
-import com.mmodding.mmodding_lib.library.utils.Prefix;
+import com.mmodding.mmodding_lib.library.texts.Prefix;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Items;
 import net.minecraft.util.Formatting;

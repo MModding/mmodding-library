@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.events.networking.client;
 
-import com.mmodding.mmodding_lib.library.stellar.client.ClientStellarStatus;
+import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.base.api.event.Event;
@@ -24,13 +24,13 @@ public class ClientStellarStatusNetworkingEvents {
 	@FunctionalInterface
 	public interface Before {
 
-		void beforeStellarStatusReceived(Identifier identifier, ClientStellarStatus status);
+		void beforeStellarStatusReceived(Identifier identifier, StellarStatus status);
 	}
 
 	@ClientOnly
 	@FunctionalInterface
 	public interface After {
 
-		void afterStellarStatusReceived(Identifier identifier, ClientStellarStatus status);
+		void afterStellarStatusReceived(Identifier identifier, StellarStatus status);
 	}
 }

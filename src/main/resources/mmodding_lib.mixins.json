@@ -60,6 +60,7 @@
     "injectors.LivingEntityMixin",
     "injectors.MiningToolItemMixin",
     "injectors.MobEntityMixin",
+    "injectors.ModBadgeRendererMixin",
     "injectors.NetherPortalBlockMixin",
     "injectors.NoiseChunkGeneratorMixin",
     "injectors.PassiveEntityMixin",

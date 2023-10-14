@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
-import com.mmodding.mmodding_lib.library.client.render.RenderLayerOperations;
+import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerOperations;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;

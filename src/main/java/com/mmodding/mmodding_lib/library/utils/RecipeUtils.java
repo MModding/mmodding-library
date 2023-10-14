@@ -49,8 +49,6 @@ public class RecipeUtils {
 			}
 		}
 
-		boolean test = ingredients.size() == counter && matcher.match(recipe, null, multiplier);
-		System.out.println(test);
-		return test;
+		return ingredients.size() == counter && matcher.match(recipe, null, multiplier);
 	}
 }

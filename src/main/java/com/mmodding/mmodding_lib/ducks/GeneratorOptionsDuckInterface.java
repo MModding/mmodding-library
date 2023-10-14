@@ -18,5 +18,5 @@ public interface GeneratorOptionsDuckInterface {
 
 	DifferedSeedsState mmodding_lib$createDifferedSeedsState();
 
-	DifferedSeedsState mmodding_lib$stateFromNbt(NbtCompound nbt);
+	DifferedSeedsState mmodding_lib$differedSeedsStateFromNbt(NbtCompound nbt);
 }

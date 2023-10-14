@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantedBookItem;
 import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantment;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.utils.FilterList;
-import com.mmodding.mmodding_lib.library.utils.Prefix;
+import com.mmodding.mmodding_lib.library.texts.Prefix;
 import com.mmodding.mmodding_lib.library.utils.TweakFunction;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.util.Formatting;

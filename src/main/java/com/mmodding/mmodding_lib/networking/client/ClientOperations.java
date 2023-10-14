@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.networking.client;
 import com.google.gson.JsonParser;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.ClientCaches;
-import com.mmodding.mmodding_lib.ducks.ClientStellarStatusDuckInterface;
+import com.mmodding.mmodding_lib.ducks.WorldDuckInterface;
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientStellarStatusNetworkingEvents;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
@@ -11,7 +11,7 @@ import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientGlintPackNetworkingEvents;
-import com.mmodding.mmodding_lib.library.stellar.client.ClientStellarStatus;
+import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
@@ -51,11 +51,11 @@ public class ClientOperations {
 		long currentTime = packet.readLong();
 		long totalTime = packet.readLong();
 
-		ClientStellarStatus status = ClientStellarStatus.of(currentTime, totalTime);
+		StellarStatus status = StellarStatus.of(currentTime, totalTime);
 
 		ClientStellarStatusNetworkingEvents.BEFORE.invoker().beforeStellarStatusReceived(identifier, status);
 
-		((ClientStellarStatusDuckInterface) handler.getWorld()).mmodding_lib$setStellarStatus(identifier, ClientStellarStatus.of(currentTime, totalTime));
+		((WorldDuckInterface) handler.getWorld()).mmodding_lib$putStellarStatus(identifier, status);
 
 		ClientStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusReceived(identifier, status);
 	}

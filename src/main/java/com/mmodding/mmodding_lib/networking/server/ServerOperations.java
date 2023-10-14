@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.networking.server;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.ducks.ServerStellarStatusDuckInterface;
+import com.mmodding.mmodding_lib.ducks.WorldDuckInterface;
 import com.mmodding.mmodding_lib.library.events.networking.server.ServerStellarStatusNetworkingEvents;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.config.Config;
@@ -95,7 +95,7 @@ public class ServerOperations {
 
 	public static void sendAllStellarStatusToClient(ServerPlayerEntity player) {
 
-        Map<Identifier, StellarStatus> stellarStatus = new HashMap<>(((ServerStellarStatusDuckInterface) player.getWorld()).mmodding_lib$getAllStellarStatus());
+        Map<Identifier, StellarStatus> stellarStatus = new HashMap<>(((WorldDuckInterface) player.getWorld()).mmodding_lib$getAllStellarStatus());
 
 		ServerStellarStatusNetworkingEvents.BEFORE_ALL.invoker().beforeAllStellarStatusSent(stellarStatus);
 

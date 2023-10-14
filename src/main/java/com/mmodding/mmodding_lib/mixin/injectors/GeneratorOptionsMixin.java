@@ -25,9 +25,9 @@ public class GeneratorOptionsMixin implements GeneratorOptionsDuckInterface {
 	public void mmodding_lib$fillDimensionSeedAddendsNbt(NbtList list) {
 		for (int i = 0; i < list.size(); i++) {
 			NbtCompound nbt = list.getCompound(i);
-			String dimensionIdentifier = nbt.getString("dimensionIdentifier");
+			String dimension = nbt.getString("dimension");
 			long differed = nbt.getLong("differed");
-			this.mmodding_lib$addDimensionSeedAddend(RegistryKey.of(Registry.WORLD_KEY, new Identifier(dimensionIdentifier)), differed);
+			this.mmodding_lib$addDimensionSeedAddend(RegistryKey.of(Registry.WORLD_KEY, new Identifier(dimension)), differed);
 		}
 	}
 
@@ -52,7 +52,7 @@ public class GeneratorOptionsMixin implements GeneratorOptionsDuckInterface {
 	}
 
 	@Override
-	public DifferedSeedsState mmodding_lib$stateFromNbt(NbtCompound nbt) {
+	public DifferedSeedsState mmodding_lib$differedSeedsStateFromNbt(NbtCompound nbt) {
 		return this.mmodding_lib$createDifferedSeedsState().readNbt(nbt);
 	}
 }

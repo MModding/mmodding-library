@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.stellar;
 
-import com.mmodding.mmodding_lib.ducks.ClientStellarStatusDuckInterface;
+import com.mmodding.mmodding_lib.ducks.WorldDuckInterface;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
 import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
@@ -40,7 +40,7 @@ public class StellarObject {
 	}
 
 	public StellarStatus getStatus(ClientWorld world) {
-		return ((ClientStellarStatusDuckInterface) world).mmodding_lib$getStellarStatus(this.stellarCycle);
+		return ((WorldDuckInterface) world).mmodding_lib$getStellarStatus(this.stellarCycle);
 	}
 
     public void render(MatrixStack matrices, ClientWorld world, float tickDelta) {

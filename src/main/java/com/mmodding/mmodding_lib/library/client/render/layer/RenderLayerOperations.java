@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.client.render;
+package com.mmodding.mmodding_lib.library.client.render.layer;
 
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.block.Block;
