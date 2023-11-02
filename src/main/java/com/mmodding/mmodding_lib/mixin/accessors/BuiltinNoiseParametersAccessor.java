@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface BuiltinNoiseParametersAccessor {
 
 	@Invoker("registerBiomeNoises")
-	static void registerBiomeNoises(Registry<DoublePerlinNoiseSampler.NoiseParameters> registry, int i, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> firstKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> secondKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> thirdKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> fourthKey) {
+	static void invokeRegisterBiomeNoises(Registry<DoublePerlinNoiseSampler.NoiseParameters> registry, int i, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> firstKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> secondKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> thirdKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> fourthKey) {
+		throw new AssertionError();
 	}
 }

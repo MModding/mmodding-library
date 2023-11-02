@@ -28,7 +28,7 @@ public class CustomPotion extends Potion implements PotionRegistrable {
 	 * @see MModdingBootstrapInitializer
 	 */
 	public CustomPotion addBrewingRecipe(Potion basePotion, Item ingredient) {
-		BrewingRecipeRegistryAccessor.registerPotionRecipe(basePotion, ingredient, this);
+		BrewingRecipeRegistryAccessor.invokeRegisterPotionRecipe(basePotion, ingredient, this);
 		return this;
 	}
 

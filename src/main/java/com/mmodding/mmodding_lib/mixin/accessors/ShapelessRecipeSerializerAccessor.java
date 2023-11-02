@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface ShapelessRecipeSerializerAccessor {
 
 	@Invoker("getIngredients")
-	static DefaultedList<Ingredient> getIngredients(JsonArray jsonArray) {
+	static DefaultedList<Ingredient> invokeGetIngredients(JsonArray jsonArray) {
 		throw new AssertionError();
 	}
 }

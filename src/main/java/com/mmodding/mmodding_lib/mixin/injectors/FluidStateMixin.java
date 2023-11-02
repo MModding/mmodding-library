@@ -24,7 +24,7 @@ public abstract class FluidStateMixin implements FluidGroupComparable {
     @Inject(method = "getVelocity", at = @At("HEAD"), cancellable = true)
     private void getVelocity(BlockView world, BlockPos pos, CallbackInfoReturnable<Vec3d> cir) {
         if (this.getFluid() instanceof FluidExtensions extensions) {
-            cir.setReturnValue(((FluidAccessor) this.getFluid()).getVelocity(world, pos, (FluidState) (Object) this).multiply(extensions.getVelocityMultiplier()));
+            cir.setReturnValue(((FluidAccessor) this.getFluid()).invokeGetVelocity(world, pos, (FluidState) (Object) this).multiply(extensions.getVelocityMultiplier()));
         }
     }
 

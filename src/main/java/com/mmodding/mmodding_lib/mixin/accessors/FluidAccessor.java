@@ -12,5 +12,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface FluidAccessor {
 
 	@Invoker("getVelocity")
-	Vec3d getVelocity(BlockView world, BlockPos pos, FluidState state);
+	Vec3d invokeGetVelocity(BlockView world, BlockPos pos, FluidState state);
 }

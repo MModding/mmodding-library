@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface BrewingRecipeRegistryAccessor {
 
 	@Invoker("registerPotionRecipe")
-	static void registerPotionRecipe(Potion input, Item item, Potion output) {
+	static void invokeRegisterPotionRecipe(Potion input, Item item, Potion output) {
+		throw new AssertionError();
 	}
 }

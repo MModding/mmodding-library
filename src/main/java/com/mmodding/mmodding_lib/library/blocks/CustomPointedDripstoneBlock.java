@@ -48,7 +48,7 @@ public class CustomPointedDripstoneBlock extends PointedDripstoneBlock implement
 	@Override
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
 		PointedDripstoneBlock.maybeDripFluid(state, world, pos, random.nextFloat());
-		if (random.nextFloat() < 0.011377778f && PointedDripstoneBlockAccessor.isHeldByPointedDripstone(state, world, pos)) {
+		if (random.nextFloat() < 0.011377778f && PointedDripstoneBlockAccessor.invokeIsHeldByPointedDripstone(state, world, pos)) {
 			this.tryGrowCustom(state, world, pos, random);
 		}
 	}
@@ -63,11 +63,11 @@ public class CustomPointedDripstoneBlock extends PointedDripstoneBlock implement
 
 		if (this.canGrow(firstState, secondState)) {
 
-			BlockPos blockPos = PointedDripstoneBlockAccessor.getTipPos(state, world, pos, 7, false);
+			BlockPos blockPos = PointedDripstoneBlockAccessor.invokeGetTipPos(state, world, pos, 7, false);
 			if (blockPos != null) {
 
 				BlockState thirdState = world.getBlockState(blockPos);
-				if (PointedDripstoneBlock.canDrip(thirdState) && PointedDripstoneBlockAccessor.canGrow(thirdState, world, blockPos)) {
+				if (PointedDripstoneBlock.canDrip(thirdState) && PointedDripstoneBlockAccessor.invokeCanGrow(thirdState, world, blockPos)) {
 
 					if (random.nextBoolean()) {
 						this.tryGrowCustom(world, blockPos, Direction.DOWN);
@@ -90,17 +90,17 @@ public class CustomPointedDripstoneBlock extends PointedDripstoneBlock implement
 				return;
 			}
 
-			if (PointedDripstoneBlockAccessor.isTip(state, Direction.UP) && PointedDripstoneBlockAccessor.canGrow(state, world, mutable)) {
+			if (PointedDripstoneBlockAccessor.invokeIsTip(state, Direction.UP) && PointedDripstoneBlockAccessor.invokeCanGrow(state, world, mutable)) {
 				this.tryGrowCustom(world, mutable, Direction.UP);
 				return;
 			}
 
-			if (PointedDripstoneBlockAccessor.canPlaceAtWithDirection(world, mutable, Direction.UP) && !world.isWater(mutable.down())) {
+			if (PointedDripstoneBlockAccessor.invokeCanPlaceAtWithDirection(world, mutable, Direction.UP) && !world.isWater(mutable.down())) {
 				this.tryGrowCustom(world, mutable.down(), Direction.UP);
 				return;
 			}
 
-			if (!PointedDripstoneBlockAccessor.canDripThrough(world, mutable, state)) {
+			if (!PointedDripstoneBlockAccessor.invokeCanDripThrough(world, mutable, state)) {
 				return;
 			}
 		}
@@ -110,7 +110,7 @@ public class CustomPointedDripstoneBlock extends PointedDripstoneBlock implement
 		BlockPos directionPos = pos.offset(direction);
 		BlockState state = world.getBlockState(directionPos);
 
-		if (PointedDripstoneBlockAccessor.isTip(state, direction.getOpposite())) {
+		if (PointedDripstoneBlockAccessor.invokeIsTip(state, direction.getOpposite())) {
 			this.growCustomMerged(state, world, directionPos);
 		} else if (state.isAir() || state.isOf(Blocks.WATER)) {
 			this.placeCustom(world, directionPos, direction, Thickness.TIP);

@@ -17,7 +17,7 @@ public class ScreenHandlerUtils {
 
 		for (int line = 0; line < 3; line++) {
 			for (int column = 0; column < 9; column++) {
-				accessor.addSlot(new Slot(playerInventory, column + line * 9 + 9, 8 + column * 18, 84 + line * 18));
+				accessor.invokeAddSlot(new Slot(playerInventory, column + line * 9 + 9, 8 + column * 18, 84 + line * 18));
 			}
 		}
 	}
@@ -26,7 +26,7 @@ public class ScreenHandlerUtils {
 		ScreenHandlerAccessor accessor = (ScreenHandlerAccessor) screenHandler;
 
 		for (int hotBarSlot = 0; hotBarSlot < 9; hotBarSlot++) {
-			accessor.addSlot(new Slot(playerInventory, hotBarSlot, 8 + hotBarSlot * 18, 142));
+			accessor.invokeAddSlot(new Slot(playerInventory, hotBarSlot, 8 + hotBarSlot * 18, 142));
 		}
 	}
 }

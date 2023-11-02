@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class RecipeSerializationUtils {
 
 	public static Ingredient getIngredient(Stream<Ingredient.Entry> entries) {
-		return IngredientAccessor.ofEntries(entries);
+		return IngredientAccessor.invokeOfEntries(entries);
 	}
 
 	public static Ingredient.StackEntry getIngredientStack(JsonObject json) {
@@ -44,7 +44,7 @@ public class RecipeSerializationUtils {
 	}
 
 	public static Ingredient.Entry getIngredientEntry(JsonObject json) {
-		return IngredientAccessor.entryFromJson(json);
+		return IngredientAccessor.invokeEntryFromJson(json);
 	}
 
 	public static ItemStack getStackWithoutData(JsonObject json) {
@@ -70,7 +70,7 @@ public class RecipeSerializationUtils {
 	}
 
 	public static DefaultedList<Ingredient> getIngredients(JsonObject json, String key, int number) {
-		DefaultedList<Ingredient> ingredients = ShapelessRecipeSerializerAccessor.getIngredients(JsonHelper.getArray(json, key));
+		DefaultedList<Ingredient> ingredients = ShapelessRecipeSerializerAccessor.invokeGetIngredients(JsonHelper.getArray(json, key));
 		if (ingredients.isEmpty()) {
 			throw new JsonParseException("No Ingredients For Recipe");
 		}

@@ -8,6 +8,6 @@ import net.minecraft.util.registry.RegistryKey;
 public class NoiseParametersUtils {
 
 	public static void registerGroupedBiomeNoises(Registry<DoublePerlinNoiseSampler.NoiseParameters> registry, int octaveOffset, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> temperatureKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> vegetationKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> continentalnessKey, RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> erosionKey) {
-		BuiltinNoiseParametersAccessor.registerBiomeNoises(registry, octaveOffset, temperatureKey, vegetationKey, continentalnessKey, erosionKey);
+		BuiltinNoiseParametersAccessor.invokeRegisterBiomeNoises(registry, octaveOffset, temperatureKey, vegetationKey, continentalnessKey, erosionKey);
 	}
 }

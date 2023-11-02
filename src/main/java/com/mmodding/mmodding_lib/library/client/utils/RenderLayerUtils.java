@@ -41,10 +41,10 @@ public class RenderLayerUtils {
     }
 
     public static RenderLayer.MultiPhase of(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, RenderLayer.MultiPhaseParameters phaseData) {
-        return RenderLayerFirstAccessor.of(name, vertexFormat, drawMode, expectedBufferSize, phaseData);
+        return RenderLayerFirstAccessor.invokeOf(name, vertexFormat, drawMode, expectedBufferSize, phaseData);
     }
 
     public static RenderLayer.MultiPhase of(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, RenderLayer.MultiPhaseParameters phases) {
-        return RenderLayerSecondAccessor.of(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, phases);
+        return RenderLayerSecondAccessor.invokeOf(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, phases);
     }
 }

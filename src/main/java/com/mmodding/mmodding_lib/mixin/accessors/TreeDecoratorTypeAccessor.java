@@ -11,6 +11,6 @@ public interface TreeDecoratorTypeAccessor {
 
 	@Invoker("<init>")
 	static <P extends TreeDecorator> TreeDecoratorType<P> create(Codec<P> codec) {
-		return null;
+		throw new AssertionError();
 	}
 }

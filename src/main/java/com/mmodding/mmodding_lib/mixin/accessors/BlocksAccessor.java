@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface BlocksAccessor {
 
 	@Invoker("always")
-	static boolean always(BlockState state, BlockView world, BlockPos pos) {
+	static boolean invokeAlways(BlockState state, BlockView world, BlockPos pos) {
 		throw new AssertionError();
 	}
 
 	@Invoker("never")
-	static boolean never(BlockState state, BlockView world, BlockPos pos) {
+	static boolean invokeNever(BlockState state, BlockView world, BlockPos pos) {
 		throw new AssertionError();
 	}
 }

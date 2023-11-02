@@ -15,7 +15,7 @@ public class CustomPOI implements POIRegistrable {
 	private final PointOfInterestType type;
 
 	public static Set<BlockState> getStates(Block block) {
-		return PointOfInterestTypesAccessor.states(block);
+		return PointOfInterestTypesAccessor.invokeStates(block);
 	}
 
     public CustomPOI(Block block, int maxTickets, int searchDistance) {

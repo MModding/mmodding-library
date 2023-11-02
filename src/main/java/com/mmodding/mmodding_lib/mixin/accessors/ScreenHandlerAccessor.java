@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface ScreenHandlerAccessor {
 
 	@Invoker("addSlot")
-	Slot addSlot(Slot slot);
+	Slot invokeAddSlot(Slot slot);
 }

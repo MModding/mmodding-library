@@ -43,10 +43,10 @@ public class BlockSettingsModifiers {
 	}
 
 	public static boolean always(BlockState state, BlockView world, BlockPos pos) {
-		return BlocksAccessor.always(state, world, pos);
+		return BlocksAccessor.invokeAlways(state, world, pos);
 	}
 
 	public static boolean never(BlockState state, BlockView world, BlockPos pos) {
-		return BlocksAccessor.never(state, world, pos);
+		return BlocksAccessor.invokeNever(state, world, pos);
 	}
 }

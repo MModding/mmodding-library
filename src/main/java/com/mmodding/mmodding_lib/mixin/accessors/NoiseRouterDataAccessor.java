@@ -50,86 +50,87 @@ public interface NoiseRouterDataAccessor {
 	}
 
 	@Invoker("method_41548")
-	static void method_41548(Registry<DensityFunction> registry, DensityFunction densityFunction, Holder<DensityFunction> holder, Holder<DensityFunction> holder2, RegistryKey<DensityFunction> firstRegistryKey, RegistryKey<DensityFunction> secondRegistryKey, RegistryKey<DensityFunction> thirdRegistryKey, RegistryKey<DensityFunction> fourthRegistryKey, RegistryKey<DensityFunction> fifthRegistryKey, boolean bl) {
+	static void invokeMethod_41548(Registry<DensityFunction> registry, DensityFunction densityFunction, Holder<DensityFunction> holder, Holder<DensityFunction> holder2, RegistryKey<DensityFunction> firstRegistryKey, RegistryKey<DensityFunction> secondRegistryKey, RegistryKey<DensityFunction> thirdRegistryKey, RegistryKey<DensityFunction> fourthRegistryKey, RegistryKey<DensityFunction> fifthRegistryKey, boolean bl) {
+		throw new AssertionError();
 	}
 
 	@Invoker("method_41551")
-	static DensityFunction method_41551(Registry<DensityFunction> registry, RegistryKey<DensityFunction> registryKey, DensityFunction densityFunction) {
+	static DensityFunction invokeMethod_41551(Registry<DensityFunction> registry, RegistryKey<DensityFunction> registryKey, DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("register")
-	static Holder<DensityFunction> register(Registry<DensityFunction> registry, RegistryKey<DensityFunction> registryKey, DensityFunction densityFunction) {
+	static Holder<DensityFunction> invokeRegister(Registry<DensityFunction> registry, RegistryKey<DensityFunction> registryKey, DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("getNoise")
-	static Holder<DoublePerlinNoiseSampler.NoiseParameters> getNoise(RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> key) {
+	static Holder<DoublePerlinNoiseSampler.NoiseParameters> invokeGetNoise(RegistryKey<DoublePerlinNoiseSampler.NoiseParameters> key) {
 		throw new AssertionError();
 	}
 
 	@Invoker("getFunction")
-	static DensityFunction getFunction(Registry<DensityFunction> registry, RegistryKey<DensityFunction> key) {
+	static DensityFunction invokeGetFunction(Registry<DensityFunction> registry, RegistryKey<DensityFunction> key) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_41547")
-	static DensityFunction method_41547(DensityFunction densityFunction) {
+	static DensityFunction invokeMethod_41547(DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("underground")
-	static DensityFunction underground(Registry<DensityFunction> densityFunctionRegistry, DensityFunction densityFunction) {
+	static DensityFunction invokeUnderground(Registry<DensityFunction> densityFunctionRegistry, DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("postProcess")
-	static DensityFunction postProcess(DensityFunction densityFunction) {
+	static DensityFunction invokePostProcess(DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_42366")
-	static DensityFunction method_42366(boolean bl, DensityFunction densityFunction) {
+	static DensityFunction invokeMethod_42366(boolean bl, DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_42363")
-	static DensityFunction method_42363(Registry<DensityFunction> registry, int i, int j) {
+	static DensityFunction invokeMethod_42363(Registry<DensityFunction> registry, int i, int j) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_42364")
-	static DensityFunction method_42364(DensityFunction densityFunction, int i, int j) {
+	static DensityFunction invokeMethod_42364(DensityFunction densityFunction, int i, int j) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_42367")
-	static DensityFunction method_42367(DensityFunction densityFunction) {
+	static DensityFunction invokeMethod_42367(DensityFunction densityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_44324")
-	static NoiseRouter method_44324() {
+	static NoiseRouter invokeMethod_44324() {
 		throw new AssertionError();
 	}
 
 	@Invoker("splineWithBlending")
-	static DensityFunction splineWithBlending(DensityFunction firstDensityFunction, DensityFunction secondDensityFunction) {
+	static DensityFunction invokeSplineWithBlending(DensityFunction firstDensityFunction, DensityFunction secondDensityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("noiseGradientDensity")
-	static DensityFunction noiseGradientDensity(DensityFunction firstDensityFunction, DensityFunction secondDensityFunction) {
+	static DensityFunction invokeNoiseGradientDensity(DensityFunction firstDensityFunction, DensityFunction secondDensityFunction) {
 		throw new AssertionError();
 	}
 
 	@Invoker("yLimitedInterpolatable")
-	static DensityFunction yLimitedInterpolatable(DensityFunction input, DensityFunction whenInRange, int minInclusive, int maxInclusive, int maxRange) {
+	static DensityFunction invokeYLimitedInterpolatable(DensityFunction input, DensityFunction whenInRange, int minInclusive, int maxInclusive, int maxRange) {
 		throw new AssertionError();
 	}
 
 	@Invoker("method_42365")
-	static DensityFunction method_42365(DensityFunction densityFunction, int i, int j, int k, int l, double d, int m, int n, double e) {
+	static DensityFunction invokeMethod_42365(DensityFunction densityFunction, int i, int j, int k, int l, double d, int m, int n, double e) {
 		throw new AssertionError();
 	}
 }

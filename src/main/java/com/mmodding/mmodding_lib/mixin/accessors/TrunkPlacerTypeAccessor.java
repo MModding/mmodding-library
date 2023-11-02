@@ -11,6 +11,6 @@ public interface TrunkPlacerTypeAccessor {
 
 	@Invoker("<init>")
 	static <P extends TrunkPlacer> TrunkPlacerType<P> create(Codec<P> codec) {
-		return null;
+		throw new AssertionError();
 	}
 }

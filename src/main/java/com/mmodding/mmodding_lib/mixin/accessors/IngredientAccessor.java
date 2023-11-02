@@ -11,12 +11,12 @@ import java.util.stream.Stream;
 public interface IngredientAccessor {
 
 	@Invoker("ofEntries")
-	static Ingredient ofEntries(Stream<? extends Ingredient.Entry> entries) {
+	static Ingredient invokeOfEntries(Stream<? extends Ingredient.Entry> entries) {
 		throw new AssertionError();
 	}
 
     @Invoker("entryFromJson")
-    static Ingredient.Entry entryFromJson(JsonObject json) {
+    static Ingredient.Entry invokeEntryFromJson(JsonObject json) {
         throw new AssertionError();
     }
 }

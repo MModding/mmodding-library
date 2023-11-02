@@ -14,7 +14,7 @@ public interface POIRegistrable extends Registrable {
 		if (this instanceof CustomPOI POI && this.isNotRegistered()) {
 			RegistryKey<PointOfInterestType> key = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY, identifier);
 			RegistrationUtils.registerPointOfInterestType(identifier, POI.getType());
-			PointOfInterestTypesAccessor.addStates(Registry.POINT_OF_INTEREST_TYPE.getHolderOrThrow(key));
+			PointOfInterestTypesAccessor.invokeAddStates(Registry.POINT_OF_INTEREST_TYPE.getHolderOrThrow(key));
 			this.setRegistered();
 		}
 	}

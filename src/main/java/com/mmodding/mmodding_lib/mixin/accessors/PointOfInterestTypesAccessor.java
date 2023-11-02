@@ -14,11 +14,12 @@ import java.util.Set;
 public interface PointOfInterestTypesAccessor {
 
 	@Invoker("states")
-	static Set<BlockState> states(Block block) {
-		return null;
+	static Set<BlockState> invokeStates(Block block) {
+		throw new AssertionError();
 	}
 
 	@Invoker("addStates")
-	static void addStates(Holder<PointOfInterestType> holder) {
+	static void invokeAddStates(Holder<PointOfInterestType> holder) {
+		throw new AssertionError();
 	}
 }
