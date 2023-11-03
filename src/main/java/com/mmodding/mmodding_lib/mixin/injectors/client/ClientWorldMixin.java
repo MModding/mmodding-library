@@ -1,7 +1,9 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.ducks.ClientWorldDuckInterface;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.WorldMixin;
+import com.mmodding.mmodding_lib.states.readable.ReadableStellarStatuses;
 import net.minecraft.client.world.ClientWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
@@ -12,11 +14,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ClientWorld.class)
-public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskClient {
+public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.TickTaskClient, ClientWorldDuckInterface {
 
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
@@ -27,10 +30,13 @@ public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.
 	@Unique
 	private final List<MutablePair<MutableTriple<Integer, Long, Runnable>, Integer>> eachTasks = new ArrayList<>();
 
+	@Unique
+	protected ReadableStellarStatuses stellarStatuses = this.fillStellarStatuses(ReadableStellarStatuses.of(new HashMap<>()));
+
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
 
-		for (int i = 0; i < this.tasks.size(); i++) {
+		for (int i = 0; i < this.ifNullDefaultList(this.tasks).size(); i++) {
 			MutablePair<Long, Runnable> task = this.tasks.get(i);
 
 			task.setLeft(task.getLeft() - 1);
@@ -43,7 +49,7 @@ public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.
 			}
 		}
 
-		for (int i = 0; i < this.repeatingTasks.size(); i++) {
+		for (int i = 0; i < this.ifNullDefaultList(this.repeatingTasks).size(); i++) {
 			MutablePair<Long, Runnable> task = this.repeatingTasks.get(i);
 
 			task.setLeft(task.getLeft() - 1);
@@ -55,7 +61,7 @@ public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.
 			}
 		}
 
-		for (int i = 0 ; i < this.eachTasks.size(); i++) {
+		for (int i = 0 ; i < this.ifNullDefaultList(this.eachTasks).size(); i++) {
 			MutablePair<MutableTriple<Integer, Long, Runnable>, Integer> task = this.eachTasks.get(i);
 
 			MutableTriple<Integer, Long, Runnable> params = task.getLeft();
@@ -75,11 +81,6 @@ public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.
 		}
 	}
 
-	@Inject(method = "tickTime", at = @At(value = "TAIL"))
-	private void tickTime(CallbackInfo ci) {
-		this.allStellarStatus.forEach((key, value) -> value.tick());
-	}
-
 	@Override
 	public void mmodding_lib$doTaskAfter(long ticksToWait, Runnable run) {
 		this.tasks.add(new MutablePair<>(ticksToWait, run));
@@ -93,5 +94,15 @@ public abstract class ClientWorldMixin extends WorldMixin implements WorldUtils.
 	@Override
 	public void mmodding_lib$repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
 		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
+	}
+
+	@Override
+	public ReadableStellarStatuses mmodding_lib$getStellarStatusesAccess() {
+		return this.stellarStatuses;
+	}
+
+	@Unique
+	private <T> List<T> ifNullDefaultList(List<T> list) {
+		return list == null ? new ArrayList<>() : list;
 	}
 }

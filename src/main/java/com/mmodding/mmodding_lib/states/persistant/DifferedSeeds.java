@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.persistentstates;
+package com.mmodding.mmodding_lib.states.persistant;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
@@ -9,16 +9,16 @@ import net.minecraft.world.PersistentState;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public class DifferedSeedsState extends PersistentState {
+public class DifferedSeeds extends PersistentState {
 
 	private final GeneratorOptionsDuckInterface generatorOptions;
 
-	public DifferedSeedsState(GeneratorOptionsDuckInterface generatorOptions) {
+	public DifferedSeeds(GeneratorOptionsDuckInterface generatorOptions) {
 		this.generatorOptions = generatorOptions;
 		this.markDirty();
 	}
 
-	public DifferedSeedsState readNbt(NbtCompound nbt) {
+	public DifferedSeeds readNbt(NbtCompound nbt) {
 		this.generatorOptions.mmodding_lib$fillDimensionSeedAddendsNbt(nbt.getList("dimension_seed_addends", NbtElement.COMPOUND_TYPE));
 		return this;
 	}

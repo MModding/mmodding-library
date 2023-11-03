@@ -1,14 +1,12 @@
-package com.mmodding.mmodding_lib.library.events.networking.server;
+package com.mmodding.mmodding_lib.library.events.networking.common;
 
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.base.api.event.Event;
 
 import java.util.Map;
 
-@DedicatedServerOnly
-public class ServerStellarStatusNetworkingEvents {
+public class StellarStatusNetworkingEvents {
 
 	public static final Event<Before> BEFORE = Event.create(Before.class, callbacks -> (identifier, status) -> {
 		for (Before callback : callbacks) {
@@ -34,28 +32,24 @@ public class ServerStellarStatusNetworkingEvents {
 		}
 	});
 
-	@DedicatedServerOnly
 	@FunctionalInterface
 	public interface Before {
 
 		void beforeStellarStatusSent(Identifier identifier, StellarStatus status);
 	}
 
-	@DedicatedServerOnly
 	@FunctionalInterface
 	public interface After {
 
 		void afterStellarStatusSent(Identifier identifier, StellarStatus status);
 	}
 
-	@DedicatedServerOnly
 	@FunctionalInterface
 	public interface BeforeAll {
 
 		void beforeAllStellarStatusSent(Map<Identifier, StellarStatus> stellarStatus);
 	}
 
-	@DedicatedServerOnly
 	@FunctionalInterface
 	public interface AfterAll {
 

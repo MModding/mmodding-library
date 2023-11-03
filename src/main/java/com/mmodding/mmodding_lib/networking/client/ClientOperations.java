@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.networking.client;
 import com.google.gson.JsonParser;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.ClientCaches;
-import com.mmodding.mmodding_lib.ducks.WorldDuckInterface;
+import com.mmodding.mmodding_lib.ducks.ClientWorldDuckInterface;
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientStellarStatusNetworkingEvents;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
@@ -47,6 +47,8 @@ public class ClientOperations {
 	}
 
 	public static void receiveStellarStatusOnClient(ClientPlayNetworkHandler handler, PacketByteBuf packet) {
+		if (handler.getWorld() == null) return;
+
 		Identifier identifier = packet.readIdentifier();
 		long currentTime = packet.readLong();
 		long totalTime = packet.readLong();
@@ -55,7 +57,7 @@ public class ClientOperations {
 
 		ClientStellarStatusNetworkingEvents.BEFORE.invoker().beforeStellarStatusReceived(identifier, status);
 
-		((WorldDuckInterface) handler.getWorld()).mmodding_lib$putStellarStatus(identifier, status);
+		((ClientWorldDuckInterface) handler.getWorld()).mmodding_lib$getStellarStatusesAccess().getMap().put(identifier, status);
 
 		ClientStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusReceived(identifier, status);
 	}

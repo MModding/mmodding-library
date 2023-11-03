@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
-import com.mmodding.mmodding_lib.persistentstates.DifferedSeedsState;
+import com.mmodding.mmodding_lib.states.persistant.DifferedSeeds;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -47,12 +47,12 @@ public class GeneratorOptionsMixin implements GeneratorOptionsDuckInterface {
 	}
 
 	@Override
-	public DifferedSeedsState mmodding_lib$createDifferedSeedsState() {
-		return new DifferedSeedsState(this);
+	public DifferedSeeds mmodding_lib$createDifferedSeedsState() {
+		return new DifferedSeeds(this);
 	}
 
 	@Override
-	public DifferedSeedsState mmodding_lib$differedSeedsStateFromNbt(NbtCompound nbt) {
+	public DifferedSeeds mmodding_lib$differedSeedsStateFromNbt(NbtCompound nbt) {
 		return this.mmodding_lib$createDifferedSeedsState().readNbt(nbt);
 	}
 }

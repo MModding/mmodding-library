@@ -48,18 +48,19 @@ public class MoveToSpecificPosGoal extends MoveToTargetPosGoal {
 	}
 
 	@Override
-	public boolean shouldContinue() {
-		return this.condition.getAsBoolean() && super.shouldContinue();
+	protected int getInterval(PathAwareEntity mob) {
+		return 20;
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public boolean shouldContinue() {
+		return this.condition.getAsBoolean() && this.tryingTime < 3600 && !this.hasReached() && this.isTargetPos(this.mob.world, this.targetPos);
+	}
 
-		if (this.hasReached()) {
-			if (this.after != null) {
-				this.after.run();
-			}
+	@Override
+	public void stop() {
+		if (this.after != null) {
+			this.after.run();
 		}
 	}
 

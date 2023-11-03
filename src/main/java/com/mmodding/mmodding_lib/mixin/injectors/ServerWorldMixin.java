@@ -1,8 +1,11 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
+import com.mmodding.mmodding_lib.ducks.ServerWorldDuckInterface;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
+import com.mmodding.mmodding_lib.states.persistant.StellarStatuses;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -21,7 +24,7 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.TickTaskServer {
+public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.TickTaskServer, ServerWorldDuckInterface {
 
 	@Unique
 	private final List<MutablePair<Long, Runnable>> tasks = new ArrayList<>();
@@ -31,6 +34,9 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 
 	@Unique
 	private final List<MutablePair<MutableTriple<Integer, Long, Runnable>, Integer>> eachTasks = new ArrayList<>();
+
+	@Unique
+	protected StellarStatuses stellarStatuses;
 
 	@Shadow
 	@NotNull
@@ -84,9 +90,9 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 		}
 	}
 
-	@Inject(method = "tickTime", at = @At(value = "TAIL"))
-	private void tickTime(CallbackInfo ci) {
-		this.allStellarStatus.forEach((key, value) -> value.tick());
+	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;tickTime()V"))
+	private void tick(CallbackInfo ci) {
+		this.stellarStatuses.tick(this.getServer());
 	}
 
 	@Inject(method = "getSeed", at = @At("HEAD"), cancellable = true)
@@ -118,5 +124,20 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 	@Override
 	public void mmodding_lib$repeatTaskEachTimeUntil(int ticksBetween, long ticksUntil, Runnable run) {
 		this.eachTasks.add(new MutablePair<>(new MutableTriple<>(ticksBetween, ticksUntil, run), 0));
+	}
+
+	@Override
+	public StellarStatuses mmodding_lib$createStellarStatuses() {
+		return this.stellarStatuses = this.fillStellarStatuses(new StellarStatuses());
+	}
+
+	@Override
+	public StellarStatuses mmodding_lib$stellarStatusesFromNbt(NbtCompound nbt) {
+		return this.stellarStatuses = (StellarStatuses) this.mmodding_lib$createStellarStatuses().readNbt(nbt);
+	}
+
+	@Override
+	public StellarStatuses mmodding_lib$getStellarStatuses() {
+		return this.stellarStatuses;
 	}
 }

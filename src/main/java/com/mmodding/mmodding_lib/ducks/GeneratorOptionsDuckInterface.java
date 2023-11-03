@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.ducks;
 
-import com.mmodding.mmodding_lib.persistentstates.DifferedSeedsState;
+import com.mmodding.mmodding_lib.states.persistant.DifferedSeeds;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.registry.RegistryKey;
@@ -16,7 +16,7 @@ public interface GeneratorOptionsDuckInterface {
 
 	long mmodding_lib$getDimensionSeedAddend(RegistryKey<World> worldKey);
 
-	DifferedSeedsState mmodding_lib$createDifferedSeedsState();
+	DifferedSeeds mmodding_lib$createDifferedSeedsState();
 
-	DifferedSeedsState mmodding_lib$differedSeedsStateFromNbt(NbtCompound nbt);
+	DifferedSeeds mmodding_lib$differedSeedsStateFromNbt(NbtCompound nbt);
 }

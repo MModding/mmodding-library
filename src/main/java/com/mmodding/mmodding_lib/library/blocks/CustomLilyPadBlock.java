@@ -1,13 +1,14 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.LilyPadBlock;
 import net.minecraft.block.Material;
-import net.minecraft.block.PlantBlock;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.WaterPlaceableBlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
@@ -15,7 +16,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiPredicate;
 
-public class CustomLilyPadBlock extends PlantBlock implements BlockRegistrable, BlockWithItem {
+public class CustomLilyPadBlock extends LilyPadBlock implements BlockRegistrable, BlockWithItem {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
@@ -53,7 +54,7 @@ public class CustomLilyPadBlock extends PlantBlock implements BlockRegistrable, 
 
 	public CustomLilyPadBlock(BiPredicate<FluidState, BlockState> placementConditions, Settings settings, boolean hasItem, Item.Settings itemSettings) {
 		super(settings);
-		if (hasItem) this.item = new BlockItem(this, itemSettings);
+		if (hasItem) this.item = new WaterPlaceableBlockItem(this, itemSettings);
 		this.placementConditions = placementConditions;
 	}
 
