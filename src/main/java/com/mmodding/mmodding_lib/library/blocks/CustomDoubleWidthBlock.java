@@ -1,0 +1,164 @@
+package com.mmodding.mmodding_lib.library.blocks;
+
+import com.mmodding.mmodding_lib.library.math.OrientedBlockPos;
+import com.mmodding.mmodding_lib.library.utils.Opposable;
+import com.mmodding.mmodding_lib.library.utils.TweakFunction;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.*;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
+import org.jetbrains.annotations.Nullable;
+import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+
+public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, BlockWithItem {
+
+	private static final EnumProperty<DoubleWidthPart> PART = EnumProperty.of("part", DoubleWidthPart.class);
+	private static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+
+    private final AtomicBoolean registered = new AtomicBoolean(false);
+
+    private BlockItem item = null;
+
+    public CustomDoubleWidthBlock(Settings settings) {
+        this(settings, false);
+    }
+
+    public CustomDoubleWidthBlock(Settings settings, boolean hasItem) {
+        this(settings, hasItem, (ItemGroup) null);
+    }
+
+	public CustomDoubleWidthBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
+		this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+	}
+
+    public CustomDoubleWidthBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
+        super(settings);
+		this.setDefaultState(this.getDefaultState().with(CustomDoubleWidthBlock.PART, DoubleWidthPart.ORIGIN).with(FACING, Direction.NORTH));
+        if (hasItem) this.item = new BlockItem(this, itemSettings);
+    }
+
+	@Nullable
+	@Override
+	public BlockState getPlacementState(ItemPlacementContext ctx) {
+		OrientedBlockPos oriented = OrientedBlockPos.of(ctx.getBlockPos()).apply(ctx.getPlayerFacing());
+		boolean validOrigin = ctx.getWorld().getBlockState(oriented).canReplace(ctx);
+		boolean validSub0 = ctx.getWorld().getBlockState(oriented.front()).canReplace(ctx);
+		boolean validSub1 = ctx.getWorld().getBlockState(oriented.front().right()).canReplace(ctx);
+		boolean validSub2 = ctx.getWorld().getBlockState(oriented.right()).canReplace(ctx);
+		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getPlayerFacing()) : null;
+	}
+
+	@Override
+	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+		if (!world.isClient()) {
+			OrientedBlockPos oriented = OrientedBlockPos.of(pos).apply(state.get(FACING));
+			world.setBlockState(oriented.front(), state.with(PART, DoubleWidthPart.SUB_PART_0), Block.NOTIFY_ALL);
+			world.setBlockState(oriented.front().right(), state.with(PART, DoubleWidthPart.SUB_PART_1), Block.NOTIFY_ALL);
+			world.setBlockState(oriented.right(), state.with(PART, DoubleWidthPart.SUB_PART_2), Block.NOTIFY_ALL);
+			world.updateNeighbors(pos, Blocks.AIR);
+			state.updateNeighbors(world, pos, Block.NOTIFY_ALL);
+		}
+	}
+
+	@Override
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		if (!world.isClient()) {
+			OrientedBlockPos origin = state.get(PART).toOrigin(pos, state.get(FACING));
+			world.setBlockState(origin, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			world.setBlockState(origin.front(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			world.setBlockState(origin.front().right(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			world.setBlockState(origin.right(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
+		}
+	}
+
+	@Override
+	public PistonBehavior getPistonBehavior(BlockState state) {
+		return PistonBehavior.DESTROY;
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, BlockRotation rotation) {
+		return state.cycle(PART).with(Properties.HORIZONTAL_FACING, rotation.rotate(state.get(Properties.HORIZONTAL_FACING)));
+	}
+
+	@Override
+	public BlockState mirror(BlockState state, BlockMirror mirror) {
+		return mirror == BlockMirror.NONE ? state : state.with(PART, state.get(PART).getOpposite()).rotate(mirror.getRotation(state.get(FACING)));
+	}
+
+	@Override
+	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		builder.add(PART);
+		builder.add(FACING);
+	}
+
+	@Override
+    public BlockItem getItem() {
+        return this.item;
+    }
+
+    @Override
+    public boolean isNotRegistered() {
+        return !this.registered.get();
+    }
+
+    @Override
+    public void setRegistered() {
+        this.registered.set(true);
+    }
+
+	public enum DoubleWidthPart implements Opposable<DoubleWidthPart>, StringIdentifiable {
+		ORIGIN((oriented) -> oriented),
+		SUB_PART_0(OrientedBlockPos::behind),
+		SUB_PART_1((oriented) -> oriented.behind().left()),
+		SUB_PART_2(OrientedBlockPos::left);
+
+		private final TweakFunction<OrientedBlockPos> tweak;
+
+		DoubleWidthPart(TweakFunction<OrientedBlockPos> tweak) {
+			this.tweak = tweak;
+		}
+
+		public OrientedBlockPos toOrigin(BlockPos pos, Direction direction) {
+			return this.tweak.apply(OrientedBlockPos.of(pos).apply(direction));
+		}
+
+		@Override
+		public DoubleWidthPart getOpposite() {
+			return switch (this) {
+				case ORIGIN -> SUB_PART_1;
+				case SUB_PART_0 -> SUB_PART_2;
+				case SUB_PART_1 -> ORIGIN;
+				case SUB_PART_2 -> SUB_PART_0;
+			};
+		}
+
+		@Override
+		public String asString() {
+			return switch (this) {
+				case ORIGIN -> "origin";
+				case SUB_PART_0 -> "sub_part_0";
+				case SUB_PART_1 -> "sub_part_1";
+				case SUB_PART_2 -> "sub_part_2";
+			};
+		}
+	}
+}
