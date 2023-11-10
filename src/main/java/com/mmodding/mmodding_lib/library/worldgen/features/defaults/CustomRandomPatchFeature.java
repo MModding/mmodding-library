@@ -1,9 +1,10 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
@@ -24,7 +25,7 @@ public class CustomRandomPatchFeature implements CustomFeature, FeatureRegistrab
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
-	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
+	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
 	private final AtomicInteger count = new AtomicInteger();
 	private final AtomicInteger rarity = new AtomicInteger();
@@ -78,12 +79,12 @@ public class CustomRandomPatchFeature implements CustomFeature, FeatureRegistrab
 	}
 
 	public CustomRandomPatchFeature addPlacedFeature(int count, int rarity, String idExt) {
-		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(count, rarity), idExt));
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(count, rarity), idExt);
 		return this;
 	}
 
 	@Override
-	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+	public BiList<PlacedFeature, String> getAdditionalPlacedFeatures() {
 		return this.additionalPlacedFeatures;
 	}
 

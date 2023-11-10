@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
-import net.minecraft.util.Pair;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.PlacedFeature;
@@ -15,5 +15,5 @@ public interface CustomFeature {
 
 	PlacedFeature getDefaultPlacedFeature();
 
-	List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures();
+	BiList<PlacedFeature, String> getAdditionalPlacedFeatures();
 }

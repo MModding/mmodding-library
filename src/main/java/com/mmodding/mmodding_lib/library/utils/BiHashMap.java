@@ -25,6 +25,12 @@ public class BiHashMap<K, V1, V2> extends HashMap<K, Pair<V1, V2>> implements Bi
 		super(m);
 	}
 
+
+	@Override
+	public boolean containsValue(V1 firstValue, V2 secondValue) {
+		return this.containsValue(new ImmutablePair<>(firstValue, secondValue));
+	}
+
 	public V1 getFirstValue(K key) {
         return this.getOrDefault(key, BiMap.emptyValue()).getLeft();
     }

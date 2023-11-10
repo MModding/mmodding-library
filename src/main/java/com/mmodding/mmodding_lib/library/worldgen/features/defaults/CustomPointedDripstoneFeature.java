@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedPointedDripstoneFeature;
@@ -7,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.HolderSet;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.math.intprovider.IntProvider;
@@ -32,7 +33,7 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
-	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
+	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
 	private final Block pointedDripstoneBlock;
 	private final Block dripstoneBlock;
@@ -129,12 +130,12 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 	}
 
 	public CustomPointedDripstoneFeature addPlacedFeature(IntProvider countRange, IntProvider numberRange, IntProvider spreadXZ, IntProvider spreadY, String idExt) {
-		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(countRange, numberRange, spreadXZ, spreadY), idExt));
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(countRange, numberRange, spreadXZ, spreadY), idExt);
 		return this;
 	}
 
 	@Override
-	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+	public BiList<PlacedFeature, String> getAdditionalPlacedFeatures() {
 		return this.additionalPlacedFeatures;
 	}
 

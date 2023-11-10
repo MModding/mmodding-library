@@ -23,6 +23,11 @@ public class BiArrayList<E1, E2> extends ArrayList<Pair<E1, E2>> implements BiLi
 	}
 
 	@Override
+	public boolean contains(E1 first, E2 second) {
+		return this.contains(new ImmutablePair<>(first, second));
+	}
+
+	@Override
 	public E1 getFirst(int index) {
 		return this.get(index).getLeft();
 	}

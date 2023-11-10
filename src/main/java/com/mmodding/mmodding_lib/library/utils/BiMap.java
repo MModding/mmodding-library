@@ -9,9 +9,15 @@ import java.util.function.BiConsumer;
 
 public interface BiMap<K, V1, V2> extends Map<K, Pair<V1, V2>> {
 
+	static <K, V> boolean contains(BiMap<K, V, V> biMap, V firstValue, V secondValue) {
+		return biMap.containsValue(firstValue, secondValue) || biMap.containsValue(secondValue, firstValue);
+	}
+
 	static <V1, V2> Pair<V1, V2> emptyValue() {
 		return new ImmutablePair<>(null, null);
 	}
+
+	boolean containsValue(V1 firstValue, V2 secondValue);
 
 	V1 getFirstValue(K key);
 

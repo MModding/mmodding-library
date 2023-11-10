@@ -1,11 +1,12 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
@@ -30,7 +31,7 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
-	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
+	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
 	private final AtomicReference<Block> groundBlock = new AtomicReference<>(Blocks.DIRT);
 	private final List<TreeDecorator> treeDecorator = new ArrayList<>();
@@ -104,12 +105,12 @@ public class CustomTreeFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public CustomTreeFeature addPlacedFeature(PlacementModifier modifier, Block blockWouldSurvive, String idExt) {
-		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(modifier, blockWouldSurvive), idExt));
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(modifier, blockWouldSurvive), idExt);
 		return this;
 	}
 
 	@Override
-	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+	public BiList<PlacedFeature, String> getAdditionalPlacedFeatures() {
 		return this.additionalPlacedFeatures;
 	}
 

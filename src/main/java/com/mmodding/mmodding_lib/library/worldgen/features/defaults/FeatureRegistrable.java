@@ -16,7 +16,7 @@ public interface FeatureRegistrable extends Registrable {
 			Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, identifier, customFeature.getConfiguredFeature());
 			Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, customFeature.getDefaultPlacedFeature());
 			customFeature.getAdditionalPlacedFeatures().forEach(
-				pair -> Registry.register(BuiltinRegistries.PLACED_FEATURE, IdentifierUtils.extend(identifier, pair.getRight()), pair.getLeft())
+				(feature, string) -> Registry.register(BuiltinRegistries.PLACED_FEATURE, IdentifierUtils.extend(identifier, string), feature)
 			);
 			this.setRegistered();
 			this.setIdentifier(identifier);

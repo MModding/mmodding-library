@@ -9,9 +9,15 @@ import java.util.function.Consumer;
 
 public interface BiList<E1, E2> extends List<Pair<E1, E2>> {
 
+	static <E> boolean contains(BiList<E, E> biList, E first, E second) {
+		return biList.contains(first, second) || biList.contains(second, first);
+	}
+
 	static <E1, E2> Pair<E1, E2> emptyValue() {
 		return new ImmutablePair<>(null, null);
 	}
+
+	boolean contains(E1 first, E2 second);
 
 	E1 getFirst(int index);
 

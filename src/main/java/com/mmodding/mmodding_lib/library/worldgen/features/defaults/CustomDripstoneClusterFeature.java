@@ -1,12 +1,13 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedDripstoneClusterFeature;
 import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.floatprovider.FloatProvider;
 import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.registry.Registry;
@@ -31,7 +32,7 @@ public class CustomDripstoneClusterFeature implements CustomFeature, FeatureRegi
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
-	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
+	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
 	private final Block pointedDripstoneBlock;
 	private final Block dripstoneBlock;
@@ -106,12 +107,12 @@ public class CustomDripstoneClusterFeature implements CustomFeature, FeatureRegi
 	}
 
 	public CustomDripstoneClusterFeature addPlacedFeature(IntProvider countRange, String idExt) {
-		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(countRange), idExt));
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(countRange), idExt);
 		return this;
 	}
 
 	@Override
-	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+	public BiList<PlacedFeature, String> getAdditionalPlacedFeatures() {
 		return this.additionalPlacedFeatures;
 	}
 

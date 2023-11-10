@@ -1,11 +1,12 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.collection.DataPool;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.registry.Registry;
@@ -35,26 +36,26 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
-	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
+	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
 	private final AtomicInteger count = new AtomicInteger();
 	private final AtomicInteger rarity = new AtomicInteger();
 	private final int tries;
 	private final int spreadXZ;
 	private final int spreadY;
-	private final List<Pair<Block, Integer>> flowers;
+	private final BiList<Block, Integer> flowers;
 	private final AtomicBoolean noised = new AtomicBoolean();
 
 	public CustomFlowerFeature(int tries, int spreadHorizontally, int spreadVertically, Block... noisedFlowers) {
-		this.flowers = new ArrayList<>();
-		Arrays.stream(noisedFlowers).toList().forEach(block -> flowers.add(new Pair<>(block, 0)));
+		this.flowers = new BiArrayList<>();
+		Arrays.stream(noisedFlowers).toList().forEach(block -> flowers.add(block, 0));
 		this.tries = tries;
 		this.spreadXZ = spreadHorizontally;
 		this.spreadY = spreadVertically;
 		this.noised.set(true);
 	}
 
-	public CustomFlowerFeature(int tries, int spreadHorizontally, int spreadVertically, List<Pair<Block, Integer>> flowers) {
+	public CustomFlowerFeature(int tries, int spreadHorizontally, int spreadVertically, BiList<Block, Integer> flowers) {
 		this.tries = tries;
 		this.spreadXZ = spreadHorizontally;
 		this.spreadY = spreadVertically;
@@ -73,7 +74,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 
 		if (this.noised.get()) {
 			List<BlockState> flowerStates = new ArrayList<>();
-			this.flowers.forEach(pair -> flowerStates.add(pair.getLeft().getDefaultState()));
+			this.flowers.forEachFirst(block -> flowerStates.add(block.getDefaultState()));
 
 			provider = new NoiseBlockStateProvider(
 				2345L,
@@ -84,7 +85,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 		}
 		else {
 			DataPool.Builder<BlockState> builder = DataPool.builder();
-			this.flowers.forEach(pair -> builder.add(pair.getLeft().getDefaultState(), pair.getRight()));
+			this.flowers.forEach((block, integer) -> builder.add(block.getDefaultState(), integer));
 
 			provider = new WeightedBlockStateProvider(builder);
 		}
@@ -123,12 +124,12 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public CustomFlowerFeature addPlacedFeature(int count, int rarity, String idExt) {
-		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(count, rarity), idExt));
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(count, rarity), idExt);
 		return this;
 	}
 
 	@Override
-	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+	public BiList<PlacedFeature, String> getAdditionalPlacedFeatures() {
 		return this.additionalPlacedFeatures;
 	}
 

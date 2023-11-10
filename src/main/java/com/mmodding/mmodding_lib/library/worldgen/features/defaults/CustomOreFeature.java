@@ -1,9 +1,10 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
@@ -23,7 +24,7 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
-	private final List<Pair<PlacedFeature, String>> additionalPlacedFeatures = new ArrayList<>();
+	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
 	private final int veinSize;
 	private final int veinNumber;
@@ -71,12 +72,12 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public CustomOreFeature addPlacedFeature(int veinNumber, int minHeight, int maxHeight, String idExt) {
-		this.additionalPlacedFeatures.add(new Pair<>(this.createPlacedFeature(veinNumber, minHeight, maxHeight), idExt));
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(veinNumber, minHeight, maxHeight), idExt);
 		return this;
 	}
 
 	@Override
-	public List<Pair<PlacedFeature, String>> getAdditionalPlacedFeatures() {
+	public BiList<PlacedFeature, String> getAdditionalPlacedFeatures() {
 		return this.additionalPlacedFeatures;
 	}
 
