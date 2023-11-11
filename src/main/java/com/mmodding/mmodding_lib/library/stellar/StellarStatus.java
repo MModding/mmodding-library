@@ -1,7 +1,5 @@
 package com.mmodding.mmodding_lib.library.stellar;
 
-import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
-
 public class StellarStatus {
 
     protected final long fullRotationTime;

@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
-import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
+import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
-import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
+import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.Self;
 import com.mmodding.mmodding_lib.states.readable.ReadableStellarStatuses;

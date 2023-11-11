@@ -1,8 +1,9 @@
-package com.mmodding.mmodding_lib.library.stellar;
+package com.mmodding.mmodding_lib.library.stellar.client;
 
 import com.mmodding.mmodding_lib.ducks.ClientWorldDuckInterface;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
-import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
+import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
+import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.platform.GlStateManager;

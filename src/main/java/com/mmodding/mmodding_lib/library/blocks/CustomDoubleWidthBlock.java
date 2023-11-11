@@ -24,7 +24,6 @@ import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, BlockWithItem {
@@ -58,11 +57,15 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		OrientedBlockPos oriented = OrientedBlockPos.of(ctx.getBlockPos()).apply(ctx.getPlayerFacing());
-		boolean validOrigin = ctx.getWorld().getBlockState(oriented).canReplace(ctx);
-		boolean validSub0 = ctx.getWorld().getBlockState(oriented.front()).canReplace(ctx);
-		boolean validSub1 = ctx.getWorld().getBlockState(oriented.front().left()).canReplace(ctx);
-		boolean validSub2 = ctx.getWorld().getBlockState(oriented.left()).canReplace(ctx);
+		boolean validOrigin = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented), ctx);
+		boolean validSub0 = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented.front()), ctx);
+		boolean validSub1 = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented.front().left()), ctx);
+		boolean validSub2 = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented.left()), ctx);
 		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getPlayerFacing()) : null;
+	}
+
+	public boolean canPlacePartAt(BlockState state, ItemPlacementContext ctx) {
+		return state.canReplace(ctx);
 	}
 
 	@Override

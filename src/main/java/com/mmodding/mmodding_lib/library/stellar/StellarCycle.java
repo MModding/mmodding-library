@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.stellar.client;
+package com.mmodding.mmodding_lib.library.stellar;
 
 import com.mmodding.mmodding_lib.library.math.MathFunction;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;

@@ -2,7 +2,7 @@ package com.mmodding.mmodding_lib.library.client.utils;
 
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
-import com.mmodding.mmodding_lib.library.stellar.StellarObject;
+import com.mmodding.mmodding_lib.library.stellar.client.StellarObject;
 import com.mmodding.mmodding_lib.mixin.accessors.client.BufferBuilderStorageAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerFirstAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerSecondAccessor;

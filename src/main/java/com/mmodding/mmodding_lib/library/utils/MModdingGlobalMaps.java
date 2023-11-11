@@ -3,7 +3,7 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
-import com.mmodding.mmodding_lib.library.stellar.client.StellarCycle;
+import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
