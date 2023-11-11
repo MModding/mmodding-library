@@ -57,14 +57,14 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		OrientedBlockPos oriented = OrientedBlockPos.of(ctx.getBlockPos()).apply(ctx.getPlayerFacing());
-		boolean validOrigin = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented), ctx);
-		boolean validSub0 = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented.front()), ctx);
-		boolean validSub1 = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented.front().left()), ctx);
-		boolean validSub2 = this.canPlacePartAt(ctx.getWorld().getBlockState(oriented.left()), ctx);
+		boolean validOrigin = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented), ctx.getWorld().getBlockState(oriented), ctx);
+		boolean validSub0 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.front()), ctx.getWorld().getBlockState(oriented.front()), ctx);
+		boolean validSub1 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.front().left()), ctx.getWorld().getBlockState(oriented.front().left()), ctx);
+		boolean validSub2 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.left()), ctx.getWorld().getBlockState(oriented.left()), ctx);
 		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getPlayerFacing()) : null;
 	}
 
-	public boolean canPlacePartAt(BlockState state, ItemPlacementContext ctx) {
+	public boolean canPlacePartAt(World world, BlockPos pos, BlockState state, ItemPlacementContext ctx) {
 		return state.canReplace(ctx);
 	}
 
