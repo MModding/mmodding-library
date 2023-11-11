@@ -24,8 +24,8 @@ import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
 
 public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, BlockWithItem {
 
@@ -60,18 +60,19 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 		OrientedBlockPos oriented = OrientedBlockPos.of(ctx.getBlockPos()).apply(ctx.getPlayerFacing());
 		boolean validOrigin = ctx.getWorld().getBlockState(oriented).canReplace(ctx);
 		boolean validSub0 = ctx.getWorld().getBlockState(oriented.front()).canReplace(ctx);
-		boolean validSub1 = ctx.getWorld().getBlockState(oriented.front().right()).canReplace(ctx);
-		boolean validSub2 = ctx.getWorld().getBlockState(oriented.right()).canReplace(ctx);
+		boolean validSub1 = ctx.getWorld().getBlockState(oriented.front().left()).canReplace(ctx);
+		boolean validSub2 = ctx.getWorld().getBlockState(oriented.left()).canReplace(ctx);
 		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getPlayerFacing()) : null;
 	}
 
 	@Override
 	public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+		super.onPlaced(world, pos, state, placer, itemStack);
 		if (!world.isClient()) {
 			OrientedBlockPos oriented = OrientedBlockPos.of(pos).apply(state.get(FACING));
 			world.setBlockState(oriented.front(), state.with(PART, DoubleWidthPart.SUB_PART_0), Block.NOTIFY_ALL);
-			world.setBlockState(oriented.front().right(), state.with(PART, DoubleWidthPart.SUB_PART_1), Block.NOTIFY_ALL);
-			world.setBlockState(oriented.right(), state.with(PART, DoubleWidthPart.SUB_PART_2), Block.NOTIFY_ALL);
+			world.setBlockState(oriented.front().left(), state.with(PART, DoubleWidthPart.SUB_PART_1), Block.NOTIFY_ALL);
+			world.setBlockState(oriented.left(), state.with(PART, DoubleWidthPart.SUB_PART_2), Block.NOTIFY_ALL);
 			world.updateNeighbors(pos, Blocks.AIR);
 			state.updateNeighbors(world, pos, Block.NOTIFY_ALL);
 		}
@@ -79,12 +80,13 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 
 	@Override
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBreak(world, pos, state, player);
 		if (!world.isClient()) {
 			OrientedBlockPos origin = state.get(PART).toOrigin(pos, state.get(FACING));
 			world.setBlockState(origin, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
 			world.setBlockState(origin.front(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(origin.front().right(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(origin.right(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			world.setBlockState(origin.front().left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			world.setBlockState(origin.left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
 			world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
 		}
 	}
@@ -128,8 +130,8 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 	public enum DoubleWidthPart implements Opposable<DoubleWidthPart>, StringIdentifiable {
 		ORIGIN((oriented) -> oriented),
 		SUB_PART_0(OrientedBlockPos::behind),
-		SUB_PART_1((oriented) -> oriented.behind().left()),
-		SUB_PART_2(OrientedBlockPos::left);
+		SUB_PART_1((oriented) -> oriented.behind().right()),
+		SUB_PART_2(OrientedBlockPos::right);
 
 		private final TweakFunction<OrientedBlockPos> tweak;
 
