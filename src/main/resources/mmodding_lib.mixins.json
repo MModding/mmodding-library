@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "accessors.AbstractBlockAccessor",
+    "accessors.AbstractBlockSettingsAccessor",
     "accessors.AreaHelperAccessor",
     "accessors.BlockEntityTypeBuilderAccessor",
     "accessors.BlocksAccessor",

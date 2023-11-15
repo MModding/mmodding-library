@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.blocks.settings;
 
 import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockAccessor;
+import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockSettingsAccessor;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.sound.BlockSoundGroup;
@@ -21,7 +22,36 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 	}
 
 	protected ImmutableBlockSettings(AbstractBlock.Settings settings) {
-		super(settings);
+		super(((AbstractBlockSettingsAccessor) settings).getMaterial(), ((AbstractBlockSettingsAccessor) settings).getMapColorProvider());
+
+		AbstractBlockSettingsAccessor accessor = (AbstractBlockSettingsAccessor) settings;
+
+		super.material(accessor.getMaterial());
+		super.hardness(accessor.getHardness());
+		super.resistance(accessor.getResistance());
+		super.collidable(accessor.getCollidable());
+		super.ticksRandomly(accessor.getRandomTicks());
+		super.luminance(accessor.getLuminance());
+		super.mapColorProvider(accessor.getMapColorProvider());
+		super.sounds(accessor.getSoundGroup());
+		super.slipperiness(accessor.getSlipperiness());
+		super.velocityMultiplier(accessor.getVelocityMultiplier());
+		super.dynamicBounds(accessor.getDynamicBounds());
+		super.opaque(accessor.getOpaque());
+		super.air(accessor.getIsAir());
+		super.requiresTool(accessor.isToolRequired());
+		super.jumpVelocityMultiplier(accessor.getJumpVelocityMultiplier());
+		super.drops(accessor.getLootTableId());
+		super.allowsSpawning(accessor.getAllowsSpawningPredicate());
+		super.solidBlock(accessor.getSolidBlockPredicate());
+		super.suffocates(accessor.getSuffocationPredicate());
+		super.blockVision(accessor.getBlockVisionPredicate());
+		super.postProcess(accessor.getPostProcessPredicate());
+		super.emissiveLighting(accessor.getEmissiveLightingPredicate());
+
+		this.ducked().mmodding_lib$setTranslucent(this.ducked(settings).mmodding_lib$getTranslucent());
+		this.ducked().mmodding_lib$setNotTranslucent(this.ducked(settings).mmodding_lib$getNotTranslucent());
+		this.ducked().mmodding_lib$setInvisibleSides(this.ducked(settings).mmodding_lib$getInvisibleSides());
 	}
 
 	public static ImmutableBlockSettings of(Material material) {

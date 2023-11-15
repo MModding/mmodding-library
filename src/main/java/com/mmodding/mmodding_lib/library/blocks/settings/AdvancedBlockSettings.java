@@ -307,11 +307,11 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 		return this;
 	}
 
-	private AbstractBlockSettingsDuckInterface ducked(AbstractBlock.Settings settings) {
+	AbstractBlockSettingsDuckInterface ducked(AbstractBlock.Settings settings) {
 		return (AbstractBlockSettingsDuckInterface) settings;
 	}
 
-	private AbstractBlockSettingsDuckInterface ducked() {
+	AbstractBlockSettingsDuckInterface ducked() {
 		return this.ducked(this);
 	}
 }
