@@ -4,7 +4,6 @@ import com.mmodding.mmodding_lib.ducks.BlockEntityTypeDuckInterface;
 import com.mmodding.mmodding_lib.library.blockentities.BlockEntityTypeBlockSupportCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import org.quiltmc.qsl.base.api.event.Event;
 import org.spongepowered.asm.mixin.Mixin;

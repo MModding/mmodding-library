@@ -4,6 +4,7 @@
   "package": "com.mmodding.mmodding_lib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "accessors.AbstractBlockAccessor",
     "accessors.AreaHelperAccessor",
     "accessors.BlockEntityTypeBuilderAccessor",
     "accessors.BlocksAccessor",
