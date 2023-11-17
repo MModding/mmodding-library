@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import org.quiltmc.qsl.base.api.util.TriState;
 
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -50,7 +51,6 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 		super.emissiveLighting(accessor.getEmissiveLightingPredicate());
 
 		this.ducked().mmodding_lib$setTranslucent(this.ducked(settings).mmodding_lib$getTranslucent());
-		this.ducked().mmodding_lib$setNotTranslucent(this.ducked(settings).mmodding_lib$getNotTranslucent());
 		this.ducked().mmodding_lib$setInvisibleSides(this.ducked(settings).mmodding_lib$getInvisibleSides());
 	}
 
@@ -79,16 +79,9 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 	}
 
 	@Override
-	public ImmutableBlockSettings translucent() {
+	public ImmutableBlockSettings translucent(TriState triState) {
 		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.translucent();
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings notTranslucent() {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.notTranslucent();
+		settings.translucent(triState);
 		return ImmutableBlockSettings.copyOf(settings);
 	}
 

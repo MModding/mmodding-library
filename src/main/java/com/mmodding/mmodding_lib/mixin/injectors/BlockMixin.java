@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
+import org.quiltmc.qsl.base.api.util.TriState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,9 +21,9 @@ public class BlockMixin extends AbstractBlockMixin {
 
 	@Inject(method = "isTranslucent", at = @At("HEAD"), cancellable = true)
 	private void isTranslucent(BlockState state, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-		if (this.duckedSettings().mmodding_lib$getTranslucent()) {
+		if (this.duckedSettings().mmodding_lib$getTranslucent() == TriState.TRUE) {
 			cir.setReturnValue(true);
-		} else if (this.duckedSettings().mmodding_lib$getNotTranslucent()) {
+		} else if (this.duckedSettings().mmodding_lib$getTranslucent() == TriState.FALSE) {
 			cir.setReturnValue(false);
 		}
 	}

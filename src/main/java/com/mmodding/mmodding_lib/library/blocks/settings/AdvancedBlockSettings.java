@@ -10,6 +10,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
+import org.quiltmc.qsl.base.api.util.TriState;
 import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 import java.util.function.Function;
@@ -28,7 +29,6 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 	protected AdvancedBlockSettings(AbstractBlock.Settings settings) {
 		super(settings);
 		this.ducked().mmodding_lib$setTranslucent(this.ducked(settings).mmodding_lib$getTranslucent());
-		this.ducked().mmodding_lib$setNotTranslucent(this.ducked(settings).mmodding_lib$getNotTranslucent());
 		this.ducked().mmodding_lib$setInvisibleSides(this.ducked(settings).mmodding_lib$getInvisibleSides());
 	}
 
@@ -56,13 +56,8 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 		return new AdvancedBlockSettings(settings);
 	}
 
-	public AdvancedBlockSettings translucent() {
-		this.ducked().mmodding_lib$setTranslucent(true);
-		return this;
-	}
-
-	public AdvancedBlockSettings notTranslucent() {
-		this.ducked().mmodding_lib$setNotTranslucent(true);
+	public AdvancedBlockSettings translucent(TriState triState) {
+		this.ducked().mmodding_lib$setTranslucent(triState);
 		return this;
 	}
 
