@@ -20,8 +20,8 @@ public interface ArmorRendererMixin {
 
     @Inject(method = "renderPart", at = @At(value = "HEAD"), cancellable = true)
     private static void renderParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture, CallbackInfo ci) {
-        if (GlintPackView.ofStack(stack) != null) {
-            VertexConsumer vertexConsumer = GlintPackView.ofStack(stack).getGlintPack().getArmorConsumer(
+        if (GlintPackView.of(stack.getItem()) != null) {
+            VertexConsumer vertexConsumer = GlintPackView.of(stack.getItem()).getGlintPack(stack).getArmorConsumer(
                 vertexConsumers,
                 RenderLayer.getArmorCutoutNoCull(texture),
                 false,

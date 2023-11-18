@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.utils;
 
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
@@ -15,6 +16,8 @@ public class MModdingGlobalMaps {
 
 	static final Map<Identifier, StellarCycle> STELLAR_CYCLES = new HashMap<>();
 
+	static final Map<Identifier, GlintPackView> GLINT_PACK_VIEWS = new HashMap<>();
+
 	static final Map<Identifier, CustomSquaredPortal> CUSTOM_SQUARED_PORTALS = new HashMap<>();
 
 	static final Map<Identifier, UnlinkedCustomSquaredPortal> UNLINKED_CUSTOM_SQUARED_PORTALS = new HashMap<>();
@@ -29,6 +32,14 @@ public class MModdingGlobalMaps {
 
 	public static StellarCycle getStellarCycle(Identifier identifier) {
 		return STELLAR_CYCLES.get(identifier);
+	}
+
+	public static Set<Identifier> getGlintPackViewKeys() {
+		return GLINT_PACK_VIEWS.keySet();
+	}
+
+	public static GlintPackView getGlintPackView(Identifier identifier) {
+		return GLINT_PACK_VIEWS.get(identifier);
 	}
 
 	public static Set<Identifier> getCustomSquaredPortalKeys() {

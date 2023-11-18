@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.events.networking.client;
 
-import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import net.minecraft.item.Item;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.base.api.event.Event;
@@ -26,13 +26,13 @@ public class ClientGlintPackNetworkingEvents {
 	@FunctionalInterface
 	public interface Before {
 
-		void beforeGlintPackReceived(Map<Item, GlintPack> glintPacks);
+		void beforeGlintPackReceived(Map<Item, GlintPackView> glintPacks);
 	}
 
 	@ClientOnly
 	@FunctionalInterface
 	public interface After {
 
-		void afterGlintPackReceived(Map<Item, GlintPack> glintPacks);
+		void afterGlintPackReceived(Map<Item, GlintPackView> glintPacks);
 	}
 }

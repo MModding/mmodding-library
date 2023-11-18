@@ -32,8 +32,8 @@ public abstract class TridentEntityRendererMixin extends EntityRendererMixin<Tri
     private void render(TridentEntity tridentEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         ItemStack stack = ((TridentEntityAccessor) tridentEntity).getTridentStack();
 
-        if (GlintPackView.ofStack(stack) != null) {
-            VertexConsumer vertexConsumer = GlintPackView.ofStack(stack).getGlintPack().getDirectItemConsumer(
+        if (GlintPackView.of(stack.getItem()) != null) {
+            VertexConsumer vertexConsumer = GlintPackView.of(stack.getItem()).getGlintPack(stack).getDirectItemConsumer(
                 vertexConsumerProvider,
                 this.model.getLayer(this.getTexture(tridentEntity)),
                 false,

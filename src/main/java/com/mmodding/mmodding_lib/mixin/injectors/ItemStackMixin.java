@@ -2,9 +2,10 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
+import com.mmodding.mmodding_lib.library.utils.Self;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
@@ -18,7 +19,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemGlintPack {
+public abstract class ItemStackMixin implements ItemGlintPack, Self<ItemStack> {
 
     @Shadow
     public abstract Item getItem();

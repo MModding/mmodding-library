@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
 import com.mmodding.mmodding_lib.library.helpers.CustomSquaredPortalAreaHelper;
 import com.mmodding.mmodding_lib.library.items.settings.*;
@@ -16,13 +15,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -120,11 +116,5 @@ public abstract class ItemMixin implements ItemGlintPack, Self<Item> {
 		if (eatable) cir.setReturnValue(UseAction.EAT);
 		boolean drinkable = AdvancedItemSettings.DRINKABLE.get(this.getObject());
 		if (drinkable) cir.setReturnValue(UseAction.DRINK);
-	}
-
-	@Nullable
-	@Override
-	public GlintPackView getGlintPackView() {
-		return AdvancedItemSettings.GLINT_PACK.get(this.getObject());
 	}
 }

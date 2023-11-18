@@ -1,5 +1,9 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.OverlayTexture;
@@ -10,6 +14,8 @@ import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,10 +30,16 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extend
 	@Shadow
 	protected abstract Identifier getArmorTexture(ArmorItem item, boolean legs, @Nullable String overlay);
 
+	@WrapOperation(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;", ordinal = 0))
+	private Item renderArmor(ItemStack stack, Operation<Item> original, @Share("itemStack") LocalRef<ItemStack> ref) {
+		ref.set(stack);
+		return original.call(stack);
+	}
+
 	@Inject(method = "renderArmorParts", at = @At(value = "HEAD"), cancellable = true)
-	private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, boolean usesSecondLayer, A model, boolean legs, float red, float green, float blue, @Nullable String overlay, CallbackInfo ci) {
-		if (GlintPackView.ofItem(item) != null) {
-			VertexConsumer vertexConsumer = GlintPackView.ofItem(item).getGlintPack().getArmorConsumer(
+	private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, boolean usesSecondLayer, A model, boolean legs, float red, float green, float blue, @Nullable String overlay, CallbackInfo ci, @Share("itemStack") LocalRef<ItemStack> ref) {
+		if (GlintPackView.of(ref.get().getItem()) != null) {
+			VertexConsumer vertexConsumer = GlintPackView.of(ref.get().getItem()).getGlintPack(ref.get()).getArmorConsumer(
 				vertexConsumers,
 				RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(item, legs, overlay)),
 				false,

@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
@@ -138,15 +139,19 @@ public class RegistrationUtils {
 		Registry.register(Registry.POINT_OF_INTEREST_TYPE, identifier, type);
 	}
 
+	public static void registerStellarCycle(Identifier identifier, StellarCycle stellarCycle) {
+		MModdingGlobalMaps.STELLAR_CYCLES.put(identifier, stellarCycle);
+	}
+
+	public static void registerGlintPackView(Identifier identifier, GlintPackView glintPackView) {
+		MModdingGlobalMaps.GLINT_PACK_VIEWS.put(identifier, glintPackView);
+	}
+
 	public static void registerSquaredPortal(Identifier identifier, CustomSquaredPortal squaredPortal) {
 		MModdingGlobalMaps.CUSTOM_SQUARED_PORTALS.put(identifier, squaredPortal);
 	}
 
 	public static void registerUnlinkedSquaredPortal(Identifier identifier, UnlinkedCustomSquaredPortal squaredPortal) {
 		MModdingGlobalMaps.UNLINKED_CUSTOM_SQUARED_PORTALS.put(identifier, squaredPortal);
-	}
-
-	public static void registerStellarCycle(Identifier identifier, StellarCycle stellarCycle) {
-		MModdingGlobalMaps.STELLAR_CYCLES.put(identifier, stellarCycle);
 	}
 }

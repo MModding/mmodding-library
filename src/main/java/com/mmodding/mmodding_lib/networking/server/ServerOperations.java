@@ -6,10 +6,12 @@ import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.events.networking.server.ServerConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.library.events.networking.server.ServerGlintPackNetworkingEvents;
+import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
@@ -17,6 +19,7 @@ import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 @DedicatedServerOnly
 public class ServerOperations {
@@ -53,7 +56,16 @@ public class ServerOperations {
 		PacketByteBuf packet = PacketByteBufs.create();
 
 		packet.writeIdentifier(Registry.ITEM.getId(item));
-		packet.writeIdentifier(view.getIdentifier());
+
+		AtomicReference<Identifier> identifier = new AtomicReference<>();
+
+		MModdingGlobalMaps.getGlintPackViewKeys().forEach(key -> {
+			if (MModdingGlobalMaps.getGlintPackView(key) == view) {
+				identifier.set(key);
+			}
+		});
+
+		packet.writeIdentifier(identifier.get());
 
 		ServerGlintPackNetworkingEvents.BEFORE.invoker().beforeGlintPackSent(item, view);
 
