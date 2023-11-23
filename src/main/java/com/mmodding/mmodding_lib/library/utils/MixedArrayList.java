@@ -26,7 +26,7 @@ public class MixedArrayList extends ArrayList<TypedObject<?>> implements MixedLi
 	}
 
 	@Override
-	public <E> E get(Class<E> type, int index) {
+	public <E> E get(int index, Class<E> type) {
 		TypedObject<?> typed = super.get(index);
 		if (type.equals(typed.getType())) {
 			return (E) typed.getValue();

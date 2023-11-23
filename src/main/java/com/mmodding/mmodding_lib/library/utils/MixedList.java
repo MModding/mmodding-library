@@ -12,7 +12,7 @@ public interface MixedList extends List<TypedObject<?>> {
 
 	<E> boolean contains(Class<E> type, E e);
 
-	<E> E get(Class<E> type, int index);
+	<E> E get(int index, Class<E> type);
 
 	<E> boolean add(Class<E> type, E e);
 
