@@ -2,9 +2,11 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mmodding.mmodding_lib.ducks.ItemStackDuckInterface;
 import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
+import com.mmodding.mmodding_lib.library.items.stacks.data.HiddenStackDataStorage;
 import com.mmodding.mmodding_lib.library.utils.Self;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,13 +15,17 @@ import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemGlintPack, Self<ItemStack> {
+public abstract class ItemStackMixin implements ItemStackDuckInterface, ItemGlintPack, Self<ItemStack> {
+
+	@Unique
+	public HiddenStackDataStorage hiddenStorage = new HiddenStackDataStorage();
 
     @Shadow
     public abstract Item getItem();
@@ -52,9 +58,19 @@ public abstract class ItemStackMixin implements ItemGlintPack, Self<ItemStack> {
 		}
 	}
 
-    @Nullable
-    @Override
-    public GlintPackView getGlintPackView() {
-        return this.getItem().getGlintPackView();
-    }
+	@Override
+	public HiddenStackDataStorage mmodding_lib$getHiddenStackData() {
+		return this.hiddenStorage;
+	}
+
+	@Override
+	public void mmodding_lib$setHiddenStackData(HiddenStackDataStorage storage) {
+		this.hiddenStorage = storage;
+	}
+
+	@Nullable
+	@Override
+	public GlintPackView getGlintPackView() {
+		return this.getItem().getGlintPackView();
+	}
 }

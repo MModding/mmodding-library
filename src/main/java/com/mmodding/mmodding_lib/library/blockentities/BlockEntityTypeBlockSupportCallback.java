@@ -8,6 +8,7 @@ import org.quiltmc.qsl.base.api.event.Event;
 
 import java.util.List;
 
+@FunctionalInterface
 public interface BlockEntityTypeBlockSupportCallback {
 
 	void onSupportedBlocks(List<Block> supportedBlocks);
