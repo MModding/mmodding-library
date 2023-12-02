@@ -24,6 +24,11 @@ public class TypedObject<T> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return this.type + ";" + this.value;
+	}
+
 	public Class<T> getType() {
 		return this.type;
 	}

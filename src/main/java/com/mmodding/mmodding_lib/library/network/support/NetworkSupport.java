@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.networking;
+package com.mmodding.mmodding_lib.library.network.support;
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -17,6 +17,16 @@ public interface NetworkSupport {
 	static <T extends NetworkSupport> void register(Identifier identifier, Class<T> type, Function<PacketByteBuf, T> function) {
 		REGISTRY.put(identifier, type);
 		MANAGER.put(type, function);
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends NetworkSupport> Class<T> getType(PacketByteBuf buf) {
+		PacketByteBuf copied = new PacketByteBuf(buf.copy());
+		Identifier identifier = copied.readIdentifier();
+		if (REGISTRY.containsKey(identifier)) {
+			return (Class<T>) REGISTRY.get(identifier);
+		}
+		throw new IllegalArgumentException("Identifier is not present in the NetworkSupport Registry");
 	}
 
 	@SuppressWarnings("unchecked")
