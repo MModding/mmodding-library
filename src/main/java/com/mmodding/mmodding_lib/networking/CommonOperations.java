@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class CommonOperations {
 
-	public static void sendStellarStatusToClient(Identifier identifier, StellarStatus status, ServerPlayerEntity player) {
+	public static void sendStellarStatusToClient(ServerPlayerEntity player, Identifier identifier, StellarStatus status) {
 		PacketByteBuf packet = PacketByteBufs.create();
 
 		packet.writeIdentifier(identifier);
@@ -29,12 +29,11 @@ public class CommonOperations {
 	}
 
 	public static void sendStellarStatusesToClient(ServerPlayerEntity player) {
-
 		Map<Identifier, StellarStatus> stellarStatus = new HashMap<>(((ServerWorldDuckInterface) player.getWorld()).mmodding_lib$getStellarStatuses().getMap());
 
 		StellarStatusNetworkingEvents.BEFORE_ALL.invoker().beforeAllStellarStatusSent(stellarStatus);
 
-		stellarStatus.forEach((identifier, status) -> CommonOperations.sendStellarStatusToClient(identifier, status, player));
+		stellarStatus.forEach((identifier, status) -> CommonOperations.sendStellarStatusToClient(player, identifier, status));
 
 		StellarStatusNetworkingEvents.AFTER_ALL.invoker().afterAllStellarStatusSent(stellarStatus);
 	}

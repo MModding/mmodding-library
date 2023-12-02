@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mmodding.mmodding_lib.mixin.accessors.TridentEntityAccessor;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.OverlayTexture;
@@ -32,19 +32,19 @@ public abstract class TridentEntityRendererMixin extends EntityRendererMixin<Tri
     private void render(TridentEntity tridentEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
         ItemStack stack = ((TridentEntityAccessor) tridentEntity).getTridentStack();
 
-        if (GlintPackView.of(stack.getItem()) != null) {
-            VertexConsumer vertexConsumer = GlintPackView.of(stack.getItem()).getGlintPack(stack).getDirectItemConsumer(
-                vertexConsumerProvider,
-                this.model.getLayer(this.getTexture(tridentEntity)),
-                false,
-                tridentEntity.isEnchanted()
-            );
+		GlintPack.of(stack).ifPresent(glintPack -> {
+			VertexConsumer vertexConsumer = glintPack.getDirectItemConsumer(
+				vertexConsumerProvider,
+				this.model.getLayer(this.getTexture(tridentEntity)),
+				false,
+				tridentEntity.isEnchanted()
+			);
 
-            this.model.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
+			this.model.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
 
-            matrixStack.pop();
-            super.render(tridentEntity, f, g, matrixStack, vertexConsumerProvider, i);
-            ci.cancel();
-        }
+			matrixStack.pop();
+			super.render(tridentEntity, f, g, matrixStack, vertexConsumerProvider, i);
+			ci.cancel();
+		});
     }
 }

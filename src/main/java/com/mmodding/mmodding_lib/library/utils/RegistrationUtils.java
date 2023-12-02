@@ -1,7 +1,6 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
@@ -141,10 +140,6 @@ public class RegistrationUtils {
 
 	public static void registerStellarCycle(Identifier identifier, StellarCycle stellarCycle) {
 		MModdingGlobalMaps.STELLAR_CYCLES.put(identifier, stellarCycle);
-	}
-
-	public static void registerGlintPackView(Identifier identifier, GlintPackView glintPackView) {
-		MModdingGlobalMaps.GLINT_PACK_VIEWS.put(identifier, glintPackView);
 	}
 
 	public static void registerSquaredPortal(Identifier identifier, CustomSquaredPortal squaredPortal) {

@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.renderer.v1.material.BlendMode;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;
@@ -30,53 +30,53 @@ public class ItemRenderContextMixin {
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 0), cancellable = true)
 	private void changeFirstItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (GlintPackView.of(this.itemStack.getItem()) != null) {
-			this.translucentVertexConsumer = GlintPackView.of(this.itemStack.getItem()).getGlintPack(this.itemStack).getItemConsumer(
+		GlintPack.of(this.itemStack).ifPresent(glintPack -> {
+			this.translucentVertexConsumer = glintPack.getItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getItemEntityTranslucentCull(),
 				true,
 				this.itemStack.hasGlint()
 			);
 			cir.setReturnValue(this.translucentVertexConsumer);
-		}
+		});
 	}
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 1), cancellable = true)
 	private void changeSecondItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (GlintPackView.of(this.itemStack.getItem()) != null) {
-			this.translucentVertexConsumer = GlintPackView.of(this.itemStack.getItem()).getGlintPack(this.itemStack).getItemConsumer(
+		GlintPack.of(this.itemStack).ifPresent(glintPack -> {
+			this.translucentVertexConsumer = glintPack.getItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getEntityTranslucentCull(),
 				true,
 				this.itemStack.hasGlint()
 			);
 			cir.setReturnValue(this.translucentVertexConsumer);
-		}
+		});
 	}
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 0), cancellable = true)
 	private void changeFirstDirectItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (GlintPackView.of(this.itemStack.getItem()) != null) {
-			this.translucentVertexConsumer = GlintPackView.of(this.itemStack.getItem()).getGlintPack(this.itemStack).getDirectItemConsumer(
+		GlintPack.of(this.itemStack).ifPresent(glintPack -> {
+			this.translucentVertexConsumer = glintPack.getDirectItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getEntityTranslucentCull(),
 				true,
 				this.itemStack.hasGlint()
 			);
 			cir.setReturnValue(this.translucentVertexConsumer);
-		}
+		});
 	}
 
 	@Inject(method = "quadVertexConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;getDirectItemGlintConsumer(Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/RenderLayer;ZZ)Lcom/mojang/blaze3d/vertex/VertexConsumer;", ordinal = 1), cancellable = true)
 	private void changeSecondDirectItemConsumer(BlendMode blendMode, CallbackInfoReturnable<VertexConsumer> cir) {
-		if (GlintPackView.of(this.itemStack.getItem()) != null) {
-			this.cutoutVertexConsumer = GlintPackView.of(this.itemStack.getItem()).getGlintPack(this.itemStack).getDirectItemConsumer(
+		GlintPack.of(this.itemStack).ifPresent(glintPack -> {
+			this.cutoutVertexConsumer = glintPack.getDirectItemConsumer(
 				this.vertexConsumerProvider,
 				TexturedRenderLayers.getEntityCutout(),
 				true,
 				this.itemStack.hasGlint()
 			);
 			cir.setReturnValue(this.cutoutVertexConsumer);
-		}
+		});
 	}
 }

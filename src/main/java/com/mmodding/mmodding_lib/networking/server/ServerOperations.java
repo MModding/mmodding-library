@@ -1,30 +1,20 @@
 package com.mmodding.mmodding_lib.networking.server;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.events.networking.server.ServerConfigNetworkingEvents;
-import com.mmodding.mmodding_lib.library.events.networking.server.ServerGlintPackNetworkingEvents;
-import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
-import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
 import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-
 @DedicatedServerOnly
 public class ServerOperations {
 
-	public static void sendConfigToClient(Config config, ServerPlayerEntity player) {
+	public static void sendConfigToClient(ServerPlayerEntity player, Config config) {
 		PacketByteBuf packet = PacketByteBufs.create();
 
 		packet.writeString(config.getQualifier());
@@ -38,52 +28,16 @@ public class ServerOperations {
 	}
 
 	public static void sendConfigsToClient(ServerPlayerEntity player) {
-
 		ServerConfigNetworkingEvents.BEFORE_ALL.invoker().beforeAllConfigsSent(MModdingLib.CONFIGS);
 
 		MModdingLib.CONFIGS.forEach((qualifier, config) -> {
 			boolean isLocalCache = config.getNetworkingSate() == Config.NetworkingState.LOCAL_CACHES;
 			boolean isClientCache = config.getNetworkingSate() == Config.NetworkingState.CLIENT_CACHES;
 			if (isLocalCache || isClientCache) {
-				ServerOperations.sendConfigToClient(config, player);
+				ServerOperations.sendConfigToClient(player, config);
 			}
 		});
 
 		ServerConfigNetworkingEvents.AFTER_ALL.invoker().afterAllConfigsSent(MModdingLib.CONFIGS);
-	}
-
-	public static void sendGlintPackToClient(Item item, GlintPackView view, ServerPlayerEntity player) {
-		PacketByteBuf packet = PacketByteBufs.create();
-
-		packet.writeIdentifier(Registry.ITEM.getId(item));
-
-		AtomicReference<Identifier> identifier = new AtomicReference<>();
-
-		MModdingGlobalMaps.getGlintPackViewKeys().forEach(key -> {
-			if (MModdingGlobalMaps.getGlintPackView(key) == view) {
-				identifier.set(key);
-			}
-		});
-
-		packet.writeIdentifier(identifier.get());
-
-		ServerGlintPackNetworkingEvents.BEFORE.invoker().beforeGlintPackSent(item, view);
-
-		ServerPlayNetworking.send(player, MModdingPackets.GLINT_PACKS, packet);
-
-		ServerGlintPackNetworkingEvents.AFTER.invoker().afterGlintPackSent(item, view);
-	}
-
-	public static void sendGlintPacksToClient(ServerPlayerEntity player) {
-
-		Map<Item, GlintPackView> glintPacks = new HashMap<>();
-
-		Registry.ITEM.stream().filter(item -> item.getGlintPackView() != null).forEach(item -> glintPacks.put(item, item.getGlintPackView()));
-
-		ServerGlintPackNetworkingEvents.BEFORE_ALL.invoker().beforeAllGlintPacksSent(glintPacks);
-
-		glintPacks.forEach((item, view) -> ServerOperations.sendGlintPackToClient(item, view, player));
-
-		ServerGlintPackNetworkingEvents.AFTER_ALL.invoker().afterAllGlintPacksSent(glintPacks);
 	}
 }

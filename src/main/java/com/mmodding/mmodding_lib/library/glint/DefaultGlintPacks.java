@@ -42,8 +42,6 @@ public class DefaultGlintPacks {
 	public static final GlintPackView BLANK = DefaultGlintPacks.create("blank");
 
 	private static GlintPackView create(String path) {
-		GlintPackView view = new SimpleGlintPackView(new MModdingIdentifier(path));
-		RegistrationUtils.registerGlintPackView(new MModdingIdentifier(path), view);
-		return view;
+        return new SimpleGlintPackView(new MModdingIdentifier(path));
 	}
 }

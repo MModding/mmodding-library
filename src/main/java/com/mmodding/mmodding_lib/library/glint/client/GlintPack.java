@@ -1,7 +1,10 @@
 package com.mmodding.mmodding_lib.library.glint.client;
 
+import com.mmodding.mmodding_lib.client.ClientCaches;
 import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerElements;
+import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
+import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.MinecraftClient;
@@ -10,10 +13,13 @@ import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
+
+import java.util.Optional;
 
 @ClientOnly
 public class GlintPack {
@@ -51,6 +57,17 @@ public class GlintPack {
 
 	public static GlintPack create(TextureLocation texture) {
 		return new GlintPack(texture, true, true, true, true, true, true, true);
+	}
+
+	public static Optional<GlintPack> of(ItemStack stack) {
+		Identifier identifier;
+		if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(stack.getItem())) {
+			identifier = ClientCaches.GLINT_PACK_OVERRIDES.get(stack.getItem()).getGlintPack(stack);
+		}
+		else {
+			identifier = stack.getHiddenDataStorage().getIdentifier(new MModdingIdentifier("glint_pack"));
+		}
+		return Optional.ofNullable(MModdingClientGlobalMaps.getGlintPack(identifier));
 	}
 
 	@Nullable

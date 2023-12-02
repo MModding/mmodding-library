@@ -3,8 +3,11 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mmodding.mmodding_lib.ducks.ItemStackDuckInterface;
-import com.mmodding.mmodding_lib.library.networking.NetworkSupport;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.items.data.HiddenStackDataInsertionCallback;
+import com.mmodding.mmodding_lib.library.network.support.NetworkSupport;
+import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
+import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.Self;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -15,16 +18,22 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(PacketByteBuf.class)
 public class PacketByteBuffMixin implements Self<PacketByteBuf> {
 
-	@WrapOperation(method = "readItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setNbt(Lnet/minecraft/nbt/NbtCompound;)V", shift = At.Shift.AFTER))
+	@WrapOperation(method = "readItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
 	private void readItemStack(ItemStack itemStack, NbtCompound compound, Operation<Void> original) {
 		original.call(itemStack, compound);
-		((ItemStackDuckInterface) (Object) itemStack).mmodding_lib$setHiddenStackData(NetworkSupport.readComplete(this.getObject()));
+		itemStack.setHiddenDataStorage(NetworkSupport.readComplete(this.getObject()));
 	}
 
-	@WrapOperation(method = "writeItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/network/PacketByteBuf;", shift = At.Shift.AFTER))
+	@WrapOperation(method = "writeItemStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeNbt(Lnet/minecraft/nbt/NbtCompound;)Lnet/minecraft/network/PacketByteBuf;"))
 	private PacketByteBuf writeItemStack(PacketByteBuf instance, NbtCompound compound, Operation<PacketByteBuf> original, @Local ItemStack stack) {
 		PacketByteBuf buf = original.call(instance, compound);
-		((ItemStackDuckInterface) (Object) stack).mmodding_lib$getHiddenStackData().write(instance);
+		if (!EnvironmentUtils.isClient()) {
+			if (GlintPackView.of(stack) != null) {
+				stack.getHiddenDataStorage().putIdentifier(new MModdingIdentifier("glint_pack"), GlintPackView.of(stack).getGlintPack(stack));
+				HiddenStackDataInsertionCallback.EVENT.invoker().insert(stack, stack.getHiddenDataStorage());
+			}
+		}
+		stack.getHiddenDataStorage().writeComplete(buf);
 		return buf;
 	}
 }

@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.client.model.Model;
@@ -20,15 +20,15 @@ public interface ArmorRendererMixin {
 
     @Inject(method = "renderPart", at = @At(value = "HEAD"), cancellable = true)
     private static void renderParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ItemStack stack, Model model, Identifier texture, CallbackInfo ci) {
-        if (GlintPackView.of(stack.getItem()) != null) {
-            VertexConsumer vertexConsumer = GlintPackView.of(stack.getItem()).getGlintPack(stack).getArmorConsumer(
-                vertexConsumers,
-                RenderLayer.getArmorCutoutNoCull(texture),
-                false,
-                stack.hasGlint()
-            );
-            model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
-            ci.cancel();
-        }
+		GlintPack.of(stack).ifPresent(glintPack -> {
+			VertexConsumer vertexConsumer = glintPack.getArmorConsumer(
+				vertexConsumers,
+				RenderLayer.getArmorCutoutNoCull(texture),
+				false,
+				stack.hasGlint()
+			);
+			model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+			ci.cancel();
+		});
     }
 }

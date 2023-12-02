@@ -64,7 +64,7 @@ public interface Config {
 	 */
 	@DedicatedServerOnly
 	default void sendServerConfigToClient(ServerPlayerEntity player) {
-		ServerOperations.sendConfigToClient(this, player);
+		ServerOperations.sendConfigToClient(player, this);
 	}
 
 	private JsonElement getReader() {

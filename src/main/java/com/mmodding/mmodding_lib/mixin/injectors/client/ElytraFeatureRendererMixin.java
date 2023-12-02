@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -28,16 +28,16 @@ public class ElytraFeatureRendererMixin<T extends LivingEntity> {
 
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/ElytraEntityModel;setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION, cancellable = true)
     private void renderArmorParts(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci, ItemStack itemStack, Identifier identifier) {
-        if (GlintPackView.of(itemStack.getItem()) != null) {
-            VertexConsumer vertexConsumer = GlintPackView.of(itemStack.getItem()).getGlintPack(itemStack).getArmorConsumer(
-                vertexConsumerProvider,
-                RenderLayer.getArmorCutoutNoCull(identifier),
-                false,
-                itemStack.hasGlint()
-            );
-            this.elytra.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
-            matrixStack.pop();
-            ci.cancel();
-        }
+		GlintPack.of(itemStack).ifPresent(glintPack -> {
+			VertexConsumer vertexConsumer = glintPack.getArmorConsumer(
+				vertexConsumerProvider,
+				RenderLayer.getArmorCutoutNoCull(identifier),
+				false,
+				itemStack.hasGlint()
+			);
+			this.elytra.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
+			matrixStack.pop();
+			ci.cancel();
+		});
     }
 }

@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -38,8 +38,8 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extend
 
 	@Inject(method = "renderArmorParts", at = @At(value = "HEAD"), cancellable = true)
 	private void renderArmorParts(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorItem item, boolean usesSecondLayer, A model, boolean legs, float red, float green, float blue, @Nullable String overlay, CallbackInfo ci, @Share("itemStack") LocalRef<ItemStack> ref) {
-		if (GlintPackView.of(ref.get().getItem()) != null) {
-			VertexConsumer vertexConsumer = GlintPackView.of(ref.get().getItem()).getGlintPack(ref.get()).getArmorConsumer(
+		GlintPack.of(ref.get()).ifPresent(glintPack -> {
+			VertexConsumer vertexConsumer = glintPack.getArmorConsumer(
 				vertexConsumers,
 				RenderLayer.getArmorCutoutNoCull(this.getArmorTexture(item, legs, overlay)),
 				false,
@@ -47,6 +47,6 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, A extend
 			);
 			model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, red, green, blue, 1.0f);
 			ci.cancel();
-		}
+		});
 	}
 }

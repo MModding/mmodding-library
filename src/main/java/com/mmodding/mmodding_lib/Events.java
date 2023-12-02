@@ -59,7 +59,6 @@ public class Events {
 
 		if (server.isDedicated()) {
 			ServerOperations.sendConfigsToClient(handler.getPlayer());
-			ServerOperations.sendGlintPacksToClient(handler.getPlayer());
 		}
 	}
 

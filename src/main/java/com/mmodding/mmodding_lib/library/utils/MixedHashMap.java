@@ -3,7 +3,6 @@ package com.mmodding.mmodding_lib.library.utils;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class MixedHashMap<K> extends HashMap<K, TypedObject<?>> implements MixedMap<K> {
@@ -42,7 +41,13 @@ public class MixedHashMap<K> extends HashMap<K, TypedObject<?>> implements Mixed
 
 	@Override
 	public <V> V put(K key, Class<V> type, V value) {
-		return (V) Objects.requireNonNull(super.put(key, TypedObject.of(type, value))).getValue();
+		TypedObject<V> typed = (TypedObject<V>) super.put(key, TypedObject.of(type, value));
+		if (typed != null) {
+			return typed.getValue();
+		}
+		else {
+			return MixedMap.emptyValue(type).getValue();
+		}
 	}
 
 	@Override

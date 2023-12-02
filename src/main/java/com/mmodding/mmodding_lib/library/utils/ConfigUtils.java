@@ -11,24 +11,22 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 public class ConfigUtils {
 
 	public static Config getConfig(String qualifier) {
-		Config.NetworkingState networkingState = MModdingLib.CONFIGS.get(qualifier).getNetworkingSate();
-
-		return switch (networkingState) {
+		return switch (MModdingLib.CONFIGS.get(qualifier).getNetworkingSate()) {
 			case LOCAL_CACHES -> {
-				if (!EnvironmentUtils.isInSinglePlayer() && EnvironmentUtils.isClient()) {
-					yield ClientCaches.CONFIGS.get(qualifier);
+				if (EnvironmentUtils.isClient()) {
+					if (!EnvironmentUtils.isInSinglePlayer()) {
+						yield ClientCaches.CONFIGS.get(qualifier);
+					}
 				}
-				else {
-					yield LocalCaches.CONFIGS.get(qualifier);
-				}
+				yield LocalCaches.CONFIGS.get(qualifier);
 			}
 			case CLIENT_CACHES -> {
-				if (!EnvironmentUtils.isInSinglePlayer() && EnvironmentUtils.isClient()) {
-					yield ClientCaches.CONFIGS.get(qualifier);
+				if (EnvironmentUtils.isClient()) {
+					if (!EnvironmentUtils.isInSinglePlayer()) {
+						yield ClientCaches.CONFIGS.get(qualifier);
+					}
 				}
-				else {
-					yield MModdingLib.CONFIGS.get(qualifier);
-				}
+				yield MModdingLib.CONFIGS.get(qualifier);
 			}
 			case WITHOUT_CACHES -> MModdingLib.CONFIGS.get(qualifier);
 		};

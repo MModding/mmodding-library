@@ -1,12 +1,13 @@
 package com.mmodding.mmodding_lib.library.client.utils;
 
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
-import com.mmodding.mmodding_lib.library.glint.SimpleGlintPackView;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mmodding.mmodding_lib.library.stellar.client.StellarObject;
+import com.mmodding.mmodding_lib.library.utils.BiHashMap;
+import com.mmodding.mmodding_lib.library.utils.BiMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.*;
@@ -20,7 +21,7 @@ public class MModdingClientGlobalMaps {
 
     static final Map<Identifier, GlintPack> GLINT_PACKS = new HashMap<>();
 
-	static final Map<Item, Pair<GlintPackView, Predicate<Item>>> GLINT_PACK_OVERRIDES = new HashMap<>();
+	static final BiMap<Item, GlintPackView, Predicate<Item>> GLINT_PACK_OVERRIDES = new BiHashMap<>();
 
     public static Stream<StellarObject> getStellarObjects() {
         return STELLAR_OBJECTS.stream();

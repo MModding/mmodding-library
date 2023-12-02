@@ -21,12 +21,12 @@ public class DynamicGlintPackView implements GlintPackView {
 			consumer.accept(stack, ref);
 			return ref;
 		};
-		Function<ItemStack, Identifier> function = stack -> tweak.apply(stack, new AtomicReference<>(view.getIdentifier(stack))).get();
+		Function<ItemStack, Identifier> function = stack -> tweak.apply(stack, new AtomicReference<>(view.getGlintPack(stack))).get();
 		return new DynamicGlintPackView(function);
 	}
 
 	@Override
-	public Identifier getIdentifier(ItemStack stack) {
+	public Identifier getGlintPack(ItemStack stack) {
 		return this.function.apply(stack);
 	}
 }

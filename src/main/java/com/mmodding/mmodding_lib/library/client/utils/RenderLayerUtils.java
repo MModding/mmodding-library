@@ -12,7 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.function.Predicate;
@@ -33,7 +33,7 @@ public class RenderLayerUtils {
     }
 
 	public static void addGlintPackOverride(Item target, GlintPackView view, Predicate<Item> canApply) {
-		MModdingClientGlobalMaps.GLINT_PACK_OVERRIDES.put(target, new Pair<>(view, canApply));
+		MModdingClientGlobalMaps.GLINT_PACK_OVERRIDES.put(target, new ImmutablePair<>(view, canApply));
 	}
 
     public static void addEntityBuilder(RenderLayer layer) {

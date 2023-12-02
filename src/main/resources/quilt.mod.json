@@ -50,6 +50,7 @@
 				"com/mmodding/mmodding_lib/interface_injections/EntitySyncableDataRegistry"
 			],
 			"net/minecraft/class_1799": [
+				"com/mmodding/mmodding_lib/interface_injections/HiddenDataStorage",
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
 			],
 			"net/minecraft/class_1792": [

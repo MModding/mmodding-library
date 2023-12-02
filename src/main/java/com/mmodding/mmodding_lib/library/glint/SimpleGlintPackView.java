@@ -12,7 +12,7 @@ public class SimpleGlintPackView implements GlintPackView {
 	}
 
 	@Override
-	public Identifier getIdentifier(ItemStack stack) {
+	public Identifier getGlintPack(ItemStack stack) {
 		return this.identifier;
 	}
 }
