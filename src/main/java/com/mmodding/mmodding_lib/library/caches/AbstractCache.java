@@ -14,7 +14,7 @@ public abstract class AbstractCache<K, V> extends HashMap<K, V> {
 		this.value = value;
 	}
 
-	abstract public boolean clientReserved();
+	public abstract boolean clientReserved();
 
 	public void debug() {
 		System.out.println((this.clientReserved() ? "Client " : "Local ") + "Cache {" + this.cache + "} :");
