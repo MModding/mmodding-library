@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
+import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Holder;
@@ -24,9 +25,7 @@ import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -48,7 +47,7 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 
 	public CustomFlowerFeature(int tries, int spreadHorizontally, int spreadVertically, Block... noisedFlowers) {
 		this.flowers = new BiArrayList<>();
-		Arrays.stream(noisedFlowers).toList().forEach(block -> flowers.add(block, 0));
+		Arrays.stream(noisedFlowers).toList().forEach(block -> this.flowers.add(block, 0));
 		this.tries = tries;
 		this.spreadXZ = spreadHorizontally;
 		this.spreadY = spreadVertically;
@@ -73,20 +72,16 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 		BlockStateProvider provider;
 
 		if (this.noised.get()) {
-			List<BlockState> flowerStates = new ArrayList<>();
-			this.flowers.forEachFirst(block -> flowerStates.add(block.getDefaultState()));
-
 			provider = new NoiseBlockStateProvider(
 				2345L,
 				new DoublePerlinNoiseSampler.NoiseParameters(0, 1.0),
 				0.05f,
-				flowerStates
+				ListUtils.builder(flowerStates -> this.flowers.forEachFirst(block -> flowerStates.add(block.getDefaultState())))
 			);
 		}
 		else {
 			DataPool.Builder<BlockState> builder = DataPool.builder();
 			this.flowers.forEach((block, integer) -> builder.add(block.getDefaultState(), integer));
-
 			provider = new WeightedBlockStateProvider(builder);
 		}
 
@@ -107,15 +102,13 @@ public class CustomFlowerFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public PlacedFeature createPlacedFeature(int count, int rarity) {
-
-		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		if (count != 0) placementModifiers.add(CountPlacementModifier.create(count));
-		if (rarity != 0) placementModifiers.add(RarityFilterPlacementModifier.create(rarity));
-		placementModifiers.add(InSquarePlacementModifier.getInstance());
-		placementModifiers.add(PlacedFeatureUtil.MOTION_BLOCKING_HEIGHTMAP);
-		placementModifiers.add(BiomePlacementModifier.getInstance());
-
-		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), placementModifiers);
+		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), ListUtils.builder(placementModifiers -> {
+			if (count != 0) placementModifiers.add(CountPlacementModifier.create(count));
+			if (rarity != 0) placementModifiers.add(RarityFilterPlacementModifier.create(rarity));
+			placementModifiers.add(InSquarePlacementModifier.getInstance());
+			placementModifiers.add(PlacedFeatureUtil.MOTION_BLOCKING_HEIGHTMAP);
+			placementModifiers.add(BiomePlacementModifier.getInstance());
+		}));
 	}
 
 	@Override

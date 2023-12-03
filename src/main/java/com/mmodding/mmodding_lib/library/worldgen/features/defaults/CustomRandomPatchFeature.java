@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
+import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -14,8 +15,6 @@ import net.minecraft.world.gen.feature.util.PlacedFeatureUtil;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -62,15 +61,13 @@ public class CustomRandomPatchFeature implements CustomFeature, FeatureRegistrab
 	}
 
 	public PlacedFeature createPlacedFeature(int count, int rarity) {
-
-		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		if (count != 0) placementModifiers.add(CountPlacementModifier.create(count));
-		if (rarity != 0) placementModifiers.add(RarityFilterPlacementModifier.create(rarity));
-		placementModifiers.add(InSquarePlacementModifier.getInstance());
-		placementModifiers.add(PlacedFeatureUtil.WORLD_SURFACE_WG_HEIGHTMAP);
-		placementModifiers.add(BiomePlacementModifier.getInstance());
-
-		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), placementModifiers);
+		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), ListUtils.builder(placementModifiers -> {
+			if (count != 0) placementModifiers.add(CountPlacementModifier.create(count));
+			if (rarity != 0) placementModifiers.add(RarityFilterPlacementModifier.create(rarity));
+			placementModifiers.add(InSquarePlacementModifier.getInstance());
+			placementModifiers.add(PlacedFeatureUtil.WORLD_SURFACE_WG_HEIGHTMAP);
+			placementModifiers.add(BiomePlacementModifier.getInstance());
+		}));
 	}
 
 	@Override

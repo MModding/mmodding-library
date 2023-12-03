@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
+import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -14,7 +15,6 @@ import net.minecraft.world.gen.feature.*;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -57,13 +57,11 @@ public class CustomOreFeature implements CustomFeature, FeatureRegistrable {
 	}
 
 	public PlacedFeature createPlacedFeature(int veinNumber, int minHeight, int maxHeight) {
-
-		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		placementModifiers.add(CountPlacementModifier.create(veinNumber));
-		placementModifiers.add(InSquarePlacementModifier.getInstance());
-		placementModifiers.add(HeightRangePlacementModifier.createUniform(YOffset.fixed(minHeight), YOffset.fixed(maxHeight)));
-
-		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), placementModifiers);
+		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), ListUtils.builder(placementModifiers -> {
+			placementModifiers.add(CountPlacementModifier.create(veinNumber));
+			placementModifiers.add(InSquarePlacementModifier.getInstance());
+			placementModifiers.add(HeightRangePlacementModifier.createUniform(YOffset.fixed(minHeight), YOffset.fixed(maxHeight)));
+		}));
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.worldgen.features.defaults;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
+import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedPointedDripstoneFeature;
 import net.minecraft.block.Block;
@@ -23,8 +24,6 @@ import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
@@ -112,16 +111,14 @@ public class CustomPointedDripstoneFeature implements CustomFeature, FeatureRegi
 	}
 
 	public PlacedFeature createPlacedFeature(IntProvider countRange, IntProvider numberRange, IntProvider spreadXZ, IntProvider spreadY) {
-
-		List<PlacementModifier> placementModifiers = new ArrayList<>();
-		placementModifiers.add(CountPlacementModifier.create(countRange));
-		placementModifiers.add(InSquarePlacementModifier.getInstance());
-		placementModifiers.add(PlacedFeatureUtil.BOTTOM_TO_MAX_TERRAIN_HEIGHT_RANGE);
-		placementModifiers.add(CountPlacementModifier.create(numberRange));
-		placementModifiers.add(RandomOffsetPlacementModifier.create(spreadXZ, spreadY));
-		placementModifiers.add(BiomePlacementModifier.getInstance());
-
-		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), placementModifiers);
+		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), ListUtils.builder(placementModifiers -> {
+			placementModifiers.add(CountPlacementModifier.create(countRange));
+			placementModifiers.add(InSquarePlacementModifier.getInstance());
+			placementModifiers.add(PlacedFeatureUtil.BOTTOM_TO_MAX_TERRAIN_HEIGHT_RANGE);
+			placementModifiers.add(CountPlacementModifier.create(numberRange));
+			placementModifiers.add(RandomOffsetPlacementModifier.create(spreadXZ, spreadY));
+			placementModifiers.add(BiomePlacementModifier.getInstance());
+		}));
 	}
 
 	@Override
