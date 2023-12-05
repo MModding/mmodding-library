@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.ducks;
 
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.BlockLocating;
@@ -9,6 +10,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.util.Optional;
 
+@InternalOf(targets = CustomSquaredPortal.class)
 public interface PortalForcerDuckInterface {
 
 	void mmodding_lib$setUseCustomPortalElements(boolean useCustomPortalElements);

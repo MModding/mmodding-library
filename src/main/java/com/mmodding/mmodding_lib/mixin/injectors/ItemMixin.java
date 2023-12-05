@@ -35,7 +35,7 @@ public abstract class ItemMixin implements ItemGlintPack, Self<Item> {
 
 	@Inject(method = "hasGlint", at = @At("TAIL"), cancellable = true)
 	private void hasGlint(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-		if (AdvancedItemSettings.GLINT.get(this.getObject())) {
+		if (AdvancedItemSettings.GLINT.get(this.getObject()).apply(stack)) {
 			cir.setReturnValue(true);
 		}
 	}

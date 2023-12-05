@@ -1,11 +1,13 @@
 package com.mmodding.mmodding_lib.ducks;
 
+import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import com.mmodding.mmodding_lib.states.persistant.DifferedSeeds;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 
+@InternalOf(targets = DifferedSeeds.class)
 public interface GeneratorOptionsDuckInterface {
 
 	void mmodding_lib$fillDimensionSeedAddendsNbt(NbtList list);

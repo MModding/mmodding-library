@@ -3,12 +3,14 @@ package com.mmodding.mmodding_lib.impl;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.MModdingScreen;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
+import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@InternalOf(targets = ConfigScreen.class)
 public class ModMenuApiImpl implements ModMenuApi {
 
 	@Override
