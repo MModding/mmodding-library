@@ -39,6 +39,10 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 		return this.customSetting(DESCRIPTION_LINES, descriptionLines);
 	}
 
+	public AdvancedItemSettings glint() {
+		return this.glint(true);
+	}
+
 	public AdvancedItemSettings glint(boolean glint) {
 		return this.glint(stack -> glint);
 	}
