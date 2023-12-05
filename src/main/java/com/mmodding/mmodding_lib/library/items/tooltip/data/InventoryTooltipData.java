@@ -23,7 +23,7 @@ public class InventoryTooltipData implements TooltipData {
     private final boolean excludeEmptyItems;
     private final boolean groupItems;
 
-	private Optional<TextureLocation> textureLocation = Optional.empty();
+	private TextureLocation textureLocation = null;
 
     public InventoryTooltipData(SimpleInventory inventory, boolean excludeEmptyItems, boolean groupItems) {
         this(inventory, inventory.stacks, excludeEmptyItems, groupItems);
@@ -62,7 +62,7 @@ public class InventoryTooltipData implements TooltipData {
     }
 
 	public void setTexture(TextureLocation location) {
-		this.textureLocation = Optional.of(location);
+		this.textureLocation = location;
 	}
 
     public Inventory getInventory() {
@@ -86,7 +86,7 @@ public class InventoryTooltipData implements TooltipData {
     }
 
 	public Optional<TextureLocation> getTexture() {
-		return this.textureLocation;
+		return Optional.ofNullable(this.textureLocation);
 	}
 
 	public OptionalInt getColumns() {

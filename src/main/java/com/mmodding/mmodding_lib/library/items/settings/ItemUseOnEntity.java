@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
+@FunctionalInterface
 public interface ItemUseOnEntity {
 
 	void apply(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand);

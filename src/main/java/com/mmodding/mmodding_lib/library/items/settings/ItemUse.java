@@ -4,6 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
+@FunctionalInterface
 public interface ItemUse {
 
 	void apply(World world, PlayerEntity user, Hand hand);

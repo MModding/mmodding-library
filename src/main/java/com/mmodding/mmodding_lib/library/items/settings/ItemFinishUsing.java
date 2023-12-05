@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+@FunctionalInterface
 public interface ItemFinishUsing {
 
 	ItemStack apply(ItemStack stack, World world, LivingEntity user);
