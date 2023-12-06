@@ -47,7 +47,7 @@ public interface NetworkSupport {
 	}
 
 	static <T extends NetworkSupport> void writeCompleteAsNullable(T value,  PacketByteBuf buf) {
-		buf.writeNullable(value, (current, support) -> support.writeComplete(buf));
+		buf.writeNullable(value, (current, support) -> support.writeComplete(current));
 	}
 
 	default void writeComplete(PacketByteBuf buf) {
