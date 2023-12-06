@@ -28,6 +28,9 @@ public class MixedArrayList extends ArrayList<TypedObject<?>> implements MixedLi
 	@Override
 	public <E> E get(int index, Class<E> type) {
 		TypedObject<?> typed = super.get(index);
+		if (typed == null) {
+			typed = MixedMap.emptyValue(type);
+		}
 		if (type.equals(typed.getType())) {
 			return (E) typed.getValue();
 		}

@@ -60,14 +60,18 @@ public class GlintPack {
 	}
 
 	public static Optional<GlintPack> of(ItemStack stack) {
-		Identifier identifier;
-		if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(stack.getItem())) {
-			identifier = ClientCaches.GLINT_PACK_OVERRIDES.get(stack.getItem()).getGlintPack(stack);
+		if (stack != null) {
+			Identifier identifier;
+			if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(stack.getItem())) {
+				identifier = ClientCaches.GLINT_PACK_OVERRIDES.get(stack.getItem()).getGlintPack(stack);
+			} else {
+				identifier = stack.getHiddenDataStorage().getIdentifier(new MModdingIdentifier("glint_pack"));
+			}
+			return Optional.ofNullable(MModdingClientGlobalMaps.getGlintPack(identifier));
 		}
 		else {
-			identifier = stack.getHiddenDataStorage().getIdentifier(new MModdingIdentifier("glint_pack"));
+			return Optional.empty();
 		}
-		return Optional.ofNullable(MModdingClientGlobalMaps.getGlintPack(identifier));
 	}
 
 	@Nullable

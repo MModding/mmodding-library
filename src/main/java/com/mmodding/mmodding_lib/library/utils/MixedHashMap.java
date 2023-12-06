@@ -31,6 +31,9 @@ public class MixedHashMap<K> extends HashMap<K, TypedObject<?>> implements Mixed
 	@Override
 	public <V> V get(K key, Class<V> type) {
 		TypedObject<?> typed = super.get(key);
+		if (typed == null) {
+			typed = MixedMap.emptyValue(type);
+		}
 		if (type.equals(typed.getType())) {
 			return (V) typed.getValue();
 		}

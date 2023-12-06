@@ -17,7 +17,6 @@ import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.YOffset;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.decorator.*;
 import net.minecraft.world.gen.feature.*;
@@ -27,13 +26,11 @@ import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-public class CustomMossPatchFeature implements CustomFeature, FeatureRegistrable {
+public class CustomVegetationPatchFeature implements CustomFeature, FeatureRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean();
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
@@ -53,7 +50,7 @@ public class CustomMossPatchFeature implements CustomFeature, FeatureRegistrable
 	private final IntProvider horizontalRadius;
 	private final float extraEdgeColumnChance;
 
-	public CustomMossPatchFeature(int count, Direction searchDirection, int maxSteps, TagKey<Block> replaceable, BlockState ground, BiList<BlockState, Integer> vegetationStates, VerticalSurfaceType verticalSurfaceType, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
+	public CustomVegetationPatchFeature(int count, Direction searchDirection, int maxSteps, TagKey<Block> replaceable, BlockState ground, BiList<BlockState, Integer> vegetationStates, VerticalSurfaceType verticalSurfaceType, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
 		this.count = count;
 		this.searchDirection = searchDirection;
 		this.maxSteps = maxSteps;
@@ -112,7 +109,7 @@ public class CustomMossPatchFeature implements CustomFeature, FeatureRegistrable
 		return this.createPlacedFeature(this.count, this.searchDirection, this.maxSteps);
 	}
 
-	public CustomMossPatchFeature addPlacedFeature(int count, Direction searchDirection, int maxSteps, String idExt) {
+	public CustomVegetationPatchFeature addPlacedFeature(int count, Direction searchDirection, int maxSteps, String idExt) {
 		this.additionalPlacedFeatures.add(this.createPlacedFeature(count, searchDirection, maxSteps), idExt);
 		return this;
 	}
