@@ -157,6 +157,7 @@ public class NetworkMap implements NetworkSupport {
 		this.entries.forEach(action);
 	}
 
+	@ShouldNotUse(useInstead = "NetworkSupport#readComplete")
 	public static NetworkMap read(PacketByteBuf buf) {
 		NetworkMap list = new NetworkMap();
 		list.entries.putAll(buf.readMap(PacketByteBuf::readIdentifier, current -> TypedObject.of(NetworkSupport.getType(current), NetworkSupport.readComplete(current))));

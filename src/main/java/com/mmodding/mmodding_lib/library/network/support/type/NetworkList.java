@@ -296,6 +296,7 @@ public class NetworkList implements NetworkSupport {
 		this.set(index, NetworkItemStack.class, NetworkItemStack.of(value));
 	}
 
+	@ShouldNotUse(useInstead = "NetworkSupport#readComplete")
 	public static NetworkList read(PacketByteBuf buf) {
 		NetworkList list = new NetworkList();
 		list.elements.addAll(buf.readList(current -> TypedObject.of(NetworkSupport.getType(current), NetworkSupport.readComplete(current))));

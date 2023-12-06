@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.network.support;
 
+import com.mmodding.mmodding_lib.library.utils.ShouldNotUse;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
@@ -54,5 +55,6 @@ public interface NetworkSupport {
 		throw new IllegalArgumentException("Class is not present in the NetworkSupport Registry");
 	}
 
+	@ShouldNotUse(useInstead = "writeComplete")
 	void write(PacketByteBuf buf);
 }
