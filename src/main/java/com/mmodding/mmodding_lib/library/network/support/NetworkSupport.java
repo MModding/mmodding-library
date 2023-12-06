@@ -46,8 +46,8 @@ public interface NetworkSupport {
 		throw new IllegalArgumentException("Identifier is not present in the NetworkSupport Registry");
 	}
 
-	default void writeCompleteAsNullable(PacketByteBuf buf) {
-		buf.writeNullable(this, (current, support) -> support.writeComplete(buf));
+	static <T extends NetworkSupport> void writeCompleteAsNullable(T value,  PacketByteBuf buf) {
+		buf.writeNullable(value, (current, support) -> support.writeComplete(buf));
 	}
 
 	default void writeComplete(PacketByteBuf buf) {
