@@ -30,6 +30,10 @@ public interface NetworkSupport {
 		throw new IllegalArgumentException("Identifier is not present in the NetworkSupport Registry");
 	}
 
+	static <T extends NetworkSupport> T readCompleteAsNullable(PacketByteBuf buf) {
+		return buf.readNullable(NetworkSupport::readComplete);
+	}
+
 	@SuppressWarnings("unchecked")
 	static <T extends NetworkSupport> T readComplete(PacketByteBuf buf) {
 		PacketByteBuf check = new PacketByteBuf(buf.copy());
@@ -40,6 +44,10 @@ public interface NetworkSupport {
 			return (T) MANAGER.get(type).apply(buf);
 		}
 		throw new IllegalArgumentException("Identifier is not present in the NetworkSupport Registry");
+	}
+
+	default void writeCompleteAsNullable(PacketByteBuf buf) {
+		buf.writeNullable(this, (current, support) -> support.writeComplete(buf));
 	}
 
 	default void writeComplete(PacketByteBuf buf) {
