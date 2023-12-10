@@ -50,6 +50,7 @@
 				"com/mmodding/mmodding_lib/interface_injections/EntitySyncableDataRegistry"
 			],
 			"net/minecraft/class_1799": [
+				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024ItemStackTagRuntimeManagement",
 				"com/mmodding/mmodding_lib/interface_injections/HiddenDataStorage",
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
 			],
@@ -57,10 +58,17 @@
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
 			],
 			"net/minecraft/class_3610": [
+				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024FluidStateTagRuntimeManagement",
 				"com/mmodding/mmodding_lib/interface_injections/FluidGroupComparable"
 			],
 			"net/minecraft/class_4770": [
 				"com/mmodding/mmodding_lib/interface_injections/ShouldLightCustomPortal"
+			],
+			"net/minecraft/class_4970\u0024class_4971": [
+				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024BlockStateTagRuntimeManagement"
+			],
+			"net/minecraft/class_6880": [
+				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement"
 			]
 		}
 	},

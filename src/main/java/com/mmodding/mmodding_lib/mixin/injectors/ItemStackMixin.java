@@ -5,11 +5,13 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.mmodding_lib.client.ClientPendingRequestManagers;
 import com.mmodding.mmodding_lib.interface_injections.HiddenDataStorage;
 import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
+import com.mmodding.mmodding_lib.interface_injections.TagRuntimeManagement;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.data.HiddenStackDataInsertionCallback;
 import com.mmodding.mmodding_lib.library.network.support.type.NetworkList;
 import com.mmodding.mmodding_lib.library.network.support.type.NetworkMap;
+import com.mmodding.mmodding_lib.library.tags.modifiers.TagModifier;
 import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.ObjectUtils;
@@ -19,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -37,13 +40,16 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements HiddenDataStorage, ItemGlintPack, Self<ItemStack> {
+public abstract class ItemStackMixin implements TagRuntimeManagement.ItemStackTagRuntimeManagement, HiddenDataStorage, ItemGlintPack, Self<ItemStack> {
 
 	@Unique
 	public NetworkMap hiddenDataStorage = new NetworkMap();
 
     @Shadow
     public abstract Item getItem();
+
+	@Shadow
+	public abstract boolean isIn(TagKey<Item> tag);
 
 	@Inject(method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V", at = @At("TAIL"))
 	private void initItem(ItemConvertible item, int count, CallbackInfo ci) {
@@ -130,6 +136,11 @@ public abstract class ItemStackMixin implements HiddenDataStorage, ItemGlintPack
 				this.hiddenDataSetup(() -> GlintPackView.of(this.getObject()).getGlintPack(this.getObject()));
 			}
 		}
+	}
+
+	@Override
+	public boolean isIn(TagModifier<Item> modifier) {
+		return modifier.result(this.getItem(), this::isIn);
 	}
 
 	@Override
