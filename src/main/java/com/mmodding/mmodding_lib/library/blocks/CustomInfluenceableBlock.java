@@ -16,6 +16,9 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentifiable> extends CustomBlock {
 
+	protected final EnumProperty<E> property = EnumProperty.of("influence", this.getType());
+
+
     public CustomInfluenceableBlock(Settings settings) {
 		this(settings, false);
     }
@@ -34,21 +37,21 @@ public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentif
 
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		return direction == Direction.UP ? state.with(this.getProperty(), this.getInfluence(neighborState)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return direction == Direction.UP ? state.with(this.property, this.getInfluence(neighborState)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Nullable
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState().with(this.getProperty(), this.getInfluence(ctx.getWorld().getBlockState(ctx.getBlockPos().up())));
+		return this.getDefaultState().with(this.property, this.getInfluence(ctx.getWorld().getBlockState(ctx.getBlockPos().up())));
 	}
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(this.getProperty());
+		builder.add(this.property);
 	}
 
-	protected abstract EnumProperty<E> getProperty();
+	public abstract Class<E> getType();
 
 	public abstract E getInfluence(BlockState state);
 }
