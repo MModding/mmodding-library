@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.helpers;
 
 import java.util.function.Consumer;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

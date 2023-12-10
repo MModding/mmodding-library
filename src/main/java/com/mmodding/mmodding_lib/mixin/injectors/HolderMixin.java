@@ -1,14 +1,15 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.interface_injections.TagRuntimeManagement;
-import net.minecraft.tag.TagKey;
+import com.mmodding.mmodding_lib.library.tags.modifiers.TagModifier;
 import net.minecraft.util.Holder;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Holder.class)
 public interface HolderMixin<T> extends TagRuntimeManagement<T> {
 
-	@Shadow
-	boolean isIn(TagKey<T> tag);
+	@Override
+	default boolean isIn(TagModifier<T> modifier) {
+		throw new AssertionError();
+	}
 }
