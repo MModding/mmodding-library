@@ -5,10 +5,10 @@ import net.minecraft.util.Holder;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Holder.Direct.class)
-public interface HolderDirectMixin<T> extends HolderMixin<T> {
+public abstract class HolderDirectMixin<T> implements HolderMixin<T> {
 
 	@Override
-	default boolean isIn(TagModifier<T> modifier) {
+	public boolean isIn(TagModifier<T> modifier) {
 		return false;
 	}
 }

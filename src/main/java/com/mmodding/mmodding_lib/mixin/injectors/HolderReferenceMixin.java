@@ -6,13 +6,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Holder.Reference.class)
-public interface HolderReferenceMixin<T> extends HolderMixin<T> {
+public abstract class HolderReferenceMixin<T> implements HolderMixin<T> {
 
 	@Shadow
-	T value();
+	public abstract T value();
 
 	@Override
-	default boolean isIn(TagModifier<T> modifier) {
+	public boolean isIn(TagModifier<T> modifier) {
 		return modifier.result(this.value(), this::isIn);
 	}
 }

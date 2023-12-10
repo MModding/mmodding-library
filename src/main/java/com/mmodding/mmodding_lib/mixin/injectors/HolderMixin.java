@@ -6,7 +6,7 @@ import net.minecraft.util.Holder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(Holder.Direct.class)
+@Mixin(Holder.class)
 public interface HolderMixin<T> extends TagRuntimeManagement<T> {
 
 	@Shadow
