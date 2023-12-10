@@ -8,25 +8,25 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomSnowBlock extends SnowBlock implements BlockRegistrable, BlockWithItem {
+public class CustomLayeredBlock extends SnowBlock implements BlockRegistrable, BlockWithItem {
 
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
     private BlockItem item = null;
 
-    public CustomSnowBlock(Settings settings) {
+    public CustomLayeredBlock(Settings settings) {
         this(settings, false);
     }
 
-    public CustomSnowBlock(Settings settings, boolean hasItem) {
+    public CustomLayeredBlock(Settings settings, boolean hasItem) {
         this(settings, hasItem, (ItemGroup) null);
     }
 
-	public CustomSnowBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
+	public CustomLayeredBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
 		this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
 	}
 
-    public CustomSnowBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
+    public CustomLayeredBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
         super(settings);
         if (hasItem) this.item = new BlockItem(this, itemSettings);
     }
