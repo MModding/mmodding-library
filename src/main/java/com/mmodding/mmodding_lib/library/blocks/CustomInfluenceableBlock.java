@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import com.mmodding.mmodding_lib.library.utils.ObjectUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
@@ -16,8 +17,14 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentifiable> extends CustomBlock {
 
-	protected final EnumProperty<E> property = EnumProperty.of("influence", this.getType());
+	private E defaultValue = null;
 
+	protected EnumProperty<E> createInfluenceProperty(Class<E> type, E defaultValue) {
+		this.defaultValue = defaultValue;
+		return EnumProperty.of("influence", type);
+	}
+
+	protected abstract EnumProperty<E> getInfluenceProperty();
 
     public CustomInfluenceableBlock(Settings settings) {
 		this(settings, false);
@@ -33,25 +40,29 @@ public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentif
 
     public CustomInfluenceableBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
 		super(settings, hasItem, itemSettings);
+	    this.setDefaultState(this.getDefaultState().with(
+			this.getInfluenceProperty(),
+		    ObjectUtils.assumeNotNull(this.defaultValue, () -> new IllegalStateException("Influence Property Default Value Not Defined"))
+	    ));
 	}
 
 	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		return direction == Direction.UP ? state.with(this.property, this.getInfluence(neighborState)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return direction == Direction.UP ? state.with(this.getInfluenceProperty(), this.getInfluence(neighborState)) : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Nullable
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState().with(this.property, this.getInfluence(ctx.getWorld().getBlockState(ctx.getBlockPos().up())));
+		return this.getDefaultState().with(this.getInfluenceProperty(), this.getInfluence(ctx.getWorld().getBlockState(ctx.getBlockPos().up())));
 	}
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(this.property);
+		builder.add(this.getInfluenceProperty());
 	}
 
-	public abstract Class<E> getType();
-
-	public abstract E getInfluence(BlockState state);
+	public E getInfluence(BlockState state) {
+		return state.get(this.getInfluenceProperty());
+	}
 }
