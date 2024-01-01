@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
-import com.mmodding.mmodding_lib.library.utils.ObjectUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
@@ -17,10 +16,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentifiable> extends CustomBlock {
 
-	private E defaultValue = null;
-
-	protected EnumProperty<E> createInfluenceProperty(Class<E> type, E defaultValue) {
-		this.defaultValue = defaultValue;
+	public static <E extends Enum<E> & StringIdentifiable> EnumProperty<E> createInfluenceProperty(Class<E> type) {
 		return EnumProperty.of("influence", type);
 	}
 
@@ -40,10 +36,6 @@ public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentif
 
     public CustomInfluenceableBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
 		super(settings, hasItem, itemSettings);
-	    this.setDefaultState(this.getDefaultState().with(
-			this.getInfluenceProperty(),
-		    ObjectUtils.assumeNotNull(this.defaultValue, () -> new IllegalStateException("Influence Property Default Value Not Defined"))
-	    ));
 	}
 
 	@Override
@@ -62,7 +54,5 @@ public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentif
 		builder.add(this.getInfluenceProperty());
 	}
 
-	public E getInfluence(BlockState state) {
-		return state.get(this.getInfluenceProperty());
-	}
+	public abstract E getInfluence(BlockState state);
 }
