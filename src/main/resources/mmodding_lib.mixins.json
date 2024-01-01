@@ -38,6 +38,7 @@
     "injectors.AbstractFireBlockMixin",
     "injectors.AnimalEntityMixin",
     "injectors.AnvilScreenHandlerMixin",
+    "injectors.ArmorItemMixin",
     "injectors.BlockEntityTypeMixin",
     "injectors.BlockMixin",
     "injectors.BootstrapMixin",
@@ -90,6 +91,7 @@
     "injectors.ShearsItemMixin",
     "injectors.SlotMixin",
     "injectors.SwordItemMixin",
+    "injectors.ToolItemMixin",
     "injectors.TridentItemMixin",
     "injectors.WeatherCommandMixin",
     "injectors.WorldMixin"
