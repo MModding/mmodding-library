@@ -19,8 +19,10 @@ public abstract class GlowingFeatureRenderer<T extends Entity, M extends EntityM
 
 	@Override
 	public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-		this.getContextModel().render(matrices, vertexConsumers.getBuffer(this.getGlowingLayer(entity)), 15728640, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
+		this.getContextModel().render(matrices, vertexConsumers.getBuffer(this.getGlowingLayer(entity)), this.getLight(entity), OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	public abstract RenderLayer getGlowingLayer(T entity);
+
+	public abstract int getLight(T entity);
 }

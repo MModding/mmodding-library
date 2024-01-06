@@ -6,5 +6,5 @@ public interface RepairOperations {
 
 	boolean preventsRepair(ItemStack stack);
 
-	ItemStack afterRepaired(ItemStack stack);
+	void afterRepaired(ItemStack stack);
 }
