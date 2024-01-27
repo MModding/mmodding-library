@@ -89,8 +89,8 @@ public class CustomVegetationPatchFeature implements CustomFeature, FeatureRegis
 			this.verticalRange,
 			this.vegetationChance,
 			this.horizontalRadius,
-			this.extraEdgeColumnChance)
-		);
+			this.extraEdgeColumnChance
+		));
 	}
 
 	public PlacedFeature createPlacedFeature(int count, Direction searchDirection, int maxSteps) {
