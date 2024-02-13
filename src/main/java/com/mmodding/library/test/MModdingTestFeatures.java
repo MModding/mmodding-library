@@ -21,12 +21,10 @@ public class MModdingTestFeatures implements DoubleContentHolder<ConfiguredFeatu
 		this.RANDOM_PATCH.appendConfiguredFeature(
 			Reference.cast(new Identifier("", "")),
 			new RandomPatchFeatureConfig(0, 0, 0, null),
-			configuredPack -> {
-				configuredPack.appendPlacedFeature(
-					Reference.cast(new Identifier("", "")),
-					BiomePlacementModifier.getInstance()
-				);
-			}
+			configuredPack -> configuredPack.appendPlacedFeature(
+				Reference.cast(new Identifier("", "")),
+				BiomePlacementModifier.getInstance()
+			)
 		);
 		this.RANDOM_PATCH.appendConfiguredFeature(
 			FeatureReplicator.replicateConfiguredFeature(
