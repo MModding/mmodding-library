@@ -69,6 +69,11 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 		}
 
 		@Override
+		public ConfiguredFeature<FC, Feature<FC>> getConfiguredFeature() {
+			return WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0);
+		}
+
+		@Override
 		public void appendPlacedFeature(Reference<PlacedFeature> reference, PlacementModifier... modifiers) {
 			this.placedFeatures.add(new WaitingRegistryEntry<>(reference, new PlacedFeature(Holder.createDirect(WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0)), List.of(modifiers))));
 		}
@@ -76,11 +81,6 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 		@Override
 		public void appendPlacedFeature(WaitingRegistryEntry<PlacedFeature> placedFeature) {
 			this.placedFeatures.add(placedFeature);
-		}
-
-		@Override
-		public ConfiguredFeature<FC, Feature<FC>> getConfiguredFeature() {
-			return WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0);
 		}
 
 		@Override
