@@ -1,0 +1,51 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "com.mmodding",
+		"id": "mmodding_library",
+		"version": "${version}",
+		"metadata": {
+			"name": "MModding Quilt Experiments",
+			"description": "Some experiments for the new upcoming MModding Library versions.",
+			"contributors": {
+				"MModding Team": "Owner",
+				"FirstMegaGame4": "Author"
+			},
+			"contact": {
+				"homepage": "https://mmodding.com/",
+				"issues": "https://github.com/MModding/MModding-Library/issues",
+				"sources": "https://github.com/MModding/MModding-Library"
+			},
+			"icon": "assets/mmodding_experiments/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": "com.mmodding.library.QuiltExperiments"
+		},
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.19.1"
+			},
+			{
+				"id": "quilted_fabric_api",
+				"versions": ">=7.0.2"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.20"
+			}
+		]
+	},
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_2960": [
+				"com/mmodding/library/core/Reference"
+			],
+			"net/minecraft/class_5321": [
+				"com/mmodding/library/core/Reference"
+			]
+		}
+	},
+	"mixin": "mmodding_library.mixins.json"
+}
