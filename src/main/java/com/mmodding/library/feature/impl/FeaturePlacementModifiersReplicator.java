@@ -1,5 +1,6 @@
-package com.mmodding.library.feature.replication;
+package com.mmodding.library.feature.impl;
 
+import com.mmodding.library.feature.api.replication.PlacementModifiers;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.PlacementModifier;
 
@@ -7,19 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-/* package */ class FeaturePlacementModifiersReplicator {
+public class FeaturePlacementModifiersReplicator {
 
 	private PlacementModifiers placementModifiers;
 
-	/* package */ FeaturePlacementModifiersReplicator(PlacedFeature placedFeature) {
+	public FeaturePlacementModifiersReplicator(PlacedFeature placedFeature) {
 		this.placementModifiers = new PlacementModifiers(placedFeature.placementModifiers());
 	}
 
-	/* package */ void mutatePlacementModifiers(Function<PlacementModifiers, PlacementModifiers> mutator) {
+	public void mutatePlacementModifiers(Function<PlacementModifiers, PlacementModifiers> mutator) {
 		this.placementModifiers = mutator.apply(this.placementModifiers);
 	}
 
-	/* package */ List<PlacementModifier> replicate() {
+	public List<PlacementModifier> replicate() {
 		return new ArrayList<>(this.placementModifiers);
 	}
 }

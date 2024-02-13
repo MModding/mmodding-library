@@ -1,9 +1,9 @@
 package com.mmodding.library.test;
 
-import com.mmodding.library.container.AdvancedContainer;
-import com.mmodding.library.core.Reference;
-import com.mmodding.library.feature.FeaturePack;
-import com.mmodding.library.feature.replication.FeatureReplicator;
+import com.mmodding.library.container.api.AdvancedContainer;
+import com.mmodding.library.core.api.Reference;
+import com.mmodding.library.feature.api.FeaturePack;
+import com.mmodding.library.feature.api.replication.FeatureReplicator;
 import com.mmodding.library.registry.content.DoubleContentHolder;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -17,7 +17,7 @@ public class MModdingTestFeatures implements DoubleContentHolder<ConfiguredFeatu
 	private final FeaturePack<RandomPatchFeatureConfig> RANDOM_PATCH;
 
 	public MModdingTestFeatures(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
-		this.RANDOM_PATCH = new FeaturePack<>(() -> Feature.RANDOM_PATCH);
+		this.RANDOM_PATCH = FeaturePack.of(() -> Feature.RANDOM_PATCH);
 		this.RANDOM_PATCH.appendConfiguredFeature(
 			Reference.cast(new Identifier("", "")),
 			new RandomPatchFeatureConfig(0, 0, 0, null),

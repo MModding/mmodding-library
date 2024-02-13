@@ -1,6 +1,6 @@
 package com.mmodding.library;
 
-import com.mmodding.library.container.AdvancedContainer;
+import com.mmodding.library.container.api.AdvancedContainer;
 import com.mmodding.library.registry.ElementsManager;
 import com.mmodding.library.registry.RegistrableProvider;
 import com.mmodding.library.registry.context.SimpleRegistryContext;

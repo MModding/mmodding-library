@@ -1,6 +1,6 @@
 package com.mmodding.library.registry;
 
-import com.mmodding.library.core.Reference;
+import com.mmodding.library.core.api.Reference;
 import net.minecraft.registry.Registry;
 
 import java.util.ArrayList;

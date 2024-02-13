@@ -1,4 +1,4 @@
-package com.mmodding.library.container;
+package com.mmodding.library.container.api;
 
 import com.mmodding.library.registry.RegistryPushable;
 import net.minecraft.registry.Registry;

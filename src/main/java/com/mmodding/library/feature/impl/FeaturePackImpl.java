@@ -1,6 +1,7 @@
-package com.mmodding.library.feature;
+package com.mmodding.library.feature.impl;
 
-import com.mmodding.library.core.Reference;
+import com.mmodding.library.core.api.Reference;
+import com.mmodding.library.feature.api.FeaturePack;
 import com.mmodding.library.registry.WaitingRegistryEntry;
 import net.minecraft.registry.Holder;
 import net.minecraft.registry.Registry;
@@ -11,38 +12,44 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class FeaturePack<FC extends FeatureConfig> {
+public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC> {
 
 	private final Supplier<Feature<FC>> feature;
 
-	private final List<ConfiguredFeaturePack<FC>> configuredFeaturePacks = new ArrayList<>();
+	private final List<ConfiguredFeaturePack<FC>> configuredFeaturePacks;
 
-	public FeaturePack(Supplier<Feature<FC>> feature) {
+	public FeaturePackImpl(Supplier<Feature<FC>> feature) {
 		this.feature = feature;
+		this.configuredFeaturePacks = new ArrayList<>();
 	}
 
+	@Override
 	public Feature<FC> getFeature() {
 		return this.feature.get();
 	}
 
-	public void appendConfiguredFeature(Reference<ConfiguredFeature<FC, Feature<FC>>> reference, FC featureConfig, Consumer<ConfiguredFeaturePack<FC>> action) {
-		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(
+	@Override
+	public void appendConfiguredFeature(Reference<ConfiguredFeature<FC, Feature<FC>>> reference, FC featureConfig, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
+		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(
 			new WaitingRegistryEntry<>(reference, new ConfiguredFeature<>(this.feature.get(), featureConfig))
 		);
 		this.configuredFeaturePacks.add(configuredFeaturePack);
 		action.accept(configuredFeaturePack);
 	}
 
-	public void appendConfiguredFeature(WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature, Consumer<ConfiguredFeaturePack<FC>> action) {
-		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(configuredFeature);
+	@Override
+	public void appendConfiguredFeature(WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
+		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(configuredFeature);
 		this.configuredFeaturePacks.add(configuredFeaturePack);
 		action.accept(configuredFeaturePack);
 	}
 
-	public List<ConfiguredFeaturePack<FC>> getConfiguredFeaturePacks() {
+	@Override
+	public List<FeaturePack.ConfiguredFeaturePack<FC>> getConfiguredFeaturePacks() {
 		return this.configuredFeaturePacks;
 	}
 
+	@Override
 	public void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures) {
 		this.configuredFeaturePacks.forEach(pack -> {
 			ConfiguredFeaturePackImpl<FC> impl = (ConfiguredFeaturePackImpl<FC>) pack;
@@ -50,18 +57,7 @@ public class FeaturePack<FC extends FeatureConfig> {
 		});
 	}
 
-	public interface ConfiguredFeaturePack<FC extends FeatureConfig> {
-
-		void appendPlacedFeature(Reference<PlacedFeature> reference, PlacementModifier... modifiers);
-
-		void appendPlacedFeature(WaitingRegistryEntry<PlacedFeature> placedFeature);
-
-		ConfiguredFeature<FC, Feature<FC>> getConfiguredFeature();
-
-		List<PlacedFeature> getPlacedFeatures();
-	}
-
-	private static class ConfiguredFeaturePackImpl<FC extends FeatureConfig> implements ConfiguredFeaturePack<FC> {
+	private static class ConfiguredFeaturePackImpl<FC extends FeatureConfig> implements FeaturePack.ConfiguredFeaturePack<FC> {
 
 		private final WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature;
 

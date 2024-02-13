@@ -1,6 +1,6 @@
 package com.mmodding.library.registry.content;
 
-import com.mmodding.library.container.AdvancedContainer;
+import com.mmodding.library.container.api.AdvancedContainer;
 
 public interface DefaultContentHolder extends ContentHolder {
 

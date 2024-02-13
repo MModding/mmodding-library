@@ -1,6 +1,6 @@
 package com.mmodding.library.test;
 
-import com.mmodding.library.container.AdvancedContainer;
+import com.mmodding.library.container.api.AdvancedContainer;
 import com.mmodding.library.impl.Registrable;
 import com.mmodding.library.registry.content.DefaultContentHolder;
 import net.minecraft.block.Block;

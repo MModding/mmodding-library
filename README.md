@@ -1,5 +1,5 @@
-# MModding Quilt Experiments
+# MModding Experiments
 
-The Official MModding Quilt Experiments Branch.
+The Official MModding Experiments Repository.
 
-These Experiments on the MModding GitHub are licensed under the [LGPLv3 License](LICENSE).
+These Experiments are licensed under the [LGPLv3 License](LICENSE).

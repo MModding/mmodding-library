@@ -1,4 +1,4 @@
-package com.mmodding.library.feature.replication;
+package com.mmodding.library.feature.api.replication;
 
 import net.minecraft.world.gen.decorator.PlacementModifierType;
 import net.minecraft.world.gen.feature.PlacementModifier;
