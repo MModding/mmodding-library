@@ -27,7 +27,7 @@ public abstract class CustomItemAcceptingStacks extends Item implements ItemRegi
 			ItemStack itemStack = otherSlot.getStack();
 			if (this.getFilter().check(itemStack.getItem())) {
 				boolean sound = otherSlot.getStack().getCount() > 0;
-				this.receiveStack(otherSlot.takeStack(1));
+				this.receiveStack(thisStack, otherSlot.takeStack(1));
 				if (sound) {
 					this.playReceiveStackSound(player);
 				}
@@ -43,8 +43,9 @@ public abstract class CustomItemAcceptingStacks extends Item implements ItemRegi
 			if (this.getFilter().check(otherStack.getItem())) {
 				boolean sound = otherStack.getCount() > 0;
 				if (sound) {
-					this.receiveStack(otherStack);
+					this.receiveStack(thisStack, otherStack);
 					otherStack.decrement(otherStack.getCount());
+					this.playReceiveStackSound(player);
 				}
 			}
 			return true;
@@ -53,7 +54,7 @@ public abstract class CustomItemAcceptingStacks extends Item implements ItemRegi
 		}
 	}
 
-	public abstract void receiveStack(ItemStack stack);
+	public abstract void receiveStack(ItemStack currentStack, ItemStack receivedStack);
 
 	public abstract void playReceiveStackSound(PlayerEntity player);
 
