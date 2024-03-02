@@ -311,8 +311,4 @@ public class NetworkList implements NetworkSupport {
 	public MixedList getElements() {
 		return new MixedArrayList(this.elements);
 	}
-
-	static {
-		NetworkSupport.register(new MModdingIdentifier("list"), NetworkList.class, NetworkList::read);
-	}
 }

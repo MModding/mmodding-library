@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.utils;
+package com.mmodding.mmodding_lib.library.world;
 
 public interface TickOperations {
 

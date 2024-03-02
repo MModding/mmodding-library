@@ -13,8 +13,4 @@ public class NetworkIdentifier extends NetworkPrimitive<Identifier> implements N
 	private NetworkIdentifier(Identifier value) {
 		super(value, PacketByteBuf::writeIdentifier);
 	}
-
-	static {
-		NetworkSupport.register(new Identifier("minecraft", "identifier"), NetworkIdentifier.class, buf -> NetworkIdentifier.of(buf.readIdentifier()));
-	}
 }

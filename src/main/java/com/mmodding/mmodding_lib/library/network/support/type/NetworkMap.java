@@ -172,8 +172,4 @@ public class NetworkMap implements NetworkSupport {
 	public MixedMap<Identifier> getEntries() {
 		return new MixedHashMap<>(this.entries);
 	}
-
-	static {
-		NetworkSupport.register(new MModdingIdentifier("map"), NetworkMap.class, NetworkMap::read);
-	}
 }
