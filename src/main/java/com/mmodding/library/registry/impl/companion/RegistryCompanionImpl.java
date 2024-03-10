@@ -1,7 +1,7 @@
 package com.mmodding.library.registry.impl.companion;
 
-import com.mmodding.library.registry.LiteRegistry;
-import com.mmodding.library.registry.companion.RegistryCompanion;
+import com.mmodding.library.registry.api.LiteRegistry;
+import com.mmodding.library.registry.api.companion.RegistryCompanion;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;

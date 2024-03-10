@@ -1,7 +1,9 @@
-package com.mmodding.library.registry;
+package com.mmodding.library.registry.api;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.registry.context.RegistryContext;
+import com.mmodding.library.registry.api.content.ContentHolder;
+import com.mmodding.library.registry.api.content.DefaultContentHolder;
+import com.mmodding.library.registry.api.context.RegistryContext;
 import com.mmodding.library.registry.content.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;

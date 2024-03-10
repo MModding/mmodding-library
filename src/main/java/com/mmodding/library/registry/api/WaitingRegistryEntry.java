@@ -1,4 +1,4 @@
-package com.mmodding.library.registry;
+package com.mmodding.library.registry.api;
 
 import com.mmodding.library.core.api.Reference;
 import net.minecraft.registry.Registry;

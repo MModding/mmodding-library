@@ -1,7 +1,7 @@
-package com.mmodding.library.registry.content;
+package com.mmodding.library.registry.api.content;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.registry.RegistrableProvider;
+import com.mmodding.library.registry.api.RegistrableProvider;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 

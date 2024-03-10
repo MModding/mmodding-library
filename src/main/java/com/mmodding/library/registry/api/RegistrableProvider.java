@@ -1,8 +1,8 @@
-package com.mmodding.library.registry;
+package com.mmodding.library.registry.api;
 
-import com.mmodding.library.registry.content.DoubleContentHolder;
-import com.mmodding.library.registry.content.MultipleContentHolder;
-import com.mmodding.library.registry.content.SimpleContentHolder;
+import com.mmodding.library.registry.api.content.DoubleContentHolder;
+import com.mmodding.library.registry.api.content.MultipleContentHolder;
+import com.mmodding.library.registry.api.content.SimpleContentHolder;
 
 public interface RegistrableProvider {
 

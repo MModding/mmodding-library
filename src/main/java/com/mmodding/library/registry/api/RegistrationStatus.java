@@ -1,4 +1,4 @@
-package com.mmodding.library.registry;
+package com.mmodding.library.registry.api;
 
 public enum RegistrationStatus {
 	UNREGISTERED,

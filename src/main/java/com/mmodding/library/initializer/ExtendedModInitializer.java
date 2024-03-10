@@ -2,7 +2,7 @@ package com.mmodding.library.initializer;
 
 import com.mmodding.library.MModdingExperiments;
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.registry.ElementsManager;
+import com.mmodding.library.registry.api.ElementsManager;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 

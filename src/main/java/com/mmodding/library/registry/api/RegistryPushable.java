@@ -1,4 +1,4 @@
-package com.mmodding.library.registry;
+package com.mmodding.library.registry.api;
 
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;

@@ -1,6 +1,6 @@
-package com.mmodding.library.registry.companion;
+package com.mmodding.library.registry.api.companion;
 
-import com.mmodding.library.registry.LiteRegistry;
+import com.mmodding.library.registry.api.LiteRegistry;
 import com.mmodding.library.registry.impl.companion.RegistryCompanionImpl;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;

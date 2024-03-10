@@ -1,4 +1,4 @@
-package com.mmodding.library.registry.content;
+package com.mmodding.library.registry.api.content;
 
 import com.mmodding.library.container.api.AdvancedContainer;
 

@@ -1,7 +1,7 @@
 package com.mmodding.library.registry.impl;
 
 import com.google.common.collect.Iterators;
-import com.mmodding.library.registry.LiteRegistry;
+import com.mmodding.library.registry.api.LiteRegistry;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

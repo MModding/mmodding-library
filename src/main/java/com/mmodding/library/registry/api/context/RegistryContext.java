@@ -1,11 +1,11 @@
-package com.mmodding.library.registry.context;
+package com.mmodding.library.registry.api.context;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.registry.RegistrableProvider;
-import com.mmodding.library.registry.content.DoubleContentHolder;
-import com.mmodding.library.registry.content.MultipleContentHolder;
-import com.mmodding.library.registry.content.ContentHolder;
-import com.mmodding.library.registry.content.SimpleContentHolder;
+import com.mmodding.library.registry.api.RegistrableProvider;
+import com.mmodding.library.registry.api.content.DoubleContentHolder;
+import com.mmodding.library.registry.api.content.MultipleContentHolder;
+import com.mmodding.library.registry.api.content.ContentHolder;
+import com.mmodding.library.registry.api.content.SimpleContentHolder;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import org.apache.commons.lang3.tuple.Pair;

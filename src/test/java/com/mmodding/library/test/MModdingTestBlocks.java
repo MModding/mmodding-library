@@ -1,8 +1,8 @@
 package com.mmodding.library.test;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.impl.Registrable;
-import com.mmodding.library.registry.content.DefaultContentHolder;
+import com.mmodding.library.registry.api.Registrable;
+import com.mmodding.library.registry.api.content.DefaultContentHolder;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 

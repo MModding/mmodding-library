@@ -1,6 +1,6 @@
 package com.mmodding.library.container.api;
 
-import com.mmodding.library.registry.RegistryPushable;
+import com.mmodding.library.registry.api.RegistryPushable;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 

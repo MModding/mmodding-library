@@ -1,4 +1,4 @@
-package com.mmodding.library.registry.context;
+package com.mmodding.library.registry.api.context;
 
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;

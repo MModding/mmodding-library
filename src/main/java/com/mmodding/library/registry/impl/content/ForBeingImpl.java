@@ -1,6 +1,6 @@
 package com.mmodding.library.registry.impl.content;
 
-import com.mmodding.library.registry.content.ForBeing;
+import com.mmodding.library.registry.api.content.ForBeing;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

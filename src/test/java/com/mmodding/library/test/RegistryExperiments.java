@@ -1,10 +1,10 @@
-package com.mmodding.library;
+package com.mmodding.library.test;
 
 import com.mmodding.library.container.api.AdvancedContainer;
 import com.mmodding.library.initializer.ExtendedModInitializer;
-import com.mmodding.library.registry.ElementsManager;
-import com.mmodding.library.registry.companion.RegistryCompanion;
-import com.mmodding.library.registry.content.SimpleContentHolder;
+import com.mmodding.library.registry.api.ElementsManager;
+import com.mmodding.library.registry.api.companion.RegistryCompanion;
+import com.mmodding.library.registry.api.content.SimpleContentHolder;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
