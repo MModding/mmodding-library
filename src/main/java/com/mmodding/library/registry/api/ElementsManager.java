@@ -4,7 +4,6 @@ import com.mmodding.library.container.api.AdvancedContainer;
 import com.mmodding.library.registry.api.content.ContentHolder;
 import com.mmodding.library.registry.api.content.DefaultContentHolder;
 import com.mmodding.library.registry.api.context.RegistryContext;
-import com.mmodding.library.registry.content.*;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import org.apache.commons.lang3.tuple.Pair;
@@ -14,13 +13,16 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.quiltmc.qsl.base.api.entrypoint.server.DedicatedServerModInitializer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public class ElementsManager {
 
-	public final List<Pair<? extends RegistryContext, ? extends RegistrableProvider>> dynamics = new ArrayList<>();
+	public final List<Pair<? extends RegistryContext, ? extends ContentHolderProvider>> dynamics = new ArrayList<>();
 
 	public final List<Supplier<DefaultContentHolder>> defaults = new ArrayList<>();
 
@@ -74,7 +76,7 @@ public class ElementsManager {
 		AdvancedContainer mod = this.retrieveContainer(modId);
 		this.dynamics.forEach(pair -> {
 			RegistryContext context = pair.getKey();
-			RegistrableProvider provider = pair.getValue();
+			ContentHolderProvider provider = pair.getValue();
 			ContentHolder holder = context.transform(mod, registries, provider);
 			this.instances.add(holder);
 			context.transfer(mod, registries, holder);
@@ -91,7 +93,7 @@ public class ElementsManager {
 
 	public static class Builder {
 
-		private final List<Pair<? extends RegistryContext, ? extends RegistrableProvider>> dynamics = new ArrayList<>();
+		private final List<Pair<? extends RegistryContext, ? extends ContentHolderProvider>> dynamics = new ArrayList<>();
 
 		private final List<Supplier<DefaultContentHolder>> defaults = new ArrayList<>();
 
@@ -113,14 +115,14 @@ public class ElementsManager {
 			return new Builder(ManagerSide.SERVER);
 		}
 
-		public ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, RegistrableProvider provider) {
+		public ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, ContentHolderProvider provider) {
 			if (QuiltLoader.isModLoaded(modId)) {
 				this.withRegistry(context, provider);
 			}
 			return this;
 		}
 
-		public ElementsManager.Builder withRegistry(RegistryContext context, RegistrableProvider provider) {
+		public ElementsManager.Builder withRegistry(RegistryContext context, ContentHolderProvider provider) {
 			this.dynamics.add(Pair.of(context, provider));
 			return this;
 		}

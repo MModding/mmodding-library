@@ -1,7 +1,8 @@
 package com.mmodding.library.initializer;
 
-import com.mmodding.library.MModdingExperiments;
 import com.mmodding.library.container.api.AdvancedContainer;
+import com.mmodding.library.core.api.MModdingLibrary;
+import com.mmodding.library.core.impl.MModdingInitializer;
 import com.mmodding.library.registry.api.ElementsManager;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -9,7 +10,7 @@ import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 public interface ExtendedModInitializer extends ModInitializer {
 
 	static ElementsManager getManager(String modId) {
-		return MModdingExperiments.MANAGERS.get(modId);
+		return MModdingInitializer.MANAGERS.get(modId);
 	}
 
 	void setupManager(ElementsManager.Builder manager);
@@ -19,7 +20,7 @@ public interface ExtendedModInitializer extends ModInitializer {
 		ElementsManager.Builder builder = ElementsManager.Builder.common();
 		this.setupManager(builder);
 		ElementsManager manager = builder.build();
-		MModdingExperiments.MANAGERS.put(mod.metadata().id(), manager);
+		MModdingLibrary.getAllManagers().put(mod.metadata().id(), manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.initDefaultContent(advanced);
 		this.onInitialize(advanced);

@@ -4,7 +4,7 @@ import com.mmodding.library.registry.api.content.DoubleContentHolder;
 import com.mmodding.library.registry.api.content.MultipleContentHolder;
 import com.mmodding.library.registry.api.content.SimpleContentHolder;
 
-public interface RegistrableProvider {
+public interface ContentHolderProvider {
 
 	static <T> SimpleContentHolder.Provider<T> simple(SimpleContentHolder.Provider<T> provider) {
 		return provider;

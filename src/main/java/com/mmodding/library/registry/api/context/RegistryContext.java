@@ -1,7 +1,7 @@
 package com.mmodding.library.registry.api.context;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.registry.api.RegistrableProvider;
+import com.mmodding.library.registry.api.ContentHolderProvider;
 import com.mmodding.library.registry.api.content.DoubleContentHolder;
 import com.mmodding.library.registry.api.content.MultipleContentHolder;
 import com.mmodding.library.registry.api.content.ContentHolder;
@@ -30,7 +30,7 @@ public abstract class RegistryContext {
 	// should keep an eye on that weirdo
 
 	@SuppressWarnings("unchecked")
-	public <T1, T2> ContentHolder transform(AdvancedContainer mod, Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries, RegistrableProvider provider) {
+	public <T1, T2> ContentHolder transform(AdvancedContainer mod, Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries, ContentHolderProvider provider) {
 		List<Pair<RegistryKey<? extends Registry<?>>, Registry<?>>> requiredRegistries = this.retainRequiredRegistries(registries);
 		if (this.requiredKeys.length == 0) {
 			throw new IllegalStateException("Context should contain at least one required key");

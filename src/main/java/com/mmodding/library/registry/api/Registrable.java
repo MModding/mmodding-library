@@ -1,7 +1,5 @@
 package com.mmodding.library.registry.api;
 
-import com.mmodding.library.registry.api.RegistrationStatus;
-import com.mmodding.library.registry.api.RegistryPushable;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
