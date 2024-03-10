@@ -7,9 +7,8 @@ import net.minecraft.util.Identifier;
 
 public interface Registrable<T> {
 
-	@SuppressWarnings("unchecked")
 	default void register(Registry<T> registry, Identifier identifier) {
-		Registry.register(registry, identifier, (T) this);
+		Registry.register(registry, identifier, this.as());
 	}
 
 	default void register(RegistryPushable<T> pushable) {
@@ -18,5 +17,9 @@ public interface Registrable<T> {
 
 	default RegistrationStatus getRegistrationStatus() {
 		throw new AssertionError();
+	}
+
+	default T as() {
+		throw new IllegalStateException();
 	}
 }
