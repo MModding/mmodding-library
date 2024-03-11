@@ -15,7 +15,7 @@ import net.minecraft.world.gen.feature.*;
 
 public class MModdingTestFeatures implements DoubleContentHolder<ConfiguredFeature<?, ?>, PlacedFeature> {
 
-	public static final ForBeing<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.create();
+	public static final ForBeing.Vacant<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.vacant();
 
 	public MModdingTestFeatures(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
 		RANDOM_PATCH.initialize(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));

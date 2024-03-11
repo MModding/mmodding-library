@@ -5,7 +5,7 @@ import com.mmodding.library.registry.api.content.ForBeing;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ForBeingImpl<T> implements ForBeing<T> {
+public class ForBeingVacantImpl<T> implements ForBeing.Vacant<T> {
 
 	private T object = null;
 
