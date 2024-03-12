@@ -24,12 +24,12 @@ public interface ForBeing<T> {
 
 	void execute(Consumer<T> t);
 
-	public interface Vacant<T> extends ForBeing<T> {
+	interface Vacant<T> extends ForBeing<T> {
 
 		void initialize(Supplier<T> initializer);
 	}
 
-	public interface Predicated<T> extends ForBeing<T> {
+	interface Predicated<T> extends ForBeing<T> {
 
 		void initialize();
 	}

@@ -1,6 +1,7 @@
 package com.mmodding.library.test;
 
 import com.mmodding.library.container.api.AdvancedContainer;
+import com.mmodding.library.core.api.MModdingRegistries;
 import com.mmodding.library.registry.api.companion.RegistryCompanion;
 import com.mmodding.library.registry.api.companion.RegistryKeyAttachment;
 import com.mmodding.library.registry.api.content.DefaultContentHolder;
@@ -9,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.world.World;
 
 public class RegistryExperiments implements DefaultContentHolder {
 
@@ -20,6 +22,7 @@ public class RegistryExperiments implements DefaultContentHolder {
 
 	@Override
 	public void register(AdvancedContainer mod) {
+		MModdingRegistries.DIFFERED_SEED.put(World.NETHER, true);
 		RegistryExperiments.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("a"), Blocks.BELL);
 		RegistryExperiments.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("b"), Blocks.DIRT);
 	}
