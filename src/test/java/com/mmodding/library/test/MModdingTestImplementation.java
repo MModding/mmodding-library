@@ -8,6 +8,7 @@ import com.mmodding.library.registry.api.ContentHolderProvider;
 import com.mmodding.library.registry.api.context.DoubleRegistryContext;
 import com.mmodding.library.registry.api.context.SimpleRegistryContext;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 public class MModdingTestImplementation implements ExtendedModInitializer {
 
@@ -16,11 +17,15 @@ public class MModdingTestImplementation implements ExtendedModInitializer {
 		manager
 			.ifModLoadedWith("string", SimpleRegistryContext.ITEM, ContentHolderProvider.simple((registry, mod) -> null))
 			.withRegistry(DoubleRegistryContext.FEATURE, ContentHolderProvider.bi(MModdingTestFeatures::new))
-			.withDefaults(MModdingTestBlocks::new);
+			.withDefaults(MModdingTestBlocks::new, RegistryExperiments::new);
 	}
 
 	@Override
 	public void onInitialize(AdvancedContainer mod) {
+		MModdingRegistries.VEIN_TYPE.getOrCreateCompanion(ChunkGeneratorSettings.OVERWORLD).execute(registry -> {
+			registry.register(mod.createId("hi"), null);
+			registry.register(mod.createId("ih"), null);
+		});
 		MModdingRegistries.DIFFERED_SEED.put(World.OVERWORLD, true);
 	}
 }

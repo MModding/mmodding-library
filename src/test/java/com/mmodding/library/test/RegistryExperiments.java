@@ -1,36 +1,26 @@
 package com.mmodding.library.test;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.initializer.ExtendedModInitializer;
-import com.mmodding.library.registry.api.ElementsManager;
 import com.mmodding.library.registry.api.companion.RegistryCompanion;
-import com.mmodding.library.registry.api.content.SimpleContentHolder;
+import com.mmodding.library.registry.api.companion.RegistryKeyAttachment;
+import com.mmodding.library.registry.api.content.DefaultContentHolder;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registries;
 
-public class RegistryExperiments implements SimpleContentHolder<Item> {
+public class RegistryExperiments implements DefaultContentHolder {
 
-	public final RegistryCompanion<Item, Block> companion;
+	public static final RegistryCompanion<Item, Block> ITEM_COMPANION = RegistryCompanion.create(RegistryKeyAttachment.classic(Registries.ITEM));
 
-	public RegistryExperiments(Registry<Item> registry, AdvancedContainer mod) {
-		this.companion = RegistryCompanion.create(registry, mod.createId("item_blocks"));
-		this.companion.addCompanion(Items.ACACIA_BOAT);
+	public RegistryExperiments() {
+		RegistryExperiments.ITEM_COMPANION.getOrCreateCompanion(Items.ACACIA_BOAT);
 	}
 
 	@Override
-	public void register(Registry<Item> registry, AdvancedContainer mod) {
-		this.companion.getCompanion(Items.ACACIA_BOAT).register(mod.createId("a"), Blocks.BELL);
-		this.companion.getCompanion(Items.ACACIA_BOAT).register(mod.createId("b"), Blocks.DIRT);
-	}
-
-	public static ElementsManager getManager() {
-		return ExtendedModInitializer.getManager("rea_experiments");
-	}
-
-	public static RegistryExperiments getInstance() {
-		return RegistryExperiments.getManager().fetchClass(RegistryExperiments.class);
+	public void register(AdvancedContainer mod) {
+		RegistryExperiments.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("a"), Blocks.BELL);
+		RegistryExperiments.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("b"), Blocks.DIRT);
 	}
 }

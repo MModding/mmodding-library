@@ -2,44 +2,64 @@ package com.mmodding.library.registry.impl.companion;
 
 import com.mmodding.library.registry.api.LiteRegistry;
 import com.mmodding.library.registry.api.companion.RegistryCompanion;
+import com.mmodding.library.registry.api.companion.RegistryKeyAttachment;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.registry.attachment.api.RegistryEntryAttachment;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKey;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
+import java.util.function.BiFunction;
 
 public class RegistryCompanionImpl<T, E> implements RegistryCompanion<T, E> {
 
-	private final RegistryEntryAttachment<T, String> rea;
+	private final RegistryKeyAttachment<T, String> rka;
 
 	private final Map<String, LiteRegistry<E>> map;
 
-	public RegistryCompanionImpl(Registry<T> registry, Identifier identifier) {
-		this.rea = RegistryEntryAttachment.stringBuilder(registry, identifier)
-			.defaultValue("empty")
-			.build();
+	public RegistryCompanionImpl(BiFunction<DynamicRegistryManager, T, RegistryKey<T>> retriever) {
+		this.rka = RegistryKeyAttachment.create(retriever);
 		this.map = new Object2ObjectOpenHashMap<>();
 	}
 
 	@Override
-	public void addCompanion(T element) {
-		this.addCompanion(element, map -> {});
+	public LiteRegistry<E> getOrCreateCompanion(T object) {
+		return this.getOrCreateCompanion(null, object);
 	}
 
 	@Override
-	public void addCompanion(T element, Consumer<LiteRegistry<E>> action) {
-		String uuid = UUID.randomUUID().toString();
-		this.rea.put(element, uuid);
-		LiteRegistry<E> registry = LiteRegistry.create();
-		action.accept(registry);
-		this.map.put(uuid, registry);
+	public LiteRegistry<E> getOrCreateCompanion(@Nullable DynamicRegistryManager manager, T object) {
+		if (this.getCompanion(manager, object) == null) {
+			String uuid = UUID.randomUUID().toString();
+			this.rka.put(manager, object, uuid);
+			this.map.put(uuid, LiteRegistry.create());
+		}
+		return this.getCompanion(manager, object);
 	}
 
 	@Override
-	public LiteRegistry<E> getCompanion(T element) {
-		return this.map.get(this.rea.getNullable(element));
+	public LiteRegistry<E> getOrCreateCompanion(RegistryKey<T> key) {
+		if (this.getCompanion(key) == null) {
+			String uuid = UUID.randomUUID().toString();
+			this.rka.put(key, uuid);
+			this.map.put(uuid, LiteRegistry.create());
+		}
+		return this.getCompanion(key);
+	}
+
+	@Override
+	public LiteRegistry<E> getCompanion(T object) {
+		return this.getCompanion(null, object);
+	}
+
+	@Override
+	public LiteRegistry<E> getCompanion(@Nullable DynamicRegistryManager manager, T object) {
+		return this.map.get(this.rka.get(manager, object));
+	}
+
+	@Override
+	public LiteRegistry<E> getCompanion(RegistryKey<T> key) {
+		return this.map.get(this.rka.get(key));
 	}
 }

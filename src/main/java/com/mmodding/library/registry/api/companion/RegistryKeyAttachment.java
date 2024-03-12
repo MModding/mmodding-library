@@ -2,12 +2,21 @@ package com.mmodding.library.registry.api.companion;
 
 import com.mmodding.library.registry.impl.companion.RegistryKeyAttachmentImpl;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
 public interface RegistryKeyAttachment<T, E> {
+
+	static <T> BiFunction<DynamicRegistryManager, T, RegistryKey<T>> classic(Registry<T> registry) {
+		return (manager, object) -> registry.getKey(object).orElseThrow();
+	}
+
+	static <T> BiFunction<DynamicRegistryManager, T, RegistryKey<T>> dynamic(RegistryKey<? extends Registry<T>> registryKey) {
+		return (manager, object) -> manager.get(registryKey).getKey(object).orElseThrow();
+	}
 
 	/**
 	 * Allows to create a new RegistryKeyAttachment

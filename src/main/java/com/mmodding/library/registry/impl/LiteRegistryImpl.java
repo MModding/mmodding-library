@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 
@@ -30,6 +31,11 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 		this.content.put(identifier, entry);
 		this.reversed.put(entry, identifier);
 		return entry;
+	}
+
+	@Override
+	public void execute(Consumer<LiteRegistry<T>> action) {
+		action.accept(this);
 	}
 
 	@NotNull
