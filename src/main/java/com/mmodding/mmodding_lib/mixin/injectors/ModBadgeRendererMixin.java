@@ -1,6 +1,5 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
-
 import com.mmodding.mmodding_lib.library.integrations.modmenu.ModMenuIntegration;
 import com.terraformersmc.modmenu.util.mod.Mod;
 import com.terraformersmc.modmenu.util.mod.ModBadgeRenderer;

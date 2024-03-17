@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.integrations.modmenu;
 
+import com.mmodding.mmodding_lib.colors.Color;
 import com.mmodding.mmodding_lib.library.utils.BiList;
-import com.mmodding.mmodding_lib.library.utils.Colors;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
 
@@ -16,14 +16,14 @@ public class CustomBadge implements BadgeRegistrable {
 
 	private final BiList<String, Class<?>> entrypointInfo;
 	private final Provider provider;
-	private final Supplier<Colors.RGB> outlineColor;
-	private final Supplier<Colors.RGB> fillColor;
+	private final Supplier<Color> outlineColor;
+	private final Supplier<Color> fillColor;
 
-	public CustomBadge(BiList<String, Class<?>> entrypointInfo, Provider provider, Colors.RGB outlineColor, Colors.RGB fillColor) {
+	public CustomBadge(BiList<String, Class<?>> entrypointInfo, Provider provider, Color outlineColor, Color fillColor) {
 		this(entrypointInfo, provider, () -> outlineColor, () -> fillColor);
 	}
 
-	public CustomBadge(BiList<String, Class<?>> entrypointInfo, Provider provider, Supplier<Colors.RGB> outlineColor, Supplier<Colors.RGB> fillColor) {
+	public CustomBadge(BiList<String, Class<?>> entrypointInfo, Provider provider, Supplier<Color> outlineColor, Supplier<Color> fillColor) {
 		this.entrypointInfo = entrypointInfo;
 		this.provider = provider;
 		this.outlineColor = outlineColor;
@@ -38,11 +38,11 @@ public class CustomBadge implements BadgeRegistrable {
 		return mods;
 	}
 
-	public Colors.RGB getOutlineColor() {
+	public Color getOutlineColor() {
 		return this.outlineColor.get();
 	}
 
-	public Colors.RGB getFillColor() {
+	public Color getFillColor() {
 		return this.fillColor.get();
 	}
 

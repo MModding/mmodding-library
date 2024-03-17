@@ -1,11 +1,14 @@
 package com.mmodding.mmodding_lib.library.integrations.modmenu;
 
 import com.mmodding.mmodding_lib.MModdingLib;
+import com.mmodding.mmodding_lib.colors.Color;
 import com.mmodding.mmodding_lib.library.base.MModdingBootstrapInitializer;
 import com.mmodding.mmodding_lib.library.base.MModdingClientModInitializer;
 import com.mmodding.mmodding_lib.library.base.MModdingModInitializer;
 import com.mmodding.mmodding_lib.library.base.MModdingServerModInitializer;
-import com.mmodding.mmodding_lib.library.utils.*;
+import com.mmodding.mmodding_lib.library.utils.BiArrayList;
+import com.mmodding.mmodding_lib.library.utils.BiList;
+import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -61,8 +64,8 @@ public class ModMenuIntegration {
 		CustomBadge mmoddingLibraryModBadge = new CustomBadge(
 			entrypointInfo,
 			new ModsUsingMModdingLibrary(),
-			new Colors.RGB(100, 0, 200),
-			new Colors.RGB(80, 0, 180)
+			Color.rgb(100, 0, 200),
+			Color.rgb(80, 0, 180)
 		);
 		mmoddingLibraryModBadge.register(MModdingLib.createId("uses_mmodding_library"));
 	}

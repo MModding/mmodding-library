@@ -1,8 +1,9 @@
 package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.MModdingLib;
+import com.mmodding.mmodding_lib.colors.ARGB;
+import com.mmodding.mmodding_lib.colors.Color;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
-import com.mmodding.mmodding_lib.library.utils.Colors;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
@@ -92,10 +93,10 @@ public class MModdingScreen extends Screen {
 
 	@Override
 	public void renderBackground(MatrixStack matrices) {
-		Colors.ARGB colorStart = Colors.ARGB.fromDecimal(-1072689136);
+		ARGB colorStart = Color.argb(-1072689136);
 		colorStart.setAlpha(150);
 		colorStart.alterBlue(20);
-		Colors.ARGB colorEnd = Colors.ARGB.fromDecimal(-804253680);
+		ARGB colorEnd = Color.argb(-804253680);
 		colorEnd.setAlpha(150);
 		colorEnd.alterBlue(20);
 		this.fillGradient(matrices, 0, 0, this.width, this.height, colorStart.toDecimal(), colorEnd.toDecimal());

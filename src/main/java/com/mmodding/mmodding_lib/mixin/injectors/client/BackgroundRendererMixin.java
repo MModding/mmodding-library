@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.mmodding.mmodding_lib.colors.Color;
+import com.mmodding.mmodding_lib.colors.RGB;
 import com.mmodding.mmodding_lib.library.fluids.FluidExtensions;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -26,18 +28,20 @@ public class BackgroundRendererMixin {
 	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/BackgroundRenderer;blue:F", opcode = Opcodes.PUTSTATIC, shift = At.Shift.AFTER, ordinal = 0))
 	private static void changeWaterFogColor(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
 		if (world.getFluidState(camera.getBlockPos()).getFluid() instanceof FluidExtensions extensions) {
-			BackgroundRendererMixin.red = extensions.getFogColor().getRed() / 255.0f;
-			BackgroundRendererMixin.green = extensions.getFogColor().getGreen() / 255.0f;
-			BackgroundRendererMixin.blue = extensions.getFogColor().getBlue() / 255.0f;
+			RGB rgb = Color.rgb(extensions.getFogColor());
+			BackgroundRendererMixin.red = rgb.getRed() / 255.0f;
+			BackgroundRendererMixin.green = rgb.getGreen() / 255.0f;
+			BackgroundRendererMixin.blue = rgb.getBlue() / 255.0f;
 		}
 	}
 
 	@Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/BackgroundRenderer;blue:F", opcode = Opcodes.PUTSTATIC, shift = At.Shift.AFTER, ordinal = 1))
 	private static void changeLavaFogColor(Camera camera, float tickDelta, ClientWorld world, int viewDistance, float skyDarkness, CallbackInfo ci) {
 		if (world.getFluidState(camera.getBlockPos()).getFluid() instanceof FluidExtensions extensions) {
-			BackgroundRendererMixin.red = extensions.getFogColor().getRed() / 255.0f;
-			BackgroundRendererMixin.green = extensions.getFogColor().getGreen() / 255.0f;
-			BackgroundRendererMixin.blue = extensions.getFogColor().getBlue() / 255.0f;
+			RGB rgb = Color.rgb(extensions.getFogColor());
+			BackgroundRendererMixin.red = rgb.getRed() / 255.0f;
+			BackgroundRendererMixin.green = rgb.getGreen() / 255.0f;
+			BackgroundRendererMixin.blue = rgb.getBlue() / 255.0f;
 		}
 	}
 }
