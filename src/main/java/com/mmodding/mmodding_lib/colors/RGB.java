@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.colors;
 
 import net.minecraft.client.util.ColorUtil;
+import net.minecraft.util.math.MathHelper;
 
 public class RGB implements Color {
 
@@ -9,9 +10,13 @@ public class RGB implements Color {
 	protected int blue;
 
 	RGB(int red, int green, int blue) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
+		this.red = this.safe(red);
+		this.green = this.safe(green);
+		this.blue = this.safe(blue);
+	}
+
+	protected int safe(int value) {
+		return MathHelper.clamp(value, 0, 255);
 	}
 
 	public int getRed() {
@@ -27,27 +32,27 @@ public class RGB implements Color {
 	}
 
 	public int setRed(int red) {
-		return this.red = red;
+		return this.red = this.safe(red);
 	}
 
 	public int setGreen(int green) {
-		return this.green = green;
+		return this.green = this.safe(green);
 	}
 
 	public int setBlue(int blue) {
-		return this.blue = blue;
+		return this.blue = this.safe(blue);
 	}
 
 	public int alterRed(int alteration) {
-		return this.setRed(this.getRed() + alteration);
+		return this.setRed(this.safe(this.getRed() + alteration));
 	}
 
 	public int alterGreen(int alteration) {
-		return this.setGreen(this.getGreen() + alteration);
+		return this.setGreen(this.safe(this.getGreen() + alteration));
 	}
 
 	public int alterBlue(int alteration) {
-		return this.setBlue(this.getBlue() + alteration);
+		return this.setBlue(this.safe(this.getBlue() + alteration));
 	}
 
 	public ARGB toARGB(int alpha) {

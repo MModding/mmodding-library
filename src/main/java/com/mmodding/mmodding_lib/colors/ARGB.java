@@ -8,7 +8,7 @@ public class ARGB extends RGB implements Color {
 
 	ARGB(int alpha, int red, int green, int blue) {
 		super(red, green, blue);
-		this.alpha = alpha;
+		this.alpha = this.safe(alpha);
 	}
 
 	public int getAlpha() {
@@ -16,11 +16,11 @@ public class ARGB extends RGB implements Color {
 	}
 
 	public int setAlpha(int alpha) {
-		return this.alpha = alpha;
+		return this.alpha = this.safe(alpha);
 	}
 
 	public int alterAlpha(int alteration) {
-		return this.setAlpha(this.getAlpha() + alteration);
+		return this.setAlpha(this.safe(this.getAlpha() + alteration));
 	}
 
 	public RGB toRGB() {

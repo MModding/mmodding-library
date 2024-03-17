@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.colors;
 
+import net.minecraft.util.math.MathHelper;
+
 public class HSB implements Color {
 
 	private float hue;
@@ -10,8 +12,12 @@ public class HSB implements Color {
 
 	HSB(float hue, float saturation, float brightness) {
 		this.hue = hue;
-		this.saturation = saturation;
-		this.brightness = brightness;
+		this.saturation = this.safe(saturation);
+		this.brightness = this.safe(brightness);
+	}
+
+	private float safe(float value) {
+		return MathHelper.clamp(value, 0.0f, 1.0f);
 	}
 
 	public float getHue() {
@@ -31,11 +37,11 @@ public class HSB implements Color {
 	}
 
 	public float setSaturation(float saturation) {
-		return this.saturation = saturation;
+		return this.saturation = this.safe(saturation);
 	}
 
 	public float setBrightness(float brightness) {
-		return this.brightness = brightness;
+		return this.brightness = this.safe(brightness);
 	}
 
 	public float alterHue(float alteration) {
@@ -43,11 +49,11 @@ public class HSB implements Color {
 	}
 
 	public float alterSaturation(float alteration) {
-		return this.setSaturation(this.getSaturation() + alteration);
+		return this.setSaturation(this.safe(this.getSaturation() + alteration));
 	}
 
 	public float alterBrightness(float alteration) {
-		return this.setBrightness(this.getBrightness() + alteration);
+		return this.setBrightness(this.safe(this.getBrightness() + alteration));
 	}
 
 	public RGB toRGB() {
