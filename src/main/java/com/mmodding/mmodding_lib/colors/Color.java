@@ -2,7 +2,13 @@ package com.mmodding.mmodding_lib.colors;
 
 import net.minecraft.client.util.ColorUtil;
 
+import java.util.function.Supplier;
+
 public interface Color {
+
+	Supplier<Color> EMPTY = () -> Color.rgb(0, 0, 0);
+
+	Supplier<Color> BLANK = () -> Color.rgb(255, 255, 255);
 
 	static RGB rgb(Color color) {
 		return Color.rgb(color.toDecimal());
