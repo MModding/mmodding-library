@@ -29,6 +29,7 @@
     "accessors.RootPlacerTypeAccessor",
     "accessors.ScreenHandlerAccessor",
     "accessors.ShapelessRecipeSerializerAccessor",
+    "accessors.StyleAccessor",
     "accessors.TreeDecoratorTypeAccessor",
     "accessors.TridentEntityAccessor",
     "accessors.TrunkPlacerTypeAccessor",
