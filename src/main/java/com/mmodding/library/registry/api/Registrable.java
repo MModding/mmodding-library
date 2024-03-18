@@ -13,6 +13,14 @@ public interface Registrable<T> {
 		this.register(pushable.getRegistry(), pushable.getIdentifier());
 	}
 
+	default void register(LiteRegistry<T> registry, Identifier identifier) {
+		registry.register(identifier, this.as());
+	}
+
+	default void register(LiteRegistryPushable<T> pushable) {
+		this.register(pushable.getRegistry(), pushable.getIdentifier());
+	}
+
 	default RegistrationStatus getRegistrationStatus() {
 		throw new AssertionError();
 	}

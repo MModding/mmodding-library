@@ -1,6 +1,7 @@
 package com.mmodding.library.worldgen.vein.api;
 
 import com.mmodding.library.block.api.util.RandomStateContainer;
+import com.mmodding.library.registry.api.Registrable;
 import com.mmodding.library.worldgen.vein.impl.VeinTypeImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.random.PositionalRandomFactory;
@@ -8,7 +9,7 @@ import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.gen.DensityFunction;
 import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
 
-public interface VeinType {
+public interface VeinType extends Registrable<VeinType> {
 
 	BlockState pickOreState(RandomGenerator random);
 
