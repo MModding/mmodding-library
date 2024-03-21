@@ -106,7 +106,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		private final int growLength;
 		private final Predicate<BlockState> chooseStemState;
 
-		private Head(AbstractBlock.Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
+		protected Head(AbstractBlock.Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
 			super(settings, Direction.DOWN, Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater, growthChance);
 			this.plant = plant;
 			this.growLength = growLength;
@@ -133,7 +133,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 
 		private final CustomGrowsDownPlantBlock plant;
 
-		public Body(Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater) {
+		protected Body(Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater) {
 			super(settings, Direction.DOWN, Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater);
 			this.plant = plant;
 		}
