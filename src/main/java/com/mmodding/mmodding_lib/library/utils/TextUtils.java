@@ -10,7 +10,7 @@ public class TextUtils {
 
 	public static Text spaceBetween(MutableText text, Text... siblings) {
 		for (Text sibling : siblings) {
-			text.append("").append(sibling);
+			text.append(" ").append(sibling);
 		}
 		return text;
 	}
