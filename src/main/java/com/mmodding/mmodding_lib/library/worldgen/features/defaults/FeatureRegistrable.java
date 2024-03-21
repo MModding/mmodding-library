@@ -13,13 +13,13 @@ public interface FeatureRegistrable extends Registrable {
 
 	default void register(Identifier identifier) {
 		if (this instanceof CustomFeature customFeature && this.isNotRegistered()) {
+			this.setIdentifier(identifier);
 			Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, identifier, customFeature.getConfiguredFeature());
 			Registry.register(BuiltinRegistries.PLACED_FEATURE, identifier, customFeature.getDefaultPlacedFeature());
 			customFeature.getAdditionalPlacedFeatures().forEach(
 				(feature, string) -> Registry.register(BuiltinRegistries.PLACED_FEATURE, IdentifierUtils.extend(identifier, string), feature)
 			);
 			this.setRegistered();
-			this.setIdentifier(identifier);
 		}
 	}
 

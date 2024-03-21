@@ -38,8 +38,12 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	}
 
 	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, Item.Settings itemSettings) {
-		this.head = new Head(settings, this, tickWater, growthChance, growLength, chooseStemState);
-		this.body = new Body(settings, this, tickWater);
+		this(Head::new, Body::new, settings, tickWater, growthChance, growLength, chooseStemState, hasItem, itemSettings);
+	}
+
+	public CustomGrowsDownPlantBlock(HeadMaker headMaker, BodyMaker bodyMaker, AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, Item.Settings itemSettings) {
+		this.head = headMaker.make(settings, this, tickWater, growthChance, growLength, chooseStemState);
+		this.body = bodyMaker.make(settings, this, tickWater);
 		if (hasItem) this.item = new BlockItem(this.head, itemSettings);
 	}
 
@@ -54,6 +58,11 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 
 	public Body getBody() {
 		return this.body;
+	}
+
+	// Returns the same block by default. If you have a fruit with that plant, you should add it in the state's properties
+	public BlockState withFruits(BlockState state) {
+		return state;
 	}
 
 	public void register(Identifier identifier) {
@@ -133,5 +142,15 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		protected AbstractPlantStemBlock getStem() {
 			return this.plant.head;
 		}
+	}
+
+	public interface HeadMaker {
+
+		Head make(AbstractBlock.Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState);
+	}
+
+	public interface BodyMaker {
+
+		Body make(AbstractBlock.Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater);
 	}
 }

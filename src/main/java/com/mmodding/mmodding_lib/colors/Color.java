@@ -65,7 +65,7 @@ public interface Color {
 
 
 	/**
-	 * RGB Color Format
+	 * HSB Color Format
 	 * @param hue hue value, can be any floating point value
 	 * @param saturation value, between 0.0f and 1.0f
 	 * @param brightness value, between 0.0f and 1.0f
