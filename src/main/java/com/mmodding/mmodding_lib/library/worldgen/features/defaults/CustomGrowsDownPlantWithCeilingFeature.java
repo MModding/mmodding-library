@@ -7,8 +7,6 @@ import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
@@ -24,12 +22,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
-import net.minecraft.world.gen.decorator.BiomePlacementModifier;
-import net.minecraft.world.gen.decorator.CountPlacementModifier;
-import net.minecraft.world.gen.decorator.InSquarePlacementModifier;
-import net.minecraft.world.gen.decorator.RarityFilterPlacementModifier;
+import net.minecraft.world.gen.decorator.*;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.feature.util.ConfiguredFeatureUtil;
 import net.minecraft.world.gen.feature.util.PlacedFeatureUtil;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.stateprovider.RandomizedIntBlockStateProvider;
@@ -39,7 +33,6 @@ import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -50,9 +43,8 @@ public class CustomGrowsDownPlantWithCeilingFeature implements CustomFeature, Fe
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
-	private final AtomicInteger count = new AtomicInteger();
-	private final AtomicInteger rarity = new AtomicInteger();
-
+	private final int count;
+	private final int maxSteps;
 	private final Supplier<CustomGrowsDownPlantBlock> plant;
 	private final Supplier<Block> ceiling;
 	private final TagKey<Block> ceilingReplaceableTag;
@@ -63,7 +55,9 @@ public class CustomGrowsDownPlantWithCeilingFeature implements CustomFeature, Fe
 	private final IntProvider horizontalRadius;
 	private final float extraEdgeColumnChance;
 
-	public CustomGrowsDownPlantWithCeilingFeature(Supplier<CustomGrowsDownPlantBlock> plant, Supplier<Block> ceiling, TagKey<Block> ceilingReplaceableTag, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
+	public CustomGrowsDownPlantWithCeilingFeature(int count, int maxSteps, Supplier<CustomGrowsDownPlantBlock> plant, Supplier<Block> ceiling, TagKey<Block> ceilingReplaceableTag, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
+		this.count = count;
+		this.maxSteps = maxSteps;
 		this.plant = plant;
 		this.ceiling = ceiling;
 		this.ceilingReplaceableTag = ceilingReplaceableTag;
@@ -113,11 +107,13 @@ public class CustomGrowsDownPlantWithCeilingFeature implements CustomFeature, Fe
 			true
 		);
 
-		ConfiguredFeature<BlockColumnFeatureConfig, ?> configuredFeature = Registry.register(
-			BuiltinRegistries.CONFIGURED_FEATURE,
-			IdentifierUtils.extend(this.identifier.get(), "_in_ceiling"),
-			new ConfiguredFeature<>(Feature.BLOCK_COLUMN, plantProvider)
-		);
+		ConfiguredFeature<BlockColumnFeatureConfig, ?> configuredFeature = new ConfiguredFeature<>(Feature.BLOCK_COLUMN, plantProvider);
+
+		Identifier identifier = IdentifierUtils.extend(this.identifier.get(), "in_ceiling");
+
+		if (!BuiltinRegistries.CONFIGURED_FEATURE.containsId(identifier)) {
+			 Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, identifier, configuredFeature);
+		}
 
 		VegetationPatchFeatureConfig featureConfig = new VegetationPatchFeatureConfig(
 			this.ceilingReplaceableTag,
@@ -135,33 +131,24 @@ public class CustomGrowsDownPlantWithCeilingFeature implements CustomFeature, Fe
 		return new ConfiguredFeature<>(this.getFeature(), featureConfig);
 	}
 
-	public CustomGrowsDownPlantWithCeilingFeature setCount(int count) {
-		this.count.set(count);
-		return this;
-	}
-
-	public CustomGrowsDownPlantWithCeilingFeature setRarity(int rarity) {
-		this.rarity.set(rarity);
-		return this;
-	}
-
-	public PlacedFeature createPlacedFeature(int count, int rarity) {
+	public PlacedFeature createPlacedFeature(int count, int maxSteps) {
 		return new PlacedFeature(Holder.createDirect(this.getConfiguredFeature()), ListUtils.builder(placementModifiers -> {
-			if (count != 0) placementModifiers.add(CountPlacementModifier.create(count));
-			if (rarity != 0) placementModifiers.add(RarityFilterPlacementModifier.create(rarity));
+			placementModifiers.add(CountPlacementModifier.create(count));
 			placementModifiers.add(InSquarePlacementModifier.getInstance());
-			placementModifiers.add(PlacedFeatureUtil.MOTION_BLOCKING_HEIGHTMAP);
+			placementModifiers.add(PlacedFeatureUtil.BOTTOM_TO_MAX_TERRAIN_HEIGHT_RANGE);
+			placementModifiers.add(EnvironmentScanPlacementModifier.create(Direction.UP, BlockPredicate.solid(), BlockPredicate.IS_AIR, maxSteps));
+			placementModifiers.add(RandomOffsetPlacementModifier.vertical(ConstantIntProvider.create(-1)));
 			placementModifiers.add(BiomePlacementModifier.getInstance());
 		}));
 	}
 
 	@Override
 	public PlacedFeature getDefaultPlacedFeature() {
-		return this.createPlacedFeature(this.count.get(), this.rarity.get());
+		return this.createPlacedFeature(this.count, this.maxSteps);
 	}
 
-	public CustomGrowsDownPlantWithCeilingFeature addPlacedFeature(int count, int rarity, String idExt) {
-		this.additionalPlacedFeatures.add(this.createPlacedFeature(count, rarity), idExt);
+	public CustomGrowsDownPlantWithCeilingFeature addPlacedFeature(int count, int maxSteps, String idExt) {
+		this.additionalPlacedFeatures.add(this.createPlacedFeature(count, maxSteps), idExt);
 		return this;
 	}
 
