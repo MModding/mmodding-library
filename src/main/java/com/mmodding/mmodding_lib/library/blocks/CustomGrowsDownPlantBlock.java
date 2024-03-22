@@ -1,15 +1,23 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerOperations;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
-import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerOperations;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.world.World;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -152,5 +160,39 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	public interface BodyMaker {
 
 		Body make(AbstractBlock.Settings settings, CustomGrowsDownPlantBlock plant, boolean tickWater);
+	}
+
+	/**
+	 * Utility Interface helping about Growing Down Plants having Fruits.
+	 */
+	public interface WithFruits {
+
+		BooleanProperty getFruitsProperty();
+
+		Item getFruitItem();
+
+		int getPickingCount();
+
+		default ActionResult pickBerries(BlockState state, World world, BlockPos pos) {
+			if (state.get(this.getFruitsProperty())) {
+				Block.dropStack(world, pos, new ItemStack(this.getFruitItem(), this.getPickingCount()));
+				world.playSound(
+					null,
+					pos,
+					SoundEvents.BLOCK_CAVE_VINES_PICK_BERRIES,
+					SoundCategory.BLOCKS,
+					1.0f,
+					MathHelper.nextBetween(world.getRandom(), 0.8f, 1.2f)
+				);
+				world.setBlockState(pos, state.with(this.getFruitsProperty(), Boolean.FALSE), Block.NOTIFY_LISTENERS);
+				return ActionResult.success(world.isClient());
+			} else {
+				return ActionResult.PASS;
+			}
+		}
+
+		default boolean hasBerries(BlockState state) {
+			return state.contains(this.getFruitsProperty()) && state.get(this.getFruitsProperty());
+		}
 	}
 }
