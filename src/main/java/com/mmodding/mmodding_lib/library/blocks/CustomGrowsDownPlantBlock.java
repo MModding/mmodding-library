@@ -169,13 +169,13 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 
 		BooleanProperty getFruitsProperty();
 
-		Item getFruitItem();
+		Item getFruitItem(BlockState state, World world, BlockPos pos);
 
-		int getPickingCount();
+		int getPickingCount(BlockState state, World world, BlockPos pos);
 
 		default ActionResult pickBerries(BlockState state, World world, BlockPos pos) {
 			if (state.get(this.getFruitsProperty())) {
-				Block.dropStack(world, pos, new ItemStack(this.getFruitItem(), this.getPickingCount()));
+				Block.dropStack(world, pos, new ItemStack(this.getFruitItem(state, world, pos), this.getPickingCount(state, world, pos)));
 				world.playSound(
 					null,
 					pos,
