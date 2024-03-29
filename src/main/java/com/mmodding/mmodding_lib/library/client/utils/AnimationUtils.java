@@ -8,9 +8,9 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 @ClientOnly
 public class AnimationUtils {
 
-	public boolean isMoving(LivingEntity livingEntity, float limbSwingAmount, float motionThreshold) {
+	public static boolean isMoving(LivingEntity livingEntity, float limbDistance, float motionThreshold) {
 		Vec3d velocity = livingEntity.getVelocity();
 		float averageVelocity = (MathHelper.abs((float) velocity.x) + MathHelper.abs((float) velocity.z)) / 2f;
-		return averageVelocity >= motionThreshold && limbSwingAmount != 0;
+		return averageVelocity >= motionThreshold && limbDistance != 0;
 	}
 }
