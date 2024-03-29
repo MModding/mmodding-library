@@ -1,7 +1,5 @@
 package com.mmodding.mmodding_lib.library.utils;
 
-import net.minecraft.util.math.MathHelper;
-
 public class CycledInteger {
 
 	private final int max;
@@ -18,7 +16,7 @@ public class CycledInteger {
 	}
 
 	public int add(int value) {
-		return this.value = MathHelper.clamp(this.value + value, 0, this.max);
+		return this.value = this.value + value > this.max ? this.value + value - this.max : this.value + value;
 	}
 
 	public int get() {
