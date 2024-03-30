@@ -19,7 +19,7 @@ import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, BlockWithItem {
+public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, BlockWithItem {
 
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
