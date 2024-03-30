@@ -6,6 +6,7 @@ import net.minecraft.util.math.Direction;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class RadiusUtils {
 
@@ -34,7 +35,7 @@ public class RadiusUtils {
 	}
 
 	private static void checkActionNext(BlockPos pos, Direction excluded, Set<BlockPos> alreadyChecked, BlockPos firstExtremis, BlockPos lastExtremis, Consumer<BlockPos> action) {
-		if (!alreadyChecked.contains(pos)) {
+		if (alreadyChecked.stream().noneMatch(current -> current.equals(pos))) {
 			BlockPos firstSubtract = pos.subtract(firstExtremis);
 			BlockPos lastSubtract = pos.subtract(lastExtremis);
 			boolean firstCheck = firstSubtract.getX() <= 0 && firstSubtract.getY() <= 0 && firstSubtract.getZ() <= 0;
@@ -52,4 +53,3 @@ public class RadiusUtils {
 		}
 	}
 }
-
