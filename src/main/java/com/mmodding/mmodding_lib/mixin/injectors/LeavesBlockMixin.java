@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.mmodding_lib.library.blocks.CustomLeavesBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.state.property.Property;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -16,5 +17,10 @@ public class LeavesBlockMixin {
 		if (!(instance instanceof CustomLeavesBlock)) {
 			original.call(instance, blockState);
 		}
+	}
+
+	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;with(Lnet/minecraft/state/property/Property;Ljava/lang/Comparable;)Ljava/lang/Object;"))
+	private Object removeConditionally(BlockState instance, Property<?> property, Comparable<?> comparable, Operation<Object> original) {
+		return ((Object) this) instanceof CustomLeavesBlock ? instance : original.call(instance, property, comparable);
 	}
 }

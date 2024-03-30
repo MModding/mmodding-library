@@ -9,11 +9,13 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.WorldAccess;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -27,12 +29,6 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 
     public CustomLeavesBlock(Settings settings) {
         this(settings, false);
-	    this.setDefaultState(
-			this.getDefaultState()
-				.with(this.getDistanceProperty(), this.getMaxDistance())
-				.with(CustomLeavesBlock.PERSISTENT, false)
-				.with(CustomLeavesBlock.WATERLOGGED, false)
-	    );
     }
 
     public CustomLeavesBlock(Settings settings, boolean hasItem) {
@@ -45,6 +41,12 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 
     public CustomLeavesBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
         super(settings);
+	    this.setDefaultState(
+		    this.getDefaultState()
+			    .with(this.getDistanceProperty(), this.getMaxDistance())
+			    .with(CustomLeavesBlock.PERSISTENT, false)
+			    .with(CustomLeavesBlock.WATERLOGGED, false)
+	    );
         if (hasItem) this.item = new BlockItem(this, itemSettings);
     }
 
@@ -60,6 +62,10 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 		return state.isIn(BlockTags.LOGS);
 	}
 
+	protected boolean hasSeparatedLeaves() {
+		return false;
+	}
+
 	@Override
 	public boolean hasRandomTicks(BlockState state) {
 		return state.get(this.getDistanceProperty()) == this.getMaxDistance() && !state.get(CustomLeavesBlock.PERSISTENT);
@@ -68,6 +74,11 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 	@Override
 	protected boolean canDecay(BlockState state) {
 		return !state.get(CustomLeavesBlock.PERSISTENT) && state.get(this.getDistanceProperty()) == this.getMaxDistance();
+	}
+
+	@Override
+	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
+		world.setBlockState(pos, this.updateDistanceFromLogs(state, world, pos), Block.NOTIFY_ALL);
 	}
 
 	@Override
@@ -102,8 +113,12 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 	private int getDistanceFromLog(BlockState state) {
 		if (this.isLogValid(state)) {
 			return 0;
-		} else {
-			return state.getBlock() instanceof CustomLeavesBlock ? state.get(this.getDistanceProperty()) : this.getMaxDistance();
+		}
+		else if (state.getBlock() instanceof CustomLeavesBlock || this.hasSeparatedLeaves()) {
+			return state.get(this.getDistanceProperty());
+		}
+		else {
+			return this.getMaxDistance();
 		}
 	}
 
@@ -120,8 +135,8 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 			.getFluidState(ctx.getBlockPos());
 
 		BlockState blockState = this.getDefaultState()
-			.with(PERSISTENT, false)
-			.with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+			.with(CustomLeavesBlock.PERSISTENT, false)
+			.with(CustomLeavesBlock.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
 
 		return this.updateDistanceFromLogs(blockState, ctx.getWorld(), ctx.getBlockPos());
 	}
