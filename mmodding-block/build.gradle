@@ -1,0 +1,5 @@
+dependencies {
+	implementation(project(":mmodding-core"))
+	testImplementation(project(":mmodding-container"))
+	testImplementation(project(":mmodding-registry"))
+}

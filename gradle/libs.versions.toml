@@ -1,17 +1,25 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
-minecraft = "1.20.1"
-quilt_mappings = "1.20.1+build.23"
-quilt_loader = "0.21.0"
+minecraft = "1.19.4"
+quilt_mappings = "1.19.4+build.10"
+quilt_loader = "0.24.0"
+mixin_extras = "0.2.0-beta.11"
 
-quilted_fabric_api = "7.3.1+0.89.3-1.20.1"
+quilted_fabric_api = "6.0.0-beta.11+0.87.0-1.19.4"
+modmenu = "4.0.6"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
 quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
+mixin_extras = { module = "io.github.llamalad7:mixinextras-fabric", version.ref = "mixin_extras" }
 
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+
+# If you have multiple similar dependencies, you can declare a dependency bundle and reference it on the build script with "libs.bundles.example".
+# [bundles]
+# example = ["example-a", "example-b", "example-c"]
 
 [plugins]
-quilt_loom = { id = "org.quiltmc.loom", version = "1.4+" }
+quilt_loom = { id = "org.quiltmc.loom", version = "1.0.+" }
