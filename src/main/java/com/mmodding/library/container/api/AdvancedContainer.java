@@ -1,5 +1,6 @@
 package com.mmodding.library.container.api;
 
+import com.mmodding.library.registry.api.LiteRegistry;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.ModContainer;
@@ -73,11 +74,36 @@ public interface AdvancedContainer extends ModContainer {
 		};
 	}
 
+	default <T> LiteRegistryLinkedContainerExecutor<T> withRegistry(LiteRegistry<T> registry) {
+
+		return () -> new LiteRegistryLinkedContainer<>() {
+
+			@Override
+			public LiteRegistry<T> getRegistry() {
+				return registry;
+			}
+
+			@Override
+			public AdvancedContainer getContainer() {
+				return AdvancedContainer.this;
+			}
+		};
+	}
+
 	interface RegistryLinkedContainerExecutor<T> {
 
 		RegistryLinkedContainer<T> getContainer();
 
 		default void execute(Consumer<RegistryLinkedContainer<T>> executor) {
+			executor.accept(this.getContainer());
+		}
+	}
+
+	interface LiteRegistryLinkedContainerExecutor<T> {
+
+		LiteRegistryLinkedContainer<T> getContainer();
+
+		default void execute(Consumer<LiteRegistryLinkedContainer<T>> executor) {
 			executor.accept(this.getContainer());
 		}
 	}

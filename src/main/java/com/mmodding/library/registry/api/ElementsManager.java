@@ -1,8 +1,7 @@
 package com.mmodding.library.registry.api;
 
 import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.registry.api.content.ContentHolder;
-import com.mmodding.library.registry.api.content.DefaultContentHolder;
+import com.mmodding.library.registry.api.content.*;
 import com.mmodding.library.registry.api.context.RegistryContext;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -115,14 +114,38 @@ public class ElementsManager {
 			return new Builder(ManagerSide.SERVER);
 		}
 
-		public ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, ContentHolderProvider provider) {
+		public <T> ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, SimpleContentHolder.Provider<T> provider) {
 			if (QuiltLoader.isModLoaded(modId)) {
 				this.withRegistry(context, provider);
 			}
 			return this;
 		}
 
-		public ElementsManager.Builder withRegistry(RegistryContext context, ContentHolderProvider provider) {
+		public <L, R> ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, DoubleContentHolder.Provider<L, R> provider) {
+			if (QuiltLoader.isModLoaded(modId)) {
+				this.withRegistry(context, provider);
+			}
+			return this;
+		}
+
+		public ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, MultipleContentHolder.Provider provider) {
+			if (QuiltLoader.isModLoaded(modId)) {
+				this.withRegistry(context, provider);
+			}
+			return this;
+		}
+
+		public <T> ElementsManager.Builder withRegistry(RegistryContext context, SimpleContentHolder.Provider<T> provider) {
+			this.dynamics.add(Pair.of(context, provider));
+			return this;
+		}
+
+		public <L, R> ElementsManager.Builder withRegistry(RegistryContext context, DoubleContentHolder.Provider<L, R> provider) {
+			this.dynamics.add(Pair.of(context, provider));
+			return this;
+		}
+
+		public ElementsManager.Builder withRegistry(RegistryContext context, MultipleContentHolder.Provider provider) {
 			this.dynamics.add(Pair.of(context, provider));
 			return this;
 		}

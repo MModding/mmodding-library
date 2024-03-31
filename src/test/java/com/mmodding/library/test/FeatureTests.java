@@ -39,21 +39,19 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 						);
 					}
 				),
-				configuredPack -> {
-					configuredPack.appendPlacedFeature(
-						FeatureReplicator.replicatePlacedFeature(
-							Reference.cast(new Identifier("", "")),
-							placedFeatures.get(VegetationPlacedFeatures.FLOWER_DEFAULT),
-							modifiers -> {
-								modifiers.mutateTypeTo(
-									PlacementModifierType.COUNT,
-									modifier -> CountPlacementModifier.create(2)
-								);
-								return modifiers;
-							}
-						)
-					);
-				}
+				configuredPack -> configuredPack.appendPlacedFeature(
+					FeatureReplicator.replicatePlacedFeature(
+						Reference.cast(new Identifier("", "")),
+						placedFeatures.get(VegetationPlacedFeatures.FLOWER_DEFAULT),
+						modifiers -> {
+							modifiers.mutateTypeTo(
+								PlacementModifierType.COUNT,
+								modifier -> CountPlacementModifier.create(2)
+							);
+							return modifiers;
+						}
+					)
+				)
 			);
 		});
 	}
