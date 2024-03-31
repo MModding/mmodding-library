@@ -78,11 +78,9 @@ jar {
 
 dependencies {
 	api include(project(":mmodding-block"))
-	api include(project(":mmodding-container"))
     api include(project(":mmodding-core"))
 	api include(project(":mmodding-feature"))
-    api include(project(":mmodding-registry"))
-	api include(project(":mmodding-worldgen-vein"))
+	api include(project(":mmodding-worldgen"))
 }
 
 // Configure the maven publication

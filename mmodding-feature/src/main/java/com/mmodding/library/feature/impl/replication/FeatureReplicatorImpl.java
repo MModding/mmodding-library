@@ -2,7 +2,7 @@ package com.mmodding.library.feature.impl.replication;
 
 import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.feature.api.replication.PlacementModifiers;
-import com.mmodding.library.registry.api.WaitingRegistryEntry;
+import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import net.minecraft.world.gen.feature.*;
 
 import java.util.ArrayList;

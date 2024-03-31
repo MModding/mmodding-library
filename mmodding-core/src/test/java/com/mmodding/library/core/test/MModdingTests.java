@@ -1,10 +1,8 @@
 package com.mmodding.library.core.test;
 
-import com.mmodding.library.container.api.AdvancedContainer;
-import com.mmodding.library.core.api.MModdingRegistries;
-import com.mmodding.library.initializer.ExtendedModInitializer;
-import com.mmodding.library.registry.api.ElementsManager;
-import net.minecraft.world.World;
+import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.management.initializer.ExtendedModInitializer;
+import com.mmodding.library.core.api.management.ElementsManager;
 
 public class MModdingTests implements ExtendedModInitializer {
 
@@ -14,6 +12,6 @@ public class MModdingTests implements ExtendedModInitializer {
 
 	@Override
 	public void onInitialize(AdvancedContainer mod) {
-		MModdingRegistries.DIFFERED_SEED.put(World.OVERWORLD, true);
+		// MModdingRegistries.DIFFERED_SEED.put(World.OVERWORLD, true);
 	}
 }

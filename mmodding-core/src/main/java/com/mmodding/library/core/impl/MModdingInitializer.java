@@ -1,6 +1,6 @@
 package com.mmodding.library.core.impl;
 
-import com.mmodding.library.registry.api.ElementsManager;
+import com.mmodding.library.core.api.management.ElementsManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import org.quiltmc.loader.api.ModContainer;

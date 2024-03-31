@@ -24,9 +24,6 @@ dependencyResolutionManagement {
 rootProject.name = "mmodding"
 
 include("mmodding-block")
-include("mmodding-container")
 include("mmodding-core")
 include("mmodding-feature")
-include("mmodding-initializer")
-include("mmodding-registry")
-include("mmodding-worldgen-vein")
+include("mmodding-worldgen")

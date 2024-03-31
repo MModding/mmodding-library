@@ -1,11 +1,11 @@
 package com.mmodding.library.feature.test;
 
-import com.mmodding.library.container.api.AdvancedContainer;
+import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.feature.api.FeaturePack;
 import com.mmodding.library.feature.api.replication.FeatureReplicator;
-import com.mmodding.library.registry.api.content.DoubleContentHolder;
-import com.mmodding.library.registry.api.content.ForBeing;
+import com.mmodding.library.core.api.management.content.DoubleContentHolder;
+import com.mmodding.library.core.api.management.content.ForBeing;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.decorator.BiomePlacementModifier;
