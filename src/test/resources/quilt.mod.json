@@ -1,0 +1,18 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "com.mmodding.library",
+		"id": "mmodding_tests",
+		"version": "1.0.0",
+		"metadata": {
+			"name": "MModding Tests",
+			"license": "LGPL-3.0"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"entrypoints": {
+			"init": [
+				"com.mmodding.library.test.MModdingTests"
+			]
+		}
+	}
+}

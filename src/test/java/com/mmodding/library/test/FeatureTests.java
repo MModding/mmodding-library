@@ -13,11 +13,11 @@ import net.minecraft.world.gen.decorator.CountPlacementModifier;
 import net.minecraft.world.gen.decorator.PlacementModifierType;
 import net.minecraft.world.gen.feature.*;
 
-public class MModdingTestFeatures implements DoubleContentHolder<ConfiguredFeature<?, ?>, PlacedFeature> {
+public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>, PlacedFeature> {
 
 	public static final ForBeing.Vacant<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.vacant();
 
-	public MModdingTestFeatures(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
+	public FeatureTests(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
 		RANDOM_PATCH.initialize(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
 		RANDOM_PATCH.execute(randomPatch -> {
 			randomPatch.appendConfiguredFeature(

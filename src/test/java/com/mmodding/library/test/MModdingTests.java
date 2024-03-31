@@ -12,13 +12,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
-public class MModdingTestImplementation implements ExtendedModInitializer {
+public class MModdingTests implements ExtendedModInitializer {
 
 	@Override
 	public void setupManager(ElementsManager.Builder manager) {
 		manager
-			.withRegistry(DoubleRegistryContext.FEATURE, ContentHolderProvider.bi(MModdingTestFeatures::new))
-			.withDefaults(MModdingTestBlocks::new, RegistryExperiments::new);
+			.withRegistry(DoubleRegistryContext.FEATURE, ContentHolderProvider.bi(FeatureTests::new))
+			.withDefaults(BlockTests::new, RegistryTests::new);
 	}
 
 	@Override

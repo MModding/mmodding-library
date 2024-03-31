@@ -16,7 +16,8 @@
 				"issues": "https://github.com/MModding/MModding-Library/issues",
 				"sources": "https://github.com/MModding/MModding-Library"
 			},
-			"icon": "assets/mmodding_experiments/icon.png"
+			"icon": "assets/mmodding_experiments/icon.png",
+			"license": "LGPL-3.0"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {

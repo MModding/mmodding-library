@@ -12,18 +12,18 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
-public class RegistryExperiments implements DefaultContentHolder {
+public class RegistryTests implements DefaultContentHolder {
 
 	public static final RegistryCompanion<Item, Block> ITEM_COMPANION = RegistryCompanion.create(RegistryKeyAttachment.classic(Registries.ITEM));
 
-	public RegistryExperiments() {
-		RegistryExperiments.ITEM_COMPANION.getOrCreateCompanion(Items.ACACIA_BOAT);
+	public RegistryTests() {
+		RegistryTests.ITEM_COMPANION.getOrCreateCompanion(Items.ACACIA_BOAT);
 	}
 
 	@Override
 	public void register(AdvancedContainer mod) {
 		MModdingRegistries.DIFFERED_SEED.put(World.NETHER, true);
-		RegistryExperiments.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("a"), Blocks.BELL);
-		RegistryExperiments.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("b"), Blocks.DIRT);
+		RegistryTests.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("a"), Blocks.BELL);
+		RegistryTests.ITEM_COMPANION.getCompanion(Items.ACACIA_BOAT).register(mod.createId("b"), Blocks.DIRT);
 	}
 }

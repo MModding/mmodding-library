@@ -6,7 +6,7 @@ import com.mmodding.library.registry.api.content.DefaultContentHolder;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 
-public class MModdingTestBlocks implements DefaultContentHolder {
+public class BlockTests implements DefaultContentHolder {
 
 	public static final Registrable<Block> FIRST_BLOCK = (Registrable<Block>) new Block(null);
 
