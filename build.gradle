@@ -63,7 +63,7 @@ allprojects {
 subprojects {
     afterEvaluate {
         // Disable the gen sources task on sub projects
-        genSourcesWithQuiltflower.enabled = false
+        genSourcesWithVineflower.enabled = false
         genSourcesWithFernFlower.enabled = false
         genSourcesWithCfr.enabled = false
     }
