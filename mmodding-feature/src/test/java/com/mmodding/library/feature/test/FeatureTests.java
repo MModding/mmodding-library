@@ -18,19 +18,20 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 	public static final ForBeing.Vacant<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.vacant();
 
 	public FeatureTests(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
+		Reference.LiteFactory factory = Reference.createFactory(path -> new Identifier("", path));
 		RANDOM_PATCH.initialize(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
 		RANDOM_PATCH.execute(randomPatch -> {
 			randomPatch.appendConfiguredFeature(
-				Reference.cast(new Identifier("", "")),
+				factory.createId(""),
 				new RandomPatchFeatureConfig(0, 0, 0, null),
 				configuredPack -> configuredPack.appendPlacedFeature(
-					Reference.cast(new Identifier("", "")),
+					factory.createId(""),
 					BiomePlacementModifier.getInstance()
 				)
 			);
 			randomPatch.appendConfiguredFeature(
 				FeatureReplicator.replicateConfiguredFeature(
-					Reference.cast(new Identifier("", "")),
+					factory.createId(""),
 					configuredFeatures.get(VegetationConfiguredFeatures.FLOWER_DEFAULT),
 					fc -> {
 						int tries = 3;
@@ -41,7 +42,7 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 				),
 				configuredPack -> configuredPack.appendPlacedFeature(
 					FeatureReplicator.replicatePlacedFeature(
-						Reference.cast(new Identifier("", "")),
+						factory.createId(""),
 						placedFeatures.get(VegetationPlacedFeatures.FLOWER_DEFAULT),
 						modifiers -> {
 							modifiers.mutateTypeTo(

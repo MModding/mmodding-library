@@ -1,11 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.mmodding.library.mixin",
+  "package": "com.mmodding.library.core.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "com.mmodding.library.core.mixin.IdentifierMixin",
-    "com.mmodding.library.core.mixin.RegistryKeyMixin"
+    "IdentifierMixin",
+    "RegistryKeyMixin"
   ],
   "client": [],
   "injectors": {

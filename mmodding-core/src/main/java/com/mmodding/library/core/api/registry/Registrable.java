@@ -8,7 +8,10 @@ import net.minecraft.util.Identifier;
 public interface Registrable<T> {
 
 	default void register(Registry<T> registry, Identifier identifier) {
-		Registry.register(registry, identifier, this.as());
+		if (this.getRegistrationStatus().equals(RegistrationStatus.REGISTERED)) {
+			Registry.register(registry, identifier, this.as());
+			this.postRegister();
+		}
 	}
 
 	default void register(RegistryPushable<T> pushable) {
@@ -16,15 +19,22 @@ public interface Registrable<T> {
 	}
 
 	default void register(LiteRegistry<T> registry, Identifier identifier) {
-		registry.register(identifier, this.as());
+		if (this.getRegistrationStatus().equals(RegistrationStatus.REGISTERED)) {
+			registry.register(identifier, this.as());
+			this.postRegister();
+		}
 	}
 
 	default void register(LiteRegistryPushable<T> pushable) {
 		this.register(pushable.getRegistry(), pushable.getIdentifier());
 	}
 
+	default void postRegister() {
+		throw new IllegalStateException();
+	}
+
 	default RegistrationStatus getRegistrationStatus() {
-		throw new AssertionError();
+		throw new IllegalStateException();
 	}
 
 	default T as() {

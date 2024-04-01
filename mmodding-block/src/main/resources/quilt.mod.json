@@ -2,11 +2,11 @@
 	"schema_version": 1,
 	"quilt_loader": {
 		"group": "com.mmodding",
-		"id": "mmodding_library",
+		"id": "mmodding_block",
 		"version": "${version}",
 		"metadata": {
-			"name": "MModding Quilt Experiments",
-			"description": "Some experiments for the new upcoming MModding Library versions.",
+			"name": "MModding Block",
+			"description": "Block Library of MModding",
 			"contributors": {
 				"MModding Team": "Owner",
 				"FirstMegaGame4": "Author"
@@ -16,13 +16,10 @@
 				"issues": "https://github.com/MModding/MModding-Library/issues",
 				"sources": "https://github.com/MModding/MModding-Library"
 			},
-			"icon": "assets/mmodding_experiments/icon.png",
+			"icon": "assets/mmodding_block/icon.png",
 			"license": "LGPL-3.0"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
-		"entrypoints": {
-			"init": "com.mmodding.library.QuiltExperiments"
-		},
 		"depends": [
 			{
 				"id": "quilt_loader",
@@ -37,6 +34,13 @@
 				"versions": ">=1.20"
 			}
 		]
+	},
+	"quilt_loom": {
+		"injected_interfaces": {
+			"net/minecraft/class_2248": [
+				"com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/block/Block;>"
+			]
+		}
 	},
 	"mixin": "mmodding_library.mixins.json"
 }
