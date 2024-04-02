@@ -8,9 +8,13 @@ import net.minecraft.util.Identifier;
 public interface Registrable<T> {
 
 	default void register(Registry<T> registry, Identifier identifier) {
-		if (this.getRegistrationStatus().equals(RegistrationStatus.REGISTERED)) {
-			Registry.register(registry, identifier, this.as());
-			this.postRegister();
+		switch (this.getRegistrationStatus()) {
+			case UNREGISTERED -> {
+				Registry.register(registry, identifier, this.as());
+				this.postRegister(identifier, this.as());
+			}
+			case REGISTERED -> throw new RuntimeException("Attempted to register twice " + this.as().toString());
+			case CANCELLED -> throw new RuntimeException("Attempted to register " + this.as() + " which is builtin");
 		}
 	}
 
@@ -19,9 +23,13 @@ public interface Registrable<T> {
 	}
 
 	default void register(LiteRegistry<T> registry, Identifier identifier) {
-		if (this.getRegistrationStatus().equals(RegistrationStatus.REGISTERED)) {
-			registry.register(identifier, this.as());
-			this.postRegister();
+		switch (this.getRegistrationStatus()) {
+			case UNREGISTERED -> {
+				registry.register(identifier, this.as());
+				this.postRegister(identifier, this.as());
+			}
+			case REGISTERED -> throw new RuntimeException("Attempted to register twice " + this.as().toString());
+			case CANCELLED -> throw new RuntimeException("Attempted to register " + this.as() + " which is builtin");
 		}
 	}
 
@@ -29,7 +37,7 @@ public interface Registrable<T> {
 		this.register(pushable.getRegistry(), pushable.getIdentifier());
 	}
 
-	default void postRegister() {
+	default void postRegister(Identifier identifier, T value) {
 		throw new IllegalStateException();
 	}
 

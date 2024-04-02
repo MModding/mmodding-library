@@ -1,5 +1,6 @@
 package com.mmodding.library.block.api.util;
 
+import com.mojang.datafixers.util.Either;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.random.RandomGenerator;
@@ -10,6 +11,11 @@ import java.util.List;
 public class RandomStateContainer {
 
 	private final List<BlockState> states;
+
+	@SafeVarargs
+	public static RandomStateContainer create(Either<Block, BlockState>... elements) {
+		return new RandomStateContainer(Arrays.stream(elements).map(element -> element.mapLeft(Block::getDefaultState).map(state -> state, state -> state)).toList());
+	}
 
 	public static RandomStateContainer create(Block... blocks) {
 		return new RandomStateContainer(Arrays.stream(blocks).map(Block::getDefaultState).toList());
