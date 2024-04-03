@@ -498,8 +498,6 @@ final class QmjBuilder {
 			writeInjectedInterfaces(writer, qmjProperties.get("injected_interfaces"))
 		}
 
-		java.util.logging.Logger.getLogger("d").info("dddddd")
-
 		// Ending
 		writer.endObject()
 		writer.flush()
