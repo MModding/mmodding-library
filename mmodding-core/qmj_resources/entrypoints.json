@@ -1,0 +1,5 @@
+{
+  "init": [
+    "com.mmodding.library.core.impl.MModdingInitializer"
+  ]
+}

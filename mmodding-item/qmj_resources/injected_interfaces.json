@@ -1,0 +1,5 @@
+{
+  "net/minecraft/class_1792": [
+    "com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/item/Item;>"
+  ]
+}

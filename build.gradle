@@ -71,6 +71,9 @@ allprojects {
 		it.inputDir.set(project.file("qmj_resources/"))
 		it.outputDir.set(project.file("build/generated/generated_resources/"))
 		it.projectId.set(project.name.replace("-", "_"))
+		it.quiltLoaderVersion.set(libs.versions.quilt.loader.get())
+		it.quiltedFabricAPIVersion.set(libs.versions.quilted.fabric.api.get())
+		it.minecraftVersion.set(libs.versions.minecraft.get())
 	}
 
 	sourceSets {
@@ -121,20 +124,27 @@ dependencies {
 
 afterEvaluate {
 	def generateQmjForIdea = tasks.register("generateQmjForIdea")
+	generateQmjForIdea.get().dependsOn project.tasks.named("generateQmj")
 	project.subprojects.each {
-		it.subprojects.each {
-			generateQmjForIdea.dependsOn it.tasks.named("generateQmj")
-		}
+		generateQmjForIdea.get().dependsOn it.tasks.named("generateQmj")
 	}
 
 	idea {
 		project {
 			settings {
 				taskTriggers {
-					afterSync generateQmjForIdea
+					afterSync generateQmjForIdea.get()
 				}
 			}
 		}
+	}
+}
+
+// Loom can detect content of generated QMJs thanks to that block code.
+afterEvaluate {
+	subprojects.each {
+		project.sourceSets.main.compileClasspath += it.sourceSets.main.compileClasspath
+		project.sourceSets.main.runtimeClasspath += it.sourceSets.main.runtimeClasspath
 	}
 }
 
@@ -163,8 +173,17 @@ abstract class GenerateQMJ extends DefaultTask {
 	@OutputDirectory
 	abstract DirectoryProperty getOutputDir()
 
-	@Nested
+	@Input
 	abstract Property<String> getProjectId()
+
+	@Input
+	abstract Property<String> getQuiltLoaderVersion()
+
+	@Input
+	abstract Property<String> getQuiltedFabricAPIVersion()
+
+	@Input
+	abstract Property<String> getMinecraftVersion()
 
 	@Override
 	String getGroup() {
@@ -186,20 +205,34 @@ abstract class GenerateQMJ extends DefaultTask {
 
 		String projectName = ""
 
-		project.name.split("_").each {
-			projectName = projectName + it[0].toUpperCase() + it.substring(1)
+		this.getProjectId().get().split("_").each {
+			if (it[0] == "m" && it[1] == "m") {
+				projectName = projectName + it[0].toUpperCase() + it[1].toUpperCase() + it.substring(2) + " "
+			}
+			else {
+				projectName = projectName + it[0].toUpperCase() + it.substring(1) + " "
+			}
 		}
 
-		String projectDescription = projectName - "MModding " + " Library of MModding"
+		projectName = projectName.substring(0, projectName.size() - 1)
+
+		String projectDescription
+
+		if (this.getProjectId().get() == "mmodding") {
+			projectDescription = "Library made by MModding Team to provide few sets of modding tools."
+		}
+		else {
+			projectDescription = projectName - "MModding " + " Library of MModding"
+		}
 
 		QmjBuilder.buildQmj(
-			project.name,
+			this.getProjectId().get(),
 			projectName,
 			projectDescription,
 			(String) project.version,
-			libs.versions.quilt.loader.get(),
-			libs.versions.quilted.fabric.api.get(),
-			libs.versions.minecraft.get(),
+			this.getQuiltLoaderVersion().get(),
+			this.getQuiltedFabricAPIVersion().get(),
+			this.getMinecraftVersion().get(),
 			output,
 			properties,
 			QmjBuilder.hasMixins(input),
@@ -238,6 +271,9 @@ final class QmjBuilder {
 			if (reader.nextName() == "has_mixins") {
 				hasMixins = reader.nextBoolean()
 			}
+			else {
+				reader.skipValue()
+			}
 		}
 
 		reader.close()
@@ -255,6 +291,9 @@ final class QmjBuilder {
 		while (reader.hasNext()) {
 			if (reader.nextName() == "has_access_wideners") {
 				hasAccessWideners = reader.nextBoolean()
+			}
+			else {
+				reader.skipValue()
 			}
 		}
 
@@ -274,6 +313,9 @@ final class QmjBuilder {
 			if (reader.nextName() == "environment") {
 				environment = reader.nextString()
 			}
+			else {
+				reader.skipValue()
+			}
 		}
 
 		reader.close()
@@ -290,9 +332,11 @@ final class QmjBuilder {
 		reader.beginObject()
 		while (reader.hasNext()) {
 			writer.name(reader.nextName()).beginArray()
+			reader.beginArray()
 			while (reader.hasNext()) {
 				writer.value(reader.nextString())
 			}
+			reader.endArray()
 			writer.endArray()
 		}
 		reader.endObject()
@@ -314,9 +358,11 @@ final class QmjBuilder {
 		reader.beginObject()
 		while (reader.hasNext()) {
 			writer.name(reader.nextName()).beginArray()
+			reader.beginArray()
 			while (reader.hasNext()) {
 				writer.value(reader.nextString().replace(".", "/").replace("\u0024", "\\u0024")) // that way we avoid some errors
 			}
+			reader.endArray()
 			writer.endArray()
 		}
 		reader.endObject()
@@ -349,7 +395,7 @@ final class QmjBuilder {
 			.name("schema_version").value(1)
 			.name("quilt_loader")
 			.beginObject() // Quilt Loader Block Start
-				.name("group").value("com.mmodding." + projectId - "mmodding_")
+				.name("group").value("com.mmodding" + (projectId != "mmodding" ? "." + projectId - "mmodding_" : ""))
 				.name("id").value(projectId)
 				.name("version").value(projectVersion)
 				.name("metadata")
@@ -380,6 +426,7 @@ final class QmjBuilder {
 				.beginObject()
 					.name("id").value("quilted_fabric_api")
 					.name("versions").value(">=" + qfapiVersion)
+				.endObject()
 				.beginObject()
 					.name("id").value("minecraft")
 					.name("versions").value(">=" + minecraftVersion)
@@ -421,7 +468,7 @@ final class QmjBuilder {
 					.beginObject() // ModMenu Parent Block Start
 						.name("id").value("mmodding")
 						.name("name").value("MModding Library")
-						.name("description").value("Library made by MModding Team to provide lot of modding tools.")
+						.name("description").value("Library made by MModding Team to provide few sets of modding tools.")
 						.name("icon").value("assets/" + projectId + "/icon.png")
 						.name("badges")
 						.beginArray()
@@ -433,6 +480,8 @@ final class QmjBuilder {
 		if (qmjProperties.containsKey("injected_interfaces")) {
 			writeInjectedInterfaces(writer, qmjProperties.get("injected_interfaces"))
 		}
+
+		java.util.logging.Logger.getLogger("d").info("dddddd")
 
 		// Ending
 		writer.endObject()

@@ -1,0 +1,6 @@
+{
+  "net/minecraft/class_2248": [
+    "com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/block/Block;>",
+    "com/mmodding/library/block/api/BlockWithItem"
+  ]
+}
