@@ -186,7 +186,7 @@ abstract class GenerateQMJ extends DefaultTask {
 
 		String projectName = ""
 
-		project.name.split("_") {
+		project.name.split("_").each {
 			projectName = projectName + it[0].toUpperCase() + it.substring(1)
 		}
 
