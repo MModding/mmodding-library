@@ -68,7 +68,7 @@ allprojects {
     }
 
 	def generateQmj = tasks.register("generateQmj", GenerateQMJ) {
-		it.inputDir.set(project.file("resources/"))
+		it.inputDir.set(project.file("qmj_resources/"))
 		it.outputDir.set(project.file("build/generated/generated_resources/"))
 		it.projectId.set(project.name.replace("-", "_"))
 	}
@@ -214,12 +214,12 @@ final class QmjBuilder {
 	static Map<String, BufferedReader> getProperties(java.nio.file.Path path) {
 		Map<String, BufferedReader> properties = new HashMap<>()
 
-		File entrypoints = new File(path.resolve("entrypoints.json"))
+		File entrypoints = path.resolve("entrypoints.json").toFile()
 		if (entrypoints.exists()) {
 			properties.put("entrypoints", entrypoints.newReader())
 		}
 
-		File injected_interfaces = new File(path.resolve("injected_interfaces.json"))
+		File injected_interfaces = path.resolve("injected_interfaces.json").toFile()
 		if (injected_interfaces.exists()) {
 			properties.put("injected_interfaces", injected_interfaces.newReader())
 		}
@@ -230,7 +230,7 @@ final class QmjBuilder {
 	static boolean hasMixins(java.nio.file.Path path) {
 		boolean hasMixins = false
 
-		JsonReader reader = JsonReader.json(path.resolve("other_properties.json"))
+		JsonReader reader = JsonReader.json(path.resolve("main.json"))
 
 		reader.beginObject()
 
@@ -248,7 +248,7 @@ final class QmjBuilder {
 	static boolean hasAccessWideners(java.nio.file.Path path) {
 		boolean hasAccessWideners = false
 
-		JsonReader reader = JsonReader.json(path.resolve("other_properties.json"))
+		JsonReader reader = JsonReader.json(path.resolve("main.json"))
 
 		reader.beginObject()
 
@@ -266,7 +266,7 @@ final class QmjBuilder {
 	static String getEnvironment(java.nio.file.Path path) {
 		String environment = "both"
 
-		JsonReader reader = JsonReader.json(path.resolve("other_properties.json"))
+		JsonReader reader = JsonReader.json(path.resolve("main.json"))
 
 		reader.beginObject()
 
