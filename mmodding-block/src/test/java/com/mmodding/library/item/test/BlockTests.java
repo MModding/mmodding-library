@@ -1,4 +1,4 @@
-package com.mmodding.library.block.test;
+package com.mmodding.library.item.test;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.DefaultContentHolder;
