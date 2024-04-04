@@ -26,5 +26,6 @@ rootProject.name = "mmodding"
 include("mmodding-block")
 include("mmodding-core")
 include("mmodding-feature")
+include("mmodding-fluid")
 include("mmodding-item")
 include("mmodding-worldgen")

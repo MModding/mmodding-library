@@ -117,6 +117,7 @@ dependencies {
 	api include(project(":mmodding-block"))
 	api include(project(":mmodding-core"))
 	api include(project(":mmodding-feature"))
+	api include(project(":mmodding-fluid"))
 	api include(project(":mmodding-item"))
 	api include(project(":mmodding-worldgen"))
 }
