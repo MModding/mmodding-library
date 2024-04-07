@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.fluids;
 
-import com.mmodding.mmodding_lib.colors.Color;
+import com.mmodding.mmodding_lib.library.colors.Color;
 import com.mmodding.mmodding_lib.library.fluids.collisions.FluidCollisionHandler;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
 import net.minecraft.particle.DefaultParticleType;

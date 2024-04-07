@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.colors;
+package com.mmodding.mmodding_lib.library.colors;
 
 import net.minecraft.client.util.ColorUtil;
 import net.minecraft.util.math.MathHelper;

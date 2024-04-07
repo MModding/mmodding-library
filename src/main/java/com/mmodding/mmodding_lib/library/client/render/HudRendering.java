@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.client.render;
 
-import com.mmodding.mmodding_lib.colors.Color;
+import com.mmodding.mmodding_lib.library.colors.Color;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;

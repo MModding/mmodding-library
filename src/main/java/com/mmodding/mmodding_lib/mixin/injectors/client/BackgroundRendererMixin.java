@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.colors.Color;
-import com.mmodding.mmodding_lib.colors.RGB;
+import com.mmodding.mmodding_lib.library.colors.Color;
+import com.mmodding.mmodding_lib.library.colors.RGB;
 import com.mmodding.mmodding_lib.library.fluids.FluidExtensions;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;

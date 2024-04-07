@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.library.integrations.modmenu;
 
-import com.mmodding.mmodding_lib.colors.Color;
+import com.mmodding.mmodding_lib.library.colors.Color;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.loader.api.entrypoint.EntrypointContainer;

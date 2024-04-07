@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.integrations.modmenu;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.colors.Color;
+import com.mmodding.mmodding_lib.library.colors.Color;
 import com.mmodding.mmodding_lib.library.base.MModdingBootstrapInitializer;
 import com.mmodding.mmodding_lib.library.base.MModdingClientModInitializer;
 import com.mmodding.mmodding_lib.library.base.MModdingModInitializer;

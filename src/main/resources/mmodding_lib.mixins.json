@@ -99,6 +99,7 @@
     "injectors.WorldMixin"
   ],
   "client": [
+    "accessors.SinglePartEntityModelAccessor",
     "accessors.client.BufferBuilderStorageAccessor",
     "accessors.client.RenderLayerFirstAccessor",
     "accessors.client.RenderLayerSecondAccessor",

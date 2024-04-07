@@ -1,8 +1,8 @@
 package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.MModdingLib;
-import com.mmodding.mmodding_lib.colors.ARGB;
-import com.mmodding.mmodding_lib.colors.Color;
+import com.mmodding.mmodding_lib.library.colors.ARGB;
+import com.mmodding.mmodding_lib.library.colors.Color;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.systems.RenderSystem;

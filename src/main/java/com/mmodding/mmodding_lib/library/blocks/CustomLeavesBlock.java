@@ -96,25 +96,40 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 	}
 
 	private BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
-		int i = this.getMaxDistance();
+		int distance = this.getMaxDistance();
 		BlockPos.Mutable mutable = new BlockPos.Mutable();
 
-		for (Direction direction : Direction.values()) {
-			mutable.set(pos, direction);
-			i = Math.min(i, this.getDistanceFromLog(world.getBlockState(mutable)) + 1);
-			if (i == 1) {
-				break;
+		if (this.hasSeparatedLeaves()) {
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					for (int k = -1; k <= 1; k++) {
+						mutable.set(pos.add(i, j, k));
+						distance = Math.min(distance, this.getDistanceFromLog(world.getBlockState(mutable)) + 1);
+						if (distance == 1) {
+							break;
+						}
+					}
+				}
+			}
+		}
+		else {
+			for (Direction direction : Direction.values()) {
+				mutable.set(pos, direction);
+				distance = Math.min(distance, this.getDistanceFromLog(world.getBlockState(mutable)) + 1);
+				if (distance == 1) {
+					break;
+				}
 			}
 		}
 
-		return state.with(this.getDistanceProperty(), i);
+		return state.with(this.getDistanceProperty(), distance);
 	}
 
 	private int getDistanceFromLog(BlockState state) {
 		if (this.isLogValid(state)) {
 			return 0;
 		}
-		else if (state.getBlock() instanceof CustomLeavesBlock || this.hasSeparatedLeaves()) {
+		else if (state.isOf(this)) {
 			return state.get(this.getDistanceProperty());
 		}
 		else {
