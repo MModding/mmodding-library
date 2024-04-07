@@ -1,13 +1,20 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.mmodding_lib.ducks.LivingEntityDuckInterface;
+import com.mmodding.mmodding_lib.library.client.render.entity.animation.DeathAnimation;
 import com.mmodding.mmodding_lib.library.entities.data.MModdingTrackedDataHandlers;
 import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.ObjectUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,9 +34,37 @@ public abstract class LivingEntityMixin extends EntityMixin implements LivingEnt
 		MModdingTrackedDataHandlers.IDENTIFIER_LIST
 	);
 
+	@Shadow
+	public int deathTime;
+
 	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setStuckArrowCount(I)V"))
 	private void tick(CallbackInfo ci) {
 		this.deleteStuckArrowType();
+	}
+
+	@WrapOperation(method = "updatePostDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendEntityStatus(Lnet/minecraft/entity/Entity;B)V"))
+	private void conditionallyCancelDeathAnimationFirstPart(World instance, Entity entity, byte status, Operation<Void> original) {
+		if (!(entity instanceof DeathAnimation animation) || animation.executeDeathAnimation() != null) {
+			original.call(instance, entity, status);
+		}
+	}
+
+	@WrapOperation(method = "updatePostDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;remove(Lnet/minecraft/entity/Entity$RemovalReason;)V"))
+	private void conditionallyCancelDeathAnimationSecondPart(LivingEntity instance, Entity.RemovalReason removalReason, Operation<Void> original) {
+		if (!(instance instanceof DeathAnimation animation) || animation.executeDeathAnimation() != null) {
+			original.call(instance, removalReason);
+		}
+	}
+
+	@Inject(method = "updatePostDeath", at = @At(value = "TAIL"))
+	private void updateDeath(CallbackInfo ci) {
+		LivingEntity livingEntity = (LivingEntity) (Object) this;
+		if (livingEntity instanceof DeathAnimation deathAnimation) {
+			if (this.deathTime == deathAnimation.getDeathTime() && !this.getWorld().isClient()) {
+				this.world.sendEntityStatus(livingEntity, EntityStatuses.ADD_DEATH_PARTICLES);
+				this.remove(Entity.RemovalReason.KILLED);
+			}
+		}
 	}
 
 	@Override

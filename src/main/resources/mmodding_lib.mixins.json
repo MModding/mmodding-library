@@ -118,6 +118,7 @@
     "injectors.client.InGameHudMixin",
     "injectors.client.ItemRenderContextMixin",
     "injectors.client.ItemRendererMixin",
+    "injectors.client.LivingEntityRendererMixin",
     "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",

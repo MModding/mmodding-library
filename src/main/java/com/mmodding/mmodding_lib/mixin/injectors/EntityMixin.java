@@ -116,6 +116,9 @@ public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityD
 	@Shadow
 	public abstract float getPitch();
 
+	@Shadow
+	public abstract void remove(Entity.RemovalReason reason);
+
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
