@@ -51,8 +51,9 @@ allprojects {
 
     // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
     // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
-    dependencies {
-        minecraft libs.minecraft
+
+	dependencies {
+		minecraft libs.minecraft
         mappings variantOf(projectLibs.quilt.mappings) { classifier 'intermediary-v2' }
 
         modImplementation libs.quilt.loader
@@ -117,7 +118,6 @@ dependencies {
 	api include(project(":mmodding-block"))
 	api include(project(":mmodding-core"))
 	api include(project(":mmodding-feature"))
-	api include(project(":mmodding-fluid"))
 	api include(project(":mmodding-item"))
 	api include(project(":mmodding-worldgen"))
 }
@@ -214,7 +214,7 @@ abstract class GenerateQMJ extends DefaultTask {
 			}
 		}
 
-		projectName = projectName + "Library"
+		projectName = projectName.substring(0, projectName.size() - 1)
 
 		String projectDescription
 
@@ -222,7 +222,7 @@ abstract class GenerateQMJ extends DefaultTask {
 			projectDescription = "Library made by MModding Team to provide few sets of modding tools."
 		}
 		else {
-			projectDescription = projectName - "MModding " + " of MModding"
+			projectDescription = projectName - "MModding " + " Library of MModding"
 		}
 
 		QmjBuilder.buildQmj(
@@ -412,7 +412,7 @@ final class QmjBuilder {
 			.name("schema_version").value(1)
 			.name("quilt_loader")
 			.beginObject() // Quilt Loader Block Start
-				.name("group").value("com.mmodding.library")
+				.name("group").value("com.mmodding" + (projectId != "mmodding" ? "." + projectId - "mmodding_" : ""))
 				.name("id").value(projectId)
 				.name("version").value(projectVersion)
 				.name("metadata")
@@ -430,16 +430,10 @@ final class QmjBuilder {
 						.name("issues").value("https://github.com/MModding/mmodding-library/issues")
 						.name("sources").value("https://github.com/MModding/mmodding-library")
 					.endObject() // Quilt Loader MetaData Contact Block End
-					.name("license")
-					.beginObject() // Quilt Loader MetaData License Block Start
-						.name("name").value("Code: LGPL-3.0\\nAssets: All Rights Reserved")
-						.name("id").value("Code-LGPL-3.0-Assets-ARR")
-						.name("url").value("../LICENSE")
-					.endObject() // Quilt Loader MetaData License Block End
+					.name("license").value("Code: LGPL-3.0\\nAssets: All Rights Reserved")
 					.name("icon").value("assets/" + projectId + "/icon.png")
 				.endObject() // Quilt Loader MetaData Block End
 			.name("intermediate_mappings").value("net.fabricmc:intermediary")
-			.name("load_type").value("if_possible")
 			.name("depends")
 			.beginArray() // Depends Block Start
 				.beginObject()
@@ -455,17 +449,10 @@ final class QmjBuilder {
 					.name("versions").value(">=" + minecraftVersion)
 				.endObject()
 			.endArray() // Depends Block End
-			.name("provides")
-			.beginArray() // Provides Block Start
-
-		if (projectId != "mmodding") {
-			writer.value(projectId.replace("_", "-"))
-		}
-
-		writer.value(projectId + "_library")
-				.value(projectId.replace("_", "-") + "-library")
-				.value(projectId + "_api")
-				.value(projectId.replace("_", "-") + "-api")
+			.name("provides") // Provides Block Start
+			.beginArray()
+				.value("mmodding-api")
+				.value("mmodding_api")
 			.endArray() // Provides Block End
 
 		if (qmjProperties.containsKey("entrypoints")) {

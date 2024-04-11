@@ -41,7 +41,7 @@ public class BehavedFluidBlock extends Block {
 
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, RandomGenerator random) {
-		this.behavior.get().randomDisplayTick(state, world, pos, random);
+		this.behavior.get().randomDisplayTick(FluidStateInfo.of(state, this.behavior.get()), world, pos, random);
 	}
 
 	@Override
