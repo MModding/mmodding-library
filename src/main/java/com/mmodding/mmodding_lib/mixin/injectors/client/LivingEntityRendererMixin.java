@@ -18,18 +18,24 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
 
 	@ModifyExpressionValue(method = "getOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/OverlayTexture;getV(Z)I"))
 	private static int conditionallyCancelDeathAnimationRedOverlay(int original, LivingEntity entity, float whiteOverlayProgress) {
-		if (!(entity instanceof DeathAnimation animation) || animation.executeDeathAnimation() != null) {
+		if (!(entity instanceof DeathAnimation animation)) {
 			return original;
 		}
 		else {
-			boolean bool = entity.hurtTime > 0 || (animation.applyRedOverlayOnDeath() && entity.deathTime > 0);
+			boolean bool;
+			if (animation.applyRedOverlayOnDeath()) {
+				bool = entity.hurtTime > 0 || entity.deathTime > 0;
+			}
+			else {
+				bool = entity.hurtTime > 0;
+			}
 			return OverlayTexture.packUv(OverlayTexture.getU(whiteOverlayProgress), OverlayTexture.getV(bool));
 		}
 	}
 
 	@WrapOperation(method = "setupTransforms", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lnet/minecraft/util/math/Quaternion;)V", ordinal = 1))
 	private void conditionallyCancelDeathAnimationTransform(MatrixStack instance, Quaternion quaternion, Operation<Void> original, @Local(argsOnly = true) T entity) {
-		if (!(entity instanceof DeathAnimation animation) || animation.executeDeathAnimation() != null) {
+		if (!(entity instanceof DeathAnimation animation) || animation.executeDeathAnimation() == null) {
 			original.call(instance, quaternion);
 		}
 	}
