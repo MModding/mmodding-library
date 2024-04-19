@@ -15,15 +15,17 @@ public class AnimationManager {
 	private final Animation idle;
 	private final Animation falling;
 	private final Animation dodge;
+	private final Animation dying;
 
 	private Animation animationCache = null;
 
-	public AnimationManager(SinglePartEntityModel<?> model, Animation moving, Animation idle, Animation falling, Animation dodge) {
+	public AnimationManager(SinglePartEntityModel<?> model, Animation moving, Animation idle, Animation falling, Animation dodge, Animation dying) {
 		this.model = model;
 		this.moving = moving;
 		this.idle = idle;
 		this.falling = falling;
 		this.dodge = dodge;
+		this.dying = dying;
 	}
 
 	private void updateFall(AnimationData data, int age, GroundChecker groundChecker) {
@@ -70,21 +72,27 @@ public class AnimationManager {
 
 	public void handle(AnimationData data, float animationProgress, int age, GroundChecker groundChecker, MovingChecker movingChecker) {
 		this.model.getPart().traverse().forEach(ModelPart::resetTransform);
-		if (data.dodge.isAnimating()) {
-			this.switchAnimation(data, this.dodge, data.dodge, animationProgress, age);
-		}
-		else {
-			this.updateFall(data, age, groundChecker);
-			if (data.fallingCount < 13) {
-				if (movingChecker.isMoving()) {
-					this.switchAnimation(data, this.moving, data.moving, animationProgress, age);
-				} else {
-					this.switchAnimation(data, this.idle, data.idle, animationProgress, age);
+		this.updateFall(data, age, groundChecker);
+		if (!data.dying.isAnimating()) {
+			if (!data.dodge.isAnimating()) {
+				if (data.fallingCount < 13) {
+					if (movingChecker.isMoving()) {
+						this.switchAnimation(data, this.moving, data.moving, animationProgress, age);
+					}
+					else {
+						this.switchAnimation(data, this.idle, data.idle, animationProgress, age);
+					}
+				}
+				else {
+					this.switchAnimation(data, this.falling, data.falling, animationProgress, age);
 				}
 			}
 			else {
-				this.switchAnimation(data, this.falling, data.falling, animationProgress, age);
+				this.switchAnimation(data, this.dodge, data.dodge, animationProgress, age);
 			}
+		}
+		else {
+			this.switchAnimation(data, this.dying, data.dodge, animationProgress, age);
 		}
 	}
 
