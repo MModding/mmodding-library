@@ -11,6 +11,9 @@ public class AnimationData {
 	public final AnimationState falling = new AnimationState();
 	public final AnimationState dodge = new AnimationState();
 
+	public int transitionAge;
+	public int transitionCount;
+
 	public int fallingAge;
 	public int fallingCount;
 
