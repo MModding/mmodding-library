@@ -29,13 +29,13 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
 			else {
 				bool = entity.hurtTime > 0;
 			}
-			return OverlayTexture.packUv(OverlayTexture.getU(whiteOverlayProgress), OverlayTexture.getV(bool));
+			return OverlayTexture.getV(bool);
 		}
 	}
 
 	@WrapOperation(method = "setupTransforms", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lnet/minecraft/util/math/Quaternion;)V", ordinal = 1))
 	private void conditionallyCancelDeathAnimationTransform(MatrixStack instance, Quaternion quaternion, Operation<Void> original, @Local(argsOnly = true) T entity) {
-		if (!(entity instanceof DeathAnimation animation) || animation.executeDeathAnimation() == null) {
+		if (!(entity instanceof DeathAnimation animation) || animation.getDeathAnimation() == null) {
 			original.call(instance, quaternion);
 		}
 	}

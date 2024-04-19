@@ -44,14 +44,14 @@ public abstract class LivingEntityMixin extends EntityMixin implements LivingEnt
 
 	@WrapOperation(method = "updatePostDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;sendEntityStatus(Lnet/minecraft/entity/Entity;B)V"))
 	private void conditionallyCancelDeathAnimationFirstPart(World instance, Entity entity, byte status, Operation<Void> original) {
-		if (!(entity instanceof DeathAnimation animation) || animation.executeDeathAnimation() == null) {
+		if (!(entity instanceof DeathAnimation animation) || animation.getDeathAnimation() == null) {
 			original.call(instance, entity, status);
 		}
 	}
 
 	@WrapOperation(method = "updatePostDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;remove(Lnet/minecraft/entity/Entity$RemovalReason;)V"))
 	private void conditionallyCancelDeathAnimationSecondPart(LivingEntity instance, Entity.RemovalReason removalReason, Operation<Void> original) {
-		if (!(instance instanceof DeathAnimation animation) || animation.executeDeathAnimation() == null) {
+		if (!(instance instanceof DeathAnimation animation) || animation.getDeathAnimation() == null) {
 			original.call(instance, removalReason);
 		}
 	}
@@ -60,8 +60,8 @@ public abstract class LivingEntityMixin extends EntityMixin implements LivingEnt
 	private void updateDeath(CallbackInfo ci) {
 		LivingEntity livingEntity = (LivingEntity) (Object) this;
 		if (livingEntity instanceof DeathAnimation deathAnimation) {
-			if (deathAnimation.executeDeathAnimation() != null && this.deathTime - 1 == 0) {
-				deathAnimation.executeDeathAnimation().run();
+			if (deathAnimation.getDeathAnimation() != null && this.deathTime - 1 == 0) {
+				deathAnimation.getDeathAnimation().run();
 			}
 			if (this.deathTime == deathAnimation.getDeathTime() && !this.getWorld().isClient()) {
 				this.world.sendEntityStatus(livingEntity, EntityStatuses.ADD_DEATH_PARTICLES);

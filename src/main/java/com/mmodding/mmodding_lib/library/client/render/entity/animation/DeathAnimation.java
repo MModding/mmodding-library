@@ -6,5 +6,5 @@ public interface DeathAnimation {
 
 	int getDeathTime();
 
-	Runnable executeDeathAnimation();
+	Runnable getDeathAnimation();
 }
