@@ -40,21 +40,21 @@ public abstract class FluidBehavior implements FluidLike {
 		this.properties = fluidProperties;
 	}
 
-	public abstract Direction getFlowDirection(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract Direction getFlowDirection(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
-	public abstract int getFlowSpeedFactor(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getFlowSpeedFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
-	public abstract int getMovementFactor(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getMovementFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
 	// When you want to pass through a flowing fluid, with which strength does it try to get you out
-	public abstract int getStrengthFactor(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getStrengthFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
 	// When you are in the fluid, how much it want to push you to the bottom
-	public abstract int getPressureFactor(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getPressureFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
-	public abstract boolean canBoatsBePlacedUpon(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract boolean canBoatsBePlacedUpon(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
-	public abstract int randomDisplayTick(BlockState state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int randomDisplayTick(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
 
 	public final int getMaxFlowStage() {
 		return this.flowStages.stream().map(Property.Value::value).max(Comparator.comparingInt(i -> i)).orElseThrow();
