@@ -7,7 +7,7 @@ public class CommonFluidProperties {
 
 	public static final FluidProperty<Boolean> HYDRATABLE = FluidProperty.of(MModdingLibrary.createId("hydratable"), false);
 
-	// kg/m3
+	// kg/m^3
 	public static final FluidProperty<Integer> DENSITY = FluidProperty.of(MModdingLibrary.createId("density"), 997);
 
 	// Kelvin
