@@ -5,7 +5,7 @@
 being the one hosted in that repository.
 
 Parts of the code excluded by any license stated here and using other ones,
- happening notably when the codes comes from or is based on a specific part
+ happening notably when some code comes from or is based on specific parts
  of code belonging to another project:
 
 - Inside the ./build.gradle file, the static method named "buildQmj" in the GenerateQMJ class,
