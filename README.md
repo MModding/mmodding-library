@@ -2,6 +2,4 @@
 
 The Official MModding Experiments Repository.
 
-These Experiments are [licensed](LICENSE):
-- Code is under LGPLv3 License.
-- Assets are All Rights Reserved.
+These Experiments are [licensed under the MModding Copyright Statement Notice Version 1](LICENSE).

@@ -432,8 +432,8 @@ final class QmjBuilder {
 					.endObject() // Quilt Loader MetaData Contact Block End
 					.name("license")
 					.beginObject() // Quilt Loader MetaData License Block Start
-						.name("name").value("Code: LGPL-3.0\\nAssets: All Rights Reserved")
-						.name("id").value("Code-LGPL-3.0-Assets-ARR")
+						.name("name").value("MModding Copyright Statement Notice Version 1")
+						.name("id").value("MCSN-1.0")
 						.name("url").value("../LICENSE")
 					.endObject() // Quilt Loader MetaData License Block End
 					.name("icon").value("assets/" + projectId + "/icon.png")

@@ -1,7 +1,56 @@
-License for MModding Library Past, Current and Future Assets:
+                   MMODDING COPYRIGHT STATEMENT NOTICE
+                        Version 1, 22 April 2024
 
-Copyright (c) 2023 MModding
+ "The Project" refers to a covered work governed by this copyright notice,
+being the one hosted in that repository.
+
+Parts of the code excluded by any license stated here and using another one,
+ happening notably when the codes comes from or is based on a specific part
+ of code belonging to another project:
+
+- Inside the ./build.gradle file, the static method named "buildQmj" in the GenerateQMJ class,
+ is licensed under the license used in the "QuiltMC" Project named "Quilt Standard Libraries".
+
+ This copyright notice includes the LGPL-3.0, only applied under certain
+conditions related to the MModding Organization activities.
+
+ If you do not or if you cannot consider this copyright notice as a valid
+license. Then consider this project as a following All Rights Reserved Project:
+
+Copyright (c) 2023-2024 MModding
 All rights reserved.
+
+ If you do or can consider this copyright notice as a valid license,
+then are the following conditions where LGPL-3.0 applies (when the
+license does not apply, the project is considered as All Rights
+Reserved):
+
+- Forking the project is allowed if the goal is to contribute directly to the
+ original project. All other forms as fork, including hard-forks, does not allow
+ the LGPL-3.0 and then are explicitly prohibited.
+
+- In association with the previous point, you can only fork (so, to contribute)
+ by using the same frameworks as the ones used by the current project state
+ (there can be an exception if one leader of MModding specifies it) to let
+ the LGPL-3.0 be applied. Otherwise LGPL-3.0 don't apply and the fork
+ (contribution) is stated as prohibited.
+
+- You can use some small parts of this project's code in order to help
+ yourself to make other stuff, and in that case you don't have to do
+ anything except from stating that this project helped you (license
+ reference is not needed). Though copy-pasting lot of code from this
+ project (> than 50 lines) will also need to link to the project's
+ license. Using parts of the project without doing the previous
+ indications won't apply LGPL-3.0 license, and then your work
+ is stated as making copyright issues, which is prohibited.
+
+- LGPL-3.0 license do not apply on any form of assets (there
+can be an exception if one leader of MModding specifies it).
+Though it is still allowed to take inspiration from the assets,
+as long as it is different enough to not be considered as
+copy-pasting.
+
+LGPL-3.0 License, applying when all conditions are met:
 
 License for Code:
 
