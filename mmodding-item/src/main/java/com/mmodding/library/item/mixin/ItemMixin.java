@@ -35,7 +35,7 @@ public class ItemMixin implements Registrable<Item> {
 	private RegistrationStatus status = RegistrationStatus.UNREGISTERED;
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	private void cancelBuiltinBlocks(Item.Settings settings, CallbackInfo ci) {
+	private void cancelBuiltinItems(Item.Settings settings, CallbackInfo ci) {
 		if (ItemMixin.BUILTIN_ITEMS.contains(this.as())) {
 			this.status = RegistrationStatus.CANCELLED;
 		}
