@@ -1,6 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
-import com.mmodding.mmodding_lib.library.client.render.model.HandheldModels;
+import com.mmodding.mmodding_lib.library.client.render.model.InventoryModels;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
@@ -33,7 +33,7 @@ public abstract class ModelLoaderMixin {
 
 	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelLoader;addModel(Lnet/minecraft/client/util/ModelIdentifier;)V", shift = At.Shift.AFTER, ordinal = 1))
 	private void appendModdedModels(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
-		HandheldModels.MODDED_HANDHELD_MODELS.forEach(this::mmodding_lib$addModdedModel);
+		InventoryModels.MODDED_HANDHELD_MODELS.forEach(this::mmodding_lib$addModdedModel);
 	}
 
 	@Unique

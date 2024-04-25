@@ -8,12 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @FunctionalInterface
-public interface HandheldModels {
+public interface InventoryModels {
 
 	Set<Identifier> MODDED_HANDHELD_MODELS = new HashSet<>();
 
-	Event<HandheldModels> EVENT = Event.create(HandheldModels.class, callbacks -> stack -> {
-		for (HandheldModels callback : callbacks) {
+	Event<InventoryModels> EVENT = Event.create(InventoryModels.class, callbacks -> stack -> {
+		for (InventoryModels callback : callbacks) {
 			Identifier identifier = callback.getModelForStack(stack);
 			if (identifier != null) {
 				return identifier;
