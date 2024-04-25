@@ -33,7 +33,7 @@ public abstract class ModelLoaderMixin {
 
 	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/ModelLoader;addModel(Lnet/minecraft/client/util/ModelIdentifier;)V", shift = At.Shift.AFTER, ordinal = 1))
 	private void appendModdedModels(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
-		InventoryModels.MODDED_HANDHELD_MODELS.forEach(this::mmodding_lib$addModdedModel);
+		InventoryModels.REGISTRY.forEach(this::mmodding_lib$addModdedModel);
 	}
 
 	@Unique

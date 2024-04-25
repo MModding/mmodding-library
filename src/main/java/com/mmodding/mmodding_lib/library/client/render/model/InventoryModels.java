@@ -10,7 +10,7 @@ import java.util.Set;
 @FunctionalInterface
 public interface InventoryModels {
 
-	Set<Identifier> MODDED_HANDHELD_MODELS = new HashSet<>();
+	Set<Identifier> REGISTRY = new HashSet<>();
 
 	Event<InventoryModels> EVENT = Event.create(InventoryModels.class, callbacks -> stack -> {
 		for (InventoryModels callback : callbacks) {
