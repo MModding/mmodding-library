@@ -2,18 +2,28 @@ package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import com.mmodding.mmodding_lib.ducks.BakedModelManagerDuckInterface;
+import com.mmodding.mmodding_lib.library.client.render.model.HandheldModels;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,6 +32,30 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
+
+	@Shadow
+	@Final
+	private ItemModels models;
+
+	@WrapOperation(method = "getHeldItemModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/BakedModel;getOverrides()Lnet/minecraft/client/render/model/json/ModelOverrideList;"))
+	private ModelOverrideList wrapHeldModels(BakedModel instance, Operation<ModelOverrideList> original, @Local(argsOnly = true) ItemStack stack) {
+		Identifier identifier = HandheldModels.EVENT.invoker().getModelForStack(stack);
+		if (identifier != null) {
+			BakedModel bakedModel = ((BakedModelManagerDuckInterface) this.models.getModelManager()).mmodding_lib$getModel(identifier);
+			return original.call(bakedModel);
+		}
+		return original.call(instance);
+	}
+
+	@WrapOperation(method = "getHeldItemModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/json/ModelOverrideList;apply(Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/entity/LivingEntity;I)Lnet/minecraft/client/render/model/BakedModel;"))
+	private BakedModel applyHeldModels(ModelOverrideList instance, BakedModel model, ItemStack stack, ClientWorld world, LivingEntity entity, int seed, Operation<BakedModel> original) {
+		Identifier identifier = HandheldModels.EVENT.invoker().getModelForStack(stack);
+		if (identifier != null) {
+			BakedModel bakedModel = ((BakedModelManagerDuckInterface) this.models.getModelManager()).mmodding_lib$getModel(identifier);
+			return original.call(instance, bakedModel, stack, world, entity, seed);
+		}
+		return original.call(instance, model, stack, world, entity, seed);
+	}
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
     private void hook(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci, @Share("itemStack") LocalRef<ItemStack> ref) {

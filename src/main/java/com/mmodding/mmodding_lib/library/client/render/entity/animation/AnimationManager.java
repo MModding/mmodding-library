@@ -75,7 +75,7 @@ public class AnimationManager {
 		this.updateFall(data, age, groundChecker);
 		if (!data.dying.isAnimating()) {
 			if (!data.dodge.isAnimating()) {
-				if (data.fallingCount < 13) {
+				if (data.fallingCount < 13 || this.falling == null) {
 					if (movingChecker.isMoving()) {
 						this.switchAnimation(data, this.moving, data.moving, animationProgress, age);
 					}
@@ -92,7 +92,7 @@ public class AnimationManager {
 			}
 		}
 		else {
-			this.switchAnimation(data, this.dying, data.dodge, animationProgress, age);
+			this.switchAnimation(data, this.dying, data.dying, animationProgress, age);
 		}
 	}
 
