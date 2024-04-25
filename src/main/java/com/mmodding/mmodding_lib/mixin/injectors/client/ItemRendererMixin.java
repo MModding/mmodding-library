@@ -37,7 +37,7 @@ public abstract class ItemRendererMixin {
 	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/BakedModel;getTransformation()Lnet/minecraft/client/render/model/json/ModelTransformation;"))
 	private void wrapHeldModels(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci, @Local(argsOnly = true) LocalRef<BakedModel> mutableModel) {
 		Identifier identifier = InventoryModels.EVENT.invoker().getModelForStack(stack);
-		if ((renderMode == ModelTransformation.Mode.GUI || renderMode == ModelTransformation.Mode.GROUND || renderMode == ModelTransformation.Mode.FIXED) && identifier != null) {
+		if ((renderMode == ModelTransformation.Mode.GUI) && identifier != null) {
 			mutableModel.set(((BakedModelManagerDuckInterface) this.models.getModelManager()).mmodding_lib$getModel(identifier));
 		}
 	}
