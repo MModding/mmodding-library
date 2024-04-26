@@ -39,6 +39,7 @@ public class MModdingLibClient implements ClientModInitializer {
 		ClientEvents.register();
 		ClientPacketReceivers.register();
 		ClientPendingRequestManagers.register();
+		ClientModelPredicates.register();
 		ClientGlintPacks.register();
 		ClientGlintPackOverrides.register();
 
