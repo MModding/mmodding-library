@@ -15,10 +15,10 @@ public class CustomSpearItem extends TridentItem implements ItemRegistrable {
 	private final LaunchFactory<? extends SpearEntity> launchFactory;
 
 	public CustomSpearItem(Settings settings) {
-		this(settings, null);
+		this(null, settings);
 	}
 
-    public CustomSpearItem(Settings settings, LaunchFactory<? extends SpearEntity> launchFactory) {
+    public CustomSpearItem(LaunchFactory<? extends SpearEntity> launchFactory, Settings settings) {
 		super(settings);
 	    this.launchFactory = launchFactory;
     }

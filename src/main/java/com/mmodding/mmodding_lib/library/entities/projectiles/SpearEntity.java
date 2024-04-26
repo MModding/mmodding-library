@@ -12,18 +12,18 @@ import net.minecraft.world.World;
 
 public class SpearEntity extends TridentEntity {
 
-	public SpearEntity(EntityType<? extends SpearEntity> entityType, World world) {
+	public SpearEntity(EntityType<? extends SpearEntity> entityType, World world, ItemStack stack) {
 		super(entityType, world);
+		((TridentEntityAccessor) this).setTridentStack(stack.copy());
 	}
 
 	public SpearEntity(EntityType<? extends SpearEntity> entityType, World world, LivingEntity owner, ItemStack stack) {
-		this(entityType, world);
+		this(entityType, world, stack);
 		this.setPosition(owner.getX(), owner.getEyeY() - 0.1F, owner.getZ());
 		this.setOwner(owner);
 		if (owner instanceof PlayerEntity) {
 			this.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
 		}
-		((TridentEntityAccessor) this).setTridentStack(stack.copy());
 		this.dataTracker.set(TridentEntityAccessor.getLoyalty(), (byte) EnchantmentHelper.getLoyalty(stack));
 		this.dataTracker.set(TridentEntityAccessor.getEnchanted(), stack.hasGlint());
 	}
