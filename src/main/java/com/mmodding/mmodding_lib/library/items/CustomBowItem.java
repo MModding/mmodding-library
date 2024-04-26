@@ -5,24 +5,25 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 public class CustomBowItem extends BowItem implements ItemRegistrable {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	private final Item defaultArrowItem;
+	private final Supplier<Item> defaultArrowItem;
 
 	public CustomBowItem(Settings settings) {
-		this(Items.ARROW, settings);
+		this(() -> Items.ARROW, settings);
 	}
 
-    public CustomBowItem(Item defaultArrowItem, Settings settings) {
+    public CustomBowItem(Supplier<Item> defaultArrowItem, Settings settings) {
 		super(settings);
 		this.defaultArrowItem = defaultArrowItem;
 	}
 
 	public Item getDefaultArrowItem() {
-		return this.defaultArrowItem;
+		return this.defaultArrowItem.get();
 	}
 
     @Override
