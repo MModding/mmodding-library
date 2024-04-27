@@ -59,7 +59,18 @@ public class GlintPack {
 		return new GlintPack(texture, true, true, true, true, true, true, true);
 	}
 
-	public static Optional<GlintPack> of(ItemStack stack) {
+	public static Optional<GlintPack> of(@Nullable ItemStack stack) {
+		if (stack != null) {
+			Identifier identifier = GlintPack.getGlintPackId(stack);
+			if (identifier != null) {
+				return Optional.ofNullable(MModdingClientGlobalMaps.getGlintPack(identifier));
+			}
+		}
+		return Optional.empty();
+	}
+
+	@Nullable
+	public static Identifier getGlintPackId(@Nullable ItemStack stack) {
 		if (stack != null) {
 			Identifier identifier;
 			if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(stack.getItem())) {
@@ -67,10 +78,10 @@ public class GlintPack {
 			} else {
 				identifier = stack.getHiddenDataStorage().getIdentifier(new MModdingIdentifier("glint_pack"));
 			}
-			return Optional.ofNullable(MModdingClientGlobalMaps.getGlintPack(identifier));
+			return identifier;
 		}
 		else {
-			return Optional.empty();
+			return null;
 		}
 	}
 

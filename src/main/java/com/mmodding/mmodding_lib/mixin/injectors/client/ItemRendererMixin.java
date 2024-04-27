@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mmodding.mmodding_lib.ducks.BakedModelManagerDuckInterface;
+import com.mmodding.mmodding_lib.ducks.ItemRendererDuckInterface;
 import com.mmodding.mmodding_lib.library.client.render.model.InventoryModels;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -21,6 +22,7 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,7 +30,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Mixin(ItemRenderer.class)
-public abstract class ItemRendererMixin {
+public abstract class ItemRendererMixin implements ItemRendererDuckInterface {
+
+	@Unique
+	private VertexConsumer vertices;
 
 	@Shadow
 	@Final
@@ -86,4 +91,19 @@ public abstract class ItemRendererMixin {
 		);
 		return value.get();
     }
+
+	@WrapOperation(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderBakedItemModel(Lnet/minecraft/client/render/model/BakedModel;Lnet/minecraft/item/ItemStack;IILnet/minecraft/client/util/math/MatrixStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V"))
+	private void wrapVertices(ItemRenderer instance, BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices, Operation<Void> original) {
+		original.call(instance, model, stack, light, overlay, matrices, this.vertices != null ? this.vertices : vertices);
+	}
+
+	@Override
+	public void mmodding_lib$setVertices(VertexConsumer vertices) {
+		this.vertices = vertices;
+	}
+
+	@Override
+	public void mmodding_lib$clearVertices() {
+		this.vertices = null;
+	}
 }

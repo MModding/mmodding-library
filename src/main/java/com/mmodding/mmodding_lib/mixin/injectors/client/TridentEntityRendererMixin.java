@@ -40,7 +40,7 @@ public abstract class TridentEntityRendererMixin extends EntityRendererMixin<Tri
 				tridentEntity.isEnchanted()
 			);
 
-			this.model.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
+			this.model.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
 
 			matrixStack.pop();
 			super.render(tridentEntity, f, g, matrixStack, vertexConsumerProvider, i);
