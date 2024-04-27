@@ -38,10 +38,13 @@ public class SpearItemEntityRenderer<T extends SpearEntity> extends EntityRender
 
 		RenderLayer layer = RenderLayers.getItemLayer(stack, true);
 		AtomicReference<VertexConsumer> vertexConsumer = new AtomicReference<>();
-		spearEntity.getGlintPack().ifPresentOrElse(identifier -> {
-			vertexConsumer.set(MModdingClientGlobalMaps.getGlintPack(identifier).getDirectItemConsumer(vertexConsumers, layer, true, spearEntity.isEnchanted()));
-		}, () ->
-			vertexConsumer.set(ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, layer, true, spearEntity.isEnchanted()))
+		spearEntity.getGlintPack().ifPresentOrElse(
+			identifier -> vertexConsumer.set(
+				MModdingClientGlobalMaps.getGlintPack(identifier).getDirectItemConsumer(vertexConsumers, layer, true, spearEntity.isEnchanted())
+			),
+			() -> vertexConsumer.set(
+				ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, layer, true, spearEntity.isEnchanted())
+			)
 		);
 
 		ItemRenderingUtils.renderItemWithVertices(
