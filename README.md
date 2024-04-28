@@ -1,4 +1,4 @@
-![[MModding](https://raw.githubusercontent.com/MModding/art/main/brand/mmodding_dark_banner.png)](https://discord.gg/2Sr83HJpD3)
+[![MModding](https://raw.githubusercontent.com/MModding/art/main/brand/mmodding_dark_banner.png)](https://discord.gg/2Sr83HJpD3)
 
 # MModding-Library #
 
