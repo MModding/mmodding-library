@@ -1,4 +1,4 @@
-[![MModding](https://raw.githubusercontent.com/MModding/mmodding.github.io/main/assets/mmodding_dark_banner.png)](https://discord.gg/2Sr83HJpD3)
+![image](https://github.com/MModding/MModding-Library/assets/84094287/915ec292-2745-4565-b5a9-11aa130e0bef)[![MModding](https://raw.githubusercontent.com/MModding/art/main/brand/mmodding_dark_banner.png)](https://discord.gg/2Sr83HJpD3)
 
 # MModding-Library #
 
@@ -16,11 +16,11 @@ MModding-Library provides detailed documentation in the form of a [Wiki](https:/
 
 Badge for Modders:
 
-<a href="https://modrinth.com/mod/mmodding-library"><img src="https://raw.githubusercontent.com/MModding/mmodding.github.io/main/assets/requires_library.png" width="300"></img></a>
+<a href="https://modrinth.com/mod/mmodding-library"><img src="https://raw.githubusercontent.com/MModding/art/main/mods/library/requires_mmodding_library.png" width="300"></img></a>
 
 Link:
 
-``<a href="https://modrinth.com/mod/mmodding-library"><img src="https://raw.githubusercontent.com/MModding/mmodding.github.io/main/assets/requires_library.png" width="300"></img></a>``
+``<a href="https://modrinth.com/mod/mmodding-library"><img src="https://raw.githubusercontent.com/MModding/art/main/mods/library/requires_mmodding_library.png" width="300"></img></a>``
 
 You can change the size by replacing `width="300"` with whatever size you want.
 
