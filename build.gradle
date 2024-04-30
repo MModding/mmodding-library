@@ -25,11 +25,6 @@ dependencies {
 
 	modImplementation libs.quilt.loader
 
-	// Mixin Extras Importation
-	include libs.mixin.extras
-	implementation libs.mixin.extras
-	annotationProcessor libs.mixin.extras
-
 	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
 	// Quilted Fabric API will automatically pull in the correct QSL version.
 	modImplementation libs.quilted.fabric.api

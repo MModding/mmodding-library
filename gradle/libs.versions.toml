@@ -2,8 +2,7 @@
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 minecraft = "1.19.2"
 quilt_mappings = "1.19.2+build.22"
-quilt_loader = "0.19.2"
-mixin_extras = "0.2.0-beta.11"
+quilt_loader = "0.25.0"
 
 quilted_fabric_api = "4.0.0-beta.30+0.77.0-1.19.2"
 modmenu = "4.0.6"
@@ -12,7 +11,6 @@ modmenu = "4.0.6"
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
 quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
-mixin_extras = { module = "io.github.llamalad7:mixinextras-fabric", version.ref = "mixin_extras" }
 
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
