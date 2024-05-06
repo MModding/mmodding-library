@@ -31,6 +31,10 @@ public interface Reference<T> {
 		throw new IllegalStateException();
 	}
 
+	default Identifier provideId() {
+		throw new IllegalStateException();
+	}
+
 	interface LiteFactory {
 
 		<T> Reference<T> createId(String path);

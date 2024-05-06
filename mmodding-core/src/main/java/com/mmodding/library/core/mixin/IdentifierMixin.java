@@ -13,4 +13,9 @@ public class IdentifierMixin implements Reference<Object> {
 	public RegistryKey<Object> provideKey(Registry<Object> registry) {
 		return RegistryKey.of(registry.getKey(), (Identifier) (Object) this);
 	}
+
+	@Override
+	public Identifier provideId() {
+		return (Identifier) (Object) this;
+	}
 }

@@ -108,7 +108,7 @@ subprojects {
 
 // If you plan to use a different file for the license, don't forget to change the file name here!
 jar {
-    from('LICENSE') {
+    from('LICENSE.md') {
         rename { "${it}_${base.archivesName.get()}" }
     }
 }
@@ -434,7 +434,7 @@ final class QmjBuilder {
 					.beginObject() // Quilt Loader MetaData License Block Start
 						.name("name").value("MModding Copyright Statement Notice Version 1")
 						.name("id").value("MCSN-1.0")
-						.name("url").value("../LICENSE")
+						.name("url").value("../LICENSE.md")
 					.endObject() // Quilt Loader MetaData License Block End
 					.name("icon").value("assets/" + projectId + "/icon.png")
 				.endObject() // Quilt Loader MetaData Block End

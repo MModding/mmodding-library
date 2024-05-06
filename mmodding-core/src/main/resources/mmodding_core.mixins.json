@@ -4,6 +4,7 @@
   "package": "com.mmodding.library.core.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BootstrapMixin",
     "IdentifierMixin",
     "RegistryKeyMixin"
   ],
