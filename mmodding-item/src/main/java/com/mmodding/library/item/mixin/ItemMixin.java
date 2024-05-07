@@ -2,9 +2,9 @@ package com.mmodding.library.item.mixin;
 
 import com.mmodding.library.core.api.registry.Registrable;
 import com.mmodding.library.core.api.registry.RegistrationStatus;
-import com.mmodding.library.item.api.group.ItemGroupQualifier;
-import com.mmodding.library.item.api.group.Qualifiable;
-import com.mmodding.library.item.impl.group.ItemGroupQualifierImpl;
+import com.mmodding.library.item.api.category.ItemCategory;
+import com.mmodding.library.item.api.category.ItemCategoryContainer;
+import com.mmodding.library.item.impl.category.ItemCategoryImpl;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Mixin(Item.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
-public class ItemMixin implements Registrable<Item>, Qualifiable {
+public class ItemMixin implements Registrable<Item>, ItemCategoryContainer {
 
 	@Unique
 	private static final Set<Item> BUILTIN_ITEMS = Arrays.stream(Items.class.getDeclaredFields())
@@ -61,8 +61,8 @@ public class ItemMixin implements Registrable<Item>, Qualifiable {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T applyQualifier(ItemGroupQualifier qualifier) {
-		ItemGroupQualifierImpl.addEntries(qualifier, this.as().getDefaultStack());
+	public <T> T setCategory(ItemCategory category) {
+		ItemCategoryImpl.addEntries(category, this.as().getDefaultStack());
 		return (T) this.as();
 	}
 }

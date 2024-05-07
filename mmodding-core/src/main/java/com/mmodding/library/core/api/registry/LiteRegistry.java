@@ -9,6 +9,8 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 		return new LiteRegistryImpl<>();
 	}
 
+	boolean contains(Identifier identifier);
+
 	T getEntry(Identifier identifier);
 
 	Identifier getIdentifier(T entry);

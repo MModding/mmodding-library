@@ -1,6 +1,6 @@
 {
   "net/minecraft/class_1792": [
     "com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/item/Item;>",
-    "com/mmodding/library/item/api/group/Qualifiable"
+    "com/mmodding/library/item/api/category/ItemCategoryContainer"
   ]
 }

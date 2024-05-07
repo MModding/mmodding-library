@@ -3,18 +3,18 @@ package com.mmodding.library.item.test;
 import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.DefaultContentHolder;
-import com.mmodding.library.item.api.group.ItemGroupQualifier;
+import com.mmodding.library.item.api.category.ItemCategory;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 public class ItemTests implements DefaultContentHolder {
 
-	public static final ItemGroupQualifier QUALIFIER = ItemGroupQualifier.create(Reference.createId("", ""), settings -> {});
+	public static final ItemCategory CATEGORY = ItemCategory.create(Reference.createId("", ""), settings -> {});
 
-	public static final Item FIRST_ITEM = new Item(new QuiltItemSettings()).applyQualifier(QUALIFIER);
+	public static final Item FIRST_ITEM = new Item(new QuiltItemSettings()).setCategory(CATEGORY);
 
-	public static final Item SECOND_ITEM = new Item(new QuiltItemSettings()).applyQualifier(QUALIFIER);
+	public static final Item SECOND_ITEM = new Item(new QuiltItemSettings()).setCategory(CATEGORY);
 
 	@Override
 	public void register(AdvancedContainer mod) {

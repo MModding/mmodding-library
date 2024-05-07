@@ -1,8 +1,9 @@
-package com.mmodding.library.item.impl.group;
+package com.mmodding.library.item.impl.category;
 
 import com.mmodding.library.core.api.Reference;
+import com.mmodding.library.core.api.registry.LiteRegistry;
 import com.mmodding.library.core.impl.PostContent;
-import com.mmodding.library.item.api.group.ItemGroupQualifier;
+import com.mmodding.library.item.api.category.ItemCategory;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -11,30 +12,32 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @ApiStatus.Internal
-public class ItemGroupQualifierImpl implements ItemGroupQualifier {
+public class ItemCategoryImpl implements ItemCategory {
 
-	private static final Set<Supplier<ItemGroupQualifierImpl>> QUALIFIERS = new HashSet<>();
+	private static final Set<Supplier<ItemCategoryImpl>> CATEGORIES = new HashSet<>();
+	private static final LiteRegistry<ItemGroup> GROUPS = LiteRegistry.create();
 
 	private final Reference<ItemGroup> reference;
 	private final SettingsImpl settings;
 	private final Set<ItemStack> entries = new HashSet<>();
 
-	public ItemGroupQualifierImpl(Reference<ItemGroup> reference, Consumer<Settings> settings) {
+	public ItemCategoryImpl(Reference<ItemGroup> reference, Consumer<Settings> settings) {
 		this.reference = reference;
 		SettingsImpl toBePassed = new SettingsImpl();
 		settings.accept(toBePassed);
 		this.settings = toBePassed;
-		ItemGroupQualifierImpl.QUALIFIERS.add(() -> this);
+		ItemCategoryImpl.CATEGORIES.add(() -> this);
 	}
 
-	public static void addEntries(ItemGroupQualifier qualifier, ItemStack... entries) {
-		((ItemGroupQualifierImpl) qualifier).entries.addAll(Arrays.stream(entries).collect(Collectors.toSet()));
+	public static void addEntries(ItemCategory category, ItemStack... entries) {
+		((ItemCategoryImpl) category).entries.addAll(Arrays.stream(entries).collect(Collectors.toSet()));
 	}
 
 	public void init() {
@@ -58,11 +61,22 @@ public class ItemGroupQualifierImpl implements ItemGroupQualifier {
 			builder.backgroundTextureName(this.settings.textureName);
 		}
 		builder.entries((parameters, collector) -> collector.addStacks(this.entries));
+		ItemCategoryImpl.GROUPS.register(this.reference.provideId(), builder.build()); // replaces the future registry
 	}
 
 	@Override
 	public Reference<ItemGroup> getReference() {
 		return this.reference;
+	}
+
+	@Override
+	public Optional<ItemGroup> getItemGroup() {
+		if (ItemCategoryImpl.GROUPS.contains(this.reference.provideId())) {
+			return Optional.of(ItemCategoryImpl.GROUPS.getEntry(this.reference.provideId()));
+		}
+		else {
+			return Optional.empty();
+		}
 	}
 
 	public static class SettingsImpl implements Settings {
@@ -112,8 +126,6 @@ public class ItemGroupQualifierImpl implements ItemGroupQualifier {
 	}
 
 	static {
-		PostContent.POST_CONTENT.register(() -> {
-			QUALIFIERS.forEach(supplier -> supplier.get().init());
-		});
+		PostContent.POST_CONTENT.register(() -> CATEGORIES.forEach(supplier -> supplier.get().init()));
 	}
 }

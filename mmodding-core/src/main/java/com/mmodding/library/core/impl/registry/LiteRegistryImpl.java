@@ -16,6 +16,11 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 	private final Map<T, Identifier> reversed = new Object2ObjectOpenHashMap<>();
 
 	@Override
+	public boolean contains(Identifier identifier) {
+		return this.content.containsKey(identifier);
+	}
+
+	@Override
 	public T getEntry(Identifier identifier) {
 		return this.content.get(identifier);
 	}
