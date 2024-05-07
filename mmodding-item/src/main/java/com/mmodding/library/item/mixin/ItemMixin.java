@@ -61,7 +61,7 @@ public class ItemMixin implements Registrable<Item>, ItemCategoryContainer {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T setCategory(ItemCategory category) {
+	public <T extends Item> T setCategory(ItemCategory category) {
 		ItemCategoryImpl.addEntries(category, this.as().getDefaultStack());
 		return (T) this.as();
 	}

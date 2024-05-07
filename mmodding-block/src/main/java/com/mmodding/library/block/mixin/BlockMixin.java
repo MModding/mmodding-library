@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Mixin(Block.class)
@@ -54,9 +55,9 @@ public class BlockMixin implements BlockWithItem, Registrable<Block>, BlockWithI
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends Block> T withItem(Item.@NotNull Settings settings, @NotNull BiFunction<T, Item.Settings, Item> factory) {
+	public <T extends Block> T withItem(Item.@NotNull Settings settings, @NotNull BiFunction<T, Item.Settings, Item> factory,  @NotNull Function<Item, Item> tweaker) {
 		if (this.item == null) {
-			this.item = factory.apply((T) this.as(), settings);
+			this.item = tweaker.apply(factory.apply((T) this.as(), settings));
 			return (T) this.as();
 		}
 		else {

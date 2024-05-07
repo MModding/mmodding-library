@@ -18,9 +18,9 @@ public class ItemTests implements DefaultContentHolder {
 
 	@Override
 	public void register(AdvancedContainer mod) {
-		mod.withRegistry(Registries.ITEM).execute(init -> {
-			FIRST_ITEM.register(init.createId("first_item"));
-			SECOND_ITEM.register(init.createId("second_item"));
+		mod.withRegistry(Registries.ITEM).execute(pusher -> {
+			FIRST_ITEM.register(pusher.createId("first_item"));
+			SECOND_ITEM.register(pusher.createId("second_item"));
 		});
 	}
 }

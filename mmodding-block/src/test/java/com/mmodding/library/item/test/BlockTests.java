@@ -16,9 +16,9 @@ public class BlockTests implements DefaultContentHolder {
 
 	@Override
 	public void register(AdvancedContainer mod) {
-		mod.withRegistry(Registries.BLOCK).execute(init -> {
-			FIRST_BLOCK.register(init.createId("first_block"));
-			SECOND_BLOCK.register(init.createId("second_block"));
+		mod.withRegistry(Registries.BLOCK).execute(pusher -> {
+			FIRST_BLOCK.register(pusher.createId("first_block"));
+			SECOND_BLOCK.register(pusher.createId("second_block"));
 		});
 	}
 }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @ApiStatus.NonExtendable
 public interface BlockWithItem {
@@ -20,7 +21,15 @@ public interface BlockWithItem {
 		return this.withItem(settings, BlockItem::new);
 	}
 
+	default <T extends Block> T withItem(@NotNull Item.Settings settings, @NotNull Function<Item, Item> tweaker) {
+		return this.withItem(settings, BlockItem::new, tweaker);
+	}
+
 	default <T extends Block> T withItem(@NotNull Item.Settings settings, @NotNull BiFunction<T, Item.Settings, Item> factory) {
+		return this.withItem(settings, factory, item -> item);
+	}
+
+	default <T extends Block> T withItem(@NotNull Item.Settings settings, @NotNull BiFunction<T, Item.Settings, Item> factory,  @NotNull Function<Item, Item> tweaker) {
 		throw new IllegalStateException();
 	}
 }
