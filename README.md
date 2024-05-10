@@ -8,7 +8,7 @@ MModding-Library is a custom library mainly used in the MModdingTeam's mods.
 [![Modrinth](https://modrinth-utils.vercel.app/api/badge/versions?id=J3eDXLuX&logo=true&last=true)](https://www.modrinth.com/mod/mmodding-library/versions)
 [![CurseForge](http://cf.way2muchnoise.eu/versions/694928.svg)](https://www.curseforge.com/minecraft/mc-mods/mmodding-library)
 
-[![JitPack](https://jitpack.io/v/MModding/MModding-Library.svg)](https://jitpack.io/#MModding/MModding-Library)
+[![JitPack](https://jitpack.io/v/com.mmodding/MModding-Library.svg)](https://jitpack.io/#com.mmodding/mmodding-library)
 ![Java CI with Gradle](https://github.com/MModding/MModding-Library/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=main)
 
 ## Usage
