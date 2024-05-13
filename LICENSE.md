@@ -1,4 +1,4 @@
-### License for env.json Past, Current and Future Assets:
+### License for MModding Library Past, Current and Future Assets:
 
 ```
 Copyright (c) 2023-2024 MModding
