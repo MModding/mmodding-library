@@ -12,7 +12,7 @@ MModding-Library is a custom library mainly used in the MModdingTeam's mods.
 ![Java CI with Gradle](https://github.com/MModding/MModding-Library/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=main)
 
 ## Usage
-MModding-Library provides detailed documentation in the form of a [Wiki](https://mmodding.gitbook.io/mmodding-library/). MModding-Library is only available for Quilt 1.18.2.
+MModding-Library provides detailed documentation in the form of a [Wiki](https://mmodding.com/documentation/library). MModding-Library is only available for Quilt 1.18.2.
 
 Badge for Modders:
 
