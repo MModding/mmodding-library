@@ -1,8 +1,8 @@
 package com.mmodding.library.core.impl.registry.companion;
 
 import com.mmodding.library.core.api.registry.LiteRegistry;
-import com.mmodding.library.core.api.registry.companion.RegistryCompanion;
-import com.mmodding.library.core.api.registry.companion.RegistryKeyAttachment;
+import com.mmodding.library.core.api.registry.extension.RegistryCompanion;
+import com.mmodding.library.core.api.registry.extension.RegistryKeyAttachment;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;

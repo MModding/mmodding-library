@@ -2,8 +2,8 @@ package com.mmodding.library.worldgen.api.vein;
 
 import com.mmodding.library.block.api.util.RandomStateContainer;
 import com.mmodding.library.core.api.registry.Registrable;
-import com.mmodding.library.core.api.registry.companion.RegistryCompanion;
-import com.mmodding.library.core.api.registry.companion.RegistryKeyAttachment;
+import com.mmodding.library.core.api.registry.extension.RegistryCompanion;
+import com.mmodding.library.core.api.registry.extension.RegistryKeyAttachment;
 import com.mmodding.library.worldgen.impl.vein.VeinTypeImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.RegistryKeys;

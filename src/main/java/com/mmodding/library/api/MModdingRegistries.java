@@ -1,7 +1,7 @@
 package com.mmodding.library.api;
 
 import com.mmodding.library.core.api.registry.LiteRegistry;
-import com.mmodding.library.core.api.registry.companion.RegistryKeyAttachment;
+import com.mmodding.library.core.api.registry.extension.RegistryKeyAttachment;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.World;
 
