@@ -116,9 +116,9 @@ jar {
 dependencies {
 	api include(project(":mmodding-block"))
 	api include(project(":mmodding-core"))
-	api include(project(":mmodding-feature"))
 	api include(project(":mmodding-fluid"))
 	api include(project(":mmodding-item"))
+	api include(project(":mmodding-java"))
 	api include(project(":mmodding-worldgen"))
 }
 
@@ -426,15 +426,15 @@ final class QmjBuilder {
 					.endObject() // Quilt Loader MetaData Contributors Block End
 					.name("contact")
 					.beginObject() // Quilt Loader MetaData Contact Block Start
-						.name("homepage").value("https://mmodding.github.io")
+						.name("homepage").value("https://mmodding.com")
 						.name("issues").value("https://github.com/MModding/mmodding-library/issues")
 						.name("sources").value("https://github.com/MModding/mmodding-library")
 					.endObject() // Quilt Loader MetaData Contact Block End
 					.name("license")
 					.beginObject() // Quilt Loader MetaData License Block Start
-						.name("name").value("MModding Copyright Statement Notice Version 1")
-						.name("id").value("MCSN-1.0")
-						.name("url").value("../LICENSE.md")
+						.name("name").value("Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved")
+						.name("id").value("Code-PolyForm-Shield-1.0.0-Assets-ARR")
+						.name("url").value("https://github.com/MModding/mmodding-library/blob/main/LICENSE.md")
 					.endObject() // Quilt Loader MetaData License Block End
 					.name("icon").value("assets/" + projectId + "/icon.png")
 				.endObject() // Quilt Loader MetaData Block End

@@ -1,9 +1,9 @@
-package com.mmodding.library.feature.test;
+package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.feature.api.FeaturePack;
-import com.mmodding.library.feature.api.replication.FeatureReplicator;
+import com.mmodding.library.java.api.FeaturePack;
+import com.mmodding.library.java.api.replication.FeatureReplicator;
 import com.mmodding.library.core.api.management.content.DoubleContentHolder;
 import com.mmodding.library.core.api.management.content.ForBeing;
 import net.minecraft.registry.Registry;

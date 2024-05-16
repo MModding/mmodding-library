@@ -1,8 +1,8 @@
-package com.mmodding.library.feature.api.replication;
+package com.mmodding.library.worldgen.api.feature.replication;
 
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.feature.impl.replication.FeatureReplicatorImpl;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
+import com.mmodding.library.worldgen.impl.feature.replication.FeatureReplicatorImpl;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;

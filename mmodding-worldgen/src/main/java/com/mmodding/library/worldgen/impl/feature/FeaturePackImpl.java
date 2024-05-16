@@ -1,8 +1,8 @@
-package com.mmodding.library.feature.impl;
+package com.mmodding.library.worldgen.impl.feature;
 
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.feature.api.FeaturePack;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
+import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import net.minecraft.registry.Holder;
 import net.minecraft.registry.Registry;
 import net.minecraft.world.gen.feature.*;

@@ -1,8 +1,8 @@
-package com.mmodding.library.feature.impl.replication;
+package com.mmodding.library.worldgen.impl.feature.replication;
 
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.feature.api.replication.PlacementModifiers;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
+import com.mmodding.library.worldgen.api.feature.replication.PlacementModifiers;
 import net.minecraft.world.gen.feature.*;
 
 import java.util.ArrayList;
