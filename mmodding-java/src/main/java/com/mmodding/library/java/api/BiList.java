@@ -1,8 +1,7 @@
 package com.mmodding.library.java.api;
 
+import com.mmodding.library.java.api.container.Pair;
 import com.mmodding.library.java.impl.BiListImpl;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +15,7 @@ public interface BiList<E1, E2> extends List<Pair<E1, E2>> {
 	}
 
 	static <E1, E2> Pair<E1, E2> emptyValue() {
-		return new ImmutablePair<>(null, null);
+		return Pair.create(null, null);
 	}
 
 	boolean contains(E1 first, E2 second);

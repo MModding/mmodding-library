@@ -1,8 +1,7 @@
 package com.mmodding.library.java.impl;
 
 import com.mmodding.library.java.api.BiList;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import com.mmodding.library.java.api.container.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -25,46 +24,46 @@ public class BiListImpl<E1, E2> extends ArrayList<Pair<E1, E2>> implements BiLis
 
 	@Override
 	public boolean contains(E1 first, E2 second) {
-		return this.contains(new ImmutablePair<>(first, second));
+		return this.contains(Pair.create(first, second));
 	}
 
 	@Override
 	public E1 getFirst(int index) {
-		return this.get(index).getLeft();
+		return this.get(index).first();
 	}
 
 	@Override
 	public E2 getSecond(int index) {
-		return this.get(index).getRight();
+		return this.get(index).last();
 	}
 
 	@Override
 	public boolean add(E1 first, E2 second) {
-		return this.add(new ImmutablePair<>(first, second));
+		return this.add(Pair.create(first, second));
 	}
 
 	@Override
 	public boolean remove(E1 first, E2 second) {
-		return this.remove(new ImmutablePair<>(first, second));
+		return this.remove(Pair.create(first, second));
 	}
 
 	@Override
 	public Pair<E1, E2> set(int index, E1 first, E2 second) {
-		return this.set(index, new ImmutablePair<>(first, second));
+		return this.set(index, Pair.create(first, second));
 	}
 
 	@Override
 	public void forEachFirst(Consumer<? super E1> action) {
-		this.forEach(value -> action.accept(value.getLeft()));
+		this.forEach(value -> action.accept(value.first()));
 	}
 
 	@Override
 	public void forEachSecond(Consumer<? super E2> action) {
-		this.forEach(value -> action.accept(value.getRight()));
+		this.forEach(value -> action.accept(value.last()));
 	}
 
 	@Override
 	public void forEach(BiConsumer<? super E1, ? super E2> action) {
-		this.forEach(value -> action.accept(value.getLeft(), value.getRight()));
+		this.forEach(value -> action.accept(value.first(), value.last()));
 	}
 }
