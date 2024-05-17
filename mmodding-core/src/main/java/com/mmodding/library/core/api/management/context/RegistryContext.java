@@ -6,11 +6,12 @@ import com.mmodding.library.core.api.management.content.DoubleContentHolder;
 import com.mmodding.library.core.api.management.content.MultipleContentHolder;
 import com.mmodding.library.core.api.management.content.SimpleContentHolder;
 import com.mmodding.library.core.api.management.ContentHolderProvider;
+import com.mmodding.library.java.api.BiList;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -31,15 +32,15 @@ public abstract class RegistryContext {
 
 	@SuppressWarnings("unchecked")
 	public <T1, T2> ContentHolder transform(AdvancedContainer mod, Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries, ContentHolderProvider provider) {
-		List<Pair<RegistryKey<? extends Registry<?>>, Registry<?>>> requiredRegistries = this.retainRequiredRegistries(registries);
+		BiList<RegistryKey<? extends Registry<?>>, Registry<?>> requiredRegistries = this.retainRequiredRegistries(registries);
 		if (this.requiredKeys.length == 0) {
 			throw new IllegalStateException("Context should contain at least one required key");
 		}
 		else if (this.requiredKeys.length == 1) {
-			return ((SimpleContentHolder.Provider<T1>) provider).init((Registry<T1>) requiredRegistries.get(0).getValue(), mod);
+			return ((SimpleContentHolder.Provider<T1>) provider).init((Registry<T1>) requiredRegistries.getSecond(0), mod);
 		}
 		else if (this.requiredKeys.length == 2) {
-			return ((DoubleContentHolder.Provider<T1, T2>) provider).init((Registry<T1>) requiredRegistries.get(0).getValue(), (Registry<T2>) requiredRegistries.get(1).getValue(), mod);
+			return ((DoubleContentHolder.Provider<T1, T2>) provider).init((Registry<T1>) requiredRegistries.getSecond(0), (Registry<T2>) requiredRegistries.getSecond(1), mod);
 		}
 		else {
 			return ((MultipleContentHolder.Provider) provider).init(this.pairListToMap(requiredRegistries), mod);
@@ -50,23 +51,23 @@ public abstract class RegistryContext {
 
 	@SuppressWarnings("unchecked")
 	public <T1, T2> void transfer(AdvancedContainer mod, Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries, ContentHolder holder) {
-		List<Pair<RegistryKey<? extends Registry<?>>, Registry<?>>> requiredRegistries = this.retainRequiredRegistries(registries);
+		BiList<RegistryKey<? extends Registry<?>>, Registry<?>> requiredRegistries = this.retainRequiredRegistries(registries);
 		if (this.requiredKeys.length == 0) {
 			throw new IllegalStateException("Context should contain at least one required key");
 		}
 		else if (this.requiredKeys.length == 1) {
-			((SimpleContentHolder<T1>) holder).register((Registry<T1>) requiredRegistries.get(0).getValue(), mod);
+			((SimpleContentHolder<T1>) holder).register((Registry<T1>) requiredRegistries.getSecond(0), mod);
 		}
 		else if (this.requiredKeys.length == 2) {
-			((DoubleContentHolder<T1, T2>) holder).register((Registry<T1>) requiredRegistries.get(0).getValue(), (Registry<T2>) requiredRegistries.get(1).getValue(), mod);
+			((DoubleContentHolder<T1, T2>) holder).register((Registry<T1>) requiredRegistries.getSecond(0), (Registry<T2>) requiredRegistries.getSecond(1), mod);
 		}
 		else {
 			((MultipleContentHolder) holder).register(this.pairListToMap(requiredRegistries), mod);
 		}
 	}
 
-	private List<Pair<RegistryKey<? extends Registry<?>>, Registry<?>>> retainRequiredRegistries(Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries) {
-		List<Pair<RegistryKey<? extends Registry<?>>, Registry<?>>> requiredRegistries = new ArrayList<>();
+	private BiList<RegistryKey<? extends Registry<?>>, Registry<?>> retainRequiredRegistries(Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries) {
+		BiList<RegistryKey<? extends Registry<?>>, Registry<?>> requiredRegistries = BiList.create();
 		registries.entrySet().stream()
 			.filter(
 				entry -> {
@@ -82,13 +83,13 @@ public abstract class RegistryContext {
 					return passes.get();
 				}
 			)
-			.forEach(entry -> requiredRegistries.add(Pair.of(entry.getKey(), entry.getValue())));
+			.forEach(entry -> requiredRegistries.add(entry.getKey(), entry.getValue()));
 		return requiredRegistries;
 	}
 
-	private Map<RegistryKey<? extends Registry<?>>, Registry<?>> pairListToMap(List<Pair<RegistryKey<? extends Registry<?>>, Registry<?>>> content) {
+	private Map<RegistryKey<? extends Registry<?>>, Registry<?>> pairListToMap(BiList<RegistryKey<? extends Registry<?>>, Registry<?>> content) {
 		Map<RegistryKey<? extends Registry<?>>, Registry<?>> map = new HashMap<>();
-		content.forEach(pair -> map.put(pair.getKey(), pair.getValue()));
+		content.forEach(map::put);
 		return map;
 	}
 }

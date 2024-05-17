@@ -34,7 +34,7 @@ public class BiListImpl<E1, E2> extends ArrayList<Pair<E1, E2>> implements BiLis
 
 	@Override
 	public E2 getSecond(int index) {
-		return this.get(index).last();
+		return this.get(index).second();
 	}
 
 	@Override
@@ -59,11 +59,11 @@ public class BiListImpl<E1, E2> extends ArrayList<Pair<E1, E2>> implements BiLis
 
 	@Override
 	public void forEachSecond(Consumer<? super E2> action) {
-		this.forEach(value -> action.accept(value.last()));
+		this.forEach(value -> action.accept(value.second()));
 	}
 
 	@Override
 	public void forEach(BiConsumer<? super E1, ? super E2> action) {
-		this.forEach(value -> action.accept(value.first(), value.last()));
+		this.forEach(value -> action.accept(value.first(), value.second()));
 	}
 }

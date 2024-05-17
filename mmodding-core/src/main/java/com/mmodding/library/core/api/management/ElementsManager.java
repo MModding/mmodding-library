@@ -3,9 +3,9 @@ package com.mmodding.library.core.api.management;
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.*;
 import com.mmodding.library.core.api.management.context.RegistryContext;
+import com.mmodding.library.java.api.BiList;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import org.apache.commons.lang3.tuple.Pair;
 import org.quiltmc.loader.api.QuiltLoader;
 import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 public class ElementsManager {
 
-	public final List<Pair<? extends RegistryContext, ? extends ContentHolderProvider>> dynamics = new ArrayList<>();
+	public final BiList<RegistryContext, ContentHolderProvider> dynamics = BiList.create();
 
 	public final List<Supplier<DefaultContentHolder>> defaults = new ArrayList<>();
 
@@ -73,9 +73,7 @@ public class ElementsManager {
 
 	public void initDynamicContent(String modId, Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries) {
 		AdvancedContainer mod = this.retrieveContainer(modId);
-		this.dynamics.forEach(pair -> {
-			RegistryContext context = pair.getKey();
-			ContentHolderProvider provider = pair.getValue();
+		this.dynamics.forEach((context, provider) -> {
 			ContentHolder holder = context.transform(mod, registries, provider);
 			this.instances.add(holder);
 			context.transfer(mod, registries, holder);
@@ -92,7 +90,7 @@ public class ElementsManager {
 
 	public static class Builder {
 
-		private final List<Pair<? extends RegistryContext, ? extends ContentHolderProvider>> dynamics = new ArrayList<>();
+		private final BiList<RegistryContext, ContentHolderProvider> dynamics = BiList.create();
 
 		private final List<Supplier<DefaultContentHolder>> defaults = new ArrayList<>();
 
@@ -136,17 +134,17 @@ public class ElementsManager {
 		}
 
 		public <T> ElementsManager.Builder withRegistry(RegistryContext context, SimpleContentHolder.Provider<T> provider) {
-			this.dynamics.add(Pair.of(context, provider));
+			this.dynamics.add(context, provider);
 			return this;
 		}
 
 		public <L, R> ElementsManager.Builder withRegistry(RegistryContext context, DoubleContentHolder.Provider<L, R> provider) {
-			this.dynamics.add(Pair.of(context, provider));
+			this.dynamics.add(context, provider);
 			return this;
 		}
 
 		public ElementsManager.Builder withRegistry(RegistryContext context, MultipleContentHolder.Provider provider) {
-			this.dynamics.add(Pair.of(context, provider));
+			this.dynamics.add(context, provider);
 			return this;
 		}
 
