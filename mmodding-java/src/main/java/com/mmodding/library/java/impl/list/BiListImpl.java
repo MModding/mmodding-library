@@ -1,6 +1,6 @@
-package com.mmodding.library.java.impl;
+package com.mmodding.library.java.impl.list;
 
-import com.mmodding.library.java.api.BiList;
+import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.java.api.container.Pair;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,7 +1,7 @@
-package com.mmodding.library.java.api;
+package com.mmodding.library.java.api.list;
 
 import com.mmodding.library.java.api.container.Pair;
-import com.mmodding.library.java.impl.BiListImpl;
+import com.mmodding.library.java.impl.list.BiListImpl;
 
 import java.util.List;
 import java.util.Objects;

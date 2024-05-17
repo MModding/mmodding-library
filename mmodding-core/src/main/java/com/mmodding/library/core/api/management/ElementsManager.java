@@ -3,7 +3,7 @@ package com.mmodding.library.core.api.management;
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.*;
 import com.mmodding.library.core.api.management.context.RegistryContext;
-import com.mmodding.library.java.api.BiList;
+import com.mmodding.library.java.api.list.BiList;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import org.quiltmc.loader.api.QuiltLoader;

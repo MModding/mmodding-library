@@ -1,4 +1,4 @@
-package com.mmodding.library.java.api.filter;
+package com.mmodding.library.java.api.list.filter;
 
 import java.util.List;
 

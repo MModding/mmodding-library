@@ -6,7 +6,7 @@ import com.mmodding.library.core.api.management.content.DoubleContentHolder;
 import com.mmodding.library.core.api.management.content.MultipleContentHolder;
 import com.mmodding.library.core.api.management.content.SimpleContentHolder;
 import com.mmodding.library.core.api.management.ContentHolderProvider;
-import com.mmodding.library.java.api.BiList;
+import com.mmodding.library.java.api.list.BiList;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 
