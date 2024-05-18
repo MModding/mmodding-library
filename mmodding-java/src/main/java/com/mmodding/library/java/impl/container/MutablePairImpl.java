@@ -4,39 +4,39 @@ import com.mmodding.library.java.api.container.Pair;
 
 import java.util.Objects;
 
-public class MutablePairImpl<E0, E1> implements Pair.Mutable<E0, E1> {
+public class MutablePairImpl<E1, E2> implements Pair.Mutable<E1, E2> {
 
-	private E0 first;
-	private E1 second;
+	private E1 first;
+	private E2 second;
 
-	public MutablePairImpl(E0 first, E1 second) {
+	public MutablePairImpl(E1 first, E2 second) {
 		this.first = first;
 		this.second = second;
 	}
 
 	@Override
-	public E0 first() {
+	public E1 first() {
 		return this.first;
 	}
 
 	@Override
-	public E1 second() {
+	public E2 second() {
 		return this.second;
 	}
 
 	@Override
-	public void mutateFirst(E0 value) {
+	public void mutateFirst(E1 value) {
 		this.first = value;
 	}
 
 	@Override
-	public void mutateSecond(E1 value) {
+	public void mutateSecond(E2 value) {
 		this.second = value;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Pair<?,?> pair) {
+		if (obj instanceof Pair<?, ?> pair) {
 			return Objects.equals(this.first, pair.first()) && Objects.equals(this.second, pair.second());
 		}
 		else {

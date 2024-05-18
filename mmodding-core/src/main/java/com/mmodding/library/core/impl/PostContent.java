@@ -1,14 +1,12 @@
 package com.mmodding.library.core.impl;
 
+import com.mmodding.library.core.api.MModdingLibrary;
+import dev.yumi.commons.event.Event;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.qsl.base.api.event.Event;
 
 @ApiStatus.Internal
 public class PostContent {
 
-	public static final Event<Runnable> POST_CONTENT = Event.create(Runnable.class, runnables -> () -> {
-		for (Runnable runnable : runnables) {
-			runnable.run();
-		}
-	});
+	public static final Event<Identifier, Runnable> POST_CONTENT = MModdingLibrary.getEventManager().create(Runnable.class);
 }

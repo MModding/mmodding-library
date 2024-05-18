@@ -55,7 +55,10 @@ allprojects {
         minecraft libs.minecraft
         mappings variantOf(projectLibs.quilt.mappings) { classifier 'intermediary-v2' }
 
-        modImplementation libs.quilt.loader
+		modImplementation libs.quilt.loader
+
+		modImplementation libs.yumi.commons
+		include libs.yumi.commons
 
         modImplementation libs.quilted.fabric.api
     }

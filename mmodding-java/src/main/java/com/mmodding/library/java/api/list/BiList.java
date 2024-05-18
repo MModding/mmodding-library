@@ -10,6 +10,10 @@ import java.util.function.Consumer;
 
 public interface BiList<E1, E2> extends List<Pair<E1, E2>> {
 
+	static <E1, E2> BiList<E1, E2> create() {
+		return new BiListImpl<>();
+	}
+
 	static <E> boolean contains(BiList<E, E> biList, E first, E second) {
 		return biList.contains(first, second) || biList.contains(second, first);
 	}
@@ -55,10 +59,6 @@ public interface BiList<E1, E2> extends List<Pair<E1, E2>> {
 		}
 
 		return biList;
-	}
-
-	static <E1, E2> BiList<E1, E2> create() {
-		return new BiListImpl<>();
 	}
 
 	@SafeVarargs
