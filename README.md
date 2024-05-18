@@ -28,4 +28,5 @@ You can change the size by replacing `width="300"` with whatever size you want.
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-[PolyForm Shield 1.0](https://polyformproject.org/licenses/shield/1.0.0)
+Code: [PolyForm Shield 1.0](https://polyformproject.org/licenses/shield/1.0.0)
+Assets: All Rights Reserved
