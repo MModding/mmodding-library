@@ -10,6 +10,11 @@ public class Typed<T> {
 		this.value = value;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> Typed<T> of(T value) {
+		return Typed.of((Class<T>) value.getClass(), value);
+	}
+
 	public static <T> Typed<T> of(Class<T> type, T value) {
 		return new Typed<>(type, value);
 	}
