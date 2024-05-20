@@ -47,7 +47,7 @@ public class ClientEvents {
 		if (MModdingLibClient.LIBRARY_CLIENT_CONFIG.getContent().getBoolean("showMModdingLibraryClientCaches")) {
 			Caches.CLIENT.forEach(CacheAccess::debugCache);
 		}
-		WorldUtils.doTaskAfter(client.world, MathHelper.floorDiv(Registry.ITEM.size(), 30), ClientPendingRequestManagers.GLINT_PACK_MANAGER::send);
+		WorldUtils.doTaskAfter(client.world, MathHelper.floorDiv(Registry.ITEM.size(), 25), ClientPendingRequestManagers.GLINT_PACK_MANAGER::send);
 	}
 
 	private static void serverDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {

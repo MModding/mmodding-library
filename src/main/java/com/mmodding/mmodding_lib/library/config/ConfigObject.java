@@ -6,7 +6,7 @@ import com.google.gson.JsonPrimitive;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -42,7 +42,7 @@ public class ConfigObject {
 	}
 
 	public Map<String, Value<?>> getConfigElementsMap() {
-		Map<String, Value<?>> configElements = new HashMap<>();
+		Map<String, Value<?>> configElements = new LinkedHashMap<>();
 		this.jsonObject.entrySet().forEach(entry -> configElements.put(entry.getKey(), Value.fromJsonElement(entry.getValue())));
 		return configElements;
 	}
