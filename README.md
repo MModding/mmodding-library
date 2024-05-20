@@ -12,7 +12,7 @@ MModding-Library is a custom library mainly used in the MModdingTeam's mods.
 ![Java CI with Gradle](https://github.com/MModding/MModding-Library/workflows/Java%20CI%20with%20Gradle/badge.svg?branch=main)
 
 ## Usage
-MModding-Library provides detailed documentation in the form of a [Wiki](https://mmodding.gitbook.io/mmodding-library/). MModding-Library is only available for Quilt 1.18.2.
+MModding-Library provides detailed documentation in the form of a [Wiki](https://mmodding.com/documentation/library). MModding-Library is only available for Quilt 1.18.2.
 
 Badge for Modders:
 
@@ -28,4 +28,5 @@ You can change the size by replacing `width="300"` with whatever size you want.
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-[PolyForm Shield 1.0](https://polyformproject.org/licenses/shield/1.0.0)
+Code: [PolyForm Shield 1.0](https://polyformproject.org/licenses/shield/1.0.0)
+Assets: All Rights Reserved
