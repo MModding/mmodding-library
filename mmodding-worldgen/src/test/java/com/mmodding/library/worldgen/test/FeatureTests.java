@@ -2,10 +2,10 @@ package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.java.api.FeaturePack;
-import com.mmodding.library.java.api.replication.FeatureReplicator;
 import com.mmodding.library.core.api.management.content.DoubleContentHolder;
 import com.mmodding.library.core.api.management.content.ForBeing;
+import com.mmodding.library.worldgen.api.feature.FeaturePack;
+import com.mmodding.library.worldgen.api.feature.replication.FeatureReplicator;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.decorator.BiomePlacementModifier;

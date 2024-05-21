@@ -2,17 +2,17 @@ package com.mmodding.library.worldgen.impl.feature.replication;
 
 import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
+import com.mmodding.library.java.api.function.SingleTypeFunction;
 import com.mmodding.library.worldgen.api.feature.replication.PlacementModifiers;
 import net.minecraft.world.gen.feature.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class FeatureReplicatorImpl {
 
 	@SuppressWarnings("unchecked")
-	public static <FC extends FeatureConfig> WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> replicateConfiguredFeature(Reference<ConfiguredFeature<?, ?>> reference, ConfiguredFeature<?, ?> configuredFeature, Function<FC, FC> mutator) {
+	public static <FC extends FeatureConfig> WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> replicateConfiguredFeature(Reference<ConfiguredFeature<?, ?>> reference, ConfiguredFeature<?, ?> configuredFeature, SingleTypeFunction<FC> mutator) {
 		Reference<ConfiguredFeature<FC, Feature<FC>>> castedReference = (Reference<ConfiguredFeature<FC, Feature<FC>>>) (Reference<?>) reference;
 		ConfiguredFeature<FC, Feature<FC>> castedConfiguredFeature = (ConfiguredFeature<FC, Feature<FC>>) configuredFeature;
 		ConfigReplicator<FC> replicator = new ConfigReplicator<>(castedConfiguredFeature);
@@ -21,7 +21,7 @@ public class FeatureReplicatorImpl {
 		return new WaitingRegistryEntry<>(castedReference, new ConfiguredFeature<>(castedConfiguredFeature.getFeature(), featureConfig));
 	}
 
-	public static WaitingRegistryEntry<PlacedFeature> replicatePlacedFeature(Reference<PlacedFeature> reference, PlacedFeature placedFeature, Function<PlacementModifiers, PlacementModifiers> mutator) {
+	public static WaitingRegistryEntry<PlacedFeature> replicatePlacedFeature(Reference<PlacedFeature> reference, PlacedFeature placedFeature, SingleTypeFunction<PlacementModifiers> mutator) {
 		PlacementModifiersReplicator replicator = new PlacementModifiersReplicator(placedFeature);
 		replicator.mutatePlacementModifiers(mutator);
 		List<PlacementModifier> placementModifiers = replicator.replicate();
@@ -36,7 +36,7 @@ public class FeatureReplicatorImpl {
 			this.featureConfig = configuredFeature.getConfig();
 		}
 
-		public void mutateConfig(Function<FC, FC> mutator) {
+		public void mutateConfig(SingleTypeFunction<FC> mutator) {
 			this.featureConfig = mutator.apply(this.featureConfig);
 		}
 
@@ -53,7 +53,7 @@ public class FeatureReplicatorImpl {
 			this.placementModifiers = new PlacementModifiers(placedFeature.placementModifiers());
 		}
 
-		public void mutatePlacementModifiers(Function<PlacementModifiers, PlacementModifiers> mutator) {
+		public void mutatePlacementModifiers(SingleTypeFunction<PlacementModifiers> mutator) {
 			this.placementModifiers = mutator.apply(this.placementModifiers);
 		}
 

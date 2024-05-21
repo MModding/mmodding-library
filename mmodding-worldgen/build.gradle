@@ -1,4 +1,5 @@
 dependencies {
 	implementation(project(":mmodding-core"))
 	implementation(project(":mmodding-block"))
+	implementation(project(":mmodding-java"))
 }
