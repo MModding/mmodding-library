@@ -1,5 +1,4 @@
 dependencies {
 	implementation(project(":mmodding-core"))
 	implementation(project(":mmodding-java"))
-	implementation(project(":mmodding-math"))
 }

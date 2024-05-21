@@ -122,6 +122,7 @@ dependencies {
 	api include(project(":mmodding-fluid"))
 	api include(project(":mmodding-item"))
 	api include(project(":mmodding-java"))
+	api include(project(":mmodding-math"))
 	api include(project(":mmodding-worldgen"))
 }
 
