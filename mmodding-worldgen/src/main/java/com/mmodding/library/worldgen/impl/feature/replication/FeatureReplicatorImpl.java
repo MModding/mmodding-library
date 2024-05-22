@@ -50,7 +50,7 @@ public class FeatureReplicatorImpl {
 		private PlacementModifiers placementModifiers;
 
 		public PlacementModifiersReplicator(PlacedFeature placedFeature) {
-			this.placementModifiers = new PlacementModifiers(placedFeature.placementModifiers());
+			this.placementModifiers = new PlacementModifiersImpl(placedFeature.placementModifiers());
 		}
 
 		public void mutatePlacementModifiers(SingleTypeFunction<PlacementModifiers> mutator) {
@@ -58,7 +58,7 @@ public class FeatureReplicatorImpl {
 		}
 
 		public List<PlacementModifier> replicate() {
-			return new ArrayList<>(this.placementModifiers);
+			return new ArrayList<>(((PlacementModifiersImpl) this.placementModifiers).retrieve());
 		}
 	}
 }
