@@ -10,11 +10,11 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 @FunctionalInterface
-public interface BlockEntityTypeSupportCallback {
+public interface BlockEntityTypeSupport {
 
 	void mutateSupportedBlocks(List<Block> supportedBlocks);
 
-	static <T extends BlockEntity> Event<Identifier, BlockEntityTypeSupportCallback> blockEntityType(BlockEntityType<T> blockEntityType) {
+	static <T extends BlockEntity> Event<Identifier, BlockEntityTypeSupport> callbackOf(BlockEntityType<T> blockEntityType) {
 		return BlockEntityTypeDuck.get(blockEntityType).mmodding$supportCallback();
 	}
 }

@@ -1,6 +1,6 @@
 package com.mmodding.library.block.entity.mixin;
 
-import com.mmodding.library.block.entity.api.BlockEntityTypeSupportCallback;
+import com.mmodding.library.block.entity.api.BlockEntityTypeSupport;
 import com.mmodding.library.block.entity.impl.duck.BlockEntityTypeDuck;
 import com.mmodding.library.core.api.MModdingLibrary;
 import dev.yumi.commons.event.Event;
@@ -21,7 +21,7 @@ import java.util.List;
 public class BlockEntityTypeMixin implements BlockEntityTypeDuck {
 
 	@Unique
-	private final Event<Identifier, BlockEntityTypeSupportCallback> supportBlocksCallBack = MModdingLibrary.getEventManager().create(BlockEntityTypeSupportCallback.class);
+	private final Event<Identifier, BlockEntityTypeSupport> supportBlocksCallBack = MModdingLibrary.getEventManager().create(BlockEntityTypeSupport.class);
 
 	@Inject(method = "supports", at = @At("HEAD"), cancellable = true)
 	private void supports(BlockState state, CallbackInfoReturnable<Boolean> cir) {
@@ -33,7 +33,7 @@ public class BlockEntityTypeMixin implements BlockEntityTypeDuck {
 	}
 
 	@Override
-	public Event<Identifier, BlockEntityTypeSupportCallback> mmodding$supportCallback() {
+	public Event<Identifier, BlockEntityTypeSupport> mmodding$supportCallback() {
 		return this.supportBlocksCallBack;
 	}
 }
