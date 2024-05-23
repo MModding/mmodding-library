@@ -1,12 +1,12 @@
 package com.mmodding.library.worldgen.api.seed;
 
-import com.mmodding.library.worldgen.impl.seed.DifferedSeedImpl;
+import com.mmodding.library.worldgen.impl.seed.IndependentSeedImpl;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.World;
 
-public interface DifferedSeed {
+public interface IndependentSeed {
 
 	static void configureFor(RegistryKey<World> world) {
-		DifferedSeedImpl.ATTACHMENT.put(world, true);
+		IndependentSeedImpl.ATTACHMENT.put(world, true);
 	}
 }
