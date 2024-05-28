@@ -119,6 +119,7 @@ jar {
 dependencies {
 	api include(project(":mmodding-block"))
 	api include(project(":mmodding-block-entity"))
+	api include(project(":mmodding-config"))
 	api include(project(":mmodding-core"))
 	api include(project(":mmodding-fluid"))
 	api include(project(":mmodding-item"))
