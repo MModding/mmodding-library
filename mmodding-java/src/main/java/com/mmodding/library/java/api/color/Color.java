@@ -63,7 +63,6 @@ public interface Color {
 		return new ARGB(javaColor.getAlpha(), javaColor.getRed(), javaColor.getGreen(), javaColor.getBlue());
 	}
 
-
 	/**
 	 * HSB Color Format
 	 * @param hue hue value, can be any floating point value

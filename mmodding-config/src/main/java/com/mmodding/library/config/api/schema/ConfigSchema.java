@@ -40,7 +40,7 @@ public interface ConfigSchema {
 
 	ConfigSchema floatingRange(String qualifier, float start, float end);
 
-	ConfigSchema list(String qualifier, Class<?> type);
+	ConfigSchema list(String qualifier);
 
 	ConfigSchema category(String qualifier, Consumer<ConfigSchema> category);
 }

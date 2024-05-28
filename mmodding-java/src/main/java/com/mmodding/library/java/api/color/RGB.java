@@ -1,7 +1,5 @@
 package com.mmodding.library.java.api.color;
 
-import net.minecraft.client.util.ColorUtil;
-
 public class RGB implements Color {
 
 	protected int red;
@@ -65,7 +63,7 @@ public class RGB implements Color {
 
 	@Override
 	public int toDecimal() {
-		return ColorUtil.ARGB32.getArgb(255, this.red, this.green, this.blue);
+		return 255 << 24 | this.red << 16 | this.green << 8 | this.blue;
 	}
 
 	@Override

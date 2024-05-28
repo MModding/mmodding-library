@@ -2,9 +2,9 @@ package com.mmodding.library.config.impl.schema;
 
 import com.mmodding.library.config.api.schema.ConfigSchema;
 import com.mmodding.library.java.api.color.Color;
+import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.BiMap;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.DoubleStream;
@@ -61,8 +61,8 @@ public class ConfigSchemaImpl implements ConfigSchema {
 	}
 
 	@Override
-	public ConfigSchema list(String qualifier, Class<?> type) {
-		this.raw.put(qualifier, List.class, Map.of("type", type));
+	public ConfigSchema list(String qualifier) {
+		this.raw.put(qualifier, MixedList.class, Map.of());
 		return this;
 	}
 
@@ -111,7 +111,7 @@ public class ConfigSchemaImpl implements ConfigSchema {
 		}
 
 		@Override
-		public ConfigSchema list(String qualifier, Class<?> type) {
+		public ConfigSchema list(String qualifier) {
 			return this;
 		}
 

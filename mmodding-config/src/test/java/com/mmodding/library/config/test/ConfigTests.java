@@ -14,7 +14,7 @@ public class ConfigTests {
 		.category("category", category -> category
 			.string("string")
 			.floatingRange("range", 1.0f, 3.0f)
-			.list("list", Integer.class)
+			.list("list")
 		);
 
 	public static final Config CONFIG = Config.builder("mmodding", "common/mmodding")

@@ -1,6 +1,6 @@
 dependencies {
 
-	modImplementation libs.quilt.parsers.json
+	implementation libs.quilt.parsers.json
 	include libs.quilt.parsers.json
 
 	implementation(project(":mmodding-core"))
