@@ -4,6 +4,8 @@ import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.function.Consumer;
+
 @ApiStatus.NonExtendable
 public interface MutableConfigContent {
 
@@ -23,5 +25,5 @@ public interface MutableConfigContent {
 
 	MutableConfigContent list(String qualifier, MixedList list);
 
-	MutableConfigContent category(String qualifier, MutableConfigContent category);
+	MutableConfigContent category(String qualifier, Consumer<MutableConfigContent> category);
 }

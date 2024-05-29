@@ -2,6 +2,7 @@ package com.mmodding.library.java.api.map;
 
 import com.mmodding.library.java.api.container.Typed;
 import com.mmodding.library.java.impl.map.MixedMapImpl;
+import com.mmodding.library.java.impl.map.linked.LinkedMixedMapImpl;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.Map;
@@ -10,6 +11,10 @@ public interface MixedMap<K> extends Map<K, Typed<?>> {
 
 	static <K> MixedMap<K> create() {
 		return new MixedMapImpl<>();
+	}
+
+	static <K> MixedMap<K> linked() {
+		return new LinkedMixedMapImpl<>();
 	}
 
 	static <V> Typed<V> emptyValue(Class<V> type) {

@@ -1,9 +1,13 @@
 package com.mmodding.library.config.api;
 
+import com.mmodding.library.config.api.content.ConfigContent;
+import com.mmodding.library.config.api.content.MutableConfigContent;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 import com.mmodding.library.config.impl.ConfigBuilderImpl;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.function.Consumer;
 
 @ApiStatus.NonExtendable
 public interface Config {
@@ -44,6 +48,12 @@ public interface Config {
 	 */
 	ConfigSchema getSchema();
 
+	/**
+	 * The default content of this configuration.
+	 * @return the {@link ConfigContent} object of this configuration's default content.
+	 */
+	ConfigContent getDefaultContent();
+
 	@ApiStatus.NonExtendable
 	interface Builder {
 
@@ -65,6 +75,13 @@ public interface Config {
 		 * @apiNote It is highly recommended to not keep an empty schema!
 		 */
 		Config.Builder withSchema(ConfigSchema schema);
+
+		/**
+		 * Default value is an empty {@link Consumer<MutableConfigContent>}.
+		 * @param content the default configuration content consumer
+		 * @apiNote It is highly recommended to set default values to your configuration.
+		 */
+		Config.Builder withDefaultContent(Consumer<MutableConfigContent> content);
 
 		/**
 		 * Builds the configuration under an identifier reference

@@ -3,6 +3,7 @@ package com.mmodding.library.config.impl;
 import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.ConfigLevel;
 import com.mmodding.library.config.api.ConfigNetworkManagement;
+import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 
 @SuppressWarnings("ClassCanBeRecord") // we do not want equals and hashcode impl of records
@@ -13,13 +14,15 @@ public class ConfigImpl implements Config {
 	private final ConfigLevel level;
 	private final ConfigNetworkManagement networkManagement;
 	private final ConfigSchema schema;
+	private final ConfigContent defaultContent;
 
-	public ConfigImpl(String translationKey, String filePath, ConfigLevel level, ConfigNetworkManagement networkManagement, ConfigSchema schema) {
+	public ConfigImpl(String translationKey, String filePath, ConfigLevel level, ConfigNetworkManagement networkManagement, ConfigSchema schema, ConfigContent defaultContent) {
 		this.translationKey = translationKey;
 		this.filePath = filePath;
 		this.level = level;
 		this.networkManagement = networkManagement;
 		this.schema = schema;
+		this.defaultContent = defaultContent;
 	}
 
 	@Override
@@ -45,5 +48,10 @@ public class ConfigImpl implements Config {
 	@Override
 	public ConfigSchema getSchema() {
 		return this.schema;
+	}
+
+	@Override
+	public ConfigContent getDefaultContent() {
+		return this.defaultContent;
 	}
 }
