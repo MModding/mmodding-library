@@ -50,7 +50,7 @@ public interface Config {
 
 	/**
 	 * The default content of this configuration.
-	 * @return the {@link ConfigContent} object of this configuration's default content.
+	 * @return the {@link ConfigContent} object of this configuration's default content
 	 */
 	ConfigContent getDefaultContent();
 

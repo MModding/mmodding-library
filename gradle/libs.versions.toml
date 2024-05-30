@@ -8,7 +8,7 @@ yumi_commons = "1.0.0-alpha.1"
 quilted_fabric_api = "6.0.0-beta.11+0.87.0-1.19.4"
 modmenu = "4.0.6"
 
-# For Gradle
+# For Gradle And MModding Config
 quilt_parsers = "0.3.0"
 
 [libraries]
@@ -20,7 +20,7 @@ yumi_commons = { module = "dev.yumi.commons:yumi-commons", version.ref = "yumi_c
 quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 
-# For Gradle
+# For Gradle And MModding Config
 quilt_parsers_json = { module = "org.quiltmc.parsers:json", version.ref = "quilt_parsers" }
 
 [plugins]

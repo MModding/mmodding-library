@@ -1,7 +1,5 @@
 package com.mmodding.library.java.api.color;
 
-import net.minecraft.client.util.ColorUtil;
-
 import java.util.function.Supplier;
 
 public interface Color {
@@ -26,11 +24,7 @@ public interface Color {
 	}
 
 	static RGB rgb(int decimal) {
-		return new RGB(
-			ColorUtil.ARGB32.getRed(decimal),
-			ColorUtil.ARGB32.getGreen(decimal),
-			ColorUtil.ARGB32.getBlue(decimal)
-		);
+		return new RGB(decimal >> 16 & 255, decimal >> 8 & 255, decimal & 255);
 	}
 
 	static RGB rgb(java.awt.Color javaColor) {
@@ -51,12 +45,7 @@ public interface Color {
 	}
 
 	static ARGB argb(int decimal) {
-		return new ARGB(
-			ColorUtil.ARGB32.getAlpha(decimal),
-			ColorUtil.ARGB32.getRed(decimal),
-			ColorUtil.ARGB32.getGreen(decimal),
-			ColorUtil.ARGB32.getBlue(decimal)
-		);
+		return new ARGB(decimal >> 24 & 255, decimal >> 16 & 255, decimal >> 8 & 255, decimal & 255);
 	}
 
 	static ARGB argb(java.awt.Color javaColor) {
