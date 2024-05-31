@@ -18,7 +18,7 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 	}
 
 	public MutableConfigContentImpl(ConfigContent configContent) {
-		this.raw = ((ConfigContentImpl) configContent).raw;
+		this.raw = ((ConfigContentImpl) configContent).getRaw();
 	}
 
 	public MutableConfigContentImpl(MixedMap<String> raw) {

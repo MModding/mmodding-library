@@ -41,7 +41,7 @@ public class ConfigDeserializer {
 	}
 
 	/**
-	 * @apiNote Array Deserialization only supports Primitive Types.
+	 * @apiNote Array Deserialization only supports Primitive Configuration Types.
 	 */
 	public static void readArray(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
 		reader.beginArray();

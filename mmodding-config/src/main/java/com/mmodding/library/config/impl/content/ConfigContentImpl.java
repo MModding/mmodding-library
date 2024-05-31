@@ -4,17 +4,28 @@ import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
+import com.mmodding.library.java.impl.map.linked.LinkedMixedMapImpl;
 
 public class ConfigContentImpl implements ConfigContent {
 
-	final MixedMap<String> raw;
+	private final MixedMap<String> raw;
 
 	public ConfigContentImpl() {
 		this(null);
 	}
 
 	public ConfigContentImpl(MixedMap<String> raw) {
-		this.raw = raw != null ? raw : MixedMap.linked();
+		if (raw != null) {
+			if (raw instanceof LinkedMixedMapImpl<String>) {
+				this.raw = raw;
+			}
+			else {
+				throw new IllegalArgumentException("MixedMap of ConfigContent object must be linked!");
+			}
+		}
+		else {
+			this.raw = MixedMap.linked();
+		}
 	}
 
 	@Override
@@ -61,5 +72,9 @@ public class ConfigContentImpl implements ConfigContent {
 	@SuppressWarnings("unchecked")
 	public ConfigContent category(String qualifier) {
 		return new ConfigContentImpl(this.raw.get(qualifier, MixedMap.class));
+	}
+
+	public MixedMap<String> getRaw() {
+		return this.raw;
 	}
 }
