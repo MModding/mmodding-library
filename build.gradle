@@ -57,8 +57,7 @@ allprojects {
 
 		modImplementation libs.quilt.loader
 
-		modImplementation libs.yumi.commons
-		include libs.yumi.commons
+		implementation libs.yumi.commons
 
         modImplementation libs.quilted.fabric.api
     }
@@ -92,7 +91,7 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_17
 
         withSourcesJar()
-        withJavadocJar()
+        // withJavadocJar()
     }
 
 	sourcesJar {
@@ -117,6 +116,12 @@ jar {
 }
 
 dependencies {
+	include libs.yumi.commons.core
+	include libs.yumi.commons.collections
+	include libs.yumi.commons.event
+
+	include libs.quilt.parsers.json
+
 	api include(project(":mmodding-block"))
 	api include(project(":mmodding-block-entity"))
 	api include(project(":mmodding-config"))
