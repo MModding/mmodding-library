@@ -15,15 +15,15 @@ import java.math.BigInteger;
 
 public class ConfigDeserializer {
 
-	public static JsonReader reader(Config config) throws IOException {
+	private static JsonReader reader(Config config) throws IOException {
 		return JsonReader.json(QuiltLoader.getConfigDir().resolve(config.getFilePath() + ".json"));
 	}
 
-	public static void readBoolean(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
+	private static void readBoolean(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
 		mutable.bool(qualifier, reader.nextBoolean());
 	}
 
-	public static void readNumber(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
+	private static void readNumber(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
 		Number num = reader.nextNumber();
 		if (num instanceof BigInteger) {
 			mutable.integer(qualifier, ((BigInteger) num).intValueExact());
@@ -36,14 +36,14 @@ public class ConfigDeserializer {
 		}
 	}
 
-	public static void readString(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
+	private static void readString(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
 		mutable.string(qualifier, reader.nextString());
 	}
 
 	/**
 	 * @apiNote Array Deserialization only supports Primitive Configuration Types.
 	 */
-	public static void readArray(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
+	private static void readArray(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
 		reader.beginArray();
 		MixedList list = MixedList.create();
 		while (reader.peek() != JsonToken.END_ARRAY) {
@@ -68,7 +68,7 @@ public class ConfigDeserializer {
 		reader.endArray();
 	}
 
-	public static void objectProcess(JsonReader reader, MutableConfigContent mutable) {
+	private static void objectProcess(JsonReader reader, MutableConfigContent mutable) {
 		try {
 			while (reader.peek() != JsonToken.END_OBJECT) {
 				String qualifier = reader.nextName();
@@ -86,7 +86,7 @@ public class ConfigDeserializer {
 		}
 	}
 
-	public static void readObject(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
+	private static void readObject(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {
 		reader.beginObject();
 		mutable.category(qualifier, next -> ConfigDeserializer.objectProcess(reader, next));
 		reader.endObject();

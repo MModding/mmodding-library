@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class ConfigSchemaImpl implements ConfigSchema {
 
-	private final BiMap<String, Class<?>, Map<String, ?>> raw = BiMap.create();
+	final BiMap<String, Class<?>, Map<String, ?>> raw = BiMap.create();
 
 	public static boolean isEmpty(ConfigSchema schema) {
 		return schema instanceof ConfigSchemaImpl.EmptySchema;

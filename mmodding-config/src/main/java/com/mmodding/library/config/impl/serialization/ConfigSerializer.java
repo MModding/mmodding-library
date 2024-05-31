@@ -13,14 +13,14 @@ import java.io.IOException;
 
 public class ConfigSerializer {
 
-	public static JsonWriter writer(Config config) throws IOException {
+	private static JsonWriter writer(Config config) throws IOException {
 		return JsonWriter.json(QuiltLoader.getConfigDir().resolve(config.getFilePath() + ".json"));
 	}
 
 	/**
 	 * @apiNote Array Serialization only supports Primitive Configuration Types.
 	 */
-	public static void writeArray(JsonWriter writer, MixedList list) throws IOException {
+	private static void writeArray(JsonWriter writer, MixedList list) throws IOException {
 		writer.beginArray();
 		list.forEach((type, object) -> {
 			try {
@@ -47,7 +47,7 @@ public class ConfigSerializer {
 		writer.endArray();
 	}
 
-	public static void writeObject(JsonWriter writer, ConfigContent content) throws IOException {
+	private static void writeObject(JsonWriter writer, ConfigContent content) throws IOException {
 		writer.beginObject();
 		((ConfigContentImpl) content).getRaw().forEach((qualifier, type, value) -> {
 			try {

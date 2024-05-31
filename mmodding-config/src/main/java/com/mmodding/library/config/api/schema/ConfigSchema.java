@@ -1,12 +1,14 @@
 package com.mmodding.library.config.api.schema;
 
 import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
 
 /**
  * Represents the schema of the config, which values are part of it, their types etc...
  */
+@ApiStatus.NonExtendable
 public interface ConfigSchema {
 
 	static ConfigSchema create() {
