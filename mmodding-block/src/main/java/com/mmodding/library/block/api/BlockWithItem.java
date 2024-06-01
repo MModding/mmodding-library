@@ -1,6 +1,7 @@
 package com.mmodding.library.block.api;
 
 import com.mmodding.library.block.impl.BlockWithItemImpl;
+import com.mmodding.library.core.api.management.content.InjectedContent;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -11,6 +12,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @ApiStatus.NonExtendable
+@InjectedContent(Block.class)
 public interface BlockWithItem {
 
 	static Item getItem(Block block) {

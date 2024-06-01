@@ -46,6 +46,10 @@ allprojects {
 			name "QuiltMC"
 			url "https://maven.quiltmc.org/repository/release"
 		}
+		maven {
+			name "ParchmentMC"
+			url "https://maven.parchmentmc.org"
+		}
     }
 
     // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -53,7 +57,8 @@ allprojects {
     dependencies {
         minecraft libs.minecraft
 		mappings(loom.layered {
-			officialMojangMappings()
+			officialMojangMappings() { nameSyntheticMembers = false }
+			parchment(libs.parchment.mappings)
 			mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
 		})
 
