@@ -18,7 +18,7 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 	public static final ForBeing.Vacant<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.vacant();
 
 	public FeatureTests(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
-		Reference.LiteFactory factory = Reference.createFactory(path -> new Identifier(mod.metadata().id(), path));
+		Reference.LiteFactory factory = Reference.createFactory(path -> new Identifier(mod.getMetadata().getId(), path));
 		RANDOM_PATCH.initialize(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
 		RANDOM_PATCH.execute(randomPatch -> {
 			randomPatch.appendConfiguredFeature(

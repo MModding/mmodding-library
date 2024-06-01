@@ -2,4 +2,6 @@
 
 The Official MModding Experiments Repository.
 
-These Experiments are [licensed under the PolyForm Shield License 1.0.0](LICENSE.md).
+These Experiments are [licensed](LICENSE.md):
+- Code is under PolyForm Shield 1.0.0
+- Assets are All Rights Reserved

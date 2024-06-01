@@ -6,7 +6,7 @@ import com.mmodding.library.config.impl.content.ConfigContentImpl;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
-import org.quiltmc.loader.api.QuiltLoader;
+import net.fabricmc.loader.api.FabricLoader;
 import org.quiltmc.parsers.json.JsonWriter;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ConfigSerializer {
 
 	private static JsonWriter writer(Config config) throws IOException {
-		return JsonWriter.json(QuiltLoader.getConfigDir().resolve(config.getFilePath() + ".json"));
+		return JsonWriter.json(FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json"));
 	}
 
 	/**

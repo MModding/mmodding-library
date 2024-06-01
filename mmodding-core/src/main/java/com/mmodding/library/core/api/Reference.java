@@ -1,16 +1,16 @@
 package com.mmodding.library.core.api;
 
+import com.mmodding.library.core.api.management.content.InjectedContent;
 import com.mmodding.library.core.impl.registry.ReferenceFactoryImpl;
 import com.mmodding.library.core.impl.registry.ReferenceLiteFactoryImpl;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.base.api.util.InjectedInterface;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-@InjectedInterface({RegistryKey.class, Identifier.class})
+@InjectedContent({RegistryKey.class, Identifier.class})
 public interface Reference<T> {
 
 	Factory VANILLA_FACTORY = Reference.createFactory((namespace, path) -> new Identifier(namespace, path));

@@ -4,8 +4,8 @@ import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.core.impl.MModdingInitializer;
 import com.mmodding.library.core.api.management.ElementsManager;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.ModContainer;
 
 public interface ExtendedModInitializer extends ModInitializer {
 
@@ -16,11 +16,12 @@ public interface ExtendedModInitializer extends ModInitializer {
 	void setupManager(ElementsManager.Builder manager);
 
 	@Override
-	default void onInitialize(ModContainer mod) {
+	default void onInitialize() {
+		ModContainer mod = MModdingLibrary.getModContainer(this.getClass());
 		ElementsManager.Builder builder = ElementsManager.Builder.common();
 		this.setupManager(builder);
 		ElementsManager manager = builder.build();
-		MModdingLibrary.getAllManagers().put(mod.metadata().id(), manager);
+		MModdingLibrary.getAllManagers().put(mod.getMetadata().getId(), manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.initDefaultContent(advanced);
 		this.onInitialize(advanced);

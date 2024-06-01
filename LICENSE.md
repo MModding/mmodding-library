@@ -1,3 +1,18 @@
+### License for MModding Experiments Past, Current and Future Assets:
+
+```
+Copyright (c) 2023-2024 MModding
+
+All rights reserved.
+```
+
+### Are Considered As Assets:
+```
+- All Files named "icon.png" or "title.png".
+```
+
+### License for Code:
+
 # PolyForm Shield License 1.0.0
 
 <https://polyformproject.org/licenses/shield/1.0.0>

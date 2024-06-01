@@ -1,11 +1,12 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
+java = "17"
 minecraft = "1.19.4"
 quilt_mappings = "1.19.4+build.10"
-quilt_loader = "0.25.0"
+fabric_loader = "0.15.11"
 yumi_commons = "1.0.0-alpha.1"
 
-quilted_fabric_api = "6.0.0-beta.11+0.87.0-1.19.4"
+fabric_api = "0.87.2+1.19.4"
 modmenu = "4.0.6"
 
 # For Gradle And MModding Config
@@ -13,8 +14,10 @@ quilt_parsers = "0.3.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
+
+# Mappings
 quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
-quilt_loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt_loader" }
 
 # Yumi Commons
 yumi_commons = { module = "dev.yumi.commons:yumi-commons", version.ref = "yumi_commons" }
@@ -22,11 +25,11 @@ yumi_commons_core = { module = "dev.yumi.commons:yumi-commons-core", version.ref
 yumi_commons_collections = { module = "dev.yumi.commons:yumi-commons-collections", version.ref = "yumi_commons" }
 yumi_commons_event = { module = "dev.yumi.commons:yumi-commons-event", version.ref = "yumi_commons" }
 
-quilted_fabric_api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted_fabric_api" }
+fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 
 # For Gradle And MModding Config
 quilt_parsers_json = { module = "org.quiltmc.parsers:json", version.ref = "quilt_parsers" }
 
 [plugins]
-quilt_loom = { id = "org.quiltmc.loom", version = "1.6.+" }
+fabric_loom = { id = "fabric-loom", version = "1.6-SNAPSHOT" }

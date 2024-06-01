@@ -5,7 +5,7 @@ import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.MutableConfigContent;
 import com.mmodding.library.config.impl.content.MutableConfigContentImpl;
 import com.mmodding.library.java.api.list.MixedList;
-import org.quiltmc.loader.api.QuiltLoader;
+import net.fabricmc.loader.api.FabricLoader;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonToken;
 
@@ -16,7 +16,7 @@ import java.math.BigInteger;
 public class ConfigDeserializer {
 
 	private static JsonReader reader(Config config) throws IOException {
-		return JsonReader.json(QuiltLoader.getConfigDir().resolve(config.getFilePath() + ".json"));
+		return JsonReader.json(FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json"));
 	}
 
 	private static void readBoolean(JsonReader reader, String qualifier, MutableConfigContent mutable) throws IOException {

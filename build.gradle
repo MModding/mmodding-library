@@ -16,7 +16,7 @@ import java.nio.file.Files
 plugins {
     id 'maven-publish'
 	id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.6'
-    alias libs.plugins.quilt.loom
+    alias libs.plugins.fabric.loom
 }
 
 base {
@@ -29,37 +29,39 @@ group = project.maven_group
 allprojects {
 
     processResources {
-        inputs.properties 'version': version, 'group': project.group
+        inputs.properties 'version': version
 
-        filesMatching('quilt.mod.json') {
-            expand 'version': version, 'group': project.group
+        filesMatching('fabric.mod.json') {
+            expand 'version': version
         }
     }
 }
 
 allprojects {
 
-    apply plugin: 'org.quiltmc.loom'
+    apply plugin: 'fabric-loom'
 
     repositories {
-        // Add repositories to retrieve artifacts from in here.
-        // You should only use this when depending on other mods because
-        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-        // for more information about repositories.
+		maven {
+			name "QuiltMC"
+			url "https://maven.quiltmc.org/repository/release"
+		}
     }
 
     // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
     // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
     dependencies {
         minecraft libs.minecraft
-        mappings variantOf(projectLibs.quilt.mappings) { classifier 'intermediary-v2' }
+		mappings(loom.layered {
+			officialMojangMappings()
+			mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
+		})
 
-		modImplementation libs.quilt.loader
+		modImplementation libs.fabric.loader
 
 		implementation libs.yumi.commons
 
-        modImplementation libs.quilted.fabric.api
+        modImplementation libs.fabric.api
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -68,19 +70,20 @@ allprojects {
         it.options.release = 17
     }
 
-	def generateQmj = tasks.register("generateQmj", GenerateQMJ) {
-		it.inputDir.set(project.file("qmj_resources/"))
+	def generateFmj = tasks.register("generateFmj", GenerateFMJ) {
+		it.inputDir.set(project.file("fmj_resources/"))
 		it.outputDir.set(project.file("build/generated/generated_resources/"))
 		it.projectId.set(project.name.replace("-", "_"))
-		it.quiltLoaderVersion.set(libs.versions.quilt.loader.get())
-		it.quiltedFabricAPIVersion.set(libs.versions.quilted.fabric.api.get())
+		it.fabricLoaderVersion.set(libs.versions.fabric.loader.get())
+		it.fabricApiVersion.set(libs.versions.fabric.api.get())
 		it.minecraftVersion.set(libs.versions.minecraft.get())
+		it.javaVersion.set(libs.versions.java.get())
 	}
 
 	sourceSets {
 		main {
 			resources {
-				srcDir generateQmj
+				srcDir generateFmj
 			}
 		}
 	}
@@ -95,7 +98,7 @@ allprojects {
     }
 
 	sourcesJar {
-		dependsOn(generateQmj)
+		dependsOn(generateFmj)
 	}
 }
 
@@ -134,26 +137,26 @@ dependencies {
 }
 
 afterEvaluate {
-	def generateQmjForIdea = tasks.register("generateQmjForIdea")
-	generateQmjForIdea.get().dependsOn project.tasks.named("generateQmj")
+	def generateFmjForIdea = tasks.register("generateFmjForIdea")
+	generateFmjForIdea.get().dependsOn project.tasks.named("generateFmj")
 	project.subprojects.each {
-		generateQmjForIdea.get().dependsOn it.tasks.named("generateQmj")
+		generateFmjForIdea.get().dependsOn it.tasks.named("generateFmj")
 	}
 
 	idea {
 		project {
 			settings {
 				taskTriggers {
-					afterSync generateQmjForIdea.get()
+					afterSync generateFmjForIdea.get()
 				}
 			}
 		}
 	}
 }
 
-// Loom can detect content of generated QMJs thanks to that block code.
+// Loom can detect content of generated FMJs thanks to that block code.
 afterEvaluate {
-	subprojects.each {
+	project.subprojects.each {
 		project.sourceSets.main.compileClasspath += it.sourceSets.main.compileClasspath
 		project.sourceSets.main.runtimeClasspath += it.sourceSets.main.runtimeClasspath
 	}
@@ -176,7 +179,7 @@ publishing {
     }
 }
 
-abstract class GenerateQMJ extends DefaultTask {
+abstract class GenerateFMJ extends DefaultTask {
 
 	@InputDirectory
 	abstract DirectoryProperty getInputDir()
@@ -188,13 +191,16 @@ abstract class GenerateQMJ extends DefaultTask {
 	abstract Property<String> getProjectId()
 
 	@Input
-	abstract Property<String> getQuiltLoaderVersion()
+	abstract Property<String> getFabricLoaderVersion()
 
 	@Input
-	abstract Property<String> getQuiltedFabricAPIVersion()
+	abstract Property<String> getFabricApiVersion()
 
 	@Input
 	abstract Property<String> getMinecraftVersion()
+
+	@Input
+	abstract Property<String> getJavaVersion()
 
 	@Override
 	String getGroup() {
@@ -202,13 +208,13 @@ abstract class GenerateQMJ extends DefaultTask {
 	}
 
 	@TaskAction
-	void generateQmj() throws IOException {
+	void generateFmj() throws IOException {
 
 		java.nio.file.Path input = this.getInputDir().getAsFile().get().toPath()
 
-		Map<String, BufferedReader> properties = QmjBuilder.getProperties(input)
+		Map<String, BufferedReader> properties = FmjBuilder.getProperties(input)
 
-		java.nio.file.Path output = this.getOutputDir().getAsFile().get().toPath().resolve("quilt.mod.json")
+		java.nio.file.Path output = this.getOutputDir().getAsFile().get().toPath().resolve("fabric.mod.json")
 
 		if (Files.exists(output)) {
 			Files.delete(output)
@@ -236,24 +242,25 @@ abstract class GenerateQMJ extends DefaultTask {
 			projectDescription = projectName - "MModding " + " of MModding"
 		}
 
-		QmjBuilder.buildQmj(
+		FmjBuilder.buildFmj(
 			this.getProjectId().get(),
 			projectName,
 			projectDescription,
 			(String) project.version,
-			this.getQuiltLoaderVersion().get(),
-			this.getQuiltedFabricAPIVersion().get(),
+			this.getFabricLoaderVersion().get(),
+			this.getFabricApiVersion().get(),
 			this.getMinecraftVersion().get(),
+			this.getJavaVersion().get(),
 			output,
 			properties,
-			QmjBuilder.hasMixins(input),
-			QmjBuilder.hasAccessWideners(input),
-			QmjBuilder.getEnvironment(input)
+			FmjBuilder.hasMixins(input),
+			FmjBuilder.hasAccessWideners(input),
+			FmjBuilder.getEnvironment(input)
 		)
 	}
 }
 
-final class QmjBuilder {
+final class FmjBuilder {
 
 	static Map<String, BufferedReader> getProperties(java.nio.file.Path path) {
 		Map<String, BufferedReader> properties = new HashMap<>()
@@ -360,11 +367,8 @@ final class QmjBuilder {
 	static void writeInjectedInterfaces(JsonWriter writer, BufferedReader bufferedReader) {
 		JsonReader reader = JsonReader.json(bufferedReader)
 
-		writer.name("quilt_loom")
-		writer.beginObject() // Quilt Loom Block Start
-
-		writer.name("injected_interfaces")
-		writer.beginObject() // Quilt Loom Injected Interfaces Block Start
+		writer.name("loom:injected_interfaces")
+		writer.beginObject() // Fabric Loom Injected Interfaces Block Start
 
 		reader.beginObject()
 		while (reader.hasNext()) {
@@ -378,94 +382,59 @@ final class QmjBuilder {
 		}
 		reader.endObject()
 
-		writer.endObject() // Quilt Loom Injected Interfaces Block End
-
-		writer.endObject() // Quilt Loom Block End
+		writer.endObject() // Fabric Loom Injected Interfaces Block End
 
 		reader.close()
 	}
 
-	/*
-	 * Wouldn't be possible without the example provided by Quilt Standard Libraries, that are under this license:
-	 *
-	 * Copyright 2023 The Quilt Project
-	 *
-	 * Licensed under the Apache License, Version 2.0 (the "License");
-	 * you may not use this file except in compliance with the License.
-	 * You may obtain a copy of the License at
-	 *
-	 *     http://www.apache.org/licenses/LICENSE-2.0
-	 *
-	 * Unless required by applicable law or agreed to in writing, software
-	 * distributed under the License is distributed on an "AS IS" BASIS,
-	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	 * See the License for the specific language governing permissions and
-	 * limitations under the License.
-	 */
-	static void buildQmj(
+	static void buildFmj(
 		String projectId,
 		String projectName,
 		String projectDescription,
 		String projectVersion,
-		String quiltLoaderVersion,
-		String qfapiVersion,
+		String fabricLoaderVersion,
+		String fabricApiVersion,
 		String minecraftVersion,
-		java.nio.file.Path qmjPath,
-		Map<String, BufferedReader> qmjProperties,
+		String javaVersion,
+		java.nio.file.Path fmjPath,
+		Map<String, BufferedReader> fmjProperties,
 		boolean hasMixins,
 		boolean hasAccessWideners,
 		String environment
 	) throws IOException {
-		JsonWriter writer = JsonWriter.json(qmjPath)
+		JsonWriter writer = JsonWriter.json(fmjPath)
 
 		// Starting by Writing the Basics
 		writer.beginObject()
-			.name("schema_version").value(1)
-			.name("quilt_loader")
-			.beginObject() // Quilt Loader Block Start
-				.name("group").value("com.mmodding.library")
-				.name("id").value(projectId)
-				.name("version").value(projectVersion)
-				.name("metadata")
-				.beginObject() // Quilt Loader MetaData Block Start
-					.name("name").value(projectName)
-					.name("description").value(projectDescription)
-					.name("contributors")
-					.beginObject() // Quilt Loader MetaData Contributors Block Start
-						.name("MModding Team").value("Owner")
-						.name("FirstMegaGame4").value("Author")
-					.endObject() // Quilt Loader MetaData Contributors Block End
-					.name("contact")
-					.beginObject() // Quilt Loader MetaData Contact Block Start
-						.name("homepage").value("https://mmodding.com")
-						.name("issues").value("https://github.com/MModding/mmodding-library/issues")
-						.name("sources").value("https://github.com/MModding/mmodding-library")
-					.endObject() // Quilt Loader MetaData Contact Block End
-					.name("license")
-					.beginObject() // Quilt Loader MetaData License Block Start
-						.name("name").value("Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved")
-						.name("id").value("Code-PolyForm-Shield-1.0.0-Assets-ARR")
-						.name("url").value("https://github.com/MModding/mmodding-library/blob/main/LICENSE.md")
-					.endObject() // Quilt Loader MetaData License Block End
-					.name("icon").value("assets/" + projectId + "/icon.png")
-				.endObject() // Quilt Loader MetaData Block End
-			.name("intermediate_mappings").value("net.fabricmc:intermediary")
-			.name("load_type").value("if_possible")
+			.name("schemaVersion").value(1)
+			.name("id").value(projectId)
+			.name("version").value(projectVersion)
+			.name("name").value(projectName)
+			.name("description").value(projectDescription)
+			.name("authors")
+			.beginArray() // Authors Start
+				.value("MModding Team")
+			.endArray() // Authors End
+			.name("contributors")
+			.beginArray() // Contributors Start
+				.value("FirstMegaGame4")
+			.endArray() // Contributors End
+			.name("contacts")
+			.beginObject() // Contacts Start
+				.name("homepage").value("https://mmodding.com")
+				.name("sources").value("https://github.com/mmodding-library")
+				.name("issues").value("https://github.com/mmodding-library/issues")
+			.endObject() // Contacts End
+			.name("license").value("Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved")
+			.name("icon").value("assets/" + projectId + "/icon.png")
+			.name("environment").value(environment.replace("both", "*"))
 			.name("depends")
-			.beginArray() // Depends Block Start
-				.beginObject()
-					.name("id").value("quilt_loader")
-					.name("versions").value(">=" + quiltLoaderVersion)
-				.endObject()
-				.beginObject()
-					.name("id").value("quilted_fabric_api")
-					.name("versions").value(">=" + qfapiVersion)
-				.endObject()
-				.beginObject()
-					.name("id").value("minecraft")
-					.name("versions").value(">=" + minecraftVersion)
-				.endObject()
-			.endArray() // Depends Block End
+			.beginObject() // Depends Block Start
+				.name("fabricloader").value(">=" + fabricLoaderVersion)
+				.name("fabric-api").value(">=" + fabricApiVersion)
+				.name("minecraft").value("~" + minecraftVersion)
+				.name("java").value(">=" + javaVersion)
+			.endObject() // Depends Block End
 			.name("provides")
 			.beginArray() // Provides Block Start
 
@@ -479,24 +448,26 @@ final class QmjBuilder {
 				.value(projectId.replace("_", "-") + "-api")
 			.endArray() // Provides Block End
 
-		if (qmjProperties.containsKey("entrypoints")) {
-			writeEntrypoints(writer, qmjProperties.get("entrypoints"))
+		if (fmjProperties.containsKey("entrypoints")) {
+			writeEntrypoints(writer, fmjProperties.get("entrypoints"))
 		}
 
-		writer.endObject() // Quilt Loader Block End
-
 		if (hasMixins) {
-			writer.name("mixin").value(projectId + ".mixins.json")
+			writer.name("mixins")
+				.beginArray() // Mixins Block Start
+					.value(projectId + ".mixins.json")
+				.endArray() // Mixins Block End
 		}
 
 		if (hasAccessWideners) {
-			writer.name("access_widener").value(projectId + ".accesswidener")
+			writer.name("accessWidener").value(projectId + ".accesswidener")
 		}
 
-		Runnable environmentWriter = () -> writer.name("minecraft").beginObject().name("environment").value(environment).endObject()
+		writer.name("custom")
+			.beginObject() // Custom Block Start
 
-		if (environment.equalsIgnoreCase("client") || environment.equalsIgnoreCase("server")) {
-			environmentWriter.run()
+		if (fmjProperties.containsKey("injected_interfaces")) {
+			writeInjectedInterfaces(writer, fmjProperties.get("injected_interfaces"))
 		}
 
 		writer.name("modmenu")
@@ -518,9 +489,7 @@ final class QmjBuilder {
 					.endObject() // ModMenu Parent Block End
 			.endObject() // ModMenu Block End
 
-		if (qmjProperties.containsKey("injected_interfaces")) {
-			writeInjectedInterfaces(writer, qmjProperties.get("injected_interfaces"))
-		}
+		writer.endObject() // Custom Block End
 
 		// Ending
 		writer.endObject()

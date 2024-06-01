@@ -4,18 +4,14 @@ import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.*;
 import com.mmodding.library.core.api.management.context.RegistryContext;
 import com.mmodding.library.java.api.list.BiList;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.base.api.entrypoint.server.DedicatedServerModInitializer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -49,9 +45,9 @@ public class ElementsManager {
 	private AdvancedContainer retrieveContainer(String modId) {
 
 		String key = switch (this.side) {
-			case CLIENT -> "client_init";
-			case COMMON -> "init";
-			case SERVER -> "server_init";
+			case CLIENT -> "client";
+			case COMMON -> "main";
+			case SERVER -> "server";
 		};
 
 		Class<?> type = switch (this.side) {
@@ -62,8 +58,8 @@ public class ElementsManager {
 
 		AdvancedContainer container = null;
 
-		for (EntrypointContainer<?> entrypointContainer : QuiltLoader.getEntrypointContainers(key, type)) {
-			if (Objects.equals(entrypointContainer.getProvider().metadata().id(), modId)) {
+		for (EntrypointContainer<?> entrypointContainer : FabricLoader.getInstance().getEntrypointContainers(key, type)) {
+			if (Objects.equals(entrypointContainer.getProvider().getMetadata().getId(), modId)) {
 				container = AdvancedContainer.of(entrypointContainer.getProvider());
 			}
 		}
@@ -71,7 +67,7 @@ public class ElementsManager {
 		return container;
 	}
 
-	public void initDynamicContent(String modId, Map<RegistryKey<? extends Registry<?>>, Registry<?>> registries) {
+	public void initDynamicContent(String modId, List<Registry<?>> registries) {
 		AdvancedContainer mod = this.retrieveContainer(modId);
 		this.dynamics.forEach((context, provider) -> {
 			ContentHolder holder = context.transform(mod, registries, provider);
@@ -113,21 +109,21 @@ public class ElementsManager {
 		}
 
 		public <T> ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, SimpleContentHolder.Provider<T> provider) {
-			if (QuiltLoader.isModLoaded(modId)) {
+			if (FabricLoader.getInstance().isModLoaded(modId)) {
 				this.withRegistry(context, provider);
 			}
 			return this;
 		}
 
 		public <L, R> ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, DoubleContentHolder.Provider<L, R> provider) {
-			if (QuiltLoader.isModLoaded(modId)) {
+			if (FabricLoader.getInstance().isModLoaded(modId)) {
 				this.withRegistry(context, provider);
 			}
 			return this;
 		}
 
 		public ElementsManager.Builder ifModLoadedWith(String modId, RegistryContext context, MultipleContentHolder.Provider provider) {
-			if (QuiltLoader.isModLoaded(modId)) {
+			if (FabricLoader.getInstance().isModLoaded(modId)) {
 				this.withRegistry(context, provider);
 			}
 			return this;

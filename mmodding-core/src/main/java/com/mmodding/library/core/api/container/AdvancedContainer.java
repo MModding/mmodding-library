@@ -1,61 +1,27 @@
 package com.mmodding.library.core.api.container;
 
 import com.mmodding.library.core.api.registry.LiteRegistry;
+import com.mmodding.library.core.impl.container.AdvancedContainerImpl;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.ModMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
-import java.util.List;
 import java.util.function.Consumer;
 
 public interface AdvancedContainer extends ModContainer {
 
 	static AdvancedContainer of(ModContainer mod) {
-
-		return new AdvancedContainer() {
-
-			@Override
-			public ModMetadata metadata() {
-				return mod.metadata();
-			}
-
-			@Override
-			public Path rootPath() {
-				return mod.rootPath();
-			}
-
-			@Override
-			public List<List<Path>> getSourcePaths() {
-				return mod.getSourcePaths();
-			}
-
-			@Override
-			public BasicSourceType getSourceType() {
-				return mod.getSourceType();
-			}
-
-			@Override
-			public ClassLoader getClassLoader() {
-				return mod.getClassLoader();
-			}
-
-			@Override
-			public Path getPath(String file) {
-				return mod.getPath(file);
-			}
-		};
+		return new AdvancedContainerImpl(mod);
 	}
 
 	default Logger logger() {
-		return LoggerFactory.getLogger(this.metadata().name());
+		return LoggerFactory.getLogger(this.getMetadata().getName());
 	}
 
 	default Identifier createId(String path) {
-		return new Identifier(this.metadata().id(), path);
+		return new Identifier(this.getMetadata().getId(), path);
 	}
 
 	default <T> RegistryLinkedContainerExecutor<T> withRegistry(Registry<T> registry) {
