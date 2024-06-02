@@ -17,6 +17,7 @@ plugins {
     id 'maven-publish'
 	id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.6'
     alias libs.plugins.fabric.loom
+	alias libs.plugins.mmodding.gradle
 }
 
 base {
@@ -40,6 +41,7 @@ allprojects {
 allprojects {
 
     apply plugin: 'fabric-loom'
+	apply plugin: 'com.mmodding.gradle'
 
     repositories {
 		maven {
@@ -123,12 +125,10 @@ jar {
     }
 }
 
-dependencies {
-	include libs.yumi.commons.core
-	include libs.yumi.commons.collections
-	include libs.yumi.commons.event
+mmodding {
+}
 
-	include libs.quilt.parsers.json
+dependencies {
 
 	api include(project(":mmodding-block"))
 	api include(project(":mmodding-block-entity"))
@@ -139,6 +139,47 @@ dependencies {
 	api include(project(":mmodding-java"))
 	api include(project(":mmodding-math"))
 	api include(project(":mmodding-worldgen"))
+
+	mmodding.withFabricManifest(include(libs.yumi.commons.core.get())) {
+		name = "Yumi Commons: Core"
+		namespace = "yumi-commons-core"
+		withContact {
+			it.email = "email@yumi.dev"
+		}
+		addAuthor("LambdAurora") {
+			withContact {
+				it.email = "email@lambdaurora.dev"
+			}
+		}
+	}
+
+	mmodding.withFabricManifest(include(libs.yumi.commons.collections.get())) {
+		name = "Yumi Commons: Collections"
+		namespace = "yumi-commons-collections"
+		withContact {
+			it.email = "email@yumi.dev"
+		}
+		addAuthor("LambdAurora") {
+			withContact {
+				it.email = "email@lambdaurora.dev"
+			}
+		}
+	}
+
+	mmodding.withFabricManifest(include(libs.yumi.commons.event.get())) {
+		name = "Yumi Commons: Event"
+		namespace = "yumi-commons-event"
+		withContact {
+			it.email = "email@yumi.dev"
+		}
+		addAuthor("LambdAurora") {
+			withContact {
+				it.email = "email@lambdaurora.dev"
+			}
+		}
+	}
+
+	include libs.quilt.parsers.json
 }
 
 afterEvaluate {

@@ -1,13 +1,23 @@
 pluginManagement {
+	resolutionStrategy {
+		eachPlugin {
+			if (requested.id.toString() == "com.mmodding.gradle") {
+				useModule("com.mmodding:mmodding-gradle:${requested.version}")
+			}
+		}
+	}
     repositories {
-        maven {
-            name = 'Quilt'
-            url = 'https://maven.quiltmc.org/repository/release'
+		maven {
+			name "JitPack"
+			url "https://jitpack.io"
+		}
+		maven {
+            name "Quilt"
+            url "https://maven.quiltmc.org/repository/release"
         }
-        // Currently needed for Intermediary and other temporary dependencies
         maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
+            name "Fabric"
+            url "https://maven.fabricmc.net/"
         }
         gradlePluginPortal()
     }
