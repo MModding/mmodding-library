@@ -238,10 +238,6 @@ dependencies {
 	include libs.quilt.parsers.json
 }
 
-afterEvaluate {
-	tasks.register("generateFmjForIdea").get().enabled = false
-}
-
 // Loom can detect content of generated FMJs thanks to that block code.
 afterEvaluate {
 	project.subprojects.each {
