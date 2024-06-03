@@ -8,10 +8,9 @@ buildscript {
 	}
 }
 
-import org.quiltmc.parsers.json.JsonReader
+import com.mmodding.gradle.api.mod.json.NamespaceProvider;
+import com.mmodding.gradle.api.mod.json.ParentSchema;
 import org.quiltmc.parsers.json.JsonWriter
-
-import java.nio.file.Files
 
 plugins {
     id 'maven-publish'
@@ -26,6 +25,49 @@ base {
 
 version = "$project.version+${libs.versions.minecraft.get()}"
 group = project.maven_group
+
+static def getMModdingLibraryNamespace(Project project) {
+	return project.name.replace("-", "_")
+}
+
+static def getMModdingLibraryName(Project project) {
+	String projectName = ""
+	getMModdingLibraryNamespace(project).split("_").each {
+		if (it[0] == "m" && it[1] == "m") {
+			projectName = projectName + it[0].toUpperCase() + it[1].toUpperCase() + it.substring(2) + " "
+		}
+		else {
+			projectName = projectName + it[0].toUpperCase() + it.substring(1) + " "
+		}
+	}
+	return projectName + "Library"
+}
+
+static def getMModdingLibraryDescription(Project project) {
+	if (getMModdingLibraryNamespace(project) == "mmodding") {
+		return "Library made by MModding Team to provide few sets of modding tools."
+	}
+	else {
+		return getMModdingLibraryName(project) - "MModding " + " of MModding"
+	}
+}
+
+static def applyMModdingLibraryProvider(Project project, NamespaceProvider provider) {
+	String projectId = getMModdingLibraryNamespace(project);
+	if (projectId != "mmodding") {
+		provider.provide(projectId.replace("_", "-"))
+	}
+	provider.provide(projectId + "_library")
+	provider.provide(projectId.replace("_", "-") + "-library")
+	provider.provide(projectId + "_api")
+	provider.provide(projectId.replace("_", "-") + "-api")
+}
+
+static def applyYumiCommonsParent(ParentSchema parent) {
+	parent.name = "Yumi Commons"
+	parent.description = "A library containing common utilities."
+	parent.addBadge("library")
+}
 
 allprojects {
 
@@ -58,11 +100,7 @@ allprojects {
     // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
     dependencies {
         minecraft libs.minecraft
-		mappings(loom.layered {
-			officialMojangMappings() { nameSyntheticMembers = false }
-			parchment(libs.parchment.mappings)
-			mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
-		})
+		mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
 
 		modImplementation libs.fabric.loader
 
@@ -77,20 +115,36 @@ allprojects {
         it.options.release = 17
     }
 
-	def generateFmj = tasks.register("generateFmj", GenerateFMJ) {
-		it.inputDir.set(project.file("fmj_resources/"))
-		it.outputDir.set(project.file("build/generated/generated_resources/"))
-		it.projectId.set(project.name.replace("-", "_"))
-		it.fabricLoaderVersion.set(libs.versions.fabric.loader.get())
-		it.fabricApiVersion.set(libs.versions.fabric.api.get())
-		it.minecraftVersion.set(libs.versions.minecraft.get())
-		it.javaVersion.set(libs.versions.java.get())
-	}
-
-	sourceSets {
-		main {
-			resources {
-				srcDir generateFmj
+	mmodding {
+		configureFabricModJson {
+			name = getMModdingLibraryName(project)
+			namespace = getMModdingLibraryNamespace(project)
+			description = getMModdingLibraryDescription(project)
+			license = "Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved"
+			icon = "assets/" + getMModdingLibraryNamespace(project) + "/icon.png"
+			addAuthor("MModding Team")
+			addContributor("FirstMegaGame4")
+			withContact {
+				it.homepage = "https://mmodding.com"
+				it.sources = "https://github.com/MModding/mmodding-library"
+				it.issues = "https://github.com/MModding/mmodding-library/issues"
+			}
+			withDependencies {
+				it.javaVersion = ">=" + 17
+				it.minecraftVersion = "~" + libs.versions.minecraft.get()
+				it.fabricLoaderVersion = ">=" + libs.versions.fabric.loader.get()
+				it.fabricApiVersion = ">=" + libs.versions.fabric.api.get()
+			}
+			withProvider {
+				applyMModdingLibraryProvider(project, it)
+			}
+			if (getMModdingLibraryNamespace(project) != "mmodding") withParent("mmodding")
+			withCustom {
+				it.withBlock("modmenu") {
+					it.withArray("badges") {
+						it.addUnique("library")
+					}
+				}
 			}
 		}
 	}
@@ -103,10 +157,6 @@ allprojects {
         withSourcesJar()
         // withJavadocJar()
     }
-
-	sourcesJar {
-		dependsOn(generateFmj)
-	}
 }
 
 subprojects {
@@ -125,9 +175,6 @@ jar {
     }
 }
 
-mmodding {
-}
-
 dependencies {
 
 	api include(project(":mmodding-block"))
@@ -140,7 +187,7 @@ dependencies {
 	api include(project(":mmodding-math"))
 	api include(project(":mmodding-worldgen"))
 
-	mmodding.withFabricManifest(include(libs.yumi.commons.core.get())) {
+	mmodding.configureFMJForDependency(include(libs.yumi.commons.core.get())) {
 		name = "Yumi Commons: Core"
 		namespace = "yumi-commons-core"
 		withContact {
@@ -151,9 +198,12 @@ dependencies {
 				it.email = "email@lambdaurora.dev"
 			}
 		}
+		withParent("yumi-commons") {
+			applyYumiCommonsParent(it)
+		}
 	}
 
-	mmodding.withFabricManifest(include(libs.yumi.commons.collections.get())) {
+	mmodding.configureFMJForDependency(include(libs.yumi.commons.collections.get())) {
 		name = "Yumi Commons: Collections"
 		namespace = "yumi-commons-collections"
 		withContact {
@@ -164,9 +214,12 @@ dependencies {
 				it.email = "email@lambdaurora.dev"
 			}
 		}
+		withParent("yumi-commons") {
+			applyYumiCommonsParent(it)
+		}
 	}
 
-	mmodding.withFabricManifest(include(libs.yumi.commons.event.get())) {
+	mmodding.configureFMJForDependency(include(libs.yumi.commons.event.get())) {
 		name = "Yumi Commons: Event"
 		namespace = "yumi-commons-event"
 		withContact {
@@ -177,27 +230,16 @@ dependencies {
 				it.email = "email@lambdaurora.dev"
 			}
 		}
+		withParent("yumi-commons") {
+			applyYumiCommonsParent(it)
+		}
 	}
 
 	include libs.quilt.parsers.json
 }
 
 afterEvaluate {
-	def generateFmjForIdea = tasks.register("generateFmjForIdea")
-	generateFmjForIdea.get().dependsOn project.tasks.named("generateFmj")
-	project.subprojects.each {
-		generateFmjForIdea.get().dependsOn it.tasks.named("generateFmj")
-	}
-
-	idea {
-		project {
-			settings {
-				taskTriggers {
-					afterSync generateFmjForIdea.get()
-				}
-			}
-		}
-	}
+	tasks.register("generateFmjForIdea").get().enabled = false
 }
 
 // Loom can detect content of generated FMJs thanks to that block code.
@@ -223,323 +265,4 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
-}
-
-abstract class GenerateFMJ extends DefaultTask {
-
-	@InputDirectory
-	abstract DirectoryProperty getInputDir()
-
-	@OutputDirectory
-	abstract DirectoryProperty getOutputDir()
-
-	@Input
-	abstract Property<String> getProjectId()
-
-	@Input
-	abstract Property<String> getFabricLoaderVersion()
-
-	@Input
-	abstract Property<String> getFabricApiVersion()
-
-	@Input
-	abstract Property<String> getMinecraftVersion()
-
-	@Input
-	abstract Property<String> getJavaVersion()
-
-	@Override
-	String getGroup() {
-		return "generation"
-	}
-
-	@TaskAction
-	void generateFmj() throws IOException {
-
-		java.nio.file.Path input = this.getInputDir().getAsFile().get().toPath()
-
-		Map<String, BufferedReader> properties = FmjBuilder.getProperties(input)
-
-		java.nio.file.Path output = this.getOutputDir().getAsFile().get().toPath().resolve("fabric.mod.json")
-
-		if (Files.exists(output)) {
-			Files.delete(output)
-		}
-
-		String projectName = ""
-
-		this.getProjectId().get().split("_").each {
-			if (it[0] == "m" && it[1] == "m") {
-				projectName = projectName + it[0].toUpperCase() + it[1].toUpperCase() + it.substring(2) + " "
-			}
-			else {
-				projectName = projectName + it[0].toUpperCase() + it.substring(1) + " "
-			}
-		}
-
-		projectName = projectName + "Library"
-
-		String projectDescription
-
-		if (this.getProjectId().get() == "mmodding") {
-			projectDescription = "Library made by MModding Team to provide few sets of modding tools."
-		}
-		else {
-			projectDescription = projectName - "MModding " + " of MModding"
-		}
-
-		FmjBuilder.buildFmj(
-			this.getProjectId().get(),
-			projectName,
-			projectDescription,
-			(String) project.version,
-			this.getFabricLoaderVersion().get(),
-			this.getFabricApiVersion().get(),
-			this.getMinecraftVersion().get(),
-			this.getJavaVersion().get(),
-			output,
-			properties,
-			FmjBuilder.hasMixins(input),
-			FmjBuilder.hasAccessWideners(input),
-			FmjBuilder.getEnvironment(input)
-		)
-	}
-}
-
-final class FmjBuilder {
-
-	static Map<String, BufferedReader> getProperties(java.nio.file.Path path) {
-		Map<String, BufferedReader> properties = new HashMap<>()
-
-		File entrypoints = path.resolve("entrypoints.json").toFile()
-		if (entrypoints.exists()) {
-			properties.put("entrypoints", entrypoints.newReader())
-		}
-
-		File injected_interfaces = path.resolve("injected_interfaces.json").toFile()
-		if (injected_interfaces.exists()) {
-			properties.put("injected_interfaces", injected_interfaces.newReader())
-		}
-
-		return properties
-	}
-
-	static boolean hasMixins(java.nio.file.Path path) {
-		boolean hasMixins = false
-
-		JsonReader reader = JsonReader.json(path.resolve("main.json"))
-
-		reader.beginObject()
-
-		while (reader.hasNext()) {
-			if (reader.nextName() == "has_mixins") {
-				hasMixins = reader.nextBoolean()
-			}
-			else {
-				reader.skipValue()
-			}
-		}
-
-		reader.close()
-
-		return hasMixins
-	}
-
-	static boolean hasAccessWideners(java.nio.file.Path path) {
-		boolean hasAccessWideners = false
-
-		JsonReader reader = JsonReader.json(path.resolve("main.json"))
-
-		reader.beginObject()
-
-		while (reader.hasNext()) {
-			if (reader.nextName() == "has_access_wideners") {
-				hasAccessWideners = reader.nextBoolean()
-			}
-			else {
-				reader.skipValue()
-			}
-		}
-
-		reader.close()
-
-		return hasAccessWideners
-	}
-
-	static String getEnvironment(java.nio.file.Path path) {
-		String environment = "both"
-
-		JsonReader reader = JsonReader.json(path.resolve("main.json"))
-
-		reader.beginObject()
-
-		while (reader.hasNext()) {
-			if (reader.nextName() == "environment") {
-				environment = reader.nextString()
-			}
-			else {
-				reader.skipValue()
-			}
-		}
-
-		reader.close()
-
-		return environment
-	}
-
-	static void writeEntrypoints(JsonWriter writer, BufferedReader bufferedReader) {
-		JsonReader reader = JsonReader.json(bufferedReader)
-
-		writer.name("entrypoints")
-		writer.beginObject() // Entrypoints Block Start
-
-		reader.beginObject()
-		while (reader.hasNext()) {
-			writer.name(reader.nextName()).beginArray()
-			reader.beginArray()
-			while (reader.hasNext()) {
-				writer.value(reader.nextString())
-			}
-			reader.endArray()
-			writer.endArray()
-		}
-		reader.endObject()
-
-		writer.endObject() // Entrypoints Block End
-
-		reader.close()
-	}
-
-	static void writeInjectedInterfaces(JsonWriter writer, BufferedReader bufferedReader) {
-		JsonReader reader = JsonReader.json(bufferedReader)
-
-		writer.name("loom:injected_interfaces")
-		writer.beginObject() // Fabric Loom Injected Interfaces Block Start
-
-		reader.beginObject()
-		while (reader.hasNext()) {
-			writer.name(reader.nextName()).beginArray()
-			reader.beginArray()
-			while (reader.hasNext()) {
-				writer.value(reader.nextString().replace(".", "/").replace("\u0024", "\\u0024")) // that way we avoid some errors
-			}
-			reader.endArray()
-			writer.endArray()
-		}
-		reader.endObject()
-
-		writer.endObject() // Fabric Loom Injected Interfaces Block End
-
-		reader.close()
-	}
-
-	static void buildFmj(
-		String projectId,
-		String projectName,
-		String projectDescription,
-		String projectVersion,
-		String fabricLoaderVersion,
-		String fabricApiVersion,
-		String minecraftVersion,
-		String javaVersion,
-		java.nio.file.Path fmjPath,
-		Map<String, BufferedReader> fmjProperties,
-		boolean hasMixins,
-		boolean hasAccessWideners,
-		String environment
-	) throws IOException {
-		JsonWriter writer = JsonWriter.json(fmjPath)
-
-		// Starting by Writing the Basics
-		writer.beginObject()
-			.name("schemaVersion").value(1)
-			.name("id").value(projectId)
-			.name("version").value(projectVersion)
-			.name("name").value(projectName)
-			.name("description").value(projectDescription)
-			.name("authors")
-			.beginArray() // Authors Start
-				.value("MModding Team")
-			.endArray() // Authors End
-			.name("contributors")
-			.beginArray() // Contributors Start
-				.value("FirstMegaGame4")
-			.endArray() // Contributors End
-			.name("contacts")
-			.beginObject() // Contacts Start
-				.name("homepage").value("https://mmodding.com")
-				.name("sources").value("https://github.com/mmodding-library")
-				.name("issues").value("https://github.com/mmodding-library/issues")
-			.endObject() // Contacts End
-			.name("license").value("Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved")
-			.name("icon").value("assets/" + projectId + "/icon.png")
-			.name("environment").value(environment.replace("both", "*"))
-			.name("depends")
-			.beginObject() // Depends Block Start
-				.name("fabricloader").value(">=" + fabricLoaderVersion)
-				.name("fabric-api").value(">=" + fabricApiVersion)
-				.name("minecraft").value("~" + minecraftVersion)
-				.name("java").value(">=" + javaVersion)
-			.endObject() // Depends Block End
-			.name("provides")
-			.beginArray() // Provides Block Start
-
-		if (projectId != "mmodding") {
-			writer.value(projectId.replace("_", "-"))
-		}
-
-		writer.value(projectId + "_library")
-				.value(projectId.replace("_", "-") + "-library")
-				.value(projectId + "_api")
-				.value(projectId.replace("_", "-") + "-api")
-			.endArray() // Provides Block End
-
-		if (fmjProperties.containsKey("entrypoints")) {
-			writeEntrypoints(writer, fmjProperties.get("entrypoints"))
-		}
-
-		if (hasMixins) {
-			writer.name("mixins")
-				.beginArray() // Mixins Block Start
-					.value(projectId + ".mixins.json")
-				.endArray() // Mixins Block End
-		}
-
-		if (hasAccessWideners) {
-			writer.name("accessWidener").value(projectId + ".accesswidener")
-		}
-
-		writer.name("custom")
-			.beginObject() // Custom Block Start
-
-		if (fmjProperties.containsKey("injected_interfaces")) {
-			writeInjectedInterfaces(writer, fmjProperties.get("injected_interfaces"))
-		}
-
-		writer.name("modmenu")
-			.beginObject() // ModMenu Block Start
-				.name("badges")
-				.beginArray()
-					.value("library")
-				.endArray()
-				.name("parent")
-					.beginObject() // ModMenu Parent Block Start
-						.name("id").value("mmodding")
-						.name("name").value("MModding Library")
-						.name("description").value("Library made by MModding Team to provide few sets of modding tools.")
-						.name("icon").value("assets/" + projectId + "/icon.png")
-						.name("badges")
-						.beginArray()
-							.value("library")
-						.endArray()
-					.endObject() // ModMenu Parent Block End
-			.endObject() // ModMenu Block End
-
-		writer.endObject() // Custom Block End
-
-		// Ending
-		writer.endObject()
-		writer.flush()
-		writer.close()
-	}
 }

@@ -1,3 +1,19 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		addMixin("mmodding_core.mixins.json")
+		withEntrypoints {
+			it.init("com.mmodding.library.core.impl.MModdingInitializer")
+		}
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/class_2960", "com/mmodding/library/core/api/Reference<Ljava/lang/Object;>")
+			it.injectTo("net/minecraft/class_5321", "com/mmodding/library/core/api/Reference<TT;>")
+		}
+	}
+}
+
 dependencies {
 	implementation(project(":mmodding-java"))
 }

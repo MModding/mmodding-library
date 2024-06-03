@@ -1,3 +1,15 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		addMixin("mmodding_fluid.mixins.json")
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/class_3611", "com/mmodding/library/fluid/api/FluidLike")
+		}
+	}
+}
+
 dependencies {
 	implementation(project(":mmodding-core"))
 }

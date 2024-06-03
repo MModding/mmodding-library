@@ -1,3 +1,18 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		addMixin("mmodding_item.mixins.json")
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/class_1792", Set.of(
+				"com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/item/Item;>",
+				"com/mmodding/library/item/api/category/ItemCategoryContainer"
+			))
+		}
+	}
+}
+
 dependencies {
 	implementation(project(":mmodding-core"))
 }

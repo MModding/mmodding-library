@@ -1,8 +1,0 @@
-{
-  "net/minecraft/class_2960": [
-    "com/mmodding/library/core/api/Reference<Ljava/lang/Object;>"
-  ],
-  "net/minecraft/class_5321": [
-    "com/mmodding/library/core/api/Reference<TT;>"
-  ]
-}
