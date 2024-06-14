@@ -1,0 +1,16 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		addMixin("mmodding_datagen.mixins.json")
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/block/AbstractBlock", "com/mmodding/library/datagen/api/lang/LangContainer")
+		}
+	}
+}
+
+dependencies {
+	implementation(project(":mmodding-core"))
+	implementation(project(":mmodding-java"))
+}
