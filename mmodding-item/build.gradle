@@ -11,8 +11,7 @@ mmodding {
 			))
 		}
 	}
-}
-
-dependencies {
-	implementation(project(":mmodding-core"))
+	modules(project) {
+		implementation("mmodding-core")
+	}
 }

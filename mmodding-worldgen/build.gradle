@@ -4,10 +4,9 @@ mmodding {
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
 	}
-}
-
-dependencies {
-	implementation(project(":mmodding-core"))
-	implementation(project(":mmodding-block"))
-	implementation(project(":mmodding-java"))
+	modules(project) {
+		implementation("mmodding-core")
+		implementation("mmodding-block")
+		implementation("mmodding-java")
+	}
 }

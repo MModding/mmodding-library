@@ -4,11 +4,12 @@ mmodding {
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
 	}
+	modules(project) {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+	}
 }
 
 dependencies {
 	implementation libs.quilt.parsers.json
-
-	implementation(project(":mmodding-core"))
-	implementation(project(":mmodding-java"))
 }

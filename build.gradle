@@ -1,16 +1,5 @@
-buildscript {
-	repositories {
-		maven { url 'https://maven.quiltmc.org/repository/release' }
-	}
-
-	dependencies {
-		classpath libs.quilt.parsers.json
-	}
-}
-
 import com.mmodding.gradle.api.mod.json.NamespaceProvider;
 import com.mmodding.gradle.api.mod.json.ParentSchema;
-import org.quiltmc.parsers.json.JsonWriter
 
 plugins {
     id 'maven-publish'
@@ -104,7 +93,7 @@ allprojects {
 
 		modImplementation libs.fabric.loader
 
-		implementation libs.yumi.commons
+		modImplementation libs.yumi.commons
 
         modImplementation libs.fabric.api
     }
@@ -175,19 +164,24 @@ jar {
     }
 }
 
+mmodding {
+	modules(project) {
+		it.include {
+			it.api("mmodding-block")
+			it.api("mmodding-block-entity")
+			it.api("mmodding-config")
+			it.api("mmodding-core")
+			it.api("mmodding-datagen")
+			it.api("mmodding-fluid")
+			it.api("mmodding-item")
+			it.api("mmodding-java")
+			it.api("mmodding-math")
+			it.api("mmodding-worldgen")
+		}
+	}
+}
+
 dependencies {
-
-	api include(project(":mmodding-block"))
-	api include(project(":mmodding-block-entity"))
-	api include(project(":mmodding-config"))
-	api include(project(":mmodding-core"))
-	api include(project(":mmodding-datagen"))
-	api include(project(":mmodding-fluid"))
-	api include(project(":mmodding-item"))
-	api include(project(":mmodding-java"))
-	api include(project(":mmodding-math"))
-	api include(project(":mmodding-worldgen"))
-
 	mmodding.configureFMJForDependency(include(libs.yumi.commons.core.get())) {
 		name = "Yumi Commons: Core"
 		namespace = "yumi-commons-core"
