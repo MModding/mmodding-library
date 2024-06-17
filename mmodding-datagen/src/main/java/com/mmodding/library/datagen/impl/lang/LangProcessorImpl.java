@@ -2,7 +2,9 @@ package com.mmodding.library.datagen.impl.lang;
 
 import com.mmodding.library.datagen.api.lang.LangProcessor;
 import net.minecraft.registry.RegistryKey;
+import org.jetbrains.annotations.ApiStatus;
 
+@ApiStatus.Internal
 public class LangProcessorImpl<T> implements LangProcessor<T> {
 
 	@Override
