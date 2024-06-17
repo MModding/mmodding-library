@@ -5,7 +5,12 @@ mmodding {
 		environment = EnvironmentTarget.ANY
 		addMixin("mmodding_datagen.mixins.json")
 		withInjectedInterfaces {
-			it.injectTo("net/minecraft/block/AbstractBlock", "com/mmodding/library/datagen/api/lang/LangContainer")
+			it.injectTo("net/minecraft/block/Block", "com/mmodding/library/datagen/api/lang/LangContainer")
+			it.injectTo("net/minecraft/enchantment/Enchantment", "com/mmodding/library/datagen/api/lang/LangContainer")
+			it.injectTo("net/minecraft/entity/attribute/EntityAttribute", "com/mmodding/library/datagen/api/lang/LangContainer")
+			it.injectTo("net/minecraft/entity/EntityType", "com/mmodding/library/datagen/api/lang/LangContainer")
+			it.injectTo("net/minecraft/item/Item", "com/mmodding/library/datagen/api/lang/LangContainer")
+			it.injectTo("net/minecraft/stat/StatType", "com/mmodding/library/datagen/api/lang/LangContainer")
 		}
 	}
 	modules(project) {

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.item.Item;
@@ -54,6 +55,11 @@ public class DataProcessor {
 						.ifPresentOrElse(
 							key -> translationBuilder.add((EntityType<?>) container, ((LangProcessorAccess<EntityType<?>>) container).processor().process(key)),
 							() -> {throw new IllegalStateException("EntityType does not exist in Registries.ENTITY_TYPE!");}
+						);
+					case ENCHANTMENT -> Registries.ENCHANTMENT.getKey((Enchantment) container)
+						.ifPresentOrElse(
+							key -> translationBuilder.add((Enchantment) container, ((LangProcessorAccess<Enchantment>) container).processor().process(key)),
+							() -> {throw new IllegalStateException("Enchantment does not exist in Registries.ENCHANTMENT!");}
 						);
 					case ATTRIBUTE -> Registries.ENTITY_ATTRIBUTE.getKey((EntityAttribute) container)
 						.ifPresentOrElse(
