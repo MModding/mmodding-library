@@ -58,7 +58,7 @@ public class TriHashMap<K, V1, V2, V3> extends HashMap<K, Triple<V1, V2, V3>> im
 		this.forEach((key, value) -> action.accept(key, value.getRight()));
 	}
 
-    public void forEach(QuadConsumer<? super K, ? super V1, ? super V2, ? super V3> action) {
+    public void forEach(QuartConsumer<? super K, ? super V1, ? super V2, ? super V3> action) {
         this.forEach((key, value) -> action.accept(key, value.getLeft(), value.getMiddle(), value.getRight()));
     }
 }

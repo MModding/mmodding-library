@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
 
-@InternalOf(targets = CustomSquaredPortalBlock.class)
+@InternalOf(CustomSquaredPortalBlock.class)
 public interface NetherPortalBlockDuckInterface {
 
 	BlockState mmodding_lib$getAbstractStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos);

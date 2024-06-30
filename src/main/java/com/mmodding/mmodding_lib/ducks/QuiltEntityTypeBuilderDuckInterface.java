@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.library.entities.CustomEntityType;
 import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import net.minecraft.entity.Entity;
 
-@InternalOf(targets = CustomEntityType.class)
+@InternalOf( CustomEntityType.class)
 public interface QuiltEntityTypeBuilderDuckInterface<T extends Entity> {
 
     CustomEntityType<T> mmodding_lib$buildCustom();

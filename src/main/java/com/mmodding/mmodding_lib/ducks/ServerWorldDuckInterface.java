@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import com.mmodding.mmodding_lib.states.persistant.StellarStatuses;
 import net.minecraft.nbt.NbtCompound;
 
-@InternalOf(targets = StellarStatuses.class)
+@InternalOf(StellarStatuses.class)
 public interface ServerWorldDuckInterface {
 
 	StellarStatuses mmodding_lib$createStellarStatuses();

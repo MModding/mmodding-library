@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.TYPE_USE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.PACKAGE})
 public @interface EnvRestriction {
 
-	Side side() default Side.COMMON;
+	Side value() default Side.COMMON;
 
 	enum Side {
 

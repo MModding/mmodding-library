@@ -6,7 +6,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import org.quiltmc.qsl.base.api.event.Event;
 
-@InternalOf(targets = BlockEntityTypeBlockSupportCallback.class)
+@InternalOf(BlockEntityTypeBlockSupportCallback.class)
 public interface BlockEntityTypeDuckInterface {
 
 	Event<BlockEntityTypeBlockSupportCallback> mmodding_lib$supportBlocksCallback();

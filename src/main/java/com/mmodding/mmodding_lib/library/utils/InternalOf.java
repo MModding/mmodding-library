@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.TYPE_USE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.PACKAGE})
 public @interface InternalOf {
 
-	Class<?>[] targets();
+	Class<?>[] value();
 }

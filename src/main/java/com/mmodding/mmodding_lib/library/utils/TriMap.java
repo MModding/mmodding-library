@@ -34,5 +34,5 @@ public interface TriMap<K, V1, V2, V3> extends Map<K, Triple<V1, V2, V3>> {
 
 	void forEachThird(BiConsumer<? super K, ? super V3> action);
 
-	void forEach(QuadConsumer<? super K, ? super V1, ? super V2, ? super V3> action);
+	void forEach(QuartConsumer<? super K, ? super V1, ? super V2, ? super V3> action);
 }

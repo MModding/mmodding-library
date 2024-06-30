@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-@InternalOf(targets = StuckArrowDisplay.class)
+@InternalOf(StuckArrowDisplay.class)
 public interface LivingEntityDuckInterface {
 
 	List<Identifier> mmodding_lib$getStuckArrowTypes();

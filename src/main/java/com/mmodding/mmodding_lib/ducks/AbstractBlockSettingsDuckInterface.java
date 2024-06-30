@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.library.blocks.settings.AdvancedBlockSettings;
 import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import org.quiltmc.qsl.base.api.util.TriState;
 
-@InternalOf(targets = AdvancedBlockSettings.class)
+@InternalOf(AdvancedBlockSettings.class)
 public interface AbstractBlockSettingsDuckInterface {
 
 	TriState mmodding_lib$getTranslucent();

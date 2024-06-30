@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.library.blocks.interactions.data.FallingBlockIn
 import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import net.minecraft.block.BlockState;
 
-@InternalOf(targets = FallingBlockInteractionData.class)
+@InternalOf(FallingBlockInteractionData.class)
 public interface FallingBlockEntityDuckInterface {
 
 	BlockState mmodding_lib$getInitialBlockState();

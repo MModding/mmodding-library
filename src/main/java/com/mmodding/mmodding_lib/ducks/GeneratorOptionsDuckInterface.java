@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 
-@InternalOf(targets = DifferedSeeds.class)
+@InternalOf(DifferedSeeds.class)
 public interface GeneratorOptionsDuckInterface {
 
 	void mmodding_lib$fillDimensionSeedAddendsNbt(NbtList list);

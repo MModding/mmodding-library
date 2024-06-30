@@ -10,7 +10,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 import java.util.Optional;
 
-@InternalOf(targets = CustomSquaredPortal.class)
+@InternalOf(CustomSquaredPortal.class)
 public interface PortalForcerDuckInterface {
 
 	void mmodding_lib$setUseCustomPortalElements(boolean useCustomPortalElements);

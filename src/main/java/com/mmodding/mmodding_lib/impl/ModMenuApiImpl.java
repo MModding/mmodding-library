@@ -10,7 +10,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import java.util.HashMap;
 import java.util.Map;
 
-@InternalOf(targets = ConfigScreen.class)
+@InternalOf(ConfigScreen.class)
 public class ModMenuApiImpl implements ModMenuApi {
 
 	@Override

@@ -6,7 +6,7 @@ import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-@InternalOf(targets = CustomSquaredPortalBlock.class)
+@InternalOf(CustomSquaredPortalBlock.class)
 public interface EntityDuckInterface {
 
 	boolean mmodding_lib$isInCustomPortal();

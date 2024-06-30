@@ -6,7 +6,7 @@ import net.minecraft.fluid.FluidState;
 
 import java.util.function.IntFunction;
 
-@InternalOf(targets = CustomFluidBlock.class)
+@InternalOf(CustomFluidBlock.class)
 public interface FlowableFluidDuckInterface {
 
 	void mmodding_lib$putCustomStates(FluidState stillState, IntFunction<FluidState> flowingStates);

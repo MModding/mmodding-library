@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-@EnvRestriction(side = EnvRestriction.Side.SERVER_COMMON)
+@EnvRestriction(EnvRestriction.Side.SERVER_COMMON)
 public interface GlintPackView {
 
 	static GlintPackView of(ItemStack stack) {

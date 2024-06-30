@@ -9,7 +9,7 @@ import net.minecraft.world.border.WorldBorder;
 
 import java.util.Optional;
 
-@InternalOf(targets = CustomSquaredPortal.class)
+@InternalOf(CustomSquaredPortal.class)
 public interface ServerPlayerDuckInterface {
 
 	Optional<BlockLocating.Rectangle> mmodding_lib$getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, WorldBorder worldBorder);
