@@ -55,6 +55,7 @@ public class ConfigBuilderImpl implements Builder {
 	public Config build(Identifier identifier) {
 		Config config = new ConfigImpl(this.translationKey, this.filePath, this.level, this.networkManagement, this.schema, ((MutableConfigContentImpl) this.defaultContent.acceptReturnable(new MutableConfigContentImpl())).immutable());
 		ConfigsImpl.CONFIGS.put(identifier, config);
+		InternalConfigRetriever.initialLoad(config);
 		return config;
 	}
 }

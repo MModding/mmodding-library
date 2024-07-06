@@ -54,6 +54,12 @@ public interface Config {
 	 */
 	ConfigContent getDefaultContent();
 
+	/**
+	 * The content of this configuration.
+	 * @return the {@link ConfigContent} object of this configuration's content
+	 */
+	ConfigContent getContent();
+
 	@ApiStatus.NonExtendable
 	interface Builder {
 

@@ -5,6 +5,9 @@ import com.mmodding.library.datagen.api.lang.LangProcessor;
 import com.mmodding.library.datagen.impl.access.LangProcessorAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
@@ -23,8 +26,8 @@ public class EntityTypeMixin<E extends Entity> implements LangContainer, LangPro
 	}
 
 	@Override
-	public Type type() {
-		return Type.ITEM;
+	public RegistryKey<Registry<EntityType<?>>> registry() {
+		return RegistryKeys.ENTITY_TYPE;
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-public class ConfigOperatorImpl {
+public class ConfigOperator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("mmodding_config");
 
@@ -26,7 +26,7 @@ public class ConfigOperatorImpl {
 	}
 
 	private static boolean isCategory(BiMap<String, Class<?>, Map<String, ?>> rawSchema, String qualifier) {
-		return ConfigOperatorImpl.getSchemaType(rawSchema, qualifier) == ConfigSchema.class;
+		return ConfigOperator.getSchemaType(rawSchema, qualifier) == ConfigSchema.class;
 	}
 
 	private static Class<?> getSchemaType(BiMap<String, Class<?>, Map<String, ?>> rawSchema, String qualifier) {
@@ -34,37 +34,37 @@ public class ConfigOperatorImpl {
 	}
 
 	private static boolean needFix(BiMap<String, Class<?>, Map<String, ?>> rawSchema, ConfigContent content, String qualifier) {
-		Class<?> type = ConfigOperatorImpl.getSchemaType(rawSchema, qualifier);
+		Class<?> type = ConfigOperator.getSchemaType(rawSchema, qualifier);
 		return TYPES_TO_PATCH.test(type) && type != ((ConfigContentImpl) content).getRaw().get(qualifier).getType();
 	}
 
 	@SuppressWarnings("unchecked")
 	private static void applyCategory(BiMap<String, Class<?>, Map<String, ?>> rawSchema, ConfigContent content, MutableConfigContent mutable) {
 		for (String qualifier : ((ConfigContentImpl) content).getRaw().keySet()) {
-			if (ConfigOperatorImpl.containsQualifier(rawSchema, qualifier)) {
-				if (ConfigOperatorImpl.isCategory(rawSchema, qualifier)) {
-					mutable.category(qualifier, nextMutable -> ConfigOperatorImpl.applyCategory(
+			if (ConfigOperator.containsQualifier(rawSchema, qualifier)) {
+				if (ConfigOperator.isCategory(rawSchema, qualifier)) {
+					mutable.category(qualifier, nextMutable -> ConfigOperator.applyCategory(
 						(BiMap<String, Class<?>, Map<String,?>>) rawSchema.getSecondValue(qualifier),
 						content.category(qualifier),
 						nextMutable
 					));
 				}
-				else if (ConfigOperatorImpl.needFix(rawSchema, content, qualifier)) {
-					if (ConfigOperatorImpl.getSchemaType(rawSchema, qualifier) == Color.class) {
+				else if (ConfigOperator.needFix(rawSchema, content, qualifier)) {
+					if (ConfigOperator.getSchemaType(rawSchema, qualifier) == Color.class) {
 						mutable.color(qualifier, Color.rgb(content.integer(qualifier)));
 					}
-					else if (ConfigOperatorImpl.getSchemaType(rawSchema, qualifier) == IntStream.class) {
+					else if (ConfigOperator.getSchemaType(rawSchema, qualifier) == IntStream.class) {
 						Map<String, ?> properties = rawSchema.getSecondValue(qualifier);
 						mutable.integerRange(qualifier, Math.max((int) properties.get("start"), Math.min((int) properties.get("end"), content.integer(qualifier))));
 					}
-					else if (ConfigOperatorImpl.getSchemaType(rawSchema, qualifier) == DoubleStream.class) {
+					else if (ConfigOperator.getSchemaType(rawSchema, qualifier) == DoubleStream.class) {
 						Map<String, ?> properties = rawSchema.getSecondValue(qualifier);
 						mutable.floatingRange(qualifier, Math.max((float) properties.get("start"), Math.min((float) properties.get("end"), content.floating(qualifier))));
 					}
 				}
 			}
 			else {
-				ConfigOperatorImpl.LOGGER.warn("Unknown configuration qualifier \"{}\", present in the configuration file but not in the configuration schema!", qualifier);
+				ConfigOperator.LOGGER.warn("Unknown configuration qualifier \"{}\", present in the configuration file but not in the configuration schema!", qualifier);
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class ConfigOperatorImpl {
 	public static ConfigContent applySchema(ConfigSchema schema, ConfigContent content) {
 		if (!(schema instanceof ConfigSchemaImpl.EmptySchema)) {
 			MutableConfigContentImpl mutable = new MutableConfigContentImpl(content);
-			ConfigOperatorImpl.applyCategory(((ConfigSchemaImpl) schema).raw, content, mutable);
+			ConfigOperator.applyCategory(((ConfigSchemaImpl) schema).raw, content, mutable);
 			return mutable.immutable();
 		}
 		else {

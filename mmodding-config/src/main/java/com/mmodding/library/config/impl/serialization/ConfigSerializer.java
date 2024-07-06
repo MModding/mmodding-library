@@ -10,11 +10,17 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.quiltmc.parsers.json.JsonWriter;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class ConfigSerializer {
 
 	private static JsonWriter writer(Config config) throws IOException {
-		return JsonWriter.json(FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json"));
+		Path path = FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json");
+		// noinspection ResultOfMethodCallIgnored
+		path.toFile().getParentFile().mkdirs();
+		// noinspection ResultOfMethodCallIgnored
+		path.toFile().createNewFile();
+		return JsonWriter.json(path);
 	}
 
 	/**
@@ -85,6 +91,7 @@ public class ConfigSerializer {
 			JsonWriter writer = ConfigSerializer.writer(config);
 			writer.setIndent("  ");
 			ConfigSerializer.writeObject(writer, content);
+			writer.close();
 		}
 		catch (IOException error) {
 			throw new RuntimeException("Failed to write configuration!", error);

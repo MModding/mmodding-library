@@ -6,7 +6,6 @@ import com.mmodding.library.config.api.ConfigNetworkManagement;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 
-@SuppressWarnings("ClassCanBeRecord") // we do not want equals and hashcode impl of records
 public class ConfigImpl implements Config {
 
 	private final String translationKey;
@@ -15,6 +14,8 @@ public class ConfigImpl implements Config {
 	private final ConfigNetworkManagement networkManagement;
 	private final ConfigSchema schema;
 	private final ConfigContent defaultContent;
+
+	private ConfigContent cachedContent = null;
 
 	public ConfigImpl(String translationKey, String filePath, ConfigLevel level, ConfigNetworkManagement networkManagement, ConfigSchema schema, ConfigContent defaultContent) {
 		this.translationKey = translationKey;
@@ -53,5 +54,14 @@ public class ConfigImpl implements Config {
 	@Override
 	public ConfigContent getDefaultContent() {
 		return this.defaultContent;
+	}
+
+	@Override
+	public ConfigContent getContent() {
+		return this.level.equals(ConfigLevel.ALWAYS_UPDATED) ? InternalConfigRetriever.load(this) : this.cachedContent;
+	}
+
+	public void updateContent(ConfigContent content) {
+		this.cachedContent = content;
 	}
 }

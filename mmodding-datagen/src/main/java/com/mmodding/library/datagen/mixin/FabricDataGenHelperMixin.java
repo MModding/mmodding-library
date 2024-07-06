@@ -2,11 +2,14 @@ package com.mmodding.library.datagen.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mmodding.library.datagen.impl.AutomatedDataGeneratorImpl;
+import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,11 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 @Mixin(value = FabricDataGenHelper.class, remap = false)
 public class FabricDataGenHelperMixin {
+
+	@Inject(method = "runInternal", at = @At("HEAD"))
+	private static void preSetup(CallbackInfo ci) {
+		TranslationSupportImpl.defaultTranslationSupports();
+	}
 
 	@SuppressWarnings("unchecked")
 	@ModifyExpressionValue(method = "runInternal", at = @At(value = "INVOKE", target = "Lnet/fabricmc/loader/api/FabricLoader;getEntrypointContainers(Ljava/lang/String;Ljava/lang/Class;)Ljava/util/List;"))
