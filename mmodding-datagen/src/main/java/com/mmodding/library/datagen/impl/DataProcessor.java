@@ -2,12 +2,17 @@ package com.mmodding.library.datagen.impl;
 
 import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.lang.TranslationSupport;
-import com.mmodding.library.datagen.impl.access.LangProcessorAccess;
+import com.mmodding.library.datagen.api.recipe.RecipeContainer;
+import com.mmodding.library.datagen.api.recipe.RecipeHelper;
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
+import com.mmodding.library.datagen.impl.recipe.RecipeHelperImpl;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -15,6 +20,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @ApiStatus.Internal
 public class DataProcessor {
@@ -23,6 +29,7 @@ public class DataProcessor {
 		return fabricDataGenerator -> {
 			FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 			pack.addProvider((output, future) -> new AutomatedLanguageProvider(containers.langContainers(), output));
+			pack.addProvider((output, future) -> new AutomatedRecipeProvider(containers.recipeContainers(), output));
 		};
 	}
 
@@ -39,28 +46,48 @@ public class DataProcessor {
 		@SuppressWarnings("unchecked")
 		public void generateTranslations(TranslationBuilder translationBuilder) {
 			for (LangContainer container : this.langContainers) {
-				if (TranslationSupportImpl.REGISTRY.containsKey(container.registry())) {
+				if (TranslationSupportImpl.REGISTRY.containsKey(container.langRegistry())) {
 					@SuppressWarnings("rawtypes")
-					Registry<LangContainer> registry = Registries.REGISTRY.get((RegistryKey) container.registry());
+					Registry<LangContainer> registry = Registries.REGISTRY.get((RegistryKey) container.langRegistry());
 					assert registry != null;
 					Optional<RegistryKey<LangContainer>> optional = registry.getKey(container);
 					optional.ifPresentOrElse(
 						key -> {
 							TranslationSupport.TranslationCallback callback = translation -> translationBuilder.add(
 								translation,
-								LangProcessorAccess.access(container).process(key)
+								InternalDataAccess.langProcessor(container).process(key)
 							);
-							TranslationSupportImpl.REGISTRY.get(container.registry()).accept(callback, container);
+							TranslationSupportImpl.REGISTRY.get(container.langRegistry()).accept(callback, container);
 						},
 						() -> {
-							throw new IllegalStateException(container + " does not exist in " + container.registry() + "!");
+							throw new IllegalStateException(container + " does not exist in " + container.langRegistry() + "!");
 						}
 					);
 
 				}
 				else {
-					throw new IllegalStateException(container.registry() + " is not a valid translation support type!");
+					throw new IllegalStateException(container.langRegistry() + " is not a valid translation support type!");
 				}
+			}
+		}
+	}
+
+	private static class AutomatedRecipeProvider extends FabricRecipeProvider {
+
+		private final List<RecipeContainer> recipeContainers;
+
+		protected AutomatedRecipeProvider(List<RecipeContainer> recipeContainers, FabricDataOutput dataOutput) {
+			super(dataOutput);
+			this.recipeContainers = recipeContainers;
+		}
+
+		@Override
+		public void generateRecipes(Consumer<RecipeJsonProvider> exporter) {
+			for (RecipeContainer container : this.recipeContainers) {
+				Consumer<RecipeHelper> recipeGenerator = InternalDataAccess.recipeGenerator(container);
+				RecipeHelperImpl helper = new RecipeHelperImpl((ItemConvertible) container);
+				recipeGenerator.accept(helper);
+				helper.getFactories().forEach(supplier -> supplier.get().offerTo(exporter));
 			}
 		}
 	}

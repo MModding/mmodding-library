@@ -9,7 +9,7 @@ public interface LangContainer {
 		throw new IllegalStateException();
 	}
 
-	default RegistryKey<? extends Registry<?>> registry() {
+	default RegistryKey<? extends Registry<?>> langRegistry() {
 		throw new IllegalStateException();
 	}
 }

@@ -2,7 +2,7 @@ package com.mmodding.library.datagen.mixin;
 
 import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.lang.LangProcessor;
-import com.mmodding.library.datagen.impl.access.LangProcessorAccess;
+import com.mmodding.library.datagen.impl.InternalDataAccess;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.Registry;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(EntityType.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
-public class EntityTypeMixin<E extends Entity> implements LangContainer, LangProcessorAccess<EntityType<E>> {
+public class EntityTypeMixin<E extends Entity> implements LangContainer, InternalDataAccess.LangProcessorAccess<EntityType<E>> {
 
 	@Unique
 	public LangProcessor<EntityType<E>> langProcessor = LangProcessor.standard();
@@ -26,12 +26,12 @@ public class EntityTypeMixin<E extends Entity> implements LangContainer, LangPro
 	}
 
 	@Override
-	public RegistryKey<Registry<EntityType<?>>> registry() {
+	public RegistryKey<Registry<EntityType<?>>> langRegistry() {
 		return RegistryKeys.ENTITY_TYPE;
 	}
 
 	@Override
-	public LangProcessor<EntityType<E>> processor() {
+	public LangProcessor<EntityType<E>> langProcessor() {
 		return this.langProcessor;
 	}
 }
