@@ -1,0 +1,18 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		addMixin("mmodding_network.mixins.json")
+		withEntrypoints {
+			it.init("com.mmodding.library.network.impl.NetworkInitializer")
+		}
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/class_2540", "com/mmodding/library/network/api/PacketByteBufExtension")
+		}
+	}
+	modules(project) {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+	}
+}
