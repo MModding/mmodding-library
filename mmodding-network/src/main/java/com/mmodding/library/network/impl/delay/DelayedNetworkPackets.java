@@ -2,8 +2,6 @@ package com.mmodding.library.network.impl.delay;
 
 import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.java.api.list.MixedList;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.PacketByteBuf;
@@ -13,7 +11,6 @@ import java.util.UUID;
 
 public class DelayedNetworkPackets {
 
-	@Environment(EnvType.CLIENT)
 	public record RequestPacket(UUID requestTracker, Identifier requestIdentifier, MixedList requestArguments) implements FabricPacket {
 
 		public static final PacketType<RequestPacket> TYPE = PacketType.create(
