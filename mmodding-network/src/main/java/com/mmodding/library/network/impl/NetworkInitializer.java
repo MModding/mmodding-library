@@ -4,7 +4,11 @@ import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
 import com.mmodding.library.network.api.NetworkHandlers;
+import com.mmodding.library.network.impl.delay.DelayedNetworkImpl;
+import com.mmodding.library.network.impl.delay.DelayedNetworkPackets;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -18,7 +22,28 @@ public class NetworkInitializer implements ModInitializer {
 	}
 
 	@Override
-	public void onInitialize() {}
+	public void onInitialize() {
+		ServerPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.RequestPacket.TYPE, (packet, player, sender) -> {
+			MixedList arguments = DelayedNetworkImpl.SERVER_REQUEST_PROCESSORS
+				.getEntry(packet.requestIdentifier())
+				.process(player, packet.requestArguments());
+			ServerPlayNetworking.send(player, new DelayedNetworkPackets.ResponsePacket(packet.requestTracker(), arguments));
+		});
+		ClientPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.ResponsePacket.TYPE, (packet, player, sender) -> {
+			DelayedNetworkImpl.CLIENT_DELAYED_ACTIONS.get(packet.tracker()).handle(packet.arguments());
+			DelayedNetworkImpl.CLIENT_DELAYED_ACTIONS.remove(packet.tracker());
+		});
+		ClientPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.RequestPacket.TYPE, (packet, player, sender) -> {
+			MixedList arguments = DelayedNetworkImpl.CLIENT_REQUEST_PROCESSORS
+				.getEntry(packet.requestIdentifier())
+				.process(packet.requestArguments());
+			ClientPlayNetworking.send(new DelayedNetworkPackets.ResponsePacket(packet.requestTracker(), arguments));
+		});
+		ServerPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.ResponsePacket.TYPE, (packet, player, sender) -> {
+			DelayedNetworkImpl.SERVER_DELAYED_ACTIONS.get(packet.tracker()).handle(player, packet.arguments());
+			DelayedNetworkImpl.SERVER_DELAYED_ACTIONS.remove(packet.tracker());
+		});
+	}
 
 	static {
 		NetworkHandlers.register(Boolean.class, NetworkInitializer.java("boolean"), PacketByteBuf::readBoolean, PacketByteBuf::writeBoolean);
