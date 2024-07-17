@@ -19,14 +19,17 @@ import java.util.UUID;
 
 public class DelayedNetworkImpl {
 
+	@Environment(EnvType.CLIENT)
 	public static final Map<UUID, DelayedClientAction> CLIENT_DELAYED_ACTIONS = new Object2ObjectOpenHashMap<>();
 
 	public static final Map<UUID, DelayedServerAction> SERVER_DELAYED_ACTIONS = new Object2ObjectOpenHashMap<>();
 
+	@Environment(EnvType.CLIENT)
 	public static final LiteRegistry<ClientRequestProcessor> CLIENT_REQUEST_PROCESSORS = LiteRegistry.create();
 
 	public static final LiteRegistry<ServerRequestProcessor> SERVER_REQUEST_PROCESSORS = LiteRegistry.create();
 
+	@Environment(EnvType.CLIENT)
 	public static void registerClientRequestProcessor(Identifier requestIdentifier, ClientRequestProcessor requestProcessor) {
 		DelayedNetworkImpl.CLIENT_REQUEST_PROCESSORS.register(requestIdentifier, requestProcessor);
 	}

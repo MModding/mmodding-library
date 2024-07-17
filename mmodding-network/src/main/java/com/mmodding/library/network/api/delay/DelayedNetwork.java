@@ -18,6 +18,7 @@ public class DelayedNetwork {
 	 * @param requestIdentifier the request {@link Identifier}
 	 * @param requestProcessor the {@link ClientRequestProcessor}
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void registerClientRequestProcessor(Identifier requestIdentifier, ClientRequestProcessor requestProcessor) {
 		DelayedNetworkImpl.registerClientRequestProcessor(requestIdentifier, requestProcessor);
 	}
