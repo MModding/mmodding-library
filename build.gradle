@@ -3,7 +3,6 @@ import com.mmodding.gradle.api.mod.json.ParentSchema;
 
 plugins {
     id 'maven-publish'
-	id 'org.jetbrains.gradle.plugin.idea-ext' version '1.1.6'
     alias libs.plugins.fabric.loom
 	alias libs.plugins.mmodding.gradle
 }
@@ -144,7 +143,7 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_17
 
         withSourcesJar()
-        // withJavadocJar()
+        withJavadocJar()
     }
 }
 
@@ -239,6 +238,28 @@ afterEvaluate {
 	project.subprojects.each {
 		project.sourceSets.main.compileClasspath += it.sourceSets.main.compileClasspath
 		project.sourceSets.main.runtimeClasspath += it.sourceSets.main.runtimeClasspath
+	}
+}
+
+// Javadocs
+allprojects {
+	javadoc {
+		options {
+			it.source = "17"
+			it.encoding = "UTF-8"
+			it.charSet = "UTF-8"
+			it.memberLevel = JavadocMemberLevel.PACKAGE
+			it.tags("apiNote:a:API Note:", "implNote:a:Implementation Note:")
+			it.addStringOption('Xdoclint:none', '-quiet')
+		}
+
+		allprojects.each {
+			source(it.sourceSets.main.allJava)
+			files(it.sourceSets.main.compileClasspath)
+		}
+
+		include("**/api/**")
+		// failOnError true => seems to have class load issues that prevents javadocs from working well with this, needs investigation in the future
 	}
 }
 
