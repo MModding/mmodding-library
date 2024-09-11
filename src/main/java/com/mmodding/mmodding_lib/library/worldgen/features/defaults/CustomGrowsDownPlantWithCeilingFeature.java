@@ -77,7 +77,6 @@ public class CustomGrowsDownPlantWithCeilingFeature implements CustomFeature, Fe
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
 
-
 		WeightedBlockStateProvider bodyProvider = new WeightedBlockStateProvider(
 			DataPool.<BlockState>builder()
 				.add(this.plant.get().getBody().getDefaultState(), 4)
