@@ -5,6 +5,7 @@ import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
@@ -43,9 +44,11 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
+		RegistryKey<PlacedFeature> firstPlaced = BuiltinRegistries.PLACED_FEATURE.getKey(this.firstFeature.get().getDefaultPlacedFeature()).orElseThrow();
+		RegistryKey<PlacedFeature> lastPlaced = BuiltinRegistries.PLACED_FEATURE.getKey(this.lastFeature.get().getDefaultPlacedFeature()).orElseThrow();
 		return new ConfiguredFeature<>(this.getFeature(), new RandomBooleanFeatureConfig(
-			Holder.createDirect(this.firstFeature.get().getDefaultPlacedFeature()),
-			Holder.createDirect(this.lastFeature.get().getDefaultPlacedFeature())
+			BuiltinRegistries.PLACED_FEATURE.getHolder(firstPlaced).orElseThrow(),
+			BuiltinRegistries.PLACED_FEATURE.getHolder(lastPlaced).orElseThrow()
 		));
 	}
 
