@@ -10,6 +10,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.util.PlacedFeatureUtil;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
 import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
 
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 
@@ -25,12 +25,12 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
-	private final RegistryKey<PlacedFeature> firstFeature;
-	private final RegistryKey<PlacedFeature> lastFeature;
+	private final RegistryKey<ConfiguredFeature<?, ?>> firstFeature;
+	private final RegistryKey<ConfiguredFeature<?, ?>> lastFeature;
 	private final GenerationStep.Feature step;
 	private final List<PlacementModifier> defaultPlacementModifiers;
 
-	public CustomBooleanFeature(RegistryKey<PlacedFeature> firstFeature, RegistryKey<PlacedFeature> lastFeature, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
+	public CustomBooleanFeature(RegistryKey<ConfiguredFeature<?, ?>> firstFeature, RegistryKey<ConfiguredFeature<?, ?>> lastFeature, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
 		this.firstFeature = firstFeature;
 		this.lastFeature = lastFeature;
 		this.step = step;
@@ -44,9 +44,11 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
+		Holder<ConfiguredFeature<?, ?>> firstConfiguredFeature = BuiltinRegistries.CONFIGURED_FEATURE.getHolderOrThrow(this.firstFeature);
+		Holder<ConfiguredFeature<?, ?>> lastConfiguredFeature = BuiltinRegistries.CONFIGURED_FEATURE.getHolderOrThrow(this.lastFeature);
 		return new ConfiguredFeature<>(this.getFeature(), new RandomBooleanFeatureConfig(
-			BuiltinRegistries.PLACED_FEATURE.getHolder(this.firstFeature).orElseThrow(),
-			BuiltinRegistries.PLACED_FEATURE.getHolder(this.lastFeature).orElseThrow()
+			PlacedFeatureUtil.placedInline(firstConfiguredFeature),
+			PlacedFeatureUtil.placedInline(lastConfiguredFeature)
 		));
 	}
 
