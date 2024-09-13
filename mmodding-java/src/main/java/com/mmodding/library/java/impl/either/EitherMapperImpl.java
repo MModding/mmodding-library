@@ -1,7 +1,7 @@
 package com.mmodding.library.java.impl.either;
 
 import com.mmodding.library.java.api.either.Either;
-import com.mmodding.library.java.api.object.EitherMapper;
+import com.mmodding.library.java.api.either.EitherMapper;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Function;
