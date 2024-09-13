@@ -25,12 +25,12 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
-	private final Supplier<CustomFeature> firstFeature;
-	private final Supplier<CustomFeature> lastFeature;
+	private final RegistryKey<PlacedFeature> firstFeature;
+	private final RegistryKey<PlacedFeature> lastFeature;
 	private final GenerationStep.Feature step;
 	private final List<PlacementModifier> defaultPlacementModifiers;
 
-	public CustomBooleanFeature(Supplier<CustomFeature> firstFeature, Supplier<CustomFeature> lastFeature, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
+	public CustomBooleanFeature(RegistryKey<PlacedFeature> firstFeature, RegistryKey<PlacedFeature> lastFeature, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
 		this.firstFeature = firstFeature;
 		this.lastFeature = lastFeature;
 		this.step = step;
@@ -44,11 +44,9 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
-		RegistryKey<PlacedFeature> firstPlaced = BuiltinRegistries.PLACED_FEATURE.getKey(this.firstFeature.get().getDefaultPlacedFeature()).orElseThrow();
-		RegistryKey<PlacedFeature> lastPlaced = BuiltinRegistries.PLACED_FEATURE.getKey(this.lastFeature.get().getDefaultPlacedFeature()).orElseThrow();
 		return new ConfiguredFeature<>(this.getFeature(), new RandomBooleanFeatureConfig(
-			BuiltinRegistries.PLACED_FEATURE.getHolder(firstPlaced).orElseThrow(),
-			BuiltinRegistries.PLACED_FEATURE.getHolder(lastPlaced).orElseThrow()
+			BuiltinRegistries.PLACED_FEATURE.getHolder(this.firstFeature).orElseThrow(),
+			BuiltinRegistries.PLACED_FEATURE.getHolder(this.lastFeature).orElseThrow()
 		));
 	}
 
