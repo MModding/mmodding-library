@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 
@@ -25,12 +26,12 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
-	private final RegistryKey<ConfiguredFeature<?, ?>> firstFeature;
-	private final RegistryKey<ConfiguredFeature<?, ?>> lastFeature;
+	private final Supplier<RegistryKey<ConfiguredFeature<?, ?>>> firstFeature;
+	private final Supplier<RegistryKey<ConfiguredFeature<?, ?>>> lastFeature;
 	private final GenerationStep.Feature step;
 	private final List<PlacementModifier> defaultPlacementModifiers;
 
-	public CustomBooleanFeature(RegistryKey<ConfiguredFeature<?, ?>> firstFeature, RegistryKey<ConfiguredFeature<?, ?>> lastFeature, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
+	public CustomBooleanFeature(Supplier<RegistryKey<ConfiguredFeature<?, ?>>> firstFeature, Supplier<RegistryKey<ConfiguredFeature<?, ?>>> lastFeature, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
 		this.firstFeature = firstFeature;
 		this.lastFeature = lastFeature;
 		this.step = step;
@@ -44,8 +45,8 @@ public class CustomBooleanFeature implements CustomFeature, FeatureRegistrable {
 
 	@Override
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
-		Holder<ConfiguredFeature<?, ?>> firstConfiguredFeature = BuiltinRegistries.CONFIGURED_FEATURE.getHolderOrThrow(this.firstFeature);
-		Holder<ConfiguredFeature<?, ?>> lastConfiguredFeature = BuiltinRegistries.CONFIGURED_FEATURE.getHolderOrThrow(this.lastFeature);
+		Holder<ConfiguredFeature<?, ?>> firstConfiguredFeature = BuiltinRegistries.CONFIGURED_FEATURE.getHolderOrThrow(this.firstFeature.get());
+		Holder<ConfiguredFeature<?, ?>> lastConfiguredFeature = BuiltinRegistries.CONFIGURED_FEATURE.getHolderOrThrow(this.lastFeature.get());
 		return new ConfiguredFeature<>(this.getFeature(), new RandomBooleanFeatureConfig(
 			PlacedFeatureUtil.placedInline(firstConfiguredFeature),
 			PlacedFeatureUtil.placedInline(lastConfiguredFeature)
