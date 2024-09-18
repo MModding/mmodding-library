@@ -1,6 +1,11 @@
 package com.mmodding.mmodding_lib.library.worldgen.features.differeds;
 
 import com.mojang.serialization.Codec;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -20,15 +25,10 @@ import net.minecraft.world.gen.feature.VegetationPatchFeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 public class DifferedLiquidVegetationPatch extends Feature<DifferedLiquidVegetationPatch.Config> {
 
-	public DifferedLiquidVegetationPatch(Codec<Config> configCodec) {
-		super(configCodec);
+	public DifferedLiquidVegetationPatch(Codec<DifferedLiquidVegetationPatch.Config> codec) {
+		super(codec);
 	}
 
 	@Override
@@ -43,77 +43,71 @@ public class DifferedLiquidVegetationPatch extends Feature<DifferedLiquidVegetat
 		return !positions.isEmpty();
 	}
 
-	protected Set<BlockPos> placeGroundAndGetPositions(StructureWorldAccess world, Config config, RandomGenerator random, BlockPos pos, Predicate<BlockState> replaceable, int radiusX, int radiusZ) {
-		BlockPos.Mutable mutablePos = pos.mutableCopy();
-		BlockPos.Mutable resultPos = mutablePos.mutableCopy();
+	protected Set<BlockPos> placeGroundAndGetPositions(StructureWorldAccess world, DifferedLiquidVegetationPatch.Config config, RandomGenerator random, BlockPos pos, Predicate<BlockState> replaceable, int radiusX, int radiusZ) {
+		BlockPos.Mutable mutable = pos.mutableCopy();
+		BlockPos.Mutable result = mutable.mutableCopy();
 		Direction direction = config.surface.getDirection();
 		Direction opposite = direction.getOpposite();
 		Set<BlockPos> positions = new HashSet<>();
+
 		for (int i = -radiusX; i <= radiusX; i++) {
-			boolean xValid = i == -radiusX || i == radiusX;
+			boolean xCheck = i == -radiusX || i == radiusX;
+
 			for (int j = -radiusZ; j <= radiusZ; j++) {
-				boolean zValid = j == -radiusZ || j == radiusZ;
-				boolean or = xValid || zValid;
-				boolean equal = xValid && zValid;
+				boolean zCheck = j == -radiusZ || j == radiusZ;
+				boolean or = xCheck || zCheck;
+				boolean equal = xCheck && zCheck;
 				boolean xor = or && !equal;
+
 				if (!equal && (!xor || config.extraEdgeColumnChance != 0.0f && !(random.nextFloat() > config.extraEdgeColumnChance))) {
-					mutablePos.set(pos, i, 0, j);
-					for (int k = 0; world.testBlockState(mutablePos, AbstractBlock.AbstractBlockState::isAir) && k < config.verticalRange; k++) {
-						mutablePos.move(direction);
+					mutable.set(pos, i, 0, j);
+
+					for (int k = 0; world.testBlockState(mutable, AbstractBlock.AbstractBlockState::isAir) && k < config.verticalRange; k++) {
+						mutable.move(direction);
 					}
-					for (int l = 0; world.testBlockState(mutablePos, state -> !state.isAir()) && l < config.verticalRange; l++) {
-						mutablePos.move(opposite);
+
+					for (int l = 0; world.testBlockState(mutable, state -> !state.isAir()) && l < config.verticalRange; l++) {
+						mutable.move(opposite);
 					}
-					resultPos.set(mutablePos, config.surface.getDirection());
-					BlockState blockState = world.getBlockState(resultPos);
-					if (world.isAir(mutablePos) && blockState.isSideSolidFullSquare(world, resultPos, config.surface.getDirection().getOpposite())) {
+
+					result.set(mutable, config.surface.getDirection());
+					BlockState blockState = world.getBlockState(result);
+					if (world.isAir(mutable) && blockState.isSideSolidFullSquare(world, result, config.surface.getDirection().getOpposite())) {
 						int depth = config.depth.get(random) + (config.extraBottomBlockChance > 0.0f && random.nextFloat() < config.extraBottomBlockChance ? 1 : 0);
-						if (this.placeGround(world, config, replaceable, random, resultPos, depth)) {
-							positions.add(resultPos.toImmutable());
+						BlockPos blockPos = result.toImmutable();
+						if (this.placeGround(world, config, replaceable, random, result, depth)) {
+							positions.add(blockPos);
 						}
 					}
 				}
 			}
 		}
 
-		Set<BlockPos> result = new HashSet<>();
-		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		Set<BlockPos> liquidPositions = new HashSet<>();
+		BlockPos.Mutable liquidMutable = new BlockPos.Mutable();
 
 		for(BlockPos blockPos : positions) {
-			if (!DifferedLiquidVegetationPatch.canRetainLiquid(world, blockPos, mutable)) {
-				result.add(blockPos);
+			if (!isSolidBlockAroundPos(world, blockPos, liquidMutable)) {
+				liquidPositions.add(blockPos);
 			}
 		}
 
-		for(BlockPos blockPos : result) {
-			world.setBlockState(blockPos, config.liquidState.getBlockState(random, pos), Block.NOTIFY_LISTENERS);
+		for(BlockPos blockPos : liquidPositions) {
+			world.setBlockState(blockPos, config.liquidState.getBlockState(random, blockPos), Block.NOTIFY_LISTENERS);
 		}
 
-		return result.stream().map(BlockPos::up).filter(blockPos -> world.testBlockState(blockPos, BlockState::isAir)).collect(Collectors.toSet());
+		return liquidPositions.stream().map(BlockPos::up).filter(blockPos -> world.testBlockState(blockPos, BlockState::isAir)).collect(Collectors.toSet());
 	}
 
-	private static boolean canRetainLiquid(StructureWorldAccess world, BlockPos pos, BlockPos.Mutable mutablePos) {
-		return DifferedLiquidVegetationPatch.isSideSolid(world, pos, mutablePos, Direction.NORTH)
-			|| DifferedLiquidVegetationPatch.isSideSolid(world, pos, mutablePos, Direction.EAST)
-			|| DifferedLiquidVegetationPatch.isSideSolid(world, pos, mutablePos, Direction.SOUTH)
-			|| DifferedLiquidVegetationPatch.isSideSolid(world, pos, mutablePos, Direction.WEST)
-			|| DifferedLiquidVegetationPatch.isSideSolid(world, pos, mutablePos, Direction.DOWN);
-	}
-
-	private static boolean isSideSolid(StructureWorldAccess world, BlockPos pos, BlockPos.Mutable mutablePos, Direction direction) {
-		mutablePos.set(pos, direction);
-		return !world.getBlockState(mutablePos).isSideSolidFullSquare(world, mutablePos, direction.getOpposite());
-	}
-
-	protected void generateVegetation(FeatureContext<Config> context, StructureWorldAccess world, VegetationPatchFeatureConfig config, RandomGenerator random, Set<BlockPos> positions) {
-		for (BlockPos pos : positions) {
+	protected void generateVegetation(FeatureContext<DifferedLiquidVegetationPatch.Config> context, StructureWorldAccess world, VegetationPatchFeatureConfig config, RandomGenerator random, Set<BlockPos> positions) {
+		for(BlockPos pos : positions) {
 			if (config.vegetationChance > 0.0f && random.nextFloat() < config.vegetationChance) {
 				config.vegetationFeature.value().place(world, context.getGenerator(), random, pos.down().offset(config.surface.getDirection().getOpposite()));
 			}
 		}
 	}
 
-	protected boolean placeGround(StructureWorldAccess world, VegetationPatchFeatureConfig config, Predicate<BlockState> replaceable, RandomGenerator random, BlockPos.Mutable pos, int depth) {
+	protected boolean placeGround(StructureWorldAccess world, Config config, Predicate<BlockState> replaceable, RandomGenerator random, BlockPos.Mutable pos, int depth) {
 		for (int i = 0; i < depth; ++i) {
 			BlockState groundState = config.groundState.getBlockState(random, pos);
 			BlockState currentState = world.getBlockState(pos);
@@ -126,6 +120,19 @@ public class DifferedLiquidVegetationPatch extends Feature<DifferedLiquidVegetat
 			}
 		}
 		return true;
+	}
+
+	private static boolean isSolidBlockAroundPos(StructureWorldAccess world, BlockPos pos, BlockPos.Mutable mutablePos) {
+		return isSolidBlockSide(world, pos, mutablePos, Direction.NORTH)
+			|| isSolidBlockSide(world, pos, mutablePos, Direction.EAST)
+			|| isSolidBlockSide(world, pos, mutablePos, Direction.SOUTH)
+			|| isSolidBlockSide(world, pos, mutablePos, Direction.WEST)
+			|| isSolidBlockSide(world, pos, mutablePos, Direction.DOWN);
+	}
+
+	private static boolean isSolidBlockSide(StructureWorldAccess world, BlockPos pos, BlockPos.Mutable mutablePos, Direction direction) {
+		mutablePos.set(pos, direction);
+		return !world.getBlockState(mutablePos).isSideSolidFullSquare(world, mutablePos, direction.getOpposite());
 	}
 
 	public static class Config extends VegetationPatchFeatureConfig {
