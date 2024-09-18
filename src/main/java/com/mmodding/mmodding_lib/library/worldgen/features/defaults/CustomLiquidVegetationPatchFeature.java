@@ -4,6 +4,8 @@ import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.ListUtils;
+import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
+import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLiquidVegetationPatch;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tag.TagKey;
@@ -41,6 +43,7 @@ public class CustomLiquidVegetationPatchFeature implements CustomFeature, Featur
 	private final int maxSteps;
 	private final TagKey<Block> replaceable;
 	private final BlockState ground;
+	private final BlockState liquid;
 	private final BiList<BlockState, Integer> vegetationStates;
 	private final VerticalSurfaceType verticalSurfaceType;
 	private final IntProvider depth;
@@ -50,12 +53,13 @@ public class CustomLiquidVegetationPatchFeature implements CustomFeature, Featur
 	private final IntProvider horizontalRadius;
 	private final float extraEdgeColumnChance;
 
-	public CustomLiquidVegetationPatchFeature(int count, Direction searchDirection, int maxSteps, TagKey<Block> replaceable, BlockState ground, BiList<BlockState, Integer> vegetationStates, VerticalSurfaceType verticalSurfaceType, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
+	public CustomLiquidVegetationPatchFeature(int count, Direction searchDirection, int maxSteps, TagKey<Block> replaceable, BlockState ground, BlockState liquid, BiList<BlockState, Integer> vegetationStates, VerticalSurfaceType verticalSurfaceType, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
 		this.count = count;
 		this.searchDirection = searchDirection;
 		this.maxSteps = maxSteps;
 		this.replaceable = replaceable;
 		this.ground = ground;
+		this.liquid = liquid;
 		this.vegetationStates = vegetationStates;
 		this.verticalSurfaceType = verticalSurfaceType;
 		this.depth = depth;
@@ -67,8 +71,8 @@ public class CustomLiquidVegetationPatchFeature implements CustomFeature, Featur
 	}
 
 	@Override
-	public Feature<VegetationPatchFeatureConfig> getFeature() {
-		return Feature.WATERLOGGED_VEGETATION_PATCH;
+	public Feature<DifferedLiquidVegetationPatch.Config> getFeature() {
+		return MModdingFeatures.DIFFERED_LIQUID_VEGETATION_PATCH;
 	}
 
 	@Override
@@ -79,9 +83,10 @@ public class CustomLiquidVegetationPatchFeature implements CustomFeature, Featur
 		this.vegetationStates.forEach(builder::add);
 		BlockStateProvider provider = new WeightedBlockStateProvider(builder);
 
-		return new ConfiguredFeature<>(this.getFeature(), new VegetationPatchFeatureConfig(
+		return new ConfiguredFeature<>(this.getFeature(), new DifferedLiquidVegetationPatch.Config(
 			this.replaceable,
 			BlockStateProvider.of(this.ground),
+			BlockStateProvider.of(this.liquid),
 			PlacedFeatureUtil.placedInline(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(provider)),
 			this.verticalSurfaceType,
 			this.depth,
