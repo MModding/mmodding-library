@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.accessors;
 
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Material;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -9,4 +10,7 @@ public interface AbstractBlockAccessor {
 
 	@Accessor
 	AbstractBlock.Settings getSettings();
+
+	@Accessor
+	Material getMaterial();
 }
