@@ -21,6 +21,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
+import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -28,8 +30,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, BlockWithItem {
 
-	private static final EnumProperty<DoubleWidthPart> PART = EnumProperty.of("part", DoubleWidthPart.class);
-	private static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+	@ApiStatus.Internal
+	public static final EnumProperty<DoubleWidthPart> PART = EnumProperty.of("part", DoubleWidthPart.class);
+
+	@ApiStatus.Internal
+	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
@@ -57,15 +62,29 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		OrientedBlockPos oriented = OrientedBlockPos.of(ctx.getBlockPos()).apply(ctx.getPlayerFacing());
-		boolean validOrigin = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented), ctx.getWorld().getBlockState(oriented), ctx);
-		boolean validSub0 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.front()), ctx.getWorld().getBlockState(oriented.front()), ctx);
-		boolean validSub1 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.front().left()), ctx.getWorld().getBlockState(oriented.front().left()), ctx);
-		boolean validSub2 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.left()), ctx.getWorld().getBlockState(oriented.left()), ctx);
+		boolean validOrigin = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented), ctx.getWorld().getBlockState(oriented));
+		boolean validSub0 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.front()), ctx.getWorld().getBlockState(oriented.front()));
+		boolean validSub1 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.front().left()), ctx.getWorld().getBlockState(oriented.front().left()));
+		boolean validSub2 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(oriented.left()), ctx.getWorld().getBlockState(oriented.left()));
 		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getPlayerFacing()) : null;
 	}
 
-	public boolean canPlacePartAt(World world, BlockPos pos, BlockState state, ItemPlacementContext ctx) {
-		return state.canReplace(ctx);
+	@Override
+	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+		OrientedBlockPos origin = state.get(PART).toOrigin(pos, state.get(FACING));
+		BlockPos originPos = new BlockPos(origin);
+		BlockPos sub0Pos = new BlockPos(origin.front());
+		BlockPos sub1Pos = new BlockPos(origin.front().left());
+		BlockPos sub2Pos = new BlockPos(origin.left());
+		boolean validOrigin = this.canPlacePartAt(world, originPos, world.getBlockState(originPos));
+		boolean validSub0 = this.canPlacePartAt(world, sub0Pos, world.getBlockState(sub0Pos));
+		boolean validSub1 = this.canPlacePartAt(world, sub1Pos, world.getBlockState(sub1Pos));
+		boolean validSub2 = this.canPlacePartAt(world, sub2Pos, world.getBlockState(sub2Pos));
+		return validOrigin && validSub0 && validSub1 && validSub2;
+	}
+
+	public boolean canPlacePartAt(WorldView world, BlockPos pos, BlockState state) {
+		return state.canPlaceAt(world, pos);
 	}
 
 	@Override

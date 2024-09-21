@@ -91,6 +91,7 @@
     "injectors.ServerPlayerEntityMixin",
     "injectors.ServerWorldMixin",
     "injectors.ShearsItemMixin",
+    "injectors.SimpleBlockFeatureMixin",
     "injectors.SlotMixin",
     "injectors.SwordItemMixin",
     "injectors.ToolItemMixin",
