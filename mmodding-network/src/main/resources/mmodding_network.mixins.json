@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.mmodding.library.network.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "PacketByteBufMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}

@@ -85,7 +85,7 @@ public interface Config {
 		/**
 		 * Default value is an empty {@link Consumer<MutableConfigContent>}.
 		 * @param content the default configuration content consumer
-		 * @apiNote It is highly recommended to set default values to your configuration.
+		 * @apiNote It is highly recommended to set default values to your configuration!
 		 */
 		Config.Builder withDefaultContent(Consumer<MutableConfigContent> content);
 
