@@ -126,7 +126,15 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 
 	@Override
 	public BlockState rotate(BlockState state, BlockRotation rotation) {
-		return state.cycle(PART).with(Properties.HORIZONTAL_FACING, rotation.rotate(state.get(Properties.HORIZONTAL_FACING)));
+		for (int i = 0; i < rotation.rotate(0, 4); i++) {
+			state = switch (state.get(PART)) {
+				case ORIGIN -> state.with(PART, DoubleWidthPart.SUB_PART_2);
+				case SUB_PART_0 -> state.with(PART, DoubleWidthPart.ORIGIN);
+				case SUB_PART_1 -> state.with(PART, DoubleWidthPart.SUB_PART_0);
+				case SUB_PART_2 -> state.with(PART, DoubleWidthPart.SUB_PART_1);
+			};
+		}
+		return state.with(FACING, rotation.rotate(state.get(FACING)));
 	}
 
 	@Override
