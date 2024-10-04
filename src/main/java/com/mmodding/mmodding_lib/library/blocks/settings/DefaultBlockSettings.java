@@ -24,7 +24,7 @@ public class DefaultBlockSettings {
 	public static final ImmutableBlockSettings BONE_SETTINGS = ImmutableBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.BONE).strength(2.0f);
 	public static final ImmutableBlockSettings GLASS_SETTINGS = ImmutableBlockSettings.of(Material.GLASS).sounds(BlockSoundGroup.GLASS).nonOpaque().strength(0.3f);
 	public static final ImmutableBlockSettings SAND_SETTINGS = ImmutableBlockSettings.of(Material.AGGREGATE).sounds(BlockSoundGroup.SAND).strength(0.5f);
-	public static final ImmutableBlockSettings CLAY_SETTINGS = ImmutableBlockSettings.of(Material.ORGANIC_PRODUCT).sounds(BlockSoundGroup.SAND).strength(0.6f);
+	public static final ImmutableBlockSettings CLAY_SETTINGS = ImmutableBlockSettings.of(Material.ORGANIC_PRODUCT).sounds(BlockSoundGroup.GRAVEL).strength(0.6f);
 	public static final ImmutableBlockSettings BASALT_SETTINGS = ImmutableBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.BASALT).strength(1.25f, 4.2f).requiresTool();
 	public static final ImmutableBlockSettings LODESTONE_SETTINGS = ImmutableBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.LODESTONE);
 	public static final ImmutableBlockSettings LEAVES_CARPET = ImmutableBlockSettings.of(Material.CARPET).sounds(BlockSoundGroup.GRASS).nonOpaque().strength(0.2f);

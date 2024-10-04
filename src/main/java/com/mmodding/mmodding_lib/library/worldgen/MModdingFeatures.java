@@ -5,6 +5,7 @@ import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedDripstoneClusterFeature;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLargeDripstoneFeature;
 import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedPointedDripstoneFeature;
+import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLiquidVegetationPatch;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 
@@ -20,6 +21,10 @@ public class MModdingFeatures {
 
 	public static final Feature<DifferedPointedDripstoneFeature.Config> DIFFERED_POINTED_DRIPSTONE = MModdingFeatures.register(
 		"differed_pointed_dripstone", new DifferedPointedDripstoneFeature(DifferedPointedDripstoneFeature.Config.CODEC)
+	);
+
+	public static final Feature<DifferedLiquidVegetationPatch.Config> DIFFERED_LIQUID_VEGETATION_PATCH = MModdingFeatures.register(
+		"differed_liquid_vegetation_patch", new DifferedLiquidVegetationPatch(DifferedLiquidVegetationPatch.Config.CODEC)
 	);
 
 	private static <C extends FeatureConfig, F extends Feature<C>> F register(String path, F feature) {
