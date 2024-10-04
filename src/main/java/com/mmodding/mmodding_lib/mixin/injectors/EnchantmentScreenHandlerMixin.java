@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.mmodding.mmodding_lib.library.enchantments.CustomBookItem;
+import com.mmodding.mmodding_lib.library.items.CustomBookItem;
 import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +25,7 @@ public class EnchantmentScreenHandlerMixin {
 
     @ModifyExpressionValue(method = "method_17410", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Items;ENCHANTED_BOOK:Lnet/minecraft/item/Item;", opcode = Opcodes.GETSTATIC))
     private Item setCustomEnchantedBooks(Item original, @Share("type") LocalRef<EnchantmentType> type) {
-        return type.get() != EnchantmentType.DEFAULT ? type.get().getEnchantedBook() : original;
+        return type.get() != EnchantmentType.DEFAULT ? type.get().getBookItem() : original;
     }
 
     @WrapOperation(method = "generateEnchantments", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))

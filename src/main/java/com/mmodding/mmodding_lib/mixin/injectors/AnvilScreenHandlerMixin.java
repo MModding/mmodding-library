@@ -2,8 +2,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantedBookItem;
+import com.mmodding.mmodding_lib.library.items.CustomEnchantedBookItem;
 import com.mmodding.mmodding_lib.library.materials.RepairOperations;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;

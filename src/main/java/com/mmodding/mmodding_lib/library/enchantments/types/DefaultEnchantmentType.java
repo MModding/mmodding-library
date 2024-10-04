@@ -29,7 +29,7 @@ public class DefaultEnchantmentType implements EnchantmentType {
 	}
 
 	@Override
-	public boolean isInEnchantingTable() {
+	public boolean canBeObtainedThroughEnchantingTable() {
 		return true;
 	}
 
@@ -39,7 +39,7 @@ public class DefaultEnchantmentType implements EnchantmentType {
 	}
 
 	@Override
-    public EnchantedBookItem getEnchantedBook() {
+    public EnchantedBookItem getBookItem() {
         return (EnchantedBookItem) Items.ENCHANTED_BOOK;
     }
 }

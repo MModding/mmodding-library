@@ -1,19 +1,16 @@
 package com.mmodding.mmodding_lib.library.enchantments.types;
 
-import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantedBookItem;
 import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantment;
-import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.utils.FilterList;
 import com.mmodding.mmodding_lib.library.texts.Prefix;
-import com.mmodding.mmodding_lib.library.utils.TweakFunction;
 import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.Items;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface EnchantmentType {
 
@@ -29,27 +26,21 @@ public interface EnchantmentType {
 
 	String getQualifier();
 
-	EnchantedBookItem getEnchantedBook();
+	EnchantedBookItem getBookItem();
 
 	Prefix getPrefix();
 
 	List<Formatting> getFormattings(CustomEnchantment enchantment);
 
-	boolean isInEnchantingTable();
+	boolean canBeObtainedThroughEnchantingTable();
 
 	FilterList<EnchantmentType> getTypeCompatibilities();
-
-	default void register(Identifier identifier) {
-		if (this.getEnchantedBook() instanceof CustomEnchantedBookItem item) {
-			item.register(identifier);
-		}
-	}
 
 	class Builder {
 
 		private final String qualifier;
 
-		private AdvancedItemSettings enchantedBookItemSettings = new AdvancedItemSettings().maxCount(1).rarity(Rarity.UNCOMMON);
+		private Supplier<EnchantedBookItem> bookItem = () -> (EnchantedBookItem) Items.ENCHANTED_BOOK;
 		private Prefix prefix = Prefix.empty();
 		private Function<CustomEnchantment, List<Formatting>> formattings = enchantment -> List.of(enchantment.isCursed() ? Formatting.RED : Formatting.GRAY);
 		private boolean inEnchantingTable = true;
@@ -59,8 +50,8 @@ public interface EnchantmentType {
 			this.qualifier = qualifier;
 		}
 
-		public Builder enchantedBookItemSettings(TweakFunction<AdvancedItemSettings> tweak) {
-			this.enchantedBookItemSettings = tweak.apply(this.enchantedBookItemSettings);
+		public Builder bookItem(Supplier<EnchantedBookItem> bookItem) {
+			this.bookItem = bookItem;
 			return this;
 		}
 
@@ -85,22 +76,23 @@ public interface EnchantmentType {
 		}
 
 		public EnchantmentType build() {
-			return new Impl(this.qualifier, this.enchantedBookItemSettings, this.prefix, this.formattings, this.inEnchantingTable, this.typeCompatibilities);
+			return new Impl(this.qualifier, this.bookItem, this.prefix, this.formattings, this.inEnchantingTable, this.typeCompatibilities);
 		}
 
 		@ApiStatus.Internal
+		@SuppressWarnings("ClassCanBeRecord")
 		private static class Impl implements EnchantmentType {
 
 			private final String qualifier;
-			private final CustomEnchantedBookItem enchantedBook;
+			private final Supplier<EnchantedBookItem> bookItem;
 			private final Prefix prefix;
 			private final Function<CustomEnchantment, List<Formatting>> formattings;
 			private final boolean inEnchantingTable;
 			private final FilterList<EnchantmentType> typeCompatibilities;
 
-			private Impl(String qualifier, AdvancedItemSettings enchantedBookItemSettings, Prefix prefix, Function<CustomEnchantment, List<Formatting>> formattings, boolean inEnchantingTable, FilterList<EnchantmentType> typeCompatibilities) {
+			private Impl(String qualifier, Supplier<EnchantedBookItem> bookItem, Prefix prefix, Function<CustomEnchantment, List<Formatting>> formattings, boolean inEnchantingTable, FilterList<EnchantmentType> typeCompatibilities) {
 				this.qualifier = qualifier;
-				this.enchantedBook = new CustomEnchantedBookItem(this, enchantedBookItemSettings);
+				this.bookItem = bookItem;
 				this.prefix = prefix;
 				this.formattings = formattings;
 				this.inEnchantingTable = inEnchantingTable;
@@ -113,8 +105,8 @@ public interface EnchantmentType {
 			}
 
 			@Override
-			public EnchantedBookItem getEnchantedBook() {
-				return this.enchantedBook;
+			public EnchantedBookItem getBookItem() {
+				return this.bookItem.get();
 			}
 
 			@Override
@@ -128,7 +120,7 @@ public interface EnchantmentType {
 			}
 
 			@Override
-			public boolean isInEnchantingTable() {
+			public boolean canBeObtainedThroughEnchantingTable() {
 				return this.inEnchantingTable;
 			}
 

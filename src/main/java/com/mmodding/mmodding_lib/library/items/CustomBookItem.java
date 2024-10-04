@@ -1,7 +1,6 @@
-package com.mmodding.mmodding_lib.library.enchantments;
+package com.mmodding.mmodding_lib.library.items;
 
 import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
-import com.mmodding.mmodding_lib.library.items.ItemRegistrable;
 import net.minecraft.item.BookItem;
 
 import java.util.concurrent.atomic.AtomicBoolean;

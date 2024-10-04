@@ -6,7 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.mmodding.mmodding_lib.library.enchantments.CustomBookItem;
+import com.mmodding.mmodding_lib.library.items.CustomBookItem;
 import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantment;
 import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
 import net.minecraft.enchantment.Enchantment;
@@ -30,7 +30,7 @@ public class EnchantmentHelperMixin {
 
 	@ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/registry/Registry;iterator()Ljava/util/Iterator;"))
 	private static Iterator<Enchantment> filterPossibleEntries(Iterator<Enchantment> original, @Share("type") LocalRef<EnchantmentType> type) {
-		Predicate<EnchantmentType> isTypeValid = enchantmentType -> enchantmentType.isInEnchantingTable() && enchantmentType == type.get();
+		Predicate<EnchantmentType> isTypeValid = enchantmentType -> enchantmentType.canBeObtainedThroughEnchantingTable() && enchantmentType == type.get();
 		return Iterators.filter(
 			original, enchantment -> !(enchantment instanceof CustomEnchantment customEnchantment) || isTypeValid.test(customEnchantment.getType())
 		);
