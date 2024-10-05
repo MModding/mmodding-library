@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.settings.ItemPostHit;
 import com.mmodding.mmodding_lib.library.items.settings.ItemPostMine;
-import com.mmodding.mmodding_lib.library.items.tools.BreakableTool;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -24,21 +23,17 @@ public abstract class MiningToolItemMixin extends ItemMixin {
 
 	@Inject(method = "getMiningSpeedMultiplier", at = @At(value = "HEAD"), cancellable = true)
 	private void cancelIfBroken(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
-		if (this.getObject() instanceof BreakableTool tool && tool.isBroken(stack)) {
+		if (this.isBroken(stack)) {
 			cir.setReturnValue(1.0f);
 		}
 	}
 
 	@WrapOperation(method = "postHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"))
 	private void cancelHitStackDamageIfBroken(ItemStack instance, int amount, LivingEntity entity, Consumer<LivingEntity> breakCallback, Operation<Void> original) {
-		if (!(this.getObject() instanceof BreakableTool tool) || !tool.isBroken(instance)) {
-			original.call(instance, amount, entity, breakCallback);
+		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject())) {
+			instance.setDamage(Math.min(instance.getDamage() + amount, instance.getMaxDamage()));
 		}
-	}
-
-	@WrapOperation(method = "postHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"))
-	private void cancelIfBroken(ItemStack instance, int amount, LivingEntity entity, Consumer<LivingEntity> breakCallback, Operation<Void> original) {
-		if (!(this.getObject() instanceof BreakableTool tool) || !tool.isBroken(instance)) {
+		else {
 			original.call(instance, amount, entity, breakCallback);
 		}
 	}
@@ -51,7 +46,10 @@ public abstract class MiningToolItemMixin extends ItemMixin {
 
 	@WrapOperation(method = "postMine", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"))
 	private void cancelMineStackDamageIfBroken(ItemStack instance, int amount, LivingEntity entity, Consumer<LivingEntity> breakCallback, Operation<Void> original) {
-		if (!(this.getObject() instanceof BreakableTool tool) || !tool.isBroken(instance)) {
+		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject())) {
+			instance.setDamage(Math.min(instance.getDamage() + amount, instance.getMaxDamage()));
+		}
+		else {
 			original.call(instance, amount, entity, breakCallback);
 		}
 	}
@@ -64,7 +62,7 @@ public abstract class MiningToolItemMixin extends ItemMixin {
 
 	@Override
 	public boolean isSuitableFor(ItemStack stack, BlockState state) {
-		if (this.getObject() instanceof BreakableTool tool && tool.isBroken(stack)) {
+		if (this.isBroken(stack)) {
 			return false;
 		}
 		else {

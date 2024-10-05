@@ -23,6 +23,7 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 	public static final CustomItemSetting<GlintPackView> GLINT_PACK = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
+	public static final CustomItemSetting<Boolean> HAS_BROKEN_STATE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<ItemUse> ITEM_USE = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemFinishUsing> ITEM_FINISH_USING = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemUseOnBlock> ITEM_USE_ON_BLOCK = CustomItemSetting.create(() -> null);
@@ -61,6 +62,10 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 
 	public AdvancedItemSettings drinkable() {
 		return this.customSetting(DRINKABLE, true);
+	}
+
+	public AdvancedItemSettings hasBrokenState() {
+		return this.customSetting(HAS_BROKEN_STATE, true);
 	}
 
 	public AdvancedItemSettings itemUse(ItemUse itemUseSetting) {
