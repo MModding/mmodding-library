@@ -8,8 +8,6 @@ import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.settings.ItemPostHit;
 import com.mmodding.mmodding_lib.library.items.settings.ItemPostMine;
 import com.mmodding.mmodding_lib.library.items.tools.BreakableTool;
-import com.mmodding.mmodding_lib.library.utils.Self;
-import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Consumer;
 
 @Mixin(SwordItem.class)
-public class SwordItemMixin implements FabricItem, Self<SwordItem> {
+public abstract class SwordItemMixin extends ItemMixin {
 
 	@Inject(method = "getMiningSpeedMultiplier", at = @At(value = "HEAD"), cancellable = true)
 	private void cancelIfBroken(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
@@ -68,7 +66,7 @@ public class SwordItemMixin implements FabricItem, Self<SwordItem> {
 			return ImmutableMultimap.of();
 		}
 		else {
-			return FabricItem.super.getAttributeModifiers(stack, slot);
+			return super.getAttributeModifiers(stack, slot);
 		}
 	}
 
@@ -78,7 +76,7 @@ public class SwordItemMixin implements FabricItem, Self<SwordItem> {
 			return false;
 		}
 		else {
-			return FabricItem.super.isSuitableFor(stack, state);
+			return super.isSuitableFor(stack, state);
 		}
 	}
 }

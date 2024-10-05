@@ -6,8 +6,6 @@ import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.settings.ItemPostHit;
 import com.mmodding.mmodding_lib.library.items.settings.ItemPostMine;
 import com.mmodding.mmodding_lib.library.items.tools.BreakableTool;
-import com.mmodding.mmodding_lib.library.utils.Self;
-import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -22,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.function.Consumer;
 
 @Mixin(MiningToolItem.class)
-public class MiningToolItemMixin implements FabricItem, Self<MiningToolItem> {
+public abstract class MiningToolItemMixin extends ItemMixin {
 
 	@Inject(method = "getMiningSpeedMultiplier", at = @At(value = "HEAD"), cancellable = true)
 	private void cancelIfBroken(ItemStack stack, BlockState state, CallbackInfoReturnable<Float> cir) {
@@ -70,7 +68,7 @@ public class MiningToolItemMixin implements FabricItem, Self<MiningToolItem> {
 			return false;
 		}
 		else {
-			return FabricItem.super.isSuitableFor(stack, state);
+			return super.isSuitableFor(stack, state);
 		}
 	}
 }
