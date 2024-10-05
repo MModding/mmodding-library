@@ -8,6 +8,7 @@ import com.mmodding.mmodding_lib.library.portals.Ignition;
 import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.Self;
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements ItemGlintPack, Self<Item> {
+public abstract class ItemMixin implements FabricItem, ItemGlintPack, Self<Item> {
 
 	@Shadow
 	public abstract boolean isFood();
