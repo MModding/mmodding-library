@@ -11,6 +11,10 @@ public class ClientModelPredicates {
 
 	public static void register() {
 		ModelPredicateProviderRegistry.register(
+			new MModdingIdentifier("broken"),
+			(stack, world, entity, seed) -> stack.getDamage() >= stack.getMaxDamage() ? 1.0f : 0.0f
+		);
+		ModelPredicateProviderRegistry.register(
 			new MModdingIdentifier("throwing"),
 			(stack, world, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == stack ? 1.0f : 0.0f
 		);
