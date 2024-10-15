@@ -53,7 +53,9 @@ public abstract class ItemStackMixin implements TagRuntimeManagement.ItemStackTa
 
 	@Inject(method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V", at = @At("TAIL"))
 	private void initItem(ItemConvertible item, int count, CallbackInfo ci) {
-		if (EnvironmentUtils.isClient()) {
+		// Filtering Items on Client not having any GlintPackView so that
+		// we do not request GlintPack data for unnecessary stacks
+		if (EnvironmentUtils.isClient() && GlintPackView.of(item.asItem()) != null) {
 			NetworkList arguments = new NetworkList();
 			arguments.addItemStack(this.getObject());
 			ClientPendingRequestManagers.GLINT_PACK_MANAGER.actionOrPrimary(
