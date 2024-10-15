@@ -122,7 +122,7 @@ public abstract class ItemMixin implements FabricItem, ItemGlintPack, Self<Item>
 
 	@Unique
 	protected boolean isBroken(ItemStack stack) {
-		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject())) {
+		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject()).test(stack)) {
 			return stack.getDamage() >= stack.getMaxDamage();
 		}
 		else {

@@ -30,7 +30,7 @@ public abstract class MiningToolItemMixin extends ItemMixin {
 
 	@WrapOperation(method = "postHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"))
 	private void cancelHitStackDamageIfBroken(ItemStack instance, int amount, LivingEntity entity, Consumer<LivingEntity> breakCallback, Operation<Void> original) {
-		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject())) {
+		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject()).test(instance)) {
 			instance.setDamage(Math.min(instance.getDamage() + amount, instance.getMaxDamage()));
 		}
 		else {
@@ -46,7 +46,7 @@ public abstract class MiningToolItemMixin extends ItemMixin {
 
 	@WrapOperation(method = "postMine", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V"))
 	private void cancelMineStackDamageIfBroken(ItemStack instance, int amount, LivingEntity entity, Consumer<LivingEntity> breakCallback, Operation<Void> original) {
-		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject())) {
+		if (AdvancedItemSettings.HAS_BROKEN_STATE.get(this.getObject()).test(instance)) {
 			instance.setDamage(Math.min(instance.getDamage() + amount, instance.getMaxDamage()));
 		}
 		else {

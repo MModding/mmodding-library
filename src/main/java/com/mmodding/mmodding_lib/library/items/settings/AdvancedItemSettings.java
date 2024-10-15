@@ -14,16 +14,17 @@ import org.quiltmc.qsl.item.setting.api.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class AdvancedItemSettings extends QuiltItemSettings {
 
 	public static final CustomItemSetting<List<Formatting>> NAME_FORMATTINGS = CustomItemSetting.create(Collections::emptyList);
 	public static final CustomItemSetting<Text[]> DESCRIPTION_LINES = CustomItemSetting.create(() -> null);
-	public static final CustomItemSetting<Function<ItemStack, Boolean>> GLINT = CustomItemSetting.create((stack) -> false);
+	public static final CustomItemSetting<Function<ItemStack, Boolean>> GLINT = CustomItemSetting.create(stack -> false);
 	public static final CustomItemSetting<GlintPackView> GLINT_PACK = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<Boolean> EATABLE = CustomItemSetting.create(Boolean.FALSE);
 	public static final CustomItemSetting<Boolean> DRINKABLE = CustomItemSetting.create(Boolean.FALSE);
-	public static final CustomItemSetting<Boolean> HAS_BROKEN_STATE = CustomItemSetting.create(Boolean.FALSE);
+	public static final CustomItemSetting<Predicate<ItemStack>> HAS_BROKEN_STATE = CustomItemSetting.create(stack -> false);
 	public static final CustomItemSetting<ItemUse> ITEM_USE = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemFinishUsing> ITEM_FINISH_USING = CustomItemSetting.create(() -> null);
 	public static final CustomItemSetting<ItemUseOnBlock> ITEM_USE_ON_BLOCK = CustomItemSetting.create(() -> null);
@@ -65,7 +66,11 @@ public class AdvancedItemSettings extends QuiltItemSettings {
 	}
 
 	public AdvancedItemSettings hasBrokenState() {
-		return this.customSetting(HAS_BROKEN_STATE, true);
+		return this.hasBrokenState(stack -> true);
+	}
+
+	public AdvancedItemSettings hasBrokenState(Predicate<ItemStack> hasBrokenState) {
+		return this.customSetting(HAS_BROKEN_STATE, hasBrokenState);
 	}
 
 	public AdvancedItemSettings itemUse(ItemUse itemUseSetting) {
