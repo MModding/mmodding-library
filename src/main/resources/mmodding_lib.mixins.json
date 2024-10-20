@@ -93,6 +93,7 @@
     "injectors.ShearsItemMixin",
     "injectors.SimpleBlockFeatureMixin",
     "injectors.SlotMixin",
+    "injectors.StateMixin",
     "injectors.SwordItemMixin",
     "injectors.ToolItemMixin",
     "injectors.TridentItemMixin",

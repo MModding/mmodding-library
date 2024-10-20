@@ -57,6 +57,9 @@
 			"net/minecraft/class_1792": [
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
 			],
+			"net/minecraft/class_2688": [
+				"com/mmodding/mmodding_lib/interface_injections/ReverseCycleState<TS;>"
+			],
 			"net/minecraft/class_3610": [
 				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024FluidStateTagRuntimeManagement",
 				"com/mmodding/mmodding_lib/interface_injections/FluidGroupComparable"

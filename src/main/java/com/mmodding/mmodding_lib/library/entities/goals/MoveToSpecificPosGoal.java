@@ -66,8 +66,6 @@ public class MoveToSpecificPosGoal extends MoveToTargetPosGoal {
 
 	@Override
 	protected boolean isTargetPos(WorldView world, BlockPos pos) {
-		return Math.floor(this.getPos().getX()) == pos.getX()
-			&& Math.floor(this.getPos().getY()) == pos.getY()
-			&& Math.floor(this.getPos().getZ()) == pos.getZ();
+		return pos.getSquaredDistance(this.position.get().getX(), this.position.get().getY(), this.position.get().getZ()) <= 3;
 	}
 }

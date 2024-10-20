@@ -20,4 +20,4 @@ modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 # example = ["example-a", "example-b", "example-c"]
 
 [plugins]
-quilt_loom = { id = "org.quiltmc.loom", version = "1.6.+" }
+quilt_loom = { id = "org.quiltmc.loom", version = "1.8.4" }
