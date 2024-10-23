@@ -159,9 +159,9 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
     }
 
 	public enum DoubleWidthPart implements Opposable<DoubleWidthPart>, StringIdentifiable {
-		ORIGIN((oriented) -> oriented),
+		ORIGIN(oriented -> oriented),
 		SUB_PART_0(OrientedBlockPos::behind),
-		SUB_PART_1((oriented) -> oriented.behind().right()),
+		SUB_PART_1(oriented -> oriented.behind().right()),
 		SUB_PART_2(OrientedBlockPos::right);
 
 		private final TweakFunction<OrientedBlockPos> tweak;

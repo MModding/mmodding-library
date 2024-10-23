@@ -1,6 +1,9 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
 plugins {
 	id 'maven-publish'
 	alias(libs.plugins.quilt.loom)
+	alias(libs.plugins.mmodding.gradle)
 }
 
 archivesBaseName = project.archives_base_name
@@ -36,11 +39,60 @@ loom {
 	accessWidenerPath = file("src/main/resources/mmodding_lib.accesswidener")
 }
 
-processResources {
-	inputs.property "version", version
-
-	filesMatching('quilt.mod.json') {
-		expand "version": version
+mmodding {
+	configureQuiltModJson {
+		name = "MModding Library"
+		namespace = "mmodding_lib"
+		group = "com.mmodding"
+		description = "The MModding Library is the Main Library for MModding Mods."
+		icon = "assets/mmodding_lib/icon.png"
+		addContributor("MModding Team", "Owner")
+		addContributor("FirstMegaGame4", "Lead Developer")
+		addContributor("Neokys", "Icon Artist")
+		withContact {
+			it.homepage = "https://mmodding.com"
+			it.sources = "https://github.com/MModding/mmodding-library"
+			it.issues = "https://github.com/MModding/mmodding-library/issues"
+		}
+		environment = EnvironmentTarget.ANY
+		withEntrypoints {
+			it.init("com.mmodding.mmodding_lib.MModdingLib")
+			it.client("com.mmodding.mmodding_lib.client.MModdingLibClient")
+			it.server("com.mmodding.mmodding_lib.server.MModdingLibServer")
+			it.custom("modmenu", "com.mmodding.mmodding_lib.impl.ModMenuApiImpl")
+		}
+		addMixin("mmodding_lib.mixins.json")
+		accessWidener = "mmodding_lib.accesswidener"
+		withDependencies {
+			it.javaVersion = ">=" + 17
+			it.minecraftVersion = "~" + libs.versions.minecraft.get()
+			it.quiltLoaderVersion = ">=0.17.6-"
+			it.quiltedFabricApiVersion = ">=1.0.0-"
+		}
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/class_1297", "com/mmodding/mmodding_lib/interface_injections/EntitySyncableDataRegistry")
+			it.injectTo("net/minecraft/class_1799", Set.of(
+				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024ItemStackTagRuntimeManagement",
+				"com/mmodding/mmodding_lib/interface_injections/HiddenDataStorage",
+				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
+			))
+			it.injectTo("net/minecraft/class_1792", "com/mmodding/mmodding_lib/interface_injections/ItemGlintPack")
+			it.injectTo("net/minecraft/class_2688", "com/mmodding/mmodding_lib/interface_injections/ReverseCycleState<TS;>")
+			it.injectTo("net/minecraft/class_3610", Set.of(
+				"com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024FluidStateTagRuntimeManagement",
+				"com/mmodding/mmodding_lib/interface_injections/FluidGroupComparable"
+			))
+			it.injectTo("net/minecraft/class_4770", "com/mmodding/mmodding_lib/interface_injections/ShouldLightCustomPortal")
+			it.injectTo("net/minecraft/class_4970\u0024class_4971", "com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement\u0024BlockStateTagRuntimeManagement")
+			it.injectTo("net/minecraft/class_6880", "com/mmodding/mmodding_lib/interface_injections/TagRuntimeManagement")
+		}
+		withCustom {
+			it.withBlock("modmenu") {
+				it.withArray("badges") {
+					it.add("library")
+				}
+			}
+		}
 	}
 }
 
