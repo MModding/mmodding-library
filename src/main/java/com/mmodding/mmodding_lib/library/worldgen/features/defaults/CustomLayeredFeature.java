@@ -26,11 +26,11 @@ public class CustomLayeredFeature implements CustomFeature, FeatureRegistrable {
 	private final AtomicReference<Identifier> identifier = new AtomicReference<>();
 	private final BiList<PlacedFeature, String> additionalPlacedFeatures = new BiArrayList<>();
 
-	private final Supplier<List<RegistryKey<PlacedFeature>>> features;
+	private final Supplier<List<RegistryKey<ConfiguredFeature<?, ?>>>> features;
 	private final GenerationStep.Feature step;
 	private final List<PlacementModifier> defaultPlacementModifiers;
 
-	public CustomLayeredFeature(Supplier<List<RegistryKey<PlacedFeature>>> features, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
+	public CustomLayeredFeature(Supplier<List<RegistryKey<ConfiguredFeature<?, ?>>>> features, GenerationStep.Feature step, PlacementModifier... defaultPlacementModifiers) {
 		this.features = features;
 		this.step = step;
 		this.defaultPlacementModifiers = List.of(defaultPlacementModifiers);
