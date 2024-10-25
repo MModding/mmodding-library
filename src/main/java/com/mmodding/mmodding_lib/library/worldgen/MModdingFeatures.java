@@ -2,14 +2,19 @@ package com.mmodding.mmodding_lib.library.worldgen;
 
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
-import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedDripstoneClusterFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLargeDripstoneFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedPointedDripstoneFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLiquidVegetationPatch;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.LayeredFeature;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedDripstoneClusterFeature;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedLargeDripstoneFeature;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedPointedDripstoneFeature;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedLiquidVegetationPatch;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 
 public class MModdingFeatures {
+
+	public static final Feature<LayeredFeature.Config> LAYERED = MModdingFeatures.register(
+		"layered", new LayeredFeature(LayeredFeature.Config.CODEC)
+	);
 
 	public static final Feature<DifferedDripstoneClusterFeature.Config> DIFFERED_DRIPSTONE_CLUSTER = MModdingFeatures.register(
 		"differed_dripstone_cluster", new DifferedDripstoneClusterFeature(DifferedDripstoneClusterFeature.Config.CODEC)

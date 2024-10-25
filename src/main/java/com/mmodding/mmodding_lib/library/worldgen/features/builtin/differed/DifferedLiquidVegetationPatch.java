@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.worldgen.features.differeds;
+package com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed;
 
 import com.mojang.serialization.Codec;
 import java.util.HashSet;

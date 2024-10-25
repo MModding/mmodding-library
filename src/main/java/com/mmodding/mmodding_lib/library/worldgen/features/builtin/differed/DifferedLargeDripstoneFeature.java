@@ -1,4 +1,4 @@
-package com.mmodding.mmodding_lib.library.worldgen.features.differeds;
+package com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed;
 
 import com.mmodding.mmodding_lib.library.helpers.CustomDripstoneHelper;
 import com.mojang.serialization.Codec;

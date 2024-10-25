@@ -5,7 +5,7 @@ import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
-import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedDripstoneClusterFeature;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedDripstoneClusterFeature;
 import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;

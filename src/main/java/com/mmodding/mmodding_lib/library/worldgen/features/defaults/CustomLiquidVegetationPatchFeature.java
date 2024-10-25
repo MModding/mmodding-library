@@ -5,7 +5,7 @@ import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.ListUtils;
 import com.mmodding.mmodding_lib.library.worldgen.MModdingFeatures;
-import com.mmodding.mmodding_lib.library.worldgen.features.differeds.DifferedLiquidVegetationPatch;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedLiquidVegetationPatch;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tag.TagKey;
