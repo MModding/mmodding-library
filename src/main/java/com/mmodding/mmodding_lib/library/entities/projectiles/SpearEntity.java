@@ -35,7 +35,7 @@ public class SpearEntity extends TridentEntity {
 		}
 		this.dataTracker.set(TridentEntityAccessor.getLoyalty(), (byte) EnchantmentHelper.getLoyalty(stack));
 		this.dataTracker.set(TridentEntityAccessor.getEnchanted(), stack.hasGlint());
-		this.dataTracker.set(SpearEntity.GLINT_PACK, GlintPack.getGlintPackId(stack).toString());
+		this.dataTracker.set(SpearEntity.GLINT_PACK, GlintPack.getGlintPackId(stack) != null ? GlintPack.getGlintPackId(stack).toString() : null);
 	}
 
 	@Override
