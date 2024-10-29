@@ -2,7 +2,6 @@ package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.fabric.impl.client.indigo.renderer.render.ItemRenderContext;

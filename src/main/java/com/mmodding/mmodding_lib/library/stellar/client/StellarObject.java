@@ -46,6 +46,7 @@ public class StellarObject {
 
     public void render(MatrixStack matrices, ClientWorld world, float tickDelta) {
 
+	    RenderSystem.depthMask(false);
 		VertexBuffer.unbind();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
