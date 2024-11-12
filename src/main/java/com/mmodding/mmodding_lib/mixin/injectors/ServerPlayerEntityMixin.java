@@ -2,6 +2,8 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
+import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
+import com.mmodding.mmodding_lib.library.soundtracks.server.ServerSoundtrackPlayer;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -18,6 +20,9 @@ import java.util.Optional;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implements ServerPlayerDuckInterface {
+
+	@Unique
+	private final ServerSoundtrackPlayer soundtrackPlayer = new ServerSoundtrackPlayer((ServerPlayerEntity) (Object) this);
 
 	@Shadow
 	public abstract ServerWorld getWorld();
@@ -41,5 +46,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 			this.useCustomPortalElements = false;
 			return optionalPortal;
 		}
+	}
+
+	@Override
+	public SoundtrackPlayer getSoundtrackPlayer() {
+		return this.soundtrackPlayer;
 	}
 }

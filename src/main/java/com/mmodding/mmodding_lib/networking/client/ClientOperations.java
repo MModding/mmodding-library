@@ -8,11 +8,15 @@ import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientStellarStatusNetworkingEvents;
+import com.mmodding.mmodding_lib.library.soundtracks.Soundtrack;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
+
+import java.util.List;
 
 @ClientOnly
 public class ClientOperations {
@@ -44,5 +48,30 @@ public class ClientOperations {
 		((ClientWorldDuckInterface) handler.getWorld()).mmodding_lib$getStellarStatusesAccess().getMap().put(identifier, status);
 
 		ClientStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusReceived(identifier, status);
+	}
+
+	public static void receiveSentSoundtrackActivity(MinecraftClient client, PacketByteBuf packet) {
+		if (client.player != null) {
+			List<Soundtrack.Part> parts = packet.readList(current -> {
+				Identifier path = current.readIdentifier();
+				boolean isLooping = current.readBoolean();
+				int iterations = current.readVarInt();
+				if (isLooping) {
+					return Soundtrack.Part.looping(path);
+				}
+				else {
+					return Soundtrack.Part.iterations(path, iterations);
+				}
+			});
+			Soundtrack soundtrack = Soundtrack.create(parts);
+			int part = packet.readVarInt();
+			client.player.getSoundtrackPlayer().play(soundtrack, part);
+		}
+	}
+
+	public static void receiveClearedSoundtrackActivity(MinecraftClient client, PacketByteBuf packet) {
+		if (client.player != null) {
+			client.player.getSoundtrackPlayer().stop();
+		}
 	}
 }

@@ -76,6 +76,7 @@ mmodding {
 				"com/mmodding/mmodding_lib/interface_injections/HiddenDataStorage",
 				"com/mmodding/mmodding_lib/interface_injections/ItemGlintPack"
 			))
+			it.injectTo("net/minecraft/class_1657", "com/mmodding/mmodding_lib/interface_injections/SoundtrackPlayerContainer")
 			it.injectTo("net/minecraft/class_1792", "com/mmodding/mmodding_lib/interface_injections/ItemGlintPack")
 			it.injectTo("net/minecraft/class_2688", "com/mmodding/mmodding_lib/interface_injections/ReverseCycleState<TS;>")
 			it.injectTo("net/minecraft/class_3610", Set.of(
