@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
+import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
 import com.mmodding.mmodding_lib.library.soundtracks.client.ClientSoundtrackPlayer;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.mixin.injectors.PlayerEntityMixin;
@@ -93,5 +94,10 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 			WorldUtils.repeatTaskUntil(clientWorld, 39, () -> this.customPortalCache = this.lastNauseaStrength > 0 ? squaredPortal.getPortalBlock() : null);
 			WorldUtils.doTaskAfter(clientWorld, 40, () -> this.customPortalCache = null);
 		}
+	}
+
+	@Override
+	public SoundtrackPlayer getSoundtrackPlayer() {
+		return (ClientSoundtrackPlayer) this.tickables.stream().filter(t -> t instanceof ClientSoundtrackPlayer).findFirst().orElseThrow();
 	}
 }

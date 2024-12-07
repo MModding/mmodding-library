@@ -6,11 +6,27 @@ public interface SoundtrackPlayer {
 		this.play(soundtrack, 0);
 	}
 
-	void play(Soundtrack soundtrack, int part);
+	default void play(Soundtrack soundtrack, int part) {
+		throw new IllegalArgumentException();
+	}
 
-	void skip();
+	default void playOnce(Soundtrack soundtrack) {
+		this.play(soundtrack, 0);
+	}
 
-	void skip(int part);
+	default void playOnce(Soundtrack soundtrack, int part) {
+		throw new IllegalArgumentException();
+	}
 
-	void stop();
+	default void skip() {
+		throw new IllegalArgumentException();
+	}
+
+	default void skip(int part) {
+		throw new IllegalArgumentException();
+	}
+
+	default void stop() {
+		throw new IllegalArgumentException();
+	}
 }

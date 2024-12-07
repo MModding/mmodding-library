@@ -7,5 +7,7 @@ import org.quiltmc.qsl.base.api.util.InjectedInterface;
 @InjectedInterface(State.class)
 public interface ReverseCycleState<S> {
 
-	<T extends Comparable<T>> S reverseCycle(Property<T> property);
+	default <T extends Comparable<T>> S reverseCycle(Property<T> property) {
+		throw new IllegalArgumentException();
+	}
 }
