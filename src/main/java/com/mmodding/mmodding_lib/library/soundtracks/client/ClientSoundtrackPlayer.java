@@ -40,6 +40,13 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 	}
 
 	@Override
+	public void playOnce(Soundtrack soundtrack, int part) {
+		if (this.currentSoundtrack != soundtrack) {
+			this.play(soundtrack, part);
+		}
+	}
+
+	@Override
 	public void skip() {
 		if (this.currentSoundtrack != null && this.currentPart != -1) {
 			if (this.currentPart == this.currentSoundtrack.getPartsCount() - 1) {
