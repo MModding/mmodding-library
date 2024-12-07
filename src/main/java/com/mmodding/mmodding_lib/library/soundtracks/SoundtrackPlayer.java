@@ -11,7 +11,7 @@ public interface SoundtrackPlayer {
 	}
 
 	default void playOnce(Soundtrack soundtrack) {
-		this.play(soundtrack, 0);
+		this.playOnce(soundtrack, 0);
 	}
 
 	default void playOnce(Soundtrack soundtrack, int part) {
