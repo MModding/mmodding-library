@@ -1,17 +1,21 @@
 package com.mmodding.library.block.mixin;
 
 import com.mmodding.library.block.api.BlockWithItem;
+import com.mmodding.library.block.api.MModdingBlock;
 import com.mmodding.library.block.impl.BlockWithItemImpl;
 import com.mmodding.library.core.api.registry.Registrable;
 import com.mmodding.library.core.api.registry.RegistrationStatus;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Mixin(Block.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
-public class BlockMixin implements BlockWithItem, Registrable<Block>, BlockWithItemImpl.Getter {
+public class BlockMixin extends AbstractBlockMixin implements BlockWithItem, MModdingBlock, Registrable<Block>, BlockWithItemImpl.Getter {
 
 	@Unique
 	private static final Set<Block> BUILTIN_BLOCKS = Arrays.stream(Blocks.class.getDeclaredFields())
@@ -63,6 +67,11 @@ public class BlockMixin implements BlockWithItem, Registrable<Block>, BlockWithI
 		else {
 			throw new RuntimeException("Tried to link a new item to a block that already had one");
 		}
+	}
+
+	@Override
+	public boolean canBeReplaced(BlockState state, @Nullable ItemPlacementContext context) {
+		return context != null ? state.canReplace(context) : this.material.isReplaceable();
 	}
 
 	@Override
