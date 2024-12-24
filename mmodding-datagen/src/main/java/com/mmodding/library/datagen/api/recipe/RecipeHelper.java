@@ -2,7 +2,6 @@ package com.mmodding.library.datagen.api.recipe;
 
 import net.minecraft.data.server.recipe.RecipeJsonFactory;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
@@ -13,12 +12,34 @@ import java.util.function.Supplier;
 @ApiStatus.NonExtendable
 public interface RecipeHelper {
 
+	/**
+	 * Creates a shaped recipe for the current item
+	 * @param category the recipe category
+	 * @param consumer the recipe options
+	 */
 	void shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer);
 
+	/**
+	 * Creates a shaped recipe for the current item.
+	 * @param count the recipe output count
+	 * @param category the recipe category
+	 * @param consumer the recipe options
+	 */
 	void shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer);
 
+	/**
+	 * Creates a shapeless recipe for the current item.
+	 * @param category the recipe category
+	 * @param consumer the recipe options
+	 */
 	void shapeless(RecipeCategory category, Consumer<ShapelessRecipe> consumer);
 
+	/**
+	 * Creates a shapeless recipe for the current item.
+	 * @param count the recipe output count
+	 * @param category the recipe category
+	 * @param consumer the recipe options
+	 */
 	void shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer);
 
 	void smelting(ItemConvertible item, RecipeCategory category, int experience, int time);

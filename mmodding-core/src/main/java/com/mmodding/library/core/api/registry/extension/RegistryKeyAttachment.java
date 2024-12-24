@@ -19,7 +19,7 @@ public interface RegistryKeyAttachment<T, E> {
 	}
 
 	/**
-	 * Allows to create a new RegistryKeyAttachment
+	 * Creates a new RegistryKeyAttachment
 	 * @param retriever a BiFunction that allows to retrieve a RegistryKey from the initial object and (optionally) a dynamic registry
 	 * @return the new RegistryKeyAttachment
 	 * @param <T> the type of the RegistryKey object
@@ -30,7 +30,7 @@ public interface RegistryKeyAttachment<T, E> {
 	}
 
 	/**
-	 * Allows to attach a value to an object by retrieving its RegistryKey
+	 * Attaches a value to an object by retrieving its RegistryKey
 	 * @param manager the dynamic registry manager
 	 * @param object the object
 	 * @param value the attached value
@@ -38,14 +38,14 @@ public interface RegistryKeyAttachment<T, E> {
 	void put(@Nullable DynamicRegistryManager manager, T object, E value);
 
 	/**
-	 * Allows to attach a value to a RegistryKey
+	 * Attaches a value to a RegistryKey
 	 * @param key the registry key
 	 * @param value the attached value
 	 */
 	void put(RegistryKey<T> key, E value);
 
 	/**
-	 * Allows to retrieve an attached value of an object using object's RegistryKey
+	 * Retrieves an attached value of an object using object's RegistryKey
 	 * @param manager the dynamic registry manager
 	 * @param object the object
 	 * @return the attached value

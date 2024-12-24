@@ -9,6 +9,13 @@ import java.util.function.BiConsumer;
 
 public class TranslationSupport {
 
+	/**
+	 * Adds a new {@link TranslationSupport} which allows a custom type of content (stored inside a {@link Registry})
+	 * to be mapped to a string translation key.
+	 * @param registry the registry
+	 * @param maker the {@link BiConsumer} providing the {@link TranslationCallback} that will apply the
+	 * {@link LangProcessor} of the current element
+	 */
 	public static <R extends Registry<T>, T extends LangContainer> void addTranslationSupport(RegistryKey<R> registry, BiConsumer<TranslationCallback, T> maker) {
 		TranslationSupportImpl.addTranslationSupport(registry, maker);
 	}
