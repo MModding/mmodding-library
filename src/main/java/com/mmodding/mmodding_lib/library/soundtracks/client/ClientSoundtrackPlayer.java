@@ -92,6 +92,7 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 			}
 			else {
 				if (!this.soundManager.isPlaying(this.instance)) {
+					this.instance = null;
 					if (this.currentSoundtrack.getPart(this.currentPart).isLooping()) {
 						this.play(this.currentSoundtrack, this.currentPart);
 					}
