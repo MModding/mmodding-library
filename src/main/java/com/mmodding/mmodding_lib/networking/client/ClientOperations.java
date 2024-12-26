@@ -50,7 +50,7 @@ public class ClientOperations {
 		ClientStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusReceived(identifier, status);
 	}
 
-	public static void receiveSentSoundtrackActivity(MinecraftClient client, PacketByteBuf packet) {
+	public static void receiveSentSoundtrack(MinecraftClient client, PacketByteBuf packet) {
 		if (client.player != null) {
 			List<Soundtrack.Part> parts = packet.readList(current -> {
 				Identifier path = current.readIdentifier();
@@ -65,11 +65,28 @@ public class ClientOperations {
 			});
 			Soundtrack soundtrack = Soundtrack.create(parts);
 			int part = packet.readVarInt();
-			client.player.getSoundtrackPlayer().play(soundtrack, part);
+			if (packet.readBoolean()) {
+				client.player.getSoundtrackPlayer().playOnce(soundtrack, part);
+			}
+			else {
+				client.player.getSoundtrackPlayer().play(soundtrack, part);
+			}
 		}
 	}
 
-	public static void receiveClearedSoundtrackActivity(MinecraftClient client, PacketByteBuf packet) {
+	public static void receiveSoundtrackSkip(MinecraftClient client) {
+		if (client.player != null) {
+			client.player.getSoundtrackPlayer().skip();
+		}
+	}
+
+	public static void receiveSoundtrackSkipToPart(MinecraftClient client, PacketByteBuf packet) {
+		if (client.player != null) {
+			client.player.getSoundtrackPlayer().skip(packet.readVarInt());
+		}
+	}
+
+	public static void receiveSoundtrackDeletion(MinecraftClient client) {
 		if (client.player != null) {
 			client.player.getSoundtrackPlayer().stop();
 		}

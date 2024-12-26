@@ -65,7 +65,9 @@ public class ClientPacketReceivers {
 		// Client Operations Networking
 		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.CONFIGS, (client, handler, buf, sender) -> ClientOperations.receiveConfigOnClient(buf));
 		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.STELLAR_STATUS, (client, handler, buf, sender) -> ClientOperations.receiveStellarStatusOnClient(handler, buf));
-		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.SEND_SOUNDTRACKS, (client, handler, buf, sender) -> ClientOperations.receiveSentSoundtrackActivity(client, buf));
-		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.CLEAR_SOUNDTRACKS, (client, handler, buf, sender) -> ClientOperations.receiveClearedSoundtrackActivity(client, buf));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.SEND_SOUNDTRACKS, (client, handler, buf, sender) -> ClientOperations.receiveSentSoundtrack(client, buf));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.SKIP_SOUNDTRACKS, (client, handler, buf, sender) -> ClientOperations.receiveSoundtrackSkip(client));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.SKIP_TO_PART_SOUNDTRACKS, (client, handler, buf, sender) -> ClientOperations.receiveSoundtrackSkipToPart(client, buf));
+		ClientPlayNetworking.registerGlobalReceiver(MModdingPackets.CLEAR_SOUNDTRACKS, (client, handler, buf, sender) -> ClientOperations.receiveSoundtrackDeletion(client));
 	}
 }

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.soundtracks;
 
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -30,12 +31,12 @@ public class Soundtrack {
 
 	public static class Part {
 
-		private final Identifier path;
+		private final SoundEvent sound;
 		private final boolean looping;
 		private final int iterations;
 
 		private Part(Identifier path, boolean looping, int iterations) {
-			this.path = path;
+			this.sound = new SoundEvent(path);
 			this.looping = looping;
 			this.iterations = iterations;
 		}
@@ -48,8 +49,8 @@ public class Soundtrack {
 			return new Part(path, false, iterations);
 		}
 
-		public Identifier getPath() {
-			return this.path;
+		public SoundEvent getSound() {
+			return this.sound;
 		}
 
 		public boolean isLooping() {

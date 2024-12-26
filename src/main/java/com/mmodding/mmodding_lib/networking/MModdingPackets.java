@@ -22,5 +22,9 @@ public class MModdingPackets {
 
 	public static final MModdingIdentifier SEND_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/send");
 
+	public static final MModdingIdentifier SKIP_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/skip");
+
+	public static final MModdingIdentifier SKIP_TO_PART_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/skip_to_part");
+
 	public static final MModdingIdentifier CLEAR_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/clear");
 }

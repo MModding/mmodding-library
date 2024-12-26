@@ -41,7 +41,7 @@ public class CommonOperations {
 		StellarStatusNetworkingEvents.AFTER_ALL.invoker().afterAllStellarStatusSent(stellarStatus);
 	}
 
-	public static void sendSoundtrackActivity(ServerPlayerEntity player, Soundtrack soundtrack, int part) {
+	public static void playSoundtrackForPlayer(ServerPlayerEntity player, Soundtrack soundtrack, int part, boolean override) {
 		PacketByteBuf packet = PacketByteBufs.create();
 
 		List<Soundtrack.Part> parts = new ArrayList<>();
@@ -51,17 +51,29 @@ public class CommonOperations {
 		}
 
 		packet.writeCollection(parts, (buf, current) -> {
-			buf.writeIdentifier(current.getPath());
+			buf.writeIdentifier(current.getSound().getId());
 			buf.writeBoolean(current.isLooping());
 			buf.writeVarInt(current.getIterations());
 		});
 
 		packet.writeVarInt(part);
 
+		packet.writeBoolean(override);
+
 		ServerPlayNetworking.send(player, MModdingPackets.SEND_SOUNDTRACKS, packet);
 	}
 
-	public static void clearSoundtrackActivity(ServerPlayerEntity player) {
+	public static void skipSoundtrackPartForPlayer(ServerPlayerEntity player) {
+		ServerPlayNetworking.send(player, MModdingPackets.SKIP_SOUNDTRACKS, PacketByteBufs.create());
+	}
+
+	public static void skipToPartForPlayer(ServerPlayerEntity player, int part) {
+		PacketByteBuf packet = PacketByteBufs.create();
+		packet.writeVarInt(part);
+		ServerPlayNetworking.send(player, MModdingPackets.SKIP_TO_PART_SOUNDTRACKS, packet);
+	}
+
+	public static void clearSoundtrackForPlayer(ServerPlayerEntity player) {
 		ServerPlayNetworking.send(player, MModdingPackets.CLEAR_SOUNDTRACKS, PacketByteBufs.create());
 	}
 }
