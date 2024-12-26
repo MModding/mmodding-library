@@ -50,6 +50,9 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 			if (this.currentPart == this.currentSoundtrack.getPartsCount() - 1) {
 				this.stop();
 			}
+			else {
+				this.play(this.currentSoundtrack, this.currentPart + 1);
+			}
 		}
 	}
 
@@ -89,7 +92,12 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 			}
 			else {
 				if (!this.soundManager.isPlaying(this.instance)) {
-					this.skip();
+					if (this.currentSoundtrack.getPart(this.currentPart).isLooping()) {
+						this.play(this.currentSoundtrack, this.currentPart);
+					}
+					else {
+						this.skip();
+					}
 				}
 			}
 		}
