@@ -124,6 +124,7 @@
     "injectors.client.ItemRendererMixin",
     "injectors.client.LivingEntityRendererMixin",
     "injectors.client.ModelLoaderMixin",
+    "injectors.client.SoundSystemMixin",
     "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",
