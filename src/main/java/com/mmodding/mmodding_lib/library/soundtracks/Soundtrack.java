@@ -29,6 +29,16 @@ public class Soundtrack {
 		return this.parts.get(part);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Soundtrack soundtrack) {
+			return this.parts.equals(soundtrack.parts);
+		}
+		else {
+			return super.equals(obj);
+		}
+	}
+
 	public static class Part {
 
 		private final SoundEvent sound;
@@ -59,6 +69,16 @@ public class Soundtrack {
 
 		public int getIterations() {
 			return this.iterations;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Part part) {
+				return this.sound.getId().equals(part.sound.getId()) && this.looping == part.looping && this.iterations == part.iterations;
+			}
+			else {
+				return super.equals(obj);
+			}
 		}
 	}
 }

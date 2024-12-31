@@ -66,10 +66,10 @@ public class ClientOperations {
 			Soundtrack soundtrack = Soundtrack.create(parts);
 			int part = packet.readVarInt();
 			if (packet.readBoolean()) {
-				client.player.getSoundtrackPlayer().playOnce(soundtrack, part);
+				client.player.getSoundtrackPlayer().play(soundtrack, part);
 			}
 			else {
-				client.player.getSoundtrackPlayer().play(soundtrack, part);
+				client.player.getSoundtrackPlayer().playOnce(soundtrack, part);
 			}
 		}
 	}
