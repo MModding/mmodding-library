@@ -48,6 +48,7 @@ public class SoundQueue implements TickableSoundInstance {
 			if (this.delayBeforeStarting == 0) {
 				if (!this.queue.isEmpty()) {
 					this.soundManager.play(this.queue.element());
+					this.delayBeforeStarting = -1; // The start has been executed, now delaying to update method
 				}
 				else {
 					this.delayBeforeStarting = 10;
