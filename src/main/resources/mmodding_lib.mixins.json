@@ -98,7 +98,8 @@
     "injectors.ToolItemMixin",
     "injectors.TridentItemMixin",
     "injectors.WeatherCommandMixin",
-    "injectors.WorldMixin"
+    "injectors.WorldMixin",
+    "injectors.client.ItemModelGeneratorMixin"
   ],
   "client": [
     "accessors.SinglePartEntityModelAccessor",
@@ -122,9 +123,9 @@
     "injectors.client.InGameHudMixin",
     "injectors.client.ItemRenderContextMixin",
     "injectors.client.ItemRendererMixin",
+    "injectors.client.JsonUnbakedModelMixin",
     "injectors.client.LivingEntityRendererMixin",
     "injectors.client.ModelLoaderMixin",
-    "injectors.client.SoundSystemMixin",
     "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",

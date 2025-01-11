@@ -1,6 +1,8 @@
 accessWidener v1 named
 
 accessible class net/minecraft/client/gui/tooltip/BundleTooltipComponent$Sprite
+accessible class net/minecraft/client/render/model/json/ItemModelGenerator$Frame
+accessible class net/minecraft/client/render/model/json/ItemModelGenerator$Side
 accessible class net/minecraft/client/render/RenderPhase$Cull
 accessible class net/minecraft/client/render/RenderPhase$DepthTest
 accessible class net/minecraft/client/render/RenderPhase$Layering
@@ -30,12 +32,16 @@ mutable field net/minecraft/world/dimension/AreaHelper width I
 mutable field net/minecraft/world/gen/chunk/ChunkNoiseSampler blockStateSampler Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler$BlockStateSampler;
 
 accessible method net/minecraft/block/entity/BlockEntityType$Builder <init> (Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;Ljava/util/Set;)V
+accessible method net/minecraft/client/render/model/json/ItemModelGenerator addLayerElements (ILjava/lang/String;Lnet/minecraft/client/texture/Sprite;)Ljava/util/List;
+accessible method net/minecraft/client/render/model/json/ItemModelGenerator getFrames (Lnet/minecraft/client/texture/Sprite;)Ljava/util/List;
+accessible method net/minecraft/client/render/model/json/ItemModelGenerator$Side isVertical ()Z
 accessible method net/minecraft/client/render/RenderLayer$MultiPhase <init> (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$DrawMode;IZZLnet/minecraft/client/render/RenderLayer$MultiPhaseParameters;)V
 accessible method net/minecraft/client/render/RenderLayer$MultiPhaseParameters <init> (Lnet/minecraft/client/render/RenderPhase$TextureBase;Lnet/minecraft/client/render/RenderPhase$Shader;Lnet/minecraft/client/render/RenderPhase$Transparency;Lnet/minecraft/client/render/RenderPhase$DepthTest;Lnet/minecraft/client/render/RenderPhase$Cull;Lnet/minecraft/client/render/RenderPhase$Lightmap;Lnet/minecraft/client/render/RenderPhase$Overlay;Lnet/minecraft/client/render/RenderPhase$Layering;Lnet/minecraft/client/render/RenderPhase$Target;Lnet/minecraft/client/render/RenderPhase$Texturing;Lnet/minecraft/client/render/RenderPhase$WriteMaskState;Lnet/minecraft/client/render/RenderPhase$LineWidth;Lnet/minecraft/client/render/RenderLayer$OutlineMode;)V
 accessible method net/minecraft/recipe/Ingredient$StackEntry <init> (Lnet/minecraft/item/ItemStack;)V
 accessible method net/minecraft/recipe/Ingredient$TagEntry <init> (Lnet/minecraft/tag/TagKey;)V
 accessible method net/minecraft/world/gen/OreVeinCreator create (Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/world/gen/DensityFunction;Lnet/minecraft/util/random/PositionalRandomFactory;)Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler$BlockStateSampler;
 
+extendable method net/minecraft/client/render/model/json/ItemModelGenerator createOrExpandCurrentCube (Ljava/util/List;Lnet/minecraft/client/render/model/json/ItemModelGenerator$Side;II)V
 extendable method net/minecraft/text/MutableText <init> (Lnet/minecraft/text/component/TextComponent;Ljava/util/List;Lnet/minecraft/text/Style;)V
 extendable method net/minecraft/world/dimension/AreaHelper getLowerCorner (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/BlockPos;
 extendable method net/minecraft/world/dimension/AreaHelper getWidth (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)I
