@@ -56,9 +56,6 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 		if (this.queue != null) {
 			this.queue.forward(1);
 		}
-		else {
-			throw new IllegalStateException("Tried skipping without any soundtrack playing");
-		}
 	}
 
 	@Override
@@ -73,9 +70,6 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 		if (this.queue != null) {
 			this.currentSoundtrack = null;
 			this.queue.stop();
-		}
-		else {
-			throw new IllegalStateException("Tried stopping without any soundtrack playing");
 		}
 	}
 
