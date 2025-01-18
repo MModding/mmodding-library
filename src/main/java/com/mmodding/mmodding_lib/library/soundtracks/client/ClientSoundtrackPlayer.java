@@ -60,9 +60,12 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 
 	@Override
 	public void skip(int part) {
-		assert this.currentSoundtrack != null;
-		this.stop();
-		this.play(this.currentSoundtrack, part);
+		if (this.currentSoundtrack != null) {
+			if (this.queue != null) {
+				this.queue.stop();
+			}
+			this.play(this.currentSoundtrack, part);
+		}
 	}
 
 	@Override

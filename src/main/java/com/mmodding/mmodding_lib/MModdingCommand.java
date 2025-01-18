@@ -7,6 +7,7 @@ import com.mmodding.mmodding_lib.library.utils.StellarUtils;
 import com.mmodding.mmodding_lib.states.persistant.StellarStatuses;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.IdentifierArgumentType;
@@ -25,9 +26,9 @@ public class MModdingCommand {
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(
 			CommandManager.literal("mmodding")
-				.requires(source -> source.hasPermissionLevel(2))
 				.then(
 					CommandManager.literal("discard")
+						.requires(source -> source.hasPermissionLevel(2))
 						.executes(context -> MModdingCommand.discard(context.getSource(), ImmutableList.of(context.getSource().getEntityOrThrow())))
 						.then(
 							CommandManager.argument("targets", EntityArgumentType.entities())
@@ -35,7 +36,31 @@ public class MModdingCommand {
 						)
 				)
 				.then(
+					CommandManager.literal("soundtrack")
+						.then(
+							CommandManager.literal("skip")
+								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.SKIP, 0))
+								.then(
+									CommandManager.argument("index", IntegerArgumentType.integer())
+										.executes(
+											context -> MModdingCommand.soundtrack(
+												context.getSource(),
+												SoundtrackOperation.SKIP_TO_POINT,
+												IntegerArgumentType.getInteger(context, "index")
+											)
+										)
+								)
+						)
+						.then(
+							CommandManager.literal("stop")
+								.executes(
+									context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.STOP, 0)
+								)
+						)
+				)
+				.then(
 					CommandManager.literal("stellar")
+						.requires(source -> source.hasPermissionLevel(2))
 						.then(
 							CommandManager.argument("status", IdentifierArgumentType.identifier())
 								.suggests(
@@ -128,6 +153,29 @@ public class MModdingCommand {
 		return targets.size();
 	}
 
+	private static int soundtrack(ServerCommandSource source, SoundtrackOperation operation, int value) throws CommandSyntaxException {
+		if (source.getEntity() == null) {
+			source.sendError(Text.translatable("commands.mmodding.soundtrack.not_an_entity"));
+		}
+		return switch (operation) {
+			case SKIP -> {
+				source.getPlayer().getSoundtrackPlayer().skip();
+				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.skipped"), false);
+				yield 0;
+			}
+			case SKIP_TO_POINT -> {
+				source.getPlayer().getSoundtrackPlayer().skip(value);
+				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.skipped_to_point", value), false);
+				yield 1;
+			}
+			case STOP -> {
+				source.getPlayer().getSoundtrackPlayer().stop();
+				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.stopped"), false);
+				yield 2;
+			}
+		};
+	}
+
 	private static int stellar(ServerCommandSource source, Identifier status, StellarOperation operation, int value) {
 		StellarStatuses stellarStatuses = ((ServerWorldDuckInterface) source.getWorld()).mmodding_lib$getStellarStatuses();
 		StellarStatus stellarStatus = StellarUtils.getStatusInWorld(source.getWorld(), status);
@@ -167,6 +215,12 @@ public class MModdingCommand {
 				default -> 3;
 			};
 		};
+	}
+
+	private enum SoundtrackOperation {
+		SKIP,
+		SKIP_TO_POINT,
+		STOP
 	}
 
 	private enum StellarOperation {
