@@ -37,6 +37,11 @@ dependencies {
 
 loom {
 	accessWidenerPath = file("src/main/resources/mmodding_lib.accesswidener")
+	mods {
+		"mmodding_lib" {
+			sourceSet("main")
+		}
+	}
 }
 
 mmodding {

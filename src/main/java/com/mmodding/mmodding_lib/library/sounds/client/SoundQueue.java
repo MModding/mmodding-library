@@ -1,87 +1,57 @@
 package com.mmodding.mmodding_lib.library.sounds.client;
 
+import com.mmodding.mmodding_lib.library.sounds.client.stream.ReleasableRepeatingAudioStream;
+import com.mmodding.mmodding_lib.mixin.accessors.client.SoundLoaderAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.sound.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.function.DoubleSupplier;
+import java.util.concurrent.CompletableFuture;
 
 @ClientOnly
-public class SoundQueue implements TickableSoundInstance {
+public class SoundQueue extends AbstractSoundInstance implements TickableSoundInstance {
 
 	private final Queue<SoundInstance> queue = new LinkedList<>();
 	private final SoundManager soundManager;
-	private final Identifier identifier;
-	private final DoubleSupplier x;
-	private final DoubleSupplier y;
-	private final DoubleSupplier z;
-	private final boolean infinite;
+	private final float volume;
+	private final float pitch;
 
-	private int delayBeforeStarting;
-
-	public SoundQueue(SoundManager soundManager, Identifier identifier, DoubleSupplier x, DoubleSupplier y, DoubleSupplier z, boolean infinite) {
-		this(soundManager, identifier, x, y, z, infinite, 0);
-	}
-
-	public SoundQueue(SoundManager soundManager, Identifier identifier, DoubleSupplier x, DoubleSupplier y, DoubleSupplier z, boolean infinite, int delayBeforeStarting) {
+	public SoundQueue(SoundManager soundManager, Identifier identifier, float volume, float pitch) {
+		super(identifier, SoundCategory.MASTER, SoundInstance.method_43221());
 		this.soundManager = soundManager;
-		this.identifier = identifier;
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.infinite = infinite;
-		this.delayBeforeStarting = delayBeforeStarting;
+		this.volume = volume;
+		this.pitch = pitch;
 	}
 
-	@Override
-	public boolean isDone() {
-		return this.queue.isEmpty() && this.delayBeforeStarting < 0 && !this.infinite;
+	public void addPositioned(SoundEvent soundEvent, boolean isLooping) {
+		SoundInstance soundInstance = new PositionedSoundInstance(soundEvent, SoundCategory.MASTER, 0.0f, 0.0f, this.random, 0.0, 0.0, 0.0);
+		this.add(isLooping ? new SimpleLoopingSoundInstance<>(soundInstance) : soundInstance);
 	}
 
-	@Override
-	public void tick() {
-		if (this.delayBeforeStarting >= 0) {
-			if (this.delayBeforeStarting == 0) {
-				if (!this.queue.isEmpty()) {
-					this.soundManager.play(this.queue.element());
-					this.delayBeforeStarting = -1; // The start has been executed, now delaying to update method
-				}
-				else {
-					this.delayBeforeStarting = 10;
-				}
-			}
-			else {
-				this.delayBeforeStarting--;
-			}
-		}
-		else {
-			if (!this.queue.isEmpty()) {
-				this.update();
-			}
-		}
-	}
-
-	private void update() {
-		SoundInstance current = this.queue.element();
-		if (!this.soundManager.isPlaying(current)) {
-			this.queue.remove();
-			if (!this.queue.isEmpty()) {
-				this.soundManager.play(this.queue.element());
-			}
-		}
+	public void addTracking(Entity entity, SoundEvent soundEvent, boolean isLooping) {
+		TickableSoundInstance tickableSoundInstance = new EntityTrackingSoundInstance(soundEvent, SoundCategory.MASTER, 0.0f, 0.0f, entity, this.random.nextLong());
+		this.add(isLooping ? new TickableLoopingSoundInstance<>(tickableSoundInstance) : tickableSoundInstance);
 	}
 
 	public void add(SoundInstance soundInstance) {
-		this.queue.add(soundInstance);
-		// If, after adding a sound instance to the queue, the queue has a size of 1, it means that it did not have
-		// any sound instances before, therefore not playing any, which is why we are playing it if infinite.
-		if (this.delayBeforeStarting < 0 && this.infinite && this.queue.size() == 1) {
-			this.soundManager.play(this.queue.element());
+		if (soundInstance.getSound() == null) {
+			soundInstance.getSoundSet(this.soundManager);
 		}
+		this.queue.add(soundInstance);
 	}
 
 	public void forward(int index) {
@@ -91,11 +61,15 @@ public class SoundQueue implements TickableSoundInstance {
 				this.queue.remove();
 			}
 			Queue<SoundInstance> merging = new LinkedList<>();
-			for (int i = 0; i < this.queue.size(); i++) {
+			int toMergeSize = this.queue.size();
+			for (int i = 0; i < toMergeSize; i++) {
 				merging.add(this.queue.remove());
 			}
+			if (current instanceof LoopingSoundInstance looping) {
+				looping.release();
+			}
 			this.queue.add(current);
-			for (int i = 0; i < merging.size(); i++) {
+			for (int i = 0; i < toMergeSize; i++) {
 				this.queue.add(merging.remove());
 			}
 		}
@@ -111,9 +85,23 @@ public class SoundQueue implements TickableSoundInstance {
 		if (!this.queue.isEmpty()) {
 			SoundInstance current = this.queue.remove();
 			this.queue.clear();
+			if (current instanceof LoopingSoundInstance looping) {
+				looping.release();
+			}
 			this.queue.add(current);
 		}
-		this.delayBeforeStarting = -1;
+	}
+
+	@Override
+	public void tick() {
+		if (!this.queue.isEmpty() && this.queue.element() instanceof TickableSoundInstance tickable) {
+			tickable.tick();
+		}
+	}
+
+	@Override
+	public boolean isDone() {
+		return false;
 	}
 
 	@Nullable
@@ -130,68 +118,132 @@ public class SoundQueue implements TickableSoundInstance {
 	}
 
 	@Override
-	public Identifier getId() {
-		return this.identifier;
-	}
-
-	@Override
-	@Nullable
-	public WeightedSoundSet getSoundSet(SoundManager soundManager) {
-		return null;
-	}
-
-	@Override
-	public Sound getSound() {
-		return null;
-	}
-
-	@Override
-	public SoundCategory getCategory() {
-		return !this.queue.isEmpty() ? this.queue.element().getCategory() : SoundCategory.NEUTRAL;
-	}
-
-	@Override
-	public boolean isRepeatable() {
-		return !this.queue.isEmpty() && this.queue.element().isRepeatable();
-	}
-
-	@Override
-	public boolean isRelative() {
-		return !this.queue.isEmpty() && this.queue.element().isRelative();
-	}
-
-	@Override
-	public int getRepeatDelay() {
-		return !this.queue.isEmpty() ? this.queue.element().getRepeatDelay() : 0;
-	}
-
-	@Override
 	public float getVolume() {
-		return !this.queue.isEmpty() ? this.queue.element().getVolume() : 0;
+		return this.volume;
 	}
 
 	@Override
 	public float getPitch() {
-		return !this.queue.isEmpty() ? this.queue.element().getPitch() : 0;
+		return this.pitch;
 	}
 
 	@Override
 	public double getX() {
-		return this.x.getAsDouble();
+		return !this.queue.isEmpty() ? this.queue.element().getX() : 0.0;
 	}
 
 	@Override
 	public double getY() {
-		return this.y.getAsDouble();
+		return !this.queue.isEmpty() ? this.queue.element().getY() : 0.0;
 	}
 
 	@Override
 	public double getZ() {
-		return this.z.getAsDouble();
+		return !this.queue.isEmpty() ? this.queue.element().getZ() : 0.0;
 	}
 
 	@Override
 	public AttenuationType getAttenuationType() {
-		return !this.queue.isEmpty() ? this.queue.element().getAttenuationType() : AttenuationType.LINEAR;
+		return AttenuationType.LINEAR;
+	}
+
+	@Override
+	public CompletableFuture<AudioStream> getAudioStream(SoundLoader loader, Identifier id, boolean repeatInstantly) {
+		return CompletableFuture.supplyAsync(
+			() -> new SoundQueueStream(soundInstance -> this.getInnerStream(loader, soundInstance), this),
+			Util.getMainWorkerExecutor()
+		);
+	}
+
+	private AudioStream getInnerStream(SoundLoader loader, SoundInstance soundInstance) throws IOException {
+		InputStream stream = ((SoundLoaderAccessor) loader).mmodding_lib$getResourceManager().open(soundInstance.getSound().getLocation());
+		return soundInstance instanceof LoopingSoundInstance ? new ReleasableRepeatingAudioStream(OggAudioStream::new, stream) : new OggAudioStream(stream);
+	}
+
+	public static class SoundQueueStream implements AudioStream {
+
+		private static final AudioFormat DUMMY = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, AudioSystem.NOT_SPECIFIED, 16, 2, 4, AudioSystem.NOT_SPECIFIED, true);
+
+		private final DelegateFactory delegateFactory;
+		private final SoundQueue sounds;
+
+		@Nullable
+		private AudioStream delegate;
+
+		// States if the Source needs to reload information about the stream
+		private boolean dirty = false;
+
+		public SoundQueueStream(DelegateFactory delegateFactory, SoundQueue sounds) {
+			this.delegateFactory = delegateFactory;
+			this.sounds = sounds;
+		}
+
+		@Override
+		public AudioFormat getFormat() {
+			return this.delegate != null ? this.delegate.getFormat() : SoundQueueStream.DUMMY;
+		}
+
+		private void setStream() throws IOException {
+			if (!this.sounds.queue.isEmpty()) {
+				this.delegate = this.delegateFactory.create(this.sounds.queue.element());
+				this.dirty = true;
+			}
+			else {
+				this.delegate = null;
+			}
+		}
+
+		// If the delegate is a repeating stream, checks if it needs to be released
+		private void checkRepeatableCases() {
+			if (this.delegate instanceof ReleasableRepeatingAudioStream releasable) {
+				if (this.sounds.queue.peek() instanceof LoopingSoundInstance looping && !looping.isRepeatable()) {
+					releasable.release();
+				}
+			}
+		}
+
+		@Override
+		public ByteBuffer getBuffer(int size) throws IOException {
+			if (this.delegate == null) {
+				this.setStream();
+			}
+			if (this.delegate != null) {
+				this.checkRepeatableCases();
+				ByteBuffer byteBuffer = this.delegate.getBuffer(size);
+				if (!byteBuffer.hasRemaining()) {
+					this.delegate.close();
+					this.sounds.queue.remove();
+					this.setStream();
+					if (this.delegate != null) {
+						return this.delegate.getBuffer(size);
+					}
+				}
+				else {
+					return byteBuffer;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public void close() throws IOException {
+			if (this.delegate != null) {
+				this.delegate.close();
+			}
+		}
+
+		public boolean isDirty() {
+			return this.dirty;
+		}
+
+		public void clean() {
+			this.dirty = false;
+		}
+	}
+
+	@FunctionalInterface
+	@Environment(EnvType.CLIENT)
+	public interface DelegateFactory {
+		AudioStream create(SoundInstance soundInstance) throws IOException;
 	}
 }
