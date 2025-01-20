@@ -66,7 +66,7 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 		return state.isOf(this);
 	}
 
-	protected boolean areLeavesConnected() {
+	public boolean areLeavesConnected() {
 		return true;
 	}
 
