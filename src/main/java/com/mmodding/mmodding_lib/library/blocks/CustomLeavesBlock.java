@@ -50,7 +50,7 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
         if (hasItem) this.item = new BlockItem(this, itemSettings);
     }
 
-	protected IntProperty getDistanceProperty() {
+	public IntProperty getDistanceProperty() {
 		return CustomLeavesBlock.DISTANCE;
 	}
 

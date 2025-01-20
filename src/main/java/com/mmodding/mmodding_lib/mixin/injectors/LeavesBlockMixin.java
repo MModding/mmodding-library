@@ -23,4 +23,14 @@ public class LeavesBlockMixin {
 	private Object removeConditionally(BlockState instance, Property<?> property, Comparable<?> comparable, Operation<Object> original) {
 		return ((Object) this) instanceof CustomLeavesBlock ? instance : original.call(instance, property, comparable);
 	}
+
+	@WrapOperation(method = "getDistanceFromLog", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;get(Lnet/minecraft/state/property/Property;)Ljava/lang/Comparable;"))
+	private static <T extends Comparable<T>> T preventWrongProperties(BlockState instance, Property<T> property, Operation<T> original) {
+		if (instance.getBlock() instanceof CustomLeavesBlock leaves) {
+			return original.call(instance, leaves.getDistanceProperty());
+		}
+		else {
+			return original.call(instance, property);
+		}
+	}
 }
