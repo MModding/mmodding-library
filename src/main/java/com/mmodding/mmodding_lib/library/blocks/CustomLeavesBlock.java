@@ -62,8 +62,12 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 		return state.isIn(BlockTags.LOGS);
 	}
 
-	protected boolean hasSeparatedLeaves() {
-		return false;
+	protected boolean areLeavesValid(BlockState state) {
+		return state.isOf(this);
+	}
+
+	protected boolean areLeavesConnected() {
+		return true;
 	}
 
 	@Override
@@ -99,7 +103,7 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 		int distance = this.getMaxDistance();
 		BlockPos.Mutable mutable = new BlockPos.Mutable();
 
-		if (this.hasSeparatedLeaves()) {
+		if (!this.areLeavesConnected()) {
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					for (int k = -1; k <= 1; k++) {
@@ -129,7 +133,7 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 		if (this.isLogValid(state)) {
 			return 0;
 		}
-		else if (state.isOf(this)) {
+		else if (this.areLeavesValid(state)) {
 			return state.get(this.getDistanceProperty());
 		}
 		else {
@@ -150,7 +154,7 @@ public class CustomLeavesBlock extends LeavesBlock implements BlockRegistrable, 
 			.getFluidState(ctx.getBlockPos());
 
 		BlockState blockState = this.getDefaultState()
-			.with(CustomLeavesBlock.PERSISTENT, false)
+			.with(CustomLeavesBlock.PERSISTENT, true)
 			.with(CustomLeavesBlock.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
 
 		return this.updateDistanceFromLogs(blockState, ctx.getWorld(), ctx.getBlockPos());
