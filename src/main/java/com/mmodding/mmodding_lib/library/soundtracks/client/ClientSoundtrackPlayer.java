@@ -84,4 +84,8 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 			}
 		}
 	}
+
+	public boolean isPlaying() {
+		return this.currentSoundtrack != null;
+	}
 }
