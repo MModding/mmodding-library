@@ -58,8 +58,9 @@ public class ClientPacketReceivers {
 			int entityId = buf.readVarInt();
 			assert client.world != null;
 			Entity entity = client.world.getEntityById(entityId);
-			assert entity != null;
-			entity.getSyncableDataRegistry().accept(buf);
+			if (entity != null) {
+				entity.getSyncableDataRegistry().accept(buf);
+			}
 		});
 
 		// Client Operations Networking
