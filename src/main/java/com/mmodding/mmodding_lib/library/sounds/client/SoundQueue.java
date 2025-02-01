@@ -169,27 +169,37 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 
 		@Nullable
 		private AudioStream delegate;
-
-		// States if the Source needs to reload information about the stream
-		private boolean dirty = false;
+		private AudioFormat format;
+		private int bufferSize;
 
 		public SoundQueueStream(DelegateFactory delegateFactory, SoundQueue sounds) {
 			this.delegateFactory = delegateFactory;
 			this.sounds = sounds;
 		}
 
-		@Override
-		public AudioFormat getFormat() {
-			return this.delegate != null ? this.delegate.getFormat() : SoundQueueStream.DUMMY;
+		private static int getBufferSize(AudioFormat format, int time) {
+			return (int) (time * format.getSampleSizeInBits() / 8.0f * format.getChannels() * format.getSampleRate());
 		}
 
-		private void setStream() throws IOException {
+		@Override
+		public AudioFormat getFormat() {
+			return this.format != null ? this.format : SoundQueueStream.DUMMY;
+		}
+
+		public boolean isEmpty() {
+			return this.sounds.queue.isEmpty();
+		}
+
+		private void replaceDelegate() throws IOException {
 			if (!this.sounds.queue.isEmpty()) {
 				this.delegate = this.delegateFactory.create(this.sounds.queue.element());
-				this.dirty = true;
+				this.format = this.delegate.getFormat();
+				this.bufferSize = getBufferSize(this.format, 1);
 			}
 			else {
 				this.delegate = null;
+				this.format = null;
+				this.bufferSize = -1;
 			}
 		}
 
@@ -203,19 +213,19 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 		}
 
 		@Override
-		public ByteBuffer getBuffer(int size) throws IOException {
+		public ByteBuffer getBuffer(int ignored) throws IOException {
 			if (this.delegate == null) {
-				this.setStream();
+				this.replaceDelegate();
 			}
 			if (this.delegate != null) {
 				this.checkRepeatableCases();
-				ByteBuffer byteBuffer = this.delegate.getBuffer(size);
+				ByteBuffer byteBuffer = this.delegate.getBuffer(this.bufferSize);
 				if (!byteBuffer.hasRemaining()) {
 					this.delegate.close();
 					this.sounds.queue.remove();
-					this.setStream();
+					this.replaceDelegate();
 					if (this.delegate != null) {
-						return this.delegate.getBuffer(size);
+						return this.delegate.getBuffer(this.bufferSize);
 					}
 				}
 				else {
@@ -230,14 +240,6 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 			if (this.delegate != null) {
 				this.delegate.close();
 			}
-		}
-
-		public boolean isDirty() {
-			return this.dirty;
-		}
-
-		public void clean() {
-			this.dirty = false;
 		}
 	}
 

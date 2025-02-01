@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.mmodding_lib.library.sounds.client.SoundQueue;
 import net.minecraft.client.sound.AudioStream;
 import net.minecraft.client.sound.Source;
@@ -10,28 +12,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.sound.sampled.AudioFormat;
-
 @Mixin(Source.class)
 public abstract class SourceMixin {
-
-	@Shadow
-	private int bufferSize;
 
 	@Shadow
 	private @Nullable AudioStream stream;
 
 	@Shadow
-	private static int getBufferSize(AudioFormat format, int time) {
-		throw new IllegalStateException();
+	public abstract void play();
+
+	@Shadow
+	public abstract boolean isStopped();
+
+	@WrapOperation(method = "setStream", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sound/Source;method_19640(I)V"))
+	private void cancelConditionally(Source instance, int i, Operation<Void> original) {
+		original.call(instance, this.stream instanceof SoundQueue.SoundQueueStream ? 1 : i);
 	}
 
-	@Inject(method = "method_19640", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sound/AudioStream;getBuffer(I)Ljava/nio/ByteBuffer;"))
-	private void reloadFormat(int i, CallbackInfo ci) {
-		assert this.stream != null;
-		if (this.stream instanceof SoundQueue.SoundQueueStream soundQueueStream && soundQueueStream.isDirty()) {
-			this.bufferSize = getBufferSize(this.stream.getFormat(), 1);
-			soundQueueStream.clean();
+	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sound/Source;method_19640(I)V", shift = At.Shift.AFTER))
+	private void continuePlaying(CallbackInfo ci) {
+		if (this.stream instanceof SoundQueue.SoundQueueStream soundQueueStream && !soundQueueStream.isEmpty() && this.isStopped()) {
+			this.play();
 		}
 	}
 }
