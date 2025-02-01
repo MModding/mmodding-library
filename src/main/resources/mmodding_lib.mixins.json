@@ -128,7 +128,7 @@
     "injectors.client.LivingEntityRendererMixin",
     "injectors.client.ModelLoaderMixin",
     "injectors.client.MusicTrackerMixin",
-    "injectors.client.SourceMixin",
+    "injectors.client.OggAudioStreamMixin",
     "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",

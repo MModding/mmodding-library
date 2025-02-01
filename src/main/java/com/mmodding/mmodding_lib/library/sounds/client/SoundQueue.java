@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.sounds.client;
 
+import com.mmodding.mmodding_lib.library.sounds.client.stream.AdaptiveOggAudioStream;
 import com.mmodding.mmodding_lib.library.sounds.client.stream.ReleasableRepeatingAudioStream;
 import com.mmodding.mmodding_lib.mixin.accessors.client.SoundLoaderAccessor;
 import net.fabricmc.api.EnvType;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -29,12 +29,20 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 	private final SoundManager soundManager;
 	private final float volume;
 	private final float pitch;
+	private final float sampleRate;
+	private final AdaptiveOggAudioStream.TrackType trackType;
 
 	public SoundQueue(SoundManager soundManager, Identifier identifier, float volume, float pitch) {
+		this(soundManager, identifier, volume, pitch, 44100.0f, AdaptiveOggAudioStream.TrackType.STEREO);
+	}
+
+	public SoundQueue(SoundManager soundManager, Identifier identifier, float volume, float pitch, float sampleRate, AdaptiveOggAudioStream.TrackType trackType) {
 		super(identifier, SoundCategory.MASTER, SoundInstance.method_43221());
 		this.soundManager = soundManager;
 		this.volume = volume;
 		this.pitch = pitch;
+		this.sampleRate = sampleRate;
+		this.trackType = trackType;
 	}
 
 	public void addPositioned(SoundEvent soundEvent, boolean isLooping) {
@@ -157,33 +165,59 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 
 	private AudioStream getInnerStream(SoundLoader loader, SoundInstance soundInstance) throws IOException {
 		InputStream stream = ((SoundLoaderAccessor) loader).mmodding_lib$getResourceManager().open(soundInstance.getSound().getLocation());
-		return soundInstance instanceof LoopingSoundInstance ? new ReleasableRepeatingAudioStream(OggAudioStream::new, stream) : new OggAudioStream(stream);
+		if (soundInstance instanceof LoopingSoundInstance) {
+			return new ReleasableRepeatingAudioStream(
+				inputStream -> new AdaptiveOggAudioStream(inputStream) {
+
+					@Override
+					public float getForcedSampleRate() {
+						return SoundQueue.this.sampleRate;
+					}
+
+					@Override
+					public TrackType getTrackType() {
+						return SoundQueue.this.trackType;
+					}
+				},
+				stream
+			);
+		}
+		else {
+			return new AdaptiveOggAudioStream(stream) {
+
+				@Override
+				public float getForcedSampleRate() {
+					return SoundQueue.this.sampleRate;
+				}
+
+				@Override
+				public TrackType getTrackType() {
+					return SoundQueue.this.trackType;
+				}
+			};
+		}
 	}
 
 	public static class SoundQueueStream implements AudioStream {
 
-		private static final AudioFormat DUMMY = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, AudioSystem.NOT_SPECIFIED, 16, 2, 4, AudioSystem.NOT_SPECIFIED, true);
-
 		private final DelegateFactory delegateFactory;
 		private final SoundQueue sounds;
+		private final AudioFormat format;
+		private final int bufferSize;
 
 		@Nullable
 		private AudioStream delegate;
-		private AudioFormat format;
-		private int bufferSize;
 
 		public SoundQueueStream(DelegateFactory delegateFactory, SoundQueue sounds) {
 			this.delegateFactory = delegateFactory;
 			this.sounds = sounds;
-		}
-
-		private static int getBufferSize(AudioFormat format, int time) {
-			return (int) (time * format.getSampleSizeInBits() / 8.0f * format.getChannels() * format.getSampleRate());
+			this.format = new AudioFormat(this.sounds.sampleRate, 16, this.sounds.trackType.equals(AdaptiveOggAudioStream.TrackType.STEREO) ? 2 : 1, true, false);
+			this.bufferSize = (int) (this.format.getSampleSizeInBits() / 8.0f * this.format.getChannels() * this.format.getSampleRate());
 		}
 
 		@Override
 		public AudioFormat getFormat() {
-			return this.format != null ? this.format : SoundQueueStream.DUMMY;
+			return this.format;
 		}
 
 		public boolean isEmpty() {
@@ -193,13 +227,9 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 		private void replaceDelegate() throws IOException {
 			if (!this.sounds.queue.isEmpty()) {
 				this.delegate = this.delegateFactory.create(this.sounds.queue.element());
-				this.format = this.delegate.getFormat();
-				this.bufferSize = getBufferSize(this.format, 1);
 			}
 			else {
 				this.delegate = null;
-				this.format = null;
-				this.bufferSize = -1;
 			}
 		}
 
