@@ -4,6 +4,7 @@ import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.sounds.client.SoundQueue;
 import com.mmodding.mmodding_lib.library.soundtracks.Soundtrack;
 import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.ClientPlayerTickable;
@@ -33,12 +34,13 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 	public void play(Soundtrack soundtrack, int part) {
 		boolean needsNewQueue = this.queue == null;
 		if (needsNewQueue) {
-			this.queue = new SoundQueue(soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
+			this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
 		}
 		this.currentSoundtrack = soundtrack;
 		for (int i = 0; i < soundtrack.getPartsCount() - part; i++) {
 			this.queue.addTracking(this.player, soundtrack.getPart(part + i).getSound(), soundtrack.getPart(part + i).isLooping());
 		}
+		MinecraftClient.getInstance().getMusicTracker().stop();
 		if (needsNewQueue) {
 			this.soundManager.play(this.queue);
 		}
