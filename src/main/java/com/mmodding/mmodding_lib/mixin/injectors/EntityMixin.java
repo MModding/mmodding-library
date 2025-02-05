@@ -9,6 +9,7 @@ import com.mmodding.mmodding_lib.interface_injections.EntitySyncableDataRegistry
 import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
+import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -133,7 +134,7 @@ public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityD
 	private float changeVelocityMultiplier(float original) {
 		BlockState state = this.getWorld().getBlockState(this.getBlockPos());
 		if (state.getCollisionShape(this.getWorld(), this.getBlockPos()).isEmpty()) {
-			return ((AbstractBlockSettingsDuckInterface) state.getBlock()).mmodding_lib$getInnerVelocityMultiplier() * original;
+			return ((AbstractBlockSettingsDuckInterface) ((AbstractBlockAccessor) state.getBlock()).getSettings()).mmodding_lib$getInnerVelocityMultiplier() * original;
 		}
 		return original;
 	}
