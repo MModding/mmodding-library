@@ -133,8 +133,7 @@ public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityD
 	private float changeVelocityMultiplier(float original) {
 		BlockState state = this.getWorld().getBlockState(this.getBlockPos());
 		if (state.getCollisionShape(this.getWorld(), this.getBlockPos()).isEmpty()) {
-			float innerVelocityMultiplier = ((AbstractBlockSettingsDuckInterface) state.getBlock()).mmodding_lib$getInnerVelocityMultiplier();
-			return innerVelocityMultiplier * original;
+			return ((AbstractBlockSettingsDuckInterface) state.getBlock()).mmodding_lib$getInnerVelocityMultiplier() * original;
 		}
 		return original;
 	}
