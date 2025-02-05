@@ -52,6 +52,7 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 
 		this.ducked().mmodding_lib$setTranslucent(this.ducked(settings).mmodding_lib$getTranslucent());
 		this.ducked().mmodding_lib$setInvisibleSides(this.ducked(settings).mmodding_lib$getInvisibleSides());
+		this.ducked().mmodding_lib$setInnerVelocityMultiplier(this.ducked(settings).mmodding_lib$getInnerVelocityMultiplier());
 	}
 
 	public static ImmutableBlockSettings of(Material material) {
@@ -124,6 +125,13 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 	public ImmutableBlockSettings jumpVelocityMultiplier(float jumpVelocityMultiplier) {
 		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
 		settings.jumpVelocityMultiplier(jumpVelocityMultiplier);
+		return ImmutableBlockSettings.copyOf(settings);
+	}
+
+	@Override
+	public AdvancedBlockSettings innerVelocityMultiplier(float innerVelocityMultiplier) {
+		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
+		settings.innerVelocityMultiplier(innerVelocityMultiplier);
 		return ImmutableBlockSettings.copyOf(settings);
 	}
 

@@ -10,10 +10,18 @@ import org.spongepowered.asm.mixin.Unique;
 public class AbstractBlockSettingsMixin implements AbstractBlockSettingsDuckInterface {
 
 	@Unique
-	TriState translucent = TriState.DEFAULT;
+	private float innerVelocityMultiplier = 1.0f;
 
 	@Unique
-	boolean invisibleSides = false;
+	private TriState translucent = TriState.DEFAULT;
+
+	@Unique
+	private boolean invisibleSides = false;
+
+	@Override
+	public float mmodding_lib$getInnerVelocityMultiplier() {
+		return this.innerVelocityMultiplier;
+	}
 
 	@Override
 	public TriState mmodding_lib$getTranslucent() {
@@ -23,6 +31,11 @@ public class AbstractBlockSettingsMixin implements AbstractBlockSettingsDuckInte
 	@Override
 	public boolean mmodding_lib$getInvisibleSides() {
 		return this.invisibleSides;
+	}
+
+	@Override
+	public void mmodding_lib$setInnerVelocityMultiplier(float innerVelocityMultiplier) {
+		this.innerVelocityMultiplier = innerVelocityMultiplier;
 	}
 
 	@Override

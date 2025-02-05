@@ -7,9 +7,13 @@ import org.quiltmc.qsl.base.api.util.TriState;
 @InternalOf(AdvancedBlockSettings.class)
 public interface AbstractBlockSettingsDuckInterface {
 
+	float mmodding_lib$getInnerVelocityMultiplier();
+
 	TriState mmodding_lib$getTranslucent();
 
 	boolean mmodding_lib$getInvisibleSides();
+
+	void mmodding_lib$setInnerVelocityMultiplier(float innerVelocityMultiplier);
 
 	void mmodding_lib$setTranslucent(TriState triState);
 

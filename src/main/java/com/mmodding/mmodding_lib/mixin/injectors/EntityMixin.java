@@ -1,5 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.mmodding.mmodding_lib.ducks.AbstractBlockSettingsDuckInterface;
 import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
@@ -119,9 +121,22 @@ public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityD
 	@Shadow
 	public abstract void remove(Entity.RemovalReason reason);
 
+	@Shadow
+	public abstract BlockPos getBlockPos();
+
 	@Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;tickNetherPortal()V", shift = At.Shift.AFTER))
 	private void baseTickAfterTickNetherPortal(CallbackInfo ci) {
 		this.tickCustomPortal();
+	}
+
+	@ModifyReturnValue(method = "getVelocityMultiplier", at = @At("RETURN"))
+	private float changeVelocityMultiplier(float original) {
+		BlockState state = this.getWorld().getBlockState(this.getBlockPos());
+		if (state.getCollisionShape(this.getWorld(), this.getBlockPos()).isEmpty()) {
+			float innerVelocityMultiplier = ((AbstractBlockSettingsDuckInterface) state.getBlock()).mmodding_lib$getInnerVelocityMultiplier();
+			return innerVelocityMultiplier * original;
+		}
+		return original;
 	}
 
 	@Override

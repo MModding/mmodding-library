@@ -28,6 +28,7 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 
 	protected AdvancedBlockSettings(AbstractBlock.Settings settings) {
 		super(settings);
+		this.ducked().mmodding_lib$setInnerVelocityMultiplier(this.ducked(settings).mmodding_lib$getInnerVelocityMultiplier());
 		this.ducked().mmodding_lib$setTranslucent(this.ducked(settings).mmodding_lib$getTranslucent());
 		this.ducked().mmodding_lib$setInvisibleSides(this.ducked(settings).mmodding_lib$getInvisibleSides());
 	}
@@ -101,6 +102,11 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 	@Override
 	public AdvancedBlockSettings jumpVelocityMultiplier(float jumpVelocityMultiplier) {
 		super.jumpVelocityMultiplier(jumpVelocityMultiplier);
+		return this;
+	}
+
+	public AdvancedBlockSettings innerVelocityMultiplier(float innerVelocityMultiplier) {
+		this.ducked().mmodding_lib$setInnerVelocityMultiplier(innerVelocityMultiplier);
 		return this;
 	}
 
