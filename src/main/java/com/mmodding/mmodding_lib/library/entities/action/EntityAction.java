@@ -24,7 +24,7 @@ public class EntityAction {
 
 	public EntityAction(Entity entity, Identifier action, int delayBeforeStarting, int delayAfterEnding) {
 		this.entity = entity;
-		this.remainingTime = new SyncableData<>(entity, action, TrackedDataHandlerRegistry.INTEGER);
+		this.remainingTime = new SyncableData<>(-1, entity, action, TrackedDataHandlerRegistry.INTEGER);
 		this.delayBeforeStaring = delayBeforeStarting;
 		this.delayAfterEnding = delayAfterEnding;
 	}
