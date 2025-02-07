@@ -1,7 +1,7 @@
 ### License for MModding Library Past, Current and Future Assets:
 
 ```
-Copyright (c) 2023-2024 MModding
+Copyright (c) 2023-2025 MModding
 
 All rights reserved.
 ```
