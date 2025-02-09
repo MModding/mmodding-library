@@ -6,14 +6,15 @@ import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
@@ -48,16 +49,14 @@ public class StellarObject {
 
 	    RenderSystem.depthMask(false);
 		VertexBuffer.unbind();
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableTexture();
-		RenderSystem.blendFuncSeparate(
-			GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
-		);
 
-        matrices.push();
+	    Vec3d vec3d = world.getSkyColor(MinecraftClient.getInstance().gameRenderer.getCamera().getPos(), tickDelta);
+		float light = (float) (vec3d.x + vec3d.y + vec3d.z) / 3.0f;
 
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f - world.getRainGradient(tickDelta));
+	    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f - light - world.getRainGradient(tickDelta));
+
+	    matrices.push();
 
 		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.getCycle().getBaseZAngle()));
 		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getBaseXAngle()));
@@ -82,7 +81,6 @@ public class StellarObject {
         matrices.pop();
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);
     }
 }
