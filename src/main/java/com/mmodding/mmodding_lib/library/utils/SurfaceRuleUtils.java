@@ -14,7 +14,7 @@ public class SurfaceRuleUtils {
 		return builder;
 	}
 
-	public static SurfaceRules.MaterialRule getBlock(Block block) {
+	public static SurfaceRules.MaterialRule block(Block block) {
 		return SurfaceRules.block(block.getDefaultState());
 	}
 
@@ -38,33 +38,37 @@ public class SurfaceRuleUtils {
 		return SurfaceRules.waterWithStoneDepth(-6, -1);
 	}
 
-	public static SurfaceRules.MaterialRule getConditionalBlock(SurfaceRules.MaterialCondition condition, Block firstPrimary, Block secondPrimary) {
-		return SurfaceRules.sequence(SurfaceRules.condition(condition, SurfaceRuleUtils.getBlock(firstPrimary)), SurfaceRuleUtils.getBlock(secondPrimary));
+	public static SurfaceRules.MaterialRule conditional(SurfaceRules.MaterialCondition condition, SurfaceRules.MaterialRule ifTrue, SurfaceRules.MaterialRule otherwise) {
+		return SurfaceRules.sequence(SurfaceRules.condition(condition, ifTrue), otherwise);
 	}
 
-	public static SurfaceRules.MaterialRule getBedrockRoof() {
-		return SurfaceRuleUtils.getRoof("bedrock_roof", Blocks.BEDROCK);
+	public static SurfaceRules.MaterialRule conditionalBlock(SurfaceRules.MaterialCondition condition, Block firstPrimary, Block secondPrimary) {
+		return SurfaceRuleUtils.conditional(condition, SurfaceRuleUtils.block(firstPrimary), SurfaceRuleUtils.block(secondPrimary));
 	}
 
-	public static SurfaceRules.MaterialRule getBedrockFloor() {
-		return SurfaceRuleUtils.getFloor("bedrock_floor", Blocks.BEDROCK);
+	public static SurfaceRules.MaterialRule bedrockRoof() {
+		return SurfaceRuleUtils.roof("bedrock_roof", Blocks.BEDROCK);
 	}
 
-	public static SurfaceRules.MaterialRule getRoof(String randomName, Block roofBlock) {
+	public static SurfaceRules.MaterialRule bedrockFloor() {
+		return SurfaceRuleUtils.floor("bedrock_floor", Blocks.BEDROCK);
+	}
+
+	public static SurfaceRules.MaterialRule roof(String randomName, Block roofBlock) {
 		return SurfaceRules.condition(SurfaceRules.not(
 			SurfaceRules.verticalGradient(randomName, YOffset.belowTop(5), YOffset.getTop())
-		), SurfaceRuleUtils.getBlock(roofBlock));
+		), SurfaceRuleUtils.block(roofBlock));
 	}
 
-	public static SurfaceRules.MaterialRule getDeep(String randomName, Block deepBlock) {
+	public static SurfaceRules.MaterialRule deep(String randomName, Block deepBlock) {
 		return SurfaceRules.condition(SurfaceRules.verticalGradient(
 			randomName, YOffset.fixed(0), YOffset.fixed(8)
-		), SurfaceRuleUtils.getBlock(deepBlock));
+		), SurfaceRuleUtils.block(deepBlock));
 	}
 
-	public static SurfaceRules.MaterialRule getFloor(String randomName, Block floorBlock) {
+	public static SurfaceRules.MaterialRule floor(String randomName, Block floorBlock) {
 		return SurfaceRules.condition(SurfaceRules.verticalGradient(
 			randomName, YOffset.getBottom(), YOffset.aboveBottom(5)
-		), SurfaceRuleUtils.getBlock(floorBlock));
+		), SurfaceRuleUtils.block(floorBlock));
 	}
 }
