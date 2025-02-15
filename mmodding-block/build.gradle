@@ -7,7 +7,11 @@ mmodding {
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_2248", Set.of(
 				"com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/block/Block;>",
-				"com/mmodding/library/block/api/BlockWithItem"
+				"com/mmodding/library/block/api/BlockWithItem",
+				"com/mmodding/library/block/api/MModdingBlock"
+			))
+			it.injectTo("net/minecraft/class_2680", Set.of(
+				"com/mmodding/library/block/api/MModdingBlockState"
 			))
 		}
 	}
