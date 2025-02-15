@@ -61,4 +61,9 @@ public class MixedListImpl extends ArrayList<Typed<?>> implements MixedList {
 	public <E> void forEach(BiConsumer<? super Class<E>, ? super E> action) {
 		this.forEach(value -> action.accept((Class<E>) value.getType(), (E) value.getValue()));
 	}
+
+	@Override
+	public MixedList copy() {
+		return new MixedListImpl(this);
+	}
 }

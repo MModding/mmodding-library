@@ -68,4 +68,9 @@ public class HSB implements Color {
 	public java.awt.Color toJavaColor() {
 		return this.toRGB().toJavaColor();
 	}
+
+	@Override
+	public Color copy() {
+		return new HSB(this.hue, this.saturation, this.brightness);
+	}
 }

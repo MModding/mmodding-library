@@ -1,8 +1,10 @@
 package com.mmodding.library.java.api.color;
 
+import com.mmodding.library.java.api.object.Copyable;
+
 import java.util.function.Supplier;
 
-public interface Color {
+public interface Color extends Copyable<Color> {
 
 	Supplier<Color> EMPTY = () -> Color.rgb(0, 0, 0);
 

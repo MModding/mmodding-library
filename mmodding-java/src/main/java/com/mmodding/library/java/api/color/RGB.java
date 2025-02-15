@@ -70,4 +70,9 @@ public class RGB implements Color {
 	public java.awt.Color toJavaColor() {
 		return new java.awt.Color(this.red, this.green, this.blue);
 	}
+
+	@Override
+	public Color copy() {
+		return new RGB(this.red, this.green, this.blue);
+	}
 }

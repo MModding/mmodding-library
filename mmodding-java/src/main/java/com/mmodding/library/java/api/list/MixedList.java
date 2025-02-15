@@ -1,13 +1,14 @@
 package com.mmodding.library.java.api.list;
 
 import com.mmodding.library.java.api.container.Typed;
+import com.mmodding.library.java.api.object.Copyable;
 import com.mmodding.library.java.impl.list.MixedListImpl;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-public interface MixedList extends List<Typed<?>> {
+public interface MixedList extends List<Typed<?>>, Copyable<MixedList> {
 
 	static MixedList create() {
 		return new MixedListImpl();

@@ -34,4 +34,9 @@ public class ARGB extends RGB implements Color {
 	public java.awt.Color toJavaColor() {
 		return new java.awt.Color(this.alpha, this.red, this.green, this.blue);
 	}
+
+	@Override
+	public ARGB copy() {
+		return new ARGB(this.alpha, this.red, this.green, this.blue);
+	}
 }
