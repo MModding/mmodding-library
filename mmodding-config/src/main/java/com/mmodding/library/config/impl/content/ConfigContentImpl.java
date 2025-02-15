@@ -1,9 +1,12 @@
 package com.mmodding.library.config.impl.content;
 
 import com.mmodding.library.config.api.content.ConfigContent;
+import com.mmodding.library.config.api.element.builtin.FloatingRange;
+import com.mmodding.library.config.api.element.builtin.IntegerRange;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
+import com.mmodding.library.java.api.object.Copyable;
 import com.mmodding.library.java.impl.map.linked.LinkedMixedMapImpl;
 
 public class ConfigContentImpl implements ConfigContent {
@@ -50,28 +53,33 @@ public class ConfigContentImpl implements ConfigContent {
 
 	@Override
 	public Color color(String qualifier) {
-		return this.raw.get(qualifier, Color.class);
+		return this.custom(qualifier, Color.class);
 	}
 
 	@Override
-	public int integerRange(String qualifier) {
-		return this.raw.get(qualifier, Integer.class);
+	public IntegerRange integerRange(String qualifier) {
+		return this.custom(qualifier, IntegerRange.class);
 	}
 
 	@Override
-	public float floatingRange(String qualifier) {
-		return this.raw.get(qualifier, Float.class);
+	public FloatingRange floatingRange(String qualifier) {
+		return this.custom(qualifier, FloatingRange.class);
 	}
 
 	@Override
 	public MixedList list(String qualifier) {
-		return this.raw.get(qualifier, MixedList.class);
+		return this.custom(qualifier, MixedList.class);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public ConfigContent category(String qualifier) {
 		return new ConfigContentImpl(this.raw.get(qualifier, MixedMap.class));
+	}
+
+	@Override
+	public <T extends Copyable<T>> T custom(String qualifier, Class<T> type) {
+		return this.raw.get(qualifier, type).copy();
 	}
 
 	public MixedMap<String> getRaw() {

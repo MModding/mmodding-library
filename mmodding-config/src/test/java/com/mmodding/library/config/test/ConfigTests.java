@@ -28,7 +28,7 @@ public class ConfigTests {
 			.color("color", Color.rgb(0, 0, 0))
 			.category("category", category -> category
 				.string("string", "value")
-				.floatingRange("range", 2.0f)
+				.floatingRange("range", 1.0f)
 				.list("list", MixedList.of(Integer.class, 10, String.class, "hi"))
 			)
 		)

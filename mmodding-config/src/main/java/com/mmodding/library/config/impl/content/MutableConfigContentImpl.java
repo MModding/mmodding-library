@@ -2,6 +2,8 @@ package com.mmodding.library.config.impl.content;
 
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.MutableConfigContent;
+import com.mmodding.library.config.api.element.builtin.FloatingRange;
+import com.mmodding.library.config.api.element.builtin.IntegerRange;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.function.consumer.ReturnableConsumer;
 import com.mmodding.library.java.api.list.MixedList;
@@ -55,15 +57,25 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 		return this;
 	}
 
+	public MutableConfigContent initIntegerRange(String qualifier, IntegerRange integerRange) {
+		this.raw.put(qualifier, IntegerRange.class, integerRange);
+		return this;
+	}
+
 	@Override
 	public MutableConfigContent integerRange(String qualifier, int integer) {
-		this.raw.put(qualifier, Integer.class, integer);
+		this.raw.get(qualifier, IntegerRange.class).setValue(integer);
+		return this;
+	}
+
+	public MutableConfigContent initFloatingRange(String qualifier, FloatingRange floatingRange) {
+		this.raw.put(qualifier, FloatingRange.class, floatingRange);
 		return this;
 	}
 
 	@Override
 	public MutableConfigContent floatingRange(String qualifier, float floating) {
-		this.raw.put(qualifier, Float.class, floating);
+		this.raw.get(qualifier, FloatingRange.class).setValue(floating);
 		return this;
 	}
 

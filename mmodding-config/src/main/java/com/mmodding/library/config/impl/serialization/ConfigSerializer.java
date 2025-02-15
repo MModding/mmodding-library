@@ -3,6 +3,7 @@ package com.mmodding.library.config.impl.serialization;
 import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.impl.content.ConfigContentImpl;
+import com.mmodding.library.config.impl.element.ConfigElementTypeOperatorImpl;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
@@ -70,14 +71,14 @@ public class ConfigSerializer {
 				else if (type.equals(String.class)) {
 					writer.value(content.string(qualifier));
 				}
-				else if (type.equals(Color.class)) {
-					writer.value(content.color(qualifier).toDecimal());
-				}
 				else if (type.equals(MixedList.class)) {
 					ConfigSerializer.writeArray(writer, content.list(qualifier));
 				}
 				else if (type.equals(MixedMap.class)) {
 					ConfigSerializer.writeObject(writer, content.category(qualifier));
+				}
+				else if (ConfigElementTypeOperatorImpl.OPERATORS.containsKey(type)) {
+					ConfigElementTypeOperatorImpl.OPERATORS.get(type).writer().write(writer, content, qualifier);
 				}
 			} catch (IOException error) {
 				throw new RuntimeException("Failed to write configuration!", error);

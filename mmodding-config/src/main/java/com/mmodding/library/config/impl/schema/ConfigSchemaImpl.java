@@ -1,14 +1,17 @@
 package com.mmodding.library.config.impl.schema;
 
+import com.mmodding.library.config.api.element.ConfigElementProperties;
+import com.mmodding.library.config.api.element.builtin.FloatingRange;
+import com.mmodding.library.config.api.element.builtin.IntegerRange;
 import com.mmodding.library.config.api.schema.ConfigSchema;
+import com.mmodding.library.config.impl.element.builtin.FloatingRangeProperties;
+import com.mmodding.library.config.impl.element.builtin.IntegerRangeProperties;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.BiMap;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 public class ConfigSchemaImpl implements ConfigSchema {
 
@@ -20,49 +23,49 @@ public class ConfigSchemaImpl implements ConfigSchema {
 
 	@Override
 	public ConfigSchema bool(String qualifier) {
-		this.raw.put(qualifier, Boolean.class, Map.of());
+		this.custom(qualifier, Boolean.class);
 		return this;
 	}
 
 	@Override
 	public ConfigSchema integer(String qualifier) {
-		this.raw.put(qualifier, Integer.class, Map.of());
+		this.custom(qualifier, Integer.class);
 		return this;
 	}
 
 	@Override
 	public ConfigSchema floating(String qualifier) {
-		this.raw.put(qualifier, Float.class, Map.of());
+		this.custom(qualifier, Float.class);
 		return this;
 	}
 
 	@Override
 	public ConfigSchema string(String qualifier) {
-		this.raw.put(qualifier, String.class, Map.of());
+		this.custom(qualifier, String.class);
 		return this;
 	}
 
 	@Override
 	public ConfigSchema color(String qualifier) {
-		this.raw.put(qualifier, Color.class, Map.of());
+		this.custom(qualifier, Color.class);
 		return this;
 	}
 
 	@Override
-	public ConfigSchema integerRange(String qualifier, int start, int end) {
-		this.raw.put(qualifier, IntStream.class, Map.of("start", start, "end", end));
+	public ConfigSchema integerRange(String qualifier, int min, int max) {
+		this.custom(qualifier, IntegerRange.class, new IntegerRangeProperties(min, max));
 		return this;
 	}
 
 	@Override
-	public ConfigSchema floatingRange(String qualifier, float start, float end) {
-		this.raw.put(qualifier, DoubleStream.class, Map.of("start", start, "end", end));
+	public ConfigSchema floatingRange(String qualifier, float min, float max) {
+		this.custom(qualifier, FloatingRange.class, new FloatingRangeProperties(min, max));
 		return this;
 	}
 
 	@Override
 	public ConfigSchema list(String qualifier) {
-		this.raw.put(qualifier, MixedList.class, Map.of());
+		this.custom(qualifier, MixedList.class);
 		return this;
 	}
 
@@ -70,6 +73,18 @@ public class ConfigSchemaImpl implements ConfigSchema {
 	public ConfigSchema category(String qualifier, Consumer<ConfigSchema> category) {
 		ConfigSchemaImpl schema = (ConfigSchemaImpl) ConfigSchema.create();
 		this.raw.put(qualifier, ConfigSchema.class, schema.raw);
+		return this;
+	}
+
+	@Override
+	public <T> ConfigSchema custom(String qualifier, Class<T> type) {
+		this.raw.put(qualifier, type, Map.of());
+		return this;
+	}
+
+	@Override
+	public <T, P extends ConfigElementProperties<T>> ConfigSchema custom(String qualifier, Class<T> type, P properties) {
+		this.raw.put(qualifier, type, properties.getProperties());
 		return this;
 	}
 
@@ -117,6 +132,16 @@ public class ConfigSchemaImpl implements ConfigSchema {
 
 		@Override
 		public ConfigSchema category(String qualifier, Consumer<ConfigSchema> category) {
+			return this;
+		}
+
+		@Override
+		public <T> ConfigSchema custom(String qualifier, Class<T> type) {
+			return this;
+		}
+
+		@Override
+		public <T, P extends ConfigElementProperties<T>> ConfigSchema custom(String qualifier, Class<T> type, P properties) {
 			return this;
 		}
 	}

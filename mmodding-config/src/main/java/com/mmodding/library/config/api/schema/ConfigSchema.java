@@ -1,5 +1,6 @@
 package com.mmodding.library.config.api.schema;
 
+import com.mmodding.library.config.api.element.ConfigElementProperties;
 import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -45,4 +46,8 @@ public interface ConfigSchema {
 	ConfigSchema list(String qualifier);
 
 	ConfigSchema category(String qualifier, Consumer<ConfigSchema> category);
+
+	<T> ConfigSchema custom(String qualifier, Class<T> type);
+
+	<T, P extends ConfigElementProperties<T>> ConfigSchema custom(String qualifier, Class<T> type, P properties);
 }
