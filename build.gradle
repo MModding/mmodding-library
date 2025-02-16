@@ -88,7 +88,7 @@ allprojects {
     // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
     dependencies {
         minecraft libs.minecraft
-		mappings variantOf(libs.quilt.mappings) { classifier "intermediary-v2" }
+		mappings libs.yarn.mappings
 
 		modImplementation libs.fabric.loader
 

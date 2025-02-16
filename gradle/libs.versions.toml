@@ -1,15 +1,15 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 java = "17"
-minecraft = "1.19.4"
-fabric_loader = "0.15.11"
+minecraft = "1.20.1"
+fabric_loader = "0.16.10"
 
 # Mappings
-quilt_mappings = "1.19.4+build.10"
+yarn_mappings = "1.20.1+build.10"
 
 yumi_commons = "1.0.0-alpha.1"
 
-fabric_api = "0.87.2+1.19.4"
+fabric_api = "0.92.3+1.20.1"
 modmenu = "4.0.6"
 
 # For Gradle And MModding Config
@@ -20,7 +20,7 @@ minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
 
 # Mappings
-quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
+yarn_mappings = { module = "net.fabricmc:yarn", version.ref = "yarn_mappings" }
 
 # Yumi Commons
 yumi_commons = { module = "dev.yumi.commons:yumi-commons", version.ref = "yumi_commons" }
