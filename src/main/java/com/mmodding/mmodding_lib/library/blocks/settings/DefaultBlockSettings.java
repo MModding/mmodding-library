@@ -18,7 +18,7 @@ public class DefaultBlockSettings {
 	public static final ImmutableBlockSettings LEAVES_SETTINGS = ImmutableBlockSettings.of(Material.LEAVES).sounds(BlockSoundGroup.GRASS).nonOpaque().strength(0.2f);
 	public static final ImmutableBlockSettings SNOW_SETTINGS = ImmutableBlockSettings.of(Material.SNOW_LAYER).sounds(BlockSoundGroup.SNOW).nonOpaque().strength(0.1f);
 	public static final ImmutableBlockSettings SNOW_BLOCK_SETTINGS = ImmutableBlockSettings.of(Material.SNOW_BLOCK).sounds(BlockSoundGroup.SNOW).strength(0.1f);
-	public static final ImmutableBlockSettings METAL_SETTINGS = ImmutableBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).strength(5.0f, 6.0f);
+	public static final ImmutableBlockSettings METAL_SETTINGS = ImmutableBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).strength(5.0f, 6.0f).requiresTool();
 	public static final ImmutableBlockSettings AMETHYST_SETTINGS = ImmutableBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_BLOCK).strength(1.5f).requiresTool();
 	public static final ImmutableBlockSettings AMETHYST_CLUSTER_SETTINGS = ImmutableBlockSettings.of(Material.AMETHYST).sounds(BlockSoundGroup.AMETHYST_CLUSTER).strength(1.5f).requiresTool();
 	public static final ImmutableBlockSettings BONE_SETTINGS = ImmutableBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.BONE).strength(2.0f);
