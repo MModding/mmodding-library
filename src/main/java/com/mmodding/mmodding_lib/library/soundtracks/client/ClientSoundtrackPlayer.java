@@ -7,15 +7,13 @@ import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.ClientPlayerTickable;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-import java.util.stream.IntStream;
-
 @ClientOnly
-public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackPlayer {
+public class ClientSoundtrackPlayer implements SoundtrackPlayer {
 
 	private final ClientPlayerEntity player;
 	private final SoundManager soundManager;
@@ -24,7 +22,9 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 	private SoundQueue queue = null;
 
 	@Nullable
-	private Soundtrack currentSoundtrack = null;
+	private Identifier lock = null;
+
+	private boolean sealed = false;
 
 	@ApiStatus.Internal
 	public ClientSoundtrackPlayer(ClientPlayerEntity player, SoundManager soundManager) {
@@ -33,68 +33,62 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 	}
 
 	@Override
-	public void append(Soundtrack soundtrack, int... parts) {
-		boolean needsNewQueue = this.queue == null;
-		if (needsNewQueue) {
-			this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
-		}
-		for (int part : parts) {
-			this.queue.addTracking(this.player, soundtrack.getPart(part).getSound(), soundtrack.getPart(part).isLooping());
-		}
-		MinecraftClient.getInstance().getMusicTracker().stop();
-		if (needsNewQueue) {
-			this.soundManager.play(this.queue);
-		}
-	}
-
-	@Override
-	public void play(Soundtrack soundtrack, int part) {
-		this.currentSoundtrack = soundtrack;
-		this.append(soundtrack, IntStream.range(0, soundtrack.getPartsCount() - part).toArray());
-	}
-
-	@Override
-	public void playOnce(Soundtrack soundtrack, int part) {
-		if (!soundtrack.equals(this.currentSoundtrack)) {
-			this.play(soundtrack, part);
-		}
-	}
-
-	@Override
-	public void skip() {
-		if (this.queue != null) {
-			this.queue.forward(1);
-		}
-	}
-
-	@Override
-	public void skip(int part) {
-		if (this.currentSoundtrack != null) {
-			if (this.queue != null) {
-				this.queue.stop();
+	public void play(Soundtrack soundtrack, int fromPart, int toPart) {
+		if ((this.lock == null || this.lock.equals(soundtrack.getIdentifier())) && !this.sealed) {
+			boolean needsNewQueue = this.queue == null;
+			if (needsNewQueue) {
+				this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
 			}
-			this.play(this.currentSoundtrack, part);
+			for (int i = 0; i <= toPart - fromPart; i++) {
+				this.queue.addTracking(this.player, soundtrack.getPart(fromPart + i).getSound(), soundtrack.getPart(fromPart + i).isLooping());
+			}
+			MinecraftClient.getInstance().getMusicTracker().stop();
+			if (needsNewQueue) {
+				MinecraftClient.getInstance().getSoundManager().play(this.queue);
+			}
+		}
+	}
+
+	@Override
+	public void lock(Identifier identifier) {
+		this.lock = identifier;
+	}
+
+	@Override
+	public void unlock() {
+		this.lock = null;
+	}
+
+	@Override
+	public void seal() {
+		this.sealed = true;
+	}
+
+	@Override
+	public void unseal() {
+		this.sealed = false;
+	}
+
+	@Override
+	public void release() {
+		if (this.queue != null) {
+			this.queue.release(true);
+		}
+	}
+
+	@Override
+	public void clear() {
+		if (this.queue != null) {
+			this.queue.clear();
 		}
 	}
 
 	@Override
 	public void stop() {
-		if (this.queue != null) {
-			this.currentSoundtrack = null;
-			this.queue.stop();
-		}
-	}
-
-	@Override
-	public void tick() {
-		if (this.queue != null) {
-			if (this.queue.getLength() == 0) {
-				this.currentSoundtrack = null;
-			}
-		}
+		MinecraftClient.getInstance().getSoundManager().stop(this.queue);
 	}
 
 	public boolean isPlaying() {
-		return this.currentSoundtrack != null;
+		return this.queue != null && this.queue.getCurrentlyPlaying() != null;
 	}
 }

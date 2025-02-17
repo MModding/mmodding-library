@@ -7,18 +7,24 @@ import java.util.List;
 
 public class Soundtrack {
 
+	private final Identifier identifier;
 	private final List<Part> parts;
 
-	private Soundtrack(List<Part> parts) {
+	private Soundtrack(Identifier identifier, List<Part> parts) {
+		this.identifier = identifier;
 		this.parts = parts;
 	}
 
-	public static Soundtrack create(Part... parts) {
-		return Soundtrack.create(List.of(parts));
+	public static Soundtrack create(Identifier identifier, Part... parts) {
+		return Soundtrack.create(identifier, List.of(parts));
 	}
 
-	public static Soundtrack create(List<Part> parts) {
-		return new Soundtrack(parts);
+	public static Soundtrack create(Identifier identifier, List<Part> parts) {
+		return new Soundtrack(identifier, parts);
+	}
+
+	public Identifier getIdentifier() {
+		return this.identifier;
 	}
 
 	public int getPartsCount() {
@@ -32,7 +38,7 @@ public class Soundtrack {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Soundtrack soundtrack) {
-			return this.parts.equals(soundtrack.parts);
+			return this.identifier.equals(soundtrack.identifier);
 		}
 		else {
 			return super.equals(obj);
@@ -69,16 +75,6 @@ public class Soundtrack {
 
 		public int getIterations() {
 			return this.iterations;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof Part part) {
-				return this.sound.getId().equals(part.sound.getId()) && this.looping == part.looping && this.iterations == part.iterations;
-			}
-			else {
-				return super.equals(obj);
-			}
 		}
 	}
 }

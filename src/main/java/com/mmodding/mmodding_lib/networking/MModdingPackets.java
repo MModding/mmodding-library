@@ -18,13 +18,11 @@ public class MModdingPackets {
 
 	public static final MModdingIdentifier STELLAR_STATUS = new MModdingIdentifier("networking/stellar_status");
 
-	public static final MModdingIdentifier APPEND_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/append");
+	public static final MModdingIdentifier PLAY_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/play");
 
-	public static final MModdingIdentifier SEND_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/send");
-
-	public static final MModdingIdentifier SKIP_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/skip");
-
-	public static final MModdingIdentifier SKIP_TO_PART_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/skip_to_part");
+	public static final MModdingIdentifier RELEASE_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/release");
 
 	public static final MModdingIdentifier CLEAR_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/clear");
+
+	public static final MModdingIdentifier STOP_SOUNDTRACKS = new MModdingIdentifier("networking/soundtracks/stop");
 }

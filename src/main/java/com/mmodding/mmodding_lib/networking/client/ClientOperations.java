@@ -16,8 +16,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-import java.util.List;
-
 @ClientOnly
 public class ClientOperations {
 
@@ -50,29 +48,9 @@ public class ClientOperations {
 		ClientStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusReceived(identifier, status);
 	}
 
-	public static void receiveAppendedSoundtrack(MinecraftClient client, PacketByteBuf packet) {
+	public static void receiveSoundtrackToPlay(MinecraftClient client, PacketByteBuf packet) {
 		if (client.player != null) {
-			Soundtrack soundtrack = Soundtrack.create(
-				packet.readList(current -> {
-					Identifier path = current.readIdentifier();
-					boolean isLooping = current.readBoolean();
-					int iterations = current.readVarInt();
-					if (isLooping) {
-						return Soundtrack.Part.looping(path);
-					}
-					else {
-						return Soundtrack.Part.iterations(path, iterations);
-					}
-				})
-			);
-			int[] parts = packet.readIntArray();
-			client.player.getSoundtrackPlayer().append(soundtrack, parts);
-		}
-	}
-
-	public static void receiveSentSoundtrack(MinecraftClient client, PacketByteBuf packet) {
-		if (client.player != null) {
-			List<Soundtrack.Part> parts = packet.readList(current -> {
+			Soundtrack soundtrack = Soundtrack.create(packet.readIdentifier(), packet.readList(current -> {
 				Identifier path = current.readIdentifier();
 				boolean isLooping = current.readBoolean();
 				int iterations = current.readVarInt();
@@ -82,31 +60,26 @@ public class ClientOperations {
 				else {
 					return Soundtrack.Part.iterations(path, iterations);
 				}
-			});
-			Soundtrack soundtrack = Soundtrack.create(parts);
-			int part = packet.readVarInt();
-			if (packet.readBoolean()) {
-				client.player.getSoundtrackPlayer().play(soundtrack, part);
-			}
-			else {
-				client.player.getSoundtrackPlayer().playOnce(soundtrack, part);
-			}
+			}));
+			int fromPart = packet.readVarInt();
+			int toPart = packet.readVarInt();
+			client.player.getSoundtrackPlayer().play(soundtrack, fromPart, toPart);
 		}
 	}
 
-	public static void receiveSoundtrackSkip(MinecraftClient client) {
+	public static void receiveSoundtrackToRelease(MinecraftClient client) {
 		if (client.player != null) {
-			client.player.getSoundtrackPlayer().skip();
+			client.player.getSoundtrackPlayer().release();
 		}
 	}
 
-	public static void receiveSoundtrackSkipToPart(MinecraftClient client, PacketByteBuf packet) {
+	public static void receiveSoundtrackToClear(MinecraftClient client) {
 		if (client.player != null) {
-			client.player.getSoundtrackPlayer().skip(packet.readVarInt());
+			client.player.getSoundtrackPlayer().clear();
 		}
 	}
 
-	public static void receiveSoundtrackDeletion(MinecraftClient client) {
+	public static void receiveSoundtrackToStop(MinecraftClient client) {
 		if (client.player != null) {
 			client.player.getSoundtrackPlayer().stop();
 		}

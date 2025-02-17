@@ -38,24 +38,16 @@ public class MModdingCommand {
 				.then(
 					CommandManager.literal("soundtrack")
 						.then(
-							CommandManager.literal("skip")
-								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.SKIP, 0))
-								.then(
-									CommandManager.argument("index", IntegerArgumentType.integer())
-										.executes(
-											context -> MModdingCommand.soundtrack(
-												context.getSource(),
-												SoundtrackOperation.SKIP_TO_POINT,
-												IntegerArgumentType.getInteger(context, "index")
-											)
-										)
-								)
+							CommandManager.literal("release")
+								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.RELEASE))
+						)
+						.then(
+							CommandManager.literal("clear")
+								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.CLEAR))
 						)
 						.then(
 							CommandManager.literal("stop")
-								.executes(
-									context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.STOP, 0)
-								)
+								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.STOP))
 						)
 				)
 				.then(
@@ -153,19 +145,19 @@ public class MModdingCommand {
 		return targets.size();
 	}
 
-	private static int soundtrack(ServerCommandSource source, SoundtrackOperation operation, int value) throws CommandSyntaxException {
+	private static int soundtrack(ServerCommandSource source, SoundtrackOperation operation) throws CommandSyntaxException {
 		if (source.getEntity() == null) {
 			source.sendError(Text.translatable("commands.mmodding.soundtrack.not_an_entity"));
 		}
 		return switch (operation) {
-			case SKIP -> {
-				source.getPlayer().getSoundtrackPlayer().skip();
-				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.skipped"), false);
+			case RELEASE -> {
+				source.getPlayer().getSoundtrackPlayer().release();
+				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.released"), false);
 				yield 0;
 			}
-			case SKIP_TO_POINT -> {
-				source.getPlayer().getSoundtrackPlayer().skip(value);
-				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.skipped_to_point", value), false);
+			case CLEAR -> {
+				source.getPlayer().getSoundtrackPlayer().clear();
+				source.sendFeedback(Text.translatable("commands.mmodding.soundtrack.cleared"), false);
 				yield 1;
 			}
 			case STOP -> {
@@ -218,8 +210,8 @@ public class MModdingCommand {
 	}
 
 	private enum SoundtrackOperation {
-		SKIP,
-		SKIP_TO_POINT,
+		RELEASE,
+		CLEAR,
 		STOP
 	}
 
