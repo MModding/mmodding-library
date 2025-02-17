@@ -3,9 +3,11 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.MModdingDamageSources;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -13,6 +15,9 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
 
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class WorldUtils {
 
@@ -79,6 +84,13 @@ public class WorldUtils {
 		Explosion explosion = new Explosion((World) world, null, MModdingDamageSources.PUSH, null, pos.getX(), pos.getY(), pos.getZ(), power, false, Explosion.DestructionType.NONE);
 		explosion.collectBlocksAndDamageEntities();
 		explosion.affectWorld(false);
+	}
+
+	public static Set<ServerPlayerEntity> getPlayersAround(ServerWorld serverWorld, Vec3d pos, Predicate<Double> length) {
+		return serverWorld.getPlayers()
+			.stream()
+			.filter(player -> length.test(player.getPos().subtract(pos).length()))
+			.collect(Collectors.toSet());
 	}
 
 	public interface TickTaskServer {
