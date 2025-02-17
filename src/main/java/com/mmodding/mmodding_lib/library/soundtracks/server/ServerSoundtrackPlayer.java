@@ -14,6 +14,11 @@ public class ServerSoundtrackPlayer implements SoundtrackPlayer {
 	}
 
 	@Override
+	public void append(Soundtrack soundtrack, int... parts) {
+		CommonOperations.appendSoundtrackForPlayer(this.player, soundtrack, parts);
+	}
+
+	@Override
 	public void play(Soundtrack soundtrack, int part) {
 		CommonOperations.playSoundtrackForPlayer(this.player, soundtrack, part, true);
 	}

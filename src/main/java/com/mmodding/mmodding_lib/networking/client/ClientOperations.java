@@ -50,6 +50,26 @@ public class ClientOperations {
 		ClientStellarStatusNetworkingEvents.AFTER.invoker().afterStellarStatusReceived(identifier, status);
 	}
 
+	public static void receiveAppendedSoundtrack(MinecraftClient client, PacketByteBuf packet) {
+		if (client.player != null) {
+			Soundtrack soundtrack = Soundtrack.create(
+				packet.readList(current -> {
+					Identifier path = current.readIdentifier();
+					boolean isLooping = current.readBoolean();
+					int iterations = current.readVarInt();
+					if (isLooping) {
+						return Soundtrack.Part.looping(path);
+					}
+					else {
+						return Soundtrack.Part.iterations(path, iterations);
+					}
+				})
+			);
+			int[] parts = packet.readIntArray();
+			client.player.getSoundtrackPlayer().append(soundtrack, parts);
+		}
+	}
+
 	public static void receiveSentSoundtrack(MinecraftClient client, PacketByteBuf packet) {
 		if (client.player != null) {
 			List<Soundtrack.Part> parts = packet.readList(current -> {

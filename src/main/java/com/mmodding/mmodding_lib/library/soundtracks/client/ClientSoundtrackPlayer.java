@@ -12,6 +12,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
+import java.util.stream.IntStream;
+
 @ClientOnly
 public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackPlayer {
 
@@ -31,19 +33,24 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 	}
 
 	@Override
-	public void play(Soundtrack soundtrack, int part) {
+	public void append(Soundtrack soundtrack, int... parts) {
 		boolean needsNewQueue = this.queue == null;
 		if (needsNewQueue) {
 			this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
 		}
-		this.currentSoundtrack = soundtrack;
-		for (int i = 0; i < soundtrack.getPartsCount() - part; i++) {
-			this.queue.addTracking(this.player, soundtrack.getPart(part + i).getSound(), soundtrack.getPart(part + i).isLooping());
+		for (int part : parts) {
+			this.queue.addTracking(this.player, soundtrack.getPart(part).getSound(), soundtrack.getPart(part).isLooping());
 		}
 		MinecraftClient.getInstance().getMusicTracker().stop();
 		if (needsNewQueue) {
 			this.soundManager.play(this.queue);
 		}
+	}
+
+	@Override
+	public void play(Soundtrack soundtrack, int part) {
+		this.currentSoundtrack = soundtrack;
+		this.append(soundtrack, IntStream.range(0, soundtrack.getPartsCount() - part).toArray());
 	}
 
 	@Override

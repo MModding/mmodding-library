@@ -41,6 +41,26 @@ public class CommonOperations {
 		StellarStatusNetworkingEvents.AFTER_ALL.invoker().afterAllStellarStatusSent(stellarStatus);
 	}
 
+	public static void appendSoundtrackForPlayer(ServerPlayerEntity player, Soundtrack soundtrack, int... parts) {
+		PacketByteBuf packet = PacketByteBufs.create();
+
+		List<Soundtrack.Part> soundtrackParts = new ArrayList<>();
+
+		for (int i = 0; i < soundtrack.getPartsCount(); i++) {
+			soundtrackParts.add(soundtrack.getPart(i));
+		}
+
+		packet.writeCollection(soundtrackParts, (buf, current) -> {
+			buf.writeIdentifier(current.getSound().getId());
+			buf.writeBoolean(current.isLooping());
+			buf.writeVarInt(current.getIterations());
+		});
+
+		packet.writeIntArray(parts);
+
+		ServerPlayNetworking.send(player, MModdingPackets.APPEND_SOUNDTRACKS, packet);
+	}
+
 	public static void playSoundtrackForPlayer(ServerPlayerEntity player, Soundtrack soundtrack, int part, boolean override) {
 		PacketByteBuf packet = PacketByteBufs.create();
 
