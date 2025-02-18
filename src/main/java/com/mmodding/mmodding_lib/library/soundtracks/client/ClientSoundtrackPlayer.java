@@ -7,13 +7,14 @@ import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundManager;
+import net.minecraft.client.util.ClientPlayerTickable;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 @ClientOnly
-public class ClientSoundtrackPlayer implements SoundtrackPlayer {
+public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackPlayer {
 
 	private final ClientPlayerEntity player;
 	private final SoundManager soundManager;
@@ -86,6 +87,13 @@ public class ClientSoundtrackPlayer implements SoundtrackPlayer {
 	@Override
 	public void stop() {
 		MinecraftClient.getInstance().getSoundManager().stop(this.queue);
+	}
+
+	@Override
+	public void tick() {
+		if (this.queue != null && this.queue.getCurrentlyPlaying() == null) {
+			this.queue = null;
+		}
 	}
 
 	public boolean isPlaying() {

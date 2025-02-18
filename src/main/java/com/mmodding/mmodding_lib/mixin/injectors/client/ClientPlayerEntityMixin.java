@@ -9,11 +9,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.recipebook.ClientRecipeBook;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.ClientPlayerTickable;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.StatHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -28,9 +31,6 @@ import java.util.List;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
-
-	@Unique
-	private final ClientSoundtrackPlayer soundtrackPlayer = new ClientSoundtrackPlayer((ClientPlayerEntity) (Object) this, MinecraftClient.getInstance().getSoundManager());
 
 	@Shadow
 	@Final
@@ -48,6 +48,11 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 
 	@Shadow
 	public abstract void closeHandledScreen();
+
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void init(MinecraftClient client, ClientWorld world, ClientPlayNetworkHandler networkHandler, StatHandler stats, ClientRecipeBook recipeBook, boolean lastSneaking, boolean lastSprinting, CallbackInfo ci) {
+		this.tickables.add(new ClientSoundtrackPlayer((ClientPlayerEntity) (Object) this, client.getSoundManager()));
+	}
 
 	@Inject(method = "updateNausea", at = @At(value = "HEAD", shift = At.Shift.BY, by = 2), cancellable = true)
 	private void updateNausea(CallbackInfo ci) {
@@ -94,6 +99,6 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntityMixin {
 
 	@Override
 	public SoundtrackPlayer getSoundtrackPlayer() {
-		return this.soundtrackPlayer;
+		return (ClientSoundtrackPlayer) this.tickables.stream().filter(t -> t instanceof ClientSoundtrackPlayer).findFirst().orElseThrow();
 	}
 }
