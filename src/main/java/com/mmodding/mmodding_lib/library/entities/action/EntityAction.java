@@ -12,9 +12,9 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
 public class EntityAction {
 
 	private final Entity entity;
-	private final SyncableData<Integer> remainingTime;
-	private final int delayBeforeStaring;
-	private final int delayAfterEnding;
+	private final SyncableData<Integer> trackingTime;
+	private final int timeBeforeExecution;
+	private final int delayAfterExecution;
 
 	@ClientOnly
 	private final AnimationState state = new AnimationState();
@@ -22,22 +22,22 @@ public class EntityAction {
 	@Nullable
 	private Runnable action = null;
 
-	public EntityAction(Entity entity, Identifier action, int delayBeforeStarting, int delayAfterEnding) {
+	public EntityAction(Entity entity, Identifier action, int timeBeforeExecution, int delayAfterExecution) {
 		this.entity = entity;
-		this.remainingTime = new SyncableData<>(-1, entity, action, TrackedDataHandlerRegistry.INTEGER);
-		this.delayBeforeStaring = delayBeforeStarting;
-		this.delayAfterEnding = delayAfterEnding;
+		this.trackingTime = new SyncableData<>(-1, entity, action, TrackedDataHandlerRegistry.INTEGER);
+		this.timeBeforeExecution = timeBeforeExecution;
+		this.delayAfterExecution = delayAfterExecution;
 	}
 
 	public boolean isExecutingAction() {
-		return this.remainingTime.get() != -1;
+		return this.trackingTime.get() != -1;
 	}
 
 	public void execute(Runnable action) {
 		if (this.entity.getWorld() instanceof ServerWorld) {
 			this.action = action;
-			this.remainingTime.set(0);
-			this.remainingTime.synchronize();
+			this.trackingTime.set(0);
+			this.trackingTime.synchronize();
 		}
 		else {
 			throw new IllegalStateException("Executed on a wrong Environment Side");
@@ -53,34 +53,38 @@ public class EntityAction {
 		}
 	}
 
+	private int getFullTime() {
+		return this.timeBeforeExecution + this.delayAfterExecution;
+	}
+
 	private void serverTick() {
-		if (this.remainingTime.get() >= 0 && this.remainingTime.get() <= this.delayBeforeStaring + this.delayAfterEnding) {
-			if (this.remainingTime.get() == this.delayBeforeStaring) {
+		if (this.trackingTime.get() >= 0 && this.trackingTime.get() <= this.getFullTime()) {
+			if (this.trackingTime.get() == this.timeBeforeExecution) {
 				assert this.action != null;
 				this.action.run();
 				this.action = null;
 			}
-			this.remainingTime.set(this.remainingTime.get() + 1);
-			if (this.remainingTime.get() % 200 == 0) {
-				this.remainingTime.synchronize();
+			this.trackingTime.set(this.trackingTime.get() + 1);
+			if (this.trackingTime.get() % 200 == 0) {
+				this.trackingTime.synchronize();
 			}
 		}
-		else if (this.remainingTime.get() >= 0 && this.remainingTime.get() > this.delayBeforeStaring + this.delayAfterEnding) {
-			this.remainingTime.set(-1);
-			this.remainingTime.synchronize();
+		else if (this.trackingTime.get() >= 0 && this.trackingTime.get() > this.getFullTime()) {
+			this.trackingTime.set(-1);
+			this.trackingTime.synchronize();
 		}
 	}
 
 	@ClientOnly
 	private void clientTick() {
-		if (this.remainingTime.get() >= 0 && this.remainingTime.get() <= this.delayBeforeStaring + this.delayAfterEnding) {
-			if (this.remainingTime.get() == 0) {
+		if (this.trackingTime.get() >= 0 && this.trackingTime.get() <= this.getFullTime()) {
+			if (this.trackingTime.get() == 0) {
 				this.state.start(this.entity.age);
 			}
-			this.remainingTime.set(this.remainingTime.get() + 1);
+			this.trackingTime.set(this.trackingTime.get() + 1);
 		}
-		else if (this.remainingTime.get() >= 0 && this.remainingTime.get() > this.delayBeforeStaring + this.delayAfterEnding) {
-			this.remainingTime.set(-1);
+		else if (this.trackingTime.get() >= 0 && this.trackingTime.get() > this.getFullTime()) {
+			this.trackingTime.set(-1);
 			this.state.stop();
 		}
 	}
