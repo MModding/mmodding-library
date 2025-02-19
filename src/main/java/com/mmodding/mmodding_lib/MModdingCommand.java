@@ -1,11 +1,13 @@
 package com.mmodding.mmodding_lib;
 
 import com.google.common.collect.ImmutableList;
+import com.mmodding.mmodding_lib.ducks.PlayerEntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerWorldDuckInterface;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.library.utils.StellarUtils;
 import com.mmodding.mmodding_lib.states.persistant.StellarStatuses;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
@@ -17,6 +19,7 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.quiltmc.qsl.base.api.util.TriState;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -33,6 +36,15 @@ public class MModdingCommand {
 						.then(
 							CommandManager.argument("targets", EntityArgumentType.entities())
 								.executes(context -> MModdingCommand.discard(context.getSource(), EntityArgumentType.getEntities(context, "targets")))
+						)
+				)
+				.then(
+					CommandManager.literal("invincible")
+						.requires(source -> source.hasPermissionLevel(2))
+						.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.DEFAULT))
+						.then(
+							CommandManager.argument("mode", BoolArgumentType.bool())
+								.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.fromBoolean(BoolArgumentType.getBool(context, "mode"))))
 						)
 				)
 				.then(
@@ -145,9 +157,36 @@ public class MModdingCommand {
 		return targets.size();
 	}
 
+	private static int invincible(ServerCommandSource source, TriState triState) throws CommandSyntaxException {
+		if (source.getEntity() == null) {
+			source.sendError(Text.translatable("commands.mmodding.not_an_entity"));
+			return 0;
+		}
+		else {
+			String addedInvincibility = "commands.mmodding.invincible.added";
+			String removedInvincibility = "commands.mmodding.invincible.removed";
+			PlayerEntityDuckInterface ducked = (PlayerEntityDuckInterface) source.getPlayer();
+			switch (triState) {
+				case TRUE -> {
+					ducked.mmodding_lib$setInvincible(true);
+					source.sendFeedback(Text.translatable(addedInvincibility), true);
+				}
+				case FALSE -> {
+					ducked.mmodding_lib$setInvincible(false);
+					source.sendFeedback(Text.translatable(removedInvincibility), true);
+				}
+				case DEFAULT -> {
+					ducked.mmodding_lib$setInvincible(!ducked.mmodding_lib$isInvincible());
+					source.sendFeedback(Text.translatable(ducked.mmodding_lib$isInvincible() ? addedInvincibility : removedInvincibility), true);
+				}
+			}
+			return 1;
+		}
+	}
+
 	private static int soundtrack(ServerCommandSource source, SoundtrackOperation operation) throws CommandSyntaxException {
 		if (source.getEntity() == null) {
-			source.sendError(Text.translatable("commands.mmodding.soundtrack.not_an_entity"));
+			source.sendError(Text.translatable("commands.mmodding.not_an_entity"));
 		}
 		return switch (operation) {
 			case RELEASE -> {
