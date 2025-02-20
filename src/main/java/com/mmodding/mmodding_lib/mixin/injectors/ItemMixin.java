@@ -78,6 +78,9 @@ public abstract class ItemMixin implements FabricItem, ItemGlintPack, Self<Item>
 
 						if (optional.isPresent()) {
 							optional.get().createPortal();
+							if (context.getStack().isDamageable() && context.getPlayer() != null) {
+								context.getStack().damage(1, context.getPlayer(), p -> p.sendToolBreakStatus(context.getHand()));
+							}
 							context.getWorld().playSound(null, pos, key.getIgniteSound(), SoundCategory.BLOCKS, 1.0f, context.getWorld().getRandom().nextFloat() * 0.4f + 0.8f);
 							cir.setReturnValue(ActionResult.SUCCESS);
 						}
