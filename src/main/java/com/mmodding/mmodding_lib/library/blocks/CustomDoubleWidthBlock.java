@@ -112,10 +112,18 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
 		super.onBreak(world, pos, state, player);
 		if (!world.isClient()) {
 			OrientedBlockPos origin = state.get(PART).toOrigin(pos, state.get(FACING));
-			world.setBlockState(origin, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
-			world.setBlockState(origin.front(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(origin.front().left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(origin.left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			if (!origin.equals(pos)) {
+				world.setBlockState(origin, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
+			if (!origin.front().equals(pos)) {
+				world.setBlockState(origin.front(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
+			if (!origin.front().left().equals(pos)) {
+				world.setBlockState(origin.front().left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
+			if (!origin.left().equals(pos)) {
+				world.setBlockState(origin.left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
 			world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
 		}
 	}
