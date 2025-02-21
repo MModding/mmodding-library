@@ -41,7 +41,9 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 				this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
 			}
 			for (int i = 0; i <= toPart - fromPart; i++) {
-				this.queue.addTracking(this.player, soundtrack.getPart(fromPart + i).getSound(), soundtrack.getPart(fromPart + i).isLooping());
+				for (int j = 0; j < soundtrack.getPart(fromPart + i).getIterations(); j++) {
+					this.queue.addTracking(this.player, soundtrack.getPart(fromPart + i).getSound(), soundtrack.getPart(fromPart + i).isLooping());
+				}
 			}
 			MinecraftClient.getInstance().getMusicTracker().stop();
 			if (needsNewQueue) {
@@ -73,7 +75,7 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 	@Override
 	public void release() {
 		if (this.queue != null) {
-			this.queue.release(true);
+			this.queue.release(false);
 		}
 	}
 

@@ -59,7 +59,7 @@ public interface SoundtrackPlayer {
 	void unseal();
 
 	/**
-	 * Looks up for a looping part. If present, the first one found will be released.
+	 * Looks up for looping parts and releases them.
 	 */
 	void release();
 
