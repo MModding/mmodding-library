@@ -126,6 +126,7 @@
     "injectors.client.ItemRendererMixin",
     "injectors.client.JsonUnbakedModelMixin",
     "injectors.client.LivingEntityRendererMixin",
+    "injectors.client.MinecraftClientMixin",
     "injectors.client.ModelLoaderMixin",
     "injectors.client.MusicTrackerMixin",
     "injectors.client.OggAudioStreamMixin",
