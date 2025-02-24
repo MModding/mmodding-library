@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -136,6 +137,14 @@ public class RegistrationUtils {
 
 	public static void registerPointOfInterestType(Identifier identifier, PointOfInterestType type) {
 		Registry.register(Registry.POINT_OF_INTEREST_TYPE, identifier, type);
+	}
+
+	public static void registerSoundEvent(SoundEvent soundEvent) {
+		RegistrationUtils.registerSoundEvent(soundEvent.getId(), soundEvent);
+	}
+
+	public static void registerSoundEvent(Identifier identifier, SoundEvent soundEvent) {
+		Registry.register(Registry.SOUND_EVENT, identifier, soundEvent);
 	}
 
 	public static void registerStellarCycle(Identifier identifier, StellarCycle stellarCycle) {
