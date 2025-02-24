@@ -1,12 +1,11 @@
 package com.mmodding.mmodding_lib.library.sounds;
 
-import com.mmodding.mmodding_lib.library.items.ItemRegistrable;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomSoundEvent extends SoundEvent implements ItemRegistrable {
+public class CustomSoundEvent extends SoundEvent implements SoundEventRegistrable {
 
     private final AtomicBoolean registered = new AtomicBoolean(false);
 
