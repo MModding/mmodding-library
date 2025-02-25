@@ -69,10 +69,13 @@ public class StellarObject {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
 
-		bufferBuilder.vertex(matrix4f, -this.width, 100.0f, -this.height).uv(0.0f, 0.0f).next();
-		bufferBuilder.vertex(matrix4f, this.width, 100.0f, -this.height).uv(1.0f, 0.0f).next();
-		bufferBuilder.vertex(matrix4f, this.width, 100.0f, this.height).uv(1.0f, 1.0f).next();
-		bufferBuilder.vertex(matrix4f, -this.width, 100.0f, this.height).uv(0.0f, 1.0f).next();
+		float a = this.width / 2.0f;
+		float b = this.height / 2.0f;
+
+		bufferBuilder.vertex(matrix4f, -a, 100.0f, -b).uv(0.0f, 0.0f).next();
+		bufferBuilder.vertex(matrix4f, a, 100.0f, -b).uv(1.0f, 0.0f).next();
+		bufferBuilder.vertex(matrix4f, a, 100.0f, b).uv(1.0f, 1.0f).next();
+		bufferBuilder.vertex(matrix4f, -a, 100.0f, b).uv(0.0f, 1.0f).next();
 
         BufferRenderer.drawWithShader(bufferBuilder.end());
 
