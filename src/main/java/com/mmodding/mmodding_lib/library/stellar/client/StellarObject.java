@@ -25,12 +25,12 @@ public class StellarObject {
 	private final float width;
 	private final float height;
 
-    private StellarObject(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
-        this.stellarCycle = stellarCycle;
+	private StellarObject(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
+		this.stellarCycle = stellarCycle;
 		this.textureLocation = textureLocation;
-        this.width = width;
-        this.height = height;
-    }
+		this.width = width;
+		this.height = height;
+	}
 
 	public static void load(Identifier stellarCycle, TextureLocation textureLocation, float width, float height) {
 		RenderLayerUtils.addStellarObject(new StellarObject(stellarCycle, textureLocation, width, height));
@@ -44,30 +44,30 @@ public class StellarObject {
 		return ((ClientWorldDuckInterface) world).mmodding_lib$getStellarStatusesAccess().getMap().get(this.stellarCycle);
 	}
 
-    public void render(MatrixStack matrices, ClientWorld world, float tickDelta) {
+	public void render(MatrixStack matrices, ClientWorld world, float tickDelta) {
 
-	    RenderSystem.depthMask(false);
+		RenderSystem.depthMask(false);
 		VertexBuffer.unbind();
-	    RenderSystem.enableBlend();
+		RenderSystem.enableBlend();
 		RenderSystem.enableTexture();
 		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-	    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f - world.getRainGradient(tickDelta));
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f - world.getRainGradient(tickDelta));
 
-	    matrices.push();
+		matrices.push();
 
 		matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.getCycle().getBaseZAngle()));
 		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getBaseXAngle()));
 
 		matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(this.getCycle().getSkyYAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getSkyXAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
+		matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.getCycle().getSkyXAngle(this.getStatus(world).getCurrentTime()) * 360.0f));
 
-        Matrix4f matrix4f = matrices.peek().getModel();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, this.textureLocation);
+		Matrix4f matrix4f = matrices.peek().getModel();
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, this.textureLocation);
 
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+		BufferBuilder bufferBuilder = Tessellator.getInstance().getBufferBuilder();
+		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
 
 		float a = this.width / 2.0f;
 		float b = this.height / 2.0f;
@@ -77,12 +77,12 @@ public class StellarObject {
 		bufferBuilder.vertex(matrix4f, a, 100.0f, b).uv(1.0f, 1.0f).next();
 		bufferBuilder.vertex(matrix4f, -a, 100.0f, b).uv(0.0f, 1.0f).next();
 
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+		BufferRenderer.drawWithShader(bufferBuilder.end());
 
-        matrices.pop();
+		matrices.pop();
 
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-	    RenderSystem.disableBlend();
+		RenderSystem.disableBlend();
 		RenderSystem.depthMask(true);
-    }
+	}
 }
