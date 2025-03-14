@@ -41,9 +41,9 @@ public class ItemCategoryImpl implements ItemCategory {
 	}
 
 	public void init() {
-		ItemGroup.Builder builder = FabricItemGroup.builder(this.reference.provideId());
+		ItemGroup.Builder builder = FabricItemGroup.builder();
 		if (this.settings.name != null) {
-			builder.name(this.settings.name);
+			builder.displayName(this.settings.name);
 		}
 		if (this.settings.iconSupplier != null) {
 			builder.icon(this.settings.iconSupplier);
@@ -52,15 +52,15 @@ public class ItemCategoryImpl implements ItemCategory {
 			builder.special();
 		}
 		if (this.settings.hideName) {
-			builder.hideName();
+			builder.noRenderedName();
 		}
 		if (this.settings.hideScrollbar) {
-			builder.hideScrollbar();
+			builder.noScrollbar();
 		}
 		if (this.settings.textureName != null) {
-			builder.backgroundTextureName(this.settings.textureName);
+			builder.texture(this.settings.textureName);
 		}
-		builder.entries((parameters, collector) -> collector.addStacks(this.entries));
+		builder.entries((parameters, collector) -> collector.addAll(this.entries));
 		ItemCategoryImpl.GROUPS.register(this.reference.provideId(), builder.build()); // replaces the future registry
 	}
 

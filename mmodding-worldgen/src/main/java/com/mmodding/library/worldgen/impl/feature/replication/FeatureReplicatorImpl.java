@@ -5,6 +5,7 @@ import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.java.api.function.SingleTypeFunction;
 import com.mmodding.library.worldgen.api.feature.replication.PlacementModifiers;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class FeatureReplicatorImpl {
 		ConfigReplicator<FC> replicator = new ConfigReplicator<>(castedConfiguredFeature);
 		replicator.mutateConfig(mutator);
 		FC featureConfig = replicator.replicate();
-		return new WaitingRegistryEntry<>(castedReference, new ConfiguredFeature<>(castedConfiguredFeature.getFeature(), featureConfig));
+		return new WaitingRegistryEntry<>(castedReference, new ConfiguredFeature<>(castedConfiguredFeature.feature(), featureConfig));
 	}
 
 	public static WaitingRegistryEntry<PlacedFeature> replicatePlacedFeature(Reference<PlacedFeature> reference, PlacedFeature placedFeature, SingleTypeFunction<PlacementModifiers> mutator) {
@@ -33,7 +34,7 @@ public class FeatureReplicatorImpl {
 		private FC featureConfig;
 
 		public ConfigReplicator(ConfiguredFeature<FC, Feature<FC>> configuredFeature) {
-			this.featureConfig = configuredFeature.getConfig();
+			this.featureConfig = configuredFeature.config();
 		}
 
 		public void mutateConfig(SingleTypeFunction<FC> mutator) {

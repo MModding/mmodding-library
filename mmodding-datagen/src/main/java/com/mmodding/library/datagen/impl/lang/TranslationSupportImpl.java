@@ -24,7 +24,7 @@ public class TranslationSupportImpl {
 		TranslationSupport.addTranslationSupport(RegistryKeys.BLOCK, (callback, object) -> callback.apply(object.getTranslationKey()));
 		TranslationSupport.addTranslationSupport(RegistryKeys.ENTITY_TYPE, (callback, object) -> callback.apply(object.getTranslationKey()));
 		TranslationSupport.addTranslationSupport(RegistryKeys.ENCHANTMENT, (callback, object) -> callback.apply(object.getTranslationKey()));
-		TranslationSupport.addTranslationSupport(RegistryKeys.ENTITY_ATTRIBUTE, (callback, object) -> callback.apply(object.getTranslationKey()));
+		TranslationSupport.addTranslationSupport(RegistryKeys.ATTRIBUTE, (callback, object) -> callback.apply(object.getTranslationKey()));
 		TranslationSupport.addTranslationSupport(RegistryKeys.STAT_TYPE, (callback, object) -> callback.apply(object.getTranslationKey()));
 	}
 }

@@ -1,8 +1,8 @@
 package com.mmodding.library.worldgen.impl.feature.replication;
 
 import com.mmodding.library.worldgen.api.feature.replication.PlacementModifiers;
-import net.minecraft.world.gen.decorator.PlacementModifierType;
-import net.minecraft.world.gen.feature.PlacementModifier;
+import net.minecraft.world.gen.placementmodifier.PlacementModifier;
+import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
 import java.util.ArrayList;
 import java.util.List;

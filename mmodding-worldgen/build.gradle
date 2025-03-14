@@ -6,6 +6,7 @@ mmodding {
 	}
 	modules(project) {
 		implementation("mmodding-core")
+		implementation("mmodding-datagen")
 		implementation("mmodding-block")
 		implementation("mmodding-java")
 	}

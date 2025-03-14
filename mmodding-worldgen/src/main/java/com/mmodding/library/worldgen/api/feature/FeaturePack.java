@@ -5,6 +5,7 @@ import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.worldgen.impl.feature.FeaturePackImpl;
 import net.minecraft.registry.Registry;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 
 import java.util.List;
 import java.util.function.Consumer;

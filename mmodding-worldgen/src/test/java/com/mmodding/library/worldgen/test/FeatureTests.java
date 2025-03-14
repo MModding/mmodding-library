@@ -2,18 +2,17 @@ package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.core.api.management.content.DoubleContentHolder;
 import com.mmodding.library.core.api.management.content.ForBeing;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import com.mmodding.library.worldgen.api.feature.replication.FeatureReplicator;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.decorator.BiomePlacementModifier;
-import net.minecraft.world.gen.decorator.CountPlacementModifier;
-import net.minecraft.world.gen.decorator.PlacementModifierType;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier;
+import net.minecraft.world.gen.placementmodifier.CountPlacementModifier;
+import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
-public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>, PlacedFeature> {
+public class FeatureTests {
 
 	public static final ForBeing.Vacant<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.vacant();
 
@@ -26,7 +25,7 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 				new RandomPatchFeatureConfig(0, 0, 0, null),
 				configuredPack -> configuredPack.appendPlacedFeature(
 					factory.createId(""),
-					BiomePlacementModifier.getInstance()
+					BiomePlacementModifier.of()
 				)
 			);
 			randomPatch.appendConfiguredFeature(
@@ -36,7 +35,7 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 					fc -> {
 						int tries = 3;
 						return new RandomPatchFeatureConfig(
-							tries, fc.spreadXz(), fc.spreadY(), fc.feature()
+							tries, fc.comp_149(), fc.comp_150(), fc.comp_155()
 						);
 					}
 				),
@@ -47,7 +46,7 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 						modifiers -> {
 							modifiers.mutateTypeTo(
 								PlacementModifierType.COUNT,
-								modifier -> CountPlacementModifier.create(2)
+								modifier -> CountPlacementModifier.of(2)
 							);
 							return modifiers;
 						}
@@ -57,8 +56,7 @@ public class FeatureTests implements DoubleContentHolder<ConfiguredFeature<?, ?>
 		});
 	}
 
-	@Override
-	public void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
+	public static void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
 		RANDOM_PATCH.get().register(configuredFeatures, placedFeatures);
 	}
 }

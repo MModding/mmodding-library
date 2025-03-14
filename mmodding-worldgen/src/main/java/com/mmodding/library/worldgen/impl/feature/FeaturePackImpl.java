@@ -3,9 +3,10 @@ package com.mmodding.library.worldgen.impl.feature;
 import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
-import net.minecraft.registry.Holder;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,7 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 
 		@Override
 		public void appendPlacedFeature(Reference<PlacedFeature> reference, PlacementModifier... modifiers) {
-			this.placedFeatures.add(new WaitingRegistryEntry<>(reference, new PlacedFeature(Holder.createDirect(WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0)), List.of(modifiers))));
+			this.placedFeatures.add(new WaitingRegistryEntry<>(reference, new PlacedFeature(RegistryEntry.of(WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0)), List.of(modifiers))));
 		}
 
 		@Override
