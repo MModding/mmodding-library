@@ -1,9 +1,9 @@
 package com.mmodding.library.datagen.api.recipe;
 
-import net.minecraft.data.server.recipe.RecipeJsonFactory;
+import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeCategory;
+import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
@@ -54,7 +54,7 @@ public interface RecipeHelper {
 
 	void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void factory(Supplier<? extends RecipeJsonFactory> factory);
+	void factory(Supplier<? extends CraftingRecipeJsonBuilder> factory);
 
 	@ApiStatus.NonExtendable
 	interface ShapedRecipe {

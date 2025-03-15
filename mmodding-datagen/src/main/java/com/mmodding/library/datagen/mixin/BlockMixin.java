@@ -2,6 +2,8 @@ package com.mmodding.library.datagen.mixin;
 
 import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.lang.LangProcessor;
+import com.mmodding.library.datagen.api.loot.block.BlockLootContainer;
+import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.recipe.RecipeContainer;
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
 import com.mmodding.library.datagen.impl.InternalDataAccess;
@@ -17,13 +19,16 @@ import java.util.function.Consumer;
 
 @Mixin(Block.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
-public class BlockMixin implements LangContainer, RecipeContainer, InternalDataAccess.LangProcessorAccess<Block>, InternalDataAccess.RecipeGeneratorAccess {
+public class BlockMixin implements LangContainer, RecipeContainer, BlockLootContainer, InternalDataAccess.LangProcessorAccess<Block>, InternalDataAccess.RecipeGeneratorAccess, InternalDataAccess.BlockLootContainerAccess {
 
 	@Unique
 	public LangProcessor<Block> langProcessor = null;
 
 	@Unique
 	public Consumer<RecipeHelper> recipeGenerator = null;
+
+	@Unique
+	public BlockLootProcessor blockLootProcessor = null;
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -45,6 +50,12 @@ public class BlockMixin implements LangContainer, RecipeContainer, InternalDataA
 	}
 
 	@Override
+	public Block loot(BlockLootProcessor processor) {
+		this.blockLootProcessor = processor;
+		return (Block) (Object) this;
+	}
+
+	@Override
 	public LangProcessor<Block> langProcessor() {
 		return this.langProcessor;
 	}
@@ -52,5 +63,10 @@ public class BlockMixin implements LangContainer, RecipeContainer, InternalDataA
 	@Override
 	public Consumer<RecipeHelper> recipeGenerator() {
 		return this.recipeGenerator;
+	}
+
+	@Override
+	public BlockLootProcessor blockLootProcess() {
+		return this.blockLootProcessor;
 	}
 }

@@ -1,12 +1,12 @@
 package com.mmodding.library.datagen.impl.recipe;
 
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
-import net.minecraft.data.server.RecipesProvider;
-import net.minecraft.data.server.recipe.CookingRecipeJsonFactory;
-import net.minecraft.data.server.recipe.RecipeJsonFactory;
+import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeCategory;
+import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 @ApiStatus.Internal
 public class RecipeHelperImpl implements RecipeHelper {
 
-	private final List<Supplier<? extends RecipeJsonFactory>> factories;
+	private final List<Supplier<? extends CraftingRecipeJsonBuilder>> factories;
 
 	private final ItemConvertible target;
 
@@ -70,13 +70,13 @@ public class RecipeHelperImpl implements RecipeHelper {
 	@Override
 	public void smelting(Ingredient ingredient, RecipeCategory category, int experience, int time) {
 		this.factories.add(
-			() -> CookingRecipeJsonFactory.createSmelting(
+			() -> CookingRecipeJsonBuilder.createSmelting(
 				ingredient,
 				category,
 				this.target,
 				experience,
 				time
-			).criterion(RecipesProvider.hasItem(this.target), RecipesProvider.conditionsFromItem(this.target))
+			).criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
 		);
 	}
 
@@ -88,13 +88,13 @@ public class RecipeHelperImpl implements RecipeHelper {
 	@Override
 	public void blasting(Ingredient ingredient, RecipeCategory category, int experience, int time) {
 		this.factories.add(
-			() -> CookingRecipeJsonFactory.createBlasting(
+			() -> CookingRecipeJsonBuilder.createBlasting(
 				ingredient,
 				category,
 				this.target,
 				experience,
 				time
-			).criterion(RecipesProvider.hasItem(this.target), RecipesProvider.conditionsFromItem(this.target))
+			).criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
 		);
 	}
 
@@ -106,22 +106,22 @@ public class RecipeHelperImpl implements RecipeHelper {
 	@Override
 	public void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time) {
 		this.factories.add(
-			() -> CookingRecipeJsonFactory.createSmoking(
+			() -> CookingRecipeJsonBuilder.createSmoking(
 				ingredient,
 				category,
 				this.target,
 				experience,
 				time
-			).criterion(RecipesProvider.hasItem(this.target), RecipesProvider.conditionsFromItem(this.target))
+			).criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
 		);
 	}
 
 	@Override
-	public void factory(Supplier<? extends RecipeJsonFactory> factory) {
+	public void factory(Supplier<? extends CraftingRecipeJsonBuilder> factory) {
 		this.factories.add(factory);
 	}
 
-	public List<Supplier<? extends RecipeJsonFactory>> getFactories() {
+	public List<Supplier<? extends CraftingRecipeJsonBuilder>> getFactories() {
 		return this.factories;
 	}
 }

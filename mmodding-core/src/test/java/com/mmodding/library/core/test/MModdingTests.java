@@ -10,7 +10,7 @@ public class MModdingTests implements ExtendedModInitializer {
 	@Override
 	public void setupManager(ElementsManager.Builder manager) {
 		manager.content(RegistryTests::register);
-		manager.data(RegistryKeys.BIOME, DataTests::register);
+		manager.resource(RegistryKeys.BIOME, DataTests::register);
 	}
 
 	@Override

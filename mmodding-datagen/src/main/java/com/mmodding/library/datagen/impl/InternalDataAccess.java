@@ -2,6 +2,8 @@ package com.mmodding.library.datagen.impl;
 
 import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.lang.LangProcessor;
+import com.mmodding.library.datagen.api.loot.block.BlockLootContainer;
+import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.recipe.RecipeContainer;
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,6 +26,10 @@ public class InternalDataAccess {
 		return ((RecipeGeneratorAccess) container).recipeGenerator();
 	}
 
+	static BlockLootProcessor blockLootProcessor(BlockLootContainer container) {
+		return ((BlockLootContainerAccess) container).blockLootProcess();
+	}
+
 	public interface LangProcessorAccess<T> {
 
 		LangProcessor<T> langProcessor();
@@ -32,5 +38,10 @@ public class InternalDataAccess {
 	public interface RecipeGeneratorAccess {
 
 		Consumer<RecipeHelper> recipeGenerator();
+	}
+
+	public interface BlockLootContainerAccess {
+
+		BlockLootProcessor blockLootProcess();
 	}
 }
