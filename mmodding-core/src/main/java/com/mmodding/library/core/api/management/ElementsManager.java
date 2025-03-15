@@ -24,12 +24,12 @@ public interface ElementsManager {
 		ElementsManager.Builder content(ContentProvider provider);
 
 		/**
-		 * Adds a {@link BootstrapProvider} which allows generating json files of builtin registry elements.
+		 * Adds a {@link ResourceProvider} which allows generating json files of builtin registry elements.
 		 * @param key the registry
 		 * @param provider the bootstrap provider
 		 * @return the builder
 		 * @param <T> the element class
 		 */
-		<T> ElementsManager.Builder data(RegistryKey<Registry<T>> key, BootstrapProvider<T> provider);
+		<T> ElementsManager.Builder resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider);
 	}
 }

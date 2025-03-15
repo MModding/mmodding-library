@@ -2,7 +2,7 @@ package com.mmodding.library.core.impl.management;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
-import com.mmodding.library.core.api.management.content.BootstrapProvider;
+import com.mmodding.library.core.api.management.content.ResourceProvider;
 import com.mmodding.library.core.api.management.content.ContentProvider;
 import com.mmodding.library.core.impl.management.content.BootstrapFunctionImpl;
 import com.mmodding.library.java.api.list.BiList;
@@ -17,28 +17,28 @@ import java.util.List;
 public class ElementsManagerImpl implements ElementsManager {
 
 	private final List<ContentProvider> contentProviders = new ArrayList<>();
-	private final BiList<RegistryKey<Registry<?>>, BootstrapProvider<?>> bootstrapProviders = BiList.create();
+	private final BiList<RegistryKey<Registry<?>>, ResourceProvider<?>> resourceProviders = BiList.create();
 
 	public void loadElements(AdvancedContainer mod) {
 		this.contentProviders.forEach(provider -> provider.register(mod));
 	}
 
 	public void loadBootstraps(AdvancedContainer mod, RegistryBuilder builder) {
-		this.bootstrapProviders.forEach((key, bootstrap) -> this.loadBootstrap(mod, builder, key, bootstrap));
+		this.resourceProviders.forEach((key, bootstrap) -> this.loadBootstrap(mod, builder, key, bootstrap));
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> void loadBootstrap(AdvancedContainer mod, RegistryBuilder builder, RegistryKey<?> key, BootstrapProvider<?> bootstrap) {
+	public <T> void loadBootstrap(AdvancedContainer mod, RegistryBuilder builder, RegistryKey<?> key, ResourceProvider<?> bootstrap) {
 		builder.addRegistry(
 			(RegistryKey<? extends Registry<T>>) key,
-			new BootstrapFunctionImpl<>(mod, (BootstrapProvider<T>) bootstrap)
+			new BootstrapFunctionImpl<>(mod, (ResourceProvider<T>) bootstrap)
 		);
 	}
 
 	public static class Builder implements ElementsManager.Builder {
 
 		private final List<ContentProvider> contentProviders = new ArrayList<>();
-		private final BiList<RegistryKey<Registry<?>>, BootstrapProvider<?>> bootstrapProviders = BiList.create();
+		private final BiList<RegistryKey<Registry<?>>, ResourceProvider<?>> resourceProviders = BiList.create();
 
 		@Override
 		public ElementsManagerImpl.Builder ifModLoaded(String modId, ContentProvider provider) {
@@ -56,9 +56,9 @@ public class ElementsManagerImpl implements ElementsManager {
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public <T> ElementsManagerImpl.Builder data(RegistryKey<Registry<T>> key, BootstrapProvider<T> provider) {
+		public <T> ElementsManagerImpl.Builder resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider) {
 			if (System.getProperty("fabric-api.datagen") != null) {
-				this.bootstrapProviders.add((RegistryKey<Registry<?>>) (Registry<?>) key, (BootstrapProvider<?>) provider);
+				this.resourceProviders.add((RegistryKey<Registry<?>>) (Registry<?>) key, (ResourceProvider<?>) provider);
 			}
 			return this;
 		}
