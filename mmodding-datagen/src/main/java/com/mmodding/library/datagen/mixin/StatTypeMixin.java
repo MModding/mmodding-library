@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class StatTypeMixin<S> implements LangContainer, InternalDataAccess.LangProcessorAccess<StatType<S>> {
 
 	@Unique
-	public LangProcessor<StatType<S>> langProcessor = LangProcessor.standard();
+	public LangProcessor<StatType<S>> langProcessor = null;
 
 	@Override
 	@SuppressWarnings("unchecked")

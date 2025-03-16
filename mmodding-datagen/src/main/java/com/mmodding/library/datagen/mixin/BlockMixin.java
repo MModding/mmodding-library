@@ -66,7 +66,7 @@ public class BlockMixin implements LangContainer, RecipeContainer, BlockLootCont
 	}
 
 	@Override
-	public BlockLootProcessor blockLootProcess() {
+	public BlockLootProcessor blockLootProcessor() {
 		return this.blockLootProcessor;
 	}
 }

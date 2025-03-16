@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class EnchantmentMixin implements LangContainer, InternalDataAccess.LangProcessorAccess<Enchantment> {
 
 	@Unique
-	public LangProcessor<Enchantment> langProcessor = LangProcessor.standard();
+	public LangProcessor<Enchantment> langProcessor = null;
 
 	@Override
 	@SuppressWarnings("unchecked")

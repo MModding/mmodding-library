@@ -4,8 +4,11 @@ import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.lang.LangProcessor;
 import com.mmodding.library.datagen.api.loot.block.BlockLootContainer;
 import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
+import com.mmodding.library.datagen.api.loot.entity.EntityLootContainer;
+import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
 import com.mmodding.library.datagen.api.recipe.RecipeContainer;
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
+import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
@@ -27,7 +30,12 @@ public class InternalDataAccess {
 	}
 
 	static BlockLootProcessor blockLootProcessor(BlockLootContainer container) {
-		return ((BlockLootContainerAccess) container).blockLootProcess();
+		return ((BlockLootContainerAccess) container).blockLootProcessor();
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends Entity> EntityLootProcessor<T> entityLootProcessor(EntityLootContainer container) {
+		return ((EntityLootContainerAccess<T>) container).entityLootProcessor();
 	}
 
 	public interface LangProcessorAccess<T> {
@@ -42,6 +50,11 @@ public class InternalDataAccess {
 
 	public interface BlockLootContainerAccess {
 
-		BlockLootProcessor blockLootProcess();
+		BlockLootProcessor blockLootProcessor();
+	}
+
+	public interface EntityLootContainerAccess<T extends Entity> {
+
+		EntityLootProcessor<T> entityLootProcessor();
 	}
 }

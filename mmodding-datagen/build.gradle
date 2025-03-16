@@ -5,23 +5,21 @@ mmodding {
 		environment = EnvironmentTarget.ANY
 		addMixin("mmodding_datagen.mixins.json")
 		withInjectedInterfaces {
-			it.injectTo(
-				"net/minecraft/block/Block",
-				Set.of(
-					"com/mmodding/library/datagen/api/lang/LangContainer",
-					"com/mmodding/library/datagen/api/recipe/RecipeContainer"
-				)
-			)
+			it.injectTo("net/minecraft/block/Block", Set.of(
+				"com/mmodding/library/datagen/api/lang/LangContainer",
+				"com/mmodding/library/datagen/api/recipe/RecipeContainer",
+				"com/mmodding/library/datagen/api/loot/block/BlockLootContainer"
+			))
 			it.injectTo("net/minecraft/enchantment/Enchantment", "com/mmodding/library/datagen/api/lang/LangContainer")
 			it.injectTo("net/minecraft/entity/attribute/EntityAttribute", "com/mmodding/library/datagen/api/lang/LangContainer")
-			it.injectTo("net/minecraft/entity/EntityType", "com/mmodding/library/datagen/api/lang/LangContainer")
-			it.injectTo(
-				"net/minecraft/item/Item",
-				Set.of(
-					"com/mmodding/library/datagen/api/lang/LangContainer",
-					"com/mmodding/library/datagen/api/recipe/RecipeContainer"
-				)
-			)
+			it.injectTo("net/minecraft/entity/EntityType", Set.of(
+				"com/mmodding/library/datagen/api/lang/LangContainer",
+				"com/mmodding/library/datagen/api/loot/entity/EntityLootContainer"
+			))
+			it.injectTo("net/minecraft/item/Item", Set.of(
+				"com/mmodding/library/datagen/api/lang/LangContainer",
+				"com/mmodding/library/datagen/api/recipe/RecipeContainer"
+			))
 			it.injectTo("net/minecraft/stat/StatType", "com/mmodding/library/datagen/api/lang/LangContainer")
 		}
 	}

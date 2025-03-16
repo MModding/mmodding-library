@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Unique;
 public class EntityAttributeMixin implements LangContainer, InternalDataAccess.LangProcessorAccess<EntityAttribute> {
 
 	@Unique
-	public LangProcessor<EntityAttribute> langProcessor = LangProcessor.standard();
+	public LangProcessor<EntityAttribute> langProcessor = null;
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -26,7 +26,7 @@ public class EntityAttributeMixin implements LangContainer, InternalDataAccess.L
 
 	@Override
 	public RegistryKey<Registry<EntityAttribute>> langRegistry() {
-		return RegistryKeys.ENTITY_ATTRIBUTE;
+		return RegistryKeys.ATTRIBUTE;
 	}
 
 	@Override
