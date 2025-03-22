@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.library.utils;
 import com.mmodding.mmodding_lib.library.MModdingDamageSources;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -20,6 +21,18 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class WorldUtils {
+
+	public static void addLocalCommonLootToStructurePiece(Identifier structure, ItemStack... stacks) {
+		MModdingGlobalMaps.LOCAL_COMMON_STRUCTURE_PIECE_LOOT.compute(structure, (key, itemStacks) -> {
+			if (itemStacks == null) {
+				return List.of(stacks);
+			}
+			else {
+				itemStacks.addAll(List.of(stacks));
+				return itemStacks;
+			}
+		});
+	}
 
 	public static void addDifferedSeed(Identifier dimensionIdentifier) {
 		MModdingGlobalMaps.DIFFERED_DIMENSION_SEEDS.add(RegistryKey.of(Registry.WORLD_KEY, dimensionIdentifier));

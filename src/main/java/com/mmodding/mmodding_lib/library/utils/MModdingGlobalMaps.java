@@ -5,6 +5,7 @@ import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -22,6 +23,8 @@ public class MModdingGlobalMaps {
 	static final Map<Identifier, List<CustomVeinType>> CUSTOM_VEIN_TYPES = new HashMap<>();
 
 	static final List<RegistryKey<World>> DIFFERED_DIMENSION_SEEDS = new ArrayList<>();
+
+	static final Map<Identifier, List<ItemStack>> LOCAL_COMMON_STRUCTURE_PIECE_LOOT = new HashMap<>();
 
 	public static Set<Identifier> getStellarCycleKeys() {
 		return STELLAR_CYCLES.keySet();
@@ -64,6 +67,14 @@ public class MModdingGlobalMaps {
 
 	public static Set<CustomVeinType> getCustomVeinTypes(Identifier chunkGeneratorSettingsIdentifier) {
 		return new HashSet<>(CUSTOM_VEIN_TYPES.get(chunkGeneratorSettingsIdentifier));
+	}
+
+	public static boolean hasLocalCommonLootOfStructurePiece(Identifier structure) {
+		return LOCAL_COMMON_STRUCTURE_PIECE_LOOT.containsKey(structure) && !LOCAL_COMMON_STRUCTURE_PIECE_LOOT.get(structure).isEmpty();
+	}
+
+	public static List<ItemStack> getLocalCommonLootOfStructurePiece(Identifier structure) {
+		return LOCAL_COMMON_STRUCTURE_PIECE_LOOT.get(structure);
 	}
 
 	public static List<RegistryKey<World>> getDifferedDimensionSeeds() {
