@@ -6,9 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public interface StructureDuckInterface {
-
-	void mmodding_lib$setIdentifier(Identifier identifier);
+public interface StructureStartDuckInterface {
 
 	void mmodding_lib$provideCollectors(Consumer<BlockPos> structureContainersCollector, BiConsumer<Identifier, BlockPos> structurePieceContainersCollector);
 }

@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import com.mmodding.mmodding_lib.library.MModdingDamageSources;
+import com.mmodding.mmodding_lib.library.worldgen.structures.StructureSpreadLoot;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.List;
 import java.util.Set;
@@ -22,16 +24,8 @@ import java.util.stream.Collectors;
 
 public class WorldUtils {
 
-	public static void addLocalCommonLootToStructurePiece(Identifier structure, ItemStack... stacks) {
-		MModdingGlobalMaps.LOCAL_COMMON_STRUCTURE_PIECE_LOOT.compute(structure, (key, itemStacks) -> {
-			if (itemStacks == null) {
-				return List.of(stacks);
-			}
-			else {
-				itemStacks.addAll(List.of(stacks));
-				return itemStacks;
-			}
-		});
+	public static void addSpreadStructureLoot(RegistryKey<StructureFeature> structureRegistryKey, StructureSpreadLoot structureSpreadLoot) {
+		MModdingGlobalMaps.SPREAD_STRUCTURE_LOOTS.put(structureRegistryKey, structureSpreadLoot);
 	}
 
 	public static void addDifferedSeed(Identifier dimensionIdentifier) {

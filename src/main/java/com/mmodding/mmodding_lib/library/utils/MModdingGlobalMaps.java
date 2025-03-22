@@ -4,11 +4,12 @@ import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.UnlinkedCustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.stellar.StellarCycle;
+import com.mmodding.mmodding_lib.library.worldgen.structures.StructureSpreadLoot;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.*;
 
@@ -24,7 +25,7 @@ public class MModdingGlobalMaps {
 
 	static final List<RegistryKey<World>> DIFFERED_DIMENSION_SEEDS = new ArrayList<>();
 
-	static final Map<Identifier, List<ItemStack>> LOCAL_COMMON_STRUCTURE_PIECE_LOOT = new HashMap<>();
+	static final Map<RegistryKey<StructureFeature>, StructureSpreadLoot> SPREAD_STRUCTURE_LOOTS = new HashMap<>();
 
 	public static Set<Identifier> getStellarCycleKeys() {
 		return STELLAR_CYCLES.keySet();
@@ -69,12 +70,12 @@ public class MModdingGlobalMaps {
 		return new HashSet<>(CUSTOM_VEIN_TYPES.get(chunkGeneratorSettingsIdentifier));
 	}
 
-	public static boolean hasLocalCommonLootOfStructurePiece(Identifier structure) {
-		return LOCAL_COMMON_STRUCTURE_PIECE_LOOT.containsKey(structure) && !LOCAL_COMMON_STRUCTURE_PIECE_LOOT.get(structure).isEmpty();
+	public static boolean hasSpreadLootInStructure(RegistryKey<StructureFeature> structureKey) {
+		return SPREAD_STRUCTURE_LOOTS.containsKey(structureKey);
 	}
 
-	public static List<ItemStack> getLocalCommonLootOfStructurePiece(Identifier structure) {
-		return LOCAL_COMMON_STRUCTURE_PIECE_LOOT.get(structure);
+	public static StructureSpreadLoot getSpreadLootInStructure(RegistryKey<StructureFeature> structureKey) {
+		return SPREAD_STRUCTURE_LOOTS.get(structureKey);
 	}
 
 	public static List<RegistryKey<World>> getDifferedDimensionSeeds() {
