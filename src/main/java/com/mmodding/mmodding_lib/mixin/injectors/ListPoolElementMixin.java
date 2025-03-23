@@ -16,8 +16,6 @@ import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -30,12 +28,6 @@ public class ListPoolElementMixin extends StructurePoolElementMixin {
 		((StructurePoolElementDuckInterface) instance).mmodding_lib$provideCollectors(this.structureContainersCollector, this.structurePieceContainersCollector);
 		return original.call(instance, structureTemplateManager, structureWorldAccess, structureManager, chunkGenerator, blockPos0, blockPos1, blockRotation, blockBox, randomGenerator, b);
 	}
-
-	/* @Inject(method = "generate", at = @At("TAIL"))
-	private void clearCollectors(StructureTemplateManager structureTemplateManager, StructureWorldAccess world, StructureManager structureManager, ChunkGenerator chunkGenerator, BlockPos pos, BlockPos pivot, BlockRotation rotation, BlockBox box, RandomGenerator random, boolean keepJigsaws, CallbackInfoReturnable<Boolean> cir) {
-		this.structureContainersCollector = null;
-		this.structurePieceContainersCollector = null;
-	} */
 
 	@Override
 	public void mmodding_lib$provideCollectors(Consumer<BlockPos> structureContainersCollector, BiConsumer<Identifier, BlockPos> structurePieceContainersCollector) {

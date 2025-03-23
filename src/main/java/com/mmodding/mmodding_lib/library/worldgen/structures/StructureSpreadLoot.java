@@ -77,6 +77,32 @@ public class StructureSpreadLoot {
 			});
 		}
 
+		// It is required to use this method before calling StructureSpreadLoot#spreadLoots.
+		// Since I cannot find any place in the Minecraft code that gets executed just after the full generation
+		// of a specific structure (in all the chunks that the structure takes), I need to execute
+		// StructureSpreadLoot#spreadLoots after the placement of every StructureStart, which creates duplicates
+		// of the provided loot. To prevent that, I need to erase the previously spread loot. So yeah it does a lot
+		// of stuff for nothing, but I cannot find a better way to achieve that at the moment.
+		// It is only an issue about the world generation that is managed for each chunk, as you cannot know from the
+		// current chunk if the structure is fully generated or not. It also means that, in example, the PlaceCommand
+		// will work properly as it manages all chunks of the structure in the same place.
+		public void erasePreviousLoots(ServerWorldAccess world) {
+			if (!this.structureContainers.isEmpty()) {
+				this.structureContainers.forEach(pos -> {
+					if (world.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootableContainerBlockEntity) {
+						((LootableContainerBlockEntityDuckInterface) lootableContainerBlockEntity).mmodding_lib$clearPredeterminedLoot();
+					}
+				});
+				for (Identifier structurePiece : this.structurePieceContainers.keySet()) {
+					this.structurePieceContainers.get(structurePiece).forEach(pos -> {
+						if (world.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootableContainerBlockEntity) {
+							((LootableContainerBlockEntityDuckInterface) lootableContainerBlockEntity).mmodding_lib$clearPredeterminedLoot();
+						}
+					});
+				}
+			}
+		}
+
 		public void spreadLoots(ServerWorldAccess world, RandomGenerator random) {
 			if (!this.structureContainers.isEmpty()) {
 				this.structureSpreadLoot.structureCommonLoot.forEach(stack -> {
@@ -85,7 +111,6 @@ public class StructureSpreadLoot {
 						((LootableContainerBlockEntityDuckInterface) lootableContainerBlockEntity).mmodding_lib$addPredeterminedLoot(stack);
 					}
 				});
-				this.structureContainers.clear();
 				for (Identifier structurePiece : this.structureSpreadLoot.structurePieceCommonLoots.keySet()) {
 					if (this.structurePieceContainers.containsKey(structurePiece)) {
 						this.structureSpreadLoot.structurePieceCommonLoots.get(structurePiece).forEach(stack -> {

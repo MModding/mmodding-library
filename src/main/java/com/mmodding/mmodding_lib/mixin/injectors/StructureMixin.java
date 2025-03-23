@@ -1,7 +1,6 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.ducks.StructureDuckInterface;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructurePlacementData;
@@ -35,9 +34,7 @@ public class StructureMixin implements StructureDuckInterface {
 
 	@Inject(method = "place", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;putLong(Ljava/lang/String;J)V"))
 	private void injectContainerPosition(ServerWorldAccess world, BlockPos pos, BlockPos pivot, StructurePlacementData placementData, RandomGenerator random, int flags, CallbackInfoReturnable<Boolean> cir, @Local Structure.StructureBlockInfo structureBlockInfo) {
-		MModdingLib.LIBRARY_CONTAINER.getLogger().warn(this.identifier.toString());
 		if (this.structureContainersCollector != null) {
-			MModdingLib.LIBRARY_CONTAINER.getLogger().warn("uuu");
 			this.structureContainersCollector.accept(structureBlockInfo.pos);
 			if (this.structurePieceContainersCollector != null && !this.identifier.equals(StructureMixin.BLANK)) {
 				this.structurePieceContainersCollector.accept(this.identifier, structureBlockInfo.pos);

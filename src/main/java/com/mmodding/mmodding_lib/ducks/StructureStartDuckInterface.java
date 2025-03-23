@@ -1,12 +1,12 @@
 package com.mmodding.mmodding_lib.ducks;
 
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import com.mmodding.mmodding_lib.library.worldgen.structures.StructureSpreadLoot;
+import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.world.ServerWorldAccess;
 
 public interface StructureStartDuckInterface {
 
-	void mmodding_lib$provideCollectors(Consumer<BlockPos> structureContainersCollector, BiConsumer<Identifier, BlockPos> structurePieceContainersCollector);
+	void mmodding_lib$injectProvider(StructureSpreadLoot.StructureSpreadLootProvider provider);
+
+	void mmodding_lib$spreadLoots(ServerWorldAccess world, RandomGenerator random);
 }

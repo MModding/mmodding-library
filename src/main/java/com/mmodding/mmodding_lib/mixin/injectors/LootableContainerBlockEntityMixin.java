@@ -92,4 +92,9 @@ public abstract class LootableContainerBlockEntityMixin implements LootableConta
 			this.predeterminedLoots.add(predeterminedLoots);
 		}
 	}
+
+	@Override
+	public void mmodding_lib$clearPredeterminedLoot() {
+		this.predeterminedLoots = null;
+	}
 }
