@@ -12,6 +12,8 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
 public class FluidGroup {
 
 	private final CustomFluid still;
@@ -19,13 +21,13 @@ public class FluidGroup {
 	private final CustomFluidBlock block;
 	private final CustomBucketItem bucket;
 
-	public FluidGroup(CustomFluid still, CustomFluid flowable, AbstractBlock.Settings settings) {
-		this(still, flowable, settings, new AdvancedItemSettings().recipeRemainder(Items.BUCKET).maxCount(1));
+	public FluidGroup(Function<Boolean, CustomFluid> factory, AbstractBlock.Settings settings) {
+		this(factory, settings, new AdvancedItemSettings().recipeRemainder(Items.BUCKET).maxCount(1));
 	}
 
-	public FluidGroup(CustomFluid still, CustomFluid flowing, AbstractBlock.Settings blockSettings, Item.Settings itemSettings) {
-		this.still = still;
-		this.flowing = flowing;
+	public FluidGroup(Function<Boolean, CustomFluid> factory, AbstractBlock.Settings blockSettings, Item.Settings itemSettings) {
+		this.still = factory.apply(true);
+		this.flowing = factory.apply(false);
 		this.block = new CustomFluidBlock(
 			this.still,
 			blockSettings,
