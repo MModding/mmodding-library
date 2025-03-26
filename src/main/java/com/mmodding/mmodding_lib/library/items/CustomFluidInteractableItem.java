@@ -35,14 +35,13 @@ public class CustomFluidInteractableItem extends Item implements ItemRegistrable
 		BlockHitResult hitResult = CustomFluidInteractableItem.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
 		if (hitResult.getType() == HitResult.Type.BLOCK) {
 			BlockPos pos = hitResult.getBlockPos();
-			if (!world.canPlayerModifyAt(user, pos)) {
+			if (world.canPlayerModifyAt(user, pos)) {
 				ItemStack stack = this.fluidPickup.getFilledStack(user.getStackInHand(hand), world.getFluidState(pos), world, pos);
 				if (!stack.isEmpty()) {
 					world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0f, 1.0f);
 					world.emitGameEvent(user, GameEvent.FLUID_PICKUP, pos);
 					user.incrementStat(Stats.USED.getOrCreateStat(this));
-					ItemUsage.exchangeStack(user.getStackInHand(hand), user, stack);
-					return TypedActionResult.success(stack, world.isClient());
+					return TypedActionResult.success(ItemUsage.exchangeStack(user.getStackInHand(hand), user, stack), world.isClient());
 				}
 			}
 		}
