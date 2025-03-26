@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.interface_injections.TagRuntimeManagement;
+import com.mmodding.mmodding_lib.library.blocks.CustomBedBlock;
 import com.mmodding.mmodding_lib.library.blocks.CustomLeavesBlock;
 import com.mmodding.mmodding_lib.library.tags.modifiers.TagModifier;
 import net.minecraft.block.AbstractBlock;
@@ -15,8 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Set;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public abstract class AbstractBlockStateMixin implements TagRuntimeManagement.BlockStateTagRuntimeManagement {
@@ -29,6 +29,13 @@ public abstract class AbstractBlockStateMixin implements TagRuntimeManagement.Bl
 
 	@Shadow
 	protected abstract BlockState asBlockState();
+
+	@Inject(method = "hasBlockEntity", at = @At("HEAD"), cancellable = true)
+	private void injectCustomBedBlockBehavior(CallbackInfoReturnable<Boolean> cir) {
+		if (this.getBlock() instanceof CustomBedBlock customBedBlock && !customBedBlock.hasBlockEntity()) {
+			cir.setReturnValue(false);
+		}
+	}
 
 	@Inject(method = "updateNeighbors(Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;II)V", at = @At("TAIL"))
 	private void injectIfCustomLeavesBlockThatDoNotHaveConnectedLeaves(WorldAccess world, BlockPos pos, int flags, int maxUpdateDepth, CallbackInfo ci) {
