@@ -10,11 +10,37 @@ public class VoxelShapeUtils {
 
 	public static RotatingVoxelShapeFactory horizontalRotatingCuboid(CuboidFactory factory, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
 		return direction -> switch (direction) {
-			case NORTH -> factory.cuboid(minX, minY, minZ, maxX, maxY, maxZ);
-			case WEST -> factory.cuboid(minZ, minY, minX, maxZ, maxY, maxX);
-			case SOUTH -> factory.cuboid(maxX, minY, 1 - minZ, minX, maxY, 1 - maxZ);
-			case EAST -> factory.cuboid(1 - minZ, minY, minX, 1 - maxZ, maxY, maxX);
-			default -> throw new IllegalArgumentException(direction + " is not a horizontal direction.");
+			case NORTH, SOUTH -> {
+				VoxelShape shape = factory.cuboid(minX, minY, minZ, maxX, maxY, maxZ);
+				if (direction.equals(Direction.NORTH)) {
+					yield shape;
+				}
+				else {
+					double xMin = shape.getMin(Direction.Axis.X);
+					double yMin = shape.getMin(Direction.Axis.Y);
+					double zMin = shape.getMin(Direction.Axis.Z);
+					double xMax = shape.getMax(Direction.Axis.X);
+					double yMax = shape.getMax(Direction.Axis.Y);
+					double zMax = shape.getMax(Direction.Axis.Z);
+					yield VoxelShapes.cuboid(xMin, yMin, 1 - zMax, xMax, yMax, 1 - zMin);
+				}
+			}
+			case WEST, EAST -> {
+				VoxelShape shape = factory.cuboid(minZ, minY, minX, maxZ, maxY, maxX);
+				if (direction.equals(Direction.WEST)) {
+					yield shape;
+				}
+				else {
+					double xMin = shape.getMin(Direction.Axis.X);
+					double yMin = shape.getMin(Direction.Axis.Y);
+					double zMin = shape.getMin(Direction.Axis.Z);
+					double xMax = shape.getMax(Direction.Axis.X);
+					double yMax = shape.getMax(Direction.Axis.Y);
+					double zMax = shape.getMax(Direction.Axis.Z);
+					yield VoxelShapes.cuboid(1 - xMax, yMin, zMin, 1 - xMin, yMax, zMax);
+				}
+			}
+			default -> throw new IllegalArgumentException(direction + " is not a horizontal direction");
 		};
 	}
 
