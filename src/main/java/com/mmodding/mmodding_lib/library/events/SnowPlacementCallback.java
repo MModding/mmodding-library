@@ -3,7 +3,6 @@ package com.mmodding.mmodding_lib.library.events;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.WorldChunk;
 import org.quiltmc.qsl.base.api.event.Event;
 
@@ -23,5 +22,5 @@ public interface SnowPlacementCallback {
         return state; // Defaults to Blocks.SNOW
     });
 
-    BlockState apply(WorldAccess world, BlockPos pos, BlockState blockState);
+    BlockState apply(ServerWorld world, BlockPos pos, BlockState blockState);
 }
