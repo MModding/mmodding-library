@@ -1,13 +1,19 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.mmodding_lib.ducks.GeneratorOptionsDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerWorldDuckInterface;
+import com.mmodding.mmodding_lib.library.events.SnowPlacementCallback;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import com.mmodding.mmodding_lib.states.persistant.StellarStatuses;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.jetbrains.annotations.NotNull;
@@ -93,6 +99,11 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;tickTime()V"))
 	private void tick(CallbackInfo ci) {
 		this.stellarStatuses.tick(this.getServer());
+	}
+
+	@WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z", ordinal = 1))
+	private boolean wrapSnow(ServerWorld instance, BlockPos blockPos, BlockState blockState, Operation<Boolean> original) {
+		return original.call(instance, blockPos, SnowPlacementCallback.EVENT.invoker().apply(instance, blockPos, blockState));
 	}
 
 	@Inject(method = "getSeed", at = @At("HEAD"), cancellable = true)
