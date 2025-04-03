@@ -11,6 +11,7 @@ import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -20,7 +21,8 @@ public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentif
 		return EnumProperty.of("influence", type);
 	}
 
-	protected abstract EnumProperty<E> getInfluenceProperty();
+	@ApiStatus.OverrideOnly
+	public abstract EnumProperty<E> getInfluenceProperty();
 
     public CustomInfluenceableBlock(Settings settings) {
 		this(settings, false);

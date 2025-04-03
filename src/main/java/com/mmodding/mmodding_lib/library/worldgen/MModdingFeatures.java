@@ -3,10 +3,7 @@ package com.mmodding.mmodding_lib.library.worldgen;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
 import com.mmodding.mmodding_lib.library.worldgen.features.builtin.LayeredFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedDripstoneClusterFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedLargeDripstoneFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedPointedDripstoneFeature;
-import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.DifferedLiquidVegetationPatch;
+import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.*;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 
@@ -14,6 +11,10 @@ public class MModdingFeatures {
 
 	public static final Feature<LayeredFeature.Config> LAYERED = MModdingFeatures.register(
 		"layered", new LayeredFeature(LayeredFeature.Config.CODEC)
+	);
+
+	public static final Feature<DifferedFreezeTopLayerFeature.Config> DIFFERED_FREEZE_TOP_LAYER = MModdingFeatures.register(
+		"differed_freeze_top_layer", new DifferedFreezeTopLayerFeature(DifferedFreezeTopLayerFeature.Config.CODEC)
 	);
 
 	public static final Feature<DifferedDripstoneClusterFeature.Config> DIFFERED_DRIPSTONE_CLUSTER = MModdingFeatures.register(
