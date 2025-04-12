@@ -139,8 +139,8 @@ public interface AdvancedBiomeProvider {
 		if (weirdness.max() < 0L) {
 			return this.peakBiomes()[temperature][humidity];
 		} else {
-			RegistryKey<Biome> registryKey = this.peakBiomes()[temperature][humidity];
-			return registryKey == null ? this.peakBiomesVariant()[temperature][humidity] : registryKey;
+			RegistryKey<Biome> registryKey = this.peakBiomesVariant()[temperature][humidity];
+			return registryKey == null ? this.peakBiomes()[temperature][humidity] : registryKey;
 		}
 	}
 
