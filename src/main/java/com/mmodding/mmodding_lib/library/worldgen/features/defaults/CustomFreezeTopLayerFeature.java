@@ -9,6 +9,7 @@ import com.mmodding.mmodding_lib.library.worldgen.features.builtin.differed.Diff
 import net.minecraft.block.Block;
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.GenerationStep;
@@ -30,10 +31,16 @@ public class CustomFreezeTopLayerFeature implements CustomFeature, FeatureRegist
 
 	private final Block iceBlock;
 	private final Block snowLayer;
+	private final int depthCoverage;
 
 	public CustomFreezeTopLayerFeature(Block iceBlock, Block snowLayer) {
+		this(iceBlock, snowLayer, 1);
+	}
+
+	public CustomFreezeTopLayerFeature(Block iceBlock, Block snowLayer, int depthCoverage) {
 		this.iceBlock = iceBlock;
 		this.snowLayer = snowLayer;
+		this.depthCoverage = depthCoverage;
 	}
 
 	@Override
@@ -45,7 +52,8 @@ public class CustomFreezeTopLayerFeature implements CustomFeature, FeatureRegist
 	public ConfiguredFeature<?, ?> getConfiguredFeature() {
 		return new ConfiguredFeature<>(this.getFeature(), new DifferedFreezeTopLayerFeature.Config(
 			BlockStateProvider.of(this.iceBlock),
-			BlockStateProvider.of(this.snowLayer)
+			BlockStateProvider.of(this.snowLayer),
+			ConstantIntProvider.create(this.depthCoverage)
 		));
 	}
 

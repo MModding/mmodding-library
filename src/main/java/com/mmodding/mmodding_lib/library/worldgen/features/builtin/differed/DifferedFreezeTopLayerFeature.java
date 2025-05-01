@@ -9,6 +9,7 @@ import net.minecraft.block.SnowyBlock;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.biome.Biome;
@@ -26,33 +27,35 @@ public class DifferedFreezeTopLayerFeature extends Feature<DifferedFreezeTopLaye
 	@Override
 	public boolean place(FeatureContext<DifferedFreezeTopLayerFeature.Config> context) {
 		StructureWorldAccess world = context.getWorld();
-		BlockPos blockPos = context.getOrigin();
-		BlockPos.Mutable snowLayerPos = new BlockPos.Mutable();
-		BlockPos.Mutable iceBlockPos = new BlockPos.Mutable();
+		BlockPos pos = context.getOrigin();
+		BlockPos.Mutable abovePosition = new BlockPos.Mutable();
+		BlockPos.Mutable blockPos = new BlockPos.Mutable();
 
 		for (int xOffset = 0; xOffset < 16; xOffset++) {
 			for (int zOffset = 0; zOffset < 16; zOffset++) {
-				int x = blockPos.getX() + xOffset;
-				int z = blockPos.getZ() + zOffset;
+				int x = pos.getX() + xOffset;
+				int z = pos.getZ() + zOffset;
 				int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING, x, z);
-				snowLayerPos.set(x, y, z);
-				iceBlockPos.set(snowLayerPos).move(Direction.DOWN, 1);
-				Biome biome = world.getBiome(snowLayerPos).value();
-				if (biome.canSetIce(world, iceBlockPos, false)) {
-					world.setBlockState(
-						iceBlockPos,
-						context.getConfig().iceBlock.getBlockState(context.getRandom(), iceBlockPos),
-						Block.NOTIFY_LISTENERS
-					);
-				}
-
-				if (biome.canSetSnow(world, snowLayerPos)) {
-					world.setBlockState(snowLayerPos, context.getConfig().snowLayer.getBlockState(context.getRandom(), snowLayerPos), Block.NOTIFY_LISTENERS);
-					BlockState state = world.getBlockState(iceBlockPos);
-					if (state.contains(SnowyBlock.SNOWY)) {
-						world.setBlockState(iceBlockPos, state.with(SnowyBlock.SNOWY, Boolean.TRUE), Block.NOTIFY_LISTENERS);
+				for (int yOffset = 0; yOffset < context.getConfig().depthCoverage.get(context.getRandom()); yOffset++) {
+					abovePosition.set(x, y - yOffset, z);
+					blockPos.set(abovePosition).move(Direction.DOWN, 1);
+					Biome biome = world.getBiome(abovePosition).value();
+					if (biome.canSetIce(world, blockPos, false)) {
+						world.setBlockState(
+							blockPos,
+							context.getConfig().iceBlock.getBlockState(context.getRandom(), blockPos),
+							Block.NOTIFY_LISTENERS
+						);
 					}
-					this.updateInfluencableBlock(state, world, new BlockPos(iceBlockPos));
+
+					if (biome.canSetSnow(world, abovePosition)) {
+						world.setBlockState(abovePosition, context.getConfig().snowLayer.getBlockState(context.getRandom(), abovePosition), Block.NOTIFY_LISTENERS);
+						BlockState state = world.getBlockState(blockPos);
+						if (state.contains(SnowyBlock.SNOWY)) {
+							world.setBlockState(blockPos, state.with(SnowyBlock.SNOWY, Boolean.TRUE), Block.NOTIFY_LISTENERS);
+						}
+						this.updateInfluencableBlock(state, world, new BlockPos(blockPos));
+					}
 				}
 			}
 		}
@@ -79,15 +82,18 @@ public class DifferedFreezeTopLayerFeature extends Feature<DifferedFreezeTopLaye
 
 		public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			BlockStateProvider.TYPE_CODEC.fieldOf("ice_block").forGetter(config -> config.iceBlock),
-			BlockStateProvider.TYPE_CODEC.fieldOf("snow_layer").forGetter(config -> config.snowLayer)
+			BlockStateProvider.TYPE_CODEC.fieldOf("snow_layer").forGetter(config -> config.snowLayer),
+			IntProvider.POSITIVE_CODEC.fieldOf("depth_coverage").forGetter(config -> config.depthCoverage)
 		).apply(instance, Config::new));
 
 		private final BlockStateProvider iceBlock;
 		private final BlockStateProvider snowLayer;
+		private final IntProvider depthCoverage;
 
-		public Config(BlockStateProvider iceBlock, BlockStateProvider snowLayer) {
+		public Config(BlockStateProvider iceBlock, BlockStateProvider snowLayer, IntProvider depthCoverage) {
 			this.iceBlock = iceBlock;
 			this.snowLayer = snowLayer;
+			this.depthCoverage = depthCoverage;
 		}
 	}
 }
