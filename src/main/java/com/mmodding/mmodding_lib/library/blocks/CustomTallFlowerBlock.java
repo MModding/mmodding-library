@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
@@ -58,7 +59,7 @@ public class CustomTallFlowerBlock extends TallFlowerBlock implements BlockRegis
 
 	@Override
 	protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-		return this.placementConditions.test(floor);
+		return floor.isSideSolidFullSquare(world, pos, Direction.UP) && this.placementConditions.test(floor);
 	}
 
 	@Override
