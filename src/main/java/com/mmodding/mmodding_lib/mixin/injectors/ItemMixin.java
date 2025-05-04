@@ -3,6 +3,7 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.mmodding.mmodding_lib.interface_injections.ItemGlintPack;
 import com.mmodding.mmodding_lib.library.helpers.CustomSquaredPortalAreaHelper;
 import com.mmodding.mmodding_lib.library.items.settings.*;
+import com.mmodding.mmodding_lib.library.items.settings.additional.AdditionalItemSettingImpl;
 import com.mmodding.mmodding_lib.library.portals.CustomPortalKey;
 import com.mmodding.mmodding_lib.library.portals.Ignition;
 import com.mmodding.mmodding_lib.library.portals.squared.AbstractSquaredPortal;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -34,6 +36,11 @@ public abstract class ItemMixin implements FabricItem, ItemGlintPack, Self<Item>
 
 	@Shadow
 	public abstract boolean isFood();
+
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void setupAdditionalSettings(Item.Settings settings, CallbackInfo ci) {
+		AdditionalItemSettingImpl.applyToItem(settings, this.getObject());
+	}
 
 	@Inject(method = "hasGlint", at = @At("TAIL"), cancellable = true)
 	private void hasGlint(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
