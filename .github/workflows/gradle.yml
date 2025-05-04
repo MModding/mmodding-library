@@ -29,7 +29,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: |
-          ./gradlew generateQMJ
+          ./gradlew generateFMJ
           ./gradlew build
       - name: capture build artifacts
         if: ${{ matrix.java == '17' }} # Only upload artifacts built from latest java
