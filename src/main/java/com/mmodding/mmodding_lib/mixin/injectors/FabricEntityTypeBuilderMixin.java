@@ -3,16 +3,18 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 import com.google.common.collect.ImmutableSet;
 import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
 import com.mmodding.mmodding_lib.library.entities.CustomEntityType;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.DefaultAttributeRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.world.Heightmap;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.function.Supplier;
 
 @Mixin(value = FabricEntityTypeBuilder.class, remap = false)
 public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricEntityTypeBuilderDuckInterface<T> {
@@ -30,23 +32,26 @@ public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricEnt
     @Shadow
     private boolean summonable;
 
-    @Shadow
-    private boolean fireImmune;
+	@Shadow
+	private boolean fireImmune;
 
-    @Shadow
-    private boolean spawnableFarFromPlayer;
+	@Shadow
+	private boolean spawnableFarFromPlayer;
 
-    @Shadow
-    private ImmutableSet<Block> canSpawnInside;
+	@Shadow
+	private ImmutableSet<Block> specificSpawnBlocks;
 
-    @Shadow
-    private EntityDimensions dimensions;
+	@Shadow
+	private EntityDimensions dimensions;
 
-    @Shadow
-    private int maxTrackingRange;
+	@Shadow
+	private int trackRange;
 
-    @Shadow
-    private int trackingTickInterval;
+	@Shadow
+	private int trackedUpdateRate;
+
+	@Shadow
+	private Boolean forceTrackedVelocityUpdates;
 
     @Override
     public CustomEntityType<T> mmodding_lib$buildCustom() {
@@ -57,10 +62,11 @@ public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricEnt
             this.summonable,
             this.fireImmune,
             this.spawnableFarFromPlayer,
-            this.canSpawnInside,
-            this.dimensions,
-            this.maxTrackingRange,
-            this.trackingTickInterval
+            this.specificSpawnBlocks,
+	        this.dimensions,
+            this.trackRange,
+            this.trackedUpdateRate,
+	        this.forceTrackedVelocityUpdates
         );
     }
 
@@ -68,14 +74,14 @@ public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricEnt
 	public static class Living<T extends LivingEntity> extends FabricEntityTypeBuilderMixin<T> {
 
 		@Shadow
-		private DefaultAttributeContainer.Builder defaultAttributeBuilder;
+		private Supplier<DefaultAttributeContainer.Builder> defaultAttributeBuilder;
 
 		@Override
 		public CustomEntityType<T> mmodding_lib$buildCustom() {
 			final CustomEntityType<T> type = super.mmodding_lib$buildCustom();
 
 			if (this.defaultAttributeBuilder != null) {
-				DefaultAttributeRegistry.DEFAULT_ATTRIBUTE_REGISTRY.put(type, this.defaultAttributeBuilder.build());
+				FabricDefaultAttributeRegistry.register(type, this.defaultAttributeBuilder.get().build());
 			}
 
 			return type;

@@ -24,20 +24,28 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 		AbstractBlockSettingsAccessor accessor = (AbstractBlockSettingsAccessor) settings;
 
 		((AbstractBlockSettingsAccessor) this).setMapColorProvider(accessor.getMapColorProvider());
-		super.material(accessor.getMaterial());
 		super.hardness(accessor.getHardness());
 		super.resistance(accessor.getResistance());
 		super.collidable(accessor.getCollidable());
-		super.ticksRandomly(accessor.getRandomTicks());
+		if (accessor.getRandomTicks()) {
+			super.ticksRandomly();
+		}
 		super.luminance(accessor.getLuminance());
-		super.mapColorProvider(accessor.getMapColorProvider());
 		super.sounds(accessor.getSoundGroup());
 		super.slipperiness(accessor.getSlipperiness());
 		super.velocityMultiplier(accessor.getVelocityMultiplier());
-		super.dynamicBounds(accessor.getDynamicBounds());
-		super.opaque(accessor.getOpaque());
-		super.air(accessor.getIsAir());
-		super.requiresTool(accessor.isToolRequired());
+		if (accessor.getDynamicBounds()) {
+			super.dynamicBounds();
+		}
+		if (!accessor.getOpaque()) {
+			super.nonOpaque();
+		}
+		if (accessor.getIsAir()) {
+			super.air();
+		}
+		if (accessor.isToolRequired()) {
+			super.requiresTool();
+		}
 		super.jumpVelocityMultiplier(accessor.getJumpVelocityMultiplier());
 		super.drops(accessor.getLootTableId());
 		super.allowsSpawning(accessor.getAllowsSpawningPredicate());
@@ -269,51 +277,9 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 	}
 
 	@Override
-	public ImmutableBlockSettings material(Material material) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.material(material);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
 	public ImmutableBlockSettings collidable(boolean collidable) {
 		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
 		settings.collidable(collidable);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings opaque(boolean opaque) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.opaque(opaque);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings ticksRandomly(boolean ticksRandomly) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.ticksRandomly(ticksRandomly);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings dynamicBounds(boolean dynamicBounds) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.dynamicBounds(dynamicBounds);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings requiresTool(boolean requiresTool) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.requiresTool(requiresTool);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings air(boolean isAir) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.air(isAir);
 		return ImmutableBlockSettings.copyOf(settings);
 	}
 

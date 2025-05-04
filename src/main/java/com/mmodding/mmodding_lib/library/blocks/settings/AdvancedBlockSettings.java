@@ -223,44 +223,8 @@ public class AdvancedBlockSettings extends FabricBlockSettings {
 	}
 
 	@Override
-	public AdvancedBlockSettings material(Material material) {
-		super.material(material);
-		return this;
-	}
-
-	@Override
 	public AdvancedBlockSettings collidable(boolean collidable) {
 		super.collidable(collidable);
-		return this;
-	}
-
-	@Override
-	public AdvancedBlockSettings opaque(boolean opaque) {
-		super.opaque(opaque);
-		return this;
-	}
-
-	@Override
-	public AdvancedBlockSettings ticksRandomly(boolean ticksRandomly) {
-		super.ticksRandomly(ticksRandomly);
-		return this;
-	}
-
-	@Override
-	public AdvancedBlockSettings dynamicBounds(boolean dynamicBounds) {
-		super.dynamicBounds(dynamicBounds);
-		return this;
-	}
-
-	@Override
-	public AdvancedBlockSettings requiresTool(boolean requiresTool) {
-		super.requiresTool(requiresTool);
-		return this;
-	}
-
-	@Override
-	public AdvancedBlockSettings air(boolean isAir) {
-		super.air(isAir);
 		return this;
 	}
 

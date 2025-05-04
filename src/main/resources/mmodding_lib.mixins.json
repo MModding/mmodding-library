@@ -59,6 +59,8 @@
     "injectors.EntityMixin",
     "injectors.ExplosionMixin",
     "injectors.FabricEntityTypeBuilderMixin",
+    "injectors.FabricEntityTypeBuilderMixin$Living",
+    "injectors.FabricEntityTypeBuilderMixin$Mob",
     "injectors.FallingBlockEntityMixin",
     "injectors.FishingBobberEntityMixin",
     "injectors.FlowableFluidMixin",

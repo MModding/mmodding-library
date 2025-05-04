@@ -3,20 +3,21 @@ package com.mmodding.mmodding_lib.library.entities;
 import com.google.common.collect.ImmutableSet;
 import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.impl.object.builder.FabricEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomEntityType<T extends Entity> extends EntityType<T> implements EntityTypeRegistrable<T> {
+@SuppressWarnings("UnstableApiUsage")
+public class CustomEntityType<T extends Entity> extends FabricEntityType<T> implements EntityTypeRegistrable<T> {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	public CustomEntityType(EntityFactory<T> factory, SpawnGroup spawnGroup, boolean saveable, boolean summonable, boolean fireImmune, boolean spawnableFarFromPlayer, ImmutableSet<Block> spawnBlocks, EntityDimensions entityDimensions, int maxTrackDistance, int trackTickInterval) {
-		super(factory, spawnGroup, saveable, summonable, fireImmune, spawnableFarFromPlayer, spawnBlocks, entityDimensions, maxTrackDistance, trackTickInterval);
+	public CustomEntityType(EntityFactory<T> factory, SpawnGroup spawnGroup, boolean saveable, boolean summonable, boolean fireImmune, boolean spawnableFarFromPlayer, ImmutableSet<Block> specificSpawnBlocks, EntityDimensions dimensions, int trackRange, int trackedUpdateRate, boolean forceTrackedVelocityUpdates) {
+		super(factory, spawnGroup, saveable, summonable, fireImmune, spawnableFarFromPlayer, specificSpawnBlocks, dimensions, trackRange, trackedUpdateRate, forceTrackedVelocityUpdates);
 	}
 
 	public static <T extends Entity> CustomEntityType<T> create(BuilderSetup<T> builderSetup) {
