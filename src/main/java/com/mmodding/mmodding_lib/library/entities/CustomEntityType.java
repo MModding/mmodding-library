@@ -3,21 +3,23 @@ package com.mmodding.mmodding_lib.library.entities;
 import com.google.common.collect.ImmutableSet;
 import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.impl.object.builder.FabricEntityType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SuppressWarnings("UnstableApiUsage")
-public class CustomEntityType<T extends Entity> extends FabricEntityType<T> implements EntityTypeRegistrable<T> {
+public class CustomEntityType<T extends Entity> extends EntityType<T> implements EntityTypeRegistrable<T> {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
+	private final Boolean alwaysUpdateVelocity;
+
 	public CustomEntityType(EntityFactory<T> factory, SpawnGroup spawnGroup, boolean saveable, boolean summonable, boolean fireImmune, boolean spawnableFarFromPlayer, ImmutableSet<Block> specificSpawnBlocks, EntityDimensions dimensions, int trackRange, int trackedUpdateRate, boolean forceTrackedVelocityUpdates) {
-		super(factory, spawnGroup, saveable, summonable, fireImmune, spawnableFarFromPlayer, specificSpawnBlocks, dimensions, trackRange, trackedUpdateRate, forceTrackedVelocityUpdates);
+		super(factory, spawnGroup, saveable, summonable, fireImmune, spawnableFarFromPlayer, specificSpawnBlocks, dimensions, trackRange, trackedUpdateRate);
+		this.alwaysUpdateVelocity = forceTrackedVelocityUpdates;
 	}
 
 	public static <T extends Entity> CustomEntityType<T> create(BuilderSetup<T> builderSetup) {
@@ -57,6 +59,11 @@ public class CustomEntityType<T extends Entity> extends FabricEntityType<T> impl
 	@SuppressWarnings("unchecked")
 	public static <T extends MobEntity> CustomEntityType<T> createMob(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, MobBuilderSetup<T> mobBuilderSetup) {
 		return ((FabricEntityTypeBuilderDuckInterface<T>) mobBuilderSetup.setup(FabricEntityTypeBuilder.createMob().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
+	}
+
+	@Override
+	public boolean alwaysUpdateVelocity() {
+		return Objects.requireNonNullElseGet(this.alwaysUpdateVelocity, super::alwaysUpdateVelocity);
 	}
 
 	@Override

@@ -33,8 +33,10 @@ public class AdditionalItemSettingImpl<T> implements AdditionalItemSetting<T> {
 	}
 
 	public static void applyToItem(Item.Settings settings, Item item) {
-		for (Map.Entry<AdditionalItemSettingImpl<Object>, Object> entry : AdditionalItemSettingImpl.ADDITIONAl_SETTINGS.get(settings).entrySet()) {
-			entry.getKey().values.put(item, entry.getValue());
+		if (AdditionalItemSettingImpl.ADDITIONAl_SETTINGS.containsKey(settings)) {
+			for (Map.Entry<AdditionalItemSettingImpl<Object>, Object> entry : AdditionalItemSettingImpl.ADDITIONAl_SETTINGS.get(settings).entrySet()) {
+				entry.getKey().values.put(item, entry.getValue());
+			}
 		}
 	}
 }
