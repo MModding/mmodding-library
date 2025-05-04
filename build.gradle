@@ -2,7 +2,7 @@ import com.mmodding.gradle.api.EnvironmentTarget
 
 plugins {
 	id 'maven-publish'
-	alias(libs.plugins.quilt.loom)
+	alias(libs.plugins.fabric.loom)
 	alias(libs.plugins.mmodding.gradle)
 }
 
@@ -16,6 +16,7 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven { url = "https://maven.quiltmc.org/repository/release" }
 	maven { url = "https://maven.terraformersmc.com" }
 }
 
@@ -26,11 +27,9 @@ dependencies {
 
 	mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
 
-	modImplementation libs.quilt.loader
+	modImplementation libs.fabric.loader
 
-	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
-	// Quilted Fabric API will automatically pull in the correct QSL version.
-	modImplementation libs.quilted.fabric.api
+	modImplementation libs.fabric.api
 
 	modImplementation libs.modmenu
 }
@@ -45,15 +44,15 @@ loom {
 }
 
 mmodding {
-	configureQuiltModJson {
+	configureFabricModJson {
 		name = "MModding Library"
 		namespace = "mmodding_lib"
 		group = "com.mmodding"
 		description = "The MModding Library is the Main Library for MModding Mods."
 		icon = "assets/mmodding_lib/icon.png"
-		addContributor("MModding Team", "Owner")
-		addContributor("FirstMegaGame4", "Lead Developer")
-		addContributor("Neokys", "Icon Artist")
+		addAuthor("MModding Team")
+		addContributor("FirstMegaGame4 (Lead Developer)")
+		addContributor("Neokys (Icon Artist)")
 		withContact {
 			it.homepage = "https://mmodding.com"
 			it.sources = "https://github.com/MModding/mmodding-library"
@@ -71,8 +70,8 @@ mmodding {
 		withDependencies {
 			it.javaVersion = ">=" + 17
 			it.minecraftVersion = "~" + libs.versions.minecraft.get()
-			it.quiltLoaderVersion = ">=0.17.6-"
-			it.quiltedFabricApiVersion = ">=1.0.0-"
+			it.fabricLoaderVersion = ">=0.17.6-"
+			it.fabricApiVersion = ">=1.0.0-"
 		}
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_1297", "com/mmodding/mmodding_lib/interface_injections/EntitySyncableDataRegistry")
@@ -103,11 +102,6 @@ mmodding {
 			}
 		}
 	}
-}
-
-project.configurations.configureEach {
-	exclude(group: "net.fabricmc", module: "fabric-loader")
-	exclude(group: "net.fabricmc.fabric-api")
 }
 
 tasks.withType(JavaCompile).configureEach {
