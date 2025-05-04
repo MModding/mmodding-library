@@ -70,8 +70,8 @@ mmodding {
 		withDependencies {
 			it.javaVersion = ">=" + 17
 			it.minecraftVersion = "~" + libs.versions.minecraft.get()
-			it.fabricLoaderVersion = ">=0.17.6-"
-			it.fabricApiVersion = ">=1.0.0-"
+			it.fabricLoaderVersion = ">=" + libs.versions.fabric.loader.get()
+			it.fabricApiVersion = ">=" + libs.versions.fabric.api.get()
 		}
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_1297", "com/mmodding/mmodding_lib/interface_injections/EntitySyncableDataRegistry")
