@@ -19,7 +19,7 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 	}
 
 	protected ImmutableBlockSettings(AbstractBlock.Settings settings) {
-		super(settings);
+		super(((AbstractBlockSettingsAccessor) settings).getMaterial(), MapColor.CLEAR);
 
 		AbstractBlockSettingsAccessor accessor = (AbstractBlockSettingsAccessor) settings;
 
