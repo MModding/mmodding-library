@@ -2,8 +2,8 @@ package com.mmodding.mmodding_lib.library.integrations.modmenu;
 
 import com.mmodding.mmodding_lib.library.colors.Color;
 import com.mmodding.mmodding_lib.library.utils.BiList;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class CustomBadge implements BadgeRegistrable {
 	public List<String> getMods() {
 		List<String> mods = new ArrayList<>();
 		this.entrypointInfo.forEach(
-			(entrypointKey, entrypointClass) -> mods.addAll(this.provider.getMods(QuiltLoader.getEntrypointContainers(entrypointKey, entrypointClass)))
+			(entrypointKey, entrypointClass) -> mods.addAll(this.provider.getMods(FabricLoader.getInstance().getEntrypointContainers(entrypointKey, entrypointClass)))
 		);
 		return mods;
 	}

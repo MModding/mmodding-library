@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -15,12 +17,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.List;
 
-@ClientOnly
 @ApiStatus.Internal
+@Environment(EnvType.CLIENT)
 public class MModdingModConfigsScreen extends Screen {
 
     private final Screen lastScreen;

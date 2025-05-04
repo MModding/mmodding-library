@@ -4,11 +4,12 @@ import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerOperatio
 import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
 import com.mmodding.mmodding_lib.library.utils.Registrable;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 public interface FluidRegistrable extends Registrable {
 
@@ -24,12 +25,12 @@ public interface FluidRegistrable extends Registrable {
         }
     }
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	default void cutout() {
 		if (this instanceof Fluid fluid) RenderLayerOperations.setCutout(fluid);
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	default void translucent() {
 		if (this instanceof Fluid fluid) RenderLayerOperations.setTranslucent(fluid);
 	}

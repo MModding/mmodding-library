@@ -2,10 +2,11 @@ package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.BlockEntityTypeDuckInterface;
 import com.mmodding.mmodding_lib.library.blockentities.BlockEntityTypeBlockSupportCallback;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import org.quiltmc.qsl.base.api.event.Event;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +20,7 @@ import java.util.List;
 public class BlockEntityTypeMixin implements BlockEntityTypeDuckInterface {
 
 	@Unique
-	private final Event<BlockEntityTypeBlockSupportCallback> supportBlocksCallBack = Event.create(BlockEntityTypeBlockSupportCallback.class, callbacks -> supportedBlocks -> {
+	private final Event<BlockEntityTypeBlockSupportCallback> supportBlocksCallBack = EventFactory.createArrayBacked(BlockEntityTypeBlockSupportCallback.class, callbacks -> supportedBlocks -> {
 		for (BlockEntityTypeBlockSupportCallback callback : callbacks) {
 			callback.onSupportedBlocks(supportedBlocks);
 		}

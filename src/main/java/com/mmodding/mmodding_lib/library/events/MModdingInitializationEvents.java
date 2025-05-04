@@ -1,17 +1,18 @@
 package com.mmodding.mmodding_lib.library.events;
 
 import com.mmodding.mmodding_lib.library.base.AdvancedModContainer;
-import org.quiltmc.qsl.base.api.event.Event;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
 public class MModdingInitializationEvents {
 
-	public static final Event<Start> START = Event.create(Start.class, callbacks -> mod -> {
+	public static final Event<Start> START = EventFactory.createArrayBacked(Start.class, callbacks -> mod -> {
 		for (Start callback : callbacks) {
 			callback.onMModdingInitializationStart(mod);
 		}
 	});
 
-	public static final Event<End> END = Event.create(End.class, callbacks -> mod -> {
+	public static final Event<End> END = EventFactory.createArrayBacked(End.class, callbacks -> mod -> {
 		for (End callback : callbacks) {
 			callback.onMModdingInitializationEnd(mod);
 		}

@@ -2,11 +2,11 @@ package com.mmodding.mmodding_lib.interface_injections;
 
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
+import com.mmodding.mmodding_lib.library.utils.ClassExtension;
 import net.minecraft.item.Item;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.base.api.util.InjectedInterface;
 
-@InjectedInterface(Item.class)
+@ClassExtension(Item.class)
 public interface ItemGlintPack {
 
 	/**

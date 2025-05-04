@@ -8,11 +8,12 @@ import com.mmodding.mmodding_lib.library.network.support.NetworkSupport;
 import com.mmodding.mmodding_lib.library.network.support.type.*;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,18 +26,18 @@ public class MModdingLib implements ModInitializer {
 
 	public static final Map<String, Config> CONFIGS = new HashMap<>();
 
-	public static final AdvancedModContainer LIBRARY_CONTAINER = AdvancedModContainer.of(QuiltLoader.getModContainer("mmodding_lib").orElseThrow());
+	public static final AdvancedModContainer LIBRARY_CONTAINER = AdvancedModContainer.of(FabricLoader.getInstance().getModContainer("mmodding_lib").orElseThrow());
 
 	public static final MModdingLibConfig LIBRARY_CONFIG = new MModdingLibConfig();
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 
 		MModdingInitializationEvents.START.invoker().onMModdingInitializationStart(LIBRARY_CONTAINER);
 
 		LIBRARY_CONFIG.initializeConfig();
 
-		LIBRARY_CONTAINER.getLogger().info("Initialize {}", LIBRARY_CONTAINER.metadata().name());
+		LIBRARY_CONTAINER.getLogger().info("Initialize {}", LIBRARY_CONTAINER.getMetadata().getName());
 
 		Events.register();
 		PacketReceivers.register();
@@ -45,7 +46,7 @@ public class MModdingLib implements ModInitializer {
 		if (LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryMods")) {
 			String mods = "MModding Library Mods :";
 			for (AdvancedModContainer mmoddingMod : MMODDING_MODS) {
-				mods = mods.concat(" " + mmoddingMod.metadata().name() + " [" + mmoddingMod.metadata().id() + "],");
+				mods = mods.concat(" " + mmoddingMod.getMetadata().getName() + " [" + mmoddingMod.getMetadata().getId() + "],");
 			}
 
 			mods = StringUtils.chop(mods);
@@ -55,10 +56,19 @@ public class MModdingLib implements ModInitializer {
 		MModdingInitializationEvents.END.invoker().onMModdingInitializationEnd(LIBRARY_CONTAINER);
 	}
 
+	public static <T> ModContainer getModContainer(Class<?> entrypoint, String key, Class<T> type) {
+		for (EntrypointContainer<?> container : FabricLoader.getInstance().getEntrypointContainers(key, type)) {
+			if (container.getEntrypoint().getClass().equals(entrypoint)) {
+				return container.getProvider();
+			}
+		}
+		return null;
+	}
+
 	private static List<AdvancedModContainer> getMModdingMods() {
 		List<AdvancedModContainer> advancedContainers = new ArrayList<>();
 
-		QuiltLoader.getEntrypointContainers(ModInitializer.ENTRYPOINT_KEY, ModInitializer.class)
+		FabricLoader.getInstance().getEntrypointContainers("main", ModInitializer.class)
 			.stream().filter(mod -> mod.getEntrypoint() instanceof MModdingModInitializer)
 			.forEachOrdered(mod -> advancedContainers.add(AdvancedModContainer.of(mod.getProvider())));
 

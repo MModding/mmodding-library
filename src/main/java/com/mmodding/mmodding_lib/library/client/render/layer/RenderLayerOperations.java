@@ -1,29 +1,30 @@
 package com.mmodding.mmodding_lib.library.client.render.layer;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.fluid.Fluid;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class RenderLayerOperations {
 
     public static void setCutout(Block block) {
-		BlockRenderLayerMap.put(RenderLayer.getCutout(), block);
+		BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
     }
 
     public static void setTranslucent(Block block) {
-		BlockRenderLayerMap.put(RenderLayer.getTranslucent(), block);
+		BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent());
     }
 
 	public static void setCutout(Fluid fluid) {
-		BlockRenderLayerMap.put(RenderLayer.getCutout(), fluid);
+		BlockRenderLayerMap.INSTANCE.putFluid(fluid, RenderLayer.getCutout());
 	}
 
 	public static void setTranslucent(Fluid fluid) {
-		BlockRenderLayerMap.put(RenderLayer.getTranslucent(), fluid);
+		BlockRenderLayerMap.INSTANCE.putFluid(fluid, RenderLayer.getTranslucent());
 	}
 
 	public static void setTransparent(Block block) {

@@ -1,17 +1,19 @@
 package com.mmodding.mmodding_lib.library.sounds.client.music;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.MusicSound;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.base.api.event.Event;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public interface MusicTypeSelectionCallback {
 
 	/**
 	 * Allows modifying the selected {@link MusicSound} at the return of {@link MinecraftClient#getMusicType()}.
 	 */
-	Event<MusicTypeSelector> EVENT = Event.create(MusicTypeSelector.class, callbacks -> (client, original) -> {
+	Event<MusicTypeSelector> EVENT = EventFactory.createArrayBacked(MusicTypeSelector.class, callbacks -> (client, original) -> {
 		MusicSound selected = original;
 		for (MusicTypeSelector callback : callbacks) {
 			selected = callback.select(client, original);
@@ -19,8 +21,8 @@ public interface MusicTypeSelectionCallback {
 		return selected;
 	});
 
-	@ClientOnly
 	@FunctionalInterface
+	@Environment(EnvType.CLIENT)
 	interface MusicTypeSelector {
 
 		/**

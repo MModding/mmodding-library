@@ -5,16 +5,17 @@ import com.mmodding.mmodding_lib.library.glint.client.GlintPack;
 import com.mmodding.mmodding_lib.library.stellar.client.StellarObject;
 import com.mmodding.mmodding_lib.library.utils.BiHashMap;
 import com.mmodding.mmodding_lib.library.utils.BiMap;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.tuple.Pair;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class MModdingClientGlobalMaps {
 
     static final List<StellarObject> STELLAR_OBJECTS = new ArrayList<>();

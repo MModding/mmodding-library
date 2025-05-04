@@ -3,12 +3,13 @@ package com.mmodding.mmodding_lib.client;
 import com.mmodding.mmodding_lib.library.caches.Caches;
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.library.glint.GlintPackView;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.item.Item;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
 @ApiStatus.Internal
+@Environment(EnvType.CLIENT)
 public class ClientCaches {
 
 	public static final Caches.Client<String, StaticConfig> CONFIGS = new Caches.Client<>("Configs", "Qualifier", "Config");

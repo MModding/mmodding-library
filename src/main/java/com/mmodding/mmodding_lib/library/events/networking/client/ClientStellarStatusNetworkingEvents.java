@@ -1,34 +1,36 @@
 package com.mmodding.mmodding_lib.library.events.networking.client;
 
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.base.api.event.Event;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class ClientStellarStatusNetworkingEvents {
 
-	public static final Event<Before> BEFORE = Event.create(Before.class, callbacks -> (identifier, status) -> {
+	public static final Event<Before> BEFORE = EventFactory.createArrayBacked(Before.class, callbacks -> (identifier, status) -> {
 		for (Before callback : callbacks) {
 			callback.beforeStellarStatusReceived(identifier, status);
 		}
 	});
 
-	public static final Event<After> AFTER = Event.create(After.class, callbacks -> (identifier, status) -> {
+	public static final Event<After> AFTER = EventFactory.createArrayBacked(After.class, callbacks -> (identifier, status) -> {
 		for (After callback : callbacks) {
 			callback.afterStellarStatusReceived(identifier, status);
 		}
 	});
 
-	@ClientOnly
 	@FunctionalInterface
+	@Environment(EnvType.CLIENT)
 	public interface Before {
 
 		void beforeStellarStatusReceived(Identifier identifier, StellarStatus status);
 	}
 
-	@ClientOnly
 	@FunctionalInterface
+	@Environment(EnvType.CLIENT)
 	public interface After {
 
 		void afterStellarStatusReceived(Identifier identifier, StellarStatus status);

@@ -1,19 +1,21 @@
 package com.mmodding.mmodding_lib.library.events.initialization.server;
 
 import com.mmodding.mmodding_lib.library.base.AdvancedModContainer;
-import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
-import org.quiltmc.qsl.base.api.event.Event;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 
-@DedicatedServerOnly
+@Environment(EnvType.SERVER)
 public class MModdingServerInitializationEvents {
 
-	public static final Event<Start> START = Event.create(Start.class, callbacks -> mod -> {
+	public static final Event<Start> START = EventFactory.createArrayBacked(Start.class, callbacks -> mod -> {
 		for (Start callback : callbacks) {
 			callback.onMModdingServerInitializationStart(mod);
 		}
 	});
 
-	public static final Event<End> END = Event.create(End.class, callbacks -> mod -> {
+	public static final Event<End> END = EventFactory.createArrayBacked(End.class, callbacks -> mod -> {
 		for (End callback : callbacks) {
 			callback.onMModdingServerInitializationEnd(mod);
 		}

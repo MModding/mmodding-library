@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
 import com.mmodding.mmodding_lib.mixin.accessors.PointedDripstoneBlockAccessor;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,7 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.WorldAccess;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -36,7 +36,7 @@ public class CustomPointedDripstoneBlock extends PointedDripstoneBlock implement
     }
 
 	public CustomPointedDripstoneBlock(Block dripstoneBlock, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(dripstoneBlock, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(dripstoneBlock, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
     public CustomPointedDripstoneBlock(Block dripstoneBlock, Settings settings, boolean hasItem, Item.Settings itemSettings) {

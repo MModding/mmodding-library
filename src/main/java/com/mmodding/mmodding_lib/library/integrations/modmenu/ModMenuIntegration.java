@@ -9,11 +9,11 @@ import com.mmodding.mmodding_lib.library.base.MModdingServerModInitializer;
 import com.mmodding.mmodding_lib.library.utils.BiArrayList;
 import com.mmodding.mmodding_lib.library.utils.BiList;
 import com.mmodding.mmodding_lib.library.utils.EnvironmentUtils;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
-import org.quiltmc.qsl.base.api.entrypoint.server.DedicatedServerModInitializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class ModMenuIntegration {
 			List<String> mods = new ArrayList<>();
 			entrypointContainers.stream()
 				.filter(this::filterMods)
-				.forEachOrdered(entrypointContainer -> mods.add(entrypointContainer.getProvider().metadata().id()));
+				.forEachOrdered(entrypointContainer -> mods.add(entrypointContainer.getProvider().getMetadata().getId()));
 			return mods;
 		}
 
@@ -53,12 +53,12 @@ public class ModMenuIntegration {
 
 	static {
 		BiList<String, Class<?>> entrypointInfo = new BiArrayList<>();
-		entrypointInfo.add(ModInitializer.ENTRYPOINT_KEY, ModInitializer.class);
+		entrypointInfo.add("main", ModInitializer.class);
 		if (EnvironmentUtils.isClient()) {
-			entrypointInfo.add(ClientModInitializer.ENTRYPOINT_KEY, ClientModInitializer.class);
+			entrypointInfo.add("client", ClientModInitializer.class);
 		}
 		else if (EnvironmentUtils.isServer()) {
-			entrypointInfo.add(DedicatedServerModInitializer.ENTRYPOINT_KEY, DedicatedServerModInitializer.class);
+			entrypointInfo.add("server", DedicatedServerModInitializer.class);
 		}
 		entrypointInfo.add(MModdingBootstrapInitializer.ENTRYPOINT_KEY, MModdingBootstrapInitializer.class);
 		CustomBadge mmoddingLibraryModBadge = new CustomBadge(

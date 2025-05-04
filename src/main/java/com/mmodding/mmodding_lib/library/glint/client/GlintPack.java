@@ -7,6 +7,9 @@ import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.vertex.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
@@ -16,12 +19,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
 
 import java.util.Optional;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class GlintPack {
 
 	@Nullable
@@ -224,7 +225,7 @@ public class GlintPack {
 
 	public void register(Identifier identifier) {
 		RenderLayerUtils.addGlintPack(identifier, this);
-		ClientLifecycleEvents.READY.register(client -> {
+		ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
 			if (this.armor != null) RenderLayerUtils.addEntityBuilder(this.armor);
 			if (this.armorEntity != null) RenderLayerUtils.addEntityBuilder(this.armorEntity);
 			if (this.translucent != null) RenderLayerUtils.addEntityBuilder(this.translucent);

@@ -1,13 +1,13 @@
 package com.mmodding.mmodding_lib.interface_injections;
 
+import com.mmodding.mmodding_lib.library.utils.ClassExtension;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.gen.feature.StructureFeature;
-import org.quiltmc.qsl.base.api.util.InjectedInterface;
 
 import java.util.Set;
 
-@InjectedInterface(PlayerEntity.class)
+@ClassExtension(PlayerEntity.class)
 public interface PlayerStructureLookup {
 
 	/**

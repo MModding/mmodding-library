@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.interface_injections;
 
 import com.mmodding.mmodding_lib.library.tags.modifiers.TagModifier;
+import com.mmodding.mmodding_lib.library.utils.ClassExtension;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
@@ -8,9 +9,8 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Holder;
-import org.quiltmc.qsl.base.api.util.InjectedInterface;
 
-@InjectedInterface({Holder.class, AbstractBlock.AbstractBlockState.class, FluidState.class, ItemStack.class})
+@ClassExtension({Holder.class, AbstractBlock.AbstractBlockState.class, FluidState.class, ItemStack.class})
 public interface TagRuntimeManagement<T> {
 
 	default boolean isIn(TagModifier<T> modifier) {

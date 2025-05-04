@@ -10,13 +10,14 @@ import com.mmodding.mmodding_lib.library.events.networking.client.ClientConfigNe
 import com.mmodding.mmodding_lib.library.events.networking.client.ClientStellarStatusNetworkingEvents;
 import com.mmodding.mmodding_lib.library.soundtracks.Soundtrack;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class ClientOperations {
 
 	public static void receiveConfigOnClient(PacketByteBuf packet) {

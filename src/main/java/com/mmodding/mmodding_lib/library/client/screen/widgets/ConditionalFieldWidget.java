@@ -1,13 +1,14 @@
 package com.mmodding.mmodding_lib.library.client.screen.widgets;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.function.Predicate;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class ConditionalFieldWidget extends TextFieldWidget {
 
 	private final Predicate<String> conditionPredicate;

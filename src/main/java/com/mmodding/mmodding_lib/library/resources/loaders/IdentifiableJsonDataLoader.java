@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.mmodding.mmodding_lib.MModdingLib;
+import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
-import org.quiltmc.qsl.resource.loader.api.reloader.SimpleResourceReloader;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-public interface IdentifiableJsonDataLoader extends SimpleResourceReloader<Map<Identifier, JsonElement>> {
+public interface IdentifiableJsonDataLoader extends SimpleResourceReloadListener<Map<Identifier, JsonElement>> {
 
 	String SUFFIX = ".json";
 

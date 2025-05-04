@@ -10,6 +10,7 @@ import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
 import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockAccessor;
+import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -29,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.dimension.AreaHelper;
 import net.minecraft.world.dimension.DimensionType;
-import org.quiltmc.qsl.worldgen.dimension.api.QuiltDimensions;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -188,7 +188,7 @@ public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityD
 					this.getWorld().getProfiler().push("portal");
 					this.customPortalTime = i;
 					this.resetNetherPortalCooldown();
-					QuiltDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
+					FabricDimensions.teleport((Entity) (Object) this, destinationWorld, this.getCustomPortalTarget(destinationWorld));
 					this.getWorld().getProfiler().pop();
 				}
 

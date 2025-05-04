@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.tags.modifiers;
 
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.tag.TagKey;
-import org.quiltmc.qsl.base.api.util.TriState;
 
 import java.util.ArrayList;
 import java.util.List;

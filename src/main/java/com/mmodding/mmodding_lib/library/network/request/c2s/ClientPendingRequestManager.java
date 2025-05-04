@@ -3,8 +3,8 @@ package com.mmodding.mmodding_lib.library.network.request.c2s;
 import com.mmodding.mmodding_lib.library.network.request.common.AbstractPendingRequestManager;
 import com.mmodding.mmodding_lib.library.network.support.NetworkSupport;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 import java.util.HashMap;
 import java.util.Map;

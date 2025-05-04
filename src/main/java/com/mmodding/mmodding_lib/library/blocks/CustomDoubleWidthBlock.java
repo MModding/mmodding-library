@@ -4,6 +4,7 @@ import com.mmodding.mmodding_lib.library.math.OrientedBlockPos;
 import com.mmodding.mmodding_lib.library.utils.Opposable;
 import com.mmodding.mmodding_lib.library.utils.TweakFunction;
 import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockAccessor;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,7 +27,6 @@ import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,7 +51,7 @@ public class CustomDoubleWidthBlock extends Block implements BlockRegistrable, B
     }
 
 	public CustomDoubleWidthBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
     public CustomDoubleWidthBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {

@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SaplingBlock;
@@ -10,7 +11,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -32,7 +32,7 @@ public class CustomSaplingBlock extends SaplingBlock implements BlockRegistrable
 	}
 
 	public CustomSaplingBlock(SaplingGenerator generator, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(generator, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(generator, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomSaplingBlock(SaplingGenerator generator, Settings settings, boolean hasItem, Item.Settings itemSettings) {
@@ -48,7 +48,7 @@ public class CustomSaplingBlock extends SaplingBlock implements BlockRegistrable
 	}
 
 	public CustomSaplingBlock(SaplingGenerator generator, Predicate<BlockState> placementConditions, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(generator, placementConditions, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(generator, placementConditions, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomSaplingBlock(SaplingGenerator generator, Predicate<BlockState> placementConditions, Settings settings, boolean hasItem, Item.Settings itemSettings) {

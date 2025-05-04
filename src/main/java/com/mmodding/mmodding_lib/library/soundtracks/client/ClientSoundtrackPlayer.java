@@ -4,6 +4,8 @@ import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.library.sounds.client.SoundQueue;
 import com.mmodding.mmodding_lib.library.soundtracks.Soundtrack;
 import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundManager;
@@ -11,9 +13,8 @@ import net.minecraft.client.util.ClientPlayerTickable;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackPlayer {
 
 	private final ClientPlayerEntity player;

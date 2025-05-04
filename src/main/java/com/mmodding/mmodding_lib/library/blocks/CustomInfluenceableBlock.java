@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
@@ -13,7 +14,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentifiable> extends CustomBlock {
 
@@ -33,7 +33,7 @@ public abstract class CustomInfluenceableBlock<E extends Enum<E> & StringIdentif
     }
 
 	public CustomInfluenceableBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
     public CustomInfluenceableBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {

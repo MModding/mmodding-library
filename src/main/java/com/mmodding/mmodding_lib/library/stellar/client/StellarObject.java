@@ -9,15 +9,16 @@ import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class StellarObject {
 
 	private final Identifier stellarCycle;

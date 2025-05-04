@@ -8,25 +8,25 @@ import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.StaticConfig;
 import com.mmodding.mmodding_lib.networking.server.ServerOperations;
 import com.mojang.brigadier.CommandDispatcher;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.command.CommandBuildContext;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.GeneratorOptions;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.qsl.command.api.CommandRegistrationCallback;
-import org.quiltmc.qsl.command.api.QuiltCommandRegistrationEnvironment;
-import org.quiltmc.qsl.lifecycle.api.event.ServerWorldLoadEvents;
-import org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents;
 
 import java.util.Objects;
 
 @ApiStatus.Internal
 public class Events {
 
-	private static void commandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, CommandBuildContext context, QuiltCommandRegistrationEnvironment environment) {
+	private static void commandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, CommandBuildContext context, CommandManager.RegistrationEnvironment environment) {
 		MModdingCommand.register(dispatcher);
 	}
 
@@ -68,7 +68,7 @@ public class Events {
 
 	public static void register() {
 		CommandRegistrationCallback.EVENT.register(Events::commandRegistration);
-		ServerWorldLoadEvents.LOAD.register(Events::serverLoad);
+		ServerWorldEvents.LOAD.register(Events::serverLoad);
 		ServerPlayConnectionEvents.INIT.register(Events::serverInit);
 		ServerPlayConnectionEvents.DISCONNECT.register(Events::serverDisconnect);
 	}

@@ -7,9 +7,9 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mmodding.mmodding_lib.library.base.AdvancedModContainer;
 import com.mmodding.mmodding_lib.library.base.MModdingBootstrapInitializer;
 import com.mmodding.mmodding_lib.library.initializers.invokepoints.BootstrapInvokePoint;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.Bootstrap;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.loader.api.entrypoint.EntrypointContainer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +33,7 @@ public abstract class BootstrapMixin {
 		@Share("cauldronBehaviors") LocalRef<Consumer<BootstrapInvokePoint.Placement>> cauldronBehaviors,
 		@Share("registries") LocalRef<Consumer<BootstrapInvokePoint.Placement>> registries
 	) {
-		List<EntrypointContainer<MModdingBootstrapInitializer>> initializers = QuiltLoader.getEntrypointContainers(MModdingBootstrapInitializer.ENTRYPOINT_KEY, MModdingBootstrapInitializer.class);
+		List<EntrypointContainer<MModdingBootstrapInitializer>> initializers = FabricLoader.getInstance().getEntrypointContainers(MModdingBootstrapInitializer.ENTRYPOINT_KEY, MModdingBootstrapInitializer.class);
 
 		for (var initializer: initializers) {
 			initializer.getEntrypoint().onInitializeBootstrap(AdvancedModContainer.of(initializer.getProvider()));

@@ -7,11 +7,11 @@ import com.mmodding.mmodding_lib.library.network.support.type.NetworkList;
 import com.mmodding.mmodding_lib.library.network.support.type.NetworkMap;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 import java.util.Map;
 import java.util.UUID;

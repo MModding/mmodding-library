@@ -8,16 +8,17 @@ import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerFirstAccessor
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderLayerSecondAccessor;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.function.Predicate;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class RenderLayerUtils {
 
     public static void addStellarObject(StellarObject stellarObject) {

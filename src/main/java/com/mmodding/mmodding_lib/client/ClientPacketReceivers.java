@@ -8,20 +8,21 @@ import com.mmodding.mmodding_lib.library.network.support.type.NetworkMap;
 import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
 import com.mmodding.mmodding_lib.networking.client.ClientOperations;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 import java.util.Map;
 import java.util.UUID;
 
-@ClientOnly
 @ApiStatus.Internal
+@Environment(EnvType.CLIENT)
 public class ClientPacketReceivers {
 
 	@SuppressWarnings("unchecked")

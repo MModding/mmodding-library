@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib.library.client.utils;
 
 import com.mmodding.mmodding_lib.mixin.accessors.SinglePartEntityModelAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.animation.Animation;
 import net.minecraft.client.render.animation.Animator;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
@@ -9,9 +11,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class AnimationUtils {
 
 	public static boolean isMoving(LivingEntity livingEntity, float limbDistance) {

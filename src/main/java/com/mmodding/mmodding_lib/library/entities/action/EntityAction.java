@@ -1,13 +1,14 @@
 package com.mmodding.mmodding_lib.library.entities.action;
 
 import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 public class EntityAction {
 
@@ -16,7 +17,7 @@ public class EntityAction {
 	private final int timeBeforeExecution;
 	private final int delayAfterExecution;
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	private final AnimationState state = new AnimationState();
 
 	@Nullable
@@ -75,7 +76,7 @@ public class EntityAction {
 		}
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	private void clientTick() {
 		if (this.trackingTime.get() >= 0 && this.trackingTime.get() <= this.getFullTime()) {
 			if (this.trackingTime.get() == 0) {
@@ -89,7 +90,7 @@ public class EntityAction {
 		}
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public AnimationState getAnimationState() {
 		return this.state;
 	}

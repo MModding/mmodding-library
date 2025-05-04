@@ -5,14 +5,15 @@ import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.config.client.screen.editing.BooleanEditScreen;
 import com.mmodding.mmodding_lib.library.config.client.screen.editing.NumberEditScreen;
 import com.mmodding.mmodding_lib.library.config.client.screen.editing.StringEditScreen;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class ConfigElementsListWidget extends AlwaysSelectedEntryListWidget<ConfigElementsListEntry> {
 
 	private final Config config;

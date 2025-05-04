@@ -1,14 +1,14 @@
 package com.mmodding.mmodding_lib.library.utils;
 
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.loader.api.minecraft.MinecraftQuiltLoader;
 
 public class EnvironmentUtils {
 
 	public static EnvType getEnvType() {
-		return MinecraftQuiltLoader.getEnvironmentType();
+		return FabricLoader.getInstance().getEnvironmentType();
 	}
 
 	public static boolean isEnvironment(EnvType envType) {
@@ -23,7 +23,7 @@ public class EnvironmentUtils {
 		return EnvironmentUtils.isEnvironment(EnvType.SERVER);
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public static boolean isInSinglePlayer() {
 		return MinecraftClient.getInstance().isInSingleplayer();
 	}

@@ -2,31 +2,28 @@ package com.mmodding.mmodding_lib.library.blocks.settings;
 
 import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockSettingsAccessor;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.base.api.util.TriState;
 
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 public class ImmutableBlockSettings extends AdvancedBlockSettings {
 
-	protected ImmutableBlockSettings(Material material, Function<BlockState, MapColor> mapColorProvider) {
-		super(material, mapColorProvider);
-	}
-
 	protected ImmutableBlockSettings(Material material, MapColor mapColor) {
 		super(material, mapColor);
 	}
 
 	protected ImmutableBlockSettings(AbstractBlock.Settings settings) {
-		super(((AbstractBlockSettingsAccessor) settings).getMaterial(), ((AbstractBlockSettingsAccessor) settings).getMapColorProvider());
+		super(settings);
 
 		AbstractBlockSettingsAccessor accessor = (AbstractBlockSettingsAccessor) settings;
 
+		((AbstractBlockSettingsAccessor) this).setMapColorProvider(accessor.getMapColorProvider());
 		super.material(accessor.getMaterial());
 		super.hardness(accessor.getHardness());
 		super.resistance(accessor.getResistance());
@@ -57,10 +54,6 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 
 	public static ImmutableBlockSettings of(Material material) {
 		return ImmutableBlockSettings.of(material, material.getColor());
-	}
-
-	public static ImmutableBlockSettings of(Material material, Function<BlockState, MapColor> mapColorProvider) {
-		return new ImmutableBlockSettings(material, mapColorProvider);
 	}
 
 	public static ImmutableBlockSettings of(Material material, MapColor color) {
@@ -342,13 +335,6 @@ public class ImmutableBlockSettings extends AdvancedBlockSettings {
 	public ImmutableBlockSettings mapColor(DyeColor color) {
 		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
 		settings.mapColor(color);
-		return ImmutableBlockSettings.copyOf(settings);
-	}
-
-	@Override
-	public ImmutableBlockSettings mapColorProvider(Function<BlockState, MapColor> mapColorProvider) {
-		AdvancedBlockSettings settings = AdvancedBlockSettings.copyOf(this);
-		settings.mapColorProvider(mapColorProvider);
 		return ImmutableBlockSettings.copyOf(settings);
 	}
 

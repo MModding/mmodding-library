@@ -4,11 +4,11 @@ import com.mmodding.mmodding_lib.ducks.ServerWorldDuckInterface;
 import com.mmodding.mmodding_lib.library.events.networking.common.StellarStatusNetworkingEvents;
 import com.mmodding.mmodding_lib.library.soundtracks.Soundtrack;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 import java.util.ArrayList;
 import java.util.HashMap;

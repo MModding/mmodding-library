@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LilyPadBlock;
 import net.minecraft.block.Material;
@@ -11,7 +12,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.WaterPlaceableBlockItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiPredicate;
@@ -33,7 +33,7 @@ public class CustomLilyPadBlock extends LilyPadBlock implements BlockRegistrable
 	}
 
 	public CustomLilyPadBlock(Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomLilyPadBlock(Settings settings, boolean hasItem, Item.Settings itemSettings) {
@@ -49,7 +49,7 @@ public class CustomLilyPadBlock extends LilyPadBlock implements BlockRegistrable
 	}
 
 	public CustomLilyPadBlock(BiPredicate<FluidState, BlockState> placementConditions, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(placementConditions, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(placementConditions, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomLilyPadBlock(BiPredicate<FluidState, BlockState> placementConditions, Settings settings, boolean hasItem, Item.Settings itemSettings) {

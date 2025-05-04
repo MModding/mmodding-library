@@ -1,11 +1,12 @@
 package com.mmodding.mmodding_lib.library.client.screen.widgets;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.text.Text;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class NumberFieldWidget extends ConditionalFieldWidget {
 
 	public NumberFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text text) {

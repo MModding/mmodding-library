@@ -1,12 +1,13 @@
 package com.mmodding.mmodding_lib.library.sounds.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.sound.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class SimpleLoopingSoundInstance<S extends SoundInstance> implements SoundInstance, LoopingSoundInstance {
 
 	private final S wrapped;

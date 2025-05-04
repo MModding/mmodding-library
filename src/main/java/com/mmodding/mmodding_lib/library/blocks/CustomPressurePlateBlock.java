@@ -1,11 +1,10 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
-import net.minecraft.block.BlockState;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,7 +23,7 @@ public class CustomPressurePlateBlock extends PressurePlateBlock implements Bloc
 	}
 
 	public CustomPressurePlateBlock(ActivationRule type, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(type, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(type, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomPressurePlateBlock(ActivationRule type, Settings settings, boolean hasItem, Item.Settings itemSettings) {

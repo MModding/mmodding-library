@@ -1,23 +1,22 @@
 package com.mmodding.mmodding_lib.library.entities;
 
 import com.google.common.collect.ImmutableSet;
-import com.mmodding.mmodding_lib.ducks.QuiltEntityTypeBuilderDuckInterface;
+import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
-import org.quiltmc.qsl.entity.impl.QuiltEntityType;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CustomEntityType<T extends Entity> extends QuiltEntityType<T> implements EntityTypeRegistrable<T> {
+public class CustomEntityType<T extends Entity> extends EntityType<T> implements EntityTypeRegistrable<T> {
 
 	private final AtomicBoolean registered = new AtomicBoolean(false);
 
-	public CustomEntityType(EntityFactory<T> factory, SpawnGroup spawnGroup, boolean saveable, boolean summonable, boolean fireImmune, boolean spawnableFarFromPlayer, ImmutableSet<Block> spawnBlocks, EntityDimensions entityDimensions, int maxTrackDistance, int trackTickInterval, @Nullable Boolean alwaysUpdateVelocity) {
-		super(factory, spawnGroup, saveable, summonable, fireImmune, spawnableFarFromPlayer, spawnBlocks, entityDimensions, maxTrackDistance, trackTickInterval, alwaysUpdateVelocity);
+	public CustomEntityType(EntityFactory<T> factory, SpawnGroup spawnGroup, boolean saveable, boolean summonable, boolean fireImmune, boolean spawnableFarFromPlayer, ImmutableSet<Block> spawnBlocks, EntityDimensions entityDimensions, int maxTrackDistance, int trackTickInterval) {
+		super(factory, spawnGroup, saveable, summonable, fireImmune, spawnableFarFromPlayer, spawnBlocks, entityDimensions, maxTrackDistance, trackTickInterval);
 	}
 
 	public static <T extends Entity> CustomEntityType<T> create(BuilderSetup<T> builderSetup) {
@@ -30,7 +29,7 @@ public class CustomEntityType<T extends Entity> extends QuiltEntityType<T> imple
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Entity> CustomEntityType<T> create(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, BuilderSetup<T> builderSetup) {
-		return ((QuiltEntityTypeBuilderDuckInterface<T>) builderSetup.setup(QuiltEntityTypeBuilder.create(spawnGroup, factory))).mmodding_lib$buildCustom();
+		return ((FabricEntityTypeBuilderDuckInterface<T>) builderSetup.setup(FabricEntityTypeBuilder.create(spawnGroup, factory))).mmodding_lib$buildCustom();
 	}
 
 	public static <T extends LivingEntity> CustomEntityType<T> createLiving(LivingBuilderSetup<T> livingBuilderSetup) {
@@ -43,7 +42,7 @@ public class CustomEntityType<T extends Entity> extends QuiltEntityType<T> imple
 
 	@SuppressWarnings("unchecked")
 	public static <T extends LivingEntity> CustomEntityType<T> createLiving(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, LivingBuilderSetup<T> livingBuilderSetup) {
-		return ((QuiltEntityTypeBuilderDuckInterface<T>) livingBuilderSetup.setup(QuiltEntityTypeBuilder.createLiving().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
+		return ((FabricEntityTypeBuilderDuckInterface<T>) livingBuilderSetup.setup(FabricEntityTypeBuilder.createLiving().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
 	}
 
 	public static <T extends MobEntity> CustomEntityType<T> createMob(MobBuilderSetup<T> mobBuilderSetup) {
@@ -56,7 +55,7 @@ public class CustomEntityType<T extends Entity> extends QuiltEntityType<T> imple
 
 	@SuppressWarnings("unchecked")
 	public static <T extends MobEntity> CustomEntityType<T> createMob(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, MobBuilderSetup<T> mobBuilderSetup) {
-		return ((QuiltEntityTypeBuilderDuckInterface<T>) mobBuilderSetup.setup(QuiltEntityTypeBuilder.createMob().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
+		return ((FabricEntityTypeBuilderDuckInterface<T>) mobBuilderSetup.setup(FabricEntityTypeBuilder.createMob().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
 	}
 
 	@Override
@@ -72,18 +71,18 @@ public class CustomEntityType<T extends Entity> extends QuiltEntityType<T> imple
 	@FunctionalInterface
 	public interface BuilderSetup<T extends Entity> {
 
-		QuiltEntityTypeBuilder<T> setup(QuiltEntityTypeBuilder<T> builder);
+		FabricEntityTypeBuilder<T> setup(FabricEntityTypeBuilder<T> builder);
 	}
 
 	@FunctionalInterface
 	public interface LivingBuilderSetup<T extends LivingEntity> {
 
-		QuiltEntityTypeBuilder.Living<T> setup(QuiltEntityTypeBuilder.Living<T> builder);
+		FabricEntityTypeBuilder.Living<T> setup(FabricEntityTypeBuilder.Living<T> builder);
 	}
 
 	@FunctionalInterface
 	public interface MobBuilderSetup<T extends MobEntity> {
 
-		QuiltEntityTypeBuilder.Mob<T> setup(QuiltEntityTypeBuilder.Mob<T> builder);
+		FabricEntityTypeBuilder.Mob<T> setup(FabricEntityTypeBuilder.Mob<T> builder);
 	}
 }

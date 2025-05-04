@@ -3,6 +3,8 @@ package com.mmodding.mmodding_lib.library.sounds.client;
 import com.mmodding.mmodding_lib.library.sounds.client.stream.AdaptiveOggAudioStream;
 import com.mmodding.mmodding_lib.library.sounds.client.stream.ReleasableRepeatingAudioStream;
 import com.mmodding.mmodding_lib.mixin.accessors.client.SoundLoaderAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.sound.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundCategory;
@@ -10,7 +12,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class SoundQueue extends AbstractSoundInstance implements TickableSoundInstance {
 
 	private final Queue<SoundInstance> queue = new LinkedList<>();
@@ -282,8 +283,8 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 		}
 	}
 
-	@ClientOnly
 	@FunctionalInterface
+	@Environment(EnvType.CLIENT)
 	public interface DelegateFactory {
 		AudioStream create(SoundInstance soundInstance) throws IOException;
 	}

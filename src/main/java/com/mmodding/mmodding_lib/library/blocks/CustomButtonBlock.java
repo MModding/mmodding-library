@@ -1,11 +1,11 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.StoneButtonBlock;
 import net.minecraft.block.WoodenButtonBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,7 +26,7 @@ public class CustomButtonBlock {
 		}
 
 		public Wooden(Settings settings, boolean hasItem, ItemGroup itemGroup) {
-			this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+			this(settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 		}
 
 		public Wooden(Settings settings, boolean hasItem, Item.Settings itemSettings) {
@@ -65,7 +65,7 @@ public class CustomButtonBlock {
 		}
 
 		public Stone(Settings settings, boolean hasItem, ItemGroup itemGroup) {
-			this(settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+			this(settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 		}
 
 		public Stone(Settings settings, boolean hasItem, Item.Settings itemSettings) {

@@ -1,6 +1,8 @@
 package com.mmodding.mmodding_lib.library.client.render.model.json;
 
 import com.mojang.datafixers.util.Either;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.model.json.ItemModelGenerator;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelElement;
@@ -8,7 +10,6 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.*;
 import java.util.function.Function;
@@ -20,7 +21,7 @@ import java.util.function.Function;
  * <br>
  * Item Model Identifier is <code>mmodding:item/not_colliding_generated`</code>.
  */
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class NotCollidingItemModelGenerator extends ItemModelGenerator {
 
 	public static final NotCollidingItemModelGenerator INSTANCE = new NotCollidingItemModelGenerator();

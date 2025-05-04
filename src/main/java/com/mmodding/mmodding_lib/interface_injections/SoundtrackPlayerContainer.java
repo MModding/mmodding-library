@@ -1,10 +1,10 @@
 package com.mmodding.mmodding_lib.interface_injections;
 
 import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
+import com.mmodding.mmodding_lib.library.utils.ClassExtension;
 import net.minecraft.entity.player.PlayerEntity;
-import org.quiltmc.qsl.base.api.util.InjectedInterface;
 
-@InjectedInterface(PlayerEntity.class)
+@ClassExtension(PlayerEntity.class)
 public interface SoundtrackPlayerContainer {
 
 	default SoundtrackPlayer getSoundtrackPlayer() {

@@ -10,6 +10,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.IdentifierArgumentType;
@@ -19,7 +20,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.base.api.util.TriState;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -44,7 +44,7 @@ public class MModdingCommand {
 						.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.DEFAULT))
 						.then(
 							CommandManager.argument("mode", BoolArgumentType.bool())
-								.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.fromBoolean(BoolArgumentType.getBool(context, "mode"))))
+								.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.of(BoolArgumentType.getBool(context, "mode"))))
 						)
 				)
 				.then(

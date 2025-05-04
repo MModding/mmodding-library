@@ -3,6 +3,9 @@ package com.mmodding.mmodding_lib.library.blocks;
 import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerOperations;
 import com.mmodding.mmodding_lib.library.utils.IdentifierUtils;
 import com.mmodding.mmodding_lib.library.utils.RegistrationUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -18,8 +21,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -42,7 +43,7 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 	}
 
 	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, ItemGroup itemGroup) {
-		this(settings, tickWater, growthChance, growLength, chooseStemState, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(settings, tickWater, growthChance, growLength, chooseStemState, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomGrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState, boolean hasItem, Item.Settings itemSettings) {
@@ -90,19 +91,19 @@ public class CustomGrowsDownPlantBlock implements BlockWithItem {
 		this.registered.set(true);
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public void cutout() {
 		RenderLayerOperations.setCutout(this.head);
 		RenderLayerOperations.setCutout(this.body);
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public void translucent() {
 		RenderLayerOperations.setTranslucent(this.head);
 		RenderLayerOperations.setTranslucent(this.body);
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public void transparent() {
 		RenderLayerOperations.setTransparent(this.head);
 		RenderLayerOperations.setTransparent(this.body);

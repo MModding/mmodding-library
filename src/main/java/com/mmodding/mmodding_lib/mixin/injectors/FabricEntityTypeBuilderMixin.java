@@ -1,8 +1,9 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.google.common.collect.ImmutableSet;
-import com.mmodding.mmodding_lib.ducks.QuiltEntityTypeBuilderDuckInterface;
+import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
 import com.mmodding.mmodding_lib.library.entities.CustomEntityType;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -10,12 +11,11 @@ import net.minecraft.entity.attribute.DefaultAttributeRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.world.Heightmap;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(value = QuiltEntityTypeBuilder.class, remap = false)
-public class QuiltEntityTypeBuilderMixin<T extends Entity> implements QuiltEntityTypeBuilderDuckInterface<T> {
+@Mixin(value = FabricEntityTypeBuilder.class, remap = false)
+public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricEntityTypeBuilderDuckInterface<T> {
 
     @Shadow
     private EntityType.EntityFactory<T> factory;
@@ -48,9 +48,6 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements QuiltEntit
     @Shadow
     private int trackingTickInterval;
 
-    @Shadow
-    private Boolean alwaysUpdateVelocity;
-
     @Override
     public CustomEntityType<T> mmodding_lib$buildCustom() {
         return new CustomEntityType<>(
@@ -63,13 +60,12 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements QuiltEntit
             this.canSpawnInside,
             this.dimensions,
             this.maxTrackingRange,
-            this.trackingTickInterval,
-            this.alwaysUpdateVelocity
+            this.trackingTickInterval
         );
     }
 
-	@Mixin(value = QuiltEntityTypeBuilder.Living.class, remap = false)
-	public static class Living<T extends LivingEntity> extends QuiltEntityTypeBuilderMixin<T> {
+	@Mixin(value = FabricEntityTypeBuilder.Living.class, remap = false)
+	public static class Living<T extends LivingEntity> extends FabricEntityTypeBuilderMixin<T> {
 
 		@Shadow
 		private DefaultAttributeContainer.Builder defaultAttributeBuilder;
@@ -86,7 +82,7 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements QuiltEntit
 		}
 	}
 
-	@Mixin(value = QuiltEntityTypeBuilder.Mob.class, remap = false)
+	@Mixin(value = FabricEntityTypeBuilder.Mob.class, remap = false)
 	public static class Mob<T extends MobEntity> extends Living<T> {
 
 		@Shadow

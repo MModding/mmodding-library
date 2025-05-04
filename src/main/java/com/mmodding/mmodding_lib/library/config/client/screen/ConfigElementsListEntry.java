@@ -1,13 +1,14 @@
 package com.mmodding.mmodding_lib.library.config.client.screen;
 
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class ConfigElementsListEntry extends AlwaysSelectedEntryListWidget.Entry<ConfigElementsListEntry> {
 
 	private final MinecraftClient client;

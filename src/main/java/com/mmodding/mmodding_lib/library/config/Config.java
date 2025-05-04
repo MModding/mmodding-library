@@ -6,9 +6,10 @@ import com.google.gson.JsonParser;
 import com.mmodding.mmodding_lib.MModdingLibConfig;
 import com.mmodding.mmodding_lib.networking.server.ServerOperations;
 import com.mmodding.mmodding_lib.library.utils.ConfigUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
 
 import java.io.*;
 
@@ -62,7 +63,7 @@ public interface Config {
 	 * @param player the targeted player
 	 * @see ServerOperations
 	 */
-	@DedicatedServerOnly
+	@Environment(EnvType.SERVER)
 	default void sendServerConfigToClient(ServerPlayerEntity player) {
 		ServerOperations.sendConfigToClient(player, this);
 	}
@@ -76,7 +77,7 @@ public interface Config {
 	}
 
 	private String getPath() {
-		return QuiltLoader.getConfigDir().toString() + ConfigUtils.getSeparator() +
+		return FabricLoader.getInstance().getConfigDir().toString() + ConfigUtils.getSeparator() +
 			this.getFilePath()
 				.replace("\\", ConfigUtils.getSeparator())
 				.replace("/", ConfigUtils.getSeparator())
@@ -104,7 +105,7 @@ public interface Config {
 			for (String string: strings) {
 				counter ++;
 				if (strings.length > counter) {
-					new File(QuiltLoader.getConfigDir().toString() + ConfigUtils.getSeparator() + temp + string).mkdirs();
+					new File(FabricLoader.getInstance().getConfigDir().toString() + ConfigUtils.getSeparator() + temp + string).mkdirs();
 					temp.append(string).append(ConfigUtils.getSeparator());
 				}
 			}

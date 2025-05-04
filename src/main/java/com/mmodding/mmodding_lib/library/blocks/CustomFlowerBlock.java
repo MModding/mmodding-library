@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerBlock;
@@ -11,7 +12,6 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -33,7 +33,7 @@ public class CustomFlowerBlock extends FlowerBlock implements BlockRegistrable, 
 	}
 
 	public CustomFlowerBlock(StatusEffect suspiciousStewEffect, int effectDuration, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(suspiciousStewEffect, effectDuration, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(suspiciousStewEffect, effectDuration, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomFlowerBlock(StatusEffect suspiciousStewEffect, int effectDuration, Settings settings, boolean hasItem, Item.Settings itemSettings) {
@@ -49,7 +49,7 @@ public class CustomFlowerBlock extends FlowerBlock implements BlockRegistrable, 
 	}
 
 	public CustomFlowerBlock(Predicate<BlockState> placementConditions, StatusEffect suspiciousStewEffect, int effectDuration, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(placementConditions, suspiciousStewEffect, effectDuration, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(placementConditions, suspiciousStewEffect, effectDuration, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
 	public CustomFlowerBlock(Predicate<BlockState> placementConditions, StatusEffect suspiciousStewEffect, int effectDuration, Settings settings, boolean hasItem, Item.Settings itemSettings) {

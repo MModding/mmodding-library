@@ -1,8 +1,8 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.mmodding.mmodding_lib.ducks.AbstractBlockSettingsDuckInterface;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.block.AbstractBlock;
-import org.quiltmc.qsl.base.api.util.TriState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

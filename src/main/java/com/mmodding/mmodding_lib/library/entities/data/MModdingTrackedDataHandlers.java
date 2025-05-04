@@ -1,11 +1,10 @@
 package com.mmodding.mmodding_lib.library.entities.data;
 
-import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
 import com.mmodding.mmodding_lib.library.utils.TrackedDataHandlerUtils;
 import net.minecraft.entity.data.TrackedDataHandler;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.entity.networking.api.tracked_data.QuiltTrackedDataHandlerRegistry;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,13 +21,14 @@ public class MModdingTrackedDataHandlers {
 	public static final TrackedDataHandler<List<UUID>> UUID_LIST = TrackedDataHandlerUtils.createTrackedDataListHandler(PacketByteBuf::writeUuid, PacketByteBuf::readUuid);
 
 	static {
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("boolean_list"), MModdingTrackedDataHandlers.BOOLEAN_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("integer_list"), MModdingTrackedDataHandlers.INTEGER_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("long_list"), MModdingTrackedDataHandlers.LONG_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("float_list"), MModdingTrackedDataHandlers.FLOAT_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("double_list"), MModdingTrackedDataHandlers.DOUBLE_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("string_list"), MModdingTrackedDataHandlers.STRING_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("identifier_list"), MModdingTrackedDataHandlers.IDENTIFIER_LIST);
-		QuiltTrackedDataHandlerRegistry.register(new MModdingIdentifier("uuid_list"), MModdingTrackedDataHandlers.UUID_LIST);
+		// Looking forward to https://github.com/FabricMC/fabric/pull/4599
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.BOOLEAN_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.INTEGER_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.LONG_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.FLOAT_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.DOUBLE_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.STRING_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.IDENTIFIER_LIST);
+		TrackedDataHandlerRegistry.register(MModdingTrackedDataHandlers.UUID_LIST);
 	}
 }

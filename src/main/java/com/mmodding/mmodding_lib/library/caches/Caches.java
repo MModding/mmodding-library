@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.caches;
 
-import org.quiltmc.loader.api.minecraft.ClientOnly;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ public class Caches {
 
 	public static final List<CacheAccess> LOCAL = new ArrayList<>();
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public static final List<CacheAccess> CLIENT = new ArrayList<>();
 
 	public static class Local<K, V> extends AbstractCache<K, V> {
@@ -25,7 +26,7 @@ public class Caches {
 		}
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public static class Client<K, V> extends AbstractCache<K, V> {
 
 		public Client(String cache, String key, String value) {

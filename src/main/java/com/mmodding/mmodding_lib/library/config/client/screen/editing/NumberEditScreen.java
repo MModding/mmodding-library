@@ -5,11 +5,12 @@ import com.mmodding.mmodding_lib.library.config.client.screen.ConfigElementsList
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigElementsListWidget;
 import com.mmodding.mmodding_lib.library.config.client.screen.ConfigScreen;
 import com.mmodding.mmodding_lib.library.client.screen.widgets.NumberFieldWidget;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class NumberEditScreen extends EditScreen<Number> {
 
 	private NumberFieldWidget numberBox;

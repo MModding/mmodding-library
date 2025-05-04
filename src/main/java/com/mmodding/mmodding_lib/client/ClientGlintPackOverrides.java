@@ -2,15 +2,16 @@ package com.mmodding.mmodding_lib.client;
 
 import com.mmodding.mmodding_lib.library.glint.DefaultGlintPacks;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.function.Predicate;
 
-@ClientOnly
 @ApiStatus.Internal
+@Environment(EnvType.CLIENT)
 public class ClientGlintPackOverrides {
 
     public static void register() {

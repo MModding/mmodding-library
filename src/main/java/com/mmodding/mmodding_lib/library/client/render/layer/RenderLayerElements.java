@@ -1,10 +1,11 @@
 package com.mmodding.mmodding_lib.library.client.render.layer;
 
 import com.mmodding.mmodding_lib.mixin.accessors.client.RenderPhaseAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderPhase;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class RenderLayerElements {
 
 	public static final Transparencies TRANSPARENCY = new Transparencies();

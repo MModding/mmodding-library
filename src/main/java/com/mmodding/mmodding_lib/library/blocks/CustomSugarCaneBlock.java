@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SugarCaneBlock;
@@ -13,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiPredicate;
@@ -37,7 +37,7 @@ public class CustomSugarCaneBlock extends SugarCaneBlock implements BlockRegistr
     }
 
 	public CustomSugarCaneBlock(@Nullable Predicate<BlockState> validFloor, @Nullable BiPredicate<BlockState, FluidState> validFluid, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(validFloor, validFluid, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(validFloor, validFluid, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
     public CustomSugarCaneBlock(@Nullable Predicate<BlockState> validFloor, @Nullable BiPredicate<BlockState, FluidState> validFluid, Settings settings, boolean hasItem, Item.Settings itemSettings) {

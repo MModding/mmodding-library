@@ -6,6 +6,7 @@ import com.mmodding.mmodding_lib.library.blocks.BlockRegistrable;
 import com.mmodding.mmodding_lib.library.blocks.BlockWithItem;
 import com.mmodding.mmodding_lib.library.portals.CustomPortalBlock;
 import com.mmodding.mmodding_lib.library.utils.MModdingGlobalMaps;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.BlockItem;
@@ -17,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,7 +37,7 @@ public class CustomSquaredPortalBlock extends NetherPortalBlock implements Custo
     }
 
 	public CustomSquaredPortalBlock(DefaultParticleType particleType, Settings settings, boolean hasItem, ItemGroup itemGroup) {
-		this(particleType, settings, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(particleType, settings, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
     public CustomSquaredPortalBlock(DefaultParticleType particleType, Settings settings, boolean hasItem, Item.Settings itemSettings) {

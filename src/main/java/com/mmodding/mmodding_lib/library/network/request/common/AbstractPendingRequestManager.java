@@ -5,9 +5,9 @@ import com.mmodding.mmodding_lib.library.network.support.type.NetworkList;
 import com.mmodding.mmodding_lib.library.utils.BiHashMap;
 import com.mmodding.mmodding_lib.library.utils.BiMap;
 import com.mmodding.mmodding_lib.library.utils.MapUtils;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
 
 import java.util.*;
 import java.util.function.BooleanSupplier;

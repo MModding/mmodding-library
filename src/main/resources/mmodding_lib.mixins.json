@@ -90,7 +90,7 @@
     "injectors.PointedDripstoneBlockMixin",
     "injectors.PoolStructurePieceMixin",
     "injectors.PortalForcerMixin",
-    "injectors.QuiltEntityTypeBuilderMixin",
+    "injectors.FabricEntityTypeBuilderMixin",
     "injectors.QuiltEntityTypeBuilderMixin$Living",
     "injectors.QuiltEntityTypeBuilderMixin$Mob",
     "injectors.ScreenHandlerSlotUpdateS2CPacketMixin",

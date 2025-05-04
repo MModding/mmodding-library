@@ -8,6 +8,12 @@ import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.tooltip.data.InventoryTooltipData;
 import com.mmodding.mmodding_lib.library.utils.WorldUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipContext;
@@ -21,17 +27,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
-import org.quiltmc.qsl.networking.api.PacketSender;
-import org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents;
-import org.quiltmc.qsl.tooltip.api.client.ItemTooltipCallback;
-import org.quiltmc.qsl.tooltip.api.client.TooltipComponentCallback;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-@ClientOnly
 @ApiStatus.Internal
+@Environment(EnvType.CLIENT)
 public class ClientEvents {
 
 	private static void serverInit(ClientPlayNetworkHandler handler, MinecraftClient client) {
@@ -64,7 +65,7 @@ public class ClientEvents {
 		}
 	}
 
-	private static void itemTooltipCallback(ItemStack stack, PlayerEntity player, TooltipContext context, List<Text> lines) {
+	private static void itemTooltipCallback(ItemStack stack, TooltipContext context, List<Text> lines) {
 		Text[] texts = AdvancedItemSettings.DESCRIPTION_LINES.get(stack.getItem());
 		if (texts != null) lines.addAll(List.of(texts));
 	}

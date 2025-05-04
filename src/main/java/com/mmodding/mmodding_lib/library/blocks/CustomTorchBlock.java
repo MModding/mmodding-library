@@ -1,11 +1,11 @@
 package com.mmodding.mmodding_lib.library.blocks;
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.particle.ParticleEffect;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -24,7 +24,7 @@ public class CustomTorchBlock extends TorchBlock implements BlockRegistrable, Bl
     }
 
 	public CustomTorchBlock(Settings settings, ParticleEffect particle, boolean hasItem, ItemGroup itemGroup) {
-		this(settings, particle, hasItem, itemGroup != null ? new QuiltItemSettings().group(itemGroup) : new QuiltItemSettings());
+		this(settings, particle, hasItem, itemGroup != null ? new FabricItemSettings().group(itemGroup) : new FabricItemSettings());
 	}
 
     public CustomTorchBlock(Settings settings, ParticleEffect particle, boolean hasItem, Item.Settings itemSettings) {

@@ -3,6 +3,8 @@ package com.mmodding.mmodding_lib.library.blocks.settings;
 import com.mmodding.mmodding_lib.ducks.AbstractBlockSettingsDuckInterface;
 import com.mmodding.mmodding_lib.mixin.accessors.AbstractBlockAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.BlocksAccessor;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.sound.BlockSoundGroup;
@@ -10,17 +12,11 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
-import org.quiltmc.qsl.base.api.util.TriState;
-import org.quiltmc.qsl.block.extensions.api.QuiltBlockSettings;
 
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-public class AdvancedBlockSettings extends QuiltBlockSettings {
-
-	protected AdvancedBlockSettings(Material material, Function<BlockState, MapColor> mapColorProvider) {
-		super(material, mapColorProvider);
-	}
+public class AdvancedBlockSettings extends FabricBlockSettings {
 
 	protected AdvancedBlockSettings(Material material, MapColor mapColor) {
 		super(material, mapColor);
@@ -35,10 +31,6 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 
 	public static AdvancedBlockSettings of(Material material) {
 		return AdvancedBlockSettings.of(material, material.getColor());
-	}
-
-	public static AdvancedBlockSettings of(Material material, Function<BlockState, MapColor> mapColorProvider) {
-		return new AdvancedBlockSettings(material, mapColorProvider);
 	}
 
 	public static AdvancedBlockSettings of(Material material, MapColor color) {
@@ -287,12 +279,6 @@ public class AdvancedBlockSettings extends QuiltBlockSettings {
 	@Override
 	public AdvancedBlockSettings mapColor(DyeColor color) {
 		super.mapColor(color);
-		return this;
-	}
-
-	@Override
-	public AdvancedBlockSettings mapColorProvider(Function<BlockState, MapColor> mapColorProvider) {
-		super.mapColorProvider(mapColorProvider);
 		return this;
 	}
 

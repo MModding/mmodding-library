@@ -5,8 +5,9 @@ import com.mmodding.mmodding_lib.MModdingLib;
 import com.mmodding.mmodding_lib.client.ClientCaches;
 import com.mmodding.mmodding_lib.client.MModdingLibClient;
 import com.mmodding.mmodding_lib.library.config.Config;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.util.Util;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 public class ConfigUtils {
 
@@ -32,7 +33,7 @@ public class ConfigUtils {
 		};
 	}
 
-	@ClientOnly
+	@Environment(EnvType.CLIENT)
 	public static Config getClientConfig(String qualifier) {
 		return MModdingLibClient.CLIENT_CONFIGS.get(qualifier);
 	}

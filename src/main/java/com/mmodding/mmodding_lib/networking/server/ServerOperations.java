@@ -5,13 +5,14 @@ import com.mmodding.mmodding_lib.library.config.Config;
 import com.mmodding.mmodding_lib.library.config.ConfigObject;
 import com.mmodding.mmodding_lib.library.events.networking.server.ServerConfigNetworkingEvents;
 import com.mmodding.mmodding_lib.networking.MModdingPackets;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.quiltmc.loader.api.minecraft.DedicatedServerOnly;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
-@DedicatedServerOnly
+@Environment(EnvType.SERVER)
 public class ServerOperations {
 
 	public static void sendConfigToClient(ServerPlayerEntity player, Config config) {
