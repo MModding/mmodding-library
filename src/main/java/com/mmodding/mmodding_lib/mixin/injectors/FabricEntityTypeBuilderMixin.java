@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.mixin.injectors;
 
 import com.google.common.collect.ImmutableSet;
-import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
+import com.mmodding.mmodding_lib.ducks.FabricOrQuiltEntityTypeBuilderDuckInterface;
 import com.mmodding.mmodding_lib.library.entities.CustomEntityType;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.function.Supplier;
 
 @Mixin(value = FabricEntityTypeBuilder.class, remap = false)
-public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricEntityTypeBuilderDuckInterface<T> {
+public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricOrQuiltEntityTypeBuilderDuckInterface<T> {
 
     @Shadow
     private EntityType.EntityFactory<T> factory;

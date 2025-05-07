@@ -5,7 +5,7 @@ import com.mmodding.mmodding_lib.library.utils.InternalOf;
 import net.minecraft.entity.Entity;
 
 @InternalOf( CustomEntityType.class)
-public interface FabricEntityTypeBuilderDuckInterface<T extends Entity> {
+public interface FabricOrQuiltEntityTypeBuilderDuckInterface<T extends Entity> {
 
     CustomEntityType<T> mmodding_lib$buildCustom();
 }

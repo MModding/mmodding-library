@@ -1,7 +1,7 @@
 package com.mmodding.mmodding_lib.library.entities;
 
 import com.google.common.collect.ImmutableSet;
-import com.mmodding.mmodding_lib.ducks.FabricEntityTypeBuilderDuckInterface;
+import com.mmodding.mmodding_lib.ducks.FabricOrQuiltEntityTypeBuilderDuckInterface;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
@@ -32,7 +32,7 @@ public class CustomEntityType<T extends Entity> extends EntityType<T> implements
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Entity> CustomEntityType<T> create(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, BuilderSetup<T> builderSetup) {
-		return ((FabricEntityTypeBuilderDuckInterface<T>) builderSetup.setup(FabricEntityTypeBuilder.create(spawnGroup, factory))).mmodding_lib$buildCustom();
+		return ((FabricOrQuiltEntityTypeBuilderDuckInterface<T>) builderSetup.setup(FabricEntityTypeBuilder.create(spawnGroup, factory))).mmodding_lib$buildCustom();
 	}
 
 	public static <T extends LivingEntity> CustomEntityType<T> createLiving(LivingBuilderSetup<T> livingBuilderSetup) {
@@ -45,7 +45,7 @@ public class CustomEntityType<T extends Entity> extends EntityType<T> implements
 
 	@SuppressWarnings("unchecked")
 	public static <T extends LivingEntity> CustomEntityType<T> createLiving(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, LivingBuilderSetup<T> livingBuilderSetup) {
-		return ((FabricEntityTypeBuilderDuckInterface<T>) livingBuilderSetup.setup(FabricEntityTypeBuilder.createLiving().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
+		return ((FabricOrQuiltEntityTypeBuilderDuckInterface<T>) livingBuilderSetup.setup(FabricEntityTypeBuilder.createLiving().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
 	}
 
 	public static <T extends MobEntity> CustomEntityType<T> createMob(MobBuilderSetup<T> mobBuilderSetup) {
@@ -58,7 +58,7 @@ public class CustomEntityType<T extends Entity> extends EntityType<T> implements
 
 	@SuppressWarnings("unchecked")
 	public static <T extends MobEntity> CustomEntityType<T> createMob(@NotNull SpawnGroup spawnGroup, @NotNull EntityType.EntityFactory<T> factory, MobBuilderSetup<T> mobBuilderSetup) {
-		return ((FabricEntityTypeBuilderDuckInterface<T>) mobBuilderSetup.setup(FabricEntityTypeBuilder.createMob().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
+		return ((FabricOrQuiltEntityTypeBuilderDuckInterface<T>) mobBuilderSetup.setup(FabricEntityTypeBuilder.createMob().spawnGroup(spawnGroup).entityFactory(factory))).mmodding_lib$buildCustom();
 	}
 
 	@Override
