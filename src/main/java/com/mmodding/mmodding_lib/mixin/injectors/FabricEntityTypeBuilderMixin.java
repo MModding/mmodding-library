@@ -51,7 +51,7 @@ public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricOrQ
 	private int trackedUpdateRate;
 
 	@Shadow
-	private boolean forceTrackedVelocityUpdates;
+	private Boolean forceTrackedVelocityUpdates;
 
     @Override
     public CustomEntityType<T> mmodding_lib$buildCustom() {
@@ -66,7 +66,7 @@ public class FabricEntityTypeBuilderMixin<T extends Entity> implements FabricOrQ
 	        this.dimensions,
             this.trackRange,
             this.trackedUpdateRate,
-	        this.forceTrackedVelocityUpdates
+	        this.forceTrackedVelocityUpdates != null && this.forceTrackedVelocityUpdates
         );
     }
 
