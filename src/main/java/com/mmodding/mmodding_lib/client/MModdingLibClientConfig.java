@@ -22,6 +22,7 @@ public class MModdingLibClientConfig implements Config {
 			.addBooleanParameter("showMModdingLibraryClientMods", true)
 			.addBooleanParameter("applyGlintPackOverridesToVanillaItems", false)
 			.addBooleanParameter("showMModdingLibraryClientCaches", false)
+			.addBooleanParameter("showExperimentalSettingsScreen", false)
 			.build();
 	}
 
