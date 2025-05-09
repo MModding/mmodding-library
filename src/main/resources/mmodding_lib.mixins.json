@@ -152,7 +152,7 @@
     "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",
-    "injectors.client.WorldListWidgetEntryMixin",
+    "injectors.client.IntegratedServerLoaderMixin",
     "injectors.client.WorldRendererMixin"
   ],
   "injectors": {
