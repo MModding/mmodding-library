@@ -7,7 +7,6 @@ import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.items.settings.AdvancedItemSettings;
 import com.mmodding.mmodding_lib.library.items.tooltip.data.InventoryTooltipData;
-import com.mmodding.mmodding_lib.library.utils.WorldUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -19,12 +18,9 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -48,12 +44,10 @@ public class ClientEvents {
 		if (MModdingLibClient.LIBRARY_CLIENT_CONFIG.getContent().getBoolean("showMModdingLibraryClientCaches")) {
 			Caches.CLIENT.forEach(CacheAccess::debugCache);
 		}
-		WorldUtils.doTaskAfter(client.world, MathHelper.floorDiv(Registry.ITEM.size(), 25), ClientPendingRequestManagers.GLINT_PACK_MANAGER::send);
 	}
 
 	private static void serverDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
 		Caches.CLIENT.forEach(CacheAccess::clearCache);
-		ClientPendingRequestManagers.GLINT_PACK_MANAGER.clear();
 	}
 
 	private static TooltipComponent tooltipComponentCallback(TooltipData data) {

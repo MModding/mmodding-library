@@ -41,7 +41,6 @@ public class MModdingLib implements ModInitializer {
 
 		Events.register();
 		PacketReceivers.register();
-		RequestHandlers.register();
 
 		if (LIBRARY_CONFIG.getContent().getBoolean("showMModdingLibraryMods")) {
 			String mods = "MModding Library Mods :";

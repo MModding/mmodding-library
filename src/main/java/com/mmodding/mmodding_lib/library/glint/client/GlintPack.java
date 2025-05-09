@@ -4,7 +4,7 @@ import com.mmodding.mmodding_lib.client.ClientCaches;
 import com.mmodding.mmodding_lib.library.client.render.layer.RenderLayerElements;
 import com.mmodding.mmodding_lib.library.client.utils.MModdingClientGlobalMaps;
 import com.mmodding.mmodding_lib.library.client.utils.RenderLayerUtils;
-import com.mmodding.mmodding_lib.library.utils.MModdingIdentifier;
+import com.mmodding.mmodding_lib.library.glint.GlintPackView;
 import com.mmodding.mmodding_lib.library.utils.TextureLocation;
 import com.mojang.blaze3d.vertex.*;
 import net.fabricmc.api.EnvType;
@@ -77,7 +77,8 @@ public class GlintPack {
 			if (ClientCaches.GLINT_PACK_OVERRIDES.containsKey(stack.getItem())) {
 				identifier = ClientCaches.GLINT_PACK_OVERRIDES.get(stack.getItem()).getGlintPack(stack);
 			} else {
-				identifier = stack.getHiddenDataStorage().getIdentifier(new MModdingIdentifier("glint_pack"));
+				GlintPackView view = GlintPackView.of(stack);
+				identifier = view != null ? view.getGlintPack(stack) : null;
 			}
 			return identifier;
 		}
