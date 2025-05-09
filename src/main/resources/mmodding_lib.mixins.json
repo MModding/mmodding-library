@@ -127,6 +127,7 @@
     "accessors.client.RenderLayerSecondAccessor",
     "accessors.client.RenderPhaseAccessor",
     "accessors.client.SoundLoaderAccessor",
+    "injectors.client.AdvancementToastMixin",
     "injectors.client.ArmorFeatureRendererMixin",
     "injectors.client.ArmorRendererMixin",
     "injectors.client.BackgroundRendererMixin",
