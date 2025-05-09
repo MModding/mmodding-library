@@ -14,6 +14,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.dimension.DimensionOptions;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.MutableTriple;
 import org.jetbrains.annotations.NotNull;
@@ -99,6 +100,16 @@ public abstract class ServerWorldMixin extends WorldMixin implements WorldUtils.
 	@Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;tickTime()V"))
 	private void tick(CallbackInfo ci) {
 		this.stellarStatuses.tick(this.getServer());
+	}
+
+	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;setTimeOfDay(J)V"))
+	private void ensureOverworldExecution(ServerWorld instance, long timeOfDay, Operation<Void> original) {
+		if (instance.getRegistryKey().equals(ServerWorld.OVERWORLD)) {
+			original.call(instance, timeOfDay);
+		}
+		else {
+			instance.getServer().getOverworld().setTimeOfDay(timeOfDay);
+		}
 	}
 
 	@WrapOperation(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z", ordinal = 1))
