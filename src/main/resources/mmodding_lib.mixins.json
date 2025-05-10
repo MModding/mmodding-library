@@ -54,6 +54,7 @@
     "injectors.CowEntityMixin",
     "injectors.CraftingScreenHandlerMixin",
     "injectors.EnchantedBookItemMixin",
+    "injectors.EnchantingTableBlockMixin",
     "injectors.EnchantmentHelperMixin",
     "injectors.EnchantmentMixin",
     "injectors.EnchantmentScreenHandlerMixin",
@@ -141,6 +142,7 @@
     "injectors.client.EntryListWidgetMixin",
     "injectors.client.FishingBobberEntityRendererMixin",
     "injectors.client.InGameHudMixin",
+    "injectors.client.IntegratedServerLoaderMixin",
     "injectors.client.ItemRenderContextMixin",
     "injectors.client.ItemRendererMixin",
     "injectors.client.JsonUnbakedModelMixin",
@@ -152,7 +154,6 @@
     "injectors.client.StuckArrowsFeatureRendererMixin",
     "injectors.client.StuckObjectsFeatureRendererMixin",
     "injectors.client.TridentEntityRendererMixin",
-    "injectors.client.IntegratedServerLoaderMixin",
     "injectors.client.WorldRendererMixin"
   ],
   "injectors": {
