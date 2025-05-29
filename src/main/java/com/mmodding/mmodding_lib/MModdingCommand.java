@@ -154,8 +154,8 @@ public class MModdingCommand {
 											CommandManager.argument("velocity", Vec3ArgumentType.vec3())
 												.executes(context -> MModdingCommand.velocity(
 													context.getSource(),
-													context.getArgument("target", Entity.class),
-													context.getArgument("velocity", Vec3d.class),
+													EntityArgumentType.getEntity(context, "target"),
+													Vec3ArgumentType.getVec3(context, "velocity"),
 													true
 												))
 										)
@@ -166,8 +166,8 @@ public class MModdingCommand {
 											CommandManager.argument("velocity", Vec3ArgumentType.vec3())
 												.executes(context -> MModdingCommand.velocity(
 													context.getSource(),
-													context.getArgument("target", Entity.class),
-													context.getArgument("velocity", Vec3d.class),
+													EntityArgumentType.getEntity(context, "target"),
+													Vec3ArgumentType.getVec3(context, "velocity"),
 													false
 												))
 										)
@@ -180,7 +180,7 @@ public class MModdingCommand {
 										.executes(context -> MModdingCommand.velocity(
 											context.getSource(),
 											null,
-											context.getArgument("velocity", Vec3d.class),
+											Vec3ArgumentType.getVec3(context, "velocity"),
 											true
 										))
 								)
@@ -192,7 +192,7 @@ public class MModdingCommand {
 										.executes(context -> MModdingCommand.velocity(
 											context.getSource(),
 											null,
-											context.getArgument("velocity", Vec3d.class),
+											Vec3ArgumentType.getVec3(context, "velocity"),
 											false
 										))
 								)
