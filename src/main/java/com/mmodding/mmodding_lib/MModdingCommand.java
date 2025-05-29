@@ -15,11 +15,14 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.command.argument.TimeArgumentType;
+import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -140,6 +143,61 @@ public class MModdingCommand {
 								)
 						)
 				)
+				.then(
+					CommandManager.literal("velocity")
+						.requires(source -> source.hasPermissionLevel(2))
+						.then(
+							CommandManager.argument("target", EntityArgumentType.entity())
+								.then(
+									CommandManager.literal("add")
+										.then(
+											CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+												.executes(context -> MModdingCommand.velocity(
+													context.getSource(),
+													context.getArgument("target", Entity.class),
+													context.getArgument("velocity", Vec3d.class),
+													true
+												))
+										)
+								)
+								.then(
+									CommandManager.literal("set")
+										.then(
+											CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+												.executes(context -> MModdingCommand.velocity(
+													context.getSource(),
+													context.getArgument("target", Entity.class),
+													context.getArgument("velocity", Vec3d.class),
+													false
+												))
+										)
+								)
+						)
+						.then(
+							CommandManager.literal("add")
+								.then(
+									CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+										.executes(context -> MModdingCommand.velocity(
+											context.getSource(),
+											null,
+											context.getArgument("velocity", Vec3d.class),
+											true
+										))
+								)
+						)
+						.then(
+							CommandManager.literal("set")
+								.then(
+									CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+										.executes(context -> MModdingCommand.velocity(
+											context.getSource(),
+											null,
+											context.getArgument("velocity", Vec3d.class),
+											false
+										))
+								)
+						)
+				)
 		);
 	}
 
@@ -246,6 +304,17 @@ public class MModdingCommand {
 				default -> 3;
 			};
 		};
+	}
+
+	private static int velocity(ServerCommandSource source, @Nullable Entity target, Vec3d velocity, boolean additive) throws CommandSyntaxException {
+		Entity entity = target != null ? target : source.getEntityOrThrow();
+		if (additive) {
+			entity.addVelocity(velocity.x, velocity.y, velocity.z);
+		}
+		else {
+			entity.setVelocity(velocity.x, velocity.y, velocity.z);
+		}
+		return additive ? 0 : 1;
 	}
 
 	private enum SoundtrackOperation {
