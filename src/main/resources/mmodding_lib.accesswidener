@@ -30,6 +30,7 @@ extendable class net/minecraft/client/render/RenderLayer$MultiPhaseParameters
 extendable class net/minecraft/world/gen/chunk/NoiseChunkGenerator
 
 accessible field net/minecraft/client/sound/RepeatingAudioStream delegate Lnet/minecraft/client/sound/AudioStream;
+accessible field net/minecraft/entity/ai/goal/MeleeAttackGoal cooldown I
 accessible field net/minecraft/entity/attribute/DefaultAttributeRegistry DEFAULT_ATTRIBUTE_REGISTRY Ljava/util/Map;
 
 mutable field net/minecraft/client/sound/OggAudioStream format Ljavax/sound/sampled/AudioFormat;
