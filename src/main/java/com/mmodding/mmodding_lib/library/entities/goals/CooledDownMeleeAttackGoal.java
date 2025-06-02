@@ -18,11 +18,11 @@ public class CooledDownMeleeAttackGoal extends MeleeAttackGoal {
 	protected void attack(LivingEntity target, double squaredDistance) {
 		if (squaredDistance <= this.getSquaredMaxAttackDistance(target) && this.cooldown <= 0) {
 			this.tryAttack(target);
+			this.resetCooldown();
 		}
 	}
 
 	protected void tryAttack(LivingEntity target) {
-		this.resetCooldown();
 		this.mob.swingHand(Hand.MAIN_HAND);
 		this.mob.tryAttack(target);
 	}
