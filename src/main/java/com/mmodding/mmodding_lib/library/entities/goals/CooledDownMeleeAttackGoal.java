@@ -9,8 +9,8 @@ public class CooledDownMeleeAttackGoal extends MeleeAttackGoal {
 
 	private final int cooldownInTicks;
 
-	public CooledDownMeleeAttackGoal(PathAwareEntity mob, int cooldownInTicks, double speed, boolean pauseWhenMobIdle) {
-		super(mob, speed, pauseWhenMobIdle);
+	public CooledDownMeleeAttackGoal(PathAwareEntity mob, int cooldownInTicks, double speed) {
+		super(mob, speed, true);
 		this.cooldownInTicks = cooldownInTicks;
 	}
 
