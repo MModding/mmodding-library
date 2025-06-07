@@ -31,12 +31,12 @@ public class SoundQueue extends AbstractSoundInstance implements TickableSoundIn
 	private final float sampleRate;
 	private final AdaptiveOggAudioStream.TrackType trackType;
 
-	public SoundQueue(SoundManager soundManager, Identifier identifier, float volume, float pitch) {
-		this(soundManager, identifier, volume, pitch, 44100.0f, AdaptiveOggAudioStream.TrackType.STEREO);
+	public SoundQueue(SoundManager soundManager, Identifier identifier, SoundCategory category, float volume, float pitch) {
+		this(soundManager, identifier, category, volume, pitch, 44100.0f, AdaptiveOggAudioStream.TrackType.STEREO);
 	}
 
-	public SoundQueue(SoundManager soundManager, Identifier identifier, float volume, float pitch, float sampleRate, AdaptiveOggAudioStream.TrackType trackType) {
-		super(identifier, SoundCategory.MASTER, SoundInstance.method_43221());
+	public SoundQueue(SoundManager soundManager, Identifier identifier, SoundCategory category, float volume, float pitch, float sampleRate, AdaptiveOggAudioStream.TrackType trackType) {
+		super(identifier, category, SoundInstance.method_43221());
 		this.soundManager = soundManager;
 		this.volume = volume;
 		this.pitch = pitch;

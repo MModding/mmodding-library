@@ -10,6 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.ClientPlayerTickable;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +40,7 @@ public class ClientSoundtrackPlayer implements ClientPlayerTickable, SoundtrackP
 		if ((this.lock == null || this.lock.equals(soundtrack.getIdentifier())) && !this.sealed) {
 			boolean needsNewQueue = this.queue == null;
 			if (needsNewQueue) {
-				this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), 1.0f, 1.0f);
+				this.queue = new SoundQueue(this.soundManager, MModdingLib.createId("soundtracks"), SoundCategory.MUSIC, 1.0f, 1.0f);
 			}
 			for (int i = 0; i <= toPart - fromPart; i++) {
 				for (int j = 0; j < soundtrack.getPart(fromPart + i).getIterations(); j++) {
