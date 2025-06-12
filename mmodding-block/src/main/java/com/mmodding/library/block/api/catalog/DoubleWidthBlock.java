@@ -6,7 +6,6 @@ import com.mmodding.library.math.api.RelativeBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -21,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class DoubleWidthBlock extends Block {
@@ -36,16 +36,26 @@ public class DoubleWidthBlock extends Block {
 	@Nullable
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		RelativeBlockPos relative = RelativeBlockPos.of(ctx.getBlockPos()).apply(ctx.getPlayerFacing());
-		boolean validOrigin = this.canPlacePartAt(ctx.getWorld(), new BlockPos(relative), ctx.getWorld().getBlockState(relative), ctx);
-		boolean validSub0 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(relative.front()), ctx.getWorld().getBlockState(relative.front()), ctx);
-		boolean validSub1 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(relative.front().left()), ctx.getWorld().getBlockState(relative.front().left()), ctx);
-		boolean validSub2 = this.canPlacePartAt(ctx.getWorld(), new BlockPos(relative.left()), ctx.getWorld().getBlockState(relative.left()), ctx);
-		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getPlayerFacing()) : null;
+		RelativeBlockPos relative = RelativeBlockPos.of(ctx.getBlockPos()).apply(ctx.getHorizontalPlayerFacing());
+		boolean validOrigin = ctx.getWorld().getBlockState(relative).canBeReplaced(ctx);
+		boolean validSub0 = ctx.getWorld().getBlockState(relative.front()).canBeReplaced(ctx);
+		boolean validSub1 = ctx.getWorld().getBlockState(relative.front().left()).canBeReplaced(ctx);
+		boolean validSub2 = ctx.getWorld().getBlockState(relative.left()).canBeReplaced(ctx);
+		return validOrigin && validSub0 && validSub1 && validSub2 ? this.getDefaultState().with(PART, DoubleWidthPart.ORIGIN).with(FACING, ctx.getHorizontalPlayerFacing()) : null;
 	}
 
-	public boolean canPlacePartAt(World world, BlockPos pos, BlockState state, ItemPlacementContext ctx) {
-		return state.canReplace(ctx);
+	@Override
+	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+		RelativeBlockPos origin = state.get(PART).toOrigin(pos, state.get(FACING));
+		BlockPos originPos = new BlockPos(origin);
+		BlockPos sub0Pos = new BlockPos(origin.front());
+		BlockPos sub1Pos = new BlockPos(origin.front().left());
+		BlockPos sub2Pos = new BlockPos(origin.left());
+		boolean validOrigin = world.getBlockState(originPos).canBeReplaced();
+		boolean validSub0 = world.getBlockState(sub0Pos).canBeReplaced();
+		boolean validSub1 = world.getBlockState(sub1Pos).canBeReplaced();
+		boolean validSub2 = world.getBlockState(sub2Pos).canBeReplaced();
+		return validOrigin && validSub0 && validSub1 && validSub2;
 	}
 
 	@Override
@@ -65,18 +75,21 @@ public class DoubleWidthBlock extends Block {
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		super.onBreak(world, pos, state, player);
 		if (!world.isClient()) {
-			RelativeBlockPos relative = state.get(PART).toOrigin(pos, state.get(FACING));
-			world.setBlockState(relative, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(relative.front(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(relative.front().left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
-			world.setBlockState(relative.left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			RelativeBlockPos origin = state.get(PART).toOrigin(pos, state.get(FACING));
+			if (!origin.equals(pos)) {
+				world.setBlockState(origin, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
+			if (!origin.front().equals(pos)) {
+				world.setBlockState(origin.front(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
+			if (!origin.front().left().equals(pos)) {
+				world.setBlockState(origin.front().left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
+			if (!origin.left().equals(pos)) {
+				world.setBlockState(origin.left(), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.SKIP_DROPS);
+			}
 			world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
 		}
-	}
-
-	@Override
-	public PistonBehavior getPistonBehavior(BlockState state) {
-		return PistonBehavior.DESTROY;
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 @Mixin(Block.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
-public class BlockMixin extends AbstractBlockMixin implements BlockWithItem, MModdingBlock, StaticElement<Block>, BlockWithItemImpl.Getter {
+public class BlockMixin implements BlockWithItem, MModdingBlock, StaticElement<Block>, BlockWithItemImpl.Getter {
 
 	@Unique
 	private Item item = null;
@@ -39,7 +39,7 @@ public class BlockMixin extends AbstractBlockMixin implements BlockWithItem, MMo
 
 	@Override
 	public boolean canBeReplaced(BlockState state, @Nullable ItemPlacementContext context) {
-		return context != null ? state.canReplace(context) : this.material.isReplaceable();
+		return context != null ? state.canReplace(context) : state.isReplaceable();
 	}
 
 	@Override
