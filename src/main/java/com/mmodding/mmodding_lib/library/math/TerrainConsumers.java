@@ -7,12 +7,20 @@ import java.util.function.Consumer;
 
 public class TerrainConsumers {
 
-    public static class Oriented {
+	public static OrientedConsumer oriented(BlockPos basePos, Consumer<BlockPos> consumer) {
+		return new OrientedConsumer(basePos, consumer);
+	}
+
+	public static NonOrientedConsumer nonOriented(BlockPos basePos, Consumer<OrientedBlockPos> consumer) {
+		return new NonOrientedConsumer(basePos, consumer);
+	}
+
+    public static class OrientedConsumer {
 
         private final BlockPos basePos;
         private final Consumer<BlockPos> consumer;
 
-        public Oriented(BlockPos basePos, Consumer<BlockPos> consumer) {
+        private OrientedConsumer(BlockPos basePos, Consumer<BlockPos> consumer) {
             this.basePos = basePos;
             this.consumer = consumer;
         }
@@ -22,20 +30,18 @@ public class TerrainConsumers {
         }
     }
 
-    public static class UnOriented {
+    public static class NonOrientedConsumer {
 
         private final BlockPos basePos;
-        private final Direction direction;
         private final Consumer<OrientedBlockPos> consumer;
 
-        public UnOriented(BlockPos basePos, Direction direction, Consumer<OrientedBlockPos> consumer) {
+        private NonOrientedConsumer(BlockPos basePos, Consumer<OrientedBlockPos> consumer) {
             this.basePos = basePos;
-            this.direction = direction;
             this.consumer = consumer;
         }
 
-        public void apply() {
-            this.consumer.accept(OrientedBlockPos.of(this.basePos).apply(this.direction));
+        public void apply(Direction direction) {
+            this.consumer.accept(OrientedBlockPos.of(this.basePos).apply(direction));
         }
     }
 }
