@@ -44,7 +44,7 @@ public class RadiusUtils {
 	}
 
 	private static void checkActionNext(BlockPos pos, Direction excluded, Set<BlockPos> alreadyChecked, BlockPos firstExtremis, BlockPos lastExtremis, Consumer<? super BlockPos> action) {
-		if (alreadyChecked.stream().noneMatch(current -> current.equals(pos))) {
+		if (!alreadyChecked.contains(pos)) {
 			BlockPos firstSubtract = pos.subtract(firstExtremis);
 			BlockPos lastSubtract = pos.subtract(lastExtremis);
 			boolean firstCheck = firstSubtract.getX() <= 0 && firstSubtract.getY() <= 0 && firstSubtract.getZ() <= 0;

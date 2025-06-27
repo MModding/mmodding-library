@@ -4,7 +4,6 @@ import com.mmodding.mmodding_lib.library.MModdingDamageSources;
 import com.mmodding.mmodding_lib.library.worldgen.structures.StructureSpreadLoot;
 import com.mmodding.mmodding_lib.library.worldgen.veins.CustomVeinType;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
