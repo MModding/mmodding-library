@@ -5,6 +5,7 @@ import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
 import com.mmodding.mmodding_lib.library.soundtracks.SoundtrackPlayer;
 import com.mmodding.mmodding_lib.library.soundtracks.server.ServerSoundtrackPlayer;
 import net.minecraft.block.NetherPortalBlock;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,9 @@ import net.minecraft.world.border.WorldBorder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
@@ -26,6 +30,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 
 	@Shadow
 	public abstract ServerWorld getWorld();
+
+	@Inject(method = "onDeath", at = @At("TAIL"))
+	private void resetSoundtrackPlayer(DamageSource source, CallbackInfo ci) {
+		this.soundtrackPlayer.unlock();
+		this.soundtrackPlayer.unseal();
+		this.soundtrackPlayer.clear();
+	}
 
 	@Unique
 	public Optional<BlockLocating.Rectangle> mmodding_lib$getCustomPortalRect(ServerWorld destWorld, BlockPos destPos, WorldBorder worldBorder) {
