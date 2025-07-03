@@ -35,7 +35,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin implemen
 	private void resetSoundtrackPlayer(DamageSource source, CallbackInfo ci) {
 		this.soundtrackPlayer.unlock();
 		this.soundtrackPlayer.unseal();
-		this.soundtrackPlayer.clear();
+		this.soundtrackPlayer.stop();
 	}
 
 	@Unique
