@@ -54,10 +54,6 @@ public class SyncableData<V> extends AtomicReference<V> {
 		this.set(this.handler.read(buf));
 	}
 
-	public Identifier id() {
-		return this.identifier;
-	}
-
 	@ApiStatus.Internal
 	public static class Registry extends HashMap<Identifier, SyncableData<?>> implements Map<Identifier, SyncableData<?>> {
 

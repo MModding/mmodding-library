@@ -6,7 +6,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -29,17 +28,6 @@ public class EntityAction {
 		this.trackingTime = new SyncableData<>(-1, entity, action, TrackedDataHandlerRegistry.INTEGER);
 		this.timeBeforeExecution = timeBeforeExecution;
 		this.delayAfterExecution = delayAfterExecution;
-	}
-
-	public void writeToNbt(NbtCompound nbt) {
-		NbtCompound actions = nbt.getCompound("EntityActions");
-		actions.putInt(this.trackingTime.id().toString(), this.trackingTime.get());
-		nbt.put("EntityActions", actions);
-	}
-
-	public void readFromNbt(NbtCompound nbt) {
-		NbtCompound actions = nbt.getCompound("EntityActions");
-		this.trackingTime.set(actions.getInt(this.trackingTime.id().toString()));
 	}
 
 	public boolean isExecutingAction() {
