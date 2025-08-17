@@ -27,7 +27,7 @@ import java.util.Objects;
 public class Events {
 
 	private static void commandRegistration(CommandDispatcher<ServerCommandSource> dispatcher, CommandBuildContext context, CommandManager.RegistrationEnvironment environment) {
-		MModdingCommand.register(dispatcher);
+		MModdingCommand.register(dispatcher, environment);
 	}
 
 	private static void serverLoad(MinecraftServer server, ServerWorld world) {

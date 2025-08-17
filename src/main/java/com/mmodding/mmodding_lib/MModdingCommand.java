@@ -3,12 +3,14 @@ package com.mmodding.mmodding_lib;
 import com.google.common.collect.ImmutableList;
 import com.mmodding.mmodding_lib.ducks.PlayerEntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerWorldDuckInterface;
+import com.mmodding.mmodding_lib.library.debug.WatcherManager;
 import com.mmodding.mmodding_lib.library.stellar.StellarStatus;
 import com.mmodding.mmodding_lib.library.utils.StellarUtils;
 import com.mmodding.mmodding_lib.states.persistant.StellarStatuses;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.command.CommandSource;
@@ -19,9 +21,11 @@ import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -29,176 +33,187 @@ import java.util.Locale;
 
 public class MModdingCommand {
 
-	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(
-			CommandManager.literal("mmodding")
-				.then(
-					CommandManager.literal("discard")
-						.requires(source -> source.hasPermissionLevel(2))
-						.executes(context -> MModdingCommand.discard(context.getSource(), ImmutableList.of(context.getSource().getEntityOrThrow())))
-						.then(
-							CommandManager.argument("targets", EntityArgumentType.entities())
-								.executes(context -> MModdingCommand.discard(context.getSource(), EntityArgumentType.getEntities(context, "targets")))
-						)
-				)
-				.then(
-					CommandManager.literal("invincible")
-						.requires(source -> source.hasPermissionLevel(2))
-						.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.DEFAULT))
-						.then(
-							CommandManager.argument("mode", BoolArgumentType.bool())
-								.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.of(BoolArgumentType.getBool(context, "mode"))))
-						)
-				)
-				.then(
-					CommandManager.literal("soundtrack")
-						.then(
-							CommandManager.literal("release")
-								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.RELEASE))
-						)
-						.then(
-							CommandManager.literal("clear")
-								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.CLEAR))
-						)
-						.then(
-							CommandManager.literal("stop")
-								.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.STOP))
-						)
-				)
-				.then(
-					CommandManager.literal("stellar")
-						.requires(source -> source.hasPermissionLevel(2))
-						.then(
-							CommandManager.argument("status", IdentifierArgumentType.identifier())
-								.suggests(
-									(context, builder) -> {
-										StellarStatuses stellarStatuses = ((ServerWorldDuckInterface) context.getSource().getWorld())
-											.mmodding_lib$getStellarStatuses();
-										return CommandSource.suggestIdentifiers(stellarStatuses.getMap().keySet(), builder);
-									}
-								)
-								.then(
-									CommandManager.literal("set")
-										.then(
-											CommandManager.argument("time", TimeArgumentType.time())
-												.executes(
-													context -> MModdingCommand.stellar(
-														context.getSource(),
-														context.getArgument("status", Identifier.class),
-														StellarOperation.SET,
-														IntegerArgumentType.getInteger(context, "time")
-													)
-												)
-										)
-								)
-								.then(
-									CommandManager.literal("add")
-										.then(
-											CommandManager.argument("time", TimeArgumentType.time())
-												.executes(
-													context -> MModdingCommand.stellar(
-														context.getSource(),
-														context.getArgument("status", Identifier.class),
-														StellarOperation.ADD,
-														IntegerArgumentType.getInteger(context, "time")
-													)
-												)
-										)
-								)
-								.then(
-									CommandManager.literal("query")
-										.then(
-											CommandManager.literal("time")
-												.executes(
-													context -> MModdingCommand.stellar(
-														context.getSource(),
-														context.getArgument("status", Identifier.class),
-														StellarOperation.QUERY,
-														0
-													)
-												)
-										)
-										.then(
-											CommandManager.literal("total")
-												.executes(
-													context -> MModdingCommand.stellar(
-														context.getSource(),
-														context.getArgument("status", Identifier.class),
-														StellarOperation.QUERY,
-														1
-													)
-												)
-										)
-										.then(
-											CommandManager.literal("rotation")
-												.executes(
-													context -> MModdingCommand.stellar(
-														context.getSource(),
-														context.getArgument("status", Identifier.class),
-														StellarOperation.QUERY,
-														2
-													)
-												)
-										)
-								)
-						)
-				)
-				.then(
-					CommandManager.literal("velocity")
-						.requires(source -> source.hasPermissionLevel(2))
-						.then(
-							CommandManager.argument("target", EntityArgumentType.entity())
-								.then(
-									CommandManager.literal("add")
-										.then(
-											CommandManager.argument("velocity", Vec3ArgumentType.vec3())
-												.executes(context -> MModdingCommand.velocity(
+	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandManager.RegistrationEnvironment environment) {
+		LiteralArgumentBuilder<ServerCommandSource> mmoddingCommand = CommandManager.literal("mmodding")
+			.then(
+				CommandManager.literal("discard")
+					.requires(source -> source.hasPermissionLevel(2))
+					.executes(context -> MModdingCommand.discard(context.getSource(), ImmutableList.of(context.getSource().getEntityOrThrow())))
+					.then(
+						CommandManager.argument("targets", EntityArgumentType.entities())
+							.executes(context -> MModdingCommand.discard(context.getSource(), EntityArgumentType.getEntities(context, "targets")))
+					)
+			)
+			.then(
+				CommandManager.literal("invincible")
+					.requires(source -> source.hasPermissionLevel(2))
+					.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.DEFAULT))
+					.then(
+						CommandManager.argument("mode", BoolArgumentType.bool())
+							.executes(context -> MModdingCommand.invincible(context.getSource(), TriState.of(BoolArgumentType.getBool(context, "mode"))))
+					)
+			)
+			.then(
+				CommandManager.literal("soundtrack")
+					.then(
+						CommandManager.literal("release")
+							.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.RELEASE))
+					)
+					.then(
+						CommandManager.literal("clear")
+							.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.CLEAR))
+					)
+					.then(
+						CommandManager.literal("stop")
+							.executes(context -> MModdingCommand.soundtrack(context.getSource(), SoundtrackOperation.STOP))
+					)
+			)
+			.then(
+				CommandManager.literal("stellar")
+					.requires(source -> source.hasPermissionLevel(2))
+					.then(
+						CommandManager.argument("status", IdentifierArgumentType.identifier())
+							.suggests(
+								(context, builder) -> {
+									StellarStatuses stellarStatuses = ((ServerWorldDuckInterface) context.getSource().getWorld())
+										.mmodding_lib$getStellarStatuses();
+									return CommandSource.suggestIdentifiers(stellarStatuses.getMap().keySet(), builder);
+								}
+							)
+							.then(
+								CommandManager.literal("set")
+									.then(
+										CommandManager.argument("time", TimeArgumentType.time())
+											.executes(
+												context -> MModdingCommand.stellar(
 													context.getSource(),
-													EntityArgumentType.getEntity(context, "target"),
-													Vec3ArgumentType.getVec3(context, "velocity"),
-													true
-												))
-										)
-								)
-								.then(
-									CommandManager.literal("set")
-										.then(
-											CommandManager.argument("velocity", Vec3ArgumentType.vec3())
-												.executes(context -> MModdingCommand.velocity(
+													context.getArgument("status", Identifier.class),
+													StellarOperation.SET,
+													IntegerArgumentType.getInteger(context, "time")
+												)
+											)
+									)
+							)
+							.then(
+								CommandManager.literal("add")
+									.then(
+										CommandManager.argument("time", TimeArgumentType.time())
+											.executes(
+												context -> MModdingCommand.stellar(
 													context.getSource(),
-													EntityArgumentType.getEntity(context, "target"),
-													Vec3ArgumentType.getVec3(context, "velocity"),
-													false
-												))
-										)
-								)
-						)
-						.then(
-							CommandManager.literal("add")
-								.then(
-									CommandManager.argument("velocity", Vec3ArgumentType.vec3())
-										.executes(context -> MModdingCommand.velocity(
-											context.getSource(),
-											null,
-											Vec3ArgumentType.getVec3(context, "velocity"),
-											true
-										))
-								)
-						)
-						.then(
-							CommandManager.literal("set")
-								.then(
-									CommandManager.argument("velocity", Vec3ArgumentType.vec3())
-										.executes(context -> MModdingCommand.velocity(
-											context.getSource(),
-											null,
-											Vec3ArgumentType.getVec3(context, "velocity"),
-											false
-										))
-								)
-						)
-				)
-		);
+													context.getArgument("status", Identifier.class),
+													StellarOperation.ADD,
+													IntegerArgumentType.getInteger(context, "time")
+												)
+											)
+									)
+							)
+							.then(
+								CommandManager.literal("query")
+									.then(
+										CommandManager.literal("time")
+											.executes(
+												context -> MModdingCommand.stellar(
+													context.getSource(),
+													context.getArgument("status", Identifier.class),
+													StellarOperation.QUERY,
+													0
+												)
+											)
+									)
+									.then(
+										CommandManager.literal("total")
+											.executes(
+												context -> MModdingCommand.stellar(
+													context.getSource(),
+													context.getArgument("status", Identifier.class),
+													StellarOperation.QUERY,
+													1
+												)
+											)
+									)
+									.then(
+										CommandManager.literal("rotation")
+											.executes(
+												context -> MModdingCommand.stellar(
+													context.getSource(),
+													context.getArgument("status", Identifier.class),
+													StellarOperation.QUERY,
+													2
+												)
+											)
+									)
+							)
+					)
+			)
+			.then(
+				CommandManager.literal("velocity")
+					.requires(source -> source.hasPermissionLevel(2))
+					.then(
+						CommandManager.argument("target", EntityArgumentType.entity())
+							.then(
+								CommandManager.literal("add")
+									.then(
+										CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+											.executes(context -> MModdingCommand.velocity(
+												context.getSource(),
+												EntityArgumentType.getEntity(context, "target"),
+												Vec3ArgumentType.getVec3(context, "velocity"),
+												true
+											))
+									)
+							)
+							.then(
+								CommandManager.literal("set")
+									.then(
+										CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+											.executes(context -> MModdingCommand.velocity(
+												context.getSource(),
+												EntityArgumentType.getEntity(context, "target"),
+												Vec3ArgumentType.getVec3(context, "velocity"),
+												false
+											))
+									)
+							)
+					)
+					.then(
+						CommandManager.literal("add")
+							.then(
+								CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+									.executes(context -> MModdingCommand.velocity(
+										context.getSource(),
+										null,
+										Vec3ArgumentType.getVec3(context, "velocity"),
+										true
+									))
+							)
+					)
+					.then(
+						CommandManager.literal("set")
+							.then(
+								CommandManager.argument("velocity", Vec3ArgumentType.vec3())
+									.executes(context -> MModdingCommand.velocity(
+										context.getSource(),
+										null,
+										Vec3ArgumentType.getVec3(context, "velocity"),
+										false
+									))
+							)
+					)
+			);
+		if (environment.integrated) {
+			mmoddingCommand.then(
+				CommandManager.literal("watch")
+					.then(
+						CommandManager.argument("target", EntityArgumentType.entity())
+							.executes(context -> MModdingCommand.watch(
+								context.getSource(),
+								EntityArgumentType.getEntity(context, "target")
+							))
+					)
+			);
+		}
+		dispatcher.register(mmoddingCommand);
 	}
 
 	private static int discard(ServerCommandSource source, Collection<? extends Entity> targets) {
@@ -315,6 +330,16 @@ public class MModdingCommand {
 			entity.setVelocity(velocity.x, velocity.y, velocity.z);
 		}
 		return additive ? 0 : 1;
+	}
+
+	private static int watch(ServerCommandSource source, @NotNull Entity target) {
+		if (source.getServer() instanceof IntegratedServer && WatcherManager.isWatchable(target)) {
+			WatcherManager.toggleEntityWatcher(target);
+			return 1;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	private enum SoundtrackOperation {
