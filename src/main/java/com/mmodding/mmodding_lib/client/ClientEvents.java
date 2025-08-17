@@ -83,7 +83,7 @@ public class ClientEvents {
 				renderer.draw(matrices, entityLabel, 10, y, 0);
 				y += gap;
 				for (var field : entry.getValue().entrySet()) {
-					Text valueLabel = Text.literal(field.getValue().get().toString()).formatted(Formatting.GREEN);
+					Text valueLabel = Text.literal(String.valueOf(field.getValue().get())).formatted(Formatting.GREEN);
 					Text fieldLabel = Text.literal(field.getKey() + ": ").formatted(Formatting.RED).append(valueLabel);
 					renderer.draw(matrices, fieldLabel, 20, y, 0);
 					y += gap;
