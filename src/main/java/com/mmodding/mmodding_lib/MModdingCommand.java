@@ -22,10 +22,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -205,10 +205,10 @@ public class MModdingCommand {
 			mmoddingCommand.then(
 				CommandManager.literal("watch")
 					.then(
-						CommandManager.argument("target", EntityArgumentType.entity())
+						CommandManager.argument("targets", EntityArgumentType.entities())
 							.executes(context -> MModdingCommand.watch(
 								context.getSource(),
-								EntityArgumentType.getEntity(context, "target")
+								EntityArgumentType.getEntities(context, "targets")
 							))
 					)
 			);
@@ -332,14 +332,15 @@ public class MModdingCommand {
 		return additive ? 0 : 1;
 	}
 
-	private static int watch(ServerCommandSource source, @NotNull Entity target) {
-		if (source.getServer() instanceof IntegratedServer && WatcherManager.isWatchable(target)) {
-			WatcherManager.toggleEntityWatcher(target);
-			return 1;
+	private static int watch(ServerCommandSource source, Collection<? extends Entity> targets) {
+		if (source.getServer() instanceof IntegratedServer && source.getEntity() instanceof ServerPlayerEntity) {
+			for (Entity target : targets) {
+				if (WatcherManager.isWatchable(target)) {
+					WatcherManager.toggleEntityWatcher(target);
+				}
+			}
 		}
-		else {
-			return 0;
-		}
+		return 1;
 	}
 
 	private enum SoundtrackOperation {

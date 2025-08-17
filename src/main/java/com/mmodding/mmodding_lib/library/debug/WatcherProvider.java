@@ -1,7 +1,9 @@
 package com.mmodding.mmodding_lib.library.debug;
 
+import net.minecraft.entity.player.PlayerEntity;
+
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 /**
  * An interface used for providing watchers.
@@ -13,5 +15,5 @@ public interface WatcherProvider {
 	/**
 	 * @return a map associating a label to a value getter
 	 */
-	Map<String, Supplier<Object>> watcher();
+	Map<String, Function<PlayerEntity, Object>> watcher();
 }

@@ -21,6 +21,7 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
@@ -73,7 +74,8 @@ public class ClientEvents {
 
 	private static void renderWatchers(MatrixStack matrices, float ticks) {
 		ClientWorld world = MinecraftClient.getInstance().world;
-		if (world != null) {
+		ClientPlayerEntity player = MinecraftClient.getInstance().player;
+		if (world != null && player != null) {
 			TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
 			final int gap = renderer.fontHeight + 2;
 			int y = 10;
@@ -83,7 +85,7 @@ public class ClientEvents {
 				renderer.draw(matrices, entityLabel, 10, y, 0);
 				y += gap;
 				for (var field : entry.getValue().entrySet()) {
-					Text valueLabel = Text.literal(String.valueOf(field.getValue().get())).formatted(Formatting.GREEN);
+					Text valueLabel = Text.literal(String.valueOf(field.getValue().apply(player))).formatted(Formatting.GREEN);
 					Text fieldLabel = Text.literal(field.getKey() + ": ").formatted(Formatting.RED).append(valueLabel);
 					renderer.draw(matrices, fieldLabel, 20, y, 0);
 					y += gap;
