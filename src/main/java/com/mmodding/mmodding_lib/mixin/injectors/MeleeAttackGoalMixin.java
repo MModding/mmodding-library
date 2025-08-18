@@ -31,7 +31,7 @@ public class MeleeAttackGoalMixin {
 	@WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/pathing/EntityNavigation;startMovingTo(Lnet/minecraft/entity/Entity;D)Z"))
 	private boolean changeMinimalDistance(EntityNavigation instance, Entity entity, double speed, Operation<Boolean> original) {
 		if (((Object) this) instanceof AdvancedMeleeAttackGoal goal) {
-			double squaredDistance = this.mob.squaredDistanceTo(this.targetX, this.targetY, this.targetZ);
+			double squaredDistance = this.mob.getTarget().squaredDistanceTo(this.targetX, this.targetY, this.targetZ);
 			if (squaredDistance >= goal.getMinimalDistance()) {
 				return original.call(instance, entity, speed);
 			}
