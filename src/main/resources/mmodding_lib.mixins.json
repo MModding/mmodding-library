@@ -80,7 +80,6 @@
     "injectors.ListPoolElementMixin",
     "injectors.LivingEntityMixin",
     "injectors.LootableContainerBlockEntityMixin",
-    "injectors.MeleeAttackGoalMixin",
     "injectors.MiningToolItemMixin",
     "injectors.MobEntityMixin",
     "injectors.ModBadgeRendererMixin",
