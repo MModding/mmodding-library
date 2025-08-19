@@ -12,7 +12,7 @@ import java.util.function.Function;
 // Only works on integrated servers as the debugging is working by executing server-provided getters.
 public class WatcherManager {
 
-	private static final Map<UUID, Map<String, Function<PlayerEntity, Object>>> ENTITY_WATCHERS = new LinkedHashMap<>();
+	private static final Map<UUID, WatcherProvider> ENTITY_WATCHERS = new LinkedHashMap<>();
 
 	public static boolean isWatchable(Entity entity) {
 		return entity instanceof WatcherProvider;
@@ -24,13 +24,12 @@ public class WatcherManager {
 			WatcherManager.ENTITY_WATCHERS.remove(entity.getUuid());
 		}
 		else {
-			WatcherProvider provider = (WatcherProvider) entity;
-			WatcherManager.ENTITY_WATCHERS.put(entity.getUuid(), provider.watcher());
+			WatcherManager.ENTITY_WATCHERS.put(entity.getUuid(), (WatcherProvider) entity);
 		}
 	}
 
 	// Used by the client.
-	public static Set<Map.Entry<UUID, Map<String, Function<PlayerEntity, Object>>>> getEntries() {
+	public static Set<Map.Entry<UUID, WatcherProvider>> getEntries() {
 		return WatcherManager.ENTITY_WATCHERS.entrySet();
 	}
 }

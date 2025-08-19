@@ -1,6 +1,7 @@
 package com.mmodding.mmodding_lib.library.debug;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -13,7 +14,18 @@ import java.util.function.Function;
 public interface WatcherProvider {
 
 	/**
-	 * @return a map associating a label to a value getter
+	 * @return a map associating a string to a value getter
+	 * @apiNote The "null" value makes it disabled by default.
 	 */
-	Map<String, Function<PlayerEntity, Object>> watcher();
+	default Map<String, Function<PlayerEntity, Object>> valueWatcher() {
+		return null;
+	}
+
+	/**
+	 * @return a map associating a string to a space position getter
+	 * @apiNote The "null" value makes it disabled by default.
+	 */
+	default Map<String, Function<PlayerEntity, Vec3d>> spaceWatcher() {
+		return null;
+	}
 }
