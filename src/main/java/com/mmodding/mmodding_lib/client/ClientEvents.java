@@ -109,7 +109,8 @@ public class ClientEvents {
 	private static void renderSpaceWatchers(WorldRenderContext context) {
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client.world != null && client.player != null) {
-			VertexConsumerProvider vertices = client.getBufferBuilders().getOutlineVertexConsumers();
+			VertexConsumerProvider vertices = context.consumers();
+			assert vertices != null;
 			for (var entry : WatcherManager.getEntries()) {
 				var spaceWatcher = entry.getValue().spaceWatcher();
 				if (spaceWatcher != null) {
@@ -140,6 +141,6 @@ public class ClientEvents {
 		TooltipComponentCallback.EVENT.register(ClientEvents::tooltipComponentCallback);
 		ItemTooltipCallback.EVENT.register(ClientEvents::itemTooltipCallback);
 		HudRenderCallback.EVENT.register(ClientEvents::renderValueWatchers);
-		WorldRenderEvents.END.register(ClientEvents::renderSpaceWatchers);
+		WorldRenderEvents.BEFORE_DEBUG_RENDER.register(ClientEvents::renderSpaceWatchers);
 	}
 }
