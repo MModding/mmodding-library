@@ -28,6 +28,11 @@ public class WatcherManager {
 		}
 	}
 
+	// Used by the integrated server.
+	public static void removeEntityWatcher(Entity entity) {
+		WatcherManager.ENTITY_WATCHERS.remove(entity.getUuid());
+	}
+
 	// Used by the client.
 	public static Set<Map.Entry<UUID, WatcherProvider>> getEntries() {
 		return WatcherManager.ENTITY_WATCHERS.entrySet();

@@ -6,6 +6,7 @@ import com.mmodding.mmodding_lib.ducks.EntityDuckInterface;
 import com.mmodding.mmodding_lib.ducks.PortalForcerDuckInterface;
 import com.mmodding.mmodding_lib.ducks.ServerPlayerDuckInterface;
 import com.mmodding.mmodding_lib.interface_injections.EntitySyncableDataRegistry;
+import com.mmodding.mmodding_lib.library.debug.WatcherManager;
 import com.mmodding.mmodding_lib.library.entities.data.syncable.SyncableData;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortal;
 import com.mmodding.mmodding_lib.library.portals.squared.CustomSquaredPortalBlock;
@@ -16,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
@@ -137,6 +139,13 @@ public abstract class EntityMixin implements EntitySyncableDataRegistry, EntityD
 			return ((AbstractBlockSettingsDuckInterface) ((AbstractBlockAccessor) state.getBlock()).getSettings()).mmodding_lib$getInnerVelocityMultiplier() * original;
 		}
 		return original;
+	}
+
+	@Inject(method = "remove", at = @At("HEAD"))
+	private void remove(Entity.RemovalReason reason, CallbackInfo ci) {
+		if (this.getWorld() instanceof ServerWorld serverWorld && serverWorld.getServer() instanceof IntegratedServer) {
+			WatcherManager.removeEntityWatcher((Entity) (Object) this);
+		}
 	}
 
 	@Override
