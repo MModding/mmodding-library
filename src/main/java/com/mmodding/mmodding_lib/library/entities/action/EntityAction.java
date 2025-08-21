@@ -80,7 +80,7 @@ public class EntityAction {
 	private void clientTick() {
 		if (this.trackingTime.get() >= 0 && this.trackingTime.get() <= this.getFullTime()) {
 			if (this.trackingTime.get() == 0) {
-				this.state.start(this.entity.age);
+				this.state.restart(this.entity.age);
 			}
 			this.trackingTime.set(this.trackingTime.get() + 1);
 		}
