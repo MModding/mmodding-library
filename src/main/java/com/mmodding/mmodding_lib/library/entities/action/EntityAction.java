@@ -80,6 +80,9 @@ public class EntityAction {
 	private void clientTick() {
 		if (this.trackingTime.get() >= 0 && this.trackingTime.get() <= this.getFullTime()) {
 			if (this.trackingTime.get() == 0) {
+				// We need to use AnimationState#restart and not AnimationState#start, because even
+				// when an animation is not looping, after the animation visually finished to animate,
+				// it is not the case in the code, preventing AnimationState#start to work properly.
 				this.state.restart(this.entity.age);
 			}
 			this.trackingTime.set(this.trackingTime.get() + 1);
