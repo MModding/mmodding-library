@@ -115,6 +115,7 @@
     "injectors.StructureTemplateManagerMixin",
     "injectors.SwordItemMixin",
     "injectors.ToolItemMixin",
+    "injectors.TridentEntityMixin",
     "injectors.TridentItemMixin",
     "injectors.WeatherCommandMixin",
     "injectors.WorldMixin",

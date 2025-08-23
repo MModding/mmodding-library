@@ -44,7 +44,11 @@ public class SpearEntity extends TridentEntity {
 		this.dataTracker.startTracking(SpearEntity.GLINT_PACK, null);
 	}
 
-	public Optional<Identifier> getGlintPack() {
+	public float getBaseDamage() {
+		return 8.0f;
+	}
+
+	public final Optional<Identifier> getGlintPack() {
 		String identifier = this.dataTracker.get(SpearEntity.GLINT_PACK);
 		if (identifier != null) {
 			return Optional.ofNullable(Identifier.tryParse(identifier));
