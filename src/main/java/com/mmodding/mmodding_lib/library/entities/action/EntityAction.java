@@ -89,6 +89,8 @@ public class EntityAction {
 		}
 		else if (this.trackingTime.get() >= 0 && this.trackingTime.get() > this.getFullTime()) {
 			this.trackingTime.set(-1);
+			// Be sure that after the full execution of the entity action, the animation really is complete, otherwise
+			// it will pollute the animation cache.
 			this.state.stop();
 		}
 	}
