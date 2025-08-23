@@ -32,7 +32,7 @@ public class AnimationUtils {
 
 	public static void updateAnimation(SinglePartEntityModel<?> model, Animation animation, AnimationState state, float animationProgress, float speedFactor) {
 		state.method_43686(animationProgress, speedFactor);
-		state.animateIfValid(current -> Animator.animate(model, animation, current.method_43687(), 1.0F, SinglePartEntityModelAccessor.getField39195()));
+		state.animateIfValid(current -> Animator.animate(model, animation, current.method_43687(), 1.0f, SinglePartEntityModelAccessor.getField39195()));
 	}
 
 	public static void reset(AnimationState state) {
