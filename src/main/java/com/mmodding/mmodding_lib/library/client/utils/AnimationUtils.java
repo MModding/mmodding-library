@@ -1,5 +1,6 @@
 package com.mmodding.mmodding_lib.library.client.utils;
 
+import com.mmodding.mmodding_lib.mixin.accessors.AnimationStateAccessor;
 import com.mmodding.mmodding_lib.mixin.accessors.SinglePartEntityModelAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,6 +33,11 @@ public class AnimationUtils {
 	public static void updateAnimation(SinglePartEntityModel<?> model, Animation animation, AnimationState state, float animationProgress, float speedFactor) {
 		state.method_43686(animationProgress, speedFactor);
 		state.animateIfValid(current -> Animator.animate(model, animation, current.method_43687(), 1.0F, SinglePartEntityModelAccessor.getField39195()));
+	}
+
+	public static void reset(AnimationState state) {
+		state.stop();
+		((AnimationStateAccessor) state).setField_39112(0);
 	}
 
 	public static void animateSmoothly(SinglePartEntityModel<?> model, Animation animation, Animation lastAnimation, long duration, float strength, Vec3f animationCache, int smooth) {
