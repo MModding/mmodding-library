@@ -9,6 +9,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mmodding.mmodding_lib.library.items.CustomBookItem;
 import com.mmodding.mmodding_lib.library.enchantments.CustomEnchantment;
 import com.mmodding.mmodding_lib.library.enchantments.types.EnchantmentType;
+import com.mmodding.mmodding_lib.library.items.CustomEnchantedBookItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
@@ -21,6 +22,21 @@ import java.util.function.Predicate;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
+
+	@WrapOperation(method = "get", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+	private static boolean allowGetCustomEnchantedBookItems(ItemStack instance, Item item, Operation<Boolean> original) {
+		return instance.getItem() instanceof CustomEnchantedBookItem || original.call(instance, item);
+	}
+
+	@WrapOperation(method = "set", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+	private static boolean allowSetCustomEnchantedBookItems(ItemStack instance, Item item, Operation<Boolean> original) {
+		return instance.getItem() instanceof CustomEnchantedBookItem || original.call(instance, item);
+	}
+
+	@WrapOperation(method = "enchant", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+	private static boolean allowEnchantingCustomBookItems(ItemStack instance, Item item, Operation<Boolean> original) {
+		return instance.getItem() instanceof CustomBookItem || original.call(instance, item);
+	}
 
 	@WrapOperation(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
 	private static boolean addCustomBooks(ItemStack stack, Item item, Operation<Boolean> operation, @Share("type") LocalRef<EnchantmentType> type) {
