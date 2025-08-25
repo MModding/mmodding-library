@@ -131,6 +131,12 @@ jar {
 	}
 }
 
+sourcesJar {
+	from("LICENSE.md") {
+		rename { "${it}_${archivesBaseName}" }
+	}
+}
+
 // Configure the maven publication
 publishing {
 	publications {
