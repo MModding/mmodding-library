@@ -127,10 +127,8 @@ java {
 // If you plan to use a different file for the license, don't forget to change the file name here!
 ["jar", "sourcesJar"].each {
 	tasks.named(it).configure {
-		inputs.property "archivesName", project.base.archivesName
-
-		from("LICENSE") {
-			rename { "${it}_${task.inputs.properties.archivesName}"}
+		from("LICENSE.md") {
+			rename { "${it}_${archivesBaseName}" }
 		}
 	}
 }
