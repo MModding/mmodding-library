@@ -28,9 +28,9 @@ public class BlockTests implements ExtendedModInitializer {
 	public void onInitialize(AdvancedContainer mod) {}
 
 	public static void registerBlocks(AdvancedContainer mod) {
-		mod.withRegistry(Registries.BLOCK).execute(pusher -> {
-			FIRST_BLOCK.register(pusher.createId("first_block"));
-			SECOND_BLOCK.register(pusher.createId("second_block"));
+		mod.withRegistry(Registries.BLOCK, factory -> {
+			FIRST_BLOCK.register(factory.createKey("first_block"));
+			SECOND_BLOCK.register(factory.createKey("second_block"));
 		});
 		FURNACE_BLOCKS.register(name -> mod.createId(name + "_furnace"));
 	}

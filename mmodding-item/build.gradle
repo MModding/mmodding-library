@@ -6,7 +6,7 @@ mmodding {
 		addMixin("mmodding_item.mixins.json")
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_1792", Set.of(
-				"com/mmodding/library/core/api/registry/Registrable<Lnet/minecraft/item/Item;>",
+				"com/mmodding/library/core/api/registry/StaticElement<Lnet/minecraft/item/Item;>",
 				"com/mmodding/library/item/api/category/ItemCategoryContainer"
 			))
 		}

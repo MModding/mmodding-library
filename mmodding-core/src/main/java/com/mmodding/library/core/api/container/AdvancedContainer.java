@@ -1,9 +1,11 @@
 package com.mmodding.library.core.api.container;
 
-import com.mmodding.library.core.api.registry.LiteRegistry;
+import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
 import com.mmodding.library.core.impl.container.AdvancedContainerImpl;
+import com.mmodding.library.core.impl.registry.factory.RegistryKeyFactoryImpl;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,53 +26,11 @@ public interface AdvancedContainer extends ModContainer {
 		return new Identifier(this.getMetadata().getId(), path);
 	}
 
-	default <T> RegistryLinkedContainerExecutor<T> withRegistry(Registry<T> registry) {
-
-		return () -> new RegistryLinkedContainer<>() {
-
-			@Override
-			public Registry<T> getRegistry() {
-				return registry;
-			}
-
-			@Override
-			public AdvancedContainer getContainer() {
-				return AdvancedContainer.this;
-			}
-		};
+	default <T> void withRegistry(Registry<T> registry, Consumer<RegistryKeyFactory<T>> consumer) {
+		this.withRegistry(registry.getKey(), consumer);
 	}
 
-	default <T> LiteRegistryLinkedContainerExecutor<T> withRegistry(LiteRegistry<T> registry) {
-
-		return () -> new LiteRegistryLinkedContainer<>() {
-
-			@Override
-			public LiteRegistry<T> getRegistry() {
-				return registry;
-			}
-
-			@Override
-			public AdvancedContainer getContainer() {
-				return AdvancedContainer.this;
-			}
-		};
-	}
-
-	interface RegistryLinkedContainerExecutor<T> {
-
-		RegistryLinkedContainer<T> getContainer();
-
-		default void execute(Consumer<RegistryLinkedContainer<T>> executor) {
-			executor.accept(this.getContainer());
-		}
-	}
-
-	interface LiteRegistryLinkedContainerExecutor<T> {
-
-		LiteRegistryLinkedContainer<T> getContainer();
-
-		default void execute(Consumer<LiteRegistryLinkedContainer<T>> executor) {
-			executor.accept(this.getContainer());
-		}
+	default <T> void withRegistry(RegistryKey<? extends Registry<T>> registry, Consumer<RegistryKeyFactory<T>> consumer) {
+		consumer.accept(new RegistryKeyFactoryImpl<>(registry, this.getMetadata().getId()));
 	}
 }

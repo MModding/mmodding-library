@@ -1,7 +1,7 @@
 package com.mmodding.library.worldgen.api.vein;
 
 import com.mmodding.library.block.api.util.RandomStateContainer;
-import com.mmodding.library.core.api.registry.Registrable;
+import com.mmodding.library.core.api.registry.StaticElement;
 import com.mmodding.library.core.api.registry.extension.RegistryCompanion;
 import com.mmodding.library.core.api.registry.extension.RegistryKeyAttachment;
 import com.mmodding.library.worldgen.impl.vein.VeinTypeImpl;
@@ -13,7 +13,7 @@ import net.minecraft.world.gen.DensityFunction;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
 
-public interface VeinType extends Registrable<VeinType> {
+public interface VeinType extends StaticElement<VeinType> {
 
 	RegistryCompanion<ChunkGeneratorSettings, VeinType> REGISTRY = RegistryCompanion.create(RegistryKeyAttachment.dynamic(RegistryKeys.CHUNK_GENERATOR_SETTINGS));
 
