@@ -2,7 +2,7 @@ package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
 import com.mmodding.library.core.api.Reference;
-import com.mmodding.library.core.api.management.content.ForBeing;
+import com.mmodding.library.java.api.object.Holder;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import com.mmodding.library.worldgen.api.feature.replication.FeatureReplicator;
 import net.minecraft.registry.Registry;
@@ -14,12 +14,12 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
 public class FeatureTests {
 
-	public static final ForBeing.Vacant<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = ForBeing.vacant();
+	public static final Holder<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = Holder.create();
 
 	public FeatureTests(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
 		Reference.LiteFactory factory = Reference.createFactory(path -> new Identifier(mod.getMetadata().getId(), path));
-		RANDOM_PATCH.initialize(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
-		RANDOM_PATCH.execute(randomPatch -> {
+		RANDOM_PATCH.assign(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
+		RANDOM_PATCH.ifPresent(randomPatch -> {
 			randomPatch.appendConfiguredFeature(
 				factory.createId(""),
 				new RandomPatchFeatureConfig(0, 0, 0, null),
