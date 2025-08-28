@@ -23,6 +23,6 @@ public class WaitingRegistryEntry<T> {
 	}
 
 	public T register(Registry<T> registry) {
-		return Registry.register(registry, this.key.provideKey(registry), this.element);
+		return Registry.register(registry, this.key, this.element);
 	}
 }
