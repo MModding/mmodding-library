@@ -7,10 +7,7 @@ mmodding {
 		withEntrypoints {
 			it.init("com.mmodding.library.core.impl.MModdingInitializer")
 		}
-		withInjectedInterfaces {
-			it.injectTo("net/minecraft/class_2960", "com/mmodding/library/core/api/Reference<Ljava/lang/Object;>")
-			it.injectTo("net/minecraft/class_5321", "com/mmodding/library/core/api/Reference<TT;>")
-		}
+		withInjectedInterfaces {}
 	}
 	modules(project) {
 		implementation("mmodding-java")

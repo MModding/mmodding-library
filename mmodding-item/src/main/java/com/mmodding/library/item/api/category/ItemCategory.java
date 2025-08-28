@@ -14,8 +14,8 @@ import java.util.function.Supplier;
 @ApiStatus.NonExtendable
 public interface ItemCategory {
 
-	static ItemCategory create(RegistryKey<ItemGroup> reference, Consumer<Settings> settings) {
-		return new ItemCategoryImpl(reference, settings);
+	static ItemCategory create(RegistryKey<ItemGroup> key, Consumer<Settings> settings) {
+		return new ItemCategoryImpl(key, settings);
 	}
 
 	RegistryKey<ItemGroup> getRegistryKey();
