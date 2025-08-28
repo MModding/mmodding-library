@@ -26,6 +26,10 @@ public interface AdvancedContainer extends ModContainer {
 		return new Identifier(this.getMetadata().getId(), path);
 	}
 
+	default <T> RegistryKey<T> createKey(RegistryKey<? extends Registry<T>> registry, String path) {
+		return RegistryKey.of(registry, this.createId(path));
+	}
+
 	default <T> void withRegistry(Registry<T> registry, Consumer<RegistryKeyFactory<T>> consumer) {
 		this.withRegistry(registry.getKey(), consumer);
 	}

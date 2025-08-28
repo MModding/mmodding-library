@@ -1,9 +1,9 @@
 package com.mmodding.library.item.api.category;
 
-import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.item.impl.category.ItemCategoryImpl;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -14,11 +14,11 @@ import java.util.function.Supplier;
 @ApiStatus.NonExtendable
 public interface ItemCategory {
 
-	static ItemCategory create(Reference<ItemGroup> reference, Consumer<Settings> settings) {
+	static ItemCategory create(RegistryKey<ItemGroup> reference, Consumer<Settings> settings) {
 		return new ItemCategoryImpl(reference, settings);
 	}
 
-	Reference<ItemGroup> getReference();
+	RegistryKey<ItemGroup> getRegistryKey();
 
 	Optional<ItemGroup> getItemGroup();
 

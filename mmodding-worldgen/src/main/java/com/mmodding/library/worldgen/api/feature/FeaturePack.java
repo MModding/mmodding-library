@@ -1,9 +1,9 @@
 package com.mmodding.library.worldgen.api.feature;
 
-import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.worldgen.impl.feature.FeaturePackImpl;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 
@@ -31,12 +31,12 @@ public interface FeaturePack<FC extends FeatureConfig> {
 
 	/**
 	 * Adds a {@link ConfiguredFeaturePack} in this {@link FeaturePack}
-	 * @param reference the configured feature's reference
+	 * @param key the configured feature's key
 	 * @param featureConfig the feature config
 	 * @param action the action handling placed features
 	 */
 	void appendConfiguredFeature(
-		Reference<ConfiguredFeature<FC, Feature<FC>>> reference,
+		RegistryKey<ConfiguredFeature<?, ?>> key,
 		FC featureConfig,
 		Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action
 	);
@@ -74,10 +74,10 @@ public interface FeaturePack<FC extends FeatureConfig> {
 
 		/**
 		 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}
-		 * @param reference the placed feature's reference
+		 * @param key the placed feature's key
 		 * @param modifiers the placement modifiers
 		 */
-		void appendPlacedFeature(Reference<PlacedFeature> reference, PlacementModifier... modifiers);
+		void appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers);
 
 		/**
 		 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}

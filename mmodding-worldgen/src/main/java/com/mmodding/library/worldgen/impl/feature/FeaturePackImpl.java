@@ -1,6 +1,6 @@
 package com.mmodding.library.worldgen.impl.feature;
 
-import com.mmodding.library.core.api.Reference;
+import net.minecraft.registry.RegistryKey;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import net.minecraft.registry.Registry;
@@ -30,9 +30,13 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 	}
 
 	@Override
-	public void appendConfiguredFeature(Reference<ConfiguredFeature<FC, Feature<FC>>> reference, FC featureConfig, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
+	@SuppressWarnings("unchecked")
+	public void appendConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
 		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(
-			new WaitingRegistryEntry<>(reference, new ConfiguredFeature<>(this.feature.get(), featureConfig))
+			new WaitingRegistryEntry<>(
+				(RegistryKey<ConfiguredFeature<FC, Feature<FC>>>) (RegistryKey<?>) key,
+				new ConfiguredFeature<>(this.feature.get(), featureConfig)
+			)
 		);
 		this.configuredFeaturePacks.add(configuredFeaturePack);
 		action.accept(configuredFeaturePack);
@@ -75,8 +79,8 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 		}
 
 		@Override
-		public void appendPlacedFeature(Reference<PlacedFeature> reference, PlacementModifier... modifiers) {
-			this.placedFeatures.add(new WaitingRegistryEntry<>(reference, new PlacedFeature(RegistryEntry.of(WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0)), List.of(modifiers))));
+		public void appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers) {
+			this.placedFeatures.add(new WaitingRegistryEntry<>(key, new PlacedFeature(RegistryEntry.of(WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0)), List.of(modifiers))));
 		}
 
 		@Override

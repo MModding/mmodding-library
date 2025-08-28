@@ -1,18 +1,18 @@
 package com.mmodding.library.core.api.registry;
 
-import com.mmodding.library.core.api.Reference;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WaitingRegistryEntry<T> {
 
-	private final Reference<T> reference;
+	private final RegistryKey<T> key;
 	private final T element;
 
-	public WaitingRegistryEntry(Reference<T> reference, T element) {
-		this.reference = reference;
+	public WaitingRegistryEntry(RegistryKey<T> key, T element) {
+		this.key = key;
 		this.element = element;
 	}
 
@@ -23,6 +23,6 @@ public class WaitingRegistryEntry<T> {
 	}
 
 	public T register(Registry<T> registry) {
-		return Registry.register(registry, this.reference.provideKey(registry), this.element);
+		return Registry.register(registry, this.key.provideKey(registry), this.element);
 	}
 }

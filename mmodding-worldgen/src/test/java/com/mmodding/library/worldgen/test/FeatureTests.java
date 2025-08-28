@@ -1,12 +1,11 @@
 package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.container.AdvancedContainer;
-import com.mmodding.library.core.api.Reference;
 import com.mmodding.library.java.api.object.Holder;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import com.mmodding.library.worldgen.api.feature.replication.FeatureReplicator;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier;
@@ -17,20 +16,19 @@ public class FeatureTests {
 	public static final Holder<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = Holder.create();
 
 	public FeatureTests(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
-		Reference.LiteFactory factory = Reference.createFactory(path -> new Identifier(mod.getMetadata().getId(), path));
 		RANDOM_PATCH.assign(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
 		RANDOM_PATCH.ifPresent(randomPatch -> {
 			randomPatch.appendConfiguredFeature(
-				factory.createId(""),
+				mod.createKey(RegistryKeys.CONFIGURED_FEATURE, ""),
 				new RandomPatchFeatureConfig(0, 0, 0, null),
 				configuredPack -> configuredPack.appendPlacedFeature(
-					factory.createId(""),
+					mod.createKey(RegistryKeys.PLACED_FEATURE, ""),
 					BiomePlacementModifier.of()
 				)
 			);
 			randomPatch.appendConfiguredFeature(
 				FeatureReplicator.replicateConfiguredFeature(
-					factory.createId(""),
+					mod.createKey(RegistryKeys.CONFIGURED_FEATURE, ""),
 					configuredFeatures.get(VegetationConfiguredFeatures.FLOWER_DEFAULT),
 					fc -> {
 						int tries = 3;
@@ -41,7 +39,7 @@ public class FeatureTests {
 				),
 				configuredPack -> configuredPack.appendPlacedFeature(
 					FeatureReplicator.replicatePlacedFeature(
-						factory.createId(""),
+						mod.createKey(RegistryKeys.PLACED_FEATURE, ""),
 						placedFeatures.get(VegetationPlacedFeatures.FLOWER_DEFAULT),
 						modifiers -> {
 							modifiers.mutateTypeTo(
