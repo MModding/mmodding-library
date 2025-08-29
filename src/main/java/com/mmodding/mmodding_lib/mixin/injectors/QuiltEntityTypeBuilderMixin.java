@@ -11,12 +11,13 @@ import net.minecraft.entity.attribute.DefaultAttributeRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.world.Heightmap;
 import org.jetbrains.annotations.NotNull;
+import org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Pseudo
-@Mixin(targets = "org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder", remap = false)
+@Mixin(value = QuiltEntityTypeBuilder.class, remap = false)
 public class QuiltEntityTypeBuilderMixin<T extends Entity> implements FabricOrQuiltEntityTypeBuilderDuckInterface<T> {
 
 	@Shadow
@@ -66,7 +67,7 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements FabricOrQu
 			this.dimensions,
 			this.maxTrackingRange,
 			this.trackingTickInterval,
-			this.alwaysUpdateVelocity
+			this.alwaysUpdateVelocity != null ? this.alwaysUpdateVelocity : false
 		);
 	}
 
@@ -76,16 +77,18 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements FabricOrQu
 	public static class FabricBuilder<T extends LivingEntity> implements FabricOrQuiltEntityTypeBuilderDuckInterface<T> {
 
 		@Shadow
-		private FabricOrQuiltEntityTypeBuilderDuckInterface<T> quiltBuilder;
+		@SuppressWarnings("rawtypes")
+		private QuiltEntityTypeBuilder quiltBuilder;
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public CustomEntityType<T> mmodding_lib$buildCustom() {
-			return this.quiltBuilder.mmodding_lib$buildCustom();
+			return ((FabricOrQuiltEntityTypeBuilderDuckInterface<T>) this.quiltBuilder).mmodding_lib$buildCustom();
 		}
 	}
 
 	@Pseudo
-	@Mixin(targets = "org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder$Living", remap = false)
+	@Mixin(value = QuiltEntityTypeBuilder.Living.class, remap = false)
 	public static class Living<T extends LivingEntity> extends QuiltEntityTypeBuilderMixin<T> {
 
 		@Shadow
@@ -104,7 +107,7 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements FabricOrQu
 	}
 
 	@Pseudo
-	@Mixin(targets = "org.quiltmc.qsl.entity.api.QuiltEntityTypeBuilder$Mob", remap = false)
+	@Mixin(value = QuiltEntityTypeBuilder.Mob.class, remap = false)
 	public static class Mob<T extends MobEntity> extends Living<T> {
 
 		@Shadow
@@ -134,11 +137,13 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements FabricOrQu
 	public static class FabricLiving<T extends LivingEntity> implements FabricOrQuiltEntityTypeBuilderDuckInterface<T> {
 
 		@Shadow
-		private FabricOrQuiltEntityTypeBuilderDuckInterface<T> quiltBuilder;
+		@SuppressWarnings("rawtypes")
+		private QuiltEntityTypeBuilder.Living quiltBuilder;
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public CustomEntityType<T> mmodding_lib$buildCustom() {
-			return this.quiltBuilder.mmodding_lib$buildCustom();
+			return ((FabricOrQuiltEntityTypeBuilderDuckInterface<T>) this.quiltBuilder).mmodding_lib$buildCustom();
 		}
 	}
 
@@ -147,11 +152,13 @@ public class QuiltEntityTypeBuilderMixin<T extends Entity> implements FabricOrQu
 	public static class FabricMob<T extends LivingEntity> implements FabricOrQuiltEntityTypeBuilderDuckInterface<T> {
 
 		@Shadow
-		private FabricOrQuiltEntityTypeBuilderDuckInterface<T> quiltBuilder;
+		@SuppressWarnings("rawtypes")
+		private QuiltEntityTypeBuilder.Mob quiltBuilder;
 
 		@Override
+		@SuppressWarnings("unchecked")
 		public CustomEntityType<T> mmodding_lib$buildCustom() {
-			return this.quiltBuilder.mmodding_lib$buildCustom();
+			return ((FabricOrQuiltEntityTypeBuilderDuckInterface<T>) this.quiltBuilder).mmodding_lib$buildCustom();
 		}
 	}
 }

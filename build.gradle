@@ -32,6 +32,9 @@ dependencies {
 	modImplementation libs.fabric.api
 
 	modImplementation libs.modmenu
+
+	// Quilt Compatibility
+	modImplementation libs.compat.qsl
 }
 
 loom {

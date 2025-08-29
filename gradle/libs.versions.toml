@@ -7,6 +7,9 @@ fabric_loader = "0.16.4"
 fabric_api = "0.77.0+1.19.2"
 modmenu = "4.0.6"
 
+# Compatibility
+compat_qsl = "3.0.0-beta.19+1.19.2"
+
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 quilt_mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt_mappings" }
@@ -14,6 +17,9 @@ fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_l
 
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+
+# Compatibility
+compat_qsl = { module = "org.quiltmc.qsl:entity", version.ref = "compat_qsl" }
 
 # If you have multiple similar dependencies, you can declare a dependency bundle and reference it on the build script with "libs.bundles.example".
 # [bundles]
