@@ -11,22 +11,20 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.registry.RegistryBuilder;
+import org.jetbrains.annotations.ApiStatus;
 
 public interface ExtendedModInitializer extends ModInitializer {
-
-	static ElementsManager getManager(String modId) {
-		return MModdingInitializer.MANAGERS.get(modId);
-	}
 
 	void setupManager(ElementsManager.Builder manager);
 
 	@Override
+	@ApiStatus.Internal
 	default void onInitialize() {
 		ModContainer mod = MModdingLibrary.getModContainer(this.getClass());
 		ElementsManagerImpl.Builder builder = new ElementsManagerImpl.Builder();
 		this.setupManager(builder);
 		ElementsManagerImpl manager = builder.build();
-		MModdingLibrary.getAllManagers().put(mod.getMetadata().getId(), manager);
+		MModdingInitializer.MANAGERS.put(mod.getMetadata().getId(), manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.loadElements(advanced);
 		DatagenContainerCallback.EVENT.register(containers -> {
