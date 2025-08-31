@@ -21,20 +21,25 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 	}
 
 	@Override
-	public T getEntry(Identifier identifier) {
+	public T get(Identifier identifier) {
 		return this.content.get(identifier);
 	}
 
 	@Override
-	public Identifier getIdentifier(T entry) {
+	public Identifier getId(T entry) {
 		return this.reversed.get(entry);
 	}
 
 	@Override
 	public T register(Identifier identifier, T entry) {
-		this.content.put(identifier, entry);
-		this.reversed.put(entry, identifier);
-		return entry;
+		if (!this.content.containsKey(identifier)) {
+			this.content.put(identifier, entry);
+			this.reversed.put(entry, identifier);
+			return entry;
+		}
+		else {
+			throw new IllegalStateException("Object with identifier " + identifier + " already exists in the lite registry");
+		}
 	}
 
 	@NotNull
@@ -43,5 +48,5 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 		return Iterators.transform(this.content.entrySet().iterator(), mapEntry -> new EntryImpl<>(mapEntry.getKey(), mapEntry.getValue()));
 	}
 
-	private record EntryImpl<T>(Identifier identifier, T entry) implements Entry<T> {}
+	private record EntryImpl<T>(Identifier identifier, T element) implements Entry<T> {}
 }

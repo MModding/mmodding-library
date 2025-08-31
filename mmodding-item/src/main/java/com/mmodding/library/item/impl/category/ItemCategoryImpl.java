@@ -72,7 +72,7 @@ public class ItemCategoryImpl implements ItemCategory {
 	@Override
 	public Optional<ItemGroup> getItemGroup() {
 		if (ItemCategoryImpl.GROUPS.contains(this.key.getValue())) {
-			return Optional.of(ItemCategoryImpl.GROUPS.getEntry(this.key.getValue()));
+			return Optional.of(ItemCategoryImpl.GROUPS.get(this.key.getValue()));
 		}
 		else {
 			return Optional.empty();

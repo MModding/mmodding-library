@@ -25,7 +25,7 @@ public class NetworkInitializer implements ModInitializer {
 	public void onInitialize() {
 		ServerPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.RequestPacket.TYPE, (packet, player, sender) -> {
 			MixedList arguments = DelayedNetworkImpl.SERVER_REQUEST_PROCESSORS
-				.getEntry(packet.requestIdentifier())
+				.get(packet.requestIdentifier())
 				.process(player, packet.requestArguments());
 			ServerPlayNetworking.send(player, new DelayedNetworkPackets.ResponsePacket(packet.requestTracker(), arguments));
 		});
@@ -35,7 +35,7 @@ public class NetworkInitializer implements ModInitializer {
 		});
 		ClientPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.RequestPacket.TYPE, (packet, player, sender) -> {
 			MixedList arguments = DelayedNetworkImpl.CLIENT_REQUEST_PROCESSORS
-				.getEntry(packet.requestIdentifier())
+				.get(packet.requestIdentifier())
 				.process(packet.requestArguments());
 			ClientPlayNetworking.send(new DelayedNetworkPackets.ResponsePacket(packet.requestTracker(), arguments));
 		});
