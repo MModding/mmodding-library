@@ -1,6 +1,6 @@
 package com.mmodding.library.item.api.category;
 
-import com.mmodding.library.core.api.management.content.InjectedContent;
+import com.mmodding.library.core.api.management.info.InjectedContent;
 import net.minecraft.item.Item;
 
 @InjectedContent(Item.class)

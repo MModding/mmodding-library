@@ -1,6 +1,6 @@
 package com.mmodding.library.worldgen.test;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.java.api.object.Holder;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import com.mmodding.library.worldgen.api.feature.replication.FeatureReplicator;

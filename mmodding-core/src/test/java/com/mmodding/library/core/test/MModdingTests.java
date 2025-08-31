@@ -1,7 +1,7 @@
 package com.mmodding.library.core.test;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
-import com.mmodding.library.core.api.management.initializer.ExtendedModInitializer;
+import com.mmodding.library.core.api.AdvancedContainer;
+import com.mmodding.library.core.api.ExtendedModInitializer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import net.minecraft.registry.RegistryKeys;
 

@@ -1,7 +1,7 @@
-package com.mmodding.library.core.api.container;
+package com.mmodding.library.core.api;
 
 import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
-import com.mmodding.library.core.impl.container.AdvancedContainerImpl;
+import com.mmodding.library.core.impl.AdvancedContainerImpl;
 import com.mmodding.library.core.impl.registry.factory.RegistryKeyFactoryImpl;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.registry.Registry;

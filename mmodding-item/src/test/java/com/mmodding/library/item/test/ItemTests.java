@@ -1,6 +1,6 @@
 package com.mmodding.library.item.test;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.item.api.category.ItemCategory;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;

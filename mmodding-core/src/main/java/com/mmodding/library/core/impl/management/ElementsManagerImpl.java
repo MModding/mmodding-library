@@ -1,6 +1,6 @@
 package com.mmodding.library.core.impl.management;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.management.content.ResourceProvider;
 import com.mmodding.library.core.api.management.content.ContentProvider;

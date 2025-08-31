@@ -1,6 +1,6 @@
 package com.mmodding.library.core.test;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import net.minecraft.registry.Registerable;
 import net.minecraft.world.biome.Biome;
 

@@ -1,8 +1,8 @@
 package com.mmodding.library.math.test;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
-import com.mmodding.library.core.api.management.initializer.ExtendedModInitializer;
+import com.mmodding.library.core.api.ExtendedModInitializer;
 import com.mmodding.library.math.api.terrain.RelativeTerrainConsumer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

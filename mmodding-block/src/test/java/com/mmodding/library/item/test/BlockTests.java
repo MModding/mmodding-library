@@ -1,9 +1,9 @@
 package com.mmodding.library.item.test;
 
 import com.mmodding.library.block.api.util.BlockHeap;
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
-import com.mmodding.library.core.api.management.initializer.ExtendedModInitializer;
+import com.mmodding.library.core.api.ExtendedModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;

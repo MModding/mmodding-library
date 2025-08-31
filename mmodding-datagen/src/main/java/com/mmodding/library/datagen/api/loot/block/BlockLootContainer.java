@@ -1,6 +1,6 @@
 package com.mmodding.library.datagen.api.loot.block;
 
-import com.mmodding.library.core.api.management.content.InjectedContent;
+import com.mmodding.library.core.api.management.info.InjectedContent;
 import net.minecraft.block.Block;
 
 @InjectedContent(Block.class)

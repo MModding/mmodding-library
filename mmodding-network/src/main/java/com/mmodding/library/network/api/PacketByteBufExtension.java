@@ -1,6 +1,6 @@
 package com.mmodding.library.network.api;
 
-import com.mmodding.library.core.api.management.content.InjectedContent;
+import com.mmodding.library.core.api.management.info.InjectedContent;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
 import net.minecraft.network.PacketByteBuf;

@@ -1,6 +1,6 @@
-package com.mmodding.library.core.impl.container;
+package com.mmodding.library.core.impl;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.fabricmc.loader.api.metadata.ModOrigin;

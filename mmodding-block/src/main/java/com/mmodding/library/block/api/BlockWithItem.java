@@ -1,7 +1,7 @@
 package com.mmodding.library.block.api;
 
 import com.mmodding.library.block.impl.BlockWithItemImpl;
-import com.mmodding.library.core.api.management.content.InjectedContent;
+import com.mmodding.library.core.api.management.info.InjectedContent;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;

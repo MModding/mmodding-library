@@ -1,7 +1,5 @@
-package com.mmodding.library.core.api.management.initializer;
+package com.mmodding.library.core.api;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
-import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.core.impl.MModdingInitializer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.impl.management.ElementsManagerImpl;

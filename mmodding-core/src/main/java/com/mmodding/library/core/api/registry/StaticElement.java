@@ -1,6 +1,6 @@
 package com.mmodding.library.core.api.registry;
 
-import com.mmodding.library.core.api.management.content.InjectedContent;
+import com.mmodding.library.core.api.management.info.InjectedContent;
 import com.mmodding.library.core.impl.registry.StaticElementImpl;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

@@ -1,6 +1,6 @@
 package com.mmodding.library.core.test;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.registry.extension.RegistryCompanion;
 import com.mmodding.library.core.api.registry.extension.RegistryKeyAttachment;
 import net.minecraft.block.Block;

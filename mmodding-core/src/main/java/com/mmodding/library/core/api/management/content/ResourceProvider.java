@@ -1,6 +1,6 @@
 package com.mmodding.library.core.api.management.content;
 
-import com.mmodding.library.core.api.container.AdvancedContainer;
+import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import net.minecraft.registry.Registerable;
 
