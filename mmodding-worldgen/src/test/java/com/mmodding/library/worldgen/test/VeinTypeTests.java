@@ -33,10 +33,9 @@ public class VeinTypeTests implements ExtendedModInitializer {
 	public void onInitialize(AdvancedContainer mod) {}
 
 	public static void register(AdvancedContainer mod) {
-		VeinType.REGISTRY.getOrCreateCompanion(ChunkGeneratorSettings.OVERWORLD).register();
-		.execute(init -> {
-			VeinTypeTests.FIRST_TYPE.register(init.createId("hi"));
-			VeinTypeTests.SECOND_TYPE.register(init.createId("ih"));
+		VeinType.REGISTRY.getOrCreateCompanion(ChunkGeneratorSettings.OVERWORLD).register(mod.getMetadata().getId(), factory -> {
+			factory.register("hi", VeinTypeTests.FIRST_TYPE);
+			factory.register("ih", VeinTypeTests.SECOND_TYPE);
 		});
 	}
 }

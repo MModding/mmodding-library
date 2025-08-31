@@ -4,6 +4,8 @@ import com.mmodding.library.core.impl.registry.LiteRegistryImpl;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
+import java.util.function.Consumer;
+
 /**
  * A lighter version of the {@link Registry} object.
  * @param <T> the element type of the registry
@@ -50,6 +52,13 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 	T register(Identifier identifier, T entry);
 
 	/**
+	 * Allows to register multiple elements to the same registry with the help of a {@link RegistrationFactory}.
+	 * @param namespace the mod namespace
+	 * @param consumer the registrations made by the mod
+	 */
+	void register(String namespace, Consumer<RegistrationFactory<T>> consumer);
+
+	/**
 	 * An {@link Entry} object for the {@link LiteRegistry}.
 	 * @param <T> the element type
 	 */
@@ -66,5 +75,19 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 		 * @return the entry object
 		 */
 		T element();
+	}
+
+	interface RegistrationFactory<T> {
+
+		/**
+		 * A registration method filling the mod namespace automatically with the provided one.
+		 * @see LiteRegistry#register(Identifier, Object)
+		 */
+		T register(String path, T entry);
+
+		/**
+		 * @see LiteRegistry#register(Identifier, Object)
+		 */
+		T register(Identifier identifier, T entry);
 	}
 }

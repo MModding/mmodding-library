@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 
@@ -42,11 +44,37 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 		}
 	}
 
+	@Override
+	public void register(String namespace, Consumer<RegistrationFactory<T>> consumer) {
+		consumer.accept(new RegistrationFactoryImpl<>(namespace, this::register));
+	}
+
 	@NotNull
 	@Override
 	public Iterator<Entry<T>> iterator() {
-		return Iterators.transform(this.content.entrySet().iterator(), mapEntry -> new EntryImpl<>(mapEntry.getKey(), mapEntry.getValue()));
+		return Iterators.transform(this.content.entrySet().iterator(), entry -> new EntryImpl<>(entry.getKey(), entry.getValue()));
 	}
 
 	private record EntryImpl<T>(Identifier identifier, T element) implements Entry<T> {}
+
+	private static class RegistrationFactoryImpl<T> implements RegistrationFactory<T> {
+
+		private final String namespace;
+		private final BiFunction<Identifier, T, T> biConsumer;
+
+		private RegistrationFactoryImpl(String namespace, BiFunction<Identifier, T, T> biConsumer) {
+			this.namespace = namespace;
+			this.biConsumer = biConsumer;
+		}
+
+		@Override
+		public T register(String path, T entry) {
+			return this.register(Identifier.of(this.namespace, path), entry);
+		}
+
+		@Override
+		public T register(Identifier identifier, T entry) {
+			return this.biConsumer.apply(identifier, entry);
+		}
+	}
 }

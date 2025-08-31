@@ -2,7 +2,6 @@ package com.mmodding.library.core.api;
 
 import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
 import com.mmodding.library.core.impl.AdvancedContainerImpl;
-import com.mmodding.library.core.impl.registry.factory.RegistryKeyFactoryImpl;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -67,6 +66,6 @@ public interface AdvancedContainer extends ModContainer {
 	 * @param consumer the registrations made by the mod
 	 */
 	default <T> void withRegistry(RegistryKey<? extends Registry<T>> registry, Consumer<RegistryKeyFactory<T>> consumer) {
-		consumer.accept(new RegistryKeyFactoryImpl<>(registry, this.getMetadata().getId()));
+		consumer.accept(RegistryKeyFactory.create(registry, this.getMetadata().getId()));
 	}
 }
