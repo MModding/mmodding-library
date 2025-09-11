@@ -6,12 +6,12 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
-import java.util.random.RandomGenerator;
 
 public abstract class FluidBehavior implements FluidLike {
 
@@ -39,21 +39,21 @@ public abstract class FluidBehavior implements FluidLike {
 		this.properties = fluidProperties;
 	}
 
-	public abstract Direction getFlowDirection(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract Direction getFlowDirection(FluidStateInfo state, World world, BlockPos pos, Random random);
 
-	public abstract int getFlowSpeedFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getFlowSpeedFactor(FluidStateInfo state, World world, BlockPos pos, Random random);
 
-	public abstract int getMovementFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getMovementFactor(FluidStateInfo state, World world, BlockPos pos, Random random);
 
 	// When you want to pass through a flowing fluid, with which strength does it try to get you out
-	public abstract int getStrengthFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getStrengthFactor(FluidStateInfo state, World world, BlockPos pos, Random random);
 
 	// When you are in the fluid, how much it want to push you to the bottom
-	public abstract int getPressureFactor(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int getPressureFactor(FluidStateInfo state, World world, BlockPos pos, Random random);
 
-	public abstract boolean canBoatsBePlacedUpon(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract boolean canBoatsBePlacedUpon(FluidStateInfo state, World world, BlockPos pos, Random random);
 
-	public abstract int randomDisplayTick(FluidStateInfo state, World world, BlockPos pos, RandomGenerator random);
+	public abstract int randomDisplayTick(FluidStateInfo state, World world, BlockPos pos, Random random);
 
 	public final int getMaxFlowStage() {
 		return this.flowStages.stream().map(Property.Value::value).max(Comparator.comparingInt(i -> i)).orElseThrow();
