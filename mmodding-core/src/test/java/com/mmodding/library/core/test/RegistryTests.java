@@ -1,8 +1,7 @@
 package com.mmodding.library.core.test;
 
 import com.mmodding.library.core.api.AdvancedContainer;
-import com.mmodding.library.core.api.registry.extension.RegistryCompanion;
-import com.mmodding.library.core.api.registry.extension.RegistryKeyAttachment;
+import com.mmodding.library.core.api.registry.companion.RegistryCompanion;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
@@ -11,7 +10,7 @@ import net.minecraft.registry.Registries;
 
 public class RegistryTests {
 
-	public static final RegistryCompanion<Item, Block> ITEM_COMPANION = RegistryCompanion.create(RegistryKeyAttachment.classic(Registries.ITEM));
+	public static final RegistryCompanion<Item, Block> ITEM_COMPANION = RegistryCompanion.create(Registries.ITEM);
 
 	public RegistryTests() {
 		RegistryTests.ITEM_COMPANION.getOrCreateCompanion(Items.ACACIA_BOAT);
