@@ -8,6 +8,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
+/**
+ * TODO: split RegistryKeyAttachment and "DynamicRegistryKeyAttachment" to prevent issues with retriever functions.
+ * Associates a {@link Registry} entries to external elements.
+ * @param <T> the registry type
+ * @param <E> the attachment type
+ */
 public interface RegistryKeyAttachment<T, E> {
 
 	static <T> BiFunction<DynamicRegistryManager, T, RegistryKey<T>> classic(Registry<T> registry) {
@@ -19,10 +25,10 @@ public interface RegistryKeyAttachment<T, E> {
 	}
 
 	/**
-	 * Creates a new RegistryKeyAttachment
+	 * Creates a new registry key attachment.
 	 * @param retriever a BiFunction that allows to retrieve a RegistryKey from the initial object and (optionally) a dynamic registry
-	 * @return the new RegistryKeyAttachment
-	 * @param <T> the type of the RegistryKey object
+	 * @return the new registry key attachment
+	 * @param <T> the type of the registry key object
 	 * @param <E> the type of the attached value
 	 */
 	static <T, E> RegistryKeyAttachment<T, E> create(BiFunction<DynamicRegistryManager, T, RegistryKey<T>> retriever) {
@@ -30,7 +36,7 @@ public interface RegistryKeyAttachment<T, E> {
 	}
 
 	/**
-	 * Attaches a value to an object by retrieving its RegistryKey
+	 * Attaches a value to an object by retrieving its registry key.
 	 * @param manager the dynamic registry manager
 	 * @param object the object
 	 * @param value the attached value
@@ -38,14 +44,14 @@ public interface RegistryKeyAttachment<T, E> {
 	void put(@Nullable DynamicRegistryManager manager, T object, E value);
 
 	/**
-	 * Attaches a value to a RegistryKey
+	 * Attaches a value to a registry key.
 	 * @param key the registry key
 	 * @param value the attached value
 	 */
 	void put(RegistryKey<T> key, E value);
 
 	/**
-	 * Retrieves an attached value of an object using object's RegistryKey
+	 * Retrieves an attached value of an object using object's registry key.
 	 * @param manager the dynamic registry manager
 	 * @param object the object
 	 * @return the attached value
