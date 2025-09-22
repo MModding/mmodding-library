@@ -1,6 +1,6 @@
-package com.mmodding.library.core.impl.registry.extension;
+package com.mmodding.library.core.impl.registry.attachment;
 
-import com.mmodding.library.core.api.registry.extension.DynamicRegistryKeyAttachment;
+import com.mmodding.library.core.api.registry.attachment.DynamicRegistryKeyAttachment;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;

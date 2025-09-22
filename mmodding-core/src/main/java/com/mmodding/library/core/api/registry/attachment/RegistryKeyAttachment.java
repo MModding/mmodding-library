@@ -1,6 +1,6 @@
-package com.mmodding.library.core.api.registry.extension;
+package com.mmodding.library.core.api.registry.attachment;
 
-import com.mmodding.library.core.impl.registry.extension.RegistryKeyAttachmentImpl;
+import com.mmodding.library.core.impl.registry.attachment.RegistryKeyAttachmentImpl;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 
