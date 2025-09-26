@@ -1,4 +1,4 @@
-package com.mmodding.library.core.mixin;
+package com.mmodding.library.core.mixin.injector;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mmodding.library.core.impl.registry.data.DatagenContainerCallback;

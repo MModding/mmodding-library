@@ -1,4 +1,4 @@
-package com.mmodding.library.core.mixin;
+package com.mmodding.library.core.mixin.injector;
 
 import com.mmodding.library.core.impl.PostContent;
 import net.minecraft.Bootstrap;

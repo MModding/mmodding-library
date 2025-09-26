@@ -4,8 +4,10 @@
   "package": "com.mmodding.library.core.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BootstrapMixin",
-    "FabricDataGenHelperMixin"
+    "accessor.RegistryKeyAccessor",
+    "injector.BootstrapMixin",
+    "injector.FabricDataGenHelperMixin",
+    "injector.RegistryKeyMixin"
   ],
   "client": [],
   "injectors": {

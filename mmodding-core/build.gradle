@@ -7,7 +7,9 @@ mmodding {
 		withEntrypoints {
 			it.init("com.mmodding.library.core.impl.MModdingInitializer")
 		}
-		withInjectedInterfaces {}
+		withInjectedInterfaces {
+			it.injectTo("net/minecraft/registry/RegistryKey", "com/mmodding/library/core/api/registry/extension/RegistryKeyExtension")
+		}
 	}
 	modules(project) {
 		implementation("mmodding-java")
