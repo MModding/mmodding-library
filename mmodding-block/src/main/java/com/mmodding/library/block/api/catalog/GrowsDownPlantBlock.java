@@ -1,16 +1,15 @@
 package com.mmodding.library.block.api.catalog;
 
 import com.mmodding.library.core.api.registry.IdentifierUtil;
-import com.mmodding.library.core.api.registry.Registrable;
+import com.mmodding.library.core.api.registry.StaticElement;
 import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
-public class GrowsDownPlantBlock implements Registrable<Block> {
+public class GrowsDownPlantBlock implements StaticElement<Block> {
 
 	private final Head head;
 	private final Body body;
@@ -46,9 +45,9 @@ public class GrowsDownPlantBlock implements Registrable<Block> {
 		return state;
 	}
 
-	public void register(Identifier identifier) {
-		this.head.register(Registries.BLOCK, IdentifierUtil.extend(identifier, "head"));
-		this.body.register(Registries.BLOCK, identifier);
+	public void register(RegistryKey<Block> key) {
+		this.head.register(key.mapValue(value -> IdentifierUtil.extend(value, "head")));
+		this.body.register(key);
 	}
 
 	/* @ClientOnly
@@ -126,7 +125,7 @@ public class GrowsDownPlantBlock implements Registrable<Block> {
 	/**
 	 * Utility Interface helping about Growing Down Plants having Fruits.
 	 */
-	public interface WithFruits {
+	public interface FruitsHolder {
 
 		BooleanProperty getFruitsProperty();
 
