@@ -8,6 +8,7 @@
     "AbstractBlockStateMixin",
     "BlockMixin",
     "BlockStateMixin",
+    "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor"
   ],
   "client": [],
