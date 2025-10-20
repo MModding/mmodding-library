@@ -9,7 +9,8 @@
     "BlockMixin",
     "BlockStateMixin",
     "LeavesBlockMixin",
-    "LeveledCauldronBlockAccessor"
+    "LeveledCauldronBlockAccessor",
+    "PointedDripstoneBlockAccessor"
   ],
   "client": [],
   "injectors": {
