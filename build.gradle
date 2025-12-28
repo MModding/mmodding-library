@@ -177,6 +177,7 @@ mmodding {
 			it.api("mmodding-java")
 			it.api("mmodding-math")
 			it.api("mmodding-network")
+			it.api("mmodding-state")
 			it.api("mmodding-worldgen")
 		}
 	}
