@@ -1,0 +1,13 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		addMixin("mmodding_enchantment.mixins.json")
+	}
+	modules(project) {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+		implementation("mmodding-item")
+	}
+}

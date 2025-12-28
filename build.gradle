@@ -171,6 +171,7 @@ mmodding {
 			it.api("mmodding-config")
 			it.api("mmodding-core")
 			it.api("mmodding-datagen")
+			it.api("mmodding-enchantment")
 			it.api("mmodding-fluid")
 			it.api("mmodding-item")
 			it.api("mmodding-java")
