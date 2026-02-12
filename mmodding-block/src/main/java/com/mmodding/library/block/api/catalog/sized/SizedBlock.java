@@ -1,7 +1,8 @@
-package com.mmodding.library.block.api.catalog;
+package com.mmodding.library.block.api.catalog.sized;
 
 import com.mmodding.library.java.api.container.Triple;
 import com.mmodding.library.java.api.container.Unit;
+import com.mmodding.library.state.api.property.ConstantIntProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,8 +12,10 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
@@ -21,15 +24,15 @@ import java.util.Collection;
 
 public abstract class SizedBlock extends Block {
 
-	private final int xSize;
-	private final int ySize;
-	private final int zSize;
+	final int xSize;
+	final int ySize;
+	final int zSize;
 
-	protected abstract IntProperty getXProperty();
+	protected abstract Property<Integer> getXProperty();
 
-	protected abstract IntProperty getYProperty();
+	protected abstract Property<Integer> getYProperty();
 
-	protected abstract IntProperty getZProperty();
+	protected abstract Property<Integer> getZProperty();
 
 	public SizedBlock(int xSize, int ySize, int zSize, Settings settings) {
 		super(settings);
@@ -53,6 +56,16 @@ public abstract class SizedBlock extends Block {
 		int zMax = zPropertyValues.stream().max(Integer::compareTo).orElseThrow();
 		if (zMin != 0 || zMax != this.zSize - 1) {
 			throw new IllegalStateException("Invalid z Coordinate of SizedBlock");
+		}
+		this.setDefaultState(this.getDefaultState().with(this.getXProperty(), 0).with(this.getYProperty(), 0).with(this.getZProperty(), 0));
+	}
+
+	protected static Property<Integer> makeOfSize(SizeAxis axis, int limit_exclusive) {
+		if (limit_exclusive == 1) {
+			return ConstantIntProperty.of(axis.repr, 0);
+		}
+		else {
+			return IntProperty.of(axis.repr, 0, limit_exclusive - 1);
 		}
 	}
 
@@ -100,6 +113,7 @@ public abstract class SizedBlock extends Block {
 				}
 			});
 		}
+		world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(state));
 	}
 
 	@Override
@@ -126,6 +140,18 @@ public abstract class SizedBlock extends Block {
 					action.accept(currentPos, world.getBlockState(currentPos), Triple.create(i, j, k));
 				}
 			}
+		}
+	}
+
+	public enum SizeAxis {
+		LENGTH("x"),
+		HEIGHT("y"),
+		WIDTH("z");
+
+		private final String repr;
+
+		SizeAxis(String repr) {
+			this.repr = repr;
 		}
 	}
 }

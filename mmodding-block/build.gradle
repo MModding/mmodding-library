@@ -19,5 +19,6 @@ mmodding {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 		implementation("mmodding-math")
+		implementation("mmodding-state")
 	}
 }

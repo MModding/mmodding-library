@@ -2,7 +2,7 @@ package com.mmodding.library.math.api;
 
 import net.minecraft.util.math.Direction;
 
-public enum RelativeDirection {
+public enum DirectionMapper {
 
 	TOP,
 	BOTTOM,
