@@ -23,13 +23,13 @@ import java.util.function.IntFunction;
 public abstract class PacketByteBufMixin implements PacketByteBufExtension {
 
 	@Shadow
-	public abstract <T, C extends Collection<T>> C readCollection(IntFunction<C> collectionFactory, PacketByteBuf.Reader<T> entryReader);
+	public abstract <T, C extends Collection<T>> C readCollection(IntFunction<C> collectionFactory, PacketByteBuf.PacketReader<T> entryReader);
 
 	@Shadow
 	public abstract Identifier readIdentifier();
 
 	@Shadow
-	public abstract <T> void writeCollection(Collection<T> collection, PacketByteBuf.Writer<T> entryWriter);
+	public abstract <T> void writeCollection(Collection<T> collection, PacketByteBuf.PacketWriter<T> entryWriter);
 
 	@Shadow
 	public abstract PacketByteBuf writeIdentifier(Identifier id);
@@ -38,10 +38,10 @@ public abstract class PacketByteBufMixin implements PacketByteBufExtension {
 	public abstract ByteBuf copy();
 
 	@Shadow
-	public abstract <K, V, M extends Map<K, V>> M readMap(IntFunction<M> mapFactory, PacketByteBuf.Reader<K> keyReader, PacketByteBuf.Reader<V> valueReader);
+	public abstract <K, V, M extends Map<K, V>> M readMap(IntFunction<M> mapFactory, PacketByteBuf.PacketReader<K> keyReader, PacketByteBuf.PacketReader<V> valueReader);
 
 	@Shadow
-	public abstract <K, V> void writeMap(Map<K, V> map, PacketByteBuf.Writer<K> keyWriter, PacketByteBuf.Writer<V> valueWriter);
+	public abstract <K, V> void writeMap(Map<K, V> map, PacketByteBuf.PacketWriter<K> keyWriter, PacketByteBuf.PacketWriter<V> valueWriter);
 
 	@Override
 	public Optional<Class<?>> peekNextType() {
@@ -99,7 +99,7 @@ public abstract class PacketByteBufMixin implements PacketByteBufExtension {
 	}
 
 	@Override
-	public <T> MixedMap<T> readMixedMap(PacketByteBuf.Reader<T> entryReader) {
+	public <T> MixedMap<T> readMixedMap(PacketByteBuf.PacketReader<T> entryReader) {
 		return this.readMap(
 			i -> MixedMap.create(),
 			entryReader,
@@ -108,7 +108,7 @@ public abstract class PacketByteBufMixin implements PacketByteBufExtension {
 	}
 
 	@Override
-	public <T> void writeMixedMap(MixedMap<T> map, PacketByteBuf.Writer<T> entryWriter) {
+	public <T> void writeMixedMap(MixedMap<T> map, PacketByteBuf.PacketWriter<T> entryWriter) {
 		this.writeMap(
 			map,
 			entryWriter,
@@ -118,25 +118,25 @@ public abstract class PacketByteBufMixin implements PacketByteBufExtension {
 
 	@Unique
 	@SuppressWarnings("unchecked")
-	private <T> PacketByteBuf.Reader<T> handlingReader(Class<T> type) {
+	private <T> PacketByteBuf.PacketReader<T> handlingReader(Class<T> type) {
 		if (this.peekNextType().isEmpty()) {
 			throw new IllegalStateException("Next value is not network-handled!");
 		}
 		else if (this.peekNextType().get() != type) {
 			throw new IllegalArgumentException("Next value is not an instance of " + type + "!");
 		}
-		return (PacketByteBuf.Reader<T>) NetworkHandlersImpl.HANDLERS.getFirstValue(this.readIdentifier());
+		return (PacketByteBuf.PacketReader<T>) NetworkHandlersImpl.HANDLERS.getFirstValue(this.readIdentifier());
 	}
 
 	@Unique
 	@SuppressWarnings("unchecked")
-	private <T> PacketByteBuf.Writer<T> handlingWriter(Class<?> type) {
+	private <T> PacketByteBuf.PacketWriter<T> handlingWriter(Class<?> type) {
 		if (!NetworkHandlersImpl.IDS.containsKey(type)) {
 			throw new IllegalArgumentException("Value cannot be network-handled as " + type + " does not have any registered handling factories!");
 		}
 		else {
 			this.writeIdentifier(NetworkHandlersImpl.IDS.get(type));
-			return (PacketByteBuf.Writer<T>) NetworkHandlersImpl.HANDLERS.getSecondValue(NetworkHandlersImpl.IDS.get(type));
+			return (PacketByteBuf.PacketWriter<T>) NetworkHandlersImpl.HANDLERS.getSecondValue(NetworkHandlersImpl.IDS.get(type));
 		}
 	}
 }

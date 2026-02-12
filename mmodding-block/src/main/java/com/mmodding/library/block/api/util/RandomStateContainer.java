@@ -3,7 +3,7 @@ package com.mmodding.library.block.api.util;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.util.math.random.Random;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +29,7 @@ public class RandomStateContainer {
 		this.states = states;
 	}
 
-	public BlockState getRandom(RandomGenerator random) {
+	public BlockState getRandom(Random random) {
 		return this.states.get(random.nextInt(this.states.size()));
 	}
 }

@@ -4,10 +4,10 @@ import com.mmodding.library.block.api.util.RandomStateContainer;
 import com.mmodding.library.worldgen.api.vein.VeinType;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.random.PositionalRandomFactory;
-import net.minecraft.util.random.RandomGenerator;
-import net.minecraft.world.gen.DensityFunction;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.util.math.random.RandomSplitter;
 import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
+import net.minecraft.world.gen.densityfunction.DensityFunction;
 
 public class VeinTypeImpl implements VeinType {
 
@@ -46,25 +46,25 @@ public class VeinTypeImpl implements VeinType {
 	}
 
 	@Override
-	public BlockState pickOreState(RandomGenerator random) {
+	public BlockState pickOreState(Random random) {
 		return this.oreStates.getRandom(random);
 	}
 
 	@Override
-	public BlockState pickRawOreState(RandomGenerator random) {
+	public BlockState pickRawOreState(Random random) {
 		return this.rawOreStates.getRandom(random);
 	}
 
 	@Override
-	public BlockState pickFillerState(RandomGenerator random) {
+	public BlockState pickFillerState(Random random) {
 		return this.fillerStates.getRandom(random);
 	}
 
 	@Override
-	public ChunkNoiseSampler.BlockStateSampler createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, PositionalRandomFactory posRandom) {
+	public ChunkNoiseSampler.BlockStateSampler createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, RandomSplitter posRandom) {
 		return ctx -> {
-			double toggle = veinToggle.compute(ctx);
-			int y = ctx.blockY();
+			double toggle = veinToggle.sample(ctx);
+			int y = ctx.comp_372();
 			double absToggle = Math.abs(toggle);
 			int maxSub = this.maxY - y;
 			int minSub = y - this.minY;
@@ -72,10 +72,10 @@ public class VeinTypeImpl implements VeinType {
 				int minBetweenSubs = Math.min(maxSub, minSub);
 				double clampedA = MathHelper.clampedMap(minBetweenSubs, 0.0, this.beginEdgeRoundoff, -this.maxEdgeRoundoff, 0.0);
 				if (absToggle + clampedA >= this.veinThreshold) {
-					RandomGenerator random = posRandom.create(ctx.blockX(), y, ctx.blockZ());
-					if (random.nextFloat() <= this.veinSolidness && veinRidged.compute(ctx) < 0) {
+					Random random = posRandom.split(ctx.comp_371(), y, ctx.comp_373());
+					if (random.nextFloat() <= this.veinSolidness && veinRidged.sample(ctx) < 0) {
 						double clampedB = MathHelper.clampedMap(absToggle, this.veinThreshold, this.maxRichnessThreshold, this.minRichness, this.maxRichness);
-						if (random.nextFloat() < clampedB && veinGap.compute(ctx) > this.minGapNoiseOreSkipThreshold) {
+						if (random.nextFloat() < clampedB && veinGap.sample(ctx) > this.minGapNoiseOreSkipThreshold) {
 							return random.nextFloat() < this.rawOreBlockChance ? this.pickRawOreState(random) : this.pickOreState(random);
 						}
 						else {

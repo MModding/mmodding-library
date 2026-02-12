@@ -74,7 +74,7 @@ public interface PacketByteBufExtension {
 	 * @param entryReader the entry reader
 	 * @return the {@link MixedMap} object
 	 */
-	default <T> MixedMap<T> readMixedMap(PacketByteBuf.Reader<T> entryReader) {
+	default <T> MixedMap<T> readMixedMap(PacketByteBuf.PacketReader<T> entryReader) {
 		throw new IllegalStateException();
 	}
 
@@ -83,7 +83,7 @@ public interface PacketByteBufExtension {
 	 * @param map the {@link MixedMap} object
 	 * @param entryWriter the entry writer
 	 */
-	default <T> void writeMixedMap(MixedMap<T> map, PacketByteBuf.Writer<T> entryWriter) {
+	default <T> void writeMixedMap(MixedMap<T> map, PacketByteBuf.PacketWriter<T> entryWriter) {
 		throw new IllegalStateException();
 	}
 }

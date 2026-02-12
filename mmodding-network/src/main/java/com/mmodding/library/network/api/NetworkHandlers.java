@@ -17,7 +17,7 @@ public class NetworkHandlers {
 	 * @param reader the reader factory
 	 * @param writer the writer factory
 	 */
-	public static <T> void register(Class<T> type, Identifier identifier, PacketByteBuf.Reader<T> reader, PacketByteBuf.Writer<T> writer) {
+	public static <T> void register(Class<T> type, Identifier identifier, PacketByteBuf.PacketReader<T> reader, PacketByteBuf.PacketWriter<T> writer) {
 		NetworkHandlersImpl.register(type, identifier, reader, writer);
 	}
 }

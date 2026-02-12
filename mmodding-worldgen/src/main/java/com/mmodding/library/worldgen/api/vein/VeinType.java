@@ -7,7 +7,7 @@ import com.mmodding.library.worldgen.impl.vein.VeinTypeImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.random.PositionalRandomFactory;
+import net.minecraft.util.math.random.RandomSplitter;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
@@ -22,7 +22,7 @@ public interface VeinType extends StaticElement<VeinType> {
 
 	BlockState pickFillerState(Random random);
 
-	ChunkNoiseSampler.BlockStateSampler createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, PositionalRandomFactory posRandom);
+	ChunkNoiseSampler.BlockStateSampler createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, RandomSplitter posRandom);
 
 	class Builder {
 
