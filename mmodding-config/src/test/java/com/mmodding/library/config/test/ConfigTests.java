@@ -4,11 +4,15 @@ import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.ConfigLevel;
 import com.mmodding.library.config.api.ConfigNetworkManagement;
 import com.mmodding.library.config.api.schema.ConfigSchema;
+import com.mmodding.library.core.api.AdvancedContainer;
+import com.mmodding.library.core.api.ExtendedModInitializer;
 import com.mmodding.library.core.api.MModdingLibrary;
+import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
+import com.mmodding.library.java.api.object.ObjectUtil;
 
-public class ConfigTests {
+public class ConfigTests implements ExtendedModInitializer {
 
 	public static final ConfigSchema SCHEMA = ConfigSchema.create()
 		.bool("boolean")
@@ -33,4 +37,12 @@ public class ConfigTests {
 			)
 		)
 		.build(MModdingLibrary.createId("config"));
+
+	@Override
+	public void setupManager(ElementsManager.Builder manager) {}
+
+	@Override
+	public void onInitialize(AdvancedContainer mod) {
+		ObjectUtil.load(CONFIG);
+	}
 }

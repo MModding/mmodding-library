@@ -7,22 +7,26 @@ import net.minecraft.util.math.MathHelper;
 @ConfigElement
 public final class FloatingRange implements Copyable<FloatingRange> {
 
-	private final float min;
-	private final float max;
+	private final double min;
+	private final double max;
 
-	private float value;
+	private double value;
 
-	public FloatingRange(float min, float max, float value) {
+	private FloatingRange(double min, double max, double value) {
 		this.min = min;
 		this.max = max;
-		this.value = value;
+		this.setValue(value);
 	}
 
-	public float getValue() {
+	public static FloatingRange of(double min, double max, double value) {
+		return new FloatingRange(min, max, value);
+	}
+
+	public double getValue() {
 		return this.value;
 	}
 
-	public void setValue(float value) {
+	public void setValue(double value) {
 		this.value = MathHelper.clamp(value, this.min, this.max);
 	}
 

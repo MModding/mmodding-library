@@ -1,21 +1,24 @@
 package com.mmodding.library.config.impl.schema;
 
-import com.mmodding.library.config.api.element.ConfigElementProperties;
+import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.api.element.builtin.FloatingRange;
 import com.mmodding.library.config.api.element.builtin.IntegerRange;
 import com.mmodding.library.config.api.schema.ConfigSchema;
-import com.mmodding.library.config.impl.element.builtin.FloatingRangeProperties;
-import com.mmodding.library.config.impl.element.builtin.IntegerRangeProperties;
+import com.mmodding.library.config.impl.ConfigsImpl;
+import com.mmodding.library.config.impl.element.builtin.FloatingRangeWrapper;
+import com.mmodding.library.config.impl.element.builtin.IntegerRangeWrapper;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.BiMap;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ConfigSchemaImpl implements ConfigSchema {
 
-	final BiMap<String, Class<?>, Map<String, ?>> raw = BiMap.create();
+	private static final Set<Class<?>> PRIMITIVES = Set.of(Boolean.class, Integer.class, Float.class, String.class, MixedList.class, ConfigSchema.class);
+
+	public final BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> raw = BiMap.create();
 
 	public static boolean isEmpty(ConfigSchema schema) {
 		return schema instanceof ConfigSchemaImpl.EmptySchema;
@@ -35,7 +38,7 @@ public class ConfigSchemaImpl implements ConfigSchema {
 
 	@Override
 	public ConfigSchema floating(String qualifier) {
-		this.custom(qualifier, Float.class);
+		this.custom(qualifier, Double.class);
 		return this;
 	}
 
@@ -53,13 +56,13 @@ public class ConfigSchemaImpl implements ConfigSchema {
 
 	@Override
 	public ConfigSchema integerRange(String qualifier, int min, int max) {
-		this.custom(qualifier, IntegerRange.class, new IntegerRangeProperties(min, max));
+		this.custom(qualifier, IntegerRange.class, new IntegerRangeWrapper.Properties(min, max));
 		return this;
 	}
 
 	@Override
 	public ConfigSchema floatingRange(String qualifier, float min, float max) {
-		this.custom(qualifier, FloatingRange.class, new FloatingRangeProperties(min, max));
+		this.custom(qualifier, FloatingRange.class, new FloatingRangeWrapper.Properties(min, max));
 		return this;
 	}
 
@@ -72,21 +75,27 @@ public class ConfigSchemaImpl implements ConfigSchema {
 	@Override
 	public ConfigSchema category(String qualifier, Consumer<ConfigSchema> category) {
 		ConfigSchemaImpl schema = (ConfigSchemaImpl) ConfigSchema.create();
-		this.raw.put(qualifier, ConfigSchema.class, schema.raw);
+		category.accept(schema);
+		this.raw.put(qualifier, ConfigSchema.class, new InnerSchemaProperties(schema.raw));
 		return this;
 	}
 
 	@Override
 	public <T> ConfigSchema custom(String qualifier, Class<T> type) {
-		this.raw.put(qualifier, type, Map.of());
+		this.raw.put(qualifier, type, null);
 		return this;
 	}
 
 	@Override
-	public <T, P extends ConfigElementProperties<T>> ConfigSchema custom(String qualifier, Class<T> type, P properties) {
-		this.raw.put(qualifier, type, properties.getProperties());
+	public <T, P extends ConfigElementTypeWrapper.Properties> ConfigSchema custom(String qualifier, Class<T> type, P properties) {
+		if (!ConfigSchemaImpl.PRIMITIVES.contains(type) && !ConfigsImpl.WRAPPERS.containsKey(type)) {
+			throw new IllegalArgumentException(type + " is not a registered type");
+		}
+		this.raw.put(qualifier, type, properties);
 		return this;
 	}
+
+	public record InnerSchemaProperties(BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> raw) implements ConfigElementTypeWrapper.Properties {}
 
 	public static class EmptySchema implements ConfigSchema {
 
@@ -141,7 +150,7 @@ public class ConfigSchemaImpl implements ConfigSchema {
 		}
 
 		@Override
-		public <T, P extends ConfigElementProperties<T>> ConfigSchema custom(String qualifier, Class<T> type, P properties) {
+		public <T, P extends ConfigElementTypeWrapper.Properties> ConfigSchema custom(String qualifier, Class<T> type, P properties) {
 			return this;
 		}
 	}

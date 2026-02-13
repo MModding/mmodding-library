@@ -43,7 +43,7 @@ public interface Config {
 
 	/**
 	 * The configuration schema. Defines multiple information
-	 * such as supported qualifiers and what are their types.
+	 * such as supported qualifiers and their associated types.
 	 * @return the configuration schema
 	 */
 	ConfigSchema getSchema();

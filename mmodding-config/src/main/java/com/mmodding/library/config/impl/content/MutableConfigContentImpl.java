@@ -2,28 +2,30 @@ package com.mmodding.library.config.impl.content;
 
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.MutableConfigContent;
+import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.api.element.builtin.FloatingRange;
 import com.mmodding.library.config.api.element.builtin.IntegerRange;
+import com.mmodding.library.config.impl.ConfigsImpl;
+import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.function.consumer.ReturnableConsumer;
 import com.mmodding.library.java.api.list.MixedList;
+import com.mmodding.library.java.api.map.BiMap;
 import com.mmodding.library.java.api.map.MixedMap;
 
 import java.util.function.Consumer;
 
 public class MutableConfigContentImpl implements MutableConfigContent {
 
+	private final BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> schema;
 	private final MixedMap<String> raw;
 
-	public MutableConfigContentImpl() {
-		this((MixedMap<String>) null);
+	public MutableConfigContentImpl(BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> schema) {
+		this(schema, null);
 	}
 
-	public MutableConfigContentImpl(ConfigContent configContent) {
-		this.raw = ((ConfigContentImpl) configContent).getRaw();
-	}
-
-	public MutableConfigContentImpl(MixedMap<String> raw) {
+	public MutableConfigContentImpl(BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> schema, MixedMap<String> raw) {
+		this.schema = schema;
 		this.raw = raw != null ? raw : MixedMap.linked();
 	}
 
@@ -40,8 +42,8 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 	}
 
 	@Override
-	public MutableConfigContent floating(String qualifier, float floating) {
-		this.raw.put(qualifier, Float.class, floating);
+	public MutableConfigContent floating(String qualifier, double floating) {
+		this.raw.put(qualifier, Double.class, floating);
 		return this;
 	}
 
@@ -53,29 +55,19 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 
 	@Override
 	public MutableConfigContent color(String qualifier, Color color) {
-		this.raw.put(qualifier, Color.class, color);
-		return this;
-	}
-
-	public MutableConfigContent initIntegerRange(String qualifier, IntegerRange integerRange) {
-		this.raw.put(qualifier, IntegerRange.class, integerRange);
+		this.custom(qualifier, Color.class, color);
 		return this;
 	}
 
 	@Override
 	public MutableConfigContent integerRange(String qualifier, int integer) {
-		this.raw.get(qualifier, IntegerRange.class).setValue(integer);
-		return this;
-	}
-
-	public MutableConfigContent initFloatingRange(String qualifier, FloatingRange floatingRange) {
-		this.raw.put(qualifier, FloatingRange.class, floatingRange);
+		this.custom(qualifier, IntegerRange.class, integer);
 		return this;
 	}
 
 	@Override
-	public MutableConfigContent floatingRange(String qualifier, float floating) {
-		this.raw.get(qualifier, FloatingRange.class).setValue(floating);
+	public MutableConfigContent floatingRange(String qualifier, double floating) {
+		this.custom(qualifier, FloatingRange.class, floating);
 		return this;
 	}
 
@@ -87,11 +79,25 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 
 	@Override
 	public MutableConfigContent category(String qualifier, Consumer<MutableConfigContent> category) {
-		this.raw.put(qualifier, MixedMap.class, ((MutableConfigContentImpl) ReturnableConsumer.of(category).acceptReturnable(new MutableConfigContentImpl())).raw);
+		ConfigSchemaImpl.InnerSchemaProperties properties = (ConfigSchemaImpl.InnerSchemaProperties) this.schema.getSecondValue(qualifier);
+		this.raw.put(qualifier, MixedMap.class, ((MutableConfigContentImpl) ReturnableConsumer.of(category).acceptReturnable(new MutableConfigContentImpl(properties.raw()))).raw);
+		return this;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T, V> MutableConfigContent custom(String qualifier, Class<T> type, V value) {
+		var wrapper = (ConfigElementTypeWrapper<T, V, ConfigElementTypeWrapper.Properties>) ConfigsImpl.WRAPPERS.get(type);
+		if (wrapper == null) {
+			throw new IllegalArgumentException(type + " is not a registered type");
+		}
+		else {
+			wrapper.modify(this, qualifier, this.schema.getSecondValue(qualifier), value);
+		}
 		return this;
 	}
 
 	public ConfigContent immutable() {
-		return new ConfigContentImpl(this.raw);
+		return new ConfigContentImpl(this.schema, this.raw);
 	}
 }

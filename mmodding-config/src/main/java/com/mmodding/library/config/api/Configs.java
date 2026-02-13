@@ -1,5 +1,6 @@
 package com.mmodding.library.config.api;
 
+import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.impl.ConfigsImpl;
 import net.minecraft.util.Identifier;
 
@@ -29,5 +30,14 @@ public class Configs {
 	 */
 	public static Config get(Identifier identifier) {
 		return ConfigsImpl.get(identifier);
+	}
+
+	/**
+	 * Allows to register a new configuration element type wrapper for a specified type.
+	 * @param type the specified type
+	 * @param wrapper the wrapped
+	 */
+	public static <T, V, P extends ConfigElementTypeWrapper.Properties> void registerWrapper(Class<T> type, ConfigElementTypeWrapper<T, V, P> wrapper) {
+		ConfigsImpl.registerWrapper(type, wrapper);
 	}
 }

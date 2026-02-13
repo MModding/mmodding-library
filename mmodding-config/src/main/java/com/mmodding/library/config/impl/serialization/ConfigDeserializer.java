@@ -4,13 +4,13 @@ import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.MutableConfigContent;
 import com.mmodding.library.config.impl.content.MutableConfigContentImpl;
+import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
 import com.mmodding.library.java.api.list.MixedList;
 import net.fabricmc.loader.api.FabricLoader;
 import org.quiltmc.parsers.json.JsonReader;
 import org.quiltmc.parsers.json.JsonToken;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class ConfigDeserializer {
@@ -28,11 +28,8 @@ public class ConfigDeserializer {
 		if (num instanceof BigInteger) {
 			mutable.integer(qualifier, ((BigInteger) num).intValueExact());
 		}
-		else if (num instanceof BigDecimal) {
-			mutable.integer(qualifier, ((BigDecimal) num).intValueExact());
-		}
 		else {
-			mutable.floating(qualifier, (float) num.doubleValue());
+			mutable.floating(qualifier, num.doubleValue());
 		}
 	}
 
@@ -54,11 +51,8 @@ public class ConfigDeserializer {
 					if (num instanceof BigInteger) {
 						list.add(Integer.class, ((BigInteger) num).intValueExact());
 					}
-					else if (num instanceof BigDecimal) {
-						list.add(Integer.class, ((BigDecimal) num).intValueExact());
-					}
 					else {
-						list.add(Float.class, (float) num.doubleValue());
+						list.add(Double.class, num.doubleValue());
 					}
 				}
 				case STRING -> list.add(String.class, reader.nextString());
@@ -94,7 +88,7 @@ public class ConfigDeserializer {
 
 	public static ConfigContent deserialize(Config config) {
 		try {
-			MutableConfigContentImpl mutable = new MutableConfigContentImpl();
+			MutableConfigContentImpl mutable = new MutableConfigContentImpl(((ConfigSchemaImpl) config.getSchema()).raw);
 			JsonReader reader = ConfigDeserializer.reader(config);
 			reader.beginObject();
 			ConfigDeserializer.objectProcess(reader, mutable);

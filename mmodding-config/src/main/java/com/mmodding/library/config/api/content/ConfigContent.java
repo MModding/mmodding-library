@@ -14,7 +14,7 @@ public interface ConfigContent {
 
 	int integer(String qualifier);
 
-	float floating(String qualifier);
+	double floating(String qualifier);
 
 	String string(String qualifier);
 

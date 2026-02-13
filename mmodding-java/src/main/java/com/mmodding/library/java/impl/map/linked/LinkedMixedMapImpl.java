@@ -45,6 +45,20 @@ public class LinkedMixedMapImpl<K> extends LinkedHashMap<K, Typed<?>> implements
 	}
 
 	@Override
+	public <V> V getOrDefault(K key, Class<V> type, V defaultValue) {
+		Typed<?> typed = super.getOrDefault(key, Typed.of(type, defaultValue));
+		if (typed == null) {
+			typed = MixedMap.emptyValue(type);
+		}
+		if (type.equals(typed.getType())) {
+			return (V) typed.getValue();
+		}
+		else {
+			throw new IllegalArgumentException("Given type does not match the targeted type!");
+		}
+	}
+
+	@Override
 	public <V> V put(K key, Class<V> type, V value) {
 		Typed<V> typed = (Typed<V>) super.put(key, Typed.of(type, value));
 		if (typed != null) {

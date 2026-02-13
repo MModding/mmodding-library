@@ -1,23 +1,25 @@
 package com.mmodding.library.config.impl.content;
 
 import com.mmodding.library.config.api.content.ConfigContent;
+import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.api.element.builtin.FloatingRange;
 import com.mmodding.library.config.api.element.builtin.IntegerRange;
+import com.mmodding.library.config.impl.ConfigsImpl;
+import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
+import com.mmodding.library.java.api.map.BiMap;
 import com.mmodding.library.java.api.map.MixedMap;
 import com.mmodding.library.java.api.object.Copyable;
 import com.mmodding.library.java.impl.map.linked.LinkedMixedMapImpl;
 
 public class ConfigContentImpl implements ConfigContent {
 
+	private final BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> schema;
 	private final MixedMap<String> raw;
 
-	public ConfigContentImpl() {
-		this(null);
-	}
-
-	public ConfigContentImpl(MixedMap<String> raw) {
+	public ConfigContentImpl(BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> schema, MixedMap<String> raw) {
+		this.schema = schema;
 		if (raw != null) {
 			if (raw instanceof LinkedMixedMapImpl<String>) {
 				this.raw = raw;
@@ -42,8 +44,8 @@ public class ConfigContentImpl implements ConfigContent {
 	}
 
 	@Override
-	public float floating(String qualifier) {
-		return this.raw.get(qualifier, Float.class);
+	public double floating(String qualifier) {
+		return this.raw.get(qualifier, Double.class);
 	}
 
 	@Override
@@ -68,18 +70,26 @@ public class ConfigContentImpl implements ConfigContent {
 
 	@Override
 	public MixedList list(String qualifier) {
-		return this.custom(qualifier, MixedList.class);
+		return this.raw.get(qualifier, MixedList.class).copy();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public ConfigContent category(String qualifier) {
-		return new ConfigContentImpl(this.raw.get(qualifier, MixedMap.class));
+		ConfigSchemaImpl.InnerSchemaProperties properties = (ConfigSchemaImpl.InnerSchemaProperties) this.schema.getSecondValue(qualifier);
+		return new ConfigContentImpl(properties.raw(), this.raw.get(qualifier, MixedMap.class));
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T extends Copyable<T>> T custom(String qualifier, Class<T> type) {
-		return this.raw.get(qualifier, type).copy();
+		var wrapper = (ConfigElementTypeWrapper<T, ?, ConfigElementTypeWrapper.Properties>) ConfigsImpl.WRAPPERS.get(type);
+		if (wrapper == null) {
+			throw new IllegalArgumentException(type + " is not a registered type");
+		}
+		else {
+			return wrapper.resolve(this, qualifier, this.schema.getSecondValue(qualifier)).copy();
+		}
 	}
 
 	public MixedMap<String> getRaw() {

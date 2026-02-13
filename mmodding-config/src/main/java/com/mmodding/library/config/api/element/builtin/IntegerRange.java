@@ -12,10 +12,14 @@ public final class IntegerRange implements Copyable<IntegerRange> {
 
 	private int value;
 
-	public IntegerRange(int min, int max, int value) {
+	private IntegerRange(int min, int max, int value) {
 		this.min = min;
 		this.max = max;
-		this.value = value;
+		this.setValue(value);
+	}
+
+	public static IntegerRange of(int min, int max, int value) {
+		return new IntegerRange(min, max, value);
 	}
 
 	public int getValue() {

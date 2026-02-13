@@ -13,7 +13,7 @@ public interface MutableConfigContent {
 
 	MutableConfigContent integer(String qualifier, int integer);
 
-	MutableConfigContent floating(String qualifier, float floating);
+	MutableConfigContent floating(String qualifier, double floating);
 
 	MutableConfigContent string(String qualifier, String string);
 
@@ -21,9 +21,11 @@ public interface MutableConfigContent {
 
 	MutableConfigContent integerRange(String qualifier, int integer);
 
-	MutableConfigContent floatingRange(String qualifier, float floating);
+	MutableConfigContent floatingRange(String qualifier, double floating);
 
 	MutableConfigContent list(String qualifier, MixedList list);
 
 	MutableConfigContent category(String qualifier, Consumer<MutableConfigContent> category);
+
+	<T, V> MutableConfigContent custom(String qualifier, Class<T> type, V element);
 }

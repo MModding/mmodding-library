@@ -7,6 +7,7 @@ import com.mmodding.library.config.api.ConfigNetworkManagement;
 import com.mmodding.library.config.api.content.MutableConfigContent;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 import com.mmodding.library.config.impl.content.MutableConfigContentImpl;
+import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
 import com.mmodding.library.java.api.function.consumer.ReturnableConsumer;
 import net.minecraft.util.Identifier;
 
@@ -53,7 +54,7 @@ public class ConfigBuilderImpl implements Builder {
 
 	@Override
 	public Config build(Identifier identifier) {
-		Config config = new ConfigImpl(this.translationKey, this.filePath, this.level, this.networkManagement, this.schema, ((MutableConfigContentImpl) this.defaultContent.acceptReturnable(new MutableConfigContentImpl())).immutable());
+		Config config = new ConfigImpl(this.translationKey, this.filePath, this.level, this.networkManagement, this.schema, ((MutableConfigContentImpl) this.defaultContent.acceptReturnable(new MutableConfigContentImpl(((ConfigSchemaImpl) this.schema).raw))).immutable());
 		ConfigsImpl.CONFIGS.put(identifier, config);
 		InternalConfigRetriever.initialLoad(config);
 		return config;

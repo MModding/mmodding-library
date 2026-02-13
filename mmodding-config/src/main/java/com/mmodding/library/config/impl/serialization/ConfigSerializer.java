@@ -3,7 +3,6 @@ package com.mmodding.library.config.impl.serialization;
 import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.impl.content.ConfigContentImpl;
-import com.mmodding.library.config.impl.element.ConfigElementTypeOperatorImpl;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
@@ -37,8 +36,8 @@ public class ConfigSerializer {
 				else if (type.equals(Integer.class)) {
 					writer.value((int) object);
 				}
-				else if (type.equals(Float.class)) {
-					writer.value((float) object);
+				else if (type.equals(Double.class)) {
+					writer.value((double) object);
 				}
 				else if (type.equals(String.class)) {
 					writer.value((String) object);
@@ -58,6 +57,7 @@ public class ConfigSerializer {
 		writer.beginObject();
 		((ConfigContentImpl) content).getRaw().forEach((qualifier, type, value) -> {
 			try {
+				System.out.println(qualifier + type);
 				writer.name(qualifier);
 				if (type.equals(Boolean.class)) {
 					writer.value(content.bool(qualifier));
@@ -65,7 +65,7 @@ public class ConfigSerializer {
 				else if (type.equals(Integer.class)) {
 					writer.value(content.integer(qualifier));
 				}
-				else if (type.equals(Float.class)) {
+				else if (type.equals(Double.class)) {
 					writer.value(content.floating(qualifier));
 				}
 				else if (type.equals(String.class)) {
@@ -76,9 +76,6 @@ public class ConfigSerializer {
 				}
 				else if (type.equals(MixedMap.class)) {
 					ConfigSerializer.writeObject(writer, content.category(qualifier));
-				}
-				else if (ConfigElementTypeOperatorImpl.OPERATORS.containsKey(type)) {
-					ConfigElementTypeOperatorImpl.OPERATORS.get(type).writer().write(writer, content, qualifier);
 				}
 			} catch (IOException error) {
 				throw new RuntimeException("Failed to write configuration!", error);

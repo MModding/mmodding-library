@@ -25,6 +25,8 @@ public interface MixedMap<K> extends Map<K, Typed<?>> {
 
 	<V> V get(K key, Class<V> type);
 
+	<V> V getOrDefault(K key, Class<V> type, V defaultValue);
+
 	<V> V put(K key, Class<V> type, V value);
 
 	<V> void forEach(TriConsumer<? super K, ? super Class<V>, ? super V> action);
