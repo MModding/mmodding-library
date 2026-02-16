@@ -8,11 +8,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public class InternalConfigRetriever {
+public class ConfigLoader {
 
 	public static void initialLoad(Config config) {
 		boolean exists = FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json").toFile().exists();
-		ConfigContent content = !exists ? InternalConfigRetriever.createAndLoad(config) : InternalConfigRetriever.load(config);
+		ConfigContent content = !exists ? ConfigLoader.createAndLoad(config) : ConfigLoader.load(config);
 		((ConfigImpl) config).updateContent(content);
 	}
 

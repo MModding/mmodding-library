@@ -58,7 +58,7 @@ public class ConfigImpl implements Config {
 
 	@Override
 	public ConfigContent getContent() {
-		return this.level.equals(ConfigLevel.ALWAYS_UPDATED) ? InternalConfigRetriever.load(this) : this.cachedContent;
+		return this.level.equals(ConfigLevel.ALWAYS_UPDATED) ? ConfigLoader.load(this) : this.cachedContent;
 	}
 
 	public void updateContent(ConfigContent content) {
