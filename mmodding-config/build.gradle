@@ -3,6 +3,9 @@ import com.mmodding.gradle.api.EnvironmentTarget
 mmodding {
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
+		withEntrypoints {
+			it.init("com.mmodding.library.config.impl.ConfigInitializer")
+		}
 	}
 	modules(project) {
 		implementation("mmodding-core")

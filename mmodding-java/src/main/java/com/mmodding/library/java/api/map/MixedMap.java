@@ -1,9 +1,9 @@
 package com.mmodding.library.java.api.map;
 
 import com.mmodding.library.java.api.container.Typed;
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.java.impl.map.MixedMapImpl;
 import com.mmodding.library.java.impl.map.linked.LinkedMixedMapImpl;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.Map;
 

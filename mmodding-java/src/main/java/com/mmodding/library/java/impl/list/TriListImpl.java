@@ -1,8 +1,8 @@
 package com.mmodding.library.java.impl.list;
 
 import com.mmodding.library.java.api.container.Triple;
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.java.api.list.TriList;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

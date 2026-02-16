@@ -1,9 +1,9 @@
 package com.mmodding.library.java.api.map;
 
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.java.impl.map.BiMapImpl;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.Map;
 import java.util.function.BiConsumer;

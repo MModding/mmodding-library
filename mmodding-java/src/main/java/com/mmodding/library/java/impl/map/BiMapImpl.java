@@ -1,10 +1,10 @@
 package com.mmodding.library.java.impl.map;
 
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.java.api.map.BiMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.function.BiConsumer;
 

@@ -1,9 +1,9 @@
 package com.mmodding.library.java.impl.map;
 
 import com.mmodding.library.java.api.container.Typed;
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.java.api.map.MixedMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.apache.logging.log4j.util.TriConsumer;
 
 @SuppressWarnings("unchecked")
 public class MixedMapImpl<K> extends Object2ObjectOpenHashMap<K, Typed<?>> implements MixedMap<K> {
