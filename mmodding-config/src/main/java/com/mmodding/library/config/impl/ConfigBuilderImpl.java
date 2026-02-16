@@ -18,7 +18,7 @@ public class ConfigBuilderImpl implements Builder {
 	private final String translationKey;
 	private final String filePath;
 
-	private ConfigLevel level = ConfigLevel.SCREEN_MODIFICATION;
+	private ConfigLevel level = ConfigLevel.IN_GAME_MODIFICATION;
 	private ConfigNetworkManagement networkManagement = ConfigNetworkManagement.UPSTREAM_SERVER;
 	private ConfigSchema schema = ConfigSchema.empty();
 	private ReturnableConsumer<MutableConfigContent> defaultContent = mutable -> {};
@@ -54,7 +54,7 @@ public class ConfigBuilderImpl implements Builder {
 
 	@Override
 	public Config build(Identifier identifier) {
-		Config config = new ConfigImpl(this.translationKey, this.filePath, this.level, this.networkManagement, this.schema, ((MutableConfigContentImpl) this.defaultContent.acceptReturnable(new MutableConfigContentImpl(((ConfigSchemaImpl) this.schema).raw))).immutable());
+		Config config = new ConfigImpl(this.translationKey, this.filePath, this.level, this.networkManagement, this.schema, ((MutableConfigContentImpl) this.defaultContent.acceptReturnable(new MutableConfigContentImpl(ConfigSchemaImpl.getRaw(this.schema)))).immutable());
 		ConfigsImpl.CONFIGS.put(identifier, config);
 		InternalConfigRetriever.initialLoad(config);
 		return config;

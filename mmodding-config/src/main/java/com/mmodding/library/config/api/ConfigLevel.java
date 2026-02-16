@@ -9,10 +9,10 @@ public enum ConfigLevel {
 	ALWAYS_UPDATED,
 
 	/**
-	 * The configuration is updated when a modification happens on it
-	 * after being saved on the configuration screen.
+	 * The configuration is updated when modified from the game.
+	 * This happens notably when editing the configuration from the config screen.
 	 */
-	SCREEN_MODIFICATION,
+	IN_GAME_MODIFICATION,
 
 	/**
 	 * The configuration is updated when a world is loaded.

@@ -5,6 +5,7 @@ import com.mmodding.library.config.api.content.MutableConfigContent;
 import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.api.element.builtin.FloatingRange;
 import com.mmodding.library.config.api.element.builtin.IntegerRange;
+import com.mmodding.library.config.impl.ConfigInitializer;
 import com.mmodding.library.config.impl.ConfigsImpl;
 import com.mmodding.library.config.impl.schema.ConfigSchemaImpl;
 import com.mmodding.library.java.api.color.Color;
@@ -29,27 +30,50 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 		this.raw = raw != null ? raw : MixedMap.linked();
 	}
 
+	private <T> void safeInsert(String qualifier, Class<T> type, T value) {
+		if (this.schema == null) { // empty schema means no verification; "C'est la fiesta !"
+			this.raw.put(qualifier, type, value);
+		}
+		else if (this.schema.containsKey(qualifier)) {
+			Class<?> schemaType = this.schema.getFirstValue(qualifier);
+			if (schemaType.equals(Integer.class) && type.equals(Double.class)) { // when integers are wrongly decoded as doubles; would've preferred that they don't cause it will not cause issues for legitime mistakes on doubles
+				this.safeInsert(qualifier, Integer.class, ((Double) value).intValue());
+			}
+			else if (schemaType.equals(type) || ConfigsImpl.WRAPPERS.containsKey(schemaType)) { // schema type differs for wrappers, it'll need to be checked in the different way later
+				this.raw.put(qualifier, type, value);
+			}
+			else {
+				throw new IllegalStateException("Property [" + qualifier + "] has invalid type [" + type + "] when expecting type [" + schemaType + "]");
+			}
+		}
+		else {
+			if (ConfigInitializer.COMMON_CONFIG.getContent().bool("strict_schema_mode")) {
+				throw new IllegalStateException("Property [" + qualifier + "] is not part of the configuration schema");
+			}
+		}
+	}
+
 	@Override
 	public MutableConfigContent bool(String qualifier, boolean bool) {
-		this.raw.put(qualifier, Boolean.class, bool);
+		this.safeInsert(qualifier, Boolean.class, bool);
 		return this;
 	}
 
 	@Override
 	public MutableConfigContent integer(String qualifier, int integer) {
-		this.raw.put(qualifier, Integer.class, integer);
+		this.safeInsert(qualifier, Integer.class, integer);
 		return this;
 	}
 
 	@Override
 	public MutableConfigContent floating(String qualifier, double floating) {
-		this.raw.put(qualifier, Double.class, floating);
+		this.safeInsert(qualifier, Double.class, floating);
 		return this;
 	}
 
 	@Override
 	public MutableConfigContent string(String qualifier, String string) {
-		this.raw.put(qualifier, String.class, string);
+		this.safeInsert(qualifier, String.class, string);
 		return this;
 	}
 

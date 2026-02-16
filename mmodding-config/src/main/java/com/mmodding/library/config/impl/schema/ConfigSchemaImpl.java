@@ -18,10 +18,14 @@ public class ConfigSchemaImpl implements ConfigSchema {
 
 	private static final Set<Class<?>> PRIMITIVES = Set.of(Boolean.class, Integer.class, Float.class, String.class, MixedList.class, ConfigSchema.class);
 
-	public final BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> raw = BiMap.create();
+	private final BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> raw = BiMap.create();
 
 	public static boolean isEmpty(ConfigSchema schema) {
 		return schema instanceof ConfigSchemaImpl.EmptySchema;
+	}
+
+	public static BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> getRaw(ConfigSchema schema) {
+		return ConfigSchemaImpl.isEmpty(schema) ? null : ((ConfigSchemaImpl) schema).raw;
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public class ConfigDeserializer {
 
 	public static ConfigContent deserialize(Config config) {
 		try {
-			MutableConfigContentImpl mutable = new MutableConfigContentImpl(((ConfigSchemaImpl) config.getSchema()).raw);
+			MutableConfigContentImpl mutable = new MutableConfigContentImpl(ConfigSchemaImpl.getRaw(config.getSchema()));
 			JsonReader reader = ConfigDeserializer.reader(config);
 			reader.beginObject();
 			ConfigDeserializer.objectProcess(reader, mutable);
