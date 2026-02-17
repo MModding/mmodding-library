@@ -57,7 +57,6 @@ public class ConfigSerializer {
 		writer.beginObject();
 		((ConfigContentImpl) content).getRaw().forEach((qualifier, type, value) -> {
 			try {
-				System.out.println(qualifier + type);
 				writer.name(qualifier);
 				if (type.equals(Boolean.class)) {
 					writer.value(content.bool(qualifier));
