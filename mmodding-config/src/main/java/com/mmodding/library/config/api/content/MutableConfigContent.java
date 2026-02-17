@@ -23,6 +23,8 @@ public interface MutableConfigContent {
 
 	MutableConfigContent floatingRange(String qualifier, double floating);
 
+	<T extends Enum<T>> MutableConfigContent enumValue(String qualifier, Enum<T> value);
+
 	MutableConfigContent list(String qualifier, MixedList list);
 
 	MutableConfigContent category(String qualifier, Consumer<MutableConfigContent> category);

@@ -5,6 +5,7 @@ import com.mmodding.library.config.api.element.builtin.FloatingRange;
 import com.mmodding.library.config.api.element.builtin.IntegerRange;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 import com.mmodding.library.config.impl.ConfigsImpl;
+import com.mmodding.library.config.impl.element.builtin.EnumWrapper;
 import com.mmodding.library.config.impl.element.builtin.FloatingRangeWrapper;
 import com.mmodding.library.config.impl.element.builtin.IntegerRangeWrapper;
 import com.mmodding.library.java.api.color.Color;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
 
 public class ConfigSchemaImpl implements ConfigSchema {
 
-	private static final Set<Class<?>> PRIMITIVES = Set.of(Boolean.class, Integer.class, Float.class, String.class, MixedList.class, ConfigSchema.class);
+	private static final Set<Class<?>> PRIMITIVES = Set.of(Boolean.class, Integer.class, Float.class, String.class, Enum.class, MixedList.class, ConfigSchema.class);
 
 	private final BiMap<String, Class<?>, ConfigElementTypeWrapper.Properties> raw = BiMap.create();
 
@@ -60,20 +61,22 @@ public class ConfigSchemaImpl implements ConfigSchema {
 
 	@Override
 	public ConfigSchema integerRange(String qualifier, int min, int max) {
-		this.custom(qualifier, IntegerRange.class, new IntegerRangeWrapper.Properties(min, max));
-		return this;
+		return this.custom(qualifier, IntegerRange.class, new IntegerRangeWrapper.Properties(min, max));
 	}
 
 	@Override
-	public ConfigSchema floatingRange(String qualifier, float min, float max) {
-		this.custom(qualifier, FloatingRange.class, new FloatingRangeWrapper.Properties(min, max));
-		return this;
+	public ConfigSchema floatingRange(String qualifier, double min, double max) {
+		return this.custom(qualifier, FloatingRange.class, new FloatingRangeWrapper.Properties(min, max));
+	}
+
+	@Override
+	public <T extends Enum<T>> ConfigSchema enumValue(String qualifier, Class<T> enumClass) {
+		return this.custom(qualifier, Enum.class, new EnumWrapper.Properties<>(enumClass));
 	}
 
 	@Override
 	public ConfigSchema list(String qualifier) {
-		this.custom(qualifier, MixedList.class);
-		return this;
+		return this.custom(qualifier, MixedList.class);
 	}
 
 	@Override
@@ -134,7 +137,12 @@ public class ConfigSchemaImpl implements ConfigSchema {
 		}
 
 		@Override
-		public ConfigSchema floatingRange(String qualifier, float start, float end) {
+		public ConfigSchema floatingRange(String qualifier, double start, double end) {
+			return this;
+		}
+
+		@Override
+		public <T extends Enum<T>> ConfigSchema enumValue(String qualifier, Class<T> enumClass) {
 			return this;
 		}
 

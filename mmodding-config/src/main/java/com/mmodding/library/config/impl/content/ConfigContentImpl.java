@@ -69,6 +69,12 @@ public class ConfigContentImpl implements ConfigContent {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Enum<T>> Enum<T> enumValue(String qualifier) {
+		return this.custom(qualifier, (Class<Enum<T>>) (Class<?>) Enum.class);
+	}
+
+	@Override
 	public MixedList list(String qualifier) {
 		return this.raw.get(qualifier, MixedList.class).copy();
 	}
@@ -82,13 +88,13 @@ public class ConfigContentImpl implements ConfigContent {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends Copyable<T>> T custom(String qualifier, Class<T> type) {
+	public <T> T custom(String qualifier, Class<T> type) {
 		var wrapper = (ConfigElementTypeWrapper<T, ?, ConfigElementTypeWrapper.Properties>) ConfigsImpl.WRAPPERS.get(type);
 		if (wrapper == null) {
 			throw new IllegalArgumentException(type + " is not a registered type");
 		}
 		else {
-			return wrapper.resolve(this, qualifier, this.schema.getSecondValue(qualifier)).copy();
+			return wrapper.resolve(this, qualifier, this.schema.getSecondValue(qualifier));
 		}
 	}
 

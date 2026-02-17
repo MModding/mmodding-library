@@ -5,6 +5,7 @@ import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.api.element.builtin.FloatingRange;
 import com.mmodding.library.config.api.element.builtin.IntegerRange;
 import com.mmodding.library.config.impl.element.builtin.ColorWrapper;
+import com.mmodding.library.config.impl.element.builtin.EnumWrapper;
 import com.mmodding.library.config.impl.element.builtin.FloatingRangeWrapper;
 import com.mmodding.library.config.impl.element.builtin.IntegerRangeWrapper;
 import com.mmodding.library.java.api.color.Color;
@@ -35,5 +36,7 @@ public class ConfigsImpl {
 		ConfigsImpl.registerWrapper(Color.class, new ColorWrapper());
 		ConfigsImpl.registerWrapper(IntegerRange.class, new IntegerRangeWrapper());
 		ConfigsImpl.registerWrapper(FloatingRange.class, new FloatingRangeWrapper());
+		// noinspection rawtypes, unchecked
+		ConfigsImpl.registerWrapper(Enum.class, new EnumWrapper());
 	}
 }

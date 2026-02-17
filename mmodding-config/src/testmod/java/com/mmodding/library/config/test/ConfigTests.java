@@ -21,6 +21,7 @@ public class ConfigTests implements ExtendedModInitializer {
 			.string("string")
 			.floatingRange("range", 1.0f, 3.0f)
 			.list("list")
+			.enumValue("enum", TestConfigEnum.class)
 		);
 
 	public static final Config CONFIG = Config.builder("mmodding", "common/mmodding")
@@ -34,6 +35,7 @@ public class ConfigTests implements ExtendedModInitializer {
 				.string("string", "value")
 				.floatingRange("range", 1.0f)
 				.list("list", MixedList.of(Integer.class, 10, String.class, "hi"))
+				.enumValue("enum", TestConfigEnum.FIRST_FIELD)
 			)
 		)
 		.build(MModdingLibrary.createId("config"));
@@ -44,5 +46,10 @@ public class ConfigTests implements ExtendedModInitializer {
 	@Override
 	public void onInitialize(AdvancedContainer mod) {
 		ObjectUtil.load(CONFIG);
+	}
+
+	public enum TestConfigEnum {
+		FIRST_FIELD,
+		SECOND_FIELD
 	}
 }

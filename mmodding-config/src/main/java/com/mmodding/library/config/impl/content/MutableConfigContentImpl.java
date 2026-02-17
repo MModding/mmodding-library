@@ -79,20 +79,23 @@ public class MutableConfigContentImpl implements MutableConfigContent {
 
 	@Override
 	public MutableConfigContent color(String qualifier, Color color) {
-		this.custom(qualifier, Color.class, color);
-		return this;
+		return this.custom(qualifier, Color.class, color);
 	}
 
 	@Override
 	public MutableConfigContent integerRange(String qualifier, int integer) {
-		this.custom(qualifier, IntegerRange.class, integer);
-		return this;
+		return this.custom(qualifier, IntegerRange.class, integer);
 	}
 
 	@Override
 	public MutableConfigContent floatingRange(String qualifier, double floating) {
-		this.custom(qualifier, FloatingRange.class, floating);
-		return this;
+		return this.custom(qualifier, FloatingRange.class, floating);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T extends Enum<T>> MutableConfigContent enumValue(String qualifier, Enum<T> value) {
+		return this.custom(qualifier, (Class<Enum<?>>) (Class<?>) Enum.class, value);
 	}
 
 	@Override
