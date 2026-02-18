@@ -11,7 +11,7 @@ mmodding {
 			))
 		}
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 	}

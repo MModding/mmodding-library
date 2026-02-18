@@ -11,7 +11,7 @@ mmodding {
 			it.injectTo("net/minecraft/class_2540", "com/mmodding/library/network/api/PacketByteBufExtension")
 		}
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 	}

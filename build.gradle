@@ -84,6 +84,17 @@ allprojects {
 		}
     }
 
+	// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
+	// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
+	dependencies {
+		minecraft libs.minecraft
+		mappings libs.yarn.mappings
+
+		modImplementation libs.fabric.loader
+		modImplementation libs.yumi.commons
+		modImplementation libs.fabric.api
+	}
+
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
         // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
@@ -122,6 +133,15 @@ allprojects {
 				}
 			}
 		}
+		loomModRegistration()
+		loomTestmodRegistration()
+		configureTestmod {
+			name = getMModdingLibraryName(project) + " Test Mod"
+			namespace = getMModdingLibraryNamespace(project) + "_testmod"
+			withDependencies {
+				it.addDependency(getMModdingLibraryNamespace(project))
+			}
+		}
 	}
 
     java {
@@ -132,66 +152,6 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
     }
-
-	// Testmods
-	sourceSets {
-		testmod {
-			compileClasspath += main.compileClasspath
-			runtimeClasspath += main.runtimeClasspath
-		}
-
-		test {
-			compileClasspath += testmod.compileClasspath
-			runtimeClasspath += testmod.runtimeClasspath
-		}
-	}
-
-	loom {
-		runtimeOnlyLog4j = true
-
-		runs {
-			testmodClient {
-				client()
-				ideConfigGenerated project.rootProject == project
-				name = "Testmod Client"
-				source sourceSets.testmod
-			}
-			testmodServer {
-				server()
-				ideConfigGenerated project.rootProject == project
-				name = "Testmod Server"
-				source sourceSets.testmod
-			}
-		}
-	}
-
-	allprojects.each { p ->
-		loom.mods.register(p.name) {
-			sourceSet p.sourceSets.main
-		}
-
-		loom.mods.register(p.name + "_testmod") {
-			sourceSet p.sourceSets.testmod
-		}
-	}
-
-	tasks.register('testmodJar', Jar) {
-		from sourceSets.testmod.output
-		archiveClassifier = "testmod"
-	}
-
-	// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-	// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
-	dependencies {
-		minecraft libs.minecraft
-		mappings libs.yarn.mappings
-
-		modImplementation libs.fabric.loader
-		modImplementation libs.yumi.commons
-		modImplementation libs.fabric.api
-
-		testmodImplementation sourceSets.main.output
-	}
 }
 
 subprojects {
@@ -211,7 +171,7 @@ jar {
 }
 
 mmodding {
-	modules(project) {
+	modules {
 		it.include {
 			it.api("mmodding-block")
 			it.api("mmodding-block-entity")
@@ -282,13 +242,7 @@ dependencies {
 	include libs.quilt.parsers.json
 }
 
-// Loom can detect content of generated FMJs thanks to that block code.
-afterEvaluate {
-	project.subprojects.each {
-		project.sourceSets.main.compileClasspath += it.sourceSets.main.compileClasspath
-		project.sourceSets.main.runtimeClasspath += it.sourceSets.main.runtimeClasspath
-	}
-}
+mmodding.collectSubprojectClasspaths()
 
 // Javadocs
 allprojects {

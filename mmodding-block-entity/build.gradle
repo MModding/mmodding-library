@@ -5,7 +5,7 @@ mmodding {
 		environment = EnvironmentTarget.ANY
 		addMixin("mmodding_block_entity.mixins.json")
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 	}

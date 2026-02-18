@@ -23,7 +23,7 @@ mmodding {
 			it.injectTo("net/minecraft/stat/StatType", "com/mmodding/library/datagen/api/lang/LangContainer")
 		}
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 	}

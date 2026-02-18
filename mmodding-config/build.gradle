@@ -7,9 +7,14 @@ mmodding {
 			it.init("com.mmodding.library.config.impl.ConfigInitializer")
 		}
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
+	}
+	configureTestmod {
+		withEntrypoints {
+			it.init("com.mmodding.library.config.test.ConfigTests")
+		}
 	}
 }
 

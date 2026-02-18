@@ -11,7 +11,7 @@ mmodding {
 			it.injectTo("net/minecraft/registry/RegistryKey", "com/mmodding/library/core/api/registry/extension/RegistryKeyExtension<TT;>")
 		}
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-java")
 	}
 }

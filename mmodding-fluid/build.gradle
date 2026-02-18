@@ -8,7 +8,7 @@ mmodding {
 			it.injectTo("net/minecraft/class_3611", "com/mmodding/library/fluid/api/FluidLike")
 		}
 	}
-	modules(project) {
+	modules {
 		implementation("mmodding-core")
 	}
 }

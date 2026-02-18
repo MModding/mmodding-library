@@ -1,6 +1,7 @@
 package com.mmodding.library.block.api.catalog.sized;
 
 import com.mmodding.library.java.api.container.Triple;
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.math.api.OrientedBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,7 +14,6 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldView;
-import org.apache.logging.log4j.util.TriConsumer;
 
 /**
  * {@link SizedBlock} variant supporting face rotations through {@link OrientedBlockPos}.

@@ -2,6 +2,7 @@ package com.mmodding.library.block.api.catalog.sized;
 
 import com.mmodding.library.java.api.container.Triple;
 import com.mmodding.library.java.api.container.Unit;
+import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.state.api.property.ConstantIntProperty;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
