@@ -88,7 +88,7 @@ allprojects {
 	// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 	dependencies {
 		minecraft libs.minecraft
-		mappings libs.yarn.mappings
+		mappings variantOf(libs.yarn.mappings) { classifier 'v2' }
 
 		modImplementation libs.fabric.loader
 		modImplementation libs.yumi.commons
