@@ -244,8 +244,6 @@ dependencies {
 	include libs.quilt.parsers.json
 }
 
-mmodding.collectSubprojectClasspaths()
-
 // Javadocs
 javadoc {
 	options {
@@ -266,7 +264,7 @@ javadoc {
 
 	classpath = files(sourceSets.main.compileClasspath)
 	include("**/api/**")
-	failOnError true
+	failOnError = true
 }
 
 // Configure the maven publication
