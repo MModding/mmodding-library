@@ -131,13 +131,13 @@ allprojects {
 				it.addDependency(getMModdingLibraryNamespace(project))
 			}
 		}
+	}
 
-		processResources {
-			inputs.properties 'version': version
+	processResources {
+		inputs.properties 'version': version
 
-			filesMatching('fabric.mod.json') {
-				expand 'version': version
-			}
+		filesMatching('fabric.mod.json') {
+			expand 'version': version
 		}
 	}
 
