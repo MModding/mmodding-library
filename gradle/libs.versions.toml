@@ -36,4 +36,4 @@ quilt_parsers_json = { module = "org.quiltmc.parsers:json", version.ref = "quilt
 
 [plugins]
 fabric_loom = { id = "fabric-loom", version = "1.10-SNAPSHOT" }
-mmodding_gradle = { id = "com.mmodding.gradle", version = "0.0.15" }
+mmodding_gradle = { id = "com.mmodding.gradle", version = "0.1.0" }
