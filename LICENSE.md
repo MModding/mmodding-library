@@ -1,4 +1,4 @@
-### License for MModding Experiments Past, Current and Future Assets:
+### License for MModding Library Past, Current and Future Assets:
 
 ```
 Copyright (c) 2023-2026 MModding
