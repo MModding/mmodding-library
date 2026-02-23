@@ -3,12 +3,8 @@ import com.mmodding.gradle.api.mod.json.ParentSchema;
 
 plugins {
     id 'maven-publish'
-    alias libs.plugins.fabric.loom
-	alias libs.plugins.mmodding.gradle
-}
-
-base {
-    archivesName = project.archives_base_name
+    alias libs.plugins.fabric.loom apply false
+	alias libs.plugins.mmodding.gradle apply false
 }
 
 version = "$project.version+${libs.versions.minecraft.get()}"
@@ -59,19 +55,12 @@ static def applyYumiCommonsParent(ParentSchema parent) {
 
 allprojects {
 
-    processResources {
-        inputs.properties 'version': version
-
-        filesMatching('fabric.mod.json') {
-            expand 'version': version
-        }
-    }
-}
-
-allprojects {
-
     apply plugin: 'fabric-loom'
 	apply plugin: 'com.mmodding.gradle'
+
+	base {
+		archivesName = project.archives_base_name
+	}
 
     repositories {
 		maven {
@@ -140,6 +129,14 @@ allprojects {
 			namespace = getMModdingLibraryNamespace(project) + "_testmod"
 			withDependencies {
 				it.addDependency(getMModdingLibraryNamespace(project))
+			}
+		}
+
+		processResources {
+			inputs.properties 'version': version
+
+			filesMatching('fabric.mod.json') {
+				expand 'version': version
 			}
 		}
 	}
