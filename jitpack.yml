@@ -1,5 +1,4 @@
 jdk:
   - openjdk17
-install:
-  - ./gradlew generateFMJ
-  - ./gradlew build
+before_install:
+  - ./gradlew generateFMJ # all FMJs need to be generated before anything else happens
