@@ -59,17 +59,22 @@ allprojects {
 	apply plugin: 'com.mmodding.gradle'
 
 	base {
-		archivesName = project.archives_base_name
+		if (project == rootProject) {
+			archivesName = project.archives_base_name
+		}
+		else {
+			archivesName = getMModdingLibraryNamespace(project)
+		}
 	}
 
     repositories {
 		maven {
-			name "QuiltMC"
-			url "https://maven.quiltmc.org/repository/release"
+			name = "QuiltMC"
+			url = "https://maven.quiltmc.org/repository/release"
 		}
 		maven {
-			name "ParchmentMC"
-			url "https://maven.parchmentmc.org"
+			name = "ParchmentMC"
+			url = "https://maven.parchmentmc.org"
 		}
     }
 
