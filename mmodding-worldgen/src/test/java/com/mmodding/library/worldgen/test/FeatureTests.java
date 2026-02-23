@@ -33,7 +33,7 @@ public class FeatureTests {
 					fc -> {
 						int tries = 3;
 						return new RandomPatchFeatureConfig(
-							tries, fc.comp_149(), fc.comp_150(), fc.comp_155()
+							tries, fc.xzSpread(), fc.ySpread(), fc.feature()
 						);
 					}
 				),

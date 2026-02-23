@@ -64,7 +64,7 @@ public class VeinTypeImpl implements VeinType {
 	public ChunkNoiseSampler.BlockStateSampler createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, RandomSplitter posRandom) {
 		return ctx -> {
 			double toggle = veinToggle.sample(ctx);
-			int y = ctx.comp_372();
+			int y = ctx.blockY();
 			double absToggle = Math.abs(toggle);
 			int maxSub = this.maxY - y;
 			int minSub = y - this.minY;
@@ -72,7 +72,7 @@ public class VeinTypeImpl implements VeinType {
 				int minBetweenSubs = Math.min(maxSub, minSub);
 				double clampedA = MathHelper.clampedMap(minBetweenSubs, 0.0, this.beginEdgeRoundoff, -this.maxEdgeRoundoff, 0.0);
 				if (absToggle + clampedA >= this.veinThreshold) {
-					Random random = posRandom.split(ctx.comp_371(), y, ctx.comp_373());
+					Random random = posRandom.split(ctx.blockX(), y, ctx.blockZ());
 					if (random.nextFloat() <= this.veinSolidness && veinRidged.sample(ctx) < 0) {
 						double clampedB = MathHelper.clampedMap(absToggle, this.veinThreshold, this.maxRichnessThreshold, this.minRichness, this.maxRichness);
 						if (random.nextFloat() < clampedB && veinGap.sample(ctx) > this.minGapNoiseOreSkipThreshold) {
