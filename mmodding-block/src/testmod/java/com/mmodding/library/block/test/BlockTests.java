@@ -1,5 +1,6 @@
-package com.mmodding.library.item.test;
+package com.mmodding.library.block.test;
 
+import com.mmodding.library.block.api.BlockWithItem;
 import com.mmodding.library.block.api.util.BlockHeap;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
@@ -31,6 +32,10 @@ public class BlockTests implements ExtendedModInitializer {
 		mod.withRegistry(Registries.BLOCK, factory -> {
 			FIRST_BLOCK.register(factory.createKey("first_block"));
 			SECOND_BLOCK.register(factory.createKey("second_block"));
+		});
+		mod.withRegistry(Registries.ITEM, factory -> {
+			BlockWithItem.getItem(FIRST_BLOCK).register(factory.createKey("first_block"));
+			BlockWithItem.getItem(SECOND_BLOCK).register(factory.createKey("second_block"));
 		});
 		FURNACE_BLOCKS.register(name -> mod.createId(name + "_furnace"));
 	}

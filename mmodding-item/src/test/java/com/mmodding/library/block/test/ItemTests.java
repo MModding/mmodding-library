@@ -1,4 +1,4 @@
-package com.mmodding.library.item.test;
+package com.mmodding.library.block.test;
 
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.item.api.category.ItemCategory;

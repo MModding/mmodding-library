@@ -20,5 +20,11 @@ mmodding {
 		implementation("mmodding-java")
 		implementation("mmodding-math")
 		implementation("mmodding-state")
+		implementation("mmodding-item")
+	}
+	configureTestmod {
+		withEntrypoints {
+			it.init("com.mmodding.library.block.test.BlockTests")
+		}
 	}
 }
