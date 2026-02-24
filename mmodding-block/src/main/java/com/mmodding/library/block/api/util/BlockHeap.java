@@ -1,6 +1,6 @@
 package com.mmodding.library.block.api.util;
 
-import com.mmodding.library.java.api.function.SingleTypeFunction;
+import com.mmodding.library.java.api.function.AutoMapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -34,7 +34,7 @@ public class BlockHeap<T extends Block> {
 		return new BlockHeap<>(factory, settings, names);
 	}
 
-	public BlockHeap<T> map(SingleTypeFunction<T> mapper) {
+	public BlockHeap<T> map(AutoMapper<T> mapper) {
 		this.blocks.keySet().forEach(name -> this.blocks.computeIfPresent(name, (ignored, block) -> mapper.apply(block)));
 		return this;
 	}

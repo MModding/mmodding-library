@@ -1,7 +1,7 @@
 package com.mmodding.library.worldgen.api.feature.replication;
 
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
-import com.mmodding.library.java.api.function.SingleTypeFunction;
+import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.worldgen.impl.feature.replication.FeatureReplicatorImpl;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -22,7 +22,7 @@ public interface FeatureReplicator {
 	static <FC extends FeatureConfig> WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> replicateConfiguredFeature(
 		RegistryKey<ConfiguredFeature<?, ?>> key,
 		ConfiguredFeature<?, ?> configuredFeature,
-		SingleTypeFunction<FC> mutator
+		AutoMapper<FC> mutator
 	) {
 		return FeatureReplicatorImpl.replicateConfiguredFeature(key, configuredFeature, mutator);
 	}
@@ -37,7 +37,7 @@ public interface FeatureReplicator {
 	static WaitingRegistryEntry<PlacedFeature> replicatePlacedFeature(
 		RegistryKey<PlacedFeature> key,
 		PlacedFeature placedFeature,
-		SingleTypeFunction<PlacementModifiers> mutator
+		AutoMapper<PlacementModifiers> mutator
 	) {
 		return FeatureReplicatorImpl.replicatePlacedFeature(key, placedFeature, mutator);
 	}

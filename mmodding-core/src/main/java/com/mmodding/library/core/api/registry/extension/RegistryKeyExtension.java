@@ -1,6 +1,6 @@
 package com.mmodding.library.core.api.registry.extension;
 
-import com.mmodding.library.java.api.function.SingleTypeFunction;
+import com.mmodding.library.java.api.function.AutoMapper;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 
@@ -15,7 +15,7 @@ public interface RegistryKeyExtension<T> {
 	 * @param mapper the mapper
 	 * @return the newly created registry key
 	 */
-	default RegistryKey<T> mapValue(SingleTypeFunction<Identifier> mapper) {
+	default RegistryKey<T> mapValue(AutoMapper<Identifier> mapper) {
 		throw new IllegalStateException();
 	}
 }

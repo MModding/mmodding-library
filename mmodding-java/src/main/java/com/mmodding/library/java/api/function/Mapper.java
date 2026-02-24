@@ -1,7 +1,7 @@
 package com.mmodding.library.java.api.function;
 
 @FunctionalInterface
-public interface SingleTypeFunction<T> {
+public interface Mapper<I, O> {
 
-	T apply(T t);
+	O map(I object);
 }

@@ -1,7 +1,7 @@
 package com.mmodding.library.core.mixin.injector;
 
 import com.mmodding.library.core.api.registry.extension.RegistryKeyExtension;
-import com.mmodding.library.java.api.function.SingleTypeFunction;
+import com.mmodding.library.java.api.function.AutoMapper;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +23,7 @@ public abstract class RegistryKeyMixin<T> implements RegistryKeyExtension<T> {
 
 	@Override
 	@SuppressWarnings("AddedMixinMembersNamePattern")
-	public RegistryKey<T> mapValue(SingleTypeFunction<Identifier> mapper) {
-		return of(this.getRegistry(), mapper.apply(this.getValue()));
+	public RegistryKey<T> mapValue(AutoMapper<Identifier> mapper) {
+		return of(this.getRegistry(), mapper.map(this.getValue()));
 	}
 }
