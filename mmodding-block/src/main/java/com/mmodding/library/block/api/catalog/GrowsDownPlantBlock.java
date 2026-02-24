@@ -1,11 +1,10 @@
 package com.mmodding.library.block.api.catalog;
 
-import com.mmodding.library.core.api.registry.IdentifierUtil;
-import com.mmodding.library.core.api.registry.StaticElement;
+import com.mmodding.library.core.api.AdvancedContainer;
 import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.BooleanProperty;
@@ -18,7 +17,7 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
-public class GrowsDownPlantBlock implements StaticElement<Block> {
+public class GrowsDownPlantBlock {
 
 	private final Head head;
 	private final Body body;
@@ -45,9 +44,9 @@ public class GrowsDownPlantBlock implements StaticElement<Block> {
 		return state;
 	}
 
-	public void register(RegistryKey<Block> key) {
-		this.head.register(key.mapValue(value -> IdentifierUtil.extend(value, "head")));
-		this.body.register(key);
+	public void register(AdvancedContainer mod, String path) {
+		mod.register(Registries.BLOCK, path + "_head", this.head);
+		mod.register(Registries.BLOCK, path, this.body);
 	}
 
 	/* @ClientOnly

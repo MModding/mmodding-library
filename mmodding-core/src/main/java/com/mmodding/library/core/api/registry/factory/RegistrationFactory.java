@@ -8,7 +8,6 @@ import net.minecraft.util.Identifier;
 
 public interface RegistrationFactory<T> {
 
-
 	/**
 	 * Creates a {@link RegistrationFactory}.
 	 * @param registry the registry

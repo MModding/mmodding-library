@@ -68,6 +68,23 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
+	 * A registration method filling the mod namespace automatically.
+	 * @see Registry#register(Registry, Identifier, Object)
+	 */
+	default <T> T register(Registry<T> registry, String path, T element) {
+		return Registry.register(registry, RegistryKey.of(registry.getKey(), Identifier.of(this.getMetadata().getId(), path)), element);
+	}
+
+	/**
+	 * A registration method filling the mod namespace automatically.
+	 * @see Registerable#register(RegistryKey, Object)
+	 */
+	default <T> T register(RegistryKey<? extends Registry<T>> registry, Registerable<T> registerable, String path, T element) {
+		registerable.register(RegistryKey.of(registry, Identifier.of(this.getMetadata().getId(), path)), element);
+		return element;
+	}
+
+	/**
 	 * Allows to make a bunch of registrations for a specified {@link Registry}.
 	 * @param registry the registry
 	 * @param consumer the registrations
