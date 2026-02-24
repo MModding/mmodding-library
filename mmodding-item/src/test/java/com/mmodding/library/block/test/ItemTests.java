@@ -18,9 +18,9 @@ public class ItemTests {
 	public static final Item SECOND_ITEM = new Item(new FabricItemSettings()).setCategory(CATEGORY);
 
 	public static void register(AdvancedContainer mod) {
-		mod.withRegistry(Registries.ITEM, factory -> {
-			FIRST_ITEM.register(factory.createKey("first_item"));
-			SECOND_ITEM.register(factory.createKey("second_item"));
+		mod.register(Registries.ITEM, factory -> {
+			factory.register("first_item", FIRST_ITEM);
+			factory.register("second_item", SECOND_ITEM);
 		});
 	}
 }
