@@ -5,7 +5,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 
 /**
- * Associates a static {@link Registry} entries to external elements.
+ * Associates static {@link Registry} entries to external elements.
  * @param <T> the registry type
  * @param <E> the attachment type
  */

@@ -35,7 +35,7 @@ public class BlockHeap<T extends Block> {
 	}
 
 	public BlockHeap<T> map(AutoMapper<T> mapper) {
-		this.blocks.keySet().forEach(name -> this.blocks.computeIfPresent(name, (ignored, block) -> mapper.apply(block)));
+		this.blocks.keySet().forEach(name -> this.blocks.computeIfPresent(name, (ignored, block) -> mapper.map(block)));
 		return this;
 	}
 

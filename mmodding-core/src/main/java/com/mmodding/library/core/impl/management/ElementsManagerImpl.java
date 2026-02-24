@@ -41,14 +41,6 @@ public class ElementsManagerImpl implements ElementsManager {
 		private final BiList<RegistryKey<Registry<?>>, ResourceProvider<?>> resourceProviders = BiList.create();
 
 		@Override
-		public ElementsManagerImpl.Builder ifModLoaded(String modId, ContentProvider provider) {
-			if (FabricLoader.getInstance().isModLoaded(modId)) {
-				this.content(provider);
-			}
-			return this;
-		}
-
-		@Override
 		public ElementsManagerImpl.Builder content(ContentProvider provider) {
 			this.contentProviders.add(provider);
 			return this;
@@ -63,9 +55,26 @@ public class ElementsManagerImpl implements ElementsManager {
 			return this;
 		}
 
+		@Override
+		public ElementsManagerImpl.Builder contentIfLoaded(String modId, ContentProvider provider) {
+			if (FabricLoader.getInstance().isModLoaded(modId)) {
+				this.content(provider);
+			}
+			return this;
+		}
+
+		@Override
+		public <T> ElementsManagerImpl.Builder resourceIfLoaded(String modId, RegistryKey<Registry<T>> key, ResourceProvider<T> provider) {
+			if (FabricLoader.getInstance().isModLoaded(modId)) {
+				this.resource(key, provider);
+			}
+			return this;
+		}
+
 		public ElementsManagerImpl build() {
 			ElementsManagerImpl manager = new ElementsManagerImpl();
 			manager.contentProviders.addAll(this.contentProviders);
+			manager.resourceProviders.addAll(this.resourceProviders);
 			return manager;
 		}
 	}

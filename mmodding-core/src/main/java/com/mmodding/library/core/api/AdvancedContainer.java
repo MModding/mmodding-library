@@ -1,8 +1,10 @@
 package com.mmodding.library.core.api;
 
+import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
 import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
 import com.mmodding.library.core.impl.AdvancedContainerImpl;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.registry.Registerable;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
@@ -50,22 +52,37 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Allows to register content for a specific registry in a more efficient way.
-	 * It makes use of the {@link  RegistryKeyFactory} object.
-	 * @param registry the registry to register content into
-	 * @param consumer the registrations made by the mod
+	 * Creates a {@link RegistryKeyFactory} of the specified {@link Registry}.
+	 * @param registry the registry
 	 */
-	default <T> void withRegistry(Registry<T> registry, Consumer<RegistryKeyFactory<T>> consumer) {
-		this.withRegistry(registry.getKey(), consumer);
+	default <T> RegistryKeyFactory<T> keyFactory(Registry<T> registry) {
+		return this.keyFactory(registry.getKey());
 	}
 
 	/**
-	 * Allows to register content for a specific registry in a more efficient way.
-	 * It makes use of the {@link  RegistryKeyFactory} object.
-	 * @param registry the registry to register content into
-	 * @param consumer the registrations made by the mod
+	 * Creates a {@link RegistryKeyFactory} of the specified registry's {@link RegistryKey}.
+	 * @param registry the registry key of the registry
 	 */
-	default <T> void withRegistry(RegistryKey<? extends Registry<T>> registry, Consumer<RegistryKeyFactory<T>> consumer) {
-		consumer.accept(RegistryKeyFactory.create(registry, this.getMetadata().getId()));
+	default <T> RegistryKeyFactory<T> keyFactory(RegistryKey<? extends Registry<T>> registry) {
+		return RegistryKeyFactory.create(registry, this.getMetadata().getId());
+	}
+
+	/**
+	 * Allows to make a bunch of registrations for a specified {@link Registry}.
+	 * @param registry the registry
+	 * @param consumer the registrations
+	 */
+	default <T> void register(Registry<T> registry, Consumer<RegistrationFactory<T>> consumer) {
+		consumer.accept(RegistrationFactory.create(registry, this.getMetadata().getId()));
+	}
+
+	/**
+	 * Allows to make a bunch of registrations for a specified {@link Registerable}.
+	 * @param registry the registry key of the registry
+	 * @param registerable the registrable
+	 * @param consumer the registrations
+	 */
+	default <T> void register(RegistryKey<? extends Registry<T>> registry, Registerable<T> registerable, Consumer<RegistrationFactory<T>> consumer) {
+		consumer.accept(RegistrationFactory.create(registry, registerable, this.getMetadata().getId()));
 	}
 }

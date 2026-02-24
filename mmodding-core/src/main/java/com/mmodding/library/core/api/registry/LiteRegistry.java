@@ -52,11 +52,11 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 	T register(Identifier identifier, T entry);
 
 	/**
-	 * Allows to register multiple elements to the same registry with the help of a {@link RegistrationFactory}.
+	 * Allows to register multiple elements to the same registry with the help of a {@link LiteRegistrationFactory}.
 	 * @param namespace the mod namespace
 	 * @param consumer the registrations made by the mod
 	 */
-	void register(String namespace, Consumer<RegistrationFactory<T>> consumer);
+	void register(String namespace, Consumer<LiteRegistrationFactory<T>> consumer);
 
 	/**
 	 * An {@link Entry} object for the {@link LiteRegistry}.
@@ -77,7 +77,7 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 		T element();
 	}
 
-	interface RegistrationFactory<T> {
+	interface LiteRegistrationFactory<T> {
 
 		/**
 		 * A registration method filling the mod namespace automatically with the provided one.

@@ -7,7 +7,7 @@ import net.minecraft.registry.RegistryKey;
 public interface RegistryKeyFactory<T> {
 
 	/**
-	 * A way to manually create a registry key factory, i.e. for a bunch of static key instantiations.
+	 * Creates a {@link RegistryKeyFactory} (when you need to generate a lot of them).
 	 * @param registry the registry's registry key
 	 * @param namespace the mod namespace
 	 * @return the newly created registry key factory

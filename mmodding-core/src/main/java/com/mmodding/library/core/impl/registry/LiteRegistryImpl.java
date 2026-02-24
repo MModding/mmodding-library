@@ -45,8 +45,8 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 	}
 
 	@Override
-	public void register(String namespace, Consumer<RegistrationFactory<T>> consumer) {
-		consumer.accept(new RegistrationFactoryImpl<>(namespace, this::register));
+	public void register(String namespace, Consumer<LiteRegistrationFactory<T>> consumer) {
+		consumer.accept(new LiteRegistrationFactoryImpl<>(namespace, this::register));
 	}
 
 	@NotNull
@@ -57,12 +57,12 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 
 	private record EntryImpl<T>(Identifier identifier, T element) implements Entry<T> {}
 
-	private static class RegistrationFactoryImpl<T> implements RegistrationFactory<T> {
+	private static class LiteRegistrationFactoryImpl<T> implements LiteRegistrationFactory<T> {
 
 		private final String namespace;
 		private final BiFunction<Identifier, T, T> biConsumer;
 
-		private RegistrationFactoryImpl(String namespace, BiFunction<Identifier, T, T> biConsumer) {
+		private LiteRegistrationFactoryImpl(String namespace, BiFunction<Identifier, T, T> biConsumer) {
 			this.namespace = namespace;
 			this.biConsumer = biConsumer;
 		}

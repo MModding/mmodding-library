@@ -6,7 +6,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 
 /**
- * Associates a dynamic {@link Registry} entries to external elements.
+ * Associates dynamic {@link Registry} entries to external elements.
  * @param <T> the registry type
  * @param <E> the attachment type
  */

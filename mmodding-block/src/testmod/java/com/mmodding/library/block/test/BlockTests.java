@@ -29,13 +29,13 @@ public class BlockTests implements ExtendedModInitializer {
 	public void onInitialize(AdvancedContainer mod) {}
 
 	public static void registerBlocks(AdvancedContainer mod) {
-		mod.withRegistry(Registries.BLOCK, factory -> {
-			FIRST_BLOCK.register(factory.createKey("first_block"));
-			SECOND_BLOCK.register(factory.createKey("second_block"));
+		mod.register(Registries.BLOCK, factory -> {
+			factory.register("first_block", FIRST_BLOCK);
+			factory.register("second_block", SECOND_BLOCK);
 		});
-		mod.withRegistry(Registries.ITEM, factory -> {
-			BlockWithItem.getItem(FIRST_BLOCK).register(factory.createKey("first_block"));
-			BlockWithItem.getItem(SECOND_BLOCK).register(factory.createKey("second_block"));
+		mod.register(Registries.ITEM, factory -> {
+			factory.register("first_block", BlockWithItem.getItem(FIRST_BLOCK));
+			factory.register("second_block", BlockWithItem.getItem(SECOND_BLOCK));
 		});
 		FURNACE_BLOCKS.register(name -> mod.createId(name + "_furnace"));
 	}

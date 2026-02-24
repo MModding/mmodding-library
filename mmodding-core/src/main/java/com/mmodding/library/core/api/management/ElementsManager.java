@@ -9,14 +9,6 @@ public interface ElementsManager {
 	interface Builder {
 
 		/**
-		 * Adds a {@link ContentProvider} if a specific mod is loaded.
-		 * @param modId the namespace of the mod
-		 * @param provider the content provider
-		 * @return the builder
-		 */
-		ElementsManager.Builder ifModLoaded(String modId, ContentProvider provider);
-
-		/**
 		 * Adds a {@link ContentProvider}.
 		 * @param provider the content provider
 		 * @return the builder
@@ -31,5 +23,22 @@ public interface ElementsManager {
 		 * @param <T> the element class
 		 */
 		<T> ElementsManager.Builder resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider);
+
+		/**
+		 * Adds a {@link ContentProvider} if a specific mod is loaded.
+		 * @param modId the namespace of the mod
+		 * @param provider the content provider
+		 * @return the builder
+		 */
+		ElementsManager.Builder contentIfLoaded(String modId, ContentProvider provider);
+
+		/**
+		 * Adds a {@link ResourceProvider} if a specific mod is loaded.
+		 * @param modId the namespace of the mod
+		 * @param provider the bootstrap provider
+		 * @return the builder
+		 * @param <T> the element class
+		 */
+		<T> ElementsManager.Builder resourceIfLoaded(String modId, RegistryKey<Registry<T>> key, ResourceProvider<T> provider);
 	}
 }
