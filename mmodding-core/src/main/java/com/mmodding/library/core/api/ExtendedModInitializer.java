@@ -7,6 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.registry.RegistryBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -23,19 +24,22 @@ public interface ExtendedModInitializer extends ModInitializer {
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.loadElements(advanced);
 		DatagenContainerCallback.EVENT.register(containers -> {
+			for (int i = 0; i < containers.size(); i++) {
+				EntrypointContainer<DataGeneratorEntrypoint> container = containers.get(i);
+				if (container.getProvider().getMetadata().getId().equals(advanced.getMetadata().getId())) {
+					containers.set(i, DatagenContainerCallback.createDummyEntrypointContainer(
+						advanced.getMetadata().getId(),
+						builder -> manager.loadBootstraps(advanced, builder),
+						containers.get(i).getEntrypoint()
+					));
+					return;
+				}
+			}
 			containers.add(
-				DatagenContainerCallback.createDummyEntrypoint(
-					new DataGeneratorEntrypoint() {
-
-						@Override
-						public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {}
-
-						@Override
-						public void buildRegistry(RegistryBuilder registryBuilder) {
-							manager.loadBootstraps(advanced, registryBuilder);
-						}
-					},
-					advanced.getMetadata().getId()
+				DatagenContainerCallback.createDummyEntrypointContainer(
+					advanced.getMetadata().getId(),
+					builder -> manager.loadBootstraps(advanced, builder),
+					null
 				)
 			);
 		});
