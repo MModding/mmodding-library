@@ -4,6 +4,7 @@ import com.mmodding.library.datagen.api.lang.TranslationSupport;
 import com.mmodding.library.datagen.api.management.handler.DataContentType;
 import com.mmodding.library.datagen.api.management.processor.ContentProcessor;
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
+import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -24,47 +25,47 @@ public class DataTranslationTypeImpl<T> implements DataContentType<T, String> {
 	}
 
 	@Override
-	public void handleContent(List<T> elements, ContentProcessor<T, String> processor, FabricDataGenerator.Pack pack) {
-		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, elements, processor, output));
+	public void handleContent(BiList<List<T>, ContentProcessor<T, String>> contentToProcess, FabricDataGenerator.Pack pack) {
+		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output));
 	}
 
 	private static class AutomatedLanguageProvider<T> extends FabricLanguageProvider {
 
 		private final RegistryKey<? extends Registry<T>> registry;
-		private final List<T> elements;
-		private final ContentProcessor<T, String> processor;
+		private final BiList<List<T>, ContentProcessor<T, String>> contentToProcess;
 
-		protected AutomatedLanguageProvider(RegistryKey<? extends Registry<T>> registry, List<T> elements, ContentProcessor<T, String> processor, FabricDataOutput output) {
+		protected AutomatedLanguageProvider(RegistryKey<? extends Registry<T>> registry, BiList<List<T>, ContentProcessor<T, String>> contentToProcess, FabricDataOutput output) {
 			super(output);
 			this.registry = registry;
-			this.elements = elements;
-			this.processor = processor;
+			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		public void generateTranslations(TranslationBuilder translationBuilder) {
-			for (T container : this.elements) {
-				if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
-					Registry<T> registry = (Registry<T>) Registries.REGISTRIES.get((RegistryKey) this.registry);
-					assert registry != null;
-					Optional<RegistryKey<T>> optional = registry.getKey(container);
-					optional.ifPresentOrElse(
-						key -> {
-							TranslationSupport.TranslationCallback callback = translation -> translationBuilder.add(
-								translation,
-								this.processor.process(key)
-							);
-							TranslationSupportImpl.REGISTRY.get(this.registry).accept(callback, container);
-						},
-						() -> { throw new IllegalStateException(container + " does not exist in " + this.registry + "!"); }
-					);
+			this.contentToProcess.forEach((elements, processor) -> {
+				for (T element : elements) {
+					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
+						Registry<T> registry = (Registry<T>) Registries.REGISTRIES.get((RegistryKey) this.registry);
+						assert registry != null;
+						Optional<RegistryKey<T>> optional = registry.getKey(element);
+						optional.ifPresentOrElse(
+							key -> {
+								TranslationSupport.TranslationCallback callback = translation -> translationBuilder.add(
+									translation,
+									processor.process(key)
+								);
+								TranslationSupportImpl.REGISTRY.get(this.registry).accept(callback, element);
+							},
+							() -> { throw new IllegalStateException(element + " does not exist in " + this.registry + "!"); }
+						);
 
+					}
+					else {
+						throw new IllegalStateException(this.registry + " is not a valid translation support type!");
+					}
 				}
-				else {
-					throw new IllegalStateException(this.registry + " is not a valid translation support type!");
-				}
-			}
+			});
 		}
 	}
 

@@ -18,11 +18,7 @@ public class DataManagerImpl implements DataManager {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void loadElements(AdvancedContainer mod, FabricDataGenerator generator) {
 		FabricDataGenerator.Pack pack = generator.createPack();
-		this.data.forEach(
-			(handler, biList) -> biList.forEach(
-				(elements, processor) -> handler.handleContent((List) elements, (ContentProcessor) processor, pack)
-			)
-		);
+		this.data.forEach((handler, biList) -> handler.handleContent((BiList) biList, pack));
 	}
 
 	@Override
