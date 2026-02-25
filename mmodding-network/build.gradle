@@ -6,6 +6,7 @@ mmodding {
 		addMixin("mmodding_network.mixins.json")
 		withEntrypoints {
 			it.init("com.mmodding.library.network.impl.NetworkInitializer")
+			it.client("com.mmodding.library.network.impl.NetworkClientInitializer")
 		}
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_2540", "com/mmodding/library/network/api/PacketByteBufExtension")
