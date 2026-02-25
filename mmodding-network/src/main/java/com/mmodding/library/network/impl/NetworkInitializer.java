@@ -7,7 +7,6 @@ import com.mmodding.library.network.api.NetworkHandlers;
 import com.mmodding.library.network.impl.delay.DelayedNetworkImpl;
 import com.mmodding.library.network.impl.delay.DelayedNetworkPackets;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -28,16 +27,6 @@ public class NetworkInitializer implements ModInitializer {
 				.get(packet.requestIdentifier())
 				.process(player, packet.requestArguments());
 			ServerPlayNetworking.send(player, new DelayedNetworkPackets.ResponsePacket(packet.requestTracker(), arguments));
-		});
-		ClientPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.ResponsePacket.TYPE, (packet, player, sender) -> {
-			DelayedNetworkImpl.CLIENT_DELAYED_ACTIONS.get(packet.tracker()).handle(packet.arguments());
-			DelayedNetworkImpl.CLIENT_DELAYED_ACTIONS.remove(packet.tracker());
-		});
-		ClientPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.RequestPacket.TYPE, (packet, player, sender) -> {
-			MixedList arguments = DelayedNetworkImpl.CLIENT_REQUEST_PROCESSORS
-				.get(packet.requestIdentifier())
-				.process(packet.requestArguments());
-			ClientPlayNetworking.send(new DelayedNetworkPackets.ResponsePacket(packet.requestTracker(), arguments));
 		});
 		ServerPlayNetworking.registerGlobalReceiver(DelayedNetworkPackets.ResponsePacket.TYPE, (packet, player, sender) -> {
 			DelayedNetworkImpl.SERVER_DELAYED_ACTIONS.get(packet.tracker()).handle(player, packet.arguments());

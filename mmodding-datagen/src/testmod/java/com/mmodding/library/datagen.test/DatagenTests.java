@@ -7,7 +7,7 @@ import com.mmodding.library.datagen.api.ExtendedDataGeneratorEntrypoint;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.management.DataManager;
-import com.mmodding.library.datagen.api.management.handler.DefaultContentHandlers;
+import com.mmodding.library.datagen.api.management.handler.DefaultContentTypes;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -37,7 +37,7 @@ public class DatagenTests implements ExtendedModInitializer, ExtendedDataGenerat
 
 	@Override
 	public void setupManager(DataManager manager) {
-		manager.data(DatagenTests.class, Block.class, DefaultContentHandlers.getTranslationHandler(RegistryKeys.BLOCK), DefaultLangProcessors.getClassic());
+		manager.data(DatagenTests.class, Block.class, DefaultContentTypes.getTranslationHandler(RegistryKeys.BLOCK), DefaultLangProcessors.getClassic());
 	}
 
 	@Override
