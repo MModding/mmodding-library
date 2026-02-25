@@ -5,10 +5,8 @@ import com.mmodding.library.core.impl.management.ElementsManagerImpl;
 import com.mmodding.library.core.impl.registry.data.DatagenContainerCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.registry.RegistryBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
 public interface ExtendedModInitializer extends ModInitializer {
