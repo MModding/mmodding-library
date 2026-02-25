@@ -7,9 +7,6 @@ import dev.yumi.commons.event.EventManager;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public interface MModdingLibrary {
 
 	/**
@@ -18,23 +15,6 @@ public interface MModdingLibrary {
 	 */
 	static EventManager<Identifier> getEventManager() {
 		return MModdingInitializer.EVENT_MANAGER;
-	}
-
-	/**
-	 * Allows to retrieve the {@link ElementsManager} from a mod namespace.
-	 * @param modId the mod namespace
-	 * @return the elements manager of the corresponding mod
-	 */
-	static ElementsManager getManager(String modId) {
-		return MModdingInitializer.MANAGERS.get(modId);
-	}
-
-	/**
-	 * Allows to retrieve all the registered {@link ElementsManager} objects.
-	 * @return the elements managers
-	 */
-	static Map<String, ElementsManager> getAllManagers() {
-		return new HashMap<>(MModdingInitializer.MANAGERS);
 	}
 
 	/**

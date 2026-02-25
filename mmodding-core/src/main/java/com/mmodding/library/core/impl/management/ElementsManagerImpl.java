@@ -35,47 +35,26 @@ public class ElementsManagerImpl implements ElementsManager {
 		);
 	}
 
-	public static class Builder implements ElementsManager.Builder {
+	@Override
+	public ElementsManagerImpl content(ContentProvider provider) {
+		this.contentProviders.add(provider);
+		return this;
+	}
 
-		private final List<ContentProvider> contentProviders = new ArrayList<>();
-		private final BiList<RegistryKey<Registry<?>>, ResourceProvider<?>> resourceProviders = BiList.create();
-
-		@Override
-		public ElementsManagerImpl.Builder content(ContentProvider provider) {
-			this.contentProviders.add(provider);
-			return this;
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> ElementsManagerImpl resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider) {
+		if (System.getProperty("fabric-api.datagen") != null) {
+			this.resourceProviders.add((RegistryKey<Registry<?>>) (Registry<?>) key, provider);
 		}
+		return this;
+	}
 
-		@Override
-		@SuppressWarnings("unchecked")
-		public <T> ElementsManagerImpl.Builder resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider) {
-			if (System.getProperty("fabric-api.datagen") != null) {
-				this.resourceProviders.add((RegistryKey<Registry<?>>) (Registry<?>) key, provider);
-			}
-			return this;
+	@Override
+	public ElementsManagerImpl ifModLoaded(String modId, ContentProvider provider) {
+		if (FabricLoader.getInstance().isModLoaded(modId)) {
+			this.content(provider);
 		}
-
-		@Override
-		public ElementsManagerImpl.Builder contentIfLoaded(String modId, ContentProvider provider) {
-			if (FabricLoader.getInstance().isModLoaded(modId)) {
-				this.content(provider);
-			}
-			return this;
-		}
-
-		@Override
-		public <T> ElementsManagerImpl.Builder resourceIfLoaded(String modId, RegistryKey<Registry<T>> key, ResourceProvider<T> provider) {
-			if (FabricLoader.getInstance().isModLoaded(modId)) {
-				this.resource(key, provider);
-			}
-			return this;
-		}
-
-		public ElementsManagerImpl build() {
-			ElementsManagerImpl manager = new ElementsManagerImpl();
-			manager.contentProviders.addAll(this.contentProviders);
-			manager.resourceProviders.addAll(this.resourceProviders);
-			return manager;
-		}
+		return this;
 	}
 }

@@ -5,12 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockMixin",
-    "EnchantmentMixin",
-    "EntityAttributeMixin",
     "EntityTypeMixin",
-    "FabricDataGenHelperMixin",
-    "ItemMixin",
-    "StatTypeMixin"
+    "ItemMixin"
   ],
   "client": [],
   "injectors": {

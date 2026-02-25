@@ -1,6 +1,5 @@
 package com.mmodding.library.core.api;
 
-import com.mmodding.library.core.impl.MModdingInitializer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.impl.management.ElementsManagerImpl;
 import com.mmodding.library.core.impl.registry.data.DatagenContainerCallback;
@@ -13,16 +12,14 @@ import org.jetbrains.annotations.ApiStatus;
 
 public interface ExtendedModInitializer extends ModInitializer {
 
-	void setupManager(ElementsManager.Builder manager);
+	void setupManager(ElementsManager manager);
 
 	@Override
 	@ApiStatus.Internal
 	default void onInitialize() {
 		ModContainer mod = MModdingLibrary.getModContainer(this.getClass());
-		ElementsManagerImpl.Builder builder = new ElementsManagerImpl.Builder();
-		this.setupManager(builder);
-		ElementsManagerImpl manager = builder.build();
-		MModdingInitializer.MANAGERS.put(mod.getMetadata().getId(), manager);
+		ElementsManagerImpl manager = new ElementsManagerImpl();
+		this.setupManager(manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.loadElements(advanced);
 		DatagenContainerCallback.EVENT.register(containers -> {

@@ -1,6 +1,5 @@
 package com.mmodding.library.datagen.impl.lang;
 
-import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.lang.TranslationSupport;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.registry.Registry;
@@ -12,11 +11,11 @@ import java.util.function.BiConsumer;
 
 public class TranslationSupportImpl {
 
-	public static final Map<RegistryKey<? extends Registry<?>>, BiConsumer<TranslationSupport.TranslationCallback, ? super LangContainer>> REGISTRY = new Object2ObjectOpenHashMap<>();
+	public static final Map<RegistryKey<? extends Registry<?>>, BiConsumer<TranslationSupport.TranslationCallback, Object>> REGISTRY = new Object2ObjectOpenHashMap<>();
 
-	@SuppressWarnings("unchecked")
-	public static <R extends Registry<T>, T extends LangContainer> void addTranslationSupport(RegistryKey<R> registry, BiConsumer<TranslationSupport.TranslationCallback, T> maker) {
-		TranslationSupportImpl.REGISTRY.put(registry, (BiConsumer<TranslationSupport.TranslationCallback, ? super LangContainer>) (BiConsumer<?, ?>) maker);
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public static <T> void addTranslationSupport(RegistryKey<? extends Registry<T>> registry, BiConsumer<TranslationSupport.TranslationCallback, T> maker) {
+		TranslationSupportImpl.REGISTRY.put(registry, (BiConsumer) maker);
 	}
 
 	public static void defaultTranslationSupports() {

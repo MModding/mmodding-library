@@ -6,25 +6,25 @@ mmodding {
 		addMixin("mmodding_datagen.mixins.json")
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_2248", Set.of(
-				"com/mmodding/library/datagen/api/lang/LangContainer",
 				"com/mmodding/library/datagen/api/recipe/RecipeContainer",
 				"com/mmodding/library/datagen/api/loot/block/BlockLootContainer"
 			))
-			it.injectTo("net/minecraft/class_1887", "com/mmodding/library/datagen/api/lang/LangContainer")
-			it.injectTo("net/minecraft/class_1320", "com/mmodding/library/datagen/api/lang/LangContainer")
 			it.injectTo("net/minecraft/class_1299", Set.of(
-				"com/mmodding/library/datagen/api/lang/LangContainer",
 				"com/mmodding/library/datagen/api/loot/entity/EntityLootContainer"
 			))
 			it.injectTo("net/minecraft/class_1792", Set.of(
-				"com/mmodding/library/datagen/api/lang/LangContainer",
 				"com/mmodding/library/datagen/api/recipe/RecipeContainer"
 			))
-			it.injectTo("net/minecraft/class_3448", "com/mmodding/library/datagen/api/lang/LangContainer")
 		}
 	}
 	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
+	}
+	configureTestmod {
+		withEntrypoints {
+			it.init("com.mmodding.library.datagen.test.DatagenTests")
+			it.custom("fabric-datagen", "com.mmodding.library.datagen.test.DatagenTests")
+		}
 	}
 }

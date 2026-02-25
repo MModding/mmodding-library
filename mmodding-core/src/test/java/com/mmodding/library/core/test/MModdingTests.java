@@ -8,7 +8,7 @@ import net.minecraft.registry.RegistryKeys;
 public class MModdingTests implements ExtendedModInitializer {
 
 	@Override
-	public void setupManager(ElementsManager.Builder manager) {
+	public void setupManager(ElementsManager manager) {
 		manager.content(RegistryTests::register);
 		manager.resource(RegistryKeys.BIOME, DataTests::register);
 	}

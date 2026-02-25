@@ -1,7 +1,5 @@
 package com.mmodding.library.datagen.impl;
 
-import com.mmodding.library.datagen.api.lang.LangContainer;
-import com.mmodding.library.datagen.api.lang.LangProcessor;
 import com.mmodding.library.datagen.api.loot.block.BlockLootContainer;
 import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.loot.entity.EntityLootContainer;
@@ -20,11 +18,6 @@ public class InternalDataAccess {
 		throw new IllegalStateException("InternalDataAccess only contains static definitions");
 	}
 
-	@SuppressWarnings("unchecked")
-	static LangProcessor<LangContainer> langProcessor(LangContainer container) {
-		return ((LangProcessorAccess<LangContainer>) container).langProcessor();
-	}
-
 	static Consumer<RecipeHelper> recipeGenerator(RecipeContainer container) {
 		return ((RecipeGeneratorAccess) container).recipeGenerator();
 	}
@@ -36,11 +29,6 @@ public class InternalDataAccess {
 	@SuppressWarnings("unchecked")
 	static <T extends Entity> EntityLootProcessor<T> entityLootProcessor(EntityLootContainer container) {
 		return ((EntityLootContainerAccess<T>) container).entityLootProcessor();
-	}
-
-	public interface LangProcessorAccess<T> {
-
-		LangProcessor<T> langProcessor();
 	}
 
 	public interface RecipeGeneratorAccess {

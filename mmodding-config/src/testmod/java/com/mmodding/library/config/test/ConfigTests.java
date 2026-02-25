@@ -41,7 +41,7 @@ public class ConfigTests implements ExtendedModInitializer {
 		.build(MModdingLibrary.createId("config"));
 
 	@Override
-	public void setupManager(ElementsManager.Builder manager) {}
+	public void setupManager(ElementsManager manager) {}
 
 	@Override
 	public void onInitialize(AdvancedContainer mod) {

@@ -10,7 +10,7 @@ import net.minecraft.util.math.Direction;
 public class MathTests implements ExtendedModInitializer {
 
 	@Override
-	public void setupManager(ElementsManager.Builder manager) {
+	public void setupManager(ElementsManager manager) {
 		manager.content(MathTests::register);
 	}
 

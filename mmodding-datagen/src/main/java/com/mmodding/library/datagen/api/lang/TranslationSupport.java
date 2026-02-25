@@ -14,9 +14,8 @@ public class TranslationSupport {
 	 * to be mapped to a string translation key.
 	 * @param registry the registry
 	 * @param maker the {@link BiConsumer} providing the {@link TranslationCallback} that will apply the
-	 * {@link LangProcessor} of the current element
 	 */
-	public static <R extends Registry<T>, T extends LangContainer> void addTranslationSupport(RegistryKey<R> registry, BiConsumer<TranslationCallback, T> maker) {
+	public static <T> void addTranslationSupport(RegistryKey<? extends Registry<T>> registry, BiConsumer<TranslationCallback, T> maker) {
 		TranslationSupportImpl.addTranslationSupport(registry, maker);
 	}
 

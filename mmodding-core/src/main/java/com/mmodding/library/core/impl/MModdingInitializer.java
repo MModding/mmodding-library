@@ -1,7 +1,6 @@
 package com.mmodding.library.core.impl;
 
 import com.mmodding.library.core.api.MModdingLibrary;
-import com.mmodding.library.core.api.management.ElementsManager;
 import dev.yumi.commons.event.EventManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -14,8 +13,6 @@ import java.util.*;
 public class MModdingInitializer implements ModInitializer {
 
 	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(MModdingLibrary.createId("default"), Identifier::tryParse);
-
-	public static final Map<String, ElementsManager> MANAGERS = new HashMap<>();
 
 	@Override
 	public void onInitialize() {}

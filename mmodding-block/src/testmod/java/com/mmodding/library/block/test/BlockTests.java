@@ -21,7 +21,7 @@ public class BlockTests implements ExtendedModInitializer {
 	public static final BlockHeap<FurnaceBlock> FURNACE_BLOCKS = BlockHeap.create(FurnaceBlock::new, FabricBlockSettings.copyOf(Blocks.FURNACE), "red", "green", "blue");
 
 	@Override
-	public void setupManager(ElementsManager.Builder manager) {
+	public void setupManager(ElementsManager manager) {
 		manager.content(BlockTests::registerBlocks);
 	}
 

@@ -1,6 +1,5 @@
 package com.mmodding.library.datagen.impl;
 
-import com.mmodding.library.datagen.api.lang.LangContainer;
 import com.mmodding.library.datagen.api.loot.block.BlockLootContainer;
 import com.mmodding.library.datagen.api.loot.entity.EntityLootContainer;
 import com.mmodding.library.datagen.api.recipe.RecipeContainer;
@@ -13,14 +12,12 @@ import java.util.List;
 
 @ApiStatus.Internal
 public record DataContainers(
-	List<LangContainer> langContainers,
 	List<RecipeContainer> recipeContainers,
 	List<BlockLootContainer> blockLootContainers,
 	List<EntityLootContainer> entityLootContainers
 ) {
 
 	public static DataContainers retrieveFrom(Class<?> clazz) {
-		List<LangContainer> langContainers = new ArrayList<>();
 		List<RecipeContainer> recipeContainers = new ArrayList<>();
 		List<BlockLootContainer> blockLootContainers = new ArrayList<>();
 		List<EntityLootContainer> entityLootContainers = new ArrayList<>();
@@ -28,10 +25,7 @@ public record DataContainers(
 			if (Modifier.isStatic(field.getModifiers())) {
 				try {
 					Object object = field.get(null);
-					if (object instanceof LangContainer container) {
-						langContainers.add(container);
-					}
-					else if (object instanceof RecipeContainer container) {
+					if (object instanceof RecipeContainer container) {
 						recipeContainers.add(container);
 					}
 					else if (object instanceof BlockLootContainer container) {
@@ -45,6 +39,6 @@ public record DataContainers(
 				}
 			}
 		}
-		return new DataContainers(langContainers, recipeContainers, blockLootContainers, entityLootContainers);
+		return new DataContainers(recipeContainers, blockLootContainers, entityLootContainers);
 	}
 }

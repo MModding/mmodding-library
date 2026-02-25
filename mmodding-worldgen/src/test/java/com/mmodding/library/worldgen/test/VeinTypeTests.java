@@ -25,7 +25,7 @@ public class VeinTypeTests implements ExtendedModInitializer {
 	).build();
 
 	@Override
-	public void setupManager(ElementsManager.Builder manager) {
+	public void setupManager(ElementsManager manager) {
 		manager.content(VeinTypeTests::register);
 	}
 
