@@ -7,7 +7,7 @@ fabric_loader = "0.16.10"
 # Mappings
 yarn_mappings = "1.20.1+build.10"
 
-yumi_commons = "1.0.0-alpha.1"
+yumi_commons = "2.0.0"
 
 fabric_api = "0.92.3+1.20.1"
 modmenu = "4.0.6"
