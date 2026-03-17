@@ -1,5 +1,6 @@
 package com.mmodding.library.block.api.util;
 
+import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -8,6 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -55,5 +57,9 @@ public class BlockHeap<T extends Block> {
 	public interface BlockFactory<T extends Block> {
 
 		T make(FabricBlockSettings settings);
+	}
+
+	static {
+		DataContentResolver.<BlockHeap<Block>, Block>register(BlockHeap.class, Block.class, input -> new ArrayList<>(input.blocks.values()));
 	}
 }
