@@ -1,8 +1,8 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
 import com.mmodding.library.datagen.api.lang.TranslationSupport;
-import com.mmodding.library.datagen.api.management.handler.DataContentType;
-import com.mmodding.library.datagen.api.management.processor.ContentProcessor;
+import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -16,7 +16,7 @@ import net.minecraft.registry.RegistryKeys;
 import java.util.List;
 import java.util.Optional;
 
-public class DataTranslationTypeImpl<T> implements DataContentType<T, String> {
+public class DataTranslationTypeImpl<T> implements DataContentType<T, TranslationProcessor<T>> {
 
 	private final RegistryKey<? extends Registry<T>> registry;
 
@@ -25,16 +25,16 @@ public class DataTranslationTypeImpl<T> implements DataContentType<T, String> {
 	}
 
 	@Override
-	public void handleContent(BiList<List<T>, ContentProcessor<T, String>> contentToProcess, FabricDataGenerator.Pack pack) {
+	public void handleContent(FabricDataGenerator.Pack pack, BiList<TranslationProcessor<T>, List<T>> contentToProcess) {
 		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output));
 	}
 
 	private static class AutomatedLanguageProvider<T> extends FabricLanguageProvider {
 
 		private final RegistryKey<? extends Registry<T>> registry;
-		private final BiList<List<T>, ContentProcessor<T, String>> contentToProcess;
+		private final BiList<TranslationProcessor<T>, List<T>> contentToProcess;
 
-		protected AutomatedLanguageProvider(RegistryKey<? extends Registry<T>> registry, BiList<List<T>, ContentProcessor<T, String>> contentToProcess, FabricDataOutput output) {
+		protected AutomatedLanguageProvider(RegistryKey<? extends Registry<T>> registry, BiList<TranslationProcessor<T>, List<T>> contentToProcess, FabricDataOutput output) {
 			super(output);
 			this.registry = registry;
 			this.contentToProcess = contentToProcess;
@@ -43,7 +43,7 @@ public class DataTranslationTypeImpl<T> implements DataContentType<T, String> {
 		@Override
 		@SuppressWarnings({"unchecked", "rawtypes"})
 		public void generateTranslations(TranslationBuilder translationBuilder) {
-			this.contentToProcess.forEach((elements, processor) -> {
+			this.contentToProcess.forEach((processor, elements) -> {
 				for (T element : elements) {
 					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
 						Registry<T> registry = (Registry<T>) Registries.REGISTRIES.get((RegistryKey) this.registry);

@@ -1,29 +1,34 @@
 package com.mmodding.library.datagen.impl.management;
 
-import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.datagen.api.management.DataManager;
-import com.mmodding.library.datagen.api.management.handler.DataContentType;
-import com.mmodding.library.datagen.api.management.processor.ContentProcessor;
-import com.mmodding.library.java.api.list.BiList;
+import com.mmodding.library.datagen.api.management.DataContentType;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class DataManagerImpl implements DataManager {
 
-	private final Map<DataContentType<?, ?>, BiList<List<?>, ContentProcessor<?, ?>>> data = new HashMap<>();
+	private final Map<Class<?>, ClassContentOperator<?, ?>> operators = new Object2ObjectOpenHashMap<>();
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void loadElements(AdvancedContainer mod, FabricDataGenerator generator) {
-		FabricDataGenerator.Pack pack = generator.createPack();
-		this.data.forEach((handler, biList) -> handler.handleContent((BiList) biList, pack));
+	public void loadElements(FabricDataGenerator.Pack pack) {
+		this.operators.values().forEach(operator -> operator.operate(pack));
 	}
 
 	@Override
-	public <I, O> DataManager data(Class<?> sourceClass, Class<I> type, DataContentType<I, O> handler, ContentProcessor<I, O> processor) {
-		this.data.computeIfAbsent(handler, ignored -> BiList.create()).add(DataContentType.extractOfType(sourceClass, type), processor);
+	@SuppressWarnings("unchecked")
+	public <T, P> DataManager data(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, P processor) {
+		ClassContentOperator<T, P> operator = (ClassContentOperator<T, P>) this.operators.computeIfAbsent(sourceClass, ClassContentOperator::new);
+		operator.add(handler, ignored -> true, processor);
+		return this;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T, P> DataManager data(Class<?> sourceClass, Class<T> type, Predicate<T> filter, DataContentType<T, P> handler, P processor) {
+		ClassContentOperator<T, P> operator = (ClassContentOperator<T, P>) this.operators.computeIfAbsent(sourceClass, ClassContentOperator::new);
+		operator.add(handler, filter, processor);
 		return this;
 	}
 }

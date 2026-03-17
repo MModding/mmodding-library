@@ -3,6 +3,7 @@ package com.mmodding.library.java.impl.either;
 import com.mmodding.library.java.api.either.Either;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class EitherImpl<F, S> implements Either<F, S> {
@@ -35,6 +36,16 @@ public class EitherImpl<F, S> implements Either<F, S> {
 	@Override
 	public Optional<S> getSecond() {
 		return Optional.ofNullable(this.secondValue);
+	}
+
+	@Override
+	public void execute(Consumer<F> executeFirst, Consumer<S> executeSecond) {
+		if (this.firstValue != null) {
+			executeFirst.accept(this.firstValue);
+		}
+		else {
+			executeSecond.accept(this.secondValue);
+		}
 	}
 
 	@Override

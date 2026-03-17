@@ -1,11 +1,11 @@
 package com.mmodding.library.datagen.impl.lang;
 
-import com.mmodding.library.datagen.api.management.processor.ContentProcessor;
+import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import net.minecraft.registry.RegistryKey;
 
 public class DefaultLangProcessorsImpl {
 
-	public static class ClassicLangProcessorImpl<T> implements ContentProcessor<T, String> {
+	public static class ClassicLangProcessorImpl<T> implements TranslationProcessor<T> {
 
 		@Override
 		public String process(RegistryKey<T> key) {

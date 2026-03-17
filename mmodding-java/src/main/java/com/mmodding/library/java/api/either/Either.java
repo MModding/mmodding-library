@@ -3,6 +3,7 @@ package com.mmodding.library.java.api.either;
 import com.mmodding.library.java.impl.either.EitherImpl;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface Either<F, S> {
@@ -18,6 +19,8 @@ public interface Either<F, S> {
 	Optional<F> getFirst();
 
 	Optional<S> getSecond();
+
+	void execute(Consumer<F> executeFirst, Consumer<S> executeSecond);
 
 	<R> R map(Function<F, R> mapFirst, Function<S, R> mapSecond);
 }
