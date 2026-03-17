@@ -40,12 +40,12 @@ public class ClassContentOperator {
 			if (!collected.containsKey(pair.second())) {
 				List<?> targets = this.elements.stream()
 					.filter(
-						element -> element.getClass().equals(pair.second()) ||
+						element -> pair.second().isAssignableFrom(element.getClass()) ||
 							(DataContentResolverImpl.REGISTRY.containsKey(element.getClass())
-							&& DataContentResolverImpl.REGISTRY.getFirstValue(element.getClass()).equals(pair.second()))
+							&& pair.second().isAssignableFrom(DataContentResolverImpl.REGISTRY.getFirstValue(element.getClass())))
 					)
 					.flatMap(
-						element -> element.getClass().equals(pair.second())
+						element -> pair.second().isAssignableFrom(element.getClass())
 							? Stream.of(element)
 							: ((DataContentResolver<Object, ?>) DataContentResolverImpl.REGISTRY.getSecondValue(element.getClass())).resolve(element).stream()
 					)
