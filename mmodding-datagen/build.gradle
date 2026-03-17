@@ -4,18 +4,6 @@ mmodding {
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
 		addMixin("mmodding_datagen.mixins.json")
-		withInjectedInterfaces {
-			it.injectTo("net/minecraft/class_2248", Set.of(
-				"com/mmodding/library/datagen/api/recipe/RecipeContainer",
-				"com/mmodding/library/datagen/api/loot/block/BlockLootContainer"
-			))
-			it.injectTo("net/minecraft/class_1299", Set.of(
-				"com/mmodding/library/datagen/api/loot/entity/EntityLootContainer"
-			))
-			it.injectTo("net/minecraft/class_1792", Set.of(
-				"com/mmodding/library/datagen/api/recipe/RecipeContainer"
-			))
-		}
 	}
 	modules {
 		implementation("mmodding-core")
