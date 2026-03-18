@@ -77,6 +77,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 	}
 
 	static {
-		DataContentResolver.register(BlockRelatives.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input).initDataFamily()));
+		// even if the BlockRelatives is using the interface type in a mod, at runtime its class is the implementation class
+		DataContentResolver.register(BlockRelativesImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input).initDataFamily()));
 	}
 }

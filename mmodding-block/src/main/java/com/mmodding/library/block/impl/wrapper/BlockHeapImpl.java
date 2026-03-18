@@ -49,6 +49,7 @@ public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 	}
 
 	static {
-		DataContentResolver.<BlockHeap<Block>, Block>register(BlockHeap.class, Block.class, BlockHeap::getEntries);
+		// even if the BlockRelatives is using the interface type in a mod, at runtime its class is the implementation class
+		DataContentResolver.<BlockHeap<Block>, Block>register(BlockHeapImpl.class, Block.class, BlockHeap::getEntries);
 	}
 }
