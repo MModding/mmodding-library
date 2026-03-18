@@ -1,7 +1,7 @@
 package com.mmodding.library.block.test;
 
 import com.mmodding.library.block.api.BlockWithItem;
-import com.mmodding.library.block.api.util.BlockHeap;
+import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.ExtendedModInitializer;
