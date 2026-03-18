@@ -1,5 +1,7 @@
-package com.mmodding.library.block.api.util;
+package com.mmodding.library.block.impl.wrapper;
 
+import com.mmodding.library.block.api.util.BlockFactory;
+import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -9,34 +11,27 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * A simple class allowing to create and manipulate a bunch of blocks at the same time.
- */
-public class BlockHeap<T extends Block> {
+public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 
 	private final Map<String, T> blocks;
 
-	private BlockHeap(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+	public BlockHeapImpl(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
 		Map<String, T> blocks = new Object2ObjectOpenHashMap<>();
 		names.forEach(name -> blocks.put(name, factory.make(settings)));
 		this.blocks = blocks;
 	}
 
-	public static <T extends Block> BlockHeap<T> create(BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
-		return BlockHeap.create(factory, settings, List.of(names));
+	@Override
+	public List<T> getEntries() {
+		return List.copyOf(this.blocks.values());
 	}
 
-	public static <T extends Block> BlockHeap<T> create(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
-		return new BlockHeap<>(factory, settings, names);
-	}
-
-	public BlockHeap<T> map(AutoMapper<T> mapper) {
+	public BlockHeapImpl<T> map(AutoMapper<T> mapper) {
 		this.blocks.keySet().forEach(name -> this.blocks.computeIfPresent(name, (ignored, block) -> mapper.map(block)));
 		return this;
 	}
@@ -53,13 +48,7 @@ public class BlockHeap<T extends Block> {
 		this.blocks.forEach((name, block) -> Registry.register(Registries.BLOCK, identifierMaker.apply(name), block));
 	}
 
-	@FunctionalInterface
-	public interface BlockFactory<T extends Block> {
-
-		T make(FabricBlockSettings settings);
-	}
-
 	static {
-		DataContentResolver.<BlockHeap<Block>, Block>register(BlockHeap.class, Block.class, input -> new ArrayList<>(input.blocks.values()));
+		DataContentResolver.<BlockHeap<Block>, Block>register(BlockHeap.class, Block.class, BlockHeap::getEntries);
 	}
 }
