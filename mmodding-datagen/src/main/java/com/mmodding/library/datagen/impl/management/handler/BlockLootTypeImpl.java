@@ -34,5 +34,10 @@ public class BlockLootTypeImpl implements DataContentType<Block, BlockLootProces
 				}
 			});
 		}
+
+		@Override
+		public String getName() {
+			return "Automated " + super.getName();
+		}
 	}
 }

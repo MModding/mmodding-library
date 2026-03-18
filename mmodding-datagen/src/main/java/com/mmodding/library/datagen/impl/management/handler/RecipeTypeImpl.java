@@ -37,5 +37,10 @@ public class RecipeTypeImpl<T extends ItemConvertible> implements DataContentTyp
 				}
 			});
 		}
+
+		@Override
+		public String getName() {
+			return "Automated " + super.getName();
+		}
 	}
 }

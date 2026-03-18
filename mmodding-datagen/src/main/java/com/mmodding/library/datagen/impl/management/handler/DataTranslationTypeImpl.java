@@ -67,6 +67,11 @@ public class DataTranslationTypeImpl<T> implements DataContentType<T, Translatio
 				}
 			});
 		}
+
+		@Override
+		public String getName() {
+			return "Automated " + super.getName();
+		}
 	}
 
 	static {

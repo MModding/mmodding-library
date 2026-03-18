@@ -40,5 +40,10 @@ public class ItemModelTypeImpl implements DataContentType<Item, ItemModelProcess
 		public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
 
 		}
+
+		@Override
+		public String getName() {
+			return "Automated " + super.getName();
+		}
 	}
 }

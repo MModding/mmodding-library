@@ -38,5 +38,10 @@ public class EntityLootTypeImpl implements DataContentType<EntityType<?>, Entity
 				}
 			});
 		}
+
+		@Override
+		public String getName() {
+			return "Automated " + super.getName();
+		}
 	}
 }

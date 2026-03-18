@@ -40,5 +40,10 @@ public class BlockModelTypeImpl implements DataContentType<Block, BlockStateMode
 		@Override
 		public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 		}
+
+		@Override
+		public String getName() {
+			return "Automated " + super.getName();
+		}
 	}
 }

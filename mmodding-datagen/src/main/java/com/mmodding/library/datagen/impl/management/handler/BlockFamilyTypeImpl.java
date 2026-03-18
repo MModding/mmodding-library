@@ -43,6 +43,11 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 
 		@Override
 		public void generateItemModels(ItemModelGenerator itemModelGenerator) {}
+
+		@Override
+		public String getName() {
+			return "Automated Block Family " + super.getName();
+		}
 	}
 
 	private static class AutomatedBlockFamilyRecipes extends FabricRecipeProvider {
@@ -60,6 +65,11 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 				Either<BlockStateModelGenerator, Consumer<RecipeJsonProvider>> either = Either.ofSecond(exporter);
 				families.forEach(family -> processor.process(either, family));
 			});
+		}
+
+		@Override
+		public String getName() {
+			return "Automated Block Family " + super.getName();
 		}
 	}
 }
