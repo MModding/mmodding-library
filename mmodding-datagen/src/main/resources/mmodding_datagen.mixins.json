@@ -3,7 +3,10 @@
   "minVersion": "0.8",
   "package": "com.mmodding.library.datagen.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [],
+  "mixins": [
+    "DataProviderAccessor",
+    "FabricLanguageProviderAccessor"
+  ],
   "client": [],
   "injectors": {
     "defaultRequire": 1
