@@ -3,6 +3,9 @@ package com.mmodding.library.block.api.wrapper;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.impl.wrapper.BlockHeapImpl;
 import com.mmodding.library.java.api.function.AutoMapper;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
@@ -24,9 +27,11 @@ public interface BlockHeap<T extends Block> {
 		return new BlockHeapImpl<>(factory, settings, names);
 	}
 
+	BlockHeap<T> withItem(FabricItemSettings settings);
+
 	List<T> getEntries();
 
-	BlockHeapImpl<T> map(AutoMapper<T> mapper);
+	BlockHeap<T> map(AutoMapper<T> mapper);
 
 	void forEach(Consumer<T> consumer);
 
@@ -35,4 +40,10 @@ public interface BlockHeap<T extends Block> {
 	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
 	 */
 	void register(Function<String, Identifier> identifierMaker);
+
+	@Environment(EnvType.CLIENT)
+	void cutout();
+
+	@Environment(EnvType.CLIENT)
+	void translucent();
 }
