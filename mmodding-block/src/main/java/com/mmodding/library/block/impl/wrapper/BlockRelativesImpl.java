@@ -1,14 +1,20 @@
 package com.mmodding.library.block.impl.wrapper;
 
+import com.mmodding.library.block.api.BlockWithItem;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.mixin.BlockFamilyAccessor;
 import com.mmodding.library.core.api.registry.IdentifierUtil;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSetType;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.data.family.BlockFamily;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -18,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-// Impl Client Layer Registrations
 public class BlockRelativesImpl implements BlockRelatives {
 
 	private final BlockSetType setType;
@@ -52,7 +57,9 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	@Override
 	public <T extends Block> BlockRelatives push(BlockFamily.Variant variant, BlockFactory<T> factory) {
-		this.variants.put(variant, factory.make(this.sharedSettings));
+		T block = factory.make(this.sharedSettings);
+		block.withItem(new FabricItemSettings());
+		this.variants.put(variant, block);
 		return this;
 	}
 
@@ -67,7 +74,59 @@ public class BlockRelativesImpl implements BlockRelatives {
 	@Override
 	public void register(Identifier name) {
 		Registry.register(Registries.BLOCK, IdentifierUtil.extend(name, this.mainName), this.mainBlock);
-		this.variants.forEach((variant, block) -> Registry.register(Registries.BLOCK, IdentifierUtil.extend(name, variant.getName()), block));
+		for (Map.Entry<BlockFamily.Variant, Block> entry : this.variants.entrySet()) {
+			Identifier identifier = IdentifierUtil.extend(name, entry.getKey().getName());
+			Registry.register(Registries.BLOCK, identifier, entry.getValue());
+			Registry.register(Registries.ITEM, identifier, BlockWithItem.getItem(entry.getValue()));
+		}
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void cutoutMain() {
+		BlockRenderLayerMap.INSTANCE.putBlock(this.mainBlock, RenderLayer.getCutout());
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void translucentMain() {
+		BlockRenderLayerMap.INSTANCE.putBlock(this.mainBlock, RenderLayer.getTranslucent());
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void cutoutVariant(BlockFamily.Variant variant) {
+		if (this.variants.containsKey(variant)) {
+			BlockRenderLayerMap.INSTANCE.putBlock(this.variants.get(variant), RenderLayer.getCutout());
+		}
+		else {
+			throw new IllegalStateException("This variant is not part of this block relatives");
+		}
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void translucentVariant(BlockFamily.Variant variant) {
+		if (this.variants.containsKey(variant)) {
+			BlockRenderLayerMap.INSTANCE.putBlock(this.variants.get(variant), RenderLayer.getTranslucent());
+		}
+		else {
+			throw new IllegalStateException("This variant is not part of this block relatives");
+		}
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void cutoutAll() {
+		this.cutoutMain();
+		this.variants.keySet().forEach(this::cutoutVariant);
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public void translucentAll() {
+		this.translucentMain();
+		this.variants.keySet().forEach(this::translucentVariant);
 	}
 
 	private BlockFamily initDataFamily() {

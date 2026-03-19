@@ -4,6 +4,8 @@ import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.core.api.registry.IdentifierUtil;
 import com.mmodding.library.java.api.function.AutoMapper;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.minecraft.block.*;
@@ -66,4 +68,22 @@ public interface BlockRelatives {
 	List<Block> getEntries();
 
 	void register(Identifier name);
+
+	@Environment(EnvType.CLIENT)
+	void cutoutMain();
+
+	@Environment(EnvType.CLIENT)
+	void translucentMain();
+
+	@Environment(EnvType.CLIENT)
+	void cutoutVariant(BlockFamily.Variant variant);
+
+	@Environment(EnvType.CLIENT)
+	void translucentVariant(BlockFamily.Variant variant);
+
+	@Environment(EnvType.CLIENT)
+	void cutoutAll();
+
+	@Environment(EnvType.CLIENT)
+	void translucentAll();
 }
