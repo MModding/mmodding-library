@@ -37,6 +37,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 		this.sharedSettings = sharedSettings;
 		this.mainName = mainName;
 		this.mainBlock = mainFactory.make(sharedSettings);
+		this.mainBlock.withItem(new FabricItemSettings());
 		this.variants = new Object2ObjectOpenHashMap<>();
 	}
 
@@ -73,11 +74,13 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	@Override
 	public void register(Identifier name) {
-		Registry.register(Registries.BLOCK, IdentifierUtil.extend(name, this.mainName), this.mainBlock);
+		Identifier mainIdentifier = IdentifierUtil.extend(name, this.mainName);
+		Registry.register(Registries.BLOCK, mainIdentifier, this.mainBlock);
+		Registry.register(Registries.ITEM, mainIdentifier, BlockWithItem.getItem(this.mainBlock));
 		for (Map.Entry<BlockFamily.Variant, Block> entry : this.variants.entrySet()) {
-			Identifier identifier = IdentifierUtil.extend(name, entry.getKey().getName());
-			Registry.register(Registries.BLOCK, identifier, entry.getValue());
-			Registry.register(Registries.ITEM, identifier, BlockWithItem.getItem(entry.getValue()));
+			Identifier variantIdentifier = IdentifierUtil.extend(name, entry.getKey().getName());
+			Registry.register(Registries.BLOCK, variantIdentifier, entry.getValue());
+			Registry.register(Registries.ITEM, variantIdentifier, BlockWithItem.getItem(entry.getValue()));
 		}
 	}
 
