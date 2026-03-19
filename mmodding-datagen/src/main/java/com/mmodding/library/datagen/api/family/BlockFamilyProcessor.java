@@ -5,7 +5,7 @@ import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.family.BlockFamily;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.resource.featuretoggle.FeatureFlags;
 
 import java.util.function.Consumer;
 
@@ -20,7 +20,7 @@ public final class BlockFamilyProcessor {
 				generator.registerCubeAllModelTexturePool(family.getBaseBlock()).family(family);
 			}
 		}, provider -> {
-			if (family.shouldGenerateRecipes(FeatureSet.empty())) {
+			if (family.shouldGenerateRecipes(FeatureFlags.FEATURE_MANAGER.getFeatureSet())) {
 				RecipeProvider.generateFamily(provider, family);
 			}
 		});
