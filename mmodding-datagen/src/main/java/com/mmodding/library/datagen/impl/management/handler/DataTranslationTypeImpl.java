@@ -3,11 +3,11 @@ package com.mmodding.library.datagen.impl.management.handler;
 import com.mmodding.library.datagen.api.lang.TranslationSupport;
 import com.mmodding.library.datagen.api.management.DataContentType;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
+import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -29,7 +29,7 @@ public class DataTranslationTypeImpl<T> implements DataContentType<T, Translatio
 		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output));
 	}
 
-	private static class AutomatedLanguageProvider<T> extends FabricLanguageProvider {
+	private static class AutomatedLanguageProvider<T> extends MModdingLanguageProvider {
 
 		private final RegistryKey<? extends Registry<T>> registry;
 		private final BiList<TranslationProcessor<T>, List<T>> contentToProcess;

@@ -5,11 +5,11 @@ import com.mmodding.library.datagen.api.family.BlockFamilyProcessor;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.java.api.either.Either;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.block.Block;
@@ -32,7 +32,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyRecipes(output, contentToProcess));
 	}
 
-	private static class AutomatedBlockFamilyTranslations extends FabricLanguageProvider {
+	private static class AutomatedBlockFamilyTranslations extends MModdingLanguageProvider {
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
