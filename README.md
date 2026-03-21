@@ -28,7 +28,7 @@ Current Modules Table:
 | mmodding-block-entity | Experimental | Block Entity Management                           |
 | mmodding-config       | Experimental | Configuration System, Level, Networking           |
 | mmodding-core         | Experimental | The Core of the Library                           |
-| mmodding-datagen      | Experimental | Data Generation Management and Automation         |
+| mmodding-datagen      | Early Stage  | Data Generation Management and Automation         |
 | mmodding-enchantment  | Experimental | Enchantment Management, Families                  |
 | mmodding-fluid        | Experimental | Fluid Management, Properties                      |
 | mmodding-item         | Experimental | Item Management, Catalog                          |

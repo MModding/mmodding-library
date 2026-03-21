@@ -7,7 +7,6 @@ import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 @ApiStatus.NonExtendable
 public interface RecipeHelper {
@@ -54,7 +53,11 @@ public interface RecipeHelper {
 
 	void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void factory(Supplier<? extends CraftingRecipeJsonBuilder> factory);
+	void campfireCooking(ItemConvertible item, RecipeCategory category, int experience, int time);
+
+	void campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time);
+
+	void factory(CraftingRecipeJsonBuilder factory);
 
 	@ApiStatus.NonExtendable
 	interface ShapedRecipe {

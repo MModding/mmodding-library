@@ -33,7 +33,7 @@ public class RecipeTypeImpl<T extends ItemConvertible> implements DataContentTyp
 		public void generate(Consumer<RecipeJsonProvider> exporter) {
 			this.contentToProcess.forEach((processor, craftables) -> {
 				for (T craftable : craftables) {
-					processor.process(new RecipeHelperImpl(craftable), craftable);
+					processor.process(new RecipeHelperImpl(exporter, craftable), craftable);
 				}
 			});
 		}

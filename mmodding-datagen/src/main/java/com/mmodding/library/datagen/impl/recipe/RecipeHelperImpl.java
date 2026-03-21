@@ -3,63 +3,48 @@ package com.mmodding.library.datagen.impl.recipe;
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
 import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public class RecipeHelperImpl implements RecipeHelper {
 
-	private final List<Supplier<? extends CraftingRecipeJsonBuilder>> factories;
-
+	private final Consumer<RecipeJsonProvider> exporter;
 	private final ItemConvertible target;
 
-	public RecipeHelperImpl(ItemConvertible target) {
-		this.factories = new ArrayList<>();
+	public RecipeHelperImpl(Consumer<RecipeJsonProvider> exporter, ItemConvertible target) {
+		this.exporter = exporter;
 		this.target = target;
 	}
 
 	@Override
 	public void shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer) {
-		this.factories.add(() -> {
-			ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.target, 1, category);
-			consumer.accept(recipe);
-			return recipe.factory;
-		});
+		this.shaped(1, category, consumer);
 	}
 
 	@Override
 	public void shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer) {
-		this.factories.add(() -> {
-			ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.target, count, category);
-			consumer.accept(recipe);
-			return recipe.factory;
-		});
+		ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.target, count, category);
+		consumer.accept(recipe);
+		recipe.factory.offerTo(this.exporter);
 	}
 
 	@Override
 	public void shapeless(RecipeCategory category, Consumer<ShapelessRecipe> consumer) {
-		this.factories.add(() -> {
-			ShapelessRecipeImpl recipe = new ShapelessRecipeImpl(this.target, 1, category);
-			consumer.accept(recipe);
-			return recipe.factory;
-		});
+		this.shapeless(1, category, consumer);
 	}
 
 	@Override
 	public void shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer) {
-		this.factories.add(() -> {
-			ShapelessRecipeImpl recipe = new ShapelessRecipeImpl(this.target, count, category);
-			consumer.accept(recipe);
-			return recipe.factory;
-		});
+		ShapelessRecipeImpl recipe = new ShapelessRecipeImpl(this.target, count, category);
+		consumer.accept(recipe);
+		recipe.factory.offerTo(this.exporter);
 	}
 
 	@Override
@@ -69,15 +54,9 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public void smelting(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		this.factories.add(
-			() -> CookingRecipeJsonBuilder.createSmelting(
-				ingredient,
-				category,
-				this.target,
-				experience,
-				time
-			).criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-		);
+		CookingRecipeJsonBuilder.createSmelting(ingredient, category, this.target, experience, time)
+			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
+			.offerTo(this.exporter);
 	}
 
 	@Override
@@ -87,15 +66,9 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public void blasting(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		this.factories.add(
-			() -> CookingRecipeJsonBuilder.createBlasting(
-				ingredient,
-				category,
-				this.target,
-				experience,
-				time
-			).criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-		);
+		CookingRecipeJsonBuilder.createBlasting(ingredient, category, this.target, experience, time)
+			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
+			.offerTo(this.exporter);
 	}
 
 	@Override
@@ -105,23 +78,25 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		this.factories.add(
-			() -> CookingRecipeJsonBuilder.createSmoking(
-				ingredient,
-				category,
-				this.target,
-				experience,
-				time
-			).criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-		);
+		CookingRecipeJsonBuilder.createSmoking(ingredient, category, this.target, experience, time)
+			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
+			.offerTo(this.exporter);
 	}
 
 	@Override
-	public void factory(Supplier<? extends CraftingRecipeJsonBuilder> factory) {
-		this.factories.add(factory);
+	public void campfireCooking(ItemConvertible item, RecipeCategory category, int experience, int time) {
+		this.campfireCooking(Ingredient.ofItems(item), category, experience, time);
 	}
 
-	public List<Supplier<? extends CraftingRecipeJsonBuilder>> getFactories() {
-		return this.factories;
+	@Override
+	public void campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time) {
+		CookingRecipeJsonBuilder.createSmoking(ingredient, category, this.target, experience, time)
+			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
+			.offerTo(this.exporter);
+	}
+
+	@Override
+	public void factory(CraftingRecipeJsonBuilder factory) {
+		factory.offerTo(this.exporter);
 	}
 }
