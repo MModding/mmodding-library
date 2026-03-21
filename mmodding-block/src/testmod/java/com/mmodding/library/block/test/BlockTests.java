@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FurnaceBlock;
 import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 
 public class BlockTests implements ExtendedModInitializer {
 
@@ -18,7 +19,7 @@ public class BlockTests implements ExtendedModInitializer {
 
 	public static final Block SECOND_BLOCK = new Block(FabricBlockSettings.copyOf(Blocks.AIR)).withItem(new FabricItemSettings());
 
-	public static final BlockHeap<FurnaceBlock> FURNACE_BLOCKS = BlockHeap.create(FurnaceBlock::new, FabricBlockSettings.copyOf(Blocks.FURNACE), "red", "green", "blue");
+	public static final BlockHeap<FurnaceBlock> FURNACE_BLOCKS = BlockHeap.create(Identifier.of("mmodding_datagen_test", "furnace"), FurnaceBlock::new, FabricBlockSettings.copyOf(Blocks.FURNACE), "red", "green", "blue");
 
 	@Override
 	public void setupManager(ElementsManager manager) {
