@@ -6,7 +6,6 @@ import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.management.DataContentType;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
-import com.mmodding.library.java.api.either.Either;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -69,15 +68,16 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		}
 
 		@Override
-		public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-			this.contentToProcess.forEach((processor, families) -> {
-				Either<BlockStateModelGenerator, Consumer<RecipeJsonProvider>> either = Either.ofFirst(blockStateModelGenerator);
-				families.forEach(family -> processor.process(either, family));
-			});
+		public void generateBlockStateModels(BlockStateModelGenerator generator) {
+			this.contentToProcess.forEach(
+				(processor, families) -> families.forEach(
+					family -> processor.process(generator, family)
+				)
+			);
 		}
 
 		@Override
-		public void generateItemModels(ItemModelGenerator itemModelGenerator) {}
+		public void generateItemModels(ItemModelGenerator generator) {}
 
 		@Override
 		public String getName() {
@@ -96,10 +96,11 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 
 		@Override
 		public void generate(Consumer<RecipeJsonProvider> exporter) {
-			this.contentToProcess.forEach((processor, families) -> {
-				Either<BlockStateModelGenerator, Consumer<RecipeJsonProvider>> either = Either.ofSecond(exporter);
-				families.forEach(family -> processor.process(either, family));
-			});
+			this.contentToProcess.forEach(
+				(processor, families) -> families.forEach(
+					family -> processor.process(exporter, family)
+				)
+			);
 		}
 
 		@Override

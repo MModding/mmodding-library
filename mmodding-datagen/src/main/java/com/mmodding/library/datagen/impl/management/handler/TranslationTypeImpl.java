@@ -16,11 +16,11 @@ import net.minecraft.registry.RegistryKeys;
 import java.util.List;
 import java.util.Optional;
 
-public class DataTranslationTypeImpl<T> implements DataContentType<T, TranslationProcessor<T>> {
+public class TranslationTypeImpl<T> implements DataContentType<T, TranslationProcessor<T>> {
 
 	private final RegistryKey<? extends Registry<T>> registry;
 
-	public DataTranslationTypeImpl(RegistryKey<? extends Registry<T>> registry) {
+	public TranslationTypeImpl(RegistryKey<? extends Registry<T>> registry) {
 		this.registry = registry;
 	}
 

@@ -16,6 +16,8 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -25,9 +27,13 @@ import java.util.function.Function;
 
 public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 
+	private final TagKey<Block> blockTagKey;
+	private final TagKey<Item> itemTagKey;
 	private final Map<String, T> blocks;
 
-	public BlockHeapImpl(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+	public BlockHeapImpl(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+		this.blockTagKey = TagKey.of(RegistryKeys.BLOCK, identifier);
+		this.itemTagKey = TagKey.of(RegistryKeys.ITEM, identifier);
 		Map<String, T> blocks = new Object2ObjectOpenHashMap<>();
 		names.forEach(name -> blocks.put(name, factory.make(settings)));
 		this.blocks = blocks;
@@ -37,6 +43,16 @@ public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 	public BlockHeap<T> withItem(FabricItemSettings settings) {
 		this.getEntries().forEach(block -> block.withItem(settings));
 		return this;
+	}
+
+	@Override
+	public TagKey<Block> getBlockTagKey() {
+		return this.blockTagKey;
+	}
+
+	@Override
+	public TagKey<Item> getItemTagKey() {
+		return this.itemTagKey;
 	}
 
 	@Override

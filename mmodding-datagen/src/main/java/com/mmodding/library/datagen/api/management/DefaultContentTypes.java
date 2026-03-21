@@ -31,6 +31,6 @@ public class DefaultContentTypes {
 	public static final DataContentType<BlockFamily, BlockFamilyProcessor> BLOCK_FAMILIES = new BlockFamilyTypeImpl();
 
 	public static <T> DataContentType<T, TranslationProcessor<T>> getTranslationHandler(RegistryKey<? extends Registry<T>> registry) {
-		return new DataTranslationTypeImpl<>(registry);
+		return new TranslationTypeImpl<>(registry);
 	}
 }

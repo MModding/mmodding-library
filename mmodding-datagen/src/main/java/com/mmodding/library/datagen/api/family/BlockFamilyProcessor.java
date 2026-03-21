@@ -1,6 +1,5 @@
 package com.mmodding.library.datagen.api.family;
 
-import com.mmodding.library.java.api.either.Either;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.family.BlockFamily;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -14,15 +13,15 @@ import java.util.function.Consumer;
  */
 public final class BlockFamilyProcessor {
 
-	public void process(Either<BlockStateModelGenerator, Consumer<RecipeJsonProvider>> either, BlockFamily family) {
-		either.execute(generator -> {
-			if (family.shouldGenerateModels()) {
-				generator.registerCubeAllModelTexturePool(family.getBaseBlock()).family(family);
-			}
-		}, provider -> {
-			if (family.shouldGenerateRecipes(FeatureFlags.FEATURE_MANAGER.getFeatureSet())) {
-				RecipeProvider.generateFamily(provider, family);
-			}
-		});
+	public void process(BlockStateModelGenerator generator, BlockFamily family) {
+		if (family.shouldGenerateModels()) {
+			generator.registerCubeAllModelTexturePool(family.getBaseBlock()).family(family);
+		}
+	}
+
+	public void process(Consumer<RecipeJsonProvider> exporter, BlockFamily family) {
+		if (family.shouldGenerateRecipes(FeatureFlags.FEATURE_MANAGER.getFeatureSet())) {
+			RecipeProvider.generateFamily(exporter, family);
+		}
 	}
 }

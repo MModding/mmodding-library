@@ -8,6 +8,8 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -19,15 +21,19 @@ import java.util.function.Function;
  */
 public interface BlockHeap<T extends Block> {
 
-	static <T extends Block> BlockHeap<T> create(BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
-		return new BlockHeapImpl<>(factory, settings, List.of(names));
+	static <T extends Block> BlockHeap<T> create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
+		return new BlockHeapImpl<>(identifier, factory, settings, List.of(names));
 	}
 
-	static <T extends Block> BlockHeap<T> create(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
-		return new BlockHeapImpl<>(factory, settings, names);
+	static <T extends Block> BlockHeap<T> create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+		return new BlockHeapImpl<>(identifier, factory, settings, names);
 	}
 
 	BlockHeap<T> withItem(FabricItemSettings settings);
+
+	TagKey<Block> getBlockTagKey();
+
+	TagKey<Item> getItemTagKey();
 
 	List<T> getEntries();
 

@@ -12,7 +12,9 @@ import net.minecraft.block.*;
 import net.minecraft.block.enums.Instrument;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.data.family.BlockFamily;
+import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
@@ -20,41 +22,41 @@ import java.util.List;
 
 public interface BlockRelatives {
 
-	static BlockRelatives createWood(Identifier name, WoodType type, AutoMapper<FabricBlockSettings> patch) {
-		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(name);
+	static BlockRelatives createWood(Identifier identifier, WoodType type, AutoMapper<FabricBlockSettings> patch) {
+		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map(FabricBlockSettings.create().instrument(Instrument.BASS).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD).burnable());
-		return BlockRelatives.create(setType, sharedSettings, "planks", Block::new)
+		return BlockRelatives.create(identifier, setType, sharedSettings, "planks", Block::new)
 				.push(BlockFamily.Variant.BUTTON, settings -> Blocks.createWoodenButtonBlock(setType))
 				.push(BlockFamily.Variant.FENCE, settings -> new FenceBlock(settings.solid()))
 				.push(BlockFamily.Variant.FENCE_GATE, settings -> new FenceGateBlock(settings.solid(), type))
 				.push(BlockFamily.Variant.PRESSURE_PLATE, settings -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, settings.solid().noCollision().pistonBehavior(PistonBehavior.DESTROY), setType))
 				.push(BlockFamily.Variant.SIGN, settings -> new SignBlock(settings.solid().noCollision(), type))
-				.push(BlockFamily.Variant.WALL_SIGN, settings -> new WallSignBlock(settings.solid().noCollision().dropsLike(Registries.BLOCK.get(IdentifierUtil.extend(name, "sign"))), type))
+				.push(BlockFamily.Variant.WALL_SIGN, settings -> new WallSignBlock(settings.solid().noCollision().dropsLike(Registries.BLOCK.get(IdentifierUtil.extend(identifier, "sign"))), type))
 				.push(BlockFamily.Variant.SLAB, SlabBlock::new)
-				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(IdentifierUtil.extend(name, "planks")).getDefaultState(), settings))
+				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(IdentifierUtil.extend(identifier, "planks")).getDefaultState(), settings))
 				.push(BlockFamily.Variant.DOOR, settings -> new DoorBlock(settings.nonOpaque(), setType))
 				.push(BlockFamily.Variant.TRAPDOOR, settings -> new TrapdoorBlock(settings.nonOpaque().allowsSpawning(Blocks::never), setType));
 	}
 
-	static BlockRelatives createStone(Identifier name, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate) {
-		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(name);
+	static BlockRelatives createStone(Identifier identifier, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate) {
+		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map(FabricBlockSettings.create().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
-		BlockRelatives result = BlockRelatives.create(setType, sharedSettings, Block::new)
+		BlockRelatives result = BlockRelatives.create(identifier, setType, sharedSettings, Block::new)
 				.push(BlockFamily.Variant.SLAB, SlabBlock::new);
 		if (hasPressurePlate) {
 			result.push(BlockFamily.Variant.PRESSURE_PLATE, settings -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.MOBS, settings.solid().noCollision().pistonBehavior(PistonBehavior.DESTROY), setType));
 		}
 		result.push(BlockFamily.Variant.BUTTON, settings -> new ButtonBlock(FabricBlockSettings.create().noCollision().strength(0.5f).pistonBehavior(PistonBehavior.DESTROY), setType, 20, false))
-				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(name).getDefaultState(), settings));
+				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(identifier).getDefaultState(), settings));
 		return result;
 	}
 
-	static <T extends Block> BlockRelatives create(BlockSetType setType, FabricBlockSettings sharedSettings, BlockFactory<T> mainFactory) {
-		return BlockRelatives.create(setType, sharedSettings, "", mainFactory);
+	static <T extends Block> BlockRelatives create(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, BlockFactory<T> mainFactory) {
+		return BlockRelatives.create(identifier, setType, sharedSettings, "", mainFactory);
 	}
 
-	static <T extends Block> BlockRelatives create(BlockSetType setType, FabricBlockSettings sharedSettings, String mainName, BlockFactory<T> mainFactory) {
-		return new BlockRelativesImpl(setType, sharedSettings, mainName, mainFactory);
+	static <T extends Block> BlockRelatives create(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainName, BlockFactory<T> mainFactory) {
+		return new BlockRelativesImpl(identifier, setType, sharedSettings, mainName, mainFactory);
 	}
 
 	BlockSetType getSetType();
@@ -65,9 +67,13 @@ public interface BlockRelatives {
 
 	<T extends Block> BlockRelatives push(BlockFamily.Variant variant, BlockFactory<T> factory);
 
+	TagKey<Block> getBlockTagKey();
+
+	TagKey<Item> getItemTagKey();
+
 	List<Block> getEntries();
 
-	void register(Identifier name);
+	void register();
 
 	@Environment(EnvType.CLIENT)
 	void cutoutMain();
