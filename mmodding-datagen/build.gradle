@@ -1,8 +1,12 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 
 mmodding {
+	loom {
+		accessWidenerPath = file("src/main/resources/mmodding_datagen.accesswidener")
+	}
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
+		accessWidener = "mmodding_datagen.accesswidener"
 		addMixin("mmodding_datagen.mixins.json")
 	}
 	modules {
