@@ -54,23 +54,55 @@ public class DataManagerImpl implements DataManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T, P> DataManager data(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, P processor) {
+	public <T, P> void task(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, P processor) {
 		if (!this.rawElements.containsKey(sourceClass)) {
 			this.rawElements.put(sourceClass, ClassContentOperator.extract(sourceClass));
 		}
 		this.dataCoverage.computeIfAbsent((DataContentType<?, Object>) handler, ignored -> TriList.create())
 				.add(sourceClass, Pair.create(type, ignored -> true), processor);
-		return this;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T, P> DataManager data(Class<?> sourceClass, Class<T> type, Predicate<T> filter, DataContentType<T, P> handler, P processor) {
+	public <T, P> void task(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, Predicate<T> filter, P processor) {
 		if (!this.rawElements.containsKey(sourceClass)) {
 			this.rawElements.put(sourceClass, ClassContentOperator.extract(sourceClass));
 		}
 		this.dataCoverage.computeIfAbsent((DataContentType<?, Object>) handler, ignored -> TriList.create())
 				.add(sourceClass, Pair.create(type, filter), processor);
-		return this;
+	}
+
+	@Override
+	public <T, P> ChainManager<T, P> chain(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, Predicate<T> filter, P processor) {
+		this.task(sourceClass, type, handler, filter, processor);
+		return new ChainManagerImpl<>(this, sourceClass, type, handler, Predicate.not(filter));
+	}
+
+	public static class ChainManagerImpl<T, P> implements ChainManager<T, P> {
+
+		private final DataManager manager;
+		private final Class<?> sourceClass;
+		private final Class<T> type;
+		private final DataContentType<T, P> handler;
+		private final Predicate<T> exclusion;
+
+		private ChainManagerImpl(DataManager manager, Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, Predicate<T> exclusion) {
+			this.manager = manager;
+			this.sourceClass = sourceClass;
+			this.type = type;
+			this.handler = handler;
+			this.exclusion = exclusion;
+		}
+
+		@Override
+		public ChainManager<T, P> chain(Predicate<T> filter, P processor) {
+			this.manager.task(this.sourceClass, this.type, this.handler, element -> this.exclusion.test(element) && filter.test(element), processor);
+			return new ChainManagerImpl<>(this.manager, this.sourceClass, this.type, this.handler, element -> this.exclusion.test(element) && !filter.test(element));
+		}
+
+		@Override
+		public void chain(P processor) {
+			this.manager.task(this.sourceClass, this.type, this.handler, this.exclusion, processor);
+		}
 	}
 }

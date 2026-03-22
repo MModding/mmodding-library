@@ -37,10 +37,10 @@ public class DatagenTests implements ExtendedModInitializer, ExtendedDataGenerat
 
 	@Override
 	public void setupManager(DataManager manager) {
-		manager.data(DatagenTests.class, Block.class, DefaultContentTypes.getTranslationHandler(RegistryKeys.BLOCK), DefaultLangProcessors.getClassic());
-		manager.data(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_MODELS, BlockStateModelGenerator::registerSimpleCubeAll);
-		manager.data(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_LOOTS, DefaultBlockLootProcessors.SIMPLE);
-		manager.data(DatagenTests.class, Item.class, DefaultContentTypes.ITEM_MODELS, (generator, item) -> generator.register(item, Models.GENERATED));
+		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.getTranslationHandler(RegistryKeys.BLOCK), DefaultLangProcessors.getClassic());
+		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_MODELS, BlockStateModelGenerator::registerSimpleCubeAll);
+		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_LOOTS, DefaultBlockLootProcessors.SIMPLE);
+		manager.task(DatagenTests.class, Item.class, DefaultContentTypes.ITEM_MODELS, (generator, item) -> generator.register(item, Models.GENERATED));
 	}
 
 	@Override

@@ -9,7 +9,7 @@ public class DefaultBlockModelProcessing {
 
 	public static void ladder(BlockStateModelGenerator generator, Block block) {
 		generator.registerNorthDefaultHorizontalRotation(block);
-		LADDER.upload(block, TextureMap.textureParticle(block), generator.modelCollector);
+		LADDER.upload(block, TextureMap.texture(block).put(TextureKey.PARTICLE, TextureMap.getId(block)), generator.modelCollector);
 		generator.registerItemModel(block);
 	}
 }
