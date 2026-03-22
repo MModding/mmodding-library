@@ -188,6 +188,9 @@ mmodding {
 		include("mmodding-network")
 		include("mmodding-state")
 		include("mmodding-worldgen")
+
+		api("mmodding-core")
+		api("mmodding-worldgen")
 	}
 }
 
