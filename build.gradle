@@ -175,21 +175,19 @@ jar {
 
 mmodding {
 	modules {
-		it.include {
-			it.api("mmodding-block")
-			it.api("mmodding-block-entity")
-			it.api("mmodding-config")
-			it.api("mmodding-core")
-			it.api("mmodding-datagen")
-			it.api("mmodding-enchantment")
-			it.api("mmodding-fluid")
-			it.api("mmodding-item")
-			it.api("mmodding-java")
-			it.api("mmodding-math")
-			it.api("mmodding-network")
-			it.api("mmodding-state")
-			it.api("mmodding-worldgen")
-		}
+		include("mmodding-block")
+		include("mmodding-block-entity")
+		include("mmodding-config")
+		include("mmodding-core")
+		include("mmodding-datagen")
+		include("mmodding-enchantment")
+		include("mmodding-fluid")
+		include("mmodding-item")
+		include("mmodding-java")
+		include("mmodding-math")
+		include("mmodding-network")
+		include("mmodding-state")
+		include("mmodding-worldgen")
 	}
 }
 
