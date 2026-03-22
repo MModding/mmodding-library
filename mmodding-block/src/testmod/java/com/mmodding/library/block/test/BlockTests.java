@@ -19,7 +19,7 @@ public class BlockTests implements ExtendedModInitializer {
 
 	public static final Block SECOND_BLOCK = new Block(FabricBlockSettings.copyOf(Blocks.AIR)).withItem(new FabricItemSettings());
 
-	public static final BlockHeap<FurnaceBlock> FURNACE_BLOCKS = BlockHeap.create(Identifier.of("mmodding_datagen_test", "furnace"), FurnaceBlock::new, FabricBlockSettings.copyOf(Blocks.FURNACE), "red", "green", "blue");
+	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.create(Identifier.of("mmodding_datagen_test", "furnace"), FurnaceBlock::new, FabricBlockSettings.copyOf(Blocks.FURNACE), "red", "green", "blue");
 
 	@Override
 	public void setupManager(ElementsManager manager) {

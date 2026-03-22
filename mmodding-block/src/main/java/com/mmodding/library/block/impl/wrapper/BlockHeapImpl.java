@@ -25,22 +25,22 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
+public class BlockHeapImpl implements BlockHeap {
 
 	private final TagKey<Block> blockTagKey;
 	private final TagKey<Item> itemTagKey;
-	private final Map<String, T> blocks;
+	private final Map<String, Block> blocks;
 
-	public BlockHeapImpl(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+	public BlockHeapImpl(Identifier identifier, BlockFactory<? extends Block> factory, FabricBlockSettings settings, List<String> names) {
 		this.blockTagKey = TagKey.of(RegistryKeys.BLOCK, identifier);
 		this.itemTagKey = TagKey.of(RegistryKeys.ITEM, identifier);
-		Map<String, T> blocks = new Object2ObjectOpenHashMap<>();
+		Map<String, Block> blocks = new Object2ObjectOpenHashMap<>();
 		names.forEach(name -> blocks.put(name, factory.make(settings)));
 		this.blocks = blocks;
 	}
 
 	@Override
-	public BlockHeap<T> withItem(FabricItemSettings settings) {
+	public BlockHeap withItem(FabricItemSettings settings) {
 		this.getEntries().forEach(block -> block.withItem(settings));
 		return this;
 	}
@@ -56,16 +56,16 @@ public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 	}
 
 	@Override
-	public List<T> getEntries() {
+	public List<Block> getEntries() {
 		return List.copyOf(this.blocks.values());
 	}
 
-	public BlockHeapImpl<T> map(AutoMapper<T> mapper) {
+	public BlockHeapImpl map(AutoMapper<Block> mapper) {
 		this.blocks.keySet().forEach(name -> this.blocks.computeIfPresent(name, (ignored, block) -> mapper.map(block)));
 		return this;
 	}
 
-	public void forEach(Consumer<T> consumer) {
+	public void forEach(Consumer<Block> consumer) {
 		this.blocks.forEach((name, block) -> consumer.accept(block));
 	}
 
@@ -74,7 +74,7 @@ public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
 	 */
 	public void register(Function<String, Identifier> identifierMaker) {
-		for (Map.Entry<String, T> entry : this.blocks.entrySet()) {
+		for (Map.Entry<String, Block> entry : this.blocks.entrySet()) {
 			Identifier identifier = identifierMaker.apply(entry.getKey());
 			Registry.register(Registries.BLOCK, identifier, entry.getValue());
 			Item item = BlockWithItem.getItem(entry.getValue());
@@ -98,6 +98,6 @@ public class BlockHeapImpl<T extends Block> implements BlockHeap<T> {
 
 	static {
 		// even if the BlockRelatives is using the interface type in a mod, at runtime its class is the implementation class
-		DataContentResolver.<BlockHeap<Block>, Block>register(BlockHeapImpl.class, Block.class, BlockHeap::getEntries);
+		DataContentResolver.register(BlockHeapImpl.class, Block.class, BlockHeap::getEntries);
 	}
 }

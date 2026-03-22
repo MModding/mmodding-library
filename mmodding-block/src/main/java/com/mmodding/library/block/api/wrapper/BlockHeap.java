@@ -19,27 +19,27 @@ import java.util.function.Function;
 /**
  * A simple class allowing to create and manipulate a bunch of blocks at the same time.
  */
-public interface BlockHeap<T extends Block> {
+public interface BlockHeap {
 
-	static <T extends Block> BlockHeap<T> create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
-		return new BlockHeapImpl<>(identifier, factory, settings, List.of(names));
+	static <T extends Block> BlockHeap create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
+		return new BlockHeapImpl(identifier, factory, settings, List.of(names));
 	}
 
-	static <T extends Block> BlockHeap<T> create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
-		return new BlockHeapImpl<>(identifier, factory, settings, names);
+	static <T extends Block> BlockHeap create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+		return new BlockHeapImpl(identifier, factory, settings, names);
 	}
 
-	BlockHeap<T> withItem(FabricItemSettings settings);
+	BlockHeap withItem(FabricItemSettings settings);
 
 	TagKey<Block> getBlockTagKey();
 
 	TagKey<Item> getItemTagKey();
 
-	List<T> getEntries();
+	List<Block> getEntries();
 
-	BlockHeap<T> map(AutoMapper<T> mapper);
+	BlockHeap map(AutoMapper<Block> mapper);
 
-	void forEach(Consumer<T> consumer);
+	void forEach(Consumer<Block> consumer);
 
 	/**
 	 * Registers every block inside the heap.
