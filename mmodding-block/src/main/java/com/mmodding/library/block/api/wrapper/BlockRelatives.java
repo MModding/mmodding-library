@@ -25,7 +25,7 @@ public interface BlockRelatives {
 	static BlockRelatives createWood(Identifier identifier, WoodType type, AutoMapper<FabricBlockSettings> patch) {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map(FabricBlockSettings.create().instrument(Instrument.BASS).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD).burnable());
-		return BlockRelatives.create(identifier, setType, sharedSettings, "planks", Block::new)
+		return BlockRelatives.create(identifier, setType, sharedSettings, "_planks", Block::new)
 				.push(BlockFamily.Variant.BUTTON, settings -> Blocks.createWoodenButtonBlock(setType))
 				.push(BlockFamily.Variant.FENCE, settings -> new FenceBlock(settings.solid()))
 				.push(BlockFamily.Variant.FENCE_GATE, settings -> new FenceGateBlock(settings.solid(), type))
