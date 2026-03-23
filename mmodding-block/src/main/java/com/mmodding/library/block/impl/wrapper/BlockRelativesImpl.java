@@ -32,17 +32,17 @@ public class BlockRelativesImpl implements BlockRelatives {
 	private final BlockSetType setType;
 	private final FabricBlockSettings sharedSettings;
 	private final Identifier identifier;
-	private final String mainName;
+	private final String mainSuffix;
 	private final Block mainBlock;
 	private final TagKey<Block> blockTagKey;
 	private final TagKey<Item> itemTagKey;
 	private final Map<BlockFamily.Variant, Block> variants;
 
-	public <T extends Block> BlockRelativesImpl(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainName, BlockFactory<T> mainFactory) {
+	public <T extends Block> BlockRelativesImpl(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
 		this.setType = setType;
 		this.sharedSettings = sharedSettings;
 		this.identifier = identifier;
-		this.mainName = mainName;
+		this.mainSuffix = mainSuffix;
 		this.mainBlock = mainFactory.make(sharedSettings);
 		this.mainBlock.withItem(new FabricItemSettings());
 		this.blockTagKey = TagKey.of(RegistryKeys.BLOCK, identifier);
@@ -93,7 +93,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	@Override
 	public void register() {
-		Identifier mainIdentifier = IdentifierUtil.extend(this.identifier, this.mainName);
+		Identifier mainIdentifier = this.identifier.withPath(path -> path + this.mainSuffix);
 		Registry.register(Registries.BLOCK, mainIdentifier, this.mainBlock);
 		Registry.register(Registries.ITEM, mainIdentifier, BlockWithItem.getItem(this.mainBlock));
 		for (Map.Entry<BlockFamily.Variant, Block> entry : this.variants.entrySet()) {

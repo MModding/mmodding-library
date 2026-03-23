@@ -23,13 +23,9 @@ import java.util.List;
 public interface BlockRelatives {
 
 	static BlockRelatives createWood(Identifier identifier, WoodType type, AutoMapper<FabricBlockSettings> patch) {
-		return BlockRelatives.createWood(identifier, false, type, patch);
-	}
-
-	static BlockRelatives createWood(Identifier identifier, boolean pluralOnMain, WoodType type, AutoMapper<FabricBlockSettings> patch) {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map(FabricBlockSettings.create().instrument(Instrument.BASS).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD).burnable());
-		return BlockRelatives.create(identifier.withPath(path -> path + (pluralOnMain ? "s" : "")), setType, sharedSettings, "planks", Block::new)
+		return BlockRelatives.create(identifier, setType, sharedSettings, "planks", Block::new)
 				.push(BlockFamily.Variant.BUTTON, settings -> Blocks.createWoodenButtonBlock(setType))
 				.push(BlockFamily.Variant.FENCE, settings -> new FenceBlock(settings.solid()))
 				.push(BlockFamily.Variant.FENCE_GATE, settings -> new FenceGateBlock(settings.solid(), type))
@@ -49,7 +45,7 @@ public interface BlockRelatives {
 	static BlockRelatives createStone(Identifier identifier, boolean pluralOnMain, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate, boolean hasButton) {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map(FabricBlockSettings.create().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
-		BlockRelatives result = BlockRelatives.create(identifier.withPath(path -> path + (pluralOnMain ? "s" : "")), setType, sharedSettings, Block::new)
+		BlockRelatives result = BlockRelatives.create(identifier, setType, sharedSettings, pluralOnMain ? "s" : "", Block::new)
 				.push(BlockFamily.Variant.SLAB, SlabBlock::new)
 				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(identifier).getDefaultState(), settings));
 		if (hasPressurePlate) {
@@ -65,8 +61,8 @@ public interface BlockRelatives {
 		return BlockRelatives.create(identifier, setType, sharedSettings, "", mainFactory);
 	}
 
-	static <T extends Block> BlockRelatives create(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainName, BlockFactory<T> mainFactory) {
-		return new BlockRelativesImpl(identifier, setType, sharedSettings, mainName, mainFactory);
+	static <T extends Block> BlockRelatives create(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
+		return new BlockRelativesImpl(identifier, setType, sharedSettings, mainSuffix, mainFactory);
 	}
 
 	BlockSetType getSetType();
