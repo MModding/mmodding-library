@@ -1,6 +1,5 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
-import com.mmodding.library.core.api.registry.IdentifierUtil;
 import com.mmodding.library.datagen.api.family.BlockFamilyProcessor;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
@@ -47,7 +46,10 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 				families.forEach(family -> {
 					RegistryKey<Block> mainKey = Registries.BLOCK.getKey(family.getBaseBlock()).orElseThrow();
 					translationBuilder.add(family.getBaseBlock(), classicProcessor.process(mainKey));
-					family.getVariants().forEach((variant, block) -> translationBuilder.add(block, classicProcessor.process(mainKey.mapValue(identifier -> IdentifierUtil.extend(identifier, variant.getName())))));
+					family.getVariants().values().forEach(block -> {
+						RegistryKey<Block> variantKey = Registries.BLOCK.getKey(block).orElseThrow();
+						translationBuilder.add(block, classicProcessor.process(variantKey));
+					});
 				});
 			});
 		}
