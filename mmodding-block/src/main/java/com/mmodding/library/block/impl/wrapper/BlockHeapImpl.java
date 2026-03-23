@@ -5,7 +5,7 @@ import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -34,7 +34,7 @@ public class BlockHeapImpl implements BlockHeap {
 	public BlockHeapImpl(Identifier identifier, BlockFactory<? extends Block> factory, FabricBlockSettings settings, List<String> names) {
 		this.blockTagKey = TagKey.of(RegistryKeys.BLOCK, identifier);
 		this.itemTagKey = TagKey.of(RegistryKeys.ITEM, identifier);
-		Map<String, Block> blocks = new Object2ObjectOpenHashMap<>();
+		Map<String, Block> blocks = new Object2ObjectLinkedOpenHashMap<>();
 		names.forEach(name -> blocks.put(name, factory.make(settings)));
 		this.blocks = blocks;
 	}
