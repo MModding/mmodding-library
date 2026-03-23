@@ -38,16 +38,18 @@ public interface BlockRelatives {
 				.push(BlockFamily.Variant.TRAPDOOR, settings -> new TrapdoorBlock(settings.nonOpaque().allowsSpawning(Blocks::never), setType));
 	}
 
-	static BlockRelatives createStone(Identifier identifier, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate) {
+	static BlockRelatives createStone(Identifier identifier, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate, boolean hasButton) {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map(FabricBlockSettings.create().instrument(Instrument.BASEDRUM).requiresTool().strength(1.5f, 6.0f));
 		BlockRelatives result = BlockRelatives.create(identifier, setType, sharedSettings, Block::new)
-				.push(BlockFamily.Variant.SLAB, SlabBlock::new);
+				.push(BlockFamily.Variant.SLAB, SlabBlock::new)
+				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(identifier).getDefaultState(), settings));
 		if (hasPressurePlate) {
 			result.push(BlockFamily.Variant.PRESSURE_PLATE, settings -> new PressurePlateBlock(PressurePlateBlock.ActivationRule.MOBS, settings.solid().noCollision().pistonBehavior(PistonBehavior.DESTROY), setType));
 		}
-		result.push(BlockFamily.Variant.BUTTON, settings -> new ButtonBlock(FabricBlockSettings.create().noCollision().strength(0.5f).pistonBehavior(PistonBehavior.DESTROY), setType, 20, false))
-				.push(BlockFamily.Variant.STAIRS, settings -> new StairsBlock(Registries.BLOCK.get(identifier).getDefaultState(), settings));
+		if (hasButton) {
+			result.push(BlockFamily.Variant.BUTTON, settings -> new ButtonBlock(FabricBlockSettings.create().noCollision().strength(0.5f).pistonBehavior(PistonBehavior.DESTROY), setType, 20, false));
+		}
 		return result;
 	}
 
