@@ -1,7 +1,7 @@
 package com.mmodding.library.block.impl.wrapper;
 
 import com.mmodding.library.block.api.BlockWithItem;
-import com.mmodding.library.block.api.util.BlockFactory;
+import com.mmodding.library.block.api.util.AdvancedBlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
@@ -31,11 +31,11 @@ public class BlockHeapImpl implements BlockHeap {
 	private final TagKey<Item> itemTagKey;
 	private final Map<String, Block> blocks;
 
-	public BlockHeapImpl(Identifier identifier, BlockFactory<? extends Block> factory, FabricBlockSettings settings, List<String> names) {
+	public BlockHeapImpl(Identifier identifier, AdvancedBlockFactory<? extends Block> factory, FabricBlockSettings settings, List<String> names) {
 		this.blockTagKey = TagKey.of(RegistryKeys.BLOCK, identifier);
 		this.itemTagKey = TagKey.of(RegistryKeys.ITEM, identifier);
 		Map<String, Block> blocks = new Object2ObjectLinkedOpenHashMap<>();
-		names.forEach(name -> blocks.put(name, factory.make(settings)));
+		names.forEach(name -> blocks.put(name, factory.make(name, settings)));
 		this.blocks = blocks;
 	}
 

@@ -1,5 +1,6 @@
 package com.mmodding.library.block.api.wrapper;
 
+import com.mmodding.library.block.api.util.AdvancedBlockFactory;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.impl.wrapper.BlockHeapImpl;
 import com.mmodding.library.java.api.function.AutoMapper;
@@ -22,10 +23,18 @@ import java.util.function.Function;
 public interface BlockHeap {
 
 	static <T extends Block> BlockHeap create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
-		return new BlockHeapImpl(identifier, factory, settings, List.of(names));
+		return BlockHeap.create(identifier, AdvancedBlockFactory.of(factory), settings, List.of(names));
 	}
 
 	static <T extends Block> BlockHeap create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+		return BlockHeap.create(identifier, AdvancedBlockFactory.of(factory), settings, names);
+	}
+
+	static <T extends Block> BlockHeap create(Identifier identifier, AdvancedBlockFactory<T> factory, FabricBlockSettings settings, String... names) {
+		return new BlockHeapImpl(identifier, factory, settings, List.of(names));
+	}
+
+	static <T extends Block> BlockHeap create(Identifier identifier, AdvancedBlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
 		return new BlockHeapImpl(identifier, factory, settings, names);
 	}
 
