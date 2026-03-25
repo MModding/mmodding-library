@@ -70,7 +70,7 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 
 		@Override
 		public String getName() {
-			return "Automated " + super.getName();
+			return "Automated " + this.registry.getValue() + " " + super.getName();
 		}
 	}
 
