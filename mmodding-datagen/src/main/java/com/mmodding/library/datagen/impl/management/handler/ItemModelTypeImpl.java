@@ -43,7 +43,7 @@ public class ItemModelTypeImpl implements DataContentType<Item, ItemModelProcess
 
 		@Override
 		public String getName() {
-			return "Automated " + super.getName();
+			return "Automated Item " + super.getName();
 		}
 	}
 }

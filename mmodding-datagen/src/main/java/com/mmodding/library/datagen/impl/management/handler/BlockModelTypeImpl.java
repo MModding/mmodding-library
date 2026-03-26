@@ -43,7 +43,7 @@ public class BlockModelTypeImpl implements DataContentType<Block, BlockStateMode
 
 		@Override
 		public String getName() {
-			return "Automated " + super.getName();
+			return "Automated Block " + super.getName();
 		}
 	}
 }
