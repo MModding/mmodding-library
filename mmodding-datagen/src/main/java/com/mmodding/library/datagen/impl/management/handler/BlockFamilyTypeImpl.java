@@ -19,6 +19,9 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -31,7 +34,8 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyTranslations(output, contentToProcess));
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyModels(output, contentToProcess));
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyRecipes(output, contentToProcess));
-		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyTags(output, lookup, contentToProcess));
+		AutomatedBlockFamilyBlockTags blockTags = pack.addProvider((output, lookup) -> new AutomatedBlockFamilyBlockTags(output, lookup, contentToProcess));
+		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyItemTags(output, lookup, blockTags));
 	}
 
 	private static class AutomatedBlockFamilyTranslations extends MModdingLanguageProvider {
@@ -115,11 +119,11 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		}
 	}
 
-	private static class AutomatedBlockFamilyTags extends FabricTagProvider.BlockTagProvider {
+	private static class AutomatedBlockFamilyBlockTags extends FabricTagProvider.BlockTagProvider {
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
-		public AutomatedBlockFamilyTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+		public AutomatedBlockFamilyBlockTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
 			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
@@ -129,6 +133,37 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 			this.contentToProcess.forEach((processor, families) -> families.forEach(
 				family -> processor.process(this::getOrCreateTagBuilder, family)
 			));
+		}
+
+		@Override
+		public String getName() {
+			return "Automated Block Family " + super.getName();
+		}
+	}
+
+	private static class AutomatedBlockFamilyItemTags extends FabricTagProvider.ItemTagProvider {
+
+		public AutomatedBlockFamilyItemTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture, @Nullable BlockTagProvider blockTagProvider) {
+			super(output, completableFuture, blockTagProvider);
+		}
+
+		@Override
+		protected void configure(RegistryWrapper.WrapperLookup arg) {
+			this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
+			this.copy(BlockTags.DOORS, ItemTags.DOORS);
+			this.copy(BlockTags.FENCES, ItemTags.FENCES);
+			this.copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
+			this.copy(BlockTags.SIGNS, ItemTags.SIGNS);
+			this.copy(BlockTags.SLABS, ItemTags.SLABS);
+			this.copy(BlockTags.STAIRS, ItemTags.STAIRS);
+			// no pressure plates item tag?
+			this.copy(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS);
+			this.copy(BlockTags.WALLS, ItemTags.WALLS);
+		}
+
+		@Override
+		public String getName() {
+			return "Automated Block Family " + super.getName();
 		}
 	}
 }
