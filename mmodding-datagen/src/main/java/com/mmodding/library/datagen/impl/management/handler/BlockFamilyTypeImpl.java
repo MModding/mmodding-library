@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.block.Block;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
@@ -17,8 +18,10 @@ import net.minecraft.data.family.BlockFamily;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryWrapper;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFamilyProcessor> {
@@ -28,6 +31,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyTranslations(output, contentToProcess));
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyModels(output, contentToProcess));
 		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyRecipes(output, contentToProcess));
+		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyTags(output, lookup, contentToProcess));
 	}
 
 	private static class AutomatedBlockFamilyTranslations extends MModdingLanguageProvider {
@@ -108,6 +112,23 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		@Override
 		public String getName() {
 			return "Automated Block Family " + super.getName();
+		}
+	}
+
+	private static class AutomatedBlockFamilyTags extends FabricTagProvider.BlockTagProvider {
+
+		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
+
+		public AutomatedBlockFamilyTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+			super(output, future);
+			this.contentToProcess = contentToProcess;
+		}
+
+		@Override
+		protected void configure(RegistryWrapper.WrapperLookup arg) {
+			this.contentToProcess.forEach((processor, families) -> families.forEach(
+				family -> processor.process(this::getOrCreateTagBuilder, family)
+			));
 		}
 	}
 }
