@@ -7,6 +7,7 @@ import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
 import com.mmodding.library.datagen.api.model.block.BlockStateModelProcessor;
 import com.mmodding.library.datagen.api.model.item.ItemModelProcessor;
 import com.mmodding.library.datagen.api.recipe.RecipeProcessor;
+import com.mmodding.library.datagen.api.tag.TagProcessor;
 import com.mmodding.library.datagen.impl.management.handler.*;
 import net.minecraft.block.Block;
 import net.minecraft.data.family.BlockFamily;
@@ -29,6 +30,10 @@ public class DefaultContentTypes {
 	public static final DataContentType<ItemConvertible, RecipeProcessor<ItemConvertible>> ITEM_CONVERTIBLE_RECIPES = new RecipeTypeImpl<>();
 
 	public static final DataContentType<BlockFamily, BlockFamilyProcessor> BLOCK_FAMILIES = new BlockFamilyTypeImpl();
+
+	public static <T> DataContentType<T, TagProcessor<T>> getTagHandler(RegistryKey<? extends Registry<T>> registry) {
+		return new TagTypeImpl<>(registry);
+	}
 
 	public static <T> DataContentType<T, TranslationProcessor<T>> getTranslationHandler(RegistryKey<? extends Registry<T>> registry) {
 		return new TranslationTypeImpl<>(registry);
