@@ -19,7 +19,6 @@ public interface ExtendedDataGeneratorEntrypoint extends DataGeneratorEntrypoint
 		this.setupManager(manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		FabricDataGenerator.Pack pack = generator.createPack();
-		manager.loadTags(pack);
 		manager.loadElements(pack);
 		this.onInitializeDataGenerator(advanced, generator, pack);
 	}
