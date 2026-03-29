@@ -44,7 +44,20 @@ public interface BlockHeap {
 	 * @param <T> the block class type
 	 */
 	static <T extends Block> BlockHeap create(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
-		return new BlockHeapImpl(factory, name -> name, name -> settings, names);
+		return new BlockHeapImpl(NameBlockFactory.of(factory), name -> name, name -> settings, names);
+	}
+
+	/**
+	 * Creates a new {@link BlockHeap} from a block factory, a name mapper, a settings mapper, and string constructors.
+	 * @param factory the block factory
+	 * @param nameMapper the name mapper
+	 * @param settingsMapper the settings mapper
+	 * @param constructors the string constructors
+	 * @return the block heap
+	 * @param <T> the block class type
+	 */
+	static <T extends Block> BlockHeap create(BlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, String... constructors)  {
+		return BlockHeap.create(NameBlockFactory.of(factory), nameMapper, settingsMapper, constructors);
 	}
 
 	/**
@@ -52,25 +65,38 @@ public interface BlockHeap {
 	 * @param factory the block factory
 	 * @param nameMapper the name mapper
 	 * @param settingsMapper the settings mapper
-	 * @param names the names
+	 * @param constructors the string constructors
 	 * @return the block heap
 	 * @param <T> the block class type
 	 */
-	static <T extends Block> BlockHeap create(BlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, String... names)  {
-		return BlockHeap.create(factory, nameMapper, settingsMapper, List.of(names));
+	static <T extends Block> BlockHeap create(BlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> constructors)  {
+		return BlockHeap.create(NameBlockFactory.of(factory), nameMapper, settingsMapper, constructors);
 	}
 
 	/**
-	 * Creates a new {@link BlockHeap} from a block factory, a name mapper, a settings mapper, and names.
-	 * @param factory the block factory
+	 * Creates a new {@link BlockHeap} from a name block factory, a name mapper, a settings mapper, and names.
+	 * @param factory the name block factory
 	 * @param nameMapper the name mapper
 	 * @param settingsMapper the settings mapper
-	 * @param names the names
+	 * @param constructors the string constructors
 	 * @return the block heap
 	 * @param <T> the block class type
 	 */
-	static <T extends Block> BlockHeap create(BlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> names)  {
-		return new BlockHeapImpl(factory, nameMapper, settingsMapper, names);
+	static <T extends Block> BlockHeap create(NameBlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, String... constructors) {
+		return BlockHeap.create(factory, nameMapper, settingsMapper, List.of(constructors));
+	}
+
+	/**
+	 * Creates a new {@link BlockHeap} from a name block factory, a name mapper, a settings mapper, and names.
+	 * @param factory the name block factory
+	 * @param nameMapper the name mapper
+	 * @param settingsMapper the settings mapper
+	 * @param constructors the string constructors
+	 * @return the block heap
+	 * @param <T> the block class type
+	 */
+	static <T extends Block> BlockHeap create(NameBlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> constructors) {
+		return new BlockHeapImpl(factory, nameMapper, settingsMapper, constructors);
 	}
 
 	default BlockHeap withItem() {
@@ -108,4 +134,13 @@ public interface BlockHeap {
 
 	@Environment(EnvType.CLIENT)
 	void translucent();
+
+	interface NameBlockFactory<T extends Block> {
+
+		static <T extends Block> NameBlockFactory<T> of(BlockFactory<T> factory) {
+			return (string, settings) -> factory.make(settings);
+		}
+
+		T make(String string, FabricBlockSettings settings);
+	}
 }

@@ -28,9 +28,9 @@ public class BlockHeapImpl implements BlockHeap {
 
 	private final Map<String, Block> blocks;
 
-	public BlockHeapImpl(BlockFactory<? extends Block> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> names) {
+	public BlockHeapImpl(BlockHeap.NameBlockFactory<? extends Block> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> constructors) {
 		Map<String, Block> blocks = new Object2ObjectLinkedOpenHashMap<>();
-		names.forEach(name -> blocks.put(nameMapper.map(name), factory.make(settingsMapper.map(name))));
+		constructors.forEach(constructor -> blocks.put(nameMapper.map(constructor), factory.make(constructor, settingsMapper.map(constructor))));
 		this.blocks = blocks;
 	}
 
