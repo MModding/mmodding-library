@@ -1,6 +1,5 @@
 package com.mmodding.library.block.impl.wrapper;
 
-import com.mmodding.library.block.api.BlockWithItem;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.mixin.BlockFamilyAccessor;
@@ -95,11 +94,11 @@ public class BlockRelativesImpl implements BlockRelatives {
 	public void register() {
 		Identifier mainIdentifier = this.identifier.withPath(path -> path + this.mainSuffix);
 		Registry.register(Registries.BLOCK, mainIdentifier, this.mainBlock);
-		Registry.register(Registries.ITEM, mainIdentifier, BlockWithItem.getItem(this.mainBlock));
+		Registry.register(Registries.ITEM, mainIdentifier, this.mainBlock.asItem());
 		for (Map.Entry<BlockFamily.Variant, Block> entry : this.variants.entrySet()) {
 			Identifier variantIdentifier = IdentifierUtil.extend(this.identifier, entry.getKey().getName());
 			Registry.register(Registries.BLOCK, variantIdentifier, entry.getValue());
-			Registry.register(Registries.ITEM, variantIdentifier, BlockWithItem.getItem(entry.getValue()));
+			Registry.register(Registries.ITEM, variantIdentifier, entry.getValue().asItem());
 		}
 	}
 

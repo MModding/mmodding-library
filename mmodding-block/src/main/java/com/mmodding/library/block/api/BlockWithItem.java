@@ -1,6 +1,5 @@
 package com.mmodding.library.block.api;
 
-import com.mmodding.library.block.impl.BlockWithItemImpl;
 import com.mmodding.library.core.api.management.info.InjectedContent;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -15,8 +14,8 @@ import java.util.function.Function;
 @InjectedContent(Block.class)
 public interface BlockWithItem {
 
-	static Item getItem(Block block) {
-		return BlockWithItemImpl.getItem(block);
+	default <T extends Block> T withItem() {
+		return this.withItem(new Item.Settings(), BlockItem::new);
 	}
 
 	default <T extends Block> T withItem(@NotNull Item.Settings settings) {

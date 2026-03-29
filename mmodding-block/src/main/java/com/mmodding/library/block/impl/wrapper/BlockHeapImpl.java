@@ -1,6 +1,5 @@
 package com.mmodding.library.block.impl.wrapper;
 
-import com.mmodding.library.block.api.BlockWithItem;
 import com.mmodding.library.block.api.util.AdvancedBlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
@@ -9,7 +8,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
@@ -19,9 +17,11 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -40,8 +40,8 @@ public class BlockHeapImpl implements BlockHeap {
 	}
 
 	@Override
-	public BlockHeap withItem(FabricItemSettings settings) {
-		this.getEntries().forEach(block -> block.withItem(settings));
+	public BlockHeap withItem(Item.@NotNull Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory, @NotNull Function<Item, Item> tweaker) {
+		this.getEntries().forEach(block -> block.withItem(settings, factory, tweaker));
 		return this;
 	}
 
@@ -60,7 +60,7 @@ public class BlockHeapImpl implements BlockHeap {
 		return List.copyOf(this.blocks.values());
 	}
 
-	public BlockHeapImpl map(AutoMapper<Block> mapper) {
+	public BlockHeap map(AutoMapper<Block> mapper) {
 		this.blocks.keySet().forEach(name -> this.blocks.computeIfPresent(name, (ignored, block) -> mapper.map(block)));
 		return this;
 	}
@@ -77,7 +77,7 @@ public class BlockHeapImpl implements BlockHeap {
 		for (Map.Entry<String, Block> entry : this.blocks.entrySet()) {
 			Identifier identifier = identifierMaker.apply(entry.getKey());
 			Registry.register(Registries.BLOCK, identifier, entry.getValue());
-			Item item = BlockWithItem.getItem(entry.getValue());
+			Item item = entry.getValue().asItem();
 			if (item != null) {
 				Registry.register(Registries.ITEM, identifier, item);
 			}

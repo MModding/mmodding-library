@@ -2,7 +2,6 @@ package com.mmodding.library.block.mixin;
 
 import com.mmodding.library.block.api.BlockWithItem;
 import com.mmodding.library.block.api.MModdingBlock;
-import com.mmodding.library.block.impl.BlockWithItemImpl;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
@@ -10,23 +9,24 @@ import net.minecraft.item.ItemPlacementContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Mixin(Block.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
-public class BlockMixin implements BlockWithItem, MModdingBlock, BlockWithItemImpl.Getter {
+public class BlockMixin implements BlockWithItem, MModdingBlock {
 
-	@Unique
-	private Item item = null;
+	@Shadow
+	@Nullable
+	private Item cachedItem;
 
 	@Override
 	@SuppressWarnings({"unchecked", "DataFlowIssue"})
 	public <T extends Block> T withItem(Item.@NotNull Settings settings, @NotNull BiFunction<T, Item.Settings, Item> factory,  @NotNull Function<Item, Item> tweaker) {
-		if (this.item == null) {
-			this.item = tweaker.apply(factory.apply((T) (Object) this, settings));
+		if (this.cachedItem == null) {
+			this.cachedItem = tweaker.apply(factory.apply((T) (Object) this, settings));
 			return (T) (Object) this;
 		}
 		else {
@@ -37,10 +37,5 @@ public class BlockMixin implements BlockWithItem, MModdingBlock, BlockWithItemIm
 	@Override
 	public boolean canBeReplaced(BlockState state, @Nullable ItemPlacementContext context) {
 		return context != null ? state.canReplace(context) : state.isReplaceable();
-	}
-
-	@Override
-	public Item mmodding$getItem() {
-		return this.item;
 	}
 }

@@ -6,14 +6,16 @@ import com.mmodding.library.block.impl.wrapper.BlockHeapImpl;
 import com.mmodding.library.java.api.function.AutoMapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -38,7 +40,23 @@ public interface BlockHeap {
 		return new BlockHeapImpl(identifier, factory, settings, names);
 	}
 
-	BlockHeap withItem(FabricItemSettings settings);
+	default BlockHeap withItem() {
+		return this.withItem(new Item.Settings(), BlockItem::new);
+	}
+
+	default BlockHeap withItem(@NotNull Item.Settings settings) {
+		return this.withItem(settings, BlockItem::new);
+	}
+
+	default BlockHeap withItem(@NotNull Item.Settings settings, @NotNull Function<Item, Item> tweaker) {
+		return this.withItem(settings, BlockItem::new, tweaker);
+	}
+
+	default BlockHeap withItem(@NotNull Item.Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory) {
+		return this.withItem(settings, factory, item -> item);
+	}
+
+	BlockHeap withItem(@NotNull Item.Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory,  @NotNull Function<Item, Item> tweaker);
 
 	TagKey<Block> getBlockTagKey();
 
