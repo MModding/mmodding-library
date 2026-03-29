@@ -1,16 +1,15 @@
 package com.mmodding.library.block.api.wrapper;
 
-import com.mmodding.library.block.api.util.AdvancedBlockFactory;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.impl.wrapper.BlockHeapImpl;
 import com.mmodding.library.java.api.function.AutoMapper;
+import com.mmodding.library.java.api.function.Mapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,20 +23,54 @@ import java.util.function.Function;
  */
 public interface BlockHeap {
 
-	static <T extends Block> BlockHeap create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
-		return BlockHeap.create(identifier, AdvancedBlockFactory.of(factory), settings, List.of(names));
+	/**
+	 * Creates a new {@link BlockHeap} from a block factory, shared settings and names.
+	 * @param factory the block factory
+	 * @param settings the block settings
+	 * @param names the names
+	 * @return the block heap
+	 * @param <T> the block class type
+	 */
+	static <T extends Block> BlockHeap create(BlockFactory<T> factory, FabricBlockSettings settings, String... names) {
+		return BlockHeap.create(factory, name -> name, name -> settings, names);
 	}
 
-	static <T extends Block> BlockHeap create(Identifier identifier, BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
-		return BlockHeap.create(identifier, AdvancedBlockFactory.of(factory), settings, names);
+	/**
+	 * Creates a new {@link BlockHeap} from a block factory, shared settings and names.
+	 * @param factory the block factory
+	 * @param settings the block settings
+	 * @param names the names
+	 * @return the block heap
+	 * @param <T> the block class type
+	 */
+	static <T extends Block> BlockHeap create(BlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
+		return new BlockHeapImpl(factory, name -> name, name -> settings, names);
 	}
 
-	static <T extends Block> BlockHeap create(Identifier identifier, AdvancedBlockFactory<T> factory, FabricBlockSettings settings, String... names) {
-		return new BlockHeapImpl(identifier, factory, settings, List.of(names));
+	/**
+	 * Creates a new {@link BlockHeap} from a block factory, a name mapper, a settings mapper, and names.
+	 * @param factory the block factory
+	 * @param nameMapper the name mapper
+	 * @param settingsMapper the settings mapper
+	 * @param names the names
+	 * @return the block heap
+	 * @param <T> the block class type
+	 */
+	static <T extends Block> BlockHeap create(BlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, String... names)  {
+		return BlockHeap.create(factory, nameMapper, settingsMapper, List.of(names));
 	}
 
-	static <T extends Block> BlockHeap create(Identifier identifier, AdvancedBlockFactory<T> factory, FabricBlockSettings settings, List<String> names) {
-		return new BlockHeapImpl(identifier, factory, settings, names);
+	/**
+	 * Creates a new {@link BlockHeap} from a block factory, a name mapper, a settings mapper, and names.
+	 * @param factory the block factory
+	 * @param nameMapper the name mapper
+	 * @param settingsMapper the settings mapper
+	 * @param names the names
+	 * @return the block heap
+	 * @param <T> the block class type
+	 */
+	static <T extends Block> BlockHeap create(BlockFactory<T> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> names)  {
+		return new BlockHeapImpl(factory, nameMapper, settingsMapper, names);
 	}
 
 	default BlockHeap withItem() {
@@ -57,10 +90,6 @@ public interface BlockHeap {
 	}
 
 	BlockHeap withItem(@NotNull Item.Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory,  @NotNull Function<Item, Item> tweaker);
-
-	TagKey<Block> getBlockTagKey();
-
-	TagKey<Item> getItemTagKey();
 
 	List<Block> getEntries();
 
