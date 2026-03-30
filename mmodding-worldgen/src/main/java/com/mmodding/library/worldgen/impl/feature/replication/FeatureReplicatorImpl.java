@@ -2,7 +2,7 @@ package com.mmodding.library.worldgen.impl.feature.replication;
 
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.java.api.function.AutoMapper;
-import com.mmodding.library.worldgen.api.feature.replication.PlacementModifiers;
+import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;

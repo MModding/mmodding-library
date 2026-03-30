@@ -1,94 +1,79 @@
 package com.mmodding.library.worldgen.api.feature;
 
-import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
+import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.worldgen.impl.feature.FeaturePackImpl;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registerable;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public interface FeaturePack<FC extends FeatureConfig> {
 
 	/**
-	 * Allows to create a new {@link FeaturePack} made around a {@link Feature}
+	 * Creates a new {@link FeaturePack} for a {@link Feature}.
 	 * @param feature the feature
 	 * @return the feature pack
 	 * @param <FC> the feature config
 	 */
-	static <FC extends FeatureConfig> FeaturePack<FC> of(Supplier<Feature<FC>> feature) {
+	static <FC extends FeatureConfig> FeaturePack<FC> of(Feature<FC> feature) {
 		return new FeaturePackImpl<>(feature);
 	}
 
 	/**
-	 * Returns the {@link Feature} for which the pack is made around
-	 * @return the feature
-	 */
-	Feature<FC> getFeature();
-
-	/**
-	 * Adds a {@link ConfiguredFeaturePack} in this {@link FeaturePack}
+	 * Adds a {@link ConfiguredFeaturePack} in this {@link FeaturePack}.
 	 * @param key the configured feature's key
 	 * @param featureConfig the feature config
 	 * @param action the action handling placed features
+	 * @return the feature pack
 	 */
-	void appendConfiguredFeature(
-		RegistryKey<ConfiguredFeature<?, ?>> key,
-		FC featureConfig,
-		Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action
-	);
+	FeaturePack<FC> appendConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<ConfiguredFeaturePack<FC>> action);
 
 	/**
-	 * Adds a {@link ConfiguredFeaturePack} in this {@link FeaturePack}
-	 * @param configuredFeature the configured feature's waiting registry entry
+	 * Adds a {@link ConfiguredFeaturePack} from an existing configured feature.
+	 * @param source the configured feature source's key
+	 * @param key the configured feature's key
+	 * @param patcher the feature config patcher
 	 * @param action the action handling placed features
+	 * @return the feature pack
+	 * @apiNote In case you depend on external mods for those configured features, make sure the source mod's resources are loaded before yours, so that the data generator does not fail.
 	 */
-	void appendConfiguredFeature(
-		WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature,
-		Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action
-	);
+	FeaturePack<FC> replicateConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> source, RegistryKey<ConfiguredFeature<?, ?>> key, AutoMapper<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action);
 
 	/**
-	 * Allows to retrieve the current list of all {@link ConfiguredFeaturePack} that are in this {@link FeaturePack<FC>}
-	 * @return the list of all current configured feature packs
-	 */
-	List<ConfiguredFeaturePack<FC>> getConfiguredFeaturePacks();
-
-	/**
-	 * Allows to register all elements that are in this pack
+	 * Registers configured features of this feature pack.
 	 * @param configuredFeatures the configured feature registry
+	 */
+	void registerConfiguredFeatures(Registerable<ConfiguredFeature<?, ?>> configuredFeatures);
+
+	/**
+	 * Registers placed features of this feature pack.
 	 * @param placedFeatures the placed feature registry
 	 */
-	void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures);
+	void registerPlacedFeatures(Registerable<PlacedFeature> placedFeatures);
 
 	interface ConfiguredFeaturePack<FC extends FeatureConfig> {
 
 		/**
-		 * Returns the {@link ConfiguredFeature} for which the pack is made around
-		 * @return the configured feature
-		 */
-		ConfiguredFeature<FC, Feature<FC>> getConfiguredFeature();
-
-		/**
-		 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}
+		 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}.
 		 * @param key the placed feature's key
 		 * @param modifiers the placement modifiers
+		 * @return the configured feature pack
 		 */
-		void appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers);
+		ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers);
 
 		/**
-		 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}
-		 * @param placedFeature the placed feature's waiting registry entry
+		 * Adds a {@link ConfiguredFeaturePack} from an existing placed feature.
+		 * @param source the placed feature source's key
+		 * @param key the placed feature's key
+		 * @param patcher the placement modifiers patcher
+		 * @return the configured feature pack
+		 * @apiNote In case you depend on external mods for those placed features, make sure the source mod's resources are loaded before yours, so that the data generator does not fail.
 		 */
-		void appendPlacedFeature(WaitingRegistryEntry<PlacedFeature> placedFeature);
-
-		/**
-		 * Allows to return the current list of all {@link PlacedFeature} that are in this {@link ConfiguredFeaturePack}
-		 * @return the list of all current placed features
-		 */
-		List<PlacedFeature> getPlacedFeatures();
+		ConfiguredFeaturePack<FC> replicatePlacedFeature(RegistryKey<PlacedFeature> source, RegistryKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher);
 	}
 }

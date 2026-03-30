@@ -1,9 +1,13 @@
 package com.mmodding.library.worldgen.impl.feature;
 
-import net.minecraft.registry.RegistryKey;
-import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
+import com.mmodding.library.java.api.function.AutoMapper;
+import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
-import net.minecraft.registry.Registry;
+import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
+import com.mmodding.library.worldgen.impl.feature.replication.PlacementModifiersImpl;
+import net.minecraft.registry.Registerable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
@@ -11,92 +15,93 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC> {
 
-	private final Supplier<Feature<FC>> feature;
+	private final Feature<FC> feature;
 
 	private final List<ConfiguredFeaturePack<FC>> configuredFeaturePacks;
 
-	public FeaturePackImpl(Supplier<Feature<FC>> feature) {
+	public FeaturePackImpl(Feature<FC> feature) {
 		this.feature = feature;
 		this.configuredFeaturePacks = new ArrayList<>();
 	}
 
 	@Override
-	public Feature<FC> getFeature() {
-		return this.feature.get();
+	public FeaturePack<FC> appendConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
+		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(this.feature, key, ignored -> featureConfig);
+		this.configuredFeaturePacks.add(configuredFeaturePack);
+		action.accept(configuredFeaturePack);
+		return this;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public void appendConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
-		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(
-			new WaitingRegistryEntry<>(
-				(RegistryKey<ConfiguredFeature<FC, Feature<FC>>>) (RegistryKey<?>) key,
-				new ConfiguredFeature<>(this.feature.get(), featureConfig)
-			)
-		);
+	public FeaturePack<FC> replicateConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> source, RegistryKey<ConfiguredFeature<?, ?>> key, AutoMapper<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action) {
+		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(this.feature, key, configuredFeatures -> {
+			ConfiguredFeature<?, ?> sourceConfiguredFeature = configuredFeatures.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(source).value();
+			return patcher.map((FC) sourceConfiguredFeature.config());
+		});
 		this.configuredFeaturePacks.add(configuredFeaturePack);
 		action.accept(configuredFeaturePack);
+		return this;
 	}
 
 	@Override
-	public void appendConfiguredFeature(WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature, Consumer<FeaturePack.ConfiguredFeaturePack<FC>> action) {
-		FeaturePack.ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(configuredFeature);
-		this.configuredFeaturePacks.add(configuredFeaturePack);
-		action.accept(configuredFeaturePack);
-	}
-
-	@Override
-	public List<FeaturePack.ConfiguredFeaturePack<FC>> getConfiguredFeaturePacks() {
-		return this.configuredFeaturePacks;
-	}
-
-	@Override
-	public void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures) {
+	public void registerConfiguredFeatures(Registerable<ConfiguredFeature<?, ?>> configuredFeatures) {
 		this.configuredFeaturePacks.forEach(pack -> {
 			ConfiguredFeaturePackImpl<FC> impl = (ConfiguredFeaturePackImpl<FC>) pack;
-			impl.register(configuredFeatures, placedFeatures);
+			impl.registerSelf(configuredFeatures);
+		});
+	}
+
+	@Override
+	public void registerPlacedFeatures(Registerable<PlacedFeature> placedFeatures) {
+		this.configuredFeaturePacks.forEach(pack -> {
+			ConfiguredFeaturePackImpl<FC> impl = (ConfiguredFeaturePackImpl<FC>) pack;
+			impl.register(placedFeatures);
 		});
 	}
 
 	private static class ConfiguredFeaturePackImpl<FC extends FeatureConfig> implements FeaturePack.ConfiguredFeaturePack<FC> {
 
-		private final WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature;
+		private final Feature<FC> feature;
+		private final RegistryKey<ConfiguredFeature<?, ?>> configuredFeatureKey;
+		private final Function<Registerable<ConfiguredFeature<?, ?>>, FC> featureConfig;
+		private final BiList<RegistryKey<PlacedFeature>, Function<Registerable<PlacedFeature>, List<PlacementModifier>>> placedFeatures;
 
-		private final List<WaitingRegistryEntry<PlacedFeature>> placedFeatures;
-
-		private ConfiguredFeaturePackImpl(WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> configuredFeature) {
-			this.configuredFeature = configuredFeature;
-			this.placedFeatures = new ArrayList<>();
+		private ConfiguredFeaturePackImpl(Feature<FC> feature, RegistryKey<ConfiguredFeature<?, ?>> configuredFeatureKey, Function<Registerable<ConfiguredFeature<?, ?>>, FC> featureConfig) {
+			this.feature = feature;
+			this.configuredFeatureKey = configuredFeatureKey;
+			this.featureConfig = featureConfig;
+			this.placedFeatures = BiList.create();
 		}
 
 		@Override
-		public ConfiguredFeature<FC, Feature<FC>> getConfiguredFeature() {
-			return WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0);
+		public ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers) {
+			this.placedFeatures.add(key, ignored -> List.of(modifiers));
+			return this;
 		}
 
 		@Override
-		public void appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers) {
-			this.placedFeatures.add(new WaitingRegistryEntry<>(key, new PlacedFeature(RegistryEntry.of(WaitingRegistryEntry.retrieveElements(List.of(this.configuredFeature)).get(0)), List.of(modifiers))));
+		public ConfiguredFeaturePack<FC> replicatePlacedFeature(RegistryKey<PlacedFeature> source, RegistryKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher) {
+			this.placedFeatures.add(key, placedFeatures -> {
+				PlacedFeature sourcePlacedFeature = placedFeatures.getRegistryLookup(RegistryKeys.PLACED_FEATURE).getOrThrow(source).value();
+				PlacementModifiersImpl modifiers = new PlacementModifiersImpl(sourcePlacedFeature.placementModifiers());
+				patcher.accept(modifiers);
+				return modifiers.retrieve();
+			});
+			return this;
 		}
 
-		@Override
-		public void appendPlacedFeature(WaitingRegistryEntry<PlacedFeature> placedFeature) {
-			this.placedFeatures.add(placedFeature);
+		private void registerSelf(Registerable<ConfiguredFeature<?, ?>> configuredFeatures) {
+			ConfiguredFeatures.register(configuredFeatures, this.configuredFeatureKey, this.feature, this.featureConfig.apply(configuredFeatures));
 		}
 
-		@Override
-		public List<PlacedFeature> getPlacedFeatures() {
-			return WaitingRegistryEntry.retrieveElements(this.placedFeatures);
-		}
-
-		@SuppressWarnings("unchecked")
-		private void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures) {
-			((WaitingRegistryEntry<ConfiguredFeature<?,?>>) (WaitingRegistryEntry<?>) this.configuredFeature).register(configuredFeatures);
-			this.placedFeatures.forEach(placedFeature -> placedFeature.register(placedFeatures));
+		private void register(Registerable<PlacedFeature> placedFeatures) {
+			RegistryEntry.Reference<ConfiguredFeature<?, ?>> entry = placedFeatures.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(this.configuredFeatureKey);
+			this.placedFeatures.forEach((placedFeatureKey, modifiers) -> PlacedFeatures.register(placedFeatures, placedFeatureKey, entry, modifiers.apply(placedFeatures)));
 		}
 	}
 }

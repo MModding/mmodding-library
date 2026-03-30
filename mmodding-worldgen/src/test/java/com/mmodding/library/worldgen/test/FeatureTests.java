@@ -1,11 +1,11 @@
 package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.AdvancedContainer;
-import com.mmodding.library.java.api.object.Holder;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
-import com.mmodding.library.worldgen.api.feature.replication.FeatureReplicator;
-import net.minecraft.registry.Registry;
+import net.minecraft.registry.Registerable;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier;
@@ -13,48 +13,47 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 
 public class FeatureTests {
 
-	public static final Holder<FeaturePack<RandomPatchFeatureConfig>> RANDOM_PATCH = Holder.create();
+	public static final FeaturePack<RandomPatchFeatureConfig> RANDOM_PATCH = FeaturePack.of(Feature.RANDOM_PATCH)
+		.appendConfiguredFeature(
+			configured("test"),
+			new RandomPatchFeatureConfig(0, 0, 0, null),
+			configuredPack -> configuredPack.appendPlacedFeature(
+				placed("test"),
+				BiomePlacementModifier.of()
+			)
+		)
+		.replicateConfiguredFeature(
+			VegetationConfiguredFeatures.FLOWER_DEFAULT,
+			configured("inner_test"),
+			fc -> {
+				int tries = 3;
+				return new RandomPatchFeatureConfig(
+					tries, fc.xzSpread(), fc.ySpread(), fc.feature()
+				);
+			},
+			configuredPack -> configuredPack.replicatePlacedFeature(
+				VegetationPlacedFeatures.FLOWER_DEFAULT,
+				placed("inner_test"),
+				modifiers -> modifiers.mutateTypeTo(
+					PlacementModifierType.COUNT,
+					modifier -> CountPlacementModifier.of(2)
+				)
+			)
+		);
 
-	public FeatureTests(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
-		RANDOM_PATCH.assign(() -> FeaturePack.of(() -> Feature.RANDOM_PATCH));
-		RANDOM_PATCH.ifPresent(randomPatch -> {
-			randomPatch.appendConfiguredFeature(
-				mod.createKey(RegistryKeys.CONFIGURED_FEATURE, ""),
-				new RandomPatchFeatureConfig(0, 0, 0, null),
-				configuredPack -> configuredPack.appendPlacedFeature(
-					mod.createKey(RegistryKeys.PLACED_FEATURE, ""),
-					BiomePlacementModifier.of()
-				)
-			);
-			randomPatch.appendConfiguredFeature(
-				FeatureReplicator.replicateConfiguredFeature(
-					mod.createKey(RegistryKeys.CONFIGURED_FEATURE, ""),
-					configuredFeatures.get(VegetationConfiguredFeatures.FLOWER_DEFAULT),
-					fc -> {
-						int tries = 3;
-						return new RandomPatchFeatureConfig(
-							tries, fc.xzSpread(), fc.ySpread(), fc.feature()
-						);
-					}
-				),
-				configuredPack -> configuredPack.appendPlacedFeature(
-					FeatureReplicator.replicatePlacedFeature(
-						mod.createKey(RegistryKeys.PLACED_FEATURE, ""),
-						placedFeatures.get(VegetationPlacedFeatures.FLOWER_DEFAULT),
-						modifiers -> {
-							modifiers.mutateTypeTo(
-								PlacementModifierType.COUNT,
-								modifier -> CountPlacementModifier.of(2)
-							);
-							return modifiers;
-						}
-					)
-				)
-			);
-		});
+	private static RegistryKey<ConfiguredFeature<?, ?>> configured(String path) {
+		return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of("mmodding_worldgen_test", path));
 	}
 
-	public static void register(Registry<ConfiguredFeature<?, ?>> configuredFeatures, Registry<PlacedFeature> placedFeatures, AdvancedContainer mod) {
-		RANDOM_PATCH.get().register(configuredFeatures, placedFeatures);
+	private static RegistryKey<PlacedFeature> placed(String path) {
+		return RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of("mmodding_worldgen_test", path));
+	}
+
+	public static void registerConfiguredFeatures(Registerable<ConfiguredFeature<?, ?>> configuredFeatures, AdvancedContainer mod) {
+		RANDOM_PATCH.registerConfiguredFeatures(configuredFeatures);
+	}
+
+	public static void registerPlacedFeatures(Registerable<PlacedFeature> placedFeatures) {
+		RANDOM_PATCH.registerPlacedFeatures(placedFeatures);
 	}
 }

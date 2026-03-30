@@ -1,4 +1,4 @@
-package com.mmodding.library.worldgen.api.feature.replication;
+package com.mmodding.library.worldgen.api.feature;
 
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
