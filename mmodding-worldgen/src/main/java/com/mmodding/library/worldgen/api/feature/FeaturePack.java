@@ -10,6 +10,7 @@ import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public interface FeaturePack<FC extends FeatureConfig> {
@@ -65,6 +66,14 @@ public interface FeaturePack<FC extends FeatureConfig> {
 		 * @return the configured feature pack
 		 */
 		ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers);
+
+		/**
+		 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}.
+		 * @param key the placed feature's key
+		 * @param modifiers the placement modifiers
+		 * @return the configured feature pack
+		 */
+		ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, List<PlacementModifier> modifiers);
 
 		/**
 		 * Adds a {@link ConfiguredFeaturePack} from an existing placed feature.

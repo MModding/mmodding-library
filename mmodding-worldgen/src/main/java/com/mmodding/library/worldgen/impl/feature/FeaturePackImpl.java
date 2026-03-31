@@ -80,7 +80,12 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 
 		@Override
 		public ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers) {
-			this.placedFeatures.add(key, ignored -> List.of(modifiers));
+			return this.appendPlacedFeature(key, List.of(modifiers));
+		}
+
+		@Override
+		public ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, List<PlacementModifier> modifiers) {
+			this.placedFeatures.add(key, ignored -> modifiers);
 			return this;
 		}
 
