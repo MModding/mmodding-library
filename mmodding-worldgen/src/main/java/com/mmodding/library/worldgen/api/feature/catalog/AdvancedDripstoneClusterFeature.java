@@ -1,12 +1,11 @@
 package com.mmodding.library.worldgen.api.feature.catalog;
 
+import com.mmodding.library.worldgen.impl.feature.helper.AdvancedDripstoneHelper;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.PointedDripstoneBlock;
-import net.minecraft.block.enums.Thickness;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +27,6 @@ import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.Consumer;
 
 public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneClusterFeature.Config> {
 
@@ -149,11 +147,11 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 
 				boolean bl4 = random.nextBoolean() && m > 0 && t > 0 && caveSurface.getOptionalHeight().isPresent() && m + t == caveSurface.getOptionalHeight().getAsInt();
 				if (optionalInt.isPresent()) {
-					generatePointedDripstone(pointedDripstoneBlock, world, pos.withY(optionalInt.getAsInt() - 1), Direction.DOWN, m, bl4);
+					AdvancedDripstoneHelper.generatePointedDripstone(pointedDripstoneBlock, world, pos.withY(optionalInt.getAsInt() - 1), Direction.DOWN, m, bl4);
 				}
 
 				if (optionalInt3.isPresent()) {
-					generatePointedDripstone(pointedDripstoneBlock, world, pos.withY(optionalInt3.getAsInt() + 1), Direction.UP, t, bl4);
+					AdvancedDripstoneHelper.generatePointedDripstone(pointedDripstoneBlock, world, pos.withY(optionalInt3.getAsInt() + 1), Direction.UP, t, bl4);
 				}
 			}
 		}
@@ -197,7 +195,7 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 		BlockPos.Mutable mutable = pos.mutableCopy();
 
 		for(int i = 0; i < height; i++) {
-			if (!generateDripstoneBlock(dripstoneBlock, world, mutable)) {
+			if (!AdvancedDripstoneHelper.generateDripstoneBlock(dripstoneBlock, world, mutable)) {
 				return;
 			}
 
@@ -216,58 +214,6 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 
 	private static float clampedGaussian(Random random, float min, float max, float mean, float deviation) {
 		return ClampedNormalFloatProvider.get(random, mean, deviation, min, max);
-	}
-
-	// Adapted methods from DripstoneHelper to support the custom blocks.
-
-	private static void getDripstoneThickness(Block pointedDripstoneBlock, Direction direction, int height, boolean merge, Consumer<BlockState> callback) {
-		if (height >= 3) {
-			callback.accept(getState(pointedDripstoneBlock, direction, Thickness.BASE));
-
-			for(int i = 0; i < height - 3; ++i) {
-				callback.accept(getState(pointedDripstoneBlock, direction, Thickness.MIDDLE));
-			}
-		}
-
-		if (height >= 2) {
-			callback.accept(getState(pointedDripstoneBlock, direction, Thickness.FRUSTUM));
-		}
-
-		if (height >= 1) {
-			callback.accept(getState(pointedDripstoneBlock, direction, merge ? Thickness.TIP_MERGE : Thickness.TIP));
-		}
-	}
-
-	private static void generatePointedDripstone(Block pointedDripstoneBlock, WorldAccess world, BlockPos pos, Direction direction, int height, boolean merge) {
-		if (canReplace(pointedDripstoneBlock, world.getBlockState(pos.offset(direction.getOpposite())))) {
-			BlockPos.Mutable mutable = pos.mutableCopy();
-			getDripstoneThickness(pointedDripstoneBlock, direction, height, merge, state -> {
-				if (state.isOf(pointedDripstoneBlock)) {
-					state = state.with(PointedDripstoneBlock.WATERLOGGED, world.isWater(mutable));
-				}
-
-				world.setBlockState(mutable, state, 2);
-				mutable.move(direction);
-			});
-		}
-	}
-
-	private static boolean generateDripstoneBlock(Block pointedDripstoneBlock, WorldAccess world, BlockPos pos) {
-		BlockState blockState = world.getBlockState(pos);
-		if (blockState.isIn(BlockTags.DRIPSTONE_REPLACEABLE_BLOCKS)) {
-			world.setBlockState(pos, pointedDripstoneBlock.getDefaultState(), 2);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static BlockState getState(Block pointedDripstoneBlock, Direction direction, Thickness thickness) {
-		return pointedDripstoneBlock.getDefaultState().with(PointedDripstoneBlock.VERTICAL_DIRECTION, direction).with(PointedDripstoneBlock.THICKNESS, thickness);
-	}
-
-	private static boolean canReplace(Block pointedDripstoneBlock, BlockState state) {
-		return state.isOf(pointedDripstoneBlock) || state.isIn(BlockTags.DRIPSTONE_REPLACEABLE_BLOCKS);
 	}
 
 	public static class Config extends DripstoneClusterFeatureConfig {
