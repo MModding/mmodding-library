@@ -13,7 +13,7 @@ public class MModdingFeatures {
 	public static final Feature<AdvancedDripstoneClusterFeature.Config> ADVANCED_DRIPSTONE_CLUSTER = register("advanced_dripstone_cluster", new AdvancedDripstoneClusterFeature(AdvancedDripstoneClusterFeature.Config.CODEC));
 	public static final Feature<AdvancedLargeDripstoneFeature.Config> ADVANCED_LARGE_DRIPSTONE = register("advanced_large_dripstone", new AdvancedLargeDripstoneFeature(AdvancedLargeDripstoneFeature.Config.CODEC));
 	public static final Feature<AdvancedLiquidVegetationPatchFeature.Config> ADVANCED_LIQUID_VEGETATION_PATCH = register("advanced_liquid_vegetation_patch", new AdvancedLiquidVegetationPatchFeature(AdvancedLiquidVegetationPatchFeature.Config.CODEC));
-	public static final Feature<LayeredFeature.Config> LAYERED_FEATURE = register("layered_feature", new LayeredFeature(LayeredFeature.Config.CODEC));
+	public static final Feature<LayeredFeature.Config> LAYERED = register("layered", new LayeredFeature(LayeredFeature.Config.CODEC));
 
 	private static <C extends FeatureConfig, F extends Feature<C>> F register(String path, F feature) {
 		return Registry.register(Registries.FEATURE, MModdingLibrary.createId(path), feature);
