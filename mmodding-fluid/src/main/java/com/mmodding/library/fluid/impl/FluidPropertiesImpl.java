@@ -1,24 +1,20 @@
 package com.mmodding.library.fluid.impl;
 
-import com.mmodding.library.fluid.api.FluidBehavior;
+import com.mmodding.library.fluid.api.property.FluidProperties;
 import com.mmodding.library.fluid.api.property.FluidProperty;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 
-public class FluidPropertiesImpl implements FluidBehavior.FluidProperties {
+@ApiStatus.Internal
+public class FluidPropertiesImpl implements FluidProperties {
 
-	private final Map<Identifier, Object> properties = new Object2ObjectOpenHashMap<>();
+	private final Map<Identifier, Object> properties;
 
-	@Override
-	public <T> void withFluidProperty(FluidProperty<T> fluidProperty) {
-		this.withFluidProperty(fluidProperty, fluidProperty.getFallback());
-	}
-
-	@Override
-	public <T> void withFluidProperty(FluidProperty<T> fluidProperty, T value) {
-		this.properties.put(fluidProperty.getIdentifier(), value);
+	private FluidPropertiesImpl(Map<Identifier, Object> properties) {
+		this.properties = properties;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -28,6 +24,20 @@ public class FluidPropertiesImpl implements FluidBehavior.FluidProperties {
 		}
 		else {
 			return fluidProperty.getFallback();
+		}
+	}
+
+	public static class Builder implements FluidProperties.Builder {
+
+		private final Map<Identifier, Object> properties = new Object2ObjectOpenHashMap<>();
+
+		@Override
+		public <T> void withFluidProperty(FluidProperty<T> fluidProperty, T value) {
+			this.properties.put(fluidProperty.getIdentifier(), value);
+		}
+
+		public FluidProperties build() {
+			return new FluidPropertiesImpl(this.properties);
 		}
 	}
 }

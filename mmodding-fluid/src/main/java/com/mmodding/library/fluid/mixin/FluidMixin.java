@@ -1,6 +1,5 @@
 package com.mmodding.library.fluid.mixin;
 
-import com.mmodding.library.fluid.api.FluidLike;
 import net.minecraft.fluid.Fluid;
 import org.spongepowered.asm.mixin.Mixin;
 
