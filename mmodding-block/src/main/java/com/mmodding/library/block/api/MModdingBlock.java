@@ -5,8 +5,9 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 
 @InjectedContent(AbstractBlock.class)
@@ -26,8 +27,11 @@ public interface MModdingBlock {
 	 * Do not forget to make the super-call when that is not the case!
 	 */
 	@ApiStatus.OverrideOnly
-	@MustBeInvokedByOverriders
 	default boolean canBeReplaced(BlockState state, @Nullable ItemPlacementContext context) {
 		throw new IllegalStateException();
+	}
+
+	default float getVelocityMultiplier(World world, BlockPos pos, BlockState state) {
+		return 1.0f;
 	}
 }

@@ -1,6 +1,5 @@
 package com.mmodding.library.block.impl.wrapper;
 
-import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
