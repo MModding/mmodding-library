@@ -28,6 +28,16 @@ public class RegistryKeyAttachmentImpl<T, E> implements RegistryKeyAttachment<T,
 	}
 
 	@Override
+	public boolean contains(T object) {
+		return this.contains(this.registry.getKey(object).orElseThrow());
+	}
+
+	@Override
+	public boolean contains(RegistryKey<T> key) {
+		return this.map.containsKey(key);
+	}
+
+	@Override
 	public E get(T object) {
 		return this.get(this.registry.getKey(object).orElseThrow());
 	}

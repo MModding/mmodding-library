@@ -37,6 +37,18 @@ public interface RegistryKeyAttachment<T, E> {
 	void put(RegistryKey<T> key, E value);
 
 	/**
+	 * Checks if an object has an attached value through its registry key.
+	 * @param object the object
+	 */
+	boolean contains(T object);
+
+	/**
+	 * Checks if a registry key has an associated value.
+	 * @param key the registry key
+	 */
+	boolean contains(RegistryKey<T> key);
+
+	/**
 	 * Retrieves an attached value of an object using object's registry key.
 	 * @param object the object
 	 * @return the attached value
