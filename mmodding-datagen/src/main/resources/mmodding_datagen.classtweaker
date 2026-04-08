@@ -1,4 +1,4 @@
-accessWidener v1 named
+classTweaker v1 named
 
 accessible method net/minecraft/data/client/Models make ([Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/Model;
 accessible method net/minecraft/data/client/Models block (Ljava/lang/String;[Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/Model;

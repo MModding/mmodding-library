@@ -1,4 +1,4 @@
-accessWidener v1 named
+classTweaker v1 named
 
 accessible method net/minecraft/world/gen/feature/util/DripstoneHelper canGenerate (Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;)Z
 accessible method net/minecraft/world/gen/feature/util/DripstoneHelper canGenerateBase (Lnet/minecraft/world/StructureWorldAccess;Lnet/minecraft/util/math/BlockPos;I)Z
