@@ -181,6 +181,7 @@ mmodding {
 		include("mmodding-datagen")
 		include("mmodding-enchantment")
 		include("mmodding-fluid")
+		include("mmodding-inventory")
 		include("mmodding-item")
 		include("mmodding-java")
 		include("mmodding-math")
@@ -188,6 +189,7 @@ mmodding {
 		include("mmodding-state")
 		include("mmodding-worldgen")
 
+		// Required for Full Bundle Classes
 		api("mmodding-core")
 		api("mmodding-worldgen")
 	}
