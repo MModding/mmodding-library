@@ -1,0 +1,5 @@
+classTweaker v1 named
+
+transitive-inject-interface net/minecraft/block/Block com/mmodding/library/block/api/BlockWithItem
+transitive-inject-interface net/minecraft/block/Block com/mmodding/library/block/api/MModdingBlock
+transitive-inject-interface net/minecraft/block/BlockState com/mmodding/library/block/api/MModdingBlockState

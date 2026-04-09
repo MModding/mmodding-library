@@ -1,0 +1,3 @@
+classTweaker v1 named
+
+transitive-inject-interface net/minecraft/registry/RegistryKey com/mmodding/library/core/api/registry/extension/RegistryKeyExtension<TT;>

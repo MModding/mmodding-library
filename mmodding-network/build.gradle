@@ -1,15 +1,14 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 
 mmodding {
+	loom.accessWidenerPath = file("src/main/resources/mmodding_network.classtweaker")
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
+		accessWidener = "mmodding_network.classtweaker"
 		addMixin("mmodding_network.mixins.json")
 		withEntrypoints {
 			it.init("com.mmodding.library.network.impl.NetworkInitializer")
 			it.client("com.mmodding.library.network.impl.NetworkClientInitializer")
-		}
-		withInjectedInterfaces {
-			it.injectTo("net/minecraft/class_2540", "com/mmodding/library/network/api/PacketByteBufExtension")
 		}
 	}
 	modules {

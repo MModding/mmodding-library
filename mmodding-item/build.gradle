@@ -1,8 +1,10 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 
 mmodding {
+	loom.accessWidenerPath = file("src/main/resources/mmodding_item.classtweaker")
 	configureFabricModJson {
 		environment = EnvironmentTarget.ANY
+		accessWidener = "mmodding_item.classtweaker"
 		addMixin("mmodding_item.mixins.json")
 		withInjectedInterfaces {
 			it.injectTo("net/minecraft/class_1792", "com/mmodding/library/item/api/category/ItemCategoryContainer")
