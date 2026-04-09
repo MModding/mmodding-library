@@ -1,6 +1,6 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
-java = "17"
+java = "21"
 minecraft = "1.20.1"
 fabric_loader = "0.18.0"
 
@@ -36,4 +36,4 @@ quilt_parsers_json = { module = "org.quiltmc.parsers:json", version.ref = "quilt
 
 [plugins]
 fabric_loom = { id = "fabric-loom", version = "1.16-SNAPSHOT" }
-mmodding_gradle = { id = "com.mmodding.gradle", version = "0.1.1" }
+mmodding_gradle = { id = "com.mmodding.gradle", version = "0.1.2" }
