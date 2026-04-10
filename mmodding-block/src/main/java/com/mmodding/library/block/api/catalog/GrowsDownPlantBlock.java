@@ -1,6 +1,8 @@
 package com.mmodding.library.block.api.catalog;
 
 import com.mmodding.library.core.api.AdvancedContainer;
+import com.mmodding.library.java.api.function.AutoMapper;
+import com.mmodding.library.java.api.object.Wrapper;
 import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,10 +19,10 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
-public class GrowsDownPlantBlock {
+public class GrowsDownPlantBlock implements Wrapper<Block> {
 
-	private final Head head;
-	private final Body body;
+	private Head head;
+	private Body body;
 
 	public GrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
 		this(Head::new, Body::new, settings, tickWater, growthChance, growLength, chooseStemState);
@@ -44,28 +46,16 @@ public class GrowsDownPlantBlock {
 		return state;
 	}
 
+	@Override
+	public void configure(AutoMapper<Block> mapper) {
+		this.head = (Head) mapper.map(this.head);
+		this.body = (Body) mapper.map(this.body);
+	}
+
 	public void register(AdvancedContainer mod, String path) {
 		mod.register(Registries.BLOCK, path + "_head", this.head);
 		mod.register(Registries.BLOCK, path, this.body);
 	}
-
-	/* @ClientOnly
-	public void cutout() {
-		RenderLayerOperations.setCutout(this.head);
-		RenderLayerOperations.setCutout(this.body);
-	}
-
-	@ClientOnly
-	public void translucent() {
-		RenderLayerOperations.setTranslucent(this.head);
-		RenderLayerOperations.setTranslucent(this.body);
-	}
-
-	@ClientOnly
-	public void transparent() {
-		RenderLayerOperations.setTransparent(this.head);
-		RenderLayerOperations.setTransparent(this.body);
-	} */
 
 	public static class Head extends AbstractPlantStemBlock {
 
