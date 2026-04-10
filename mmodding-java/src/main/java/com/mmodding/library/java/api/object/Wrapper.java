@@ -3,9 +3,9 @@ package com.mmodding.library.java.api.object;
 import com.mmodding.library.java.api.function.AutoMapper;
 
 /**
- * Represents a wrapper of a {@link T} object;
+ * Represents a wrapper of type {@link W}, wrapping an object of type {@link T};
  */
-public interface Wrapper<T> {
+public interface Wrapper<W extends Wrapper<W, T>, T> {
 
-	void configure(AutoMapper<T> configuration);
+	W configure(AutoMapper<T> configuration);
 }

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
-public class GrowsDownPlantBlock implements Wrapper<Block> {
+public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> {
 
 	private Head head;
 	private Body body;
@@ -46,10 +46,21 @@ public class GrowsDownPlantBlock implements Wrapper<Block> {
 		return state;
 	}
 
+	public GrowsDownPlantBlock configureHead(AutoMapper<Head> mapper) {
+		this.head = mapper.map(this.head);
+		return this;
+	}
+
+	public GrowsDownPlantBlock configureBody(AutoMapper<Body> mapper) {
+		this.body = mapper.map(this.body);
+		return this;
+	}
+
 	@Override
-	public void configure(AutoMapper<Block> mapper) {
-		this.head = (Head) mapper.map(this.head);
-		this.body = (Body) mapper.map(this.body);
+	public GrowsDownPlantBlock configure(AutoMapper<Block> mapper) {
+		this.configureHead(head -> (Head) mapper.map(head));
+		this.configureBody(body -> (Body) mapper.map(body));
+		return this;
 	}
 
 	public void register(AdvancedContainer mod, String path) {
