@@ -2,12 +2,12 @@ package com.mmodding.library.core.impl.management.content;
 
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.ResourceProvider;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.data.worldgen.BootstapContext;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public class BootstrapFunctionImpl<T> implements RegistryBuilder.BootstrapFunction<T> {
+public class BootstrapFunctionImpl<T> implements RegistrySetBuilder.RegistryBootstrap<T> {
 
 	private final AdvancedContainer mod;
 	private final ResourceProvider<T> provider;
@@ -18,7 +18,7 @@ public class BootstrapFunctionImpl<T> implements RegistryBuilder.BootstrapFuncti
 	}
 
 	@Override
-	public void run(Registerable<T> registerable) {
+	public void run(BootstapContext<T> registerable) {
 		this.provider.run(this.mod, registerable);
 	}
 }

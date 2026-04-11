@@ -8,19 +8,18 @@ import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import java.util.List;
 import java.util.Optional;
 
 public class TranslationTypeImpl<T> implements DataContentType<T, TranslationProcessor<T>> {
 
-	private final RegistryKey<? extends Registry<T>> registry;
+	private final ResourceKey<? extends Registry<T>> registry;
 
-	public TranslationTypeImpl(RegistryKey<? extends Registry<T>> registry) {
+	public TranslationTypeImpl(ResourceKey<? extends Registry<T>> registry) {
 		this.registry = registry;
 	}
 
@@ -31,10 +30,10 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 
 	private static class AutomatedLanguageProvider<T> extends MModdingLanguageProvider {
 
-		private final RegistryKey<? extends Registry<T>> registry;
+		private final ResourceKey<? extends Registry<T>> registry;
 		private final BiList<TranslationProcessor<T>, List<T>> contentToProcess;
 
-		protected AutomatedLanguageProvider(RegistryKey<? extends Registry<T>> registry, BiList<TranslationProcessor<T>, List<T>> contentToProcess, FabricDataOutput output) {
+		protected AutomatedLanguageProvider(ResourceKey<? extends Registry<T>> registry, BiList<TranslationProcessor<T>, List<T>> contentToProcess, FabricDataOutput output) {
 			super(output);
 			this.registry = registry;
 			this.contentToProcess = contentToProcess;
@@ -46,9 +45,9 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (T element : elements) {
 					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
-						Registry<T> registry = (Registry<T>) Registries.REGISTRIES.get((RegistryKey) this.registry);
+						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get((ResourceKey) this.registry);
 						assert registry != null;
-						Optional<RegistryKey<T>> optional = registry.getKey(element);
+						Optional<ResourceKey<T>> optional = registry.getResourceKey(element);
 						optional.ifPresentOrElse(
 							key -> {
 								TranslationSupport.TranslationCallback callback = translation -> translationBuilder.add(
@@ -70,16 +69,16 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 
 		@Override
 		public String getName() {
-			return "Automated " + this.registry.getValue() + " " + super.getName();
+			return "Automated " + this.registry.location() + " " + super.getName();
 		}
 	}
 
 	static {
-		TranslationSupport.addTranslationSupport(RegistryKeys.ITEM, (callback, object) -> callback.apply(object.getTranslationKey()));
-		TranslationSupport.addTranslationSupport(RegistryKeys.BLOCK, (callback, object) -> callback.apply(object.getTranslationKey()));
-		TranslationSupport.addTranslationSupport(RegistryKeys.ENTITY_TYPE, (callback, object) -> callback.apply(object.getTranslationKey()));
-		TranslationSupport.addTranslationSupport(RegistryKeys.ENCHANTMENT, (callback, object) -> callback.apply(object.getTranslationKey()));
-		TranslationSupport.addTranslationSupport(RegistryKeys.ATTRIBUTE, (callback, object) -> callback.apply(object.getTranslationKey()));
-		TranslationSupport.addTranslationSupport(RegistryKeys.STAT_TYPE, (callback, object) -> callback.apply(object.getTranslationKey()));
+		TranslationSupport.addTranslationSupport(Registries.ITEM, (callback, object) -> callback.apply(object.getDescriptionId()));
+		TranslationSupport.addTranslationSupport(Registries.BLOCK, (callback, object) -> callback.apply(object.getDescriptionId()));
+		TranslationSupport.addTranslationSupport(Registries.ENTITY_TYPE, (callback, object) -> callback.apply(object.getDescriptionId()));
+		TranslationSupport.addTranslationSupport(Registries.ENCHANTMENT, (callback, object) -> callback.apply(object.getDescriptionId()));
+		TranslationSupport.addTranslationSupport(Registries.ATTRIBUTE, (callback, object) -> callback.apply(object.getDescriptionId()));
+		TranslationSupport.addTranslationSupport(Registries.STAT_TYPE, (callback, object) -> callback.apply(object.getTranslationKey()));
 	}
 }

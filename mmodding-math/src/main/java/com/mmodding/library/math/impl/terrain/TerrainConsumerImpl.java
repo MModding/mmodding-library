@@ -1,9 +1,8 @@
 package com.mmodding.library.math.impl.terrain;
 
 import com.mmodding.library.math.api.terrain.TerrainConsumer;
-import net.minecraft.util.math.BlockPos;
-
 import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
 
 public class TerrainConsumerImpl implements TerrainConsumer {
 

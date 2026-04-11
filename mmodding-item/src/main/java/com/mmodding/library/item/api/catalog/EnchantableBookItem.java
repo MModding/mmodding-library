@@ -1,9 +1,8 @@
 package com.mmodding.library.item.api.catalog;
 
-import net.minecraft.item.BookItem;
-import net.minecraft.item.EnchantedBookItem;
-
 import java.util.function.Supplier;
+import net.minecraft.world.item.BookItem;
+import net.minecraft.world.item.EnchantedBookItem;
 
 /**
  * A {@link BookItem} class supporting enchantments.
@@ -12,7 +11,7 @@ public class EnchantableBookItem extends BookItem {
 
 	private final Supplier<EnchantedBookItem> enchantedBookItem;
 
-	public EnchantableBookItem(Supplier<EnchantedBookItem> enchantedBookItem, Settings settings) {
+	public EnchantableBookItem(Supplier<EnchantedBookItem> enchantedBookItem, Properties settings) {
 		super(settings);
 		this.enchantedBookItem = enchantedBookItem;
 	}

@@ -4,8 +4,7 @@ import com.mmodding.library.datagen.api.recipe.RecipeGenerator;
 import com.mmodding.library.datagen.impl.recipe.RecipeHelperImpl;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
-
+import net.minecraft.data.recipes.FinishedRecipe;
 import java.util.function.Consumer;
 
 /**
@@ -18,7 +17,7 @@ public abstract class MModdingRecipeProvider extends FabricRecipeProvider {
 	}
 
 	@Override
-	public void generate(Consumer<RecipeJsonProvider> exporter) {
+	public void buildRecipes(Consumer<FinishedRecipe> exporter) {
 		this.generate((RecipeGenerator) item -> new RecipeHelperImpl(exporter, item));
 	}
 

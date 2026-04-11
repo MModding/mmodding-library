@@ -1,10 +1,10 @@
 package com.mmodding.library.worldgen.impl.seed;
 
-import com.mmodding.library.core.api.registry.attachment.DynamicRegistryKeyAttachment;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.world.World;
+import com.mmodding.library.core.api.registry.attachment.DynamicResourceKeyAttachment;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.Level;
 
 public class IndependentSeedImpl {
 
-	public static final DynamicRegistryKeyAttachment<World, Boolean> ATTACHMENT = DynamicRegistryKeyAttachment.create(RegistryKeys.WORLD);
+	public static final DynamicResourceKeyAttachment<Level, Boolean> ATTACHMENT = DynamicResourceKeyAttachment.create(Registries.DIMENSION);
 }

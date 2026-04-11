@@ -2,58 +2,63 @@ package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placementmodifier.BiomePlacementModifier;
-import net.minecraft.world.gen.placementmodifier.CountPlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.features.VegetationFeatures;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 public class FeatureTests {
 
-	public static final FeaturePack<RandomPatchFeatureConfig> RANDOM_PATCH = FeaturePack.of(Feature.RANDOM_PATCH)
+	public static final FeaturePack<RandomPatchConfiguration> RANDOM_PATCH = FeaturePack.of(Feature.RANDOM_PATCH)
 		.appendConfiguredFeature(
 			configured("test"),
-			new RandomPatchFeatureConfig(0, 0, 0, null),
+			new RandomPatchConfiguration(0, 0, 0, null),
 			configuredPack -> configuredPack.appendPlacedFeature(
 				placed("test"),
-				BiomePlacementModifier.of()
+				BiomeFilter.biome()
 			)
 		)
 		.replicateConfiguredFeature(
-			VegetationConfiguredFeatures.FLOWER_DEFAULT,
+			VegetationFeatures.FLOWER_DEFAULT,
 			configured("inner_test"),
 			fc -> {
 				int tries = 3;
-				return new RandomPatchFeatureConfig(
+				return new RandomPatchConfiguration(
 					tries, fc.xzSpread(), fc.ySpread(), fc.feature()
 				);
 			},
 			configuredPack -> configuredPack.replicatePlacedFeature(
-				VegetationPlacedFeatures.FLOWER_DEFAULT,
+				VegetationPlacements.FLOWER_DEFAULT,
 				placed("inner_test"),
 				modifiers -> modifiers.mutateTypeTo(
 					PlacementModifierType.COUNT,
-					modifier -> CountPlacementModifier.of(2)
+					modifier -> CountPlacement.of(2)
 				)
 			)
 		);
 
-	private static RegistryKey<ConfiguredFeature<?, ?>> configured(String path) {
-		return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, Identifier.of("mmodding_worldgen_test", path));
+	private static ResourceKey<ConfiguredFeature<?, ?>> configured(String path) {
+		return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation("mmodding_worldgen_test", path));
 	}
 
-	private static RegistryKey<PlacedFeature> placed(String path) {
-		return RegistryKey.of(RegistryKeys.PLACED_FEATURE, Identifier.of("mmodding_worldgen_test", path));
+	private static ResourceKey<PlacedFeature> placed(String path) {
+		return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("mmodding_worldgen_test", path));
 	}
 
-	public static void registerConfiguredFeatures(Registerable<ConfiguredFeature<?, ?>> configuredFeatures, AdvancedContainer mod) {
+	public static void registerConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatures, AdvancedContainer mod) {
 		RANDOM_PATCH.registerConfiguredFeatures(configuredFeatures);
 	}
 
-	public static void registerPlacedFeatures(Registerable<PlacedFeature> placedFeatures) {
+	public static void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures) {
 		RANDOM_PATCH.registerPlacedFeatures(placedFeatures);
 	}
 }

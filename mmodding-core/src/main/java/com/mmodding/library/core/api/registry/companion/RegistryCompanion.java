@@ -1,13 +1,13 @@
 package com.mmodding.library.core.api.registry.companion;
 
 import com.mmodding.library.core.api.registry.LiteRegistry;
-import com.mmodding.library.core.api.registry.attachment.RegistryKeyAttachment;
+import com.mmodding.library.core.api.registry.attachment.ResourceKeyAttachment;
 import com.mmodding.library.core.impl.registry.companion.RegistryCompanionImpl;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 /**
- * Associates a {@link LiteRegistry} for each entry of a static {@link Registry} thanks to a {@link RegistryKeyAttachment}.
+ * Associates a {@link LiteRegistry} for each entry of a static {@link Registry} thanks to a {@link ResourceKeyAttachment}.
  * @param <T> the registry type
  * @param <E> the companion type
  */
@@ -36,7 +36,7 @@ public interface RegistryCompanion<T, E> {
 	 * @param key the registry key
 	 * @return the attached registry
 	 */
-	LiteRegistry<E> getOrCreateCompanion(RegistryKey<T> key);
+	LiteRegistry<E> getOrCreateCompanion(ResourceKey<T> key);
 
 	/**
 	 * Retrieves the registry associated to an object by retrieving its registry key.
@@ -50,5 +50,5 @@ public interface RegistryCompanion<T, E> {
 	 * @param key the registry key
 	 * @return the attached registry
 	 */
-	LiteRegistry<E> getCompanion(RegistryKey<T> key);
+	LiteRegistry<E> getCompanion(ResourceKey<T> key);
 }

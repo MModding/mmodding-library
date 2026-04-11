@@ -1,8 +1,8 @@
 package com.mmodding.library.core.api.management;
 
 import com.mmodding.library.core.api.management.content.*;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public interface ElementsManager {
 
@@ -20,7 +20,7 @@ public interface ElementsManager {
 	 * @return the builder
 	 * @param <T> the element class
 	 */
-	<T> ElementsManager resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider);
+	<T> ElementsManager resource(ResourceKey<Registry<T>> key, ResourceProvider<T> provider);
 
 	/**
 	 * Adds a {@link ContentProvider} if a specific mod is loaded.

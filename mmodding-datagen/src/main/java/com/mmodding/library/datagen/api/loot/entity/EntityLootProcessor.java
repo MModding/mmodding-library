@@ -1,7 +1,7 @@
 package com.mmodding.library.datagen.api.loot.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.loot.LootTable;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 @FunctionalInterface
 public interface EntityLootProcessor {

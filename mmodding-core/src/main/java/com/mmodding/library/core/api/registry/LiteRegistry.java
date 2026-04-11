@@ -1,10 +1,9 @@
 package com.mmodding.library.core.api.registry;
 
 import com.mmodding.library.core.impl.registry.LiteRegistryImpl;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
-
 import java.util.function.Consumer;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * A lighter version of the {@link Registry} object.
@@ -26,21 +25,21 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 	 * @param identifier the identifier
 	 * @return a boolean representing if it was found or not
 	 */
-	boolean contains(Identifier identifier);
+	boolean contains(ResourceLocation identifier);
 
 	/**
 	 * Retrieves an object from the registry with its associated identifier.
 	 * @param identifier the identifier of the object
 	 * @return the object
 	 */
-	T get(Identifier identifier);
+	T get(ResourceLocation identifier);
 
 	/**
 	 * Retrieves an identifier from the registry with its associated object.
 	 * @param entry the object for the identifier
 	 * @return the identifier
 	 */
-	Identifier getId(T entry);
+	ResourceLocation getId(T entry);
 
 	/**
 	 * Registers an object to the registry for a provided identifier.
@@ -49,7 +48,7 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 	 * @return the newly registered object
 	 * @exception IllegalStateException an entry with the same identifier is already present in the registry
 	 */
-	T register(Identifier identifier, T entry);
+	T register(ResourceLocation identifier, T entry);
 
 	/**
 	 * Allows to register multiple elements to the same registry with the help of a {@link LiteRegistrationFactory}.
@@ -65,10 +64,10 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 	interface Entry<T> {
 
 		/**
-		 * Returns the {@link Identifier} used by the {@link Entry}.
+		 * Returns the {@link ResourceLocation} used by the {@link Entry}.
 		 * @return the identifier
 		 */
-		Identifier identifier();
+		ResourceLocation identifier();
 
 		/**
 		 * Returns the object held by the {@link Entry}.
@@ -81,13 +80,13 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 
 		/**
 		 * A registration method filling the mod namespace automatically with the provided one.
-		 * @see LiteRegistry#register(Identifier, Object)
+		 * @see LiteRegistry#register(ResourceLocation, Object)
 		 */
 		T register(String path, T entry);
 
 		/**
-		 * @see LiteRegistry#register(Identifier, Object)
+		 * @see LiteRegistry#register(ResourceLocation, Object)
 		 */
-		T register(Identifier identifier, T entry);
+		T register(ResourceLocation identifier, T entry);
 	}
 }

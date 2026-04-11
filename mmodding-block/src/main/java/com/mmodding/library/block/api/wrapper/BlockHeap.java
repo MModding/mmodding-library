@@ -7,10 +7,10 @@ import com.mmodding.library.java.api.function.Mapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -100,22 +100,22 @@ public interface BlockHeap {
 	}
 
 	default BlockHeap withItem() {
-		return this.withItem(new Item.Settings(), BlockItem::new);
+		return this.withItem(new Item.Properties(), BlockItem::new);
 	}
 
-	default BlockHeap withItem(@NotNull Item.Settings settings) {
+	default BlockHeap withItem(@NotNull Item.Properties settings) {
 		return this.withItem(settings, BlockItem::new);
 	}
 
-	default BlockHeap withItem(@NotNull Item.Settings settings, @NotNull Function<Item, Item> tweaker) {
+	default BlockHeap withItem(@NotNull Item.Properties settings, @NotNull Function<Item, Item> tweaker) {
 		return this.withItem(settings, BlockItem::new, tweaker);
 	}
 
-	default BlockHeap withItem(@NotNull Item.Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory) {
+	default BlockHeap withItem(@NotNull Item.Properties settings, @NotNull BiFunction<Block, Item.Properties, Item> factory) {
 		return this.withItem(settings, factory, item -> item);
 	}
 
-	BlockHeap withItem(@NotNull Item.Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory,  @NotNull Function<Item, Item> tweaker);
+	BlockHeap withItem(@NotNull Item.Properties settings, @NotNull BiFunction<Block, Item.Properties, Item> factory,  @NotNull Function<Item, Item> tweaker);
 
 	List<Block> getEntries();
 
@@ -127,7 +127,7 @@ public interface BlockHeap {
 	 * Registers every block inside the heap.
 	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
 	 */
-	void register(Function<String, Identifier> identifierMaker);
+	void register(Function<String, ResourceLocation> identifierMaker);
 
 	@Environment(EnvType.CLIENT)
 	void cutout();

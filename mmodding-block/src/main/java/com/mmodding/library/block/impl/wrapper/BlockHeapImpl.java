@@ -9,12 +9,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class BlockHeapImpl implements BlockHeap {
 	}
 
 	@Override
-	public BlockHeap withItem(Item.@NotNull Settings settings, @NotNull BiFunction<Block, Item.Settings, Item> factory, @NotNull Function<Item, Item> tweaker) {
+	public BlockHeap withItem(Item.@NotNull Properties settings, @NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker) {
 		this.getEntries().forEach(block -> block.withItem(settings, factory, tweaker));
 		return this;
 	}
@@ -57,13 +57,13 @@ public class BlockHeapImpl implements BlockHeap {
 	 * Registers every block inside the heap.
 	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
 	 */
-	public void register(Function<String, Identifier> identifierMaker) {
+	public void register(Function<String, ResourceLocation> identifierMaker) {
 		for (Map.Entry<String, Block> entry : this.blocks.entrySet()) {
-			Identifier identifier = identifierMaker.apply(entry.getKey());
-			Registry.register(Registries.BLOCK, identifier, entry.getValue());
+			ResourceLocation identifier = identifierMaker.apply(entry.getKey());
+			Registry.register(BuiltInRegistries.BLOCK, identifier, entry.getValue());
 			Item item = entry.getValue().asItem();
 			if (item != null) {
-				Registry.register(Registries.ITEM, identifier, item);
+				Registry.register(BuiltInRegistries.ITEM, identifier, item);
 			}
 		}
 	}
@@ -71,13 +71,13 @@ public class BlockHeapImpl implements BlockHeap {
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void cutout() {
-		this.getEntries().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout()));
+		this.getEntries().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void translucent() {
-		this.getEntries().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent()));
+		this.getEntries().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.translucent()));
 	}
 
 	static {

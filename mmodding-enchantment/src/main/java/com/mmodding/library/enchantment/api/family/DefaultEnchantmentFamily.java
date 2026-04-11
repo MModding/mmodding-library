@@ -2,12 +2,11 @@ package com.mmodding.library.enchantment.api.family;
 
 import com.mmodding.library.enchantment.api.AdvancedEnchantment;
 import com.mmodding.library.java.api.list.filter.FilterList;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.Items;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
 import java.util.List;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.Items;
 
 /**
  * The {@link DefaultEnchantmentFamily} public implementation.
@@ -22,13 +21,13 @@ public class DefaultEnchantmentFamily implements EnchantmentFamily {
 	}
 
 	@Override
-	public Text getPrefix() {
-		return Text.empty();
+	public Component getPrefix() {
+		return Component.empty();
 	}
 
 	@Override
-	public List<Formatting> getFormattings(AdvancedEnchantment enchantment) {
-		return List.of(enchantment.isCursed() ? Formatting.RED : Formatting.GRAY);
+	public List<ChatFormatting> getFormattings(AdvancedEnchantment enchantment) {
+		return List.of(enchantment.isCurse() ? ChatFormatting.RED : ChatFormatting.GRAY);
 	}
 
 	@Override

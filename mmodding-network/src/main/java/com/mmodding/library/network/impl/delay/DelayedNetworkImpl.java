@@ -11,9 +11,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,16 +29,16 @@ public class DelayedNetworkImpl {
 	public static final LiteRegistry<ServerRequestProcessor> SERVER_REQUEST_PROCESSORS = LiteRegistry.create();
 
 	@Environment(EnvType.CLIENT)
-	public static void registerClientRequestProcessor(Identifier requestIdentifier, ClientRequestProcessor requestProcessor) {
+	public static void registerClientRequestProcessor(ResourceLocation requestIdentifier, ClientRequestProcessor requestProcessor) {
 		DelayedNetworkImpl.CLIENT_REQUEST_PROCESSORS.register(requestIdentifier, requestProcessor);
 	}
 
-	public static void registerServerRequestProcessor(Identifier requestIdentifier, ServerRequestProcessor requestProcessor) {
+	public static void registerServerRequestProcessor(ResourceLocation requestIdentifier, ServerRequestProcessor requestProcessor) {
 		DelayedNetworkImpl.SERVER_REQUEST_PROCESSORS.register(requestIdentifier, requestProcessor);
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void executeC2S(Identifier requestIdentifier, MixedList requestArguments, DelayedClientAction action) {
+	public static void executeC2S(ResourceLocation requestIdentifier, MixedList requestArguments, DelayedClientAction action) {
 		UUID tracker;
 		do {
 			tracker = UUID.randomUUID();
@@ -49,7 +48,7 @@ public class DelayedNetworkImpl {
 		ClientPlayNetworking.send(new DelayedNetworkPackets.RequestPacket(tracker, requestIdentifier, requestArguments));
 	}
 
-	public static void executeS2C(ServerPlayerEntity requestTarget, Identifier requestIdentifier, MixedList requestArguments, DelayedServerAction action) {
+	public static void executeS2C(ServerPlayer requestTarget, ResourceLocation requestIdentifier, MixedList requestArguments, DelayedServerAction action) {
 		UUID tracker;
 		do {
 			tracker = UUID.randomUUID();

@@ -1,8 +1,7 @@
 package com.mmodding.library.datagen.api.tag;
 
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.tag.TagKey;
-
+import net.minecraft.tags.TagKey;
 import java.util.function.Function;
 
 public interface TagProcessor<T> {

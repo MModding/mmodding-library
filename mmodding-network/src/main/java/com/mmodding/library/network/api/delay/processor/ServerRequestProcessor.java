@@ -1,7 +1,7 @@
 package com.mmodding.library.network.api.delay.processor;
 
 import com.mmodding.library.java.api.list.MixedList;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 @FunctionalInterface
 public interface ServerRequestProcessor {
@@ -12,5 +12,5 @@ public interface ServerRequestProcessor {
 	 * @param arguments the request arguments
 	 * @return the response arguments
 	 */
-	MixedList process(ServerPlayerEntity sender, MixedList arguments);
+	MixedList process(ServerPlayer sender, MixedList arguments);
 }

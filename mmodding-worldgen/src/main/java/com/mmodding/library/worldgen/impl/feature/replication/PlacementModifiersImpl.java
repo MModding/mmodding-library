@@ -1,12 +1,11 @@
 package com.mmodding.library.worldgen.impl.feature.replication;
 
 import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 public class PlacementModifiersImpl implements PlacementModifiers {
 
@@ -19,7 +18,7 @@ public class PlacementModifiersImpl implements PlacementModifiers {
 	public List<PlacementModifier> fetch(PlacementModifierType<?> type) {
 		List<PlacementModifier> fetched = new ArrayList<>();
 		this.placementModifiers.forEach(modifier -> {
-			if (modifier.getType() == type) {
+			if (modifier.type() == type) {
 				fetched.add(modifier);
 			}
 		});
@@ -40,7 +39,7 @@ public class PlacementModifiersImpl implements PlacementModifiers {
 
 	public void remove(PlacementModifierType<?> type) {
 		for (int i = 0; i < this.placementModifiers.size(); i++) {
-			if (this.placementModifiers.get(i).getType() == type) {
+			if (this.placementModifiers.get(i).type() == type) {
 				this.placementModifiers.remove(i);
 				i--;
 			}

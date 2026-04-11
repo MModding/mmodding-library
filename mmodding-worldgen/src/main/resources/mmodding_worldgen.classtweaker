@@ -1,6 +1,7 @@
 classTweaker v1 named
 
-accessible method net/minecraft/world/gen/feature/util/DripstoneHelper canGenerate (Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;)Z
-accessible method net/minecraft/world/gen/feature/util/DripstoneHelper canGenerateBase (Lnet/minecraft/world/StructureWorldAccess;Lnet/minecraft/util/math/BlockPos;I)Z
-accessible method net/minecraft/world/gen/feature/util/DripstoneHelper canGenerateOrLava (Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;)Z
-accessible method net/minecraft/world/gen/feature/util/DripstoneHelper scaleHeightFromRadius (DDDD)D
+accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/block/state/BlockState;)Z
+accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
+accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWaterOrLava (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
+accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils getDripstoneHeight (DDDD)D
+accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isCircleMostlyEmbeddedInStone (Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/core/BlockPos;I)Z

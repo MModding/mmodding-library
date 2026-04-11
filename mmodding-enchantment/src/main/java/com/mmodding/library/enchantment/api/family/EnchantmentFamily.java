@@ -3,13 +3,12 @@ package com.mmodding.library.enchantment.api.family;
 import com.mmodding.library.enchantment.api.AdvancedEnchantment;
 import com.mmodding.library.enchantment.impl.family.EnchantmentFamilyBuilderImpl;
 import com.mmodding.library.java.api.list.filter.FilterList;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.EnchantedBookItem;
 
 /**
  * An {@link EnchantmentFamily} can be defined as an attribute of an {@link AdvancedEnchantment} to classify them to.
@@ -57,14 +56,14 @@ public interface EnchantmentFamily {
 	 * The prefix displayed before the name of every {@link AdvancedEnchantment} of the {@link EnchantmentFamily}.
 	 * @return the prefix
 	 */
-	Text getPrefix();
+	Component getPrefix();
 
 	/**
-	 * A list of {@link Formatting} applied to the name of an {@link AdvancedEnchantment} of the {@link EnchantmentFamily}.
+	 * A list of {@link ChatFormatting} applied to the name of an {@link AdvancedEnchantment} of the {@link EnchantmentFamily}.
 	 * @param enchantment the advanced enchantment
 	 * @return the formattings of the advanced enchantment
 	 */
-	List<Formatting> getFormattings(AdvancedEnchantment enchantment);
+	List<ChatFormatting> getFormattings(AdvancedEnchantment enchantment);
 
 	/**
 	 * Indicates if the {@link AdvancedEnchantment} of the {@link EnchantmentFamily} can be obtained through enchanting tables.
@@ -86,9 +85,9 @@ public interface EnchantmentFamily {
 
 		Builder bookItem(Supplier<EnchantedBookItem> bookItem);
 
-		Builder prefix(Text prefix);
+		Builder prefix(Component prefix);
 
-		Builder formattings(Function<AdvancedEnchantment, List<Formatting>> formattings);
+		Builder formattings(Function<AdvancedEnchantment, List<ChatFormatting>> formattings);
 
 		Builder setInEnchantingTable(boolean inEnchantingTable);
 

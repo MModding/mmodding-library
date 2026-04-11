@@ -1,27 +1,26 @@
 package com.mmodding.library.math.api;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.Vec3;
 
 // Will need to hide that to impl later.
 public class AreaUtil {
 
 	public static void forBlockPosInLine(BlockPos pos1, BlockPos pos2, Consumer<? super BlockPos> consumer) {
-		Vec3d vector = Vec3d.ofCenter(pos1).relativize(Vec3d.ofCenter(pos2)).normalize();
-		Vec3d mutable = Vec3d.ofCenter(pos1);
+		Vec3 vector = Vec3.atCenterOf(pos1).vectorTo(Vec3.atCenterOf(pos2)).normalize();
+		Vec3 mutable = Vec3.atCenterOf(pos1);
 		do {
 			mutable = mutable.add(vector);
-			consumer.accept(BlockPos.ofFloored(mutable));
-		} while (!BlockPos.ofFloored(mutable).equals(pos2));
+			consumer.accept(BlockPos.containing(mutable));
+		} while (!BlockPos.containing(mutable).equals(pos2));
 	}
 
 	public static void forBlockPosInCubicRadius(BlockPos pos, int radius, Consumer<? super BlockPos> execute) {
-		BlockPos.iterate(
+		BlockPos.betweenClosed(
 			pos.getX() - radius,
 			pos.getY() - radius,
 			pos.getZ() - radius,
@@ -37,10 +36,10 @@ public class AreaUtil {
 
 	public static void iterateFromCenter(BlockPos center, int radiusX, int radiusY, int radiusZ, Consumer<? super BlockPos> action) {
 		Set<BlockPos> alreadyChecked = new HashSet<>();
-		BlockPos firstExtremis = center.add(radiusX, radiusY, radiusZ);
-		BlockPos lastExtremis = center.add(-radiusX, -radiusY, -radiusZ);
+		BlockPos firstExtremis = center.offset(radiusX, radiusY, radiusZ);
+		BlockPos lastExtremis = center.offset(-radiusX, -radiusY, -radiusZ);
 		for (Direction direction : Direction.values()) {
-			AreaUtil.checkActionNext(center.offset(direction), direction.getOpposite(), alreadyChecked, firstExtremis, lastExtremis, action);
+			AreaUtil.checkActionNext(center.relative(direction), direction.getOpposite(), alreadyChecked, firstExtremis, lastExtremis, action);
 		}
 	}
 
@@ -56,7 +55,7 @@ public class AreaUtil {
 				action.accept(pos);
 				for (Direction direction : Direction.values()) {
 					if (direction != excluded) {
-						AreaUtil.checkActionNext(pos.offset(direction), direction.getOpposite(), alreadyChecked, firstExtremis, lastExtremis, action);
+						AreaUtil.checkActionNext(pos.relative(direction), direction.getOpposite(), alreadyChecked, firstExtremis, lastExtremis, action);
 					}
 				}
 			}

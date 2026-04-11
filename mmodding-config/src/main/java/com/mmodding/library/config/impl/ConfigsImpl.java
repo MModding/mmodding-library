@@ -10,21 +10,20 @@ import com.mmodding.library.config.impl.element.builtin.FloatingRangeWrapper;
 import com.mmodding.library.config.impl.element.builtin.IntegerRangeWrapper;
 import com.mmodding.library.java.api.color.Color;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.util.Identifier;
-
 import java.util.Map;
+import net.minecraft.resources.ResourceLocation;
 
 public class ConfigsImpl {
 
-	static final Map<Identifier, Config> CONFIGS = new Object2ObjectOpenHashMap<>();
+	static final Map<ResourceLocation, Config> CONFIGS = new Object2ObjectOpenHashMap<>();
 
 	public static final Object2ObjectOpenHashMap<Class<?>, ConfigElementTypeWrapper<?, ?, ? extends ConfigElementTypeWrapper.Properties>> WRAPPERS = new Object2ObjectOpenHashMap<>();
 
-	public static Map<Identifier, Config> getAll() {
+	public static Map<ResourceLocation, Config> getAll() {
 		return new Object2ObjectOpenHashMap<>(ConfigsImpl.CONFIGS);
 	}
 
-	public static Config get(Identifier identifier) {
+	public static Config get(ResourceLocation identifier) {
 		return ConfigsImpl.CONFIGS.get(identifier);
 	}
 

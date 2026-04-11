@@ -4,28 +4,27 @@ import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.java.api.list.MixedList;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import java.util.UUID;
 
 public class DelayedNetworkPackets {
 
-	public record RequestPacket(UUID requestTracker, Identifier requestIdentifier, MixedList requestArguments) implements FabricPacket {
+	public record RequestPacket(UUID requestTracker, ResourceLocation requestIdentifier, MixedList requestArguments) implements FabricPacket {
 
 		public static final PacketType<RequestPacket> TYPE = PacketType.create(
 			MModdingLibrary.createId("delayed_network/request"),
 			RequestPacket::new
 		);
 
-		public RequestPacket(PacketByteBuf buf) {
-			this(buf.readUuid(), buf.readIdentifier(), buf.readMixedList());
+		public RequestPacket(FriendlyByteBuf buf) {
+			this(buf.readUUID(), buf.readResourceLocation(), buf.readMixedList());
 		}
 
 		@Override
-		public void write(PacketByteBuf buf) {
-			buf.writeUuid(this.requestTracker);
-			buf.writeIdentifier(this.requestIdentifier);
+		public void write(FriendlyByteBuf buf) {
+			buf.writeUUID(this.requestTracker);
+			buf.writeResourceLocation(this.requestIdentifier);
 			buf.writeMixedList(this.requestArguments);
 		}
 
@@ -42,13 +41,13 @@ public class DelayedNetworkPackets {
 			ResponsePacket::new
 		);
 
-		public ResponsePacket(PacketByteBuf buf) {
-			this(buf.readUuid(), buf.readMixedList());
+		public ResponsePacket(FriendlyByteBuf buf) {
+			this(buf.readUUID(), buf.readMixedList());
 		}
 
 		@Override
-		public void write(PacketByteBuf buf) {
-			buf.writeUuid(this.tracker);
+		public void write(FriendlyByteBuf buf) {
+			buf.writeUUID(this.tracker);
 			buf.writeMixedList(this.arguments);
 		}
 

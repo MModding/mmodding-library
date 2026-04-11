@@ -3,12 +3,11 @@ package com.mmodding.library.network.api;
 import com.mmodding.library.core.api.management.info.InjectedContent;
 import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
-import net.minecraft.network.PacketByteBuf;
-
 import java.util.Optional;
+import net.minecraft.network.FriendlyByteBuf;
 
-@InjectedContent(PacketByteBuf.class)
-public interface PacketByteBufExtension {
+@InjectedContent(FriendlyByteBuf.class)
+public interface FriendlyByteBufExtension {
 
 	/**
 	 * Determines the type of the next handled value, and stores it in an {@link Optional} instance
@@ -74,7 +73,7 @@ public interface PacketByteBufExtension {
 	 * @param entryReader the entry reader
 	 * @return the {@link MixedMap} object
 	 */
-	default <T> MixedMap<T> readMixedMap(PacketByteBuf.PacketReader<T> entryReader) {
+	default <T> MixedMap<T> readMixedMap(FriendlyByteBuf.Reader<T> entryReader) {
 		throw new IllegalStateException();
 	}
 
@@ -83,7 +82,7 @@ public interface PacketByteBufExtension {
 	 * @param map the {@link MixedMap} object
 	 * @param entryWriter the entry writer
 	 */
-	default <T> void writeMixedMap(MixedMap<T> map, PacketByteBuf.PacketWriter<T> entryWriter) {
+	default <T> void writeMixedMap(MixedMap<T> map, FriendlyByteBuf.Writer<T> entryWriter) {
 		throw new IllegalStateException();
 	}
 }

@@ -1,44 +1,43 @@
 package com.mmodding.library.block.api.catalog;
 
 import com.mmodding.library.block.mixin.PointedDripstoneBlockAccessor;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PointedDripstoneBlock;
-import net.minecraft.block.enums.Thickness;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldAccess;
-
 import java.util.function.Supplier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PointedDripstoneBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
+import net.minecraft.world.level.material.Fluids;
 
 public class AdvancedPointedDripstoneBlock extends PointedDripstoneBlock {
 
 	private final Supplier<Block> dripstoneBlock;
 
-	public AdvancedPointedDripstoneBlock(Supplier<Block> dripstoneBlock, Settings settings) {
+	public AdvancedPointedDripstoneBlock(Supplier<Block> dripstoneBlock, Properties settings) {
 		super(settings);
 		this.dripstoneBlock = dripstoneBlock;
 	}
 
 	@Override
-	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		PointedDripstoneBlock.dripTick(state, world, pos, random.nextFloat());
+	public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		PointedDripstoneBlock.maybeTransferFluid(state, world, pos, random.nextFloat());
 		if (random.nextFloat() < 0.011377778f && PointedDripstoneBlockAccessor.mmodding$isHeldByPointedDripstone(state, world, pos)) {
 			this.tryGrowCustom(state, world, pos, random);
 		}
 	}
 
 	public boolean canGrow(BlockState dripstoneBlockState, BlockState waterState) {
-		return dripstoneBlockState.isOf(this.dripstoneBlock.get()) && waterState.isOf(Blocks.WATER) && waterState.getFluidState().isStill();
+		return dripstoneBlockState.is(this.dripstoneBlock.get()) && waterState.is(Blocks.WATER) && waterState.getFluidState().isSource();
 	}
 
-	public void tryGrowCustom(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		BlockState firstState = world.getBlockState(pos.up(1));
-		BlockState secondState = world.getBlockState(pos.up(2));
+	public void tryGrowCustom(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		BlockState firstState = world.getBlockState(pos.above(1));
+		BlockState secondState = world.getBlockState(pos.above(2));
 
 		if (this.canGrow(firstState, secondState)) {
 
@@ -58,8 +57,8 @@ public class AdvancedPointedDripstoneBlock extends PointedDripstoneBlock {
 		}
 	}
 
-	public void tryGrowCustomStalagmite(ServerWorld world, BlockPos pos) {
-		BlockPos.Mutable mutable = pos.mutableCopy();
+	public void tryGrowCustomStalagmite(ServerLevel world, BlockPos pos) {
+		BlockPos.MutableBlockPos mutable = pos.mutable();
 
 		for(int i = 0; i < 10; i++) {
 			mutable.move(Direction.DOWN);
@@ -74,8 +73,8 @@ public class AdvancedPointedDripstoneBlock extends PointedDripstoneBlock {
 				return;
 			}
 
-			if (PointedDripstoneBlockAccessor.mmodding$canPlaceAtWithDirection(world, mutable, Direction.UP) && !world.isWater(mutable.down())) {
-				this.tryGrowCustom(world, mutable.down(), Direction.UP);
+			if (PointedDripstoneBlockAccessor.mmodding$canPlaceAtWithDirection(world, mutable, Direction.UP) && !world.isWaterAt(mutable.below())) {
+				this.tryGrowCustom(world, mutable.below(), Direction.UP);
 				return;
 			}
 
@@ -85,30 +84,30 @@ public class AdvancedPointedDripstoneBlock extends PointedDripstoneBlock {
 		}
 	}
 
-	public void tryGrowCustom(ServerWorld world, BlockPos pos, Direction direction) {
-		BlockPos directionPos = pos.offset(direction);
+	public void tryGrowCustom(ServerLevel world, BlockPos pos, Direction direction) {
+		BlockPos directionPos = pos.relative(direction);
 		BlockState state = world.getBlockState(directionPos);
 
 		if (PointedDripstoneBlockAccessor.mmodding$isTip(state, direction.getOpposite())) {
 			this.growCustomMerged(state, world, directionPos);
-		} else if (state.isAir() || state.isOf(Blocks.WATER)) {
-			this.placeCustom(world, directionPos, direction, Thickness.TIP);
+		} else if (state.isAir() || state.is(Blocks.WATER)) {
+			this.placeCustom(world, directionPos, direction, DripstoneThickness.TIP);
 		}
 	}
 
-	public void placeCustom(WorldAccess world, BlockPos pos, Direction direction, Thickness thickness) {
-		BlockState state = this.getDefaultState()
-			.with(VERTICAL_DIRECTION, direction)
-			.with(THICKNESS, thickness)
-			.with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
-		world.setBlockState(pos, state, Block.NOTIFY_ALL);
+	public void placeCustom(LevelAccessor world, BlockPos pos, Direction direction, DripstoneThickness thickness) {
+		BlockState state = this.defaultBlockState()
+			.setValue(TIP_DIRECTION, direction)
+			.setValue(THICKNESS, thickness)
+			.setValue(WATERLOGGED, world.getFluidState(pos).getType() == Fluids.WATER);
+		world.setBlock(pos, state, Block.UPDATE_ALL);
 	}
 
-	public void growCustomMerged(BlockState state, WorldAccess world, BlockPos pos) {
-		BlockPos firstPos = state.get(VERTICAL_DIRECTION) == Direction.UP ? pos.up() : pos;
-		BlockPos secondPos = state.get(VERTICAL_DIRECTION) == Direction.UP ? pos : pos.down();
+	public void growCustomMerged(BlockState state, LevelAccessor world, BlockPos pos) {
+		BlockPos firstPos = state.getValue(TIP_DIRECTION) == Direction.UP ? pos.above() : pos;
+		BlockPos secondPos = state.getValue(TIP_DIRECTION) == Direction.UP ? pos : pos.below();
 
-		this.placeCustom(world, firstPos, Direction.DOWN, Thickness.TIP_MERGE);
-		this.placeCustom(world, secondPos, Direction.UP, Thickness.TIP_MERGE);
+		this.placeCustom(world, firstPos, Direction.DOWN, DripstoneThickness.TIP_MERGE);
+		this.placeCustom(world, secondPos, Direction.UP, DripstoneThickness.TIP_MERGE);
 	}
 }

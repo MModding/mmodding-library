@@ -1,10 +1,10 @@
 package com.mmodding.library.block.api.catalog;
 
-import net.minecraft.block.SnowBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
 
-public class LayeredBlock extends SnowBlock {
+public class LayeredBlock extends SnowLayerBlock {
 
-	public LayeredBlock(Settings settings) {
+	public LayeredBlock(Properties settings) {
 		super(settings);
 	}
 }

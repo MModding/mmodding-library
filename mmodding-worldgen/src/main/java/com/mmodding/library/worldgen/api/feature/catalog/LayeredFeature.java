@@ -2,12 +2,12 @@ package com.mmodding.library.worldgen.api.feature.catalog;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.PlacedFeature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class LayeredFeature extends Feature<LayeredFeature.Config> {
 
@@ -16,14 +16,14 @@ public class LayeredFeature extends Feature<LayeredFeature.Config> {
 	}
 
 	@Override
-	public boolean generate(FeatureContext<Config> context) {
-		for (RegistryEntry<PlacedFeature> placedFeature : context.getConfig().layers()) {
-			placedFeature.value().generate(context.getWorld(), context.getGenerator(), context.getRandom(), context.getOrigin());
+	public boolean place(FeaturePlaceContext<Config> context) {
+		for (Holder<PlacedFeature> placedFeature : context.config().layers()) {
+			placedFeature.value().placeWithBiomeCheck(context.level(), context.chunkGenerator(), context.random(), context.origin());
 		}
 		return true;
 	}
 
-	public record Config(RegistryEntryList<PlacedFeature> layers) implements FeatureConfig {
+	public record Config(HolderSet<PlacedFeature> layers) implements FeatureConfiguration {
 
 		public static final Codec<LayeredFeature.Config> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(

@@ -1,41 +1,41 @@
 package com.mmodding.library.fluid.api;
 
-import net.minecraft.fluid.FlowableFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 
 /**
  * Handles the still/flowing differences for you.
  */
-public abstract class UnitedFlowableFluid extends FlowableFluid {
+public abstract class UnitedFlowableFluid extends FlowingFluid {
 
-	private final IntProperty levels;
+	private final IntegerProperty levels;
 	private final int maxLevel;
-	private final boolean still;
+	private final boolean source;
 
-	public UnitedFlowableFluid(IntProperty levels, boolean still) {
+	public UnitedFlowableFluid(IntegerProperty levels, boolean source) {
 		this.levels = levels;
-		this.maxLevel = levels.getValues().stream().max(Integer::compare).orElseThrow();
-		this.still = still;
+		this.maxLevel = levels.getPossibleValues().stream().max(Integer::compare).orElseThrow();
+		this.source = source;
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Fluid, FluidState> builder) {
-		super.appendProperties(builder);
-		if (this.still) {
+	protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+		super.createFluidStateDefinition(builder);
+		if (this.source) {
 			builder.add(this.levels);
 		}
 	}
 
 	@Override
-	public int getLevel(FluidState state) {
-		return this.still ? this.maxLevel : state.get(this.levels);
+	public int getAmount(FluidState state) {
+		return this.source ? this.maxLevel : state.getValue(this.levels);
 	}
 
 	@Override
-	public boolean isStill(FluidState state) {
-		return this.still;
+	public boolean isSource(FluidState state) {
+		return this.source;
 	}
 }

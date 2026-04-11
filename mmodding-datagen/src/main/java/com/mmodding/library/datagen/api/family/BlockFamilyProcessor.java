@@ -1,15 +1,14 @@
 package com.mmodding.library.datagen.api.family;
 
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.family.BlockFamily;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.resource.featuretoggle.FeatureFlags;
-
+import net.minecraft.data.BlockFamily;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.level.block.Block;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -19,15 +18,15 @@ import java.util.function.Function;
  */
 public final class BlockFamilyProcessor {
 
-	public void process(BlockStateModelGenerator generator, BlockFamily family) {
-		if (family.shouldGenerateModels()) {
-			generator.registerCubeAllModelTexturePool(family.getBaseBlock()).family(family);
+	public void process(BlockModelGenerators generator, BlockFamily family) {
+		if (family.shouldGenerateModel()) {
+			generator.family(family.getBaseBlock()).generateFor(family);
 		}
 	}
 
-	public void process(Consumer<RecipeJsonProvider> exporter, BlockFamily family) {
-		if (family.shouldGenerateRecipes(FeatureFlags.FEATURE_MANAGER.getFeatureSet())) {
-			RecipeProvider.generateFamily(exporter, family);
+	public void process(Consumer<FinishedRecipe> exporter, BlockFamily family) {
+		if (family.shouldGenerateRecipe(FeatureFlags.REGISTRY.allFlags())) {
+			RecipeProvider.generateRecipes(exporter, family);
 		}
 	}
 

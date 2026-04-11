@@ -1,17 +1,16 @@
 package com.mmodding.library.core.api.registry;
 
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public class WaitingRegistryEntry<T> {
 
-	private final RegistryKey<T> key;
+	private final ResourceKey<T> key;
 	private final T element;
 
-	public WaitingRegistryEntry(RegistryKey<T> key, T element) {
+	public WaitingRegistryEntry(ResourceKey<T> key, T element) {
 		this.key = key;
 		this.element = element;
 	}

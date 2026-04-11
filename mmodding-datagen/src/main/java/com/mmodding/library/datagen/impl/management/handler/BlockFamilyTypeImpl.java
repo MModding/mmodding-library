@@ -11,16 +11,16 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.family.BlockFamily;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.BlockFamily;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -52,10 +52,10 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 			TranslationProcessor<Block> classicProcessor = DefaultLangProcessors.getClassic(); // I don't think that it really needs to be customized here. Block Families are meant to naming conventions.
 			this.contentToProcess.forEach((processor, families) -> {
 				families.forEach(family -> {
-					RegistryKey<Block> mainKey = Registries.BLOCK.getKey(family.getBaseBlock()).orElseThrow();
+					ResourceKey<Block> mainKey = BuiltInRegistries.BLOCK.getResourceKey(family.getBaseBlock()).orElseThrow();
 					translationBuilder.add(family.getBaseBlock(), classicProcessor.process(mainKey));
 					family.getVariants().values().forEach(block -> {
-						RegistryKey<Block> variantKey = Registries.BLOCK.getKey(block).orElseThrow();
+						ResourceKey<Block> variantKey = BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow();
 						translationBuilder.add(block, classicProcessor.process(variantKey));
 					});
 				});
@@ -78,7 +78,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		}
 
 		@Override
-		public void generateBlockStateModels(BlockStateModelGenerator generator) {
+		public void generateBlockStateModels(BlockModelGenerators generator) {
 			this.contentToProcess.forEach(
 				(processor, families) -> families.forEach(
 					family -> processor.process(generator, family)
@@ -87,7 +87,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		}
 
 		@Override
-		public void generateItemModels(ItemModelGenerator generator) {}
+		public void generateItemModels(ItemModelGenerators generator) {}
 
 		@Override
 		public String getName() {
@@ -105,7 +105,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		}
 
 		@Override
-		public void generate(Consumer<RecipeJsonProvider> exporter) {
+		public void buildRecipes(Consumer<FinishedRecipe> exporter) {
 			this.contentToProcess.forEach(
 				(processor, families) -> families.forEach(
 					family -> processor.process(exporter, family)
@@ -123,13 +123,13 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
-		public AutomatedBlockFamilyBlockTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+		public AutomatedBlockFamilyBlockTags(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
 			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
-		protected void configure(RegistryWrapper.WrapperLookup arg) {
+		protected void addTags(HolderLookup.Provider arg) {
 			this.contentToProcess.forEach((processor, families) -> families.forEach(
 				family -> processor.process(this::getOrCreateTagBuilder, family)
 			));
@@ -143,12 +143,12 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 
 	private static class AutomatedBlockFamilyItemTags extends FabricTagProvider.ItemTagProvider {
 
-		public AutomatedBlockFamilyItemTags(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture, @Nullable BlockTagProvider blockTagProvider) {
+		public AutomatedBlockFamilyItemTags(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, @Nullable BlockTagProvider blockTagProvider) {
 			super(output, completableFuture, blockTagProvider);
 		}
 
 		@Override
-		protected void configure(RegistryWrapper.WrapperLookup arg) {
+		protected void addTags(HolderLookup.Provider arg) {
 			this.copy(BlockTags.BUTTONS, ItemTags.BUTTONS);
 			this.copy(BlockTags.DOORS, ItemTags.DOORS);
 			this.copy(BlockTags.FENCES, ItemTags.FENCES);

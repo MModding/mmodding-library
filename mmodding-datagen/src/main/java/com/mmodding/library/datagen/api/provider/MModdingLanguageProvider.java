@@ -5,8 +5,7 @@ import com.mmodding.library.datagen.impl.provider.DataProviderExtension;
 import com.mmodding.library.datagen.mixin.FabricLanguageProviderAccessor;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
-import net.minecraft.data.DataWriter;
-
+import net.minecraft.data.CachedOutput;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -26,7 +25,7 @@ public abstract class MModdingLanguageProvider extends FabricLanguageProvider {
 	}
 
 	@Override
-	public CompletableFuture<?> run(DataWriter writer) {
+	public CompletableFuture<?> run(CachedOutput writer) {
 		TreeMap<String, String> translationEntries = new TreeMap<>();
 
 		generateTranslations((String key, String value) -> {

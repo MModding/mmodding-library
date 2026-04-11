@@ -1,12 +1,11 @@
 package com.mmodding.library.block.api.util;
 
 import com.mojang.datafixers.util.Either;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.random.Random;
-
 import java.util.Arrays;
 import java.util.List;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class RandomStateContainer {
 
@@ -14,11 +13,11 @@ public class RandomStateContainer {
 
 	@SafeVarargs
 	public static RandomStateContainer create(Either<Block, BlockState>... elements) {
-		return new RandomStateContainer(Arrays.stream(elements).map(element -> element.mapLeft(Block::getDefaultState).map(state -> state, state -> state)).toList());
+		return new RandomStateContainer(Arrays.stream(elements).map(element -> element.mapLeft(Block::defaultBlockState).map(state -> state, state -> state)).toList());
 	}
 
 	public static RandomStateContainer create(Block... blocks) {
-		return new RandomStateContainer(Arrays.stream(blocks).map(Block::getDefaultState).toList());
+		return new RandomStateContainer(Arrays.stream(blocks).map(Block::defaultBlockState).toList());
 	}
 
 	public static RandomStateContainer create(BlockState... states) {
@@ -29,7 +28,7 @@ public class RandomStateContainer {
 		this.states = states;
 	}
 
-	public BlockState getRandom(Random random) {
+	public BlockState getRandom(RandomSource random) {
 		return this.states.get(random.nextInt(this.states.size()));
 	}
 }

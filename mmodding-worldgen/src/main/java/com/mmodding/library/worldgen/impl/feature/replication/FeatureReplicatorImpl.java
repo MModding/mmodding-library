@@ -3,18 +3,20 @@ package com.mmodding.library.worldgen.impl.feature.replication;
 import com.mmodding.library.core.api.registry.WaitingRegistryEntry;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureReplicatorImpl {
 
 	@SuppressWarnings("unchecked")
-	public static <FC extends FeatureConfig> WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> replicateConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, ConfiguredFeature<?, ?> configuredFeature, AutoMapper<FC> mutator) {
-		RegistryKey<ConfiguredFeature<FC, Feature<FC>>> castedKey = (RegistryKey<ConfiguredFeature<FC, Feature<FC>>>) (RegistryKey<?>) key;
+	public static <FC extends FeatureConfiguration> WaitingRegistryEntry<ConfiguredFeature<FC, Feature<FC>>> replicateConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> key, ConfiguredFeature<?, ?> configuredFeature, AutoMapper<FC> mutator) {
+		ResourceKey<ConfiguredFeature<FC, Feature<FC>>> castedKey = (ResourceKey<ConfiguredFeature<FC, Feature<FC>>>) (ResourceKey<?>) key;
 		ConfiguredFeature<FC, Feature<FC>> castedConfiguredFeature = (ConfiguredFeature<FC, Feature<FC>>) configuredFeature;
 		ConfigReplicator<FC> replicator = new ConfigReplicator<>(castedConfiguredFeature);
 		replicator.mutateConfig(mutator);
@@ -22,14 +24,14 @@ public class FeatureReplicatorImpl {
 		return new WaitingRegistryEntry<>(castedKey, new ConfiguredFeature<>(castedConfiguredFeature.feature(), featureConfig));
 	}
 
-	public static WaitingRegistryEntry<PlacedFeature> replicatePlacedFeature(RegistryKey<PlacedFeature> key, PlacedFeature placedFeature, AutoMapper<PlacementModifiers> mutator) {
+	public static WaitingRegistryEntry<PlacedFeature> replicatePlacedFeature(ResourceKey<PlacedFeature> key, PlacedFeature placedFeature, AutoMapper<PlacementModifiers> mutator) {
 		PlacementModifiersReplicator replicator = new PlacementModifiersReplicator(placedFeature);
 		replicator.mutatePlacementModifiers(mutator);
 		List<PlacementModifier> placementModifiers = replicator.replicate();
 		return new WaitingRegistryEntry<>(key, new PlacedFeature(placedFeature.feature(), placementModifiers));
 	}
 
-	private static class ConfigReplicator<FC extends FeatureConfig> {
+	private static class ConfigReplicator<FC extends FeatureConfiguration> {
 
 		private FC featureConfig;
 
@@ -51,7 +53,7 @@ public class FeatureReplicatorImpl {
 		private PlacementModifiers placementModifiers;
 
 		public PlacementModifiersReplicator(PlacedFeature placedFeature) {
-			this.placementModifiers = new PlacementModifiersImpl(placedFeature.placementModifiers());
+			this.placementModifiers = new PlacementModifiersImpl(placedFeature.placement());
 		}
 
 		public void mutatePlacementModifiers(AutoMapper<PlacementModifiers> mutator) {

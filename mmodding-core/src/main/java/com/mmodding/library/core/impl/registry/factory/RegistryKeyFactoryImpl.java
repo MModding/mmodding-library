@@ -1,27 +1,27 @@
 package com.mmodding.library.core.impl.registry.factory;
 
 import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 
 public class RegistryKeyFactoryImpl<T> implements RegistryKeyFactory<T> {
 
-	private final RegistryKey<? extends Registry<T>> registry;
+	private final ResourceKey<? extends Registry<T>> registry;
 	private final String namespace;
 
-	public RegistryKeyFactoryImpl(RegistryKey<? extends Registry<T>> registry, String namespace) {
+	public RegistryKeyFactoryImpl(ResourceKey<? extends Registry<T>> registry, String namespace) {
 		this.registry = registry;
 		this.namespace = namespace;
 	}
 
 	@Override
-	public RegistryKey<T> createKey(String path) {
+	public ResourceKey<T> createKey(String path) {
 		return this.createKey(this.namespace, path);
 	}
 
 	@Override
-	public RegistryKey<T> createKey(String namespace, String path) {
-		return RegistryKey.of(this.registry, new Identifier(namespace, path));
+	public ResourceKey<T> createKey(String namespace, String path) {
+		return ResourceKey.create(this.registry, new ResourceLocation(namespace, path));
 	}
 }

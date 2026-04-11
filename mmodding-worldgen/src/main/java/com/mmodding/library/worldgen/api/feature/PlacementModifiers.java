@@ -1,10 +1,9 @@
 package com.mmodding.library.worldgen.api.feature;
 
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
-
 import java.util.List;
 import java.util.function.Function;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 public interface PlacementModifiers {
 

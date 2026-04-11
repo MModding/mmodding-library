@@ -4,9 +4,6 @@ java = "21"
 minecraft = "1.20.1"
 fabric_loader = "0.18.0"
 
-# Mappings
-yarn_mappings = "1.20.1+build.10"
-
 yumi_commons = "1.0.0"
 
 fabric_api = "0.92.3+1.20.1"
@@ -18,9 +15,6 @@ quilt_parsers = "0.3.0"
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
-
-# Mappings
-yarn_mappings = { module = "net.fabricmc:yarn", version.ref = "yarn_mappings" }
 
 # Yumi Commons
 yumi_commons = { module = "dev.yumi.commons:yumi-commons", version.ref = "yumi_commons" }

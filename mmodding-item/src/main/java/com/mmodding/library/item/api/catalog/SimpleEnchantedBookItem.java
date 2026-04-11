@@ -1,8 +1,7 @@
 package com.mmodding.library.item.api.catalog;
 
-import net.minecraft.item.EnchantedBookItem;
-
 import java.util.function.Supplier;
+import net.minecraft.world.item.EnchantedBookItem;
 
 /**
  * A simple variant of the {@link EnchantedBookItem} class with better vanilla-integration for modders.
@@ -11,7 +10,7 @@ public class SimpleEnchantedBookItem extends EnchantedBookItem {
 
 	private Supplier<EnchantableBookItem> sourceItem;
 
-	public SimpleEnchantedBookItem(Supplier<EnchantableBookItem> sourceItem, Settings settings) {
+	public SimpleEnchantedBookItem(Supplier<EnchantableBookItem> sourceItem, Properties settings) {
 		super(settings);
 	}
 

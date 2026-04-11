@@ -1,35 +1,35 @@
 package com.mmodding.library.inventory.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
- * A very basic {@link Inventory} implementation.
+ * A very basic {@link Container} implementation.
  */
-public interface BasicInventory extends Inventory {
+public interface BasicInventory extends Container {
 
-	DefaultedList<ItemStack> getContent();
+	NonNullList<ItemStack> getContent();
 
-	static BasicInventory of(DefaultedList<ItemStack> content) {
+	static BasicInventory of(NonNullList<ItemStack> content) {
 		return () -> content;
 	}
 
 	static BasicInventory ofSize(int size) {
-		return BasicInventory.of(DefaultedList.ofSize(size, ItemStack.EMPTY));
+		return BasicInventory.of(NonNullList.withSize(size, ItemStack.EMPTY));
 	}
 
 	@Override
-	default int size() {
+	default int getContainerSize() {
 		return this.getContent().size();
 	}
 
 	@Override
 	default boolean isEmpty() {
-		for (int index = 0; index < this.size(); index++) {
-			ItemStack stack = this.getStack(index);
+		for (int index = 0; index < this.getContainerSize(); index++) {
+			ItemStack stack = this.getItem(index);
 			if (!stack.isEmpty()) {
 				return false;
 			}
@@ -38,42 +38,42 @@ public interface BasicInventory extends Inventory {
 	}
 
 	@Override
-	default ItemStack getStack(int slot) {
+	default ItemStack getItem(int slot) {
 		return this.getContent().get(slot);
 	}
 
 	@Override
-	default ItemStack removeStack(int slot, int amount) {
-		ItemStack removed = Inventories.splitStack(this.getContent(), slot, amount);
+	default ItemStack removeItem(int slot, int amount) {
+		ItemStack removed = ContainerHelper.removeItem(this.getContent(), slot, amount);
 		if (!removed.isEmpty()) {
-			this.markDirty();
+			this.setChanged();
 		}
 		return removed;
 	}
 
 	@Override
-	default ItemStack removeStack(int slot) {
-		return Inventories.removeStack(this.getContent(), slot);
+	default ItemStack removeItemNoUpdate(int slot) {
+		return ContainerHelper.takeItem(this.getContent(), slot);
 	}
 
 	@Override
-	default void setStack(int slot, ItemStack stack) {
+	default void setItem(int slot, ItemStack stack) {
 		this.getContent().set(slot, stack);
-		if (stack.getCount() > this.getMaxCountPerStack()) {
-			stack.setCount(this.getMaxCountPerStack());
+		if (stack.getCount() > this.getMaxStackSize()) {
+			stack.setCount(this.getMaxStackSize());
 		}
 	}
 
 	@Override
-	default void clear() {
+	default void clearContent() {
 		this.getContent().clear();
 	}
 
 	@Override
-	default void markDirty() {}
+	default void setChanged() {}
 
 	@Override
-	default boolean canPlayerUse(PlayerEntity player) {
+	default boolean stillValid(Player player) {
 		return true;
 	}
 }

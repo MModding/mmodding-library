@@ -3,25 +3,25 @@ package com.mmodding.library.worldgen.api.vein;
 import com.mmodding.library.block.api.util.RandomStateContainer;
 import com.mmodding.library.core.api.registry.companion.DynamicRegistryCompanion;
 import com.mmodding.library.worldgen.impl.vein.VeinTypeImpl;
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.math.random.RandomSplitter;
-import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
-import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
-import net.minecraft.world.gen.densityfunction.DensityFunction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.NoiseChunk;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 
 public interface VeinType {
 
-	DynamicRegistryCompanion<ChunkGeneratorSettings, VeinType> REGISTRY = DynamicRegistryCompanion.create(RegistryKeys.CHUNK_GENERATOR_SETTINGS);
+	DynamicRegistryCompanion<NoiseGeneratorSettings, VeinType> REGISTRY = DynamicRegistryCompanion.create(Registries.NOISE_SETTINGS);
 
-	BlockState pickOreState(Random random);
+	BlockState pickOreState(RandomSource random);
 
-	BlockState pickRawOreState(Random random);
+	BlockState pickRawOreState(RandomSource random);
 
-	BlockState pickFillerState(Random random);
+	BlockState pickFillerState(RandomSource random);
 
-	ChunkNoiseSampler.BlockStateSampler createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, RandomSplitter posRandom);
+	NoiseChunk.BlockStateFiller createVein(DensityFunction veinToggle, DensityFunction veinRidged, DensityFunction veinGap, PositionalRandomFactory posRandom);
 
 	class Builder {
 

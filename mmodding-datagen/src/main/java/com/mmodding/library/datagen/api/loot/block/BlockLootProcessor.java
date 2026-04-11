@@ -1,10 +1,10 @@
 package com.mmodding.library.datagen.api.loot.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.server.loottable.BlockLootTableGenerator;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.level.block.Block;
 
 @FunctionalInterface
 public interface BlockLootProcessor {
 
-	void process(BlockLootTableGenerator generator, Block block);
+	void process(BlockLootSubProvider generator, Block block);
 }

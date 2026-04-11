@@ -1,6 +1,6 @@
 package com.mmodding.library.datagen.api.recipe;
 
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 
 public interface RecipeGenerator {
 
@@ -9,5 +9,5 @@ public interface RecipeGenerator {
 	 * @param item the target
 	 * @return the helper
 	 */
-	RecipeHelper forItem(ItemConvertible item);
+	RecipeHelper forItem(ItemLike item);
 }

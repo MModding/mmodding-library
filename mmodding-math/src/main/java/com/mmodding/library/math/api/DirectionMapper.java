@@ -1,6 +1,6 @@
 package com.mmodding.library.math.api;
 
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
 
 public enum DirectionMapper {
 
@@ -13,12 +13,12 @@ public enum DirectionMapper {
 
 	public Direction transform(Direction direction) {
 		return switch (this) {
-			case TOP -> direction.rotateCounterclockwise(Direction.Axis.X);
-			case BOTTOM -> direction.rotateClockwise(Direction.Axis.X);
+			case TOP -> direction.getCounterClockWise(Direction.Axis.X);
+			case BOTTOM -> direction.getClockWise(Direction.Axis.X);
 			case FRONT -> direction;
 			case BEHIND -> direction.getOpposite();
-			case LEFT -> direction.rotateCounterclockwise(Direction.Axis.Y);
-			case RIGHT -> direction.rotateClockwise(Direction.Axis.Y);
+			case LEFT -> direction.getCounterClockWise(Direction.Axis.Y);
+			case RIGHT -> direction.getClockWise(Direction.Axis.Y);
 		};
 	}
 }

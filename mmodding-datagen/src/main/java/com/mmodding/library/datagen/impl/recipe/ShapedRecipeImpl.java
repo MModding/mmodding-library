@@ -1,25 +1,25 @@
 package com.mmodding.library.datagen.impl.recipe;
 
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class ShapedRecipeImpl implements RecipeHelper.ShapedRecipe {
 
-	final ShapedRecipeJsonBuilder factory;
+	final ShapedRecipeBuilder factory;
 
-	public ShapedRecipeImpl(ItemConvertible item, int count, RecipeCategory category) {
-		this.factory = new ShapedRecipeJsonBuilder(category, item, count).criterion(RecipeProvider.hasItem(item), RecipeProvider.conditionsFromItem(item));
+	public ShapedRecipeImpl(ItemLike item, int count, RecipeCategory category) {
+		this.factory = new ShapedRecipeBuilder(category, item, count).unlockedBy(RecipeProvider.getHasName(item), RecipeProvider.has(item));
 	}
 
 	@Override
 	public void key(char key, Ingredient ingredient) {
-		this.factory.input(key, ingredient);
+		this.factory.define(key, ingredient);
 	}
 
 	@Override

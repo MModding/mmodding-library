@@ -1,15 +1,15 @@
 package com.mmodding.library.core.mixin.accessor;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(RegistryKey.class)
+@Mixin(ResourceKey.class)
 public interface RegistryKeyAccessor {
 
-	@Invoker("of")
-	static <T> RegistryKey<T> mmodding$of(Identifier registry, Identifier value) {
+	@Invoker("create")
+	static <T> ResourceKey<T> mmodding$of(ResourceLocation registry, ResourceLocation value) {
 		throw new IllegalStateException();
 	}
 }

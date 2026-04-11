@@ -1,31 +1,31 @@
 package com.mmodding.library.item.api.category;
 
 import com.mmodding.library.item.impl.category.ItemCategoryImpl;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 @ApiStatus.NonExtendable
 public interface ItemCategory {
 
-	static ItemCategory create(RegistryKey<ItemGroup> key, Consumer<Settings> settings) {
+	static ItemCategory create(ResourceKey<CreativeModeTab> key, Consumer<Settings> settings) {
 		return new ItemCategoryImpl(key, settings);
 	}
 
-	RegistryKey<ItemGroup> getRegistryKey();
+	ResourceKey<CreativeModeTab> getRegistryKey();
 
-	Optional<ItemGroup> getItemGroup();
+	Optional<CreativeModeTab> getCreativeModeTab();
 
 	@ApiStatus.NonExtendable
 	interface Settings {
 
-		Settings name(Text name);
+		Settings name(Component name);
 
 		Settings icon(Supplier<ItemStack> iconSupplier);
 

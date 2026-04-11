@@ -1,12 +1,12 @@
 package com.mmodding.library.datagen.api.recipe;
 
-import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 @ApiStatus.NonExtendable
 public interface RecipeHelper {
@@ -41,29 +41,29 @@ public interface RecipeHelper {
 	 */
 	void shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer);
 
-	void smelting(ItemConvertible item, RecipeCategory category, int experience, int time);
+	void smelting(ItemLike item, RecipeCategory category, int experience, int time);
 
 	void smelting(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void blasting(ItemConvertible item, RecipeCategory category, int experience, int time);
+	void blasting(ItemLike item, RecipeCategory category, int experience, int time);
 
 	void blasting(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void smoking(ItemConvertible item, RecipeCategory category, int experience, int time);
+	void smoking(ItemLike item, RecipeCategory category, int experience, int time);
 
 	void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void campfireCooking(ItemConvertible item, RecipeCategory category, int experience, int time);
+	void campfireCooking(ItemLike item, RecipeCategory category, int experience, int time);
 
 	void campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void factory(CraftingRecipeJsonBuilder factory);
+	void factory(RecipeBuilder factory);
 
 	@ApiStatus.NonExtendable
 	interface ShapedRecipe {
 
-		default void key(char key, ItemConvertible item) {
-			this.key(key, Ingredient.ofItems(item));
+		default void key(char key, ItemLike item) {
+			this.key(key, Ingredient.of(item));
 		}
 
 		void key(char key, Ingredient ingredient);
@@ -76,7 +76,7 @@ public interface RecipeHelper {
 	@ApiStatus.NonExtendable
 	interface ShapelessRecipe {
 
-		void with(ItemConvertible... items);
+		void with(ItemLike... items);
 
 		void with(Ingredient... ingredients);
 	}
@@ -84,16 +84,16 @@ public interface RecipeHelper {
 	@ApiStatus.NonExtendable
 	interface SmeltingRecipe {
 
-		default void input(ItemConvertible item) {
-			this.input(Ingredient.ofItems(item));
+		default void input(ItemLike item) {
+			this.input(Ingredient.of(item));
 		}
 
 		void input(Ingredient ingredient);
 
 		void time(int time);
 
-		default void output(ItemConvertible item) {
-			this.input(Ingredient.ofItems(item));
+		default void output(ItemLike item) {
+			this.input(Ingredient.of(item));
 		}
 
 		void output(Ingredient ingredient);

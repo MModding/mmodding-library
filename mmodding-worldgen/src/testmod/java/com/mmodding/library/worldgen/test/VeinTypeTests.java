@@ -5,8 +5,8 @@ import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.ExtendedModInitializer;
 import com.mmodding.library.worldgen.api.vein.VeinType;
-import net.minecraft.block.Blocks;
-import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 public class VeinTypeTests implements ExtendedModInitializer {
 
@@ -33,7 +33,7 @@ public class VeinTypeTests implements ExtendedModInitializer {
 	public void onInitialize(AdvancedContainer mod) {}
 
 	public static void register(AdvancedContainer mod) {
-		VeinType.REGISTRY.getOrCreateCompanion(ChunkGeneratorSettings.OVERWORLD).register(mod.getMetadata().getId(), factory -> {
+		VeinType.REGISTRY.getOrCreateCompanion(NoiseGeneratorSettings.OVERWORLD).register(mod.getMetadata().getId(), factory -> {
 			factory.register("hi", VeinTypeTests.FIRST_TYPE);
 			factory.register("ih", VeinTypeTests.SECOND_TYPE);
 		});

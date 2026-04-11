@@ -1,15 +1,15 @@
 package com.mmodding.library.core.api.registry.attachment;
 
-import com.mmodding.library.core.impl.registry.attachment.RegistryKeyAttachmentImpl;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import com.mmodding.library.core.impl.registry.attachment.ResourceKeyAttachmentImpl;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 /**
  * Associates static {@link Registry} entries to external elements.
  * @param <T> the registry type
  * @param <E> the attachment type
  */
-public interface RegistryKeyAttachment<T, E> {
+public interface ResourceKeyAttachment<T, E> {
 
 	/**
 	 * Creates a new registry key attachment.
@@ -18,8 +18,8 @@ public interface RegistryKeyAttachment<T, E> {
 	 * @param <T> the type of the registry object
 	 * @param <E> the type of the attached value
 	 */
-	static <T, E> RegistryKeyAttachment<T, E> create(Registry<T> registry) {
-		return new RegistryKeyAttachmentImpl<>(registry);
+	static <T, E> ResourceKeyAttachment<T, E> create(Registry<T> registry) {
+		return new ResourceKeyAttachmentImpl<>(registry);
 	}
 
 	/**
@@ -34,7 +34,7 @@ public interface RegistryKeyAttachment<T, E> {
 	 * @param key the registry key
 	 * @param value the attached value
 	 */
-	void put(RegistryKey<T> key, E value);
+	void put(ResourceKey<T> key, E value);
 
 	/**
 	 * Checks if an object has an attached value through its registry key.
@@ -46,7 +46,7 @@ public interface RegistryKeyAttachment<T, E> {
 	 * Checks if a registry key has an associated value.
 	 * @param key the registry key
 	 */
-	boolean contains(RegistryKey<T> key);
+	boolean contains(ResourceKey<T> key);
 
 	/**
 	 * Retrieves an attached value of an object using object's registry key.
@@ -60,5 +60,5 @@ public interface RegistryKeyAttachment<T, E> {
 	 * @param key the registry key
 	 * @return the attached value
 	 */
-	E get(RegistryKey<T> key);
+	E get(ResourceKey<T> key);
 }

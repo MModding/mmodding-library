@@ -1,11 +1,11 @@
 package com.mmodding.library.datagen.api.lang;
 
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.BiConsumer;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public class TranslationSupport {
 
@@ -15,7 +15,7 @@ public class TranslationSupport {
 	 * @param registry the registry
 	 * @param maker the {@link BiConsumer} providing the {@link TranslationCallback} that will apply the
 	 */
-	public static <T> void addTranslationSupport(RegistryKey<? extends Registry<T>> registry, BiConsumer<TranslationCallback, T> maker) {
+	public static <T> void addTranslationSupport(ResourceKey<? extends Registry<T>> registry, BiConsumer<TranslationCallback, T> maker) {
 		TranslationSupportImpl.addTranslationSupport(registry, maker);
 	}
 

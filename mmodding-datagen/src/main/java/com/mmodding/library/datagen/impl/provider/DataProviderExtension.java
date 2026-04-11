@@ -6,9 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.mmodding.library.datagen.mixin.DataProviderAccessor;
-import net.minecraft.data.DataWriter;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +13,16 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.Util;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.util.GsonHelper;
 
 public class DataProviderExtension {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("mmodding_datagen");
 
 	@SuppressWarnings("UnstableApiUsage")
-	public static CompletableFuture<?> readAndWriteToPath(DataWriter writer, JsonElement json, Path path) {
+	public static CompletableFuture<?> readAndWriteToPath(CachedOutput writer, JsonElement json, Path path) {
 		return CompletableFuture.runAsync(() -> {
 			try {
 				if (path.toFile().isFile()) {
@@ -44,14 +44,14 @@ public class DataProviderExtension {
 				try (JsonWriter jsonWriter = new JsonWriter(new OutputStreamWriter(hashingOutputStream, StandardCharsets.UTF_8))) {
 					jsonWriter.setSerializeNulls(false);
 					jsonWriter.setIndent("  ");
-					JsonHelper.writeSorted(jsonWriter, json, DataProviderAccessor.mmodding$getSortingComparator());
+					GsonHelper.writeValue(jsonWriter, json, DataProviderAccessor.mmodding$getSortingComparator());
 				}
 
-				writer.write(path, byteArrayOutputStream.toByteArray(), hashingOutputStream.hash());
+				writer.writeIfNeeded(path, byteArrayOutputStream.toByteArray(), hashingOutputStream.hash());
 			} catch (IOException iOException) {
 				LOGGER.error("Failed to save file to {}", path, iOException);
 			}
 
-		}, Util.getMainWorkerExecutor());
+		}, Util.backgroundExecutor());
 	}
 }

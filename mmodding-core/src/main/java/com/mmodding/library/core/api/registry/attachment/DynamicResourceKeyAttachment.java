@@ -1,16 +1,16 @@
 package com.mmodding.library.core.api.registry.attachment;
 
-import com.mmodding.library.core.impl.registry.attachment.DynamicRegistryKeyAttachmentImpl;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import com.mmodding.library.core.impl.registry.attachment.DynamicResourceKeyAttachmentImpl;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
 
 /**
  * Associates dynamic {@link Registry} entries to external elements.
  * @param <T> the registry type
  * @param <E> the attachment type
  */
-public interface DynamicRegistryKeyAttachment<T, E> {
+public interface DynamicResourceKeyAttachment<T, E> {
 
 	/**
 	 * Creates a new dynamic registry key attachment.
@@ -19,8 +19,8 @@ public interface DynamicRegistryKeyAttachment<T, E> {
 	 * @param <T> the type of the registry object
 	 * @param <E> the type of the attached value
 	 */
-	static <T, E> DynamicRegistryKeyAttachment<T, E> create(RegistryKey<? extends Registry<T>> registry) {
-		return new DynamicRegistryKeyAttachmentImpl<>(registry);
+	static <T, E> DynamicResourceKeyAttachment<T, E> create(ResourceKey<? extends Registry<T>> registry) {
+		return new DynamicResourceKeyAttachmentImpl<>(registry);
 	}
 
 	/**
@@ -29,14 +29,14 @@ public interface DynamicRegistryKeyAttachment<T, E> {
 	 * @param object the object
 	 * @param value the attached value
 	 */
-	void put(DynamicRegistryManager manager, T object, E value);
+	void put(RegistryAccess manager, T object, E value);
 
 	/**
 	 * Attaches a value to a registry key.
 	 * @param key the registry key
 	 * @param value the attached value
 	 */
-	void put(RegistryKey<T> key, E value);
+	void put(ResourceKey<T> key, E value);
 
 	/**
 	 * Retrieves an attached value of an object using object's registry key.
@@ -44,12 +44,12 @@ public interface DynamicRegistryKeyAttachment<T, E> {
 	 * @param object the object
 	 * @return the attached value
 	 */
-	E get(DynamicRegistryManager manager, T object);
+	E get(RegistryAccess manager, T object);
 
 	/**
 	 * Retrieves a value from a registry key.
 	 * @param key the registry key
 	 * @return the attached value
 	 */
-	E get(RegistryKey<T> key);
+	E get(ResourceKey<T> key);
 }

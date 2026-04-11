@@ -1,17 +1,17 @@
 package com.mmodding.library.block.api.catalog.transparent;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class TransparentSlabBlock extends SlabBlock {
 
-	public TransparentSlabBlock(Settings settings) {
+	public TransparentSlabBlock(Properties settings) {
 		super(settings);
 	}
 
 	@Override
-	public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
-		return stateFrom.isOf(this) || super.isSideInvisible(state, stateFrom, direction);
+	public boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
+		return stateFrom.is(this) || super.skipRendering(state, stateFrom, direction);
 	}
 }

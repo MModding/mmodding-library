@@ -4,10 +4,10 @@ import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.MutableConfigContent;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 import com.mmodding.library.config.impl.ConfigBuilderImpl;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
+import net.minecraft.resources.ResourceLocation;
 
 @ApiStatus.NonExtendable
 public interface Config {
@@ -94,6 +94,6 @@ public interface Config {
 		 * @param identifier the configuration identifier
 		 * @return the configuration
 		 */
-		Config build(Identifier identifier);
+		Config build(ResourceLocation identifier);
 	}
 }

@@ -1,33 +1,33 @@
 package com.mmodding.library.block.api.catalog;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 
 public class AdvancedLeavesBlock extends LeavesBlock {
 
-	public AdvancedLeavesBlock(Settings settings) {
+	public AdvancedLeavesBlock(Properties settings) {
 		super(settings);
-		this.setDefaultState(
-			this.getDefaultState()
-				.with(this.getDistanceProperty(), this.getMaxDistance())
-				.with(AdvancedLeavesBlock.PERSISTENT, false)
-				.with(AdvancedLeavesBlock.WATERLOGGED, false)
+		this.registerDefaultState(
+			this.defaultBlockState()
+				.setValue(this.getDistanceProperty(), this.getMaxDistance())
+				.setValue(AdvancedLeavesBlock.PERSISTENT, false)
+				.setValue(AdvancedLeavesBlock.WATERLOGGED, false)
 		);
 	}
 
-	public IntProperty getDistanceProperty() {
+	public IntegerProperty getDistanceProperty() {
 		return AdvancedLeavesBlock.DISTANCE;
 	}
 
@@ -36,11 +36,11 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 	}
 
 	protected boolean isLogValid(BlockState state) {
-		return state.isIn(BlockTags.LOGS);
+		return state.is(BlockTags.LOGS);
 	}
 
 	protected boolean areLeavesValid(BlockState state) {
-		return state.isOf(this);
+		return state.is(this);
 	}
 
 	public boolean areLeavesConnected() {
@@ -48,46 +48,46 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public boolean hasRandomTicks(BlockState state) {
-		return state.get(this.getDistanceProperty()) == this.getMaxDistance() && !state.get(AdvancedLeavesBlock.PERSISTENT);
+	public boolean isRandomlyTicking(BlockState state) {
+		return state.getValue(this.getDistanceProperty()) == this.getMaxDistance() && !state.getValue(AdvancedLeavesBlock.PERSISTENT);
 	}
 
 
 
 	@Override
-	protected boolean shouldDecay(BlockState state) {
-		return !state.get(AdvancedLeavesBlock.PERSISTENT) && state.get(this.getDistanceProperty()) == this.getMaxDistance();
+	protected boolean decaying(BlockState state) {
+		return !state.getValue(AdvancedLeavesBlock.PERSISTENT) && state.getValue(this.getDistanceProperty()) == this.getMaxDistance();
 	}
 
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		world.setBlockState(pos, this.updateDistanceFromLogs(state, world, pos), Block.NOTIFY_ALL);
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+		world.setBlock(pos, this.updateDistance(state, world, pos), Block.UPDATE_ALL);
 	}
 
 	@Override
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
-		if (state.get(AdvancedLeavesBlock.WATERLOGGED)) {
-			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(AdvancedLeavesBlock.WATERLOGGED)) {
+			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
 		}
 
-		int i = this.getDistanceFromLog(neighborState) + 1;
-		if (i != 1 || state.get(this.getDistanceProperty()) != i) {
-			world.scheduleBlockTick(pos, this, 1);
+		int i = this.getDistanceAt(neighborState) + 1;
+		if (i != 1 || state.getValue(this.getDistanceProperty()) != i) {
+			world.scheduleTick(pos, this, 1);
 		}
 
 		return state;
 	}
 
-	private BlockState updateDistanceFromLogs(BlockState state, WorldAccess world, BlockPos pos) {
+	private BlockState updateDistance(BlockState state, LevelAccessor world, BlockPos pos) {
 		int distance = this.getMaxDistance();
-		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 		if (!this.areLeavesConnected()) {
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
 					for (int k = -1; k <= 1; k++) {
-						mutable.set(pos.add(i, j, k));
-						distance = Math.min(distance, this.getDistanceFromLog(world.getBlockState(mutable)) + 1);
+						mutable.set(pos.offset(i, j, k));
+						distance = Math.min(distance, this.getDistanceAt(world.getBlockState(mutable)) + 1);
 						if (distance == 1) {
 							break;
 						}
@@ -97,23 +97,23 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 		}
 		else {
 			for (Direction direction : Direction.values()) {
-				mutable.set(pos, direction);
-				distance = Math.min(distance, this.getDistanceFromLog(world.getBlockState(mutable)) + 1);
+				mutable.setWithOffset(pos, direction);
+				distance = Math.min(distance, this.getDistanceAt(world.getBlockState(mutable)) + 1);
 				if (distance == 1) {
 					break;
 				}
 			}
 		}
 
-		return state.with(this.getDistanceProperty(), distance);
+		return state.setValue(this.getDistanceProperty(), distance);
 	}
 
-	private int getDistanceFromLog(BlockState state) {
+	private int getDistanceAt(BlockState state) {
 		if (this.isLogValid(state)) {
 			return 0;
 		}
 		else if (this.areLeavesValid(state)) {
-			return state.get(this.getDistanceProperty());
+			return state.getValue(this.getDistanceProperty());
 		}
 		else {
 			return this.getMaxDistance();
@@ -121,21 +121,21 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(this.getDistanceProperty());
 		builder.add(AdvancedLeavesBlock.PERSISTENT);
 		builder.add(AdvancedLeavesBlock.WATERLOGGED);
 	}
 
 	@Override
-	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		FluidState fluidState = ctx.getWorld()
-			.getFluidState(ctx.getBlockPos());
+	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		FluidState fluidState = ctx.getLevel()
+			.getFluidState(ctx.getClickedPos());
 
-		BlockState blockState = this.getDefaultState()
-			.with(AdvancedLeavesBlock.PERSISTENT, true)
-			.with(AdvancedLeavesBlock.WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+		BlockState blockState = this.defaultBlockState()
+			.setValue(AdvancedLeavesBlock.PERSISTENT, true)
+			.setValue(AdvancedLeavesBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
 
-		return this.updateDistanceFromLogs(blockState, ctx.getWorld(), ctx.getBlockPos());
+		return this.updateDistance(blockState, ctx.getLevel(), ctx.getClickedPos());
 	}
 }

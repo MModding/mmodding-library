@@ -1,20 +1,19 @@
 package com.mmodding.library.item.api.catalog;
 
-import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-
 import java.util.function.Supplier;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 public class AdvancedBowItem extends BowItem {
 
 	private final Supplier<Item> defaultArrowItem;
 
-	public AdvancedBowItem(Settings settings) {
+	public AdvancedBowItem(Properties settings) {
 		this(() -> Items.ARROW, settings);
 	}
 
-	public AdvancedBowItem(Supplier<Item> defaultArrowItem, Settings settings) {
+	public AdvancedBowItem(Supplier<Item> defaultArrowItem, Properties settings) {
 		super(settings);
 		this.defaultArrowItem = defaultArrowItem;
 	}

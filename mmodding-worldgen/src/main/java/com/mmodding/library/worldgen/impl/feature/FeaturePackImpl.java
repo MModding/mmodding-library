@@ -4,20 +4,23 @@ import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.worldgen.api.feature.ConfiguredFeaturePack;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.world.gen.feature.*;
-
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC> {
+public class FeaturePackImpl<FC extends FeatureConfiguration> implements FeaturePack<FC> {
 
 	private final Feature<FC> feature;
 
-	private final BiList<ConfiguredFeaturePack<FC>, Function<Registerable<ConfiguredFeature<?, ?>>, FC>> configuredFeaturePacks;
+	private final BiList<ConfiguredFeaturePack<FC>, Function<BootstapContext<ConfiguredFeature<?, ?>>, FC>> configuredFeaturePacks;
 
 	public FeaturePackImpl(Feature<FC> feature) {
 		this.feature = feature;
@@ -25,7 +28,7 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 	}
 
 	@Override
-	public FeaturePack<FC> appendConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<ConfiguredFeaturePack<FC>> action) {
+	public FeaturePack<FC> appendConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<ConfiguredFeaturePack<FC>> action) {
 		ConfiguredFeaturePack<FC> configuredFeaturePack = ConfiguredFeaturePack.of(key);
 		this.configuredFeaturePacks.add(configuredFeaturePack, ignored -> featureConfig);
 		action.accept(configuredFeaturePack);
@@ -33,10 +36,10 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 	}
 
 	@Override
-	public FeaturePack<FC> appendConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> key, Function<FeaturePack.ConfiguredFeatureLookup<FC>, FC> featureConfigFactory, Consumer<ConfiguredFeaturePack<FC>> action) {
+	public FeaturePack<FC> appendConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> key, Function<FeaturePack.ConfiguredFeatureLookup<FC>, FC> featureConfigFactory, Consumer<ConfiguredFeaturePack<FC>> action) {
 		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(key);
 		this.configuredFeaturePacks.add(configuredFeaturePack, configuredFeatures -> {
-			RegistryEntryLookup<ConfiguredFeature<?, ?>> lookup = configuredFeatures.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
+			HolderGetter<ConfiguredFeature<?, ?>> lookup = configuredFeatures.lookup(Registries.CONFIGURED_FEATURE);
 			return featureConfigFactory.apply(lookup::getOrThrow);
 		});
 		action.accept(configuredFeaturePack);
@@ -45,10 +48,10 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public FeaturePack<FC> replicateConfiguredFeature(RegistryKey<ConfiguredFeature<?, ?>> source, RegistryKey<ConfiguredFeature<?, ?>> key, AutoMapper<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action) {
+	public FeaturePack<FC> replicateConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> source, ResourceKey<ConfiguredFeature<?, ?>> key, AutoMapper<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action) {
 		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(key);
 		this.configuredFeaturePacks.add(configuredFeaturePack, configuredFeatures -> {
-			ConfiguredFeature<?, ?> sourceConfiguredFeature = configuredFeatures.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE).getOrThrow(source).value();
+			ConfiguredFeature<?, ?> sourceConfiguredFeature = configuredFeatures.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(source).value();
 			return patcher.map((FC) sourceConfiguredFeature.config());
 		});
 		action.accept(configuredFeaturePack);
@@ -56,15 +59,15 @@ public class FeaturePackImpl<FC extends FeatureConfig> implements FeaturePack<FC
 	}
 
 	@Override
-	public void registerConfiguredFeatures(Registerable<ConfiguredFeature<?, ?>> configuredFeatures) {
+	public void registerConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatures) {
 		this.configuredFeaturePacks.forEach((pack, featureConfig) -> {
 			ConfiguredFeaturePackImpl<FC> impl = (ConfiguredFeaturePackImpl<FC>) pack;
-			ConfiguredFeatures.register(configuredFeatures, impl.configuredFeatureKey, this.feature, featureConfig.apply(configuredFeatures));
+			FeatureUtils.register(configuredFeatures, impl.configuredFeatureKey, this.feature, featureConfig.apply(configuredFeatures));
 		});
 	}
 
 	@Override
-	public void registerPlacedFeatures(Registerable<PlacedFeature> placedFeatures) {
+	public void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures) {
 		this.configuredFeaturePacks.forEach((pack, featureConfig) -> pack.registerPlacedFeatures(placedFeatures));
 	}
 }

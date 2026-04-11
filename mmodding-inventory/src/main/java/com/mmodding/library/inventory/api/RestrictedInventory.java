@@ -1,37 +1,36 @@
 package com.mmodding.library.inventory.api;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
-
 import java.util.function.Predicate;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
- * An implementation of {@link Inventory} which allows restricting its usage by players with predicates.
+ * An implementation of {@link Container} which allows restricting its usage by players with predicates.
  */
 public interface RestrictedInventory extends BasicInventory {
 
-	Predicate<PlayerEntity> playerUsePredicate();
+	Predicate<Player> playerUsePredicate();
 
-	static RestrictedInventory of(DefaultedList<ItemStack> content, Predicate<PlayerEntity> playerUsePredicate) {
+	static RestrictedInventory of(NonNullList<ItemStack> content, Predicate<Player> playerUsePredicate) {
 
 		return new RestrictedInventory() {
 
 			@Override
-			public DefaultedList<ItemStack> getContent() {
+			public NonNullList<ItemStack> getContent() {
 				return content;
 			}
 
 			@Override
-			public Predicate<PlayerEntity> playerUsePredicate() {
+			public Predicate<Player> playerUsePredicate() {
 				return playerUsePredicate;
 			}
 		};
 	}
 
-	static RestrictedInventory ofSize(int size, Predicate<PlayerEntity> playerUsePredicate) {
-		return RestrictedInventory.of(DefaultedList.ofSize(size, ItemStack.EMPTY), playerUsePredicate);
+	static RestrictedInventory ofSize(int size, Predicate<Player> playerUsePredicate) {
+		return RestrictedInventory.of(NonNullList.withSize(size, ItemStack.EMPTY), playerUsePredicate);
 	}
 
 	/**
@@ -43,7 +42,7 @@ public interface RestrictedInventory extends BasicInventory {
 	}
 
 	@Override
-	default boolean canPlayerUse(PlayerEntity player) {
+	default boolean stillValid(Player player) {
 		return this.playerUsePredicate().test(player);
 	}
 }

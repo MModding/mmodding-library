@@ -1,8 +1,8 @@
 package com.mmodding.library.core.api.registry.factory;
 
 import com.mmodding.library.core.impl.registry.factory.RegistryKeyFactoryImpl;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 public interface RegistryKeyFactory<T> {
 
@@ -12,7 +12,7 @@ public interface RegistryKeyFactory<T> {
 	 * @param namespace the mod namespace
 	 * @return the newly created registry key factory
 	 */
-	static <T> RegistryKeyFactory<T> create(RegistryKey<? extends Registry<T>> registry, String namespace) {
+	static <T> RegistryKeyFactory<T> create(ResourceKey<? extends Registry<T>> registry, String namespace) {
 		return new RegistryKeyFactoryImpl<>(registry, namespace);
 	}
 
@@ -21,7 +21,7 @@ public interface RegistryKeyFactory<T> {
 	 * @param path the path to provide to create the key
 	 * @return the newly created registry key
 	 */
-	RegistryKey<T> createKey(String path);
+	ResourceKey<T> createKey(String path);
 
 	/**
 	 * Creates a registry key with the factory registry's registry key.
@@ -29,5 +29,5 @@ public interface RegistryKeyFactory<T> {
 	 * @param path the path to provide to create the key
 	 * @return the newly created registry key
 	 */
-	RegistryKey<T> createKey(String namespace, String path);
+	ResourceKey<T> createKey(String namespace, String path);
 }

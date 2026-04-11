@@ -3,20 +3,23 @@ package com.mmodding.library.block.api.catalog;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.object.Wrapper;
-import net.minecraft.block.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.GrowingPlantBodyBlock;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import java.util.function.Predicate;
 
 public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> {
@@ -24,11 +27,11 @@ public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> 
 	private Head head;
 	private Body body;
 
-	public GrowsDownPlantBlock(AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
+	public GrowsDownPlantBlock(BlockBehaviour.Properties settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
 		this(Head::new, Body::new, settings, tickWater, growthChance, growLength, chooseStemState);
 	}
 
-	public GrowsDownPlantBlock(HeadMaker headMaker, BodyMaker bodyMaker, AbstractBlock.Settings settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
+	public GrowsDownPlantBlock(HeadMaker headMaker, BodyMaker bodyMaker, BlockBehaviour.Properties settings, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
 		this.head = headMaker.make(settings, this, tickWater, growthChance, growLength, chooseStemState);
 		this.body = bodyMaker.make(settings, this, tickWater);
 	}
@@ -64,62 +67,62 @@ public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> 
 	}
 
 	public void register(AdvancedContainer mod, String path) {
-		mod.register(Registries.BLOCK, path + "_head", this.head);
-		mod.register(Registries.BLOCK, path, this.body);
+		mod.register(BuiltInRegistries.BLOCK, path + "_head", this.head);
+		mod.register(BuiltInRegistries.BLOCK, path, this.body);
 	}
 
-	public static class Head extends AbstractPlantStemBlock {
+	public static class Head extends GrowingPlantHeadBlock {
 
 		private final GrowsDownPlantBlock plant;
 		private final int growLength;
 		private final Predicate<BlockState> chooseStemState;
 
-		protected Head(AbstractBlock.Settings settings, GrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
-			super(settings, Direction.DOWN, Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater, growthChance);
+		protected Head(BlockBehaviour.Properties settings, GrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState) {
+			super(settings, Direction.DOWN, Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater, growthChance);
 			this.plant = plant;
 			this.growLength = growLength;
 			this.chooseStemState = chooseStemState;
 		}
 
 		@Override
-		protected int getGrowthLength(Random random) {
+		protected int getBlocksToGrowWhenBonemealed(RandomSource random) {
 			return this.growLength;
 		}
 
 		@Override
-		protected boolean chooseStemState(BlockState state) {
+		protected boolean canGrowInto(BlockState state) {
 			return this.chooseStemState.test(state);
 		}
 
 		@Override
-		protected Block getPlant() {
+		protected Block getBodyBlock() {
 			return this.plant.body;
 		}
 	}
 
-	public static class Body extends AbstractPlantBlock {
+	public static class Body extends GrowingPlantBodyBlock {
 
 		private final GrowsDownPlantBlock plant;
 
-		protected Body(Settings settings, GrowsDownPlantBlock plant, boolean tickWater) {
-			super(settings, Direction.DOWN, Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater);
+		protected Body(Properties settings, GrowsDownPlantBlock plant, boolean tickWater) {
+			super(settings, Direction.DOWN, Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater);
 			this.plant = plant;
 		}
 
 		@Override
-		protected AbstractPlantStemBlock getStem() {
+		protected GrowingPlantHeadBlock getHeadBlock() {
 			return this.plant.head;
 		}
 	}
 
 	public interface HeadMaker {
 
-		Head make(AbstractBlock.Settings settings, GrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState);
+		Head make(BlockBehaviour.Properties settings, GrowsDownPlantBlock plant, boolean tickWater, float growthChance, int growLength, Predicate<BlockState> chooseStemState);
 	}
 
 	public interface BodyMaker {
 
-		Body make(AbstractBlock.Settings settings, GrowsDownPlantBlock plant, boolean tickWater);
+		Body make(BlockBehaviour.Properties settings, GrowsDownPlantBlock plant, boolean tickWater);
 	}
 
 	/**
@@ -129,30 +132,30 @@ public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> 
 
 		BooleanProperty getFruitsProperty();
 
-		Item getFruitItem(BlockState state, World world, BlockPos pos);
+		Item getFruitItem(BlockState state, Level world, BlockPos pos);
 
-		int getPickingCount(BlockState state, World world, BlockPos pos);
+		int getPickingCount(BlockState state, Level world, BlockPos pos);
 
-		default ActionResult pickBerries(BlockState state, World world, BlockPos pos) {
-			if (state.get(this.getFruitsProperty())) {
-				Block.dropStack(world, pos, new ItemStack(this.getFruitItem(state, world, pos), this.getPickingCount(state, world, pos)));
+		default InteractionResult pickBerries(BlockState state, Level world, BlockPos pos) {
+			if (state.getValue(this.getFruitsProperty())) {
+				Block.popResource(world, pos, new ItemStack(this.getFruitItem(state, world, pos), this.getPickingCount(state, world, pos)));
 				world.playSound(
 					null,
 					pos,
-					SoundEvents.BLOCK_CAVE_VINES_PICK_BERRIES,
-					SoundCategory.BLOCKS,
+					SoundEvents.CAVE_VINES_PICK_BERRIES,
+					SoundSource.BLOCKS,
 					1.0f,
-					MathHelper.nextBetween(world.getRandom(), 0.8f, 1.2f)
+					Mth.randomBetween(world.getRandom(), 0.8f, 1.2f)
 				);
-				world.setBlockState(pos, state.with(this.getFruitsProperty(), Boolean.FALSE), Block.NOTIFY_LISTENERS);
-				return ActionResult.success(world.isClient());
+				world.setBlock(pos, state.setValue(this.getFruitsProperty(), Boolean.FALSE), Block.UPDATE_CLIENTS);
+				return InteractionResult.sidedSuccess(world.isClientSide());
 			} else {
-				return ActionResult.PASS;
+				return InteractionResult.PASS;
 			}
 		}
 
 		default boolean hasBerries(BlockState state) {
-			return state.contains(this.getFruitsProperty()) && state.get(this.getFruitsProperty());
+			return state.hasProperty(this.getFruitsProperty()) && state.getValue(this.getFruitsProperty());
 		}
 	}
 }

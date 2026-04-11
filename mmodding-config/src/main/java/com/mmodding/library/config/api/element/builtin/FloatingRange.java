@@ -2,7 +2,7 @@ package com.mmodding.library.config.api.element.builtin;
 
 import com.mmodding.library.config.api.element.ConfigElement;
 import com.mmodding.library.java.api.object.Copyable;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 @ConfigElement
 public final class FloatingRange implements Copyable<FloatingRange> {
@@ -27,7 +27,7 @@ public final class FloatingRange implements Copyable<FloatingRange> {
 	}
 
 	public void setValue(double value) {
-		this.value = MathHelper.clamp(value, this.min, this.max);
+		this.value = Mth.clamp(value, this.min, this.max);
 	}
 
 	@Override

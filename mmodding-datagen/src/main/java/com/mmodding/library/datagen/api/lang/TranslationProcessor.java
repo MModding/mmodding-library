@@ -1,8 +1,8 @@
 package com.mmodding.library.datagen.api.lang;
 
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
 
 public interface TranslationProcessor<T> {
 
-	String process(RegistryKey<T> element);
+	String process(ResourceKey<T> element);
 }

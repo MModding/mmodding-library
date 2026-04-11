@@ -7,30 +7,29 @@ import com.mmodding.library.core.api.management.content.ContentProvider;
 import com.mmodding.library.core.impl.management.content.BootstrapFunctionImpl;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryBuilder;
-import net.minecraft.registry.RegistryKey;
-
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.resources.ResourceKey;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ElementsManagerImpl implements ElementsManager {
 
 	private final List<ContentProvider> contentProviders = new ArrayList<>();
-	private final BiList<RegistryKey<Registry<?>>, ResourceProvider<?>> resourceProviders = BiList.create();
+	private final BiList<ResourceKey<Registry<?>>, ResourceProvider<?>> resourceProviders = BiList.create();
 
 	public void loadElements(AdvancedContainer mod) {
 		this.contentProviders.forEach(provider -> provider.register(mod));
 	}
 
-	public void loadBootstraps(AdvancedContainer mod, RegistryBuilder builder) {
+	public void loadBootstraps(AdvancedContainer mod, RegistrySetBuilder builder) {
 		this.resourceProviders.forEach((key, bootstrap) -> this.loadBootstrap(mod, builder, key, bootstrap));
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> void loadBootstrap(AdvancedContainer mod, RegistryBuilder builder, RegistryKey<?> key, ResourceProvider<?> bootstrap) {
-		builder.addRegistry(
-			(RegistryKey<? extends Registry<T>>) key,
+	public <T> void loadBootstrap(AdvancedContainer mod, RegistrySetBuilder builder, ResourceKey<?> key, ResourceProvider<?> bootstrap) {
+		builder.add(
+			(ResourceKey<? extends Registry<T>>) key,
 			new BootstrapFunctionImpl<>(mod, (ResourceProvider<T>) bootstrap)
 		);
 	}
@@ -43,9 +42,9 @@ public class ElementsManagerImpl implements ElementsManager {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> ElementsManagerImpl resource(RegistryKey<Registry<T>> key, ResourceProvider<T> provider) {
+	public <T> ElementsManagerImpl resource(ResourceKey<Registry<T>> key, ResourceProvider<T> provider) {
 		if (System.getProperty("fabric-api.datagen") != null) {
-			this.resourceProviders.add((RegistryKey<Registry<?>>) (Registry<?>) key, provider);
+			this.resourceProviders.add((ResourceKey<Registry<?>>) (Registry<?>) key, provider);
 		}
 		return this;
 	}

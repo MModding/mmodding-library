@@ -10,12 +10,12 @@ import org.jetbrains.annotations.ApiStatus;
 public class FloatingRangeWrapper implements ConfigElementTypeWrapper<FloatingRange, Double, FloatingRangeWrapper.Properties> {
 
 	@Override
-	public FloatingRange resolve(ConfigContent category, String qualifier, Properties properties) {
+	public FloatingRange resolve(ConfigContent category, String qualifier, com.mmodding.library.config.impl.element.builtin.FloatingRangeWrapper.Properties properties) {
 		return FloatingRange.of(properties.min, properties.max, category.floating(qualifier));
 	}
 
 	@Override
-	public void modify(MutableConfigContent mutable, String qualifier, Properties properties, Double value) {
+	public void modify(MutableConfigContent mutable, String qualifier, com.mmodding.library.config.impl.element.builtin.FloatingRangeWrapper.Properties properties, Double value) {
 		mutable.floating(qualifier, value);
 	}
 

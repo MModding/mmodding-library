@@ -6,8 +6,7 @@ import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.minecraft.block.Block;
-
+import net.minecraft.world.level.block.Block;
 import java.util.List;
 
 public class BlockLootTypeImpl implements DataContentType<Block, BlockLootProcessor> {

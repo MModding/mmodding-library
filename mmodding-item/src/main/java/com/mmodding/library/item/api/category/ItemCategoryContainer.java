@@ -1,7 +1,7 @@
 package com.mmodding.library.item.api.category;
 
 import com.mmodding.library.core.api.management.info.InjectedContent;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 @InjectedContent(Item.class)
 public interface ItemCategoryContainer {

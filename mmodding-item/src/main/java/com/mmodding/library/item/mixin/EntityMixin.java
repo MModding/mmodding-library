@@ -1,6 +1,6 @@
 package com.mmodding.library.item.mixin;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class EntityMixin {
 
 	@Shadow
-	public abstract double squaredDistanceTo(Entity entity);
+	public abstract double distanceToSqr(Entity entity);
 }

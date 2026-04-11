@@ -3,37 +3,37 @@ package com.mmodding.library.core.impl.registry;
 import com.google.common.collect.Iterators;
 import com.mmodding.library.core.api.registry.LiteRegistry;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import net.minecraft.resources.ResourceLocation;
 
 public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 
-	private final Map<Identifier, T> content = new Object2ObjectOpenHashMap<>();
+	private final Map<ResourceLocation, T> content = new Object2ObjectOpenHashMap<>();
 
-	private final Map<T, Identifier> reversed = new Object2ObjectOpenHashMap<>();
+	private final Map<T, ResourceLocation> reversed = new Object2ObjectOpenHashMap<>();
 
 	@Override
-	public boolean contains(Identifier identifier) {
+	public boolean contains(ResourceLocation identifier) {
 		return this.content.containsKey(identifier);
 	}
 
 	@Override
-	public T get(Identifier identifier) {
+	public T get(ResourceLocation identifier) {
 		return this.content.get(identifier);
 	}
 
 	@Override
-	public Identifier getId(T entry) {
+	public ResourceLocation getId(T entry) {
 		return this.reversed.get(entry);
 	}
 
 	@Override
-	public T register(Identifier identifier, T entry) {
+	public T register(ResourceLocation identifier, T entry) {
 		if (!this.content.containsKey(identifier)) {
 			this.content.put(identifier, entry);
 			this.reversed.put(entry, identifier);
@@ -55,25 +55,25 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 		return Iterators.transform(this.content.entrySet().iterator(), entry -> new EntryImpl<>(entry.getKey(), entry.getValue()));
 	}
 
-	private record EntryImpl<T>(Identifier identifier, T element) implements Entry<T> {}
+	private record EntryImpl<T>(ResourceLocation identifier, T element) implements Entry<T> {}
 
 	private static class LiteRegistrationFactoryImpl<T> implements LiteRegistrationFactory<T> {
 
 		private final String namespace;
-		private final BiFunction<Identifier, T, T> biConsumer;
+		private final BiFunction<ResourceLocation, T, T> biConsumer;
 
-		private LiteRegistrationFactoryImpl(String namespace, BiFunction<Identifier, T, T> biConsumer) {
+		private LiteRegistrationFactoryImpl(String namespace, BiFunction<ResourceLocation, T, T> biConsumer) {
 			this.namespace = namespace;
 			this.biConsumer = biConsumer;
 		}
 
 		@Override
 		public T register(String path, T entry) {
-			return this.register(Identifier.of(this.namespace, path), entry);
+			return this.register(ResourceLocation.tryBuild(this.namespace, path), entry);
 		}
 
 		@Override
-		public T register(Identifier identifier, T entry) {
+		public T register(ResourceLocation identifier, T entry) {
 			return this.biConsumer.apply(identifier, entry);
 		}
 	}

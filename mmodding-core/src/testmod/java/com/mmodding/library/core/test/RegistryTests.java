@@ -2,15 +2,15 @@ package com.mmodding.library.core.test;
 
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.registry.companion.RegistryCompanion;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class RegistryTests {
 
-	public static final RegistryCompanion<Item, Block> ITEM_COMPANION = RegistryCompanion.create(Registries.ITEM);
+	public static final RegistryCompanion<Item, Block> ITEM_COMPANION = RegistryCompanion.create(BuiltInRegistries.ITEM);
 
 	public RegistryTests() {
 		RegistryTests.ITEM_COMPANION.getOrCreateCompanion(Items.ACACIA_BOAT);

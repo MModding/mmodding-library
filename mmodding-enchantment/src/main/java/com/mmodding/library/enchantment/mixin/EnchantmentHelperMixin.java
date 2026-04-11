@@ -7,29 +7,29 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.library.enchantment.api.AdvancedEnchantment;
 import com.mmodding.library.enchantment.api.family.EnchantmentFamily;
 import com.mmodding.library.item.api.catalog.EnchantableBookItem;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.Iterator;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
 
-	@WrapOperation(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+	@WrapOperation(method = "getAvailableEnchantmentResults", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"))
 	private static boolean addCustomBooks(ItemStack stack, Item item, Operation<Boolean> operation) {
 		return operation.call(stack, item) || stack.getItem() instanceof EnchantableBookItem;
 	}
 
-	@ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registry;iterator()Ljava/util/Iterator;"))
+	@ModifyExpressionValue(method = "getAvailableEnchantmentResults", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;iterator()Ljava/util/Iterator;"))
 	private static Iterator<Enchantment> filterPossibleEntries(Iterator<Enchantment> original, int i, ItemStack itemStack, boolean bl) {
 		return Iterators.filter(original, enchantment -> {
 			if (enchantment instanceof AdvancedEnchantment advancedEnchantment) {
 				EnchantmentFamily enchantmentFamily = advancedEnchantment.getFamily();
-				return enchantmentFamily.isObtainableInEnchantingTable() && itemStack.isOf(enchantmentFamily.getBookItem());
+				return enchantmentFamily.isObtainableInEnchantingTable() && itemStack.is(enchantmentFamily.getBookItem());
 			}
 			else {
 				return true;

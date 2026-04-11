@@ -1,8 +1,8 @@
 package com.mmodding.library.datagen.api.recipe;
 
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.world.level.ItemLike;
 
-public interface RecipeProcessor<T extends ItemConvertible> {
+public interface RecipeProcessor<T extends ItemLike> {
 
 	void process(RecipeHelper helper, T element);
 }

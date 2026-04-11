@@ -1,9 +1,8 @@
 package com.mmodding.library.state.api.property;
 
-import net.minecraft.state.property.Property;
-
 import java.util.Collection;
 import java.util.Set;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public abstract class ConstantProperty<T extends Comparable<T>> extends Property<T> {
 
@@ -17,12 +16,12 @@ public abstract class ConstantProperty<T extends Comparable<T>> extends Property
 	}
 
 	@Override
-	public Collection<T> getValues() {
+	public Collection<T> getPossibleValues() {
 		return this.singleton;
 	}
 
 	@Override
-	public String name(T comparable) {
+	public String getName(T comparable) {
 		return comparable.toString();
 	}
 

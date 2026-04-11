@@ -7,7 +7,7 @@
     "accessor.RegistryKeyAccessor",
     "injector.BootstrapMixin",
     "injector.FabricDataGenHelperMixin",
-    "injector.RegistryKeyMixin"
+    "injector.ResourceKeyMixin"
   ],
   "client": [],
   "injectors": {

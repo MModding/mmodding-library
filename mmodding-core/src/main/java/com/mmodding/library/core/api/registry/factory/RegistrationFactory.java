@@ -1,10 +1,10 @@
 package com.mmodding.library.core.api.registry.factory;
 
 import com.mmodding.library.core.impl.registry.factory.RegistrationFactoryImpl;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 
 public interface RegistrationFactory<T> {
 
@@ -25,21 +25,21 @@ public interface RegistrationFactory<T> {
 	 * @param namespace the mod namespace
 	 * @return the newly created registration factory
 	 */
-	static <T> RegistrationFactory<T> create(RegistryKey<? extends Registry<T>> registry, Registerable<T> registerable, String namespace) {
+	static <T> RegistrationFactory<T> create(ResourceKey<? extends Registry<T>> registry, BootstapContext<T> registerable, String namespace) {
 		return new RegistrationFactoryImpl<>(registry, registerable, namespace);
 	}
 
 	/**
 	 * A registration method filling the registry and the mod namespace automatically with the provided ones.
-	 * @see Registry#register(Registry, Identifier, Object)
-	 * @see Registerable#register(RegistryKey, Object)
+	 * @see Registry#register(Registry, ResourceLocation, Object)
+	 * @see BootstapContext#register(ResourceKey, Object)
 	 */
 	T register(String path, T entry);
 
 	/**
 	 * A registration method filling the registry automatically with the provided one.
-	 * @see Registry#register(Registry, Identifier, Object)
-	 * @see Registerable#register(RegistryKey, Object)
+	 * @see Registry#register(Registry, ResourceLocation, Object)
+	 * @see BootstapContext#register(ResourceKey, Object)
 	 */
 	T register(String namespace, String path, T entry);
 }

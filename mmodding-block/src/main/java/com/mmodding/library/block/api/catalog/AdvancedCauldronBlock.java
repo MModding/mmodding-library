@@ -1,33 +1,32 @@
 package com.mmodding.library.block.api.catalog;
 
 import com.mmodding.library.block.mixin.LeveledCauldronBlockAccessor;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeveledCauldronBlock;
-import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-
 import java.util.Map;
 import java.util.function.Predicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 
-public class AdvancedCauldronBlock extends LeveledCauldronBlock {
+public class AdvancedCauldronBlock extends LayeredCauldronBlock {
 
-	public AdvancedCauldronBlock(Settings settings, Predicate<Biome.Precipitation> predicate, Map<Item, CauldronBehavior> map) {
+	public AdvancedCauldronBlock(Properties settings, Predicate<Biome.Precipitation> predicate, Map<Item, CauldronInteraction> map) {
 		super(settings, predicate, map);
 	}
 
 	@Override
-	protected boolean canBeFilledByDripstone(Fluid fluid) {
-		return ((LeveledCauldronBlockAccessor) this).getPrecipitationPredicate() != null && super.canBeFilledByDripstone(fluid);
+	protected boolean canReceiveStalactiteDrip(Fluid fluid) {
+		return ((LeveledCauldronBlockAccessor) this).getFillPredicate() != null && super.canReceiveStalactiteDrip(fluid);
 	}
 
 	@Override
-	public void precipitationTick(BlockState state, World world, BlockPos pos, Biome.Precipitation precipitation) {
-		if (((LeveledCauldronBlockAccessor) this).getPrecipitationPredicate() != null) {
-			super.precipitationTick(state, world, pos, precipitation);
+	public void handlePrecipitation(BlockState state, Level world, BlockPos pos, Biome.Precipitation precipitation) {
+		if (((LeveledCauldronBlockAccessor) this).getFillPredicate() != null) {
+			super.handlePrecipitation(state, world, pos, precipitation);
 		}
 	}
 }

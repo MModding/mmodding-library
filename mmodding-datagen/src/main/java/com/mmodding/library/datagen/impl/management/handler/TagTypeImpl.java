@@ -6,25 +6,24 @@ import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.world.event.GameEvent;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluid;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class TagTypeImpl<T> implements DataContentType<T, TagProcessor<T>> {
 
-	private final RegistryKey<? extends Registry<T>> registry;
+	private final ResourceKey<? extends Registry<T>> registry;
 
-	public TagTypeImpl(RegistryKey<? extends Registry<T>> registry) {
+	public TagTypeImpl(ResourceKey<? extends Registry<T>> registry) {
 		this.registry = registry;
 	}
 
@@ -36,26 +35,26 @@ public class TagTypeImpl<T> implements DataContentType<T, TagProcessor<T>> {
 	private static class AutomatedTagProvider<T> extends FabricTagProvider<T> {
 
 		private final BiList<TagProcessor<T>, List<T>> contentToProcess;
-		private final Function<T, RegistryKey<T>> reverseLookupLogic;
+		private final Function<T, ResourceKey<T>> reverseLookupLogic;
 
 		@SuppressWarnings("unchecked")
-		protected AutomatedTagProvider(RegistryKey<? extends Registry<T>> registry, BiList<TagProcessor<T>, List<T>> contentToProcess, FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> future) {
+		protected AutomatedTagProvider(ResourceKey<? extends Registry<T>> registry, BiList<TagProcessor<T>, List<T>> contentToProcess, FabricDataOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, registry, future);
 			this.contentToProcess = contentToProcess;
-			if (registry.equals(RegistryKeys.BLOCK)) {
-				this.reverseLookupLogic = (Function<T, RegistryKey<T>>) (Function<?, ?>) (Function<Block, RegistryKey<Block>>) block -> block.getRegistryEntry().registryKey();
+			if (registry.equals(Registries.BLOCK)) {
+				this.reverseLookupLogic = (Function<T, ResourceKey<T>>) (Function<?, ?>) (Function<Block, ResourceKey<Block>>) block -> block.builtInRegistryHolder().key();
 			}
-			else if (registry.equals(RegistryKeys.ITEM)) {
-				this.reverseLookupLogic = (Function<T, RegistryKey<T>>) (Function<?, ?>) (Function<Item, RegistryKey<Item>>) item -> item.getRegistryEntry().registryKey();
+			else if (registry.equals(Registries.ITEM)) {
+				this.reverseLookupLogic = (Function<T, ResourceKey<T>>) (Function<?, ?>) (Function<Item, ResourceKey<Item>>) item -> item.builtInRegistryHolder().key();
 			}
-			else if (registry.equals(RegistryKeys.FLUID)) {
-				this.reverseLookupLogic = (Function<T, RegistryKey<T>>) (Function<?, ?>) (Function<Fluid, RegistryKey<Fluid>>) fluid -> fluid.getRegistryEntry().registryKey();
+			else if (registry.equals(Registries.FLUID)) {
+				this.reverseLookupLogic = (Function<T, ResourceKey<T>>) (Function<?, ?>) (Function<Fluid, ResourceKey<Fluid>>) fluid -> fluid.builtInRegistryHolder().key();
 			}
-			else if (registry.equals(RegistryKeys.ENTITY_TYPE)) {
-				this.reverseLookupLogic = (Function<T, RegistryKey<T>>) (Function<?, ?>) (Function<EntityType<?>, RegistryKey<EntityType<?>>>) type -> type.getRegistryEntry().registryKey();
+			else if (registry.equals(Registries.ENTITY_TYPE)) {
+				this.reverseLookupLogic = (Function<T, ResourceKey<T>>) (Function<?, ?>) (Function<EntityType<?>, ResourceKey<EntityType<?>>>) type -> type.builtInRegistryHolder().key();
 			}
-			else if (registry.equals(RegistryKeys.GAME_EVENT)) {
-				this.reverseLookupLogic = (Function<T, RegistryKey<T>>) (Function<?, ?>) (Function<GameEvent, RegistryKey<GameEvent>>) event -> event.getRegistryEntry().registryKey();
+			else if (registry.equals(Registries.GAME_EVENT)) {
+				this.reverseLookupLogic = (Function<T, ResourceKey<T>>) (Function<?, ?>) (Function<GameEvent, ResourceKey<GameEvent>>) event -> event.builtInRegistryHolder().key();
 			}
 			else {
 				this.reverseLookupLogic = super::reverseLookup;
@@ -63,7 +62,7 @@ public class TagTypeImpl<T> implements DataContentType<T, TagProcessor<T>> {
 		}
 
 		@Override
-		protected void configure(RegistryWrapper.WrapperLookup arg) {
+		protected void addTags(HolderLookup.Provider arg) {
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (T element : elements) {
 					processor.process(this::getOrCreateTagBuilder, element);
@@ -72,7 +71,7 @@ public class TagTypeImpl<T> implements DataContentType<T, TagProcessor<T>> {
 		}
 
 		@Override
-		protected RegistryKey<T> reverseLookup(T element) {
+		protected ResourceKey<T> reverseLookup(T element) {
 			return this.reverseLookupLogic.apply(element);
 		}
 

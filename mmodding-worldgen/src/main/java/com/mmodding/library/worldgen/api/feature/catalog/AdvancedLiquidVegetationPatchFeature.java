@@ -5,25 +5,24 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.VerticalSurfaceType;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.PlacedFeature;
-import net.minecraft.world.gen.feature.VegetationPatchFeatureConfig;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 
 public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquidVegetationPatchFeature.Config> {
 
@@ -32,20 +31,20 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 	}
 
 	@Override
-	public boolean generate(FeatureContext<Config> context) {
-		StructureWorldAccess world = context.getWorld();
-		Config config = context.getConfig();
-		Random random = context.getRandom();
-		BlockPos pos = context.getOrigin();
-		Predicate<BlockState> predicate = state -> state.isIn(config.replaceable);
-		Set<BlockPos> positions = this.placeGroundAndGetPositions(world, config, random, pos, predicate, config.horizontalRadius.get(random) + 1, config.horizontalRadius.get(random) + 1);
+	public boolean place(FeaturePlaceContext<Config> context) {
+		WorldGenLevel world = context.level();
+		Config config = context.config();
+		RandomSource random = context.random();
+		BlockPos pos = context.origin();
+		Predicate<BlockState> predicate = state -> state.is(config.replaceable);
+		Set<BlockPos> positions = this.placeGroundAndGetPositions(world, config, random, pos, predicate, config.xzRadius.sample(random) + 1, config.xzRadius.sample(random) + 1);
 		this.generateVegetation(context, world, config, random, positions);
 		return !positions.isEmpty();
 	}
 
-	protected Set<BlockPos> placeGroundAndGetPositions(StructureWorldAccess world, AdvancedLiquidVegetationPatchFeature.Config config, Random random, BlockPos pos, Predicate<BlockState> replaceable, int radiusX, int radiusZ) {
-		BlockPos.Mutable mutable = pos.mutableCopy();
-		BlockPos.Mutable result = mutable.mutableCopy();
+	protected Set<BlockPos> placeGroundAndGetPositions(WorldGenLevel world, AdvancedLiquidVegetationPatchFeature.Config config, RandomSource random, BlockPos pos, Predicate<BlockState> replaceable, int radiusX, int radiusZ) {
+		BlockPos.MutableBlockPos mutable = pos.mutable();
+		BlockPos.MutableBlockPos result = mutable.mutable();
 		Direction direction = config.surface.getDirection();
 		Direction opposite = direction.getOpposite();
 		Set<BlockPos> positions = new HashSet<>();
@@ -60,21 +59,21 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 				boolean xor = or && !equal;
 
 				if (!equal && (!xor || config.extraEdgeColumnChance != 0.0f && !(random.nextFloat() > config.extraEdgeColumnChance))) {
-					mutable.set(pos, i, 0, j);
+					mutable.setWithOffset(pos, i, 0, j);
 
-					for (int k = 0; world.testBlockState(mutable, AbstractBlock.AbstractBlockState::isAir) && k < config.verticalRange; k++) {
+					for (int k = 0; world.isStateAtPosition(mutable, BlockBehaviour.BlockStateBase::isAir) && k < config.verticalRange; k++) {
 						mutable.move(direction);
 					}
 
-					for (int l = 0; world.testBlockState(mutable, state -> !state.isAir()) && l < config.verticalRange; l++) {
+					for (int l = 0; world.isStateAtPosition(mutable, state -> !state.isAir()) && l < config.verticalRange; l++) {
 						mutable.move(opposite);
 					}
 
-					result.set(mutable, config.surface.getDirection());
+					result.setWithOffset(mutable, config.surface.getDirection());
 					BlockState blockState = world.getBlockState(result);
-					if (world.isAir(mutable) && blockState.isSideSolidFullSquare(world, result, config.surface.getDirection().getOpposite())) {
-						int depth = config.depth.get(random) + (config.extraBottomBlockChance > 0.0f && random.nextFloat() < config.extraBottomBlockChance ? 1 : 0);
-						BlockPos blockPos = result.toImmutable();
+					if (world.isEmptyBlock(mutable) && blockState.isFaceSturdy(world, result, config.surface.getDirection().getOpposite())) {
+						int depth = config.depth.sample(random) + (config.extraBottomBlockChance > 0.0f && random.nextFloat() < config.extraBottomBlockChance ? 1 : 0);
+						BlockPos blockPos = result.immutable();
 						if (this.placeGround(world, config, replaceable, random, result, depth)) {
 							positions.add(blockPos);
 						}
@@ -84,7 +83,7 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 		}
 
 		Set<BlockPos> liquidPositions = new HashSet<>();
-		BlockPos.Mutable liquidMutable = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos liquidMutable = new BlockPos.MutableBlockPos();
 
 		for(BlockPos blockPos : positions) {
 			if (!isSolidBlockAroundPos(world, blockPos, liquidMutable)) {
@@ -93,36 +92,36 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 		}
 
 		for(BlockPos blockPos : liquidPositions) {
-			world.setBlockState(blockPos, config.liquidState.get(random, blockPos), Block.NOTIFY_LISTENERS);
+			world.setBlock(blockPos, config.liquidState.getState(random, blockPos), Block.UPDATE_CLIENTS);
 		}
 
-		return liquidPositions.stream().map(BlockPos::up).filter(blockPos -> world.testBlockState(blockPos, BlockState::isAir)).collect(Collectors.toSet());
+		return liquidPositions.stream().map(BlockPos::above).filter(blockPos -> world.isStateAtPosition(blockPos, BlockState::isAir)).collect(Collectors.toSet());
 	}
 
-	protected void generateVegetation(FeatureContext<AdvancedLiquidVegetationPatchFeature.Config> context, StructureWorldAccess world, VegetationPatchFeatureConfig config, Random random, Set<BlockPos> positions) {
+	protected void generateVegetation(FeaturePlaceContext<AdvancedLiquidVegetationPatchFeature.Config> context, WorldGenLevel world, VegetationPatchConfiguration config, RandomSource random, Set<BlockPos> positions) {
 		for(BlockPos pos : positions) {
 			if (config.vegetationChance > 0.0f && random.nextFloat() < config.vegetationChance) {
-				config.vegetationFeature.value().generate(world, context.getGenerator(), random, pos.down().offset(config.surface.getDirection().getOpposite()));
+				config.vegetationFeature.value().placeWithBiomeCheck(world, context.chunkGenerator(), random, pos.below().relative(config.surface.getDirection().getOpposite()));
 			}
 		}
 	}
 
-	protected boolean placeGround(StructureWorldAccess world, Config config, Predicate<BlockState> replaceable, Random random, BlockPos.Mutable pos, int depth) {
+	protected boolean placeGround(WorldGenLevel world, Config config, Predicate<BlockState> replaceable, RandomSource random, BlockPos.MutableBlockPos pos, int depth) {
 		for (int i = 0; i < depth; ++i) {
-			BlockState groundState = config.groundState.get(random, pos);
+			BlockState groundState = config.groundState.getState(random, pos);
 			BlockState currentState = world.getBlockState(pos);
-			if (!groundState.isOf(currentState.getBlock())) {
+			if (!groundState.is(currentState.getBlock())) {
 				if (!replaceable.test(currentState)) {
 					return i != 0;
 				}
-				world.setBlockState(pos, groundState, Block.NOTIFY_LISTENERS);
+				world.setBlock(pos, groundState, Block.UPDATE_CLIENTS);
 				pos.move(config.surface.getDirection());
 			}
 		}
 		return true;
 	}
 
-	private static boolean isSolidBlockAroundPos(StructureWorldAccess world, BlockPos pos, BlockPos.Mutable mutablePos) {
+	private static boolean isSolidBlockAroundPos(WorldGenLevel world, BlockPos pos, BlockPos.MutableBlockPos mutablePos) {
 		return isSolidBlockSide(world, pos, mutablePos, Direction.NORTH)
 			|| isSolidBlockSide(world, pos, mutablePos, Direction.EAST)
 			|| isSolidBlockSide(world, pos, mutablePos, Direction.SOUTH)
@@ -130,25 +129,25 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 			|| isSolidBlockSide(world, pos, mutablePos, Direction.DOWN);
 	}
 
-	private static boolean isSolidBlockSide(StructureWorldAccess world, BlockPos pos, BlockPos.Mutable mutablePos, Direction direction) {
-		mutablePos.set(pos, direction);
-		return !world.getBlockState(mutablePos).isSideSolidFullSquare(world, mutablePos, direction.getOpposite());
+	private static boolean isSolidBlockSide(WorldGenLevel world, BlockPos pos, BlockPos.MutableBlockPos mutablePos, Direction direction) {
+		mutablePos.setWithOffset(pos, direction);
+		return !world.getBlockState(mutablePos).isFaceSturdy(world, mutablePos, direction.getOpposite());
 	}
 
-	public static class Config extends VegetationPatchFeatureConfig {
+	public static class Config extends VegetationPatchConfiguration {
 
 		public static final Codec<Config> CODEC = RecordCodecBuilder.create(
 			instance -> instance.group(
-					TagKey.codec(RegistryKeys.BLOCK).fieldOf("replaceable").forGetter(config -> config.replaceable),
-					BlockStateProvider.TYPE_CODEC.fieldOf("ground_state").forGetter(config -> config.groundState),
-					BlockStateProvider.TYPE_CODEC.fieldOf("liquid_state").forGetter(config -> config.liquidState),
-					PlacedFeature.REGISTRY_CODEC.fieldOf("vegetation_feature").forGetter(config -> config.vegetationFeature),
-					VerticalSurfaceType.CODEC.fieldOf("surface").forGetter(config -> config.surface),
-					IntProvider.createValidatingCodec(1, 128).fieldOf("depth").forGetter(config -> config.depth),
+					TagKey.hashedCodec(Registries.BLOCK).fieldOf("replaceable").forGetter(config -> config.replaceable),
+					BlockStateProvider.CODEC.fieldOf("ground_state").forGetter(config -> config.groundState),
+					BlockStateProvider.CODEC.fieldOf("liquid_state").forGetter(config -> config.liquidState),
+					PlacedFeature.CODEC.fieldOf("vegetation_feature").forGetter(config -> config.vegetationFeature),
+					CaveSurface.CODEC.fieldOf("surface").forGetter(config -> config.surface),
+					IntProvider.codec(1, 128).fieldOf("depth").forGetter(config -> config.depth),
 					Codec.floatRange(0.0f, 1.0f).fieldOf("extra_bottom_block_chance").forGetter(config -> config.extraBottomBlockChance),
 					Codec.intRange(1, 256).fieldOf("vertical_range").forGetter(config -> config.verticalRange),
 					Codec.floatRange(0.0f, 1.0f).fieldOf("vegetation_chance").forGetter(config -> config.vegetationChance),
-					IntProvider.VALUE_CODEC.fieldOf("xz_radius").forGetter(config -> config.horizontalRadius),
+					IntProvider.CODEC.fieldOf("xz_radius").forGetter(config -> config.xzRadius),
 					Codec.floatRange(0.0f, 1.0f).fieldOf("extra_edge_column_chance").forGetter(config -> config.extraEdgeColumnChance)
 				)
 				.apply(instance, Config::new)
@@ -156,7 +155,7 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 
 		private final BlockStateProvider liquidState;
 
-		public Config(TagKey<Block> replaceable, BlockStateProvider groundState, BlockStateProvider liquidState, RegistryEntry<PlacedFeature> vegetationFeature, VerticalSurfaceType surface, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
+		public Config(TagKey<Block> replaceable, BlockStateProvider groundState, BlockStateProvider liquidState, Holder<PlacedFeature> vegetationFeature, CaveSurface surface, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider horizontalRadius, float extraEdgeColumnChance) {
 			super(replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, horizontalRadius, extraEdgeColumnChance);
 			this.liquidState = liquidState;
 		}

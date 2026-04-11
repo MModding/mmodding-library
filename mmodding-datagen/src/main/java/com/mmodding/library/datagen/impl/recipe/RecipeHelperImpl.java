@@ -1,24 +1,24 @@
 package com.mmodding.library.datagen.impl.recipe;
 
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
-import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
-import net.minecraft.data.server.recipe.RecipeJsonProvider;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 @ApiStatus.Internal
 public class RecipeHelperImpl implements RecipeHelper {
 
-	private final Consumer<RecipeJsonProvider> exporter;
-	private final ItemConvertible target;
+	private final Consumer<FinishedRecipe> exporter;
+	private final ItemLike target;
 
-	public RecipeHelperImpl(Consumer<RecipeJsonProvider> exporter, ItemConvertible target) {
+	public RecipeHelperImpl(Consumer<FinishedRecipe> exporter, ItemLike target) {
 		this.exporter = exporter;
 		this.target = target;
 	}
@@ -32,7 +32,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 	public void shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer) {
 		ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.target, count, category);
 		consumer.accept(recipe);
-		recipe.factory.offerTo(this.exporter);
+		recipe.factory.save(this.exporter);
 	}
 
 	@Override
@@ -44,59 +44,59 @@ public class RecipeHelperImpl implements RecipeHelper {
 	public void shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer) {
 		ShapelessRecipeImpl recipe = new ShapelessRecipeImpl(this.target, count, category);
 		consumer.accept(recipe);
-		recipe.factory.offerTo(this.exporter);
+		recipe.factory.save(this.exporter);
 	}
 
 	@Override
-	public void smelting(ItemConvertible item, RecipeCategory category, int experience, int time) {
-		this.smelting(Ingredient.ofItems(item), category, experience, time);
+	public void smelting(ItemLike item, RecipeCategory category, int experience, int time) {
+		this.smelting(Ingredient.of(item), category, experience, time);
 	}
 
 	@Override
 	public void smelting(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		CookingRecipeJsonBuilder.createSmelting(ingredient, category, this.target, experience, time)
-			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-			.offerTo(this.exporter);
+		SimpleCookingRecipeBuilder.smelting(ingredient, category, this.target, experience, time)
+			.unlockedBy(RecipeProvider.getHasName(this.target), RecipeProvider.has(this.target))
+			.save(this.exporter);
 	}
 
 	@Override
-	public void blasting(ItemConvertible item, RecipeCategory category, int experience, int time) {
-		this.blasting(Ingredient.ofItems(item), category, experience, time);
+	public void blasting(ItemLike item, RecipeCategory category, int experience, int time) {
+		this.blasting(Ingredient.of(item), category, experience, time);
 	}
 
 	@Override
 	public void blasting(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		CookingRecipeJsonBuilder.createBlasting(ingredient, category, this.target, experience, time)
-			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-			.offerTo(this.exporter);
+		SimpleCookingRecipeBuilder.blasting(ingredient, category, this.target, experience, time)
+			.unlockedBy(RecipeProvider.getHasName(this.target), RecipeProvider.has(this.target))
+			.save(this.exporter);
 	}
 
 	@Override
-	public void smoking(ItemConvertible item, RecipeCategory category, int experience, int time) {
-		this.smoking(Ingredient.ofItems(item), category, experience, time);
+	public void smoking(ItemLike item, RecipeCategory category, int experience, int time) {
+		this.smoking(Ingredient.of(item), category, experience, time);
 	}
 
 	@Override
 	public void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		CookingRecipeJsonBuilder.createSmoking(ingredient, category, this.target, experience, time)
-			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-			.offerTo(this.exporter);
+		SimpleCookingRecipeBuilder.smoking(ingredient, category, this.target, experience, time)
+			.unlockedBy(RecipeProvider.getHasName(this.target), RecipeProvider.has(this.target))
+			.save(this.exporter);
 	}
 
 	@Override
-	public void campfireCooking(ItemConvertible item, RecipeCategory category, int experience, int time) {
-		this.campfireCooking(Ingredient.ofItems(item), category, experience, time);
+	public void campfireCooking(ItemLike item, RecipeCategory category, int experience, int time) {
+		this.campfireCooking(Ingredient.of(item), category, experience, time);
 	}
 
 	@Override
 	public void campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time) {
-		CookingRecipeJsonBuilder.createSmoking(ingredient, category, this.target, experience, time)
-			.criterion(RecipeProvider.hasItem(this.target), RecipeProvider.conditionsFromItem(this.target))
-			.offerTo(this.exporter);
+		SimpleCookingRecipeBuilder.smoking(ingredient, category, this.target, experience, time)
+			.unlockedBy(RecipeProvider.getHasName(this.target), RecipeProvider.has(this.target))
+			.save(this.exporter);
 	}
 
 	@Override
-	public void factory(CraftingRecipeJsonBuilder factory) {
-		factory.offerTo(this.exporter);
+	public void factory(RecipeBuilder factory) {
+		factory.save(this.exporter);
 	}
 }

@@ -1,15 +1,15 @@
 package com.mmodding.library.datagen.impl.lang;
 
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
-import net.minecraft.registry.RegistryKey;
+import net.minecraft.resources.ResourceKey;
 
 public class DefaultLangProcessorsImpl {
 
 	public static class ClassicLangProcessorImpl<T> implements TranslationProcessor<T> {
 
 		@Override
-		public String process(RegistryKey<T> key) {
-			String path = key.getValue().getPath();
+		public String process(ResourceKey<T> key) {
+			String path = key.location().getPath();
 			String[] words = path.split("_");
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < words.length; i++) {

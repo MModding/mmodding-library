@@ -1,17 +1,16 @@
 package com.mmodding.library.worldgen.api.feature;
 
 import com.mmodding.library.worldgen.impl.feature.ConfiguredFeaturePackImpl;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.PlacedFeature;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-
 import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 
-public interface ConfiguredFeaturePack<FC extends FeatureConfig> {
+public interface ConfiguredFeaturePack<FC extends FeatureConfiguration> {
 
 	/**
 	 * Creates a new {@link ConfiguredFeaturePack} for a {@link ConfiguredFeature}.
@@ -19,7 +18,7 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfig> {
 	 * @return the configured feature pack
 	 * @param <FC> the feature config
 	 */
-	static <FC extends FeatureConfig> ConfiguredFeaturePack<FC> of(RegistryKey<ConfiguredFeature<?, ?>> key) {
+	static <FC extends FeatureConfiguration> ConfiguredFeaturePack<FC> of(ResourceKey<ConfiguredFeature<?, ?>> key) {
 		return new ConfiguredFeaturePackImpl<>(key);
 	}
 
@@ -29,7 +28,7 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfig> {
 	 * @param modifiers the placement modifiers
 	 * @return the configured feature pack
 	 */
-	ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, PlacementModifier... modifiers);
+	ConfiguredFeaturePack<FC> appendPlacedFeature(ResourceKey<PlacedFeature> key, PlacementModifier... modifiers);
 
 	/**
 	 * Adds a new {@link PlacedFeature} in this {@link ConfiguredFeaturePack<FC>}.
@@ -37,7 +36,7 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfig> {
 	 * @param modifiers the placement modifiers
 	 * @return the configured feature pack
 	 */
-	ConfiguredFeaturePack<FC> appendPlacedFeature(RegistryKey<PlacedFeature> key, List<PlacementModifier> modifiers);
+	ConfiguredFeaturePack<FC> appendPlacedFeature(ResourceKey<PlacedFeature> key, List<PlacementModifier> modifiers);
 
 	/**
 	 * Adds a {@link ConfiguredFeaturePack} from an existing placed feature.
@@ -47,11 +46,11 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfig> {
 	 * @return the configured feature pack
 	 * @apiNote In case you depend on external mods for those placed features, make sure the source mod's resources are loaded before yours, so that the data generator does not fail.
 	 */
-	ConfiguredFeaturePack<FC> replicatePlacedFeature(RegistryKey<PlacedFeature> source, RegistryKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher);
+	ConfiguredFeaturePack<FC> replicatePlacedFeature(ResourceKey<PlacedFeature> source, ResourceKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher);
 
 	/**
 	 * Registers placed features of this configured feature pack.
 	 * @param placedFeatures the placed feature registry
 	 */
-	void registerPlacedFeatures(Registerable<PlacedFeature> placedFeatures);
+	void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures);
 }

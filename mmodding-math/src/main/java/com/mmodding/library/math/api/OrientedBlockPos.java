@@ -1,8 +1,8 @@
 package com.mmodding.library.math.api;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 
 public class OrientedBlockPos extends BlockPos {
 
@@ -28,81 +28,81 @@ public class OrientedBlockPos extends BlockPos {
 
 	public OrientedBlockPos top() {
 		Direction transformed = DirectionMapper.TOP.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed));
+		return new OrientedBlockPos(this.direction, super.relative(transformed));
 	}
 
 	public OrientedBlockPos top(int i) {
 		Direction transformed = DirectionMapper.TOP.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed, i));
+		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
 	}
 
 	public OrientedBlockPos bottom() {
 		Direction transformed = DirectionMapper.BOTTOM.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed));
+		return new OrientedBlockPos(this.direction, super.relative(transformed));
 	}
 
 	public OrientedBlockPos bottom(int i) {
 		Direction transformed = DirectionMapper.BOTTOM.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed, i));
+		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
 	}
 
 	public OrientedBlockPos front() {
 		Direction transformed = DirectionMapper.FRONT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed));
+		return new OrientedBlockPos(this.direction, super.relative(transformed));
 	}
 
 	public OrientedBlockPos front(int i) {
 		Direction transformed = DirectionMapper.FRONT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed, i));
+		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
 	}
 
 	public OrientedBlockPos behind() {
 		Direction transformed = DirectionMapper.BEHIND.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed));
+		return new OrientedBlockPos(this.direction, super.relative(transformed));
 	}
 
 	public OrientedBlockPos behind(int i) {
 		Direction transformed = DirectionMapper.BEHIND.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed, i));
+		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
 	}
 
 	public OrientedBlockPos left() {
 		Direction transformed = DirectionMapper.LEFT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed));
+		return new OrientedBlockPos(this.direction, super.relative(transformed));
 	}
 
 	public OrientedBlockPos left(int i) {
 		Direction transformed = DirectionMapper.LEFT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed, i));
+		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
 	}
 
 	public OrientedBlockPos right() {
 		Direction transformed = DirectionMapper.RIGHT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed));
+		return new OrientedBlockPos(this.direction, super.relative(transformed));
 	}
 
 	public OrientedBlockPos right(int i) {
 		Direction transformed = DirectionMapper.RIGHT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.offset(transformed, i));
+		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
 	}
 
 	public OrientedBlockPos rotateClockwise(Direction.Axis axis) {
-		return new OrientedBlockPos(this.direction.rotateClockwise(axis), this);
+		return new OrientedBlockPos(this.direction.getClockWise(axis), this);
 	}
 
 	public OrientedBlockPos rotateCounterClockWise(Direction.Axis axis) {
-		return new OrientedBlockPos(this.direction.rotateCounterclockwise(axis), this);
+		return new OrientedBlockPos(this.direction.getCounterClockWise(axis), this);
 	}
 
 	@Override
 	@Deprecated
-	public BlockPos up() {
+	public BlockPos above() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	@Deprecated
-	public BlockPos up(int i) {
+	public BlockPos above(int i) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -120,13 +120,13 @@ public class OrientedBlockPos extends BlockPos {
 
 	@Override
 	@Deprecated
-	public BlockPos down() {
+	public BlockPos below() {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	@Deprecated
-	public BlockPos down(int i) {
+	public BlockPos below(int i) {
 		throw new UnsupportedOperationException();
 	}
 

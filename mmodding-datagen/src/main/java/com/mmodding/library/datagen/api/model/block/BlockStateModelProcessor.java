@@ -1,9 +1,9 @@
 package com.mmodding.library.datagen.api.model.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.world.level.block.Block;
 
 public interface BlockStateModelProcessor {
 
-	void process(BlockStateModelGenerator generator, Block block);
+	void process(BlockModelGenerators generator, Block block);
 }

@@ -13,7 +13,7 @@ public class ConstantIntProperty extends ConstantProperty<Integer> {
 	}
 
 	@Override
-	public Optional<Integer> parse(String string) {
+	public Optional<Integer> getValue(String string) {
 		try {
 			int integer = Integer.parseInt(string);
 			return integer != this.getConstant() ? Optional.of(integer) : Optional.empty();

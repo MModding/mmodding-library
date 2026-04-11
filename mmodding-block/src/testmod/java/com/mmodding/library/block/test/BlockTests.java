@@ -6,10 +6,10 @@ import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.ExtendedModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FurnaceBlock;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FurnaceBlock;
 
 public class BlockTests implements ExtendedModInitializer {
 
@@ -28,11 +28,11 @@ public class BlockTests implements ExtendedModInitializer {
 	public void onInitialize(AdvancedContainer mod) {}
 
 	public static void registerBlocks(AdvancedContainer mod) {
-		mod.register(Registries.BLOCK, factory -> {
+		mod.register(BuiltInRegistries.BLOCK, factory -> {
 			factory.register("first_block", FIRST_BLOCK);
 			factory.register("second_block", SECOND_BLOCK);
 		});
-		mod.register(Registries.ITEM, factory -> {
+		mod.register(BuiltInRegistries.ITEM, factory -> {
 			factory.register("first_block", FIRST_BLOCK.asItem());
 			factory.register("second_block", SECOND_BLOCK.asItem());
 		});

@@ -9,7 +9,7 @@ import java.util.Comparator;
 @Mixin(DataProvider.class)
 public interface DataProviderAccessor {
 
-	@Accessor("JSON_KEY_SORTING_COMPARATOR")
+	@Accessor("KEY_COMPARATOR")
 	static Comparator<String> mmodding$getSortingComparator() {
 		throw new IllegalStateException();
 	}

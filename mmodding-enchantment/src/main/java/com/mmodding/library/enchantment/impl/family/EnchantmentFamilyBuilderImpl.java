@@ -3,15 +3,15 @@ package com.mmodding.library.enchantment.impl.family;
 import com.mmodding.library.enchantment.api.AdvancedEnchantment;
 import com.mmodding.library.enchantment.api.family.EnchantmentFamily;
 import com.mmodding.library.java.api.list.filter.FilterList;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.Items;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.Items;
 
 @ApiStatus.Internal
 public class EnchantmentFamilyBuilderImpl implements EnchantmentFamily.Builder {
@@ -19,8 +19,8 @@ public class EnchantmentFamilyBuilderImpl implements EnchantmentFamily.Builder {
 	private final String qualifier;
 
 	private Supplier<EnchantedBookItem> bookItem = () -> (EnchantedBookItem) Items.ENCHANTED_BOOK;
-	private Text prefix = Text.empty();
-	private Function<AdvancedEnchantment, List<Formatting>> formattings = enchantment -> List.of(enchantment.isCursed() ? Formatting.RED : Formatting.GRAY);
+	private Component prefix = Component.empty();
+	private Function<AdvancedEnchantment, List<ChatFormatting>> formattings = enchantment -> List.of(enchantment.isCurse() ? ChatFormatting.RED : ChatFormatting.GRAY);
 	private boolean inEnchantingTable = true;
 	private FilterList<EnchantmentFamily> familyCompatibilities = FilterList.always();
 
@@ -35,13 +35,13 @@ public class EnchantmentFamilyBuilderImpl implements EnchantmentFamily.Builder {
 	}
 
 	@Override
-	public EnchantmentFamily.Builder prefix(Text prefix) {
+	public EnchantmentFamily.Builder prefix(Component prefix) {
 		this.prefix = prefix;
 		return this;
 	}
 
 	@Override
-	public EnchantmentFamily.Builder formattings(Function<AdvancedEnchantment, List<Formatting>> formattings) {
+	public EnchantmentFamily.Builder formattings(Function<AdvancedEnchantment, List<ChatFormatting>> formattings) {
 		this.formattings = formattings;
 		return this;
 	}

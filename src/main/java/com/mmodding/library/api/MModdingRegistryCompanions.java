@@ -2,9 +2,9 @@ package com.mmodding.library.api;
 
 import com.mmodding.library.core.api.registry.companion.DynamicRegistryCompanion;
 import com.mmodding.library.worldgen.api.vein.VeinType;
-import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 public class MModdingRegistryCompanions {
 
-	public static final DynamicRegistryCompanion<ChunkGeneratorSettings, VeinType> VEIN_TYPE = VeinType.REGISTRY;
+	public static final DynamicRegistryCompanion<NoiseGeneratorSettings, VeinType> VEIN_TYPE = VeinType.REGISTRY;
 }

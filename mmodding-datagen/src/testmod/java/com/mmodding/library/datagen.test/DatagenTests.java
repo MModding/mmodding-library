@@ -11,24 +11,24 @@ import com.mmodding.library.datagen.api.management.DefaultContentTypes;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.Models;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.MapColor;
 
 public class DatagenTests implements ExtendedModInitializer, ExtendedDataGeneratorEntrypoint {
 
-	public static final Block BLOCK = new Block(FabricBlockSettings.create().mapColor(MapColor.BLACK));
+	public static final Block BLOCK = new Block(FabricBlockSettings.create().mapColor(MapColor.COLOR_BLACK));
 
-	public static final EntityType<CowEntity> COW = FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, CowEntity::new).build();
+	public static final EntityType<Cow> COW = FabricEntityTypeBuilder.create(MobCategory.CREATURE, Cow::new).build();
 
 	@Override
 	public void setupManager(ElementsManager manager) {
@@ -37,10 +37,10 @@ public class DatagenTests implements ExtendedModInitializer, ExtendedDataGenerat
 
 	@Override
 	public void setupManager(DataManager manager) {
-		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.getTranslationHandler(RegistryKeys.BLOCK), DefaultLangProcessors.getClassic());
-		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_MODELS, BlockStateModelGenerator::registerSimpleCubeAll);
+		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.getTranslationHandler(Registries.BLOCK), DefaultLangProcessors.getClassic());
+		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_MODELS, BlockModelGenerators::createGenericCube);
 		manager.task(DatagenTests.class, Block.class, DefaultContentTypes.BLOCK_LOOTS, DefaultBlockLootProcessors.SIMPLE);
-		manager.task(DatagenTests.class, Item.class, DefaultContentTypes.ITEM_MODELS, (generator, item) -> generator.register(item, Models.GENERATED));
+		manager.task(DatagenTests.class, Item.class, DefaultContentTypes.ITEM_MODELS, (generator, item) -> generator.generateFlatItem(item, ModelTemplates.FLAT_ITEM));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class DatagenTests implements ExtendedModInitializer, ExtendedDataGenerat
 	}
 
 	private static void register(AdvancedContainer advancedContainer) {
-		Registry.register(Registries.BLOCK, new Identifier("mmodding_datagen", "block"), BLOCK);
-		Registry.register(Registries.ENTITY_TYPE, new Identifier("mmodding_datagen", "cow"), COW);
+		Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation("mmodding_datagen", "block"), BLOCK);
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation("mmodding_datagen", "cow"), COW);
 	}
 }

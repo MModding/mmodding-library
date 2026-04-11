@@ -1,7 +1,7 @@
 package com.mmodding.library.network.api.delay.action;
 
 import com.mmodding.library.java.api.list.MixedList;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 @FunctionalInterface
 public interface DelayedServerAction {
@@ -11,5 +11,5 @@ public interface DelayedServerAction {
 	 * @param target the player corresponding to the client where the arguments are coming from
 	 * @param arguments the obtained arguments from the client
 	 */
-	void handle(ServerPlayerEntity target, MixedList arguments);
+	void handle(ServerPlayer target, MixedList arguments);
 }

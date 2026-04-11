@@ -1,23 +1,21 @@
 package com.mmodding.library.fluid.test;
 
 import com.mmodding.library.fluid.api.UnitedFlowableFluid;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import org.jetbrains.annotations.NotNull;
 
 public class CoolFluid extends UnitedFlowableFluid {
 
-	public static final IntProperty STAGES = IntProperty.of("stage", 0, 16);
+	public static final IntegerProperty STAGES = IntegerProperty.create("stage", 0, 16);
 
-	public CoolFluid(IntProperty levels, boolean still) {
+	public CoolFluid(IntegerProperty levels, boolean still) {
 		super(levels, still);
 	}
 
@@ -27,52 +25,54 @@ public class CoolFluid extends UnitedFlowableFluid {
 	}
 
 	@Override
-	public Fluid getStill() {
+	public Fluid getSource() {
 		return FluidTests.COOL_FLUID;
 	}
 
 	@Override
-	protected boolean isInfinite(World world) {
+	protected boolean canConvertToSource(Level level) {
 		return false;
 	}
 
 	@Override
-	protected void beforeBreakingBlock(WorldAccess world, BlockPos pos, BlockState state) {
+	protected void beforeDestroyingBlock(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState) {
 
 	}
 
 	@Override
-	protected int getFlowSpeed(WorldView world) {
+	protected int getSlopeFindDistance(LevelReader levelReader) {
 		return 0;
 	}
 
 	@Override
-	protected int getLevelDecreasePerBlock(WorldView world) {
+	protected int getDropOff(LevelReader levelReader) {
 		return 0;
 	}
 
 	@Override
-	public Item getBucketItem() {
+	public Item getBucket() {
 		return null;
 	}
 
+
 	@Override
-	protected boolean canBeReplacedWith(FluidState state, BlockView world, BlockPos pos, Fluid fluid, Direction direction) {
+	protected boolean canBeReplacedWith(FluidState fluidState, BlockGetter blockGetter, BlockPos blockPos, Fluid fluid, Direction direction) {
 		return false;
 	}
 
 	@Override
-	public int getTickRate(WorldView world) {
+	public int getTickDelay(LevelReader levelReader) {
 		return 0;
 	}
 
 	@Override
-	protected float getBlastResistance() {
+	protected float getExplosionResistance() {
 		return 0;
 	}
 
 	@Override
-	protected BlockState toBlockState(FluidState state) {
+	@NotNull
+	protected BlockState createLegacyBlock(FluidState fluidState) {
 		return null;
 	}
 }

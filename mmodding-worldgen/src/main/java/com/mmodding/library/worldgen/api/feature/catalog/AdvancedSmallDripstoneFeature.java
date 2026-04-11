@@ -1,20 +1,19 @@
 package com.mmodding.library.worldgen.api.feature.catalog;
 
-import com.mmodding.library.worldgen.impl.feature.helper.AdvancedDripstoneHelper;
+import com.mmodding.library.worldgen.impl.feature.helper.AdvancedDripstoneUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.SmallDripstoneFeatureConfig;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
-
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.PointedDripstoneConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public class AdvancedSmallDripstoneFeature extends Feature<AdvancedSmallDripstoneFeature.Config> {
 
@@ -23,32 +22,32 @@ public class AdvancedSmallDripstoneFeature extends Feature<AdvancedSmallDripston
 	}
 
 	@Override
-	public boolean generate(FeatureContext<Config> context) {
-		Block pointedDripstoneBlock = context.getConfig().pointedDripstoneBlock.get(context.getRandom(), context.getOrigin()).getBlock();
-		Block dripstoneBlock = context.getConfig().dripstoneBlock.get(context.getRandom(), context.getOrigin()).getBlock();
+	public boolean place(FeaturePlaceContext<Config> context) {
+		Block pointedDripstoneBlock = context.config().pointedDripstoneBlock.getState(context.random(), context.origin()).getBlock();
+		Block dripstoneBlock = context.config().dripstoneBlock.getState(context.random(), context.origin()).getBlock();
 
-		WorldAccess worldAccess = context.getWorld();
-		BlockPos blockPos = context.getOrigin();
-		Random randomGenerator = context.getRandom();
-		Config pointedDripstoneFeatureConfig = context.getConfig();
+		LevelAccessor worldAccess = context.level();
+		BlockPos blockPos = context.origin();
+		RandomSource randomGenerator = context.random();
+		Config pointedDripstoneFeatureConfig = context.config();
 		Optional<Direction> optional = this.getDirection(worldAccess, blockPos, randomGenerator);
 		if (optional.isEmpty()) {
 			return false;
 		} else {
-			BlockPos patchPos = blockPos.offset(optional.get().getOpposite());
+			BlockPos patchPos = blockPos.relative(optional.get().getOpposite());
 			this.generateDripstoneBlocksPatch(dripstoneBlock, worldAccess, randomGenerator, patchPos, pointedDripstoneFeatureConfig);
 			int i = randomGenerator.nextFloat() < pointedDripstoneFeatureConfig.chanceOfTallerDripstone
-				&& DripstoneHelper.canGenerate(worldAccess.getBlockState(blockPos.offset(optional.get())))
+				&& DripstoneUtils.isEmptyOrWater(worldAccess.getBlockState(blockPos.relative(optional.get())))
 				? 2
 				: 1;
-			AdvancedDripstoneHelper.generatePointedDripstone(pointedDripstoneBlock, worldAccess, blockPos, optional.get(), i, false);
+			AdvancedDripstoneUtils.generatePointedDripstone(pointedDripstoneBlock, worldAccess, blockPos, optional.get(), i, false);
 			return true;
 		}
 	}
 
-	private Optional<Direction> getDirection(WorldAccess world, BlockPos pos, Random random) {
-		boolean bl = DripstoneHelper.canReplace(world.getBlockState(pos.up()));
-		boolean bl2 = DripstoneHelper.canReplace(world.getBlockState(pos.down()));
+	private Optional<Direction> getDirection(LevelAccessor world, BlockPos pos, RandomSource random) {
+		boolean bl = DripstoneUtils.isDripstoneBase(world.getBlockState(pos.above()));
+		boolean bl2 = DripstoneUtils.isDripstoneBase(world.getBlockState(pos.below()));
 		if (bl && bl2) {
 			return Optional.of(random.nextBoolean() ? Direction.DOWN : Direction.UP);
 		} else if (bl) {
@@ -58,30 +57,30 @@ public class AdvancedSmallDripstoneFeature extends Feature<AdvancedSmallDripston
 		}
 	}
 
-	private void generateDripstoneBlocksPatch(Block dripstoneBlock, WorldAccess world, Random random, BlockPos pos, Config config) {
-		AdvancedDripstoneHelper.generateDripstoneBlock(dripstoneBlock, world, pos);
+	private void generateDripstoneBlocksPatch(Block dripstoneBlock, LevelAccessor world, RandomSource random, BlockPos pos, Config config) {
+		AdvancedDripstoneUtils.generateDripstoneBlock(dripstoneBlock, world, pos);
 
-		for(Direction direction : Direction.Type.HORIZONTAL) {
+		for(Direction direction : Direction.Plane.HORIZONTAL) {
 			if (!(random.nextFloat() > config.chanceOfDirectionalSpread)) {
-				BlockPos blockPos = pos.offset(direction);
-				AdvancedDripstoneHelper.generateDripstoneBlock(dripstoneBlock, world, blockPos);
+				BlockPos blockPos = pos.relative(direction);
+				AdvancedDripstoneUtils.generateDripstoneBlock(dripstoneBlock, world, blockPos);
 				if (!(random.nextFloat() > config.chanceOfSpreadRadius2)) {
-					BlockPos blockPos2 = blockPos.offset(Direction.random(random));
-					AdvancedDripstoneHelper.generateDripstoneBlock(dripstoneBlock, world, blockPos2);
+					BlockPos blockPos2 = blockPos.relative(Direction.getRandom(random));
+					AdvancedDripstoneUtils.generateDripstoneBlock(dripstoneBlock, world, blockPos2);
 					if (!(random.nextFloat() > config.chanceOfSpreadRadius3)) {
-						BlockPos blockPos3 = blockPos2.offset(Direction.random(random));
-						AdvancedDripstoneHelper.generateDripstoneBlock(dripstoneBlock, world, blockPos3);
+						BlockPos blockPos3 = blockPos2.relative(Direction.getRandom(random));
+						AdvancedDripstoneUtils.generateDripstoneBlock(dripstoneBlock, world, blockPos3);
 					}
 				}
 			}
 		}
 	}
 
-	public static class Config extends SmallDripstoneFeatureConfig {
+	public static class Config extends PointedDripstoneConfiguration {
 
 		public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			BlockStateProvider.TYPE_CODEC.fieldOf("pointed_dripstone_block").forGetter(config -> config.pointedDripstoneBlock),
-			BlockStateProvider.TYPE_CODEC.fieldOf("dripstone_block").forGetter(config -> config.dripstoneBlock),
+			BlockStateProvider.CODEC.fieldOf("pointed_dripstone_block").forGetter(config -> config.pointedDripstoneBlock),
+			BlockStateProvider.CODEC.fieldOf("dripstone_block").forGetter(config -> config.dripstoneBlock),
 			Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_taller_dripstone").orElse(0.2F).forGetter(config -> config.chanceOfTallerDripstone),
 			Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_directional_spread").orElse(0.7F).forGetter(config -> config.chanceOfDirectionalSpread),
 			Codec.floatRange(0.0F, 1.0F).fieldOf("chance_of_spread_radius2").orElse(0.5F).forGetter(config -> config.chanceOfSpreadRadius2),

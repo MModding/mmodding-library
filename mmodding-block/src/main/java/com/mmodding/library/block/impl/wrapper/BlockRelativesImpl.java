@@ -11,17 +11,16 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSetType;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.data.family.BlockFamily;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.BlockFamily;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,22 +29,22 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	private final BlockSetType setType;
 	private final FabricBlockSettings sharedSettings;
-	private final Identifier identifier;
+	private final ResourceLocation identifier;
 	private final String mainSuffix;
 	private final Block mainBlock;
 	private final TagKey<Block> blockTagKey;
 	private final TagKey<Item> itemTagKey;
 	private final Map<BlockFamily.Variant, Block> variants;
 
-	public <T extends Block> BlockRelativesImpl(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
+	public <T extends Block> BlockRelativesImpl(ResourceLocation identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
 		this.setType = setType;
 		this.sharedSettings = sharedSettings;
 		this.identifier = identifier;
 		this.mainSuffix = mainSuffix;
 		this.mainBlock = mainFactory.make(sharedSettings);
 		this.mainBlock.withItem(new FabricItemSettings());
-		this.blockTagKey = TagKey.of(RegistryKeys.BLOCK, identifier);
-		this.itemTagKey = TagKey.of(RegistryKeys.ITEM, identifier);
+		this.blockTagKey = TagKey.create(Registries.BLOCK, identifier);
+		this.itemTagKey = TagKey.create(Registries.ITEM, identifier);
 		this.variants = new Object2ObjectOpenHashMap<>();
 	}
 
@@ -92,33 +91,33 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	@Override
 	public void register() {
-		Identifier mainIdentifier = this.identifier.withPath(path -> path + this.mainSuffix);
-		Registry.register(Registries.BLOCK, mainIdentifier, this.mainBlock);
-		Registry.register(Registries.ITEM, mainIdentifier, this.mainBlock.asItem());
+		ResourceLocation mainIdentifier = this.identifier.withPath(path -> path + this.mainSuffix);
+		Registry.register(BuiltInRegistries.BLOCK, mainIdentifier, this.mainBlock);
+		Registry.register(BuiltInRegistries.ITEM, mainIdentifier, this.mainBlock.asItem());
 		for (Map.Entry<BlockFamily.Variant, Block> entry : this.variants.entrySet()) {
-			Identifier variantIdentifier = IdentifierUtil.extend(this.identifier, entry.getKey().getName());
-			Registry.register(Registries.BLOCK, variantIdentifier, entry.getValue());
-			Registry.register(Registries.ITEM, variantIdentifier, entry.getValue().asItem());
+			ResourceLocation variantIdentifier = IdentifierUtil.extend(this.identifier, entry.getKey().getName());
+			Registry.register(BuiltInRegistries.BLOCK, variantIdentifier, entry.getValue());
+			Registry.register(BuiltInRegistries.ITEM, variantIdentifier, entry.getValue().asItem());
 		}
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void cutoutMain() {
-		BlockRenderLayerMap.INSTANCE.putBlock(this.mainBlock, RenderLayer.getCutout());
+		BlockRenderLayerMap.INSTANCE.putBlock(this.mainBlock, RenderType.cutout());
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void translucentMain() {
-		BlockRenderLayerMap.INSTANCE.putBlock(this.mainBlock, RenderLayer.getTranslucent());
+		BlockRenderLayerMap.INSTANCE.putBlock(this.mainBlock, RenderType.translucent());
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
 	public void cutoutVariant(BlockFamily.Variant variant) {
 		if (this.variants.containsKey(variant)) {
-			BlockRenderLayerMap.INSTANCE.putBlock(this.variants.get(variant), RenderLayer.getCutout());
+			BlockRenderLayerMap.INSTANCE.putBlock(this.variants.get(variant), RenderType.cutout());
 		}
 		else {
 			throw new IllegalStateException("This variant is not part of this block relatives");
@@ -129,7 +128,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 	@Environment(EnvType.CLIENT)
 	public void translucentVariant(BlockFamily.Variant variant) {
 		if (this.variants.containsKey(variant)) {
-			BlockRenderLayerMap.INSTANCE.putBlock(this.variants.get(variant), RenderLayer.getTranslucent());
+			BlockRenderLayerMap.INSTANCE.putBlock(this.variants.get(variant), RenderType.translucent());
 		}
 		else {
 			throw new IllegalStateException("This variant is not part of this block relatives");

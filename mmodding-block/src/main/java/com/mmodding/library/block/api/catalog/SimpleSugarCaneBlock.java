@@ -1,38 +1,37 @@
 package com.mmodding.library.block.api.catalog;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SugarCaneBlock;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.WorldView;
-
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.SugarCaneBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 
 public class SimpleSugarCaneBlock extends SugarCaneBlock {
 
 	private final Predicate<BlockState> validFloor;
 	private final BiPredicate<BlockState, FluidState> validFluid;
 
-	public SimpleSugarCaneBlock(Predicate<BlockState> validFloor, BiPredicate<BlockState, FluidState> validFluid, Settings settings) {
+	public SimpleSugarCaneBlock(Predicate<BlockState> validFloor, BiPredicate<BlockState, FluidState> validFluid, Properties settings) {
 		super(settings);
 		this.validFloor = validFloor;
 		this.validFluid = validFluid;
 	}
 
 	@Override
-	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-		BlockState floorState = world.getBlockState(pos.down());
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+		BlockState floorState = world.getBlockState(pos.below());
 
-		if (floorState.isOf(this)) {
+		if (floorState.is(this)) {
 			return true;
 		}
 
 		if (this.validFloor.test(floorState)) {
-			for (Direction direction : Direction.Type.HORIZONTAL) {
-				BlockState blockState = world.getBlockState(pos.down().offset(direction));
-				FluidState fluidState = world.getFluidState(pos.down().offset(direction));
+			for (Direction direction : Direction.Plane.HORIZONTAL) {
+				BlockState blockState = world.getBlockState(pos.below().relative(direction));
+				FluidState fluidState = world.getFluidState(pos.below().relative(direction));
 
 				if (this.validFluid.test(blockState, fluidState)) {
 					return true;

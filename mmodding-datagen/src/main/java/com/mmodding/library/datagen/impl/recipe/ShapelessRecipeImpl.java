@@ -1,33 +1,33 @@
 package com.mmodding.library.datagen.impl.recipe;
 
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
-import net.minecraft.data.server.recipe.RecipeProvider;
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class ShapelessRecipeImpl implements RecipeHelper.ShapelessRecipe {
 
-	final ShapelessRecipeJsonBuilder factory;
+	final ShapelessRecipeBuilder factory;
 
-	public ShapelessRecipeImpl(ItemConvertible item, int count, RecipeCategory category) {
-		this.factory = new ShapelessRecipeJsonBuilder(category, item, count).criterion(RecipeProvider.hasItem(item), RecipeProvider.conditionsFromItem(item));
+	public ShapelessRecipeImpl(ItemLike item, int count, RecipeCategory category) {
+		this.factory = new ShapelessRecipeBuilder(category, item, count).unlockedBy(RecipeProvider.getHasName(item), RecipeProvider.has(item));
 	}
 
 	@Override
-	public void with(ItemConvertible... items) {
-		for (ItemConvertible item : items) {
-			this.factory.input(item);
+	public void with(ItemLike... items) {
+		for (ItemLike item : items) {
+			this.factory.requires(item);
 		}
 	}
 
 	@Override
 	public void with(Ingredient... ingredients) {
 		for (Ingredient ingredient : ingredients) {
-			this.factory.input(ingredient);
+			this.factory.requires(ingredient);
 		}
 	}
 }

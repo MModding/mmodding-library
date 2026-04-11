@@ -6,10 +6,9 @@ import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.ItemModelGenerator;
-
+import net.minecraft.data.models.BlockModelGenerators;
+import net.minecraft.data.models.ItemModelGenerators;
+import net.minecraft.world.level.block.Block;
 import java.util.List;
 
 public class BlockModelTypeImpl implements DataContentType<Block, BlockStateModelProcessor> {
@@ -29,7 +28,7 @@ public class BlockModelTypeImpl implements DataContentType<Block, BlockStateMode
 		}
 
 		@Override
-		public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
+		public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
 			this.contentToProcess.forEach((processor, blocks) -> {
 				for (Block block : blocks) {
 					processor.process(blockStateModelGenerator, block);
@@ -38,7 +37,7 @@ public class BlockModelTypeImpl implements DataContentType<Block, BlockStateMode
 		}
 
 		@Override
-		public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+		public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 		}
 
 		@Override

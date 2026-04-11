@@ -4,10 +4,10 @@ import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
 import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
 import com.mmodding.library.core.impl.AdvancedContainerImpl;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,22 +33,22 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Creates a new {@link Identifier} without the need to provide the mod namespace manually.
+	 * Creates a new {@link ResourceLocation} without the need to provide the mod namespace manually.
 	 * @param path the path of the identifier you want to create
 	 * @return the newly created identifier
 	 */
-	default Identifier createId(String path) {
-		return new Identifier(this.getMetadata().getId(), path);
+	default ResourceLocation createId(String path) {
+		return new ResourceLocation(this.getMetadata().getId(), path);
 	}
 
 	/**
-	 * Creates a new {@link RegistryKey} without the need to provide the mod namespace manually.
+	 * Creates a new {@link ResourceKey} without the need to provide the mod namespace manually.
 	 * @param registry the registry that the key is targeting
 	 * @param path the path of the identifier you want to create
 	 * @return the newly created registry key
 	 */
-	default <T> RegistryKey<T> createKey(RegistryKey<? extends Registry<T>> registry, String path) {
-		return RegistryKey.of(registry, this.createId(path));
+	default <T> ResourceKey<T> createKey(ResourceKey<? extends Registry<T>> registry, String path) {
+		return ResourceKey.create(registry, this.createId(path));
 	}
 
 	/**
@@ -56,31 +56,31 @@ public interface AdvancedContainer extends ModContainer {
 	 * @param registry the registry
 	 */
 	default <T> RegistryKeyFactory<T> keyFactory(Registry<T> registry) {
-		return this.keyFactory(registry.getKey());
+		return this.keyFactory(registry.key());
 	}
 
 	/**
-	 * Creates a {@link RegistryKeyFactory} of the specified registry's {@link RegistryKey}.
+	 * Creates a {@link RegistryKeyFactory} of the specified registry's {@link ResourceKey}.
 	 * @param registry the registry key of the registry
 	 */
-	default <T> RegistryKeyFactory<T> keyFactory(RegistryKey<? extends Registry<T>> registry) {
+	default <T> RegistryKeyFactory<T> keyFactory(ResourceKey<? extends Registry<T>> registry) {
 		return RegistryKeyFactory.create(registry, this.getMetadata().getId());
 	}
 
 	/**
 	 * A registration method filling the mod namespace automatically.
-	 * @see Registry#register(Registry, Identifier, Object)
+	 * @see Registry#register(Registry, ResourceLocation, Object)
 	 */
 	default <T> T register(Registry<T> registry, String path, T element) {
-		return Registry.register(registry, RegistryKey.of(registry.getKey(), Identifier.of(this.getMetadata().getId(), path)), element);
+		return Registry.register(registry, ResourceKey.create(registry.key(), ResourceLocation.tryBuild(this.getMetadata().getId(), path)), element);
 	}
 
 	/**
 	 * A registration method filling the mod namespace automatically.
-	 * @see Registerable#register(RegistryKey, Object)
+	 * @see BootstapContext#register(ResourceKey, Object)
 	 */
-	default <T> T register(RegistryKey<? extends Registry<T>> registry, Registerable<T> registerable, String path, T element) {
-		registerable.register(RegistryKey.of(registry, Identifier.of(this.getMetadata().getId(), path)), element);
+	default <T> T register(ResourceKey<? extends Registry<T>> registry, BootstapContext<T> registerable, String path, T element) {
+		registerable.register(ResourceKey.create(registry, ResourceLocation.tryBuild(this.getMetadata().getId(), path)), element);
 		return element;
 	}
 
@@ -94,12 +94,12 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Allows to make a bunch of registrations for a specified {@link Registerable}.
+	 * Allows to make a bunch of registrations for a specified {@link BootstapContext}.
 	 * @param registry the registry key of the registry
 	 * @param registerable the registrable
 	 * @param consumer the registrations
 	 */
-	default <T> void register(RegistryKey<? extends Registry<T>> registry, Registerable<T> registerable, Consumer<RegistrationFactory<T>> consumer) {
+	default <T> void register(ResourceKey<? extends Registry<T>> registry, BootstapContext<T> registerable, Consumer<RegistrationFactory<T>> consumer) {
 		consumer.accept(RegistrationFactory.create(registry, registerable, this.getMetadata().getId()));
 	}
 }

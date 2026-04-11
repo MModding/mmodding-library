@@ -1,47 +1,47 @@
 package com.mmodding.library.item.api.catalog;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 public class FluidInteractableItem extends Item {
 
 	private final FluidPickup fluidPickup;
 
-	public FluidInteractableItem(FluidPickup fluidPickup, Settings settings) {
+	public FluidInteractableItem(FluidPickup fluidPickup, Properties settings) {
 		super(settings);
 		this.fluidPickup = fluidPickup;
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		BlockHitResult hitResult = FluidInteractableItem.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
+	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+		BlockHitResult hitResult = FluidInteractableItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
 		if (hitResult.getType() == HitResult.Type.BLOCK) {
 			BlockPos pos = hitResult.getBlockPos();
-			if (world.canPlayerModifyAt(user, pos)) {
-				ItemStack stack = this.fluidPickup.getFilledStack(user.getStackInHand(hand), world.getFluidState(pos), world, pos);
+			if (world.mayInteract(user, pos)) {
+				ItemStack stack = this.fluidPickup.getFilledStack(user.getItemInHand(hand), world.getFluidState(pos), world, pos);
 				if (!stack.isEmpty()) {
-					world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0f, 1.0f);
-					world.emitGameEvent(user, GameEvent.FLUID_PICKUP, pos);
-					user.incrementStat(Stats.USED.getOrCreateStat(this));
-					return TypedActionResult.success(ItemUsage.exchangeStack(user.getStackInHand(hand), user, stack), world.isClient());
+					world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0f, 1.0f);
+					world.gameEvent(user, GameEvent.FLUID_PICKUP, pos);
+					user.awardStat(Stats.ITEM_USED.get(this));
+					return InteractionResultHolder.sidedSuccess(ItemUtils.createFilledResult(user.getItemInHand(hand), user, stack), world.isClientSide());
 				}
 			}
 		}
-		return TypedActionResult.pass(user.getStackInHand(hand));
+		return InteractionResultHolder.pass(user.getItemInHand(hand));
 	}
 
 	public interface FluidPickup {
@@ -55,6 +55,6 @@ public class FluidInteractableItem extends Item {
 		 * @return the filled stack
 		 * @apiNote To prevent the action from happening, simply return {@link ItemStack#EMPTY}.
 		 */
-		ItemStack getFilledStack(ItemStack stack, FluidState state, World world, BlockPos pos);
+		ItemStack getFilledStack(ItemStack stack, FluidState state, Level world, BlockPos pos);
 	}
 }

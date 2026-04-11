@@ -6,13 +6,12 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
 import java.util.*;
 
 public class MModdingInitializer implements ModInitializer {
 
-	public static final EventManager<Identifier> EVENT_MANAGER = new EventManager<>(MModdingLibrary.createId("default"), Identifier::tryParse);
+	public static final EventManager<ResourceLocation> EVENT_MANAGER = new EventManager<>(MModdingLibrary.createId("default"), ResourceLocation::tryParse);
 
 	@Override
 	public void onInitialize() {}

@@ -8,8 +8,8 @@ import net.fabricmc.fabric.api.datagen.v1.JsonKeySortOrderCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.registry.RegistryBuilder;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 
 public interface DatagenContainerCallback {
 
-	Event<Identifier, DatagenContainerCallback> EVENT = MModdingLibrary.getEventManager().create(DatagenContainerCallback.class);
+	Event<ResourceLocation, DatagenContainerCallback> EVENT = MModdingLibrary.getEventManager().create(DatagenContainerCallback.class);
 
-	static DataGeneratorEntrypoint createDummyEntrypoint(Consumer<RegistryBuilder> consumer, @Nullable DataGeneratorEntrypoint wrapped) {
+	static DataGeneratorEntrypoint createDummyEntrypoint(Consumer<RegistrySetBuilder> consumer, @Nullable DataGeneratorEntrypoint wrapped) {
 		if (wrapped != null) {
 			return new DataGeneratorEntrypoint() {
 
@@ -29,7 +29,7 @@ public interface DatagenContainerCallback {
 				}
 
 				@Override
-				public void buildRegistry(RegistryBuilder registryBuilder) {
+				public void buildRegistry(RegistrySetBuilder registryBuilder) {
 					consumer.accept(registryBuilder);
 					wrapped.buildRegistry(registryBuilder);
 				}
@@ -52,14 +52,14 @@ public interface DatagenContainerCallback {
 				public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {}
 
 				@Override
-				public void buildRegistry(RegistryBuilder registryBuilder) {
+				public void buildRegistry(RegistrySetBuilder registryBuilder) {
 					consumer.accept(registryBuilder);
 				}
 			};
 		}
 	}
 
-	static EntrypointContainer<DataGeneratorEntrypoint> createDummyEntrypointContainer(String namespace, Consumer<RegistryBuilder> consumer, @Nullable DataGeneratorEntrypoint wrapped) {
+	static EntrypointContainer<DataGeneratorEntrypoint> createDummyEntrypointContainer(String namespace, Consumer<RegistrySetBuilder> consumer, @Nullable DataGeneratorEntrypoint wrapped) {
 		DataGeneratorEntrypoint entrypoint = DatagenContainerCallback.createDummyEntrypoint(consumer, wrapped);
 		return new EntrypointContainer<>() {
 

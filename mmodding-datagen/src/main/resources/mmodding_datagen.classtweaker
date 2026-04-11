@@ -1,6 +1,3 @@
 classTweaker v1 named
 
-accessible method net/minecraft/data/client/Models make ([Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/Model;
-accessible method net/minecraft/data/client/Models block (Ljava/lang/String;[Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/Model;
-accessible method net/minecraft/data/client/Models item (Ljava/lang/String;[Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/Model;
-accessible method net/minecraft/data/client/Models block (Ljava/lang/String;Ljava/lang/String;[Lnet/minecraft/data/client/TextureKey;)Lnet/minecraft/data/client/Model;
+accessible method net/minecraft/data/models/model/ModelTemplates create (Ljava/lang/String;[Lnet/minecraft/data/models/model/TextureSlot;)Lnet/minecraft/data/models/model/ModelTemplate;
