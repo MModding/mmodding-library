@@ -1,5 +1,5 @@
 jdk:
-  - openjdk21
+  - openjdk25
 install:
   - ./gradlew generateFMJ # all FMJs need to be generated before anything else happens
   - ./gradlew clean -Pgroup=com.mmodding -xtest assemble publishToMavenLocal
