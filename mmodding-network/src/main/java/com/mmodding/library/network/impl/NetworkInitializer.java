@@ -9,14 +9,14 @@ import com.mmodding.library.network.impl.delay.DelayedNetworkPackets;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import java.util.UUID;
 
 public class NetworkInitializer implements ModInitializer {
 
-	private static ResourceLocation java(String path) {
-		return new ResourceLocation("java", path);
+	private static Identifier java(String path) {
+		return Identifier.fromNamespaceAndPath("java", path);
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class NetworkInitializer implements ModInitializer {
 		NetworkHandlers.register(Short.class, NetworkInitializer.java("short"), FriendlyByteBuf::readShort, (buf, value) -> buf.writeShort(value));
 		NetworkHandlers.register(String.class, NetworkInitializer.java("string"), FriendlyByteBuf::readUtf, FriendlyByteBuf::writeUtf);
 		NetworkHandlers.register(UUID.class, NetworkInitializer.java("uuid"), FriendlyByteBuf::readUUID, FriendlyByteBuf::writeUUID);
-		NetworkHandlers.register(ResourceLocation.class, new ResourceLocation("identifier"), FriendlyByteBuf::readResourceLocation, FriendlyByteBuf::writeResourceLocation);
-		NetworkHandlers.register(ItemStack.class, new ResourceLocation("itemstack"), FriendlyByteBuf::readItem, FriendlyByteBuf::writeItem);
+		NetworkHandlers.register(Identifier.class, Identifier.withDefaultNamespace("identifier"), FriendlyByteBuf::readIdentifier, FriendlyByteBuf::writeIdentifier);
+		NetworkHandlers.register(ItemStack.class, Identifier.withDefaultNamespace("itemstack"), FriendlyByteBuf::readItem, FriendlyByteBuf::writeItem);
 		NetworkHandlers.register(MixedList.class, MModdingLibrary.createId("list"), FriendlyByteBuf::readMixedList, FriendlyByteBuf::writeMixedList);
 		NetworkHandlers.register(
 			MixedMap.class,

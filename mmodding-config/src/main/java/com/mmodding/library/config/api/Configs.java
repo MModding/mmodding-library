@@ -2,8 +2,9 @@ package com.mmodding.library.config.api;
 
 import com.mmodding.library.config.api.element.ConfigElementTypeWrapper;
 import com.mmodding.library.config.impl.ConfigsImpl;
+import net.minecraft.resources.Identifier;
+
 import java.util.Map;
-import net.minecraft.resources.ResourceLocation;
 
 /**
  * A class allowing to access built configurations.
@@ -18,7 +19,7 @@ public class Configs {
 	 * Gives all configurations associated with their respective identifiers.
 	 * @return a map containing all configurations
 	 */
-	public static Map<ResourceLocation, Config> getAll() {
+	public static Map<Identifier, Config> getAll() {
 		return ConfigsImpl.getAll();
 	}
 
@@ -27,7 +28,7 @@ public class Configs {
 	 * @param identifier the configuration identifier
 	 * @return the retrieved configuration
 	 */
-	public static Config get(ResourceLocation identifier) {
+	public static Config get(Identifier identifier) {
 		return ConfigsImpl.get(identifier);
 	}
 

@@ -6,7 +6,7 @@ import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -30,7 +30,7 @@ public class EntityLootTypeImpl implements DataContentType<EntityType<?>, Entity
 		}
 
 		@Override
-		public void generate(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+		public void generate(BiConsumer<Identifier, LootTable.Builder> biConsumer) {
 			this.contentToProcess.forEach((processor, entityTypes) -> {
 				for (EntityType<?> entityType : entityTypes) {
 					processor.process(entityType);

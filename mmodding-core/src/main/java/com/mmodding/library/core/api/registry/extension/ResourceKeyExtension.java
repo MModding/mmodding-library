@@ -1,8 +1,8 @@
 package com.mmodding.library.core.api.registry.extension;
 
 import com.mmodding.library.java.api.function.AutoMapper;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 /**
  * Few extensions provide to the {@link ResourceKey} class.
@@ -15,7 +15,7 @@ public interface ResourceKeyExtension<T> {
 	 * @param mapper the mapper
 	 * @return the newly created registry key
 	 */
-	default ResourceKey<T> mapValue(AutoMapper<ResourceLocation> mapper) {
+	default ResourceKey<T> mapValue(AutoMapper<Identifier> mapper) {
 		throw new IllegalStateException();
 	}
 }

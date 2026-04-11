@@ -5,7 +5,7 @@ import com.mmodding.library.core.api.management.ElementsManager;
 import dev.yumi.commons.event.Event;
 import dev.yumi.commons.event.EventManager;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface MModdingLibrary {
 
@@ -13,7 +13,7 @@ public interface MModdingLibrary {
 	 * Retrieves the {@link ElementsManager} to create new {@link Event} objects.
 	 * @return the event manager
 	 */
-	static EventManager<ResourceLocation> getEventManager() {
+	static EventManager<Identifier> getEventManager() {
 		return MModdingInitializer.EVENT_MANAGER;
 	}
 
@@ -40,7 +40,7 @@ public interface MModdingLibrary {
 	 * @param path the identifier path
 	 * @return the newly created identifier
 	 */
-	static ResourceLocation createId(String path) {
-		return new ResourceLocation("mmodding", path);
+	static Identifier createId(String path) {
+		return Identifier.fromNamespaceAndPath("mmodding", path);
 	}
 }

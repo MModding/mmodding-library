@@ -7,7 +7,6 @@
     "AbstractBlockStateMixin",
     "BlockFamilyAccessor",
     "BlockMixin",
-    "BlockStateMixin",
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
     "PointedDripstoneBlockAccessor"

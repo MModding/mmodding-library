@@ -8,27 +8,27 @@ import com.mmodding.library.network.api.delay.processor.ServerRequestProcessor;
 import com.mmodding.library.network.impl.delay.DelayedNetworkImpl;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 
 public class DelayedNetwork {
 
 	/**
-	 * Registers a {@link ClientRequestProcessor} under the specified request {@link ResourceLocation}.
-	 * @param requestIdentifier the request {@link ResourceLocation}
+	 * Registers a {@link ClientRequestProcessor} under the specified request {@link Identifier}.
+	 * @param requestIdentifier the request {@link Identifier}
 	 * @param requestProcessor the {@link ClientRequestProcessor}
 	 */
 	@Environment(EnvType.CLIENT)
-	public static void registerClientRequestProcessor(ResourceLocation requestIdentifier, ClientRequestProcessor requestProcessor) {
+	public static void registerClientRequestProcessor(Identifier requestIdentifier, ClientRequestProcessor requestProcessor) {
 		DelayedNetworkImpl.registerClientRequestProcessor(requestIdentifier, requestProcessor);
 	}
 
 	/**
-	 * Registers a {@link ServerRequestProcessor} under the specified request {@link ResourceLocation}.
-	 * @param requestIdentifier the request {@link ResourceLocation}
+	 * Registers a {@link ServerRequestProcessor} under the specified request {@link Identifier}.
+	 * @param requestIdentifier the request {@link Identifier}
 	 * @param requestProcessor the {@link ServerRequestProcessor}
 	 */
-	public static void registerServerRequestProcessor(ResourceLocation requestIdentifier, ServerRequestProcessor requestProcessor) {
+	public static void registerServerRequestProcessor(Identifier requestIdentifier, ServerRequestProcessor requestProcessor) {
 		DelayedNetworkImpl.registerServerRequestProcessor(requestIdentifier, requestProcessor);
 	}
 
@@ -40,7 +40,7 @@ public class DelayedNetwork {
 	 * @param action the delayed action waiting for the server's response
 	 */
 	@Environment(EnvType.CLIENT)
-	public static void executeC2S(ResourceLocation requestIdentifier, MixedList requestArguments, DelayedClientAction action) {
+	public static void executeC2S(Identifier requestIdentifier, MixedList requestArguments, DelayedClientAction action) {
 		DelayedNetworkImpl.executeC2S(requestIdentifier, requestArguments, action);
 	}
 
@@ -52,7 +52,7 @@ public class DelayedNetwork {
 	 * @param requestArguments the request arguments, to provide some data first to the client if necessary
 	 * @param action the delayed action waiting for the client's response
 	 */
-	public static void executeS2C(ServerPlayer requestTarget, ResourceLocation requestIdentifier, MixedList requestArguments, DelayedServerAction action) {
+	public static void executeS2C(ServerPlayer requestTarget, Identifier requestIdentifier, MixedList requestArguments, DelayedServerAction action) {
 		DelayedNetworkImpl.executeS2C(requestTarget, requestIdentifier, requestArguments, action);
 	}
 }

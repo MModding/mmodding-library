@@ -2,7 +2,6 @@ package com.mmodding.library.block.api.catalog.sized;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
 public class DoubleWidthBlock extends SizedBlock {
@@ -11,7 +10,7 @@ public class DoubleWidthBlock extends SizedBlock {
 	private static final Property<Integer> Y_PROPERTY = SizedBlock.makeOfSize(SizeAxis.HEIGHT, 1);
 	private static final Property<Integer> Z_PROPERTY = SizedBlock.makeOfSize(SizeAxis.WIDTH, 2);
 
-	private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+	private static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	public DoubleWidthBlock(Properties settings) {
 		super(2, 1, 2, settings);

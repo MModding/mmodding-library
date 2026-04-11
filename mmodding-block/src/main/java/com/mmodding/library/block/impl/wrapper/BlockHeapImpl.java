@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -57,9 +57,9 @@ public class BlockHeapImpl implements BlockHeap {
 	 * Registers every block inside the heap.
 	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
 	 */
-	public void register(Function<String, ResourceLocation> identifierMaker) {
+	public void register(Function<String, Identifier> identifierMaker) {
 		for (Map.Entry<String, Block> entry : this.blocks.entrySet()) {
-			ResourceLocation identifier = identifierMaker.apply(entry.getKey());
+			Identifier identifier = identifierMaker.apply(entry.getKey());
 			Registry.register(BuiltInRegistries.BLOCK, identifier, entry.getValue());
 			Item item = entry.getValue().asItem();
 			if (item != null) {

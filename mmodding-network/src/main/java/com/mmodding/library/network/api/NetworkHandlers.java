@@ -4,7 +4,7 @@ import com.mmodding.library.network.impl.NetworkHandlersImpl;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class NetworkHandlers {
 
@@ -17,7 +17,7 @@ public class NetworkHandlers {
 	 * @param reader the reader factory
 	 * @param writer the writer factory
 	 */
-	public static <T> void register(Class<T> type, ResourceLocation identifier, FriendlyByteBuf.Reader<T> reader, FriendlyByteBuf.Writer<T> writer) {
+	public static <T> void register(Class<T> type, Identifier identifier, FriendlyByteBuf.Reader<T> reader, FriendlyByteBuf.Writer<T> writer) {
 		NetworkHandlersImpl.register(type, identifier, reader, writer);
 	}
 }

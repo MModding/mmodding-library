@@ -6,8 +6,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
@@ -47,11 +47,11 @@ public class FeatureTests {
 		);
 
 	private static ResourceKey<ConfiguredFeature<?, ?>> configured(String path) {
-		return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation("mmodding_worldgen_test", path));
+		return ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath("mmodding_worldgen_test", path));
 	}
 
 	private static ResourceKey<PlacedFeature> placed(String path) {
-		return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("mmodding_worldgen_test", path));
+		return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath("mmodding_worldgen_test", path));
 	}
 
 	public static void registerConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatures, AdvancedContainer mod) {

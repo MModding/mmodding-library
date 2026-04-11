@@ -3,17 +3,17 @@ package com.mmodding.library.fluid.impl;
 import com.mmodding.library.fluid.api.property.FluidProperties;
 import com.mmodding.library.fluid.api.property.FluidProperty;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
-import net.minecraft.resources.ResourceLocation;
 
 @ApiStatus.Internal
 public class FluidPropertiesImpl implements FluidProperties {
 
-	private final Map<ResourceLocation, Object> properties;
+	private final Map<Identifier, Object> properties;
 
-	private FluidPropertiesImpl(Map<ResourceLocation, Object> properties) {
+	private FluidPropertiesImpl(Map<Identifier, Object> properties) {
 		this.properties = properties;
 	}
 
@@ -29,7 +29,7 @@ public class FluidPropertiesImpl implements FluidProperties {
 
 	public static class Builder implements FluidProperties.Builder {
 
-		private final Map<ResourceLocation, Object> properties = new Object2ObjectOpenHashMap<>();
+		private final Map<Identifier, Object> properties = new Object2ObjectOpenHashMap<>();
 
 		@Override
 		public <T> void withFluidProperty(FluidProperty<T> fluidProperty, T value) {

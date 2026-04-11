@@ -4,8 +4,8 @@ import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
 import java.util.function.BiFunction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 public class RegistrationFactoryImpl<T> implements RegistrationFactory<T> {
 
@@ -32,6 +32,6 @@ public class RegistrationFactoryImpl<T> implements RegistrationFactory<T> {
 
 	@Override
 	public T register(String namespace, String path, T entry) {
-		return this.biFunction.apply(ResourceKey.create(this.registry, ResourceLocation.tryBuild(namespace, path)), entry);
+		return this.biFunction.apply(ResourceKey.create(this.registry, Identifier.tryBuild(namespace, path)), entry);
 	}
 }

@@ -90,21 +90,21 @@ public abstract class SizedBlock extends Block {
 	}
 
 	@Override
-	public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
-		super.setPlacedBy(world, pos, state, entity, stack);
-		if (!world.isClientSide()) {
-			this.forEach(world, pos, state, (blockPos, blockState, ijk) -> world.setBlock(
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+		super.setPlacedBy(level, pos, state, entity, stack);
+		if (!level.isClientSide()) {
+			this.forEach(level, pos, state, (blockPos, blockState, ijk) -> level.setBlock(
 				blockPos,
 				state.setValue(this.getXProperty(), ijk.first()).setValue(this.getYProperty(), ijk.second()).setValue(this.getZProperty(), ijk.third()),
 				Block.UPDATE_ALL
 			));
-			world.blockUpdated(pos, Blocks.AIR);
-			state.updateNeighbourShapes(world, pos, Block.UPDATE_ALL);
+			level.blockUpdated(pos, Blocks.AIR);
+			state.updateNeighbourShapes(level, pos, Block.UPDATE_ALL);
 		}
 	}
 
 	@Override
-	public void playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
+	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
 		super.playerWillDestroy(world, pos, state, player);
 		if (!world.isClientSide()) {
 			this.forEach(world, pos, state, (blockPos, blockState, ijk) -> {
@@ -114,6 +114,7 @@ public abstract class SizedBlock extends Block {
 			});
 		}
 		world.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+		return state;
 	}
 
 	@Override

@@ -6,8 +6,8 @@ import com.mmodding.library.core.impl.AdvancedContainerImpl;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,12 +33,12 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Creates a new {@link ResourceLocation} without the need to provide the mod namespace manually.
+	 * Creates a new {@link Identifier} without the need to provide the mod namespace manually.
 	 * @param path the path of the identifier you want to create
 	 * @return the newly created identifier
 	 */
-	default ResourceLocation createId(String path) {
-		return new ResourceLocation(this.getMetadata().getId(), path);
+	default Identifier createId(String path) {
+		return Identifier.fromNamespaceAndPath(this.getMetadata().getId(), path);
 	}
 
 	/**
@@ -69,10 +69,10 @@ public interface AdvancedContainer extends ModContainer {
 
 	/**
 	 * A registration method filling the mod namespace automatically.
-	 * @see Registry#register(Registry, ResourceLocation, Object)
+	 * @see Registry#register(Registry, Identifier, Object)
 	 */
 	default <T> T register(Registry<T> registry, String path, T element) {
-		return Registry.register(registry, ResourceKey.create(registry.key(), ResourceLocation.tryBuild(this.getMetadata().getId(), path)), element);
+		return Registry.register(registry, ResourceKey.create(registry.key(), Identifier.tryBuild(this.getMetadata().getId(), path)), element);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public interface AdvancedContainer extends ModContainer {
 	 * @see BootstapContext#register(ResourceKey, Object)
 	 */
 	default <T> T register(ResourceKey<? extends Registry<T>> registry, BootstapContext<T> registerable, String path, T element) {
-		registerable.register(ResourceKey.create(registry, ResourceLocation.tryBuild(this.getMetadata().getId(), path)), element);
+		registerable.register(ResourceKey.create(registry, Identifier.tryBuild(this.getMetadata().getId(), path)), element);
 		return element;
 	}
 

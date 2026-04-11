@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -35,7 +35,7 @@ import java.util.List;
 
 public interface BlockRelatives {
 
-	static BlockRelatives createWood(ResourceLocation identifier, WoodType type, AutoMapper<FabricBlockSettings> patch) {
+	static BlockRelatives createWood(Identifier identifier, WoodType type, AutoMapper<FabricBlockSettings> patch) {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map((FabricBlockSettings) FabricBlockSettings.create().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava());
 		return BlockRelatives.create(identifier, setType, sharedSettings, "_planks", Block::new)
@@ -51,11 +51,11 @@ public interface BlockRelatives {
 				.push(BlockFamily.Variant.TRAPDOOR, settings -> new TrapDoorBlock(settings.noOcclusion().isValidSpawn(Blocks::never), setType));
 	}
 
-	static BlockRelatives createStone(ResourceLocation identifier, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate, boolean hasButton) {
+	static BlockRelatives createStone(Identifier identifier, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate, boolean hasButton) {
 		return BlockRelatives.createStone(identifier, false, patch, hasPressurePlate, hasButton);
 	}
 
-	static BlockRelatives createStone(ResourceLocation identifier, boolean pluralOnMain, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate, boolean hasButton) {
+	static BlockRelatives createStone(Identifier identifier, boolean pluralOnMain, AutoMapper<FabricBlockSettings> patch, boolean hasPressurePlate, boolean hasButton) {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(identifier);
 		FabricBlockSettings sharedSettings = patch.map((FabricBlockSettings) FabricBlockSettings.create().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5f, 6.0f));
 		BlockRelatives result = BlockRelatives.create(identifier, setType, sharedSettings, pluralOnMain ? "s" : "", Block::new)
@@ -71,11 +71,11 @@ public interface BlockRelatives {
 		return result;
 	}
 
-	static <T extends Block> BlockRelatives create(ResourceLocation identifier, BlockSetType setType, FabricBlockSettings sharedSettings, BlockFactory<T> mainFactory) {
+	static <T extends Block> BlockRelatives create(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, BlockFactory<T> mainFactory) {
 		return BlockRelatives.create(identifier, setType, sharedSettings, "", mainFactory);
 	}
 
-	static <T extends Block> BlockRelatives create(ResourceLocation identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
+	static <T extends Block> BlockRelatives create(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
 		return new BlockRelativesImpl(identifier, setType, sharedSettings, mainSuffix, mainFactory);
 	}
 

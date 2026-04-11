@@ -6,6 +6,8 @@ import com.mmodding.library.java.api.map.MixedMap;
 import com.mmodding.library.network.api.FriendlyByteBufExtension;
 import com.mmodding.library.network.impl.NetworkHandlersImpl;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.IdentifierException;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,9 +16,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.IntFunction;
-import net.minecraft.ResourceLocationException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 
 @Mixin(FriendlyByteBuf.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
@@ -26,13 +26,13 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 	public abstract <T, C extends Collection<T>> C readCollection(IntFunction<C> collectionFactory, FriendlyByteBuf.Reader<T> entryReader);
 
 	@Shadow
-	public abstract ResourceLocation readResourceLocation();
+	public abstract Identifier readIdentifier();
 
 	@Shadow
 	public abstract <T> void writeCollection(Collection<T> collection, FriendlyByteBuf.Writer<T> entryWriter);
 
 	@Shadow
-	public abstract FriendlyByteBuf writeResourceLocation(ResourceLocation id);
+	public abstract FriendlyByteBuf writeIdentifier(Identifier id);
 
 	@Shadow
 	public abstract ByteBuf copy();
@@ -46,12 +46,12 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 	@Override
 	public Optional<Class<?>> peekNextType() {
 		FriendlyByteBuf copied = new FriendlyByteBuf(this.copy());
-		ResourceLocation identifier;
+		Identifier identifier;
 		try {
-			identifier = copied.readResourceLocation();
+			identifier = copied.readIdentifier();
 			copied.release();
 		}
-		catch (ResourceLocationException error) {
+		catch (IdentifierException error) {
 			return Optional.empty();
 		}
 		if (NetworkHandlersImpl.TYPES.containsKey(identifier)) {
@@ -125,7 +125,7 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 		else if (this.peekNextType().get() != type) {
 			throw new IllegalArgumentException("Next value is not an instance of " + type + "!");
 		}
-		return (FriendlyByteBuf.Reader<T>) NetworkHandlersImpl.HANDLERS.getFirstValue(this.readResourceLocation());
+		return (FriendlyByteBuf.Reader<T>) NetworkHandlersImpl.HANDLERS.getFirstValue(this.readIdentifier());
 	}
 
 	@Unique
@@ -135,7 +135,7 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 			throw new IllegalArgumentException("Value cannot be network-handled as " + type + " does not have any registered handling factories!");
 		}
 		else {
-			this.writeResourceLocation(NetworkHandlersImpl.IDS.get(type));
+			this.writeIdentifier(NetworkHandlersImpl.IDS.get(type));
 			return (FriendlyByteBuf.Writer<T>) NetworkHandlersImpl.HANDLERS.getSecondValue(NetworkHandlersImpl.IDS.get(type));
 		}
 	}

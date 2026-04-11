@@ -9,7 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public interface DatagenContainerCallback {
 
-	Event<ResourceLocation, DatagenContainerCallback> EVENT = MModdingLibrary.getEventManager().create(DatagenContainerCallback.class);
+	Event<Identifier, DatagenContainerCallback> EVENT = MModdingLibrary.getEventManager().create(DatagenContainerCallback.class);
 
 	static DataGeneratorEntrypoint createDummyEntrypoint(Consumer<RegistrySetBuilder> consumer, @Nullable DataGeneratorEntrypoint wrapped) {
 		if (wrapped != null) {

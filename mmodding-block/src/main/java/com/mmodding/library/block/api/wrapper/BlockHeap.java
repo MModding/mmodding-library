@@ -7,7 +7,7 @@ import com.mmodding.library.java.api.function.Mapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -127,7 +127,7 @@ public interface BlockHeap {
 	 * Registers every block inside the heap.
 	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
 	 */
-	void register(Function<String, ResourceLocation> identifierMaker);
+	void register(Function<String, Identifier> identifierMaker);
 
 	@Environment(EnvType.CLIENT)
 	void cutout();

@@ -10,9 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(Block.class)
 @SuppressWarnings("AddedMixinMembersNamePattern")
@@ -32,10 +30,5 @@ public class BlockMixin implements BlockWithItem, MModdingBlock {
 		else {
 			throw new RuntimeException("Tried to link a new item to a block that already had one");
 		}
-	}
-
-	@Override
-	public boolean canBeReplaced(BlockState state, @Nullable BlockPlaceContext context) {
-		return context != null ? state.canBeReplaced(context) : state.canBeReplaced();
 	}
 }

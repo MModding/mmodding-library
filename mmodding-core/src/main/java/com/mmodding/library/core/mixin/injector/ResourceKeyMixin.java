@@ -2,8 +2,8 @@ package com.mmodding.library.core.mixin.injector;
 
 import com.mmodding.library.core.api.registry.extension.ResourceKeyExtension;
 import com.mmodding.library.java.api.function.AutoMapper;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -11,19 +11,19 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class ResourceKeyMixin<T> implements ResourceKeyExtension<T> {
 
 	@Shadow
-	public abstract ResourceLocation registry();
+	public abstract Identifier registry();
 
 	@Shadow
-	public abstract ResourceLocation location();
+	public abstract Identifier location();
 
 	@Shadow
-	private static <T> ResourceKey<T> create(ResourceLocation identifier, ResourceLocation identifier2) {
+	private static <T> ResourceKey<T> create(Identifier identifier, Identifier identifier2) {
 		throw new IllegalStateException();
 	}
 
 	@Override
 	@SuppressWarnings("AddedMixinMembersNamePattern")
-	public ResourceKey<T> mapValue(AutoMapper<ResourceLocation> mapper) {
+	public ResourceKey<T> mapValue(AutoMapper<Identifier> mapper) {
 		return create(this.registry(), mapper.map(this.location()));
 	}
 }

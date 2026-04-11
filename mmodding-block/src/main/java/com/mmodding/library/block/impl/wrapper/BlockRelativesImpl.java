@@ -16,7 +16,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -29,14 +29,14 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	private final BlockSetType setType;
 	private final FabricBlockSettings sharedSettings;
-	private final ResourceLocation identifier;
+	private final Identifier identifier;
 	private final String mainSuffix;
 	private final Block mainBlock;
 	private final TagKey<Block> blockTagKey;
 	private final TagKey<Item> itemTagKey;
 	private final Map<BlockFamily.Variant, Block> variants;
 
-	public <T extends Block> BlockRelativesImpl(ResourceLocation identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
+	public <T extends Block> BlockRelativesImpl(Identifier identifier, BlockSetType setType, FabricBlockSettings sharedSettings, String mainSuffix, BlockFactory<T> mainFactory) {
 		this.setType = setType;
 		this.sharedSettings = sharedSettings;
 		this.identifier = identifier;
@@ -91,11 +91,11 @@ public class BlockRelativesImpl implements BlockRelatives {
 
 	@Override
 	public void register() {
-		ResourceLocation mainIdentifier = this.identifier.withPath(path -> path + this.mainSuffix);
+		Identifier mainIdentifier = this.identifier.withPath(path -> path + this.mainSuffix);
 		Registry.register(BuiltInRegistries.BLOCK, mainIdentifier, this.mainBlock);
 		Registry.register(BuiltInRegistries.ITEM, mainIdentifier, this.mainBlock.asItem());
 		for (Map.Entry<BlockFamily.Variant, Block> entry : this.variants.entrySet()) {
-			ResourceLocation variantIdentifier = IdentifierUtil.extend(this.identifier, entry.getKey().getName());
+			Identifier variantIdentifier = IdentifierUtil.extend(this.identifier, entry.getKey().getName());
 			Registry.register(BuiltInRegistries.BLOCK, variantIdentifier, entry.getValue());
 			Registry.register(BuiltInRegistries.ITEM, variantIdentifier, entry.getValue().asItem());
 		}

@@ -5,13 +5,13 @@ import com.mmodding.library.item.api.category.ItemCategory;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 public class ItemTests {
 
-	public static final ItemCategory CATEGORY = ItemCategory.create(ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation("", "")), settings -> {});
+	public static final ItemCategory CATEGORY = ItemCategory.create(ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath("", "")), settings -> {});
 
 	public static final Item FIRST_ITEM = new Item(new FabricItemSettings()).setCategory(CATEGORY);
 

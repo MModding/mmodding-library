@@ -10,7 +10,7 @@ import net.minecraft.data.models.model.ModelTemplate;
 import net.minecraft.data.models.model.ModelTemplates;
 import net.minecraft.data.models.model.TextureMapping;
 import net.minecraft.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -47,14 +47,14 @@ public class DefaultBlockModelProcessing {
 	 * @param paneBlock the pane block
 	 * @param paneTopPath the location of the pane top texture
 	 */
-	public static void pane(BlockModelGenerators generator, Block glassBlock, Block paneBlock, ResourceLocation paneTopPath) {
+	public static void pane(BlockModelGenerators generator, Block glassBlock, Block paneBlock, Identifier paneTopPath) {
 		TextureMapping textures = new TextureMapping();
 		textures.put(TextureSlot.PANE, TextureMapping.getBlockTexture(glassBlock)).put(TextureSlot.EDGE, paneTopPath);
-		ResourceLocation panePost = ModelTemplates.STAINED_GLASS_PANE_POST.create(paneBlock, textures, generator.modelOutput);
-		ResourceLocation paneSide = ModelTemplates.STAINED_GLASS_PANE_SIDE.create(paneBlock, textures, generator.modelOutput);
-		ResourceLocation paneSideAlt = ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.create(paneBlock, textures, generator.modelOutput);
-		ResourceLocation paneNoSide = ModelTemplates.STAINED_GLASS_PANE_NOSIDE.create(paneBlock, textures, generator.modelOutput);
-		ResourceLocation paneNoSideAlt = ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.create(paneBlock, textures, generator.modelOutput);
+		Identifier panePost = ModelTemplates.STAINED_GLASS_PANE_POST.create(paneBlock, textures, generator.modelOutput);
+		Identifier paneSide = ModelTemplates.STAINED_GLASS_PANE_SIDE.create(paneBlock, textures, generator.modelOutput);
+		Identifier paneSideAlt = ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.create(paneBlock, textures, generator.modelOutput);
+		Identifier paneNoSide = ModelTemplates.STAINED_GLASS_PANE_NOSIDE.create(paneBlock, textures, generator.modelOutput);
+		Identifier paneNoSideAlt = ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.create(paneBlock, textures, generator.modelOutput);
 		if (paneBlock.asItem() != Items.AIR) {
 			ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(paneBlock.asItem()), TextureMapping.layer0(glassBlock), generator.modelOutput);
 		}

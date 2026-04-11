@@ -16,7 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.Cow;
@@ -51,7 +51,7 @@ public class DatagenTests implements ExtendedModInitializer, ExtendedDataGenerat
 	}
 
 	private static void register(AdvancedContainer advancedContainer) {
-		Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation("mmodding_datagen", "block"), BLOCK);
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation("mmodding_datagen", "cow"), COW);
+		Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath("mmodding_datagen", "block"), BLOCK);
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("mmodding_datagen", "cow"), COW);
 	}
 }

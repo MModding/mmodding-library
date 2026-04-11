@@ -2,8 +2,8 @@ package com.mmodding.library.core.impl.registry.factory;
 
 import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
 public class RegistryKeyFactoryImpl<T> implements RegistryKeyFactory<T> {
 
@@ -22,6 +22,6 @@ public class RegistryKeyFactoryImpl<T> implements RegistryKeyFactory<T> {
 
 	@Override
 	public ResourceKey<T> createKey(String namespace, String path) {
-		return ResourceKey.create(this.registry, new ResourceLocation(namespace, path));
+		return ResourceKey.create(this.registry, Identifier.fromNamespaceAndPath(namespace, path));
 	}
 }
