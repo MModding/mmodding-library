@@ -1,4 +1,4 @@
-classTweaker v1 named
+classTweaker v1 official
 
 accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/block/state/BlockState;)Z
 accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z

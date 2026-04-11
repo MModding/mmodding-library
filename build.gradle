@@ -55,7 +55,7 @@ static def applyYumiCommonsParent(ParentSchema parent) {
 
 allprojects {
 
-    apply plugin: 'fabric-loom'
+    apply plugin: 'net.fabricmc.fabric-loom'
 	apply plugin: 'com.mmodding.gradle'
 
 	base {
@@ -83,17 +83,16 @@ allprojects {
 	// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 	dependencies {
 		minecraft libs.minecraft
-		mappings loom.officialMojangMappings()
+		implementation libs.fabric.loader
 
-		modImplementation libs.fabric.loader
-		modImplementation libs.yumi.commons
-		modImplementation libs.fabric.api
+		implementation libs.yumi.commons
+		implementation libs.fabric.api
 	}
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-        it.options.release = 17
+        // Minecraft 26.1 upwards uses Java 25.
+        it.options.release = Integer.valueOf(libs.versions.java.get())
     }
 
 	mmodding {
@@ -149,8 +148,8 @@ allprojects {
 
     java {
         // Still required by IDEs such as Eclipse and Visual Studio Code
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
 
         withSourcesJar()
         // withJavadocJar()
