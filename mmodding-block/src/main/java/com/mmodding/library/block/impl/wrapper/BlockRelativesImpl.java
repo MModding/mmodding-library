@@ -31,7 +31,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 	public <T extends Block> BlockRelativesImpl(Identifier identifier, BlockSetType setType, Block.Properties sharedProperties, String mainSuffix, BlockFactory<T> mainFactory) {
 		this.setType = setType;
 		this.identifier = identifier;
-		this.mainBlock = Blocks.register(ResourceKey.create(Registries.BLOCK, IdentifierUtil.extend(this.identifier, mainSuffix)), mainFactory::make, sharedProperties);
+		this.mainBlock = Blocks.register(ResourceKey.create(Registries.BLOCK, this.identifier.withPath(path -> path + mainSuffix)), mainFactory::make, sharedProperties);
 		this.mainBlock.registerItem(new Item.Properties());
 		this.blockTagKey = TagKey.create(Registries.BLOCK, identifier);
 		this.itemTagKey = TagKey.create(Registries.ITEM, identifier);
