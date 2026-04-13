@@ -57,7 +57,7 @@ public interface BlockRelatives {
 		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5f, 6.0f));
 		BlockRelatives result = BlockRelatives.create(identifier, setType, sharedProperties, pluralOnMain ? "s" : "", Block::new)
 			.register(BlockFamily.Variant.SLAB, SlabBlock::new)
-			.register(BlockFamily.Variant.STAIRS, properties -> new StairBlock(BuiltInRegistries.BLOCK.get(identifier).orElseThrow().value().defaultBlockState(), properties))
+			.register(BlockFamily.Variant.STAIRS, properties -> new StairBlock(BuiltInRegistries.BLOCK.get(identifier.withPath(path -> pluralOnMain ? path + "s" : path)).orElseThrow().value().defaultBlockState(), properties))
 			.register(BlockFamily.Variant.WALL, WallBlock::new);
 		if (hasPressurePlate) {
 			result.register(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)));
