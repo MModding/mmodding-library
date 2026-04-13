@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 
 /**
  * {@link SizedBlock} variant supporting face rotations through {@link OrientedBlockPos}.
@@ -76,7 +76,7 @@ public abstract class FacingSizedBlock extends SizedBlock {
 		builder.add(this.getFacingProperty());
 	}
 
-	public DirectionProperty getFacingProperty() {
+	public Property<Direction> getFacingProperty() {
 		return this.horizontal ? BlockStateProperties.HORIZONTAL_FACING : BlockStateProperties.FACING;
 	}
 }

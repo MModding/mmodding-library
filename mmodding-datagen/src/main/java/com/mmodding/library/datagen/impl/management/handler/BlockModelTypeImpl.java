@@ -3,11 +3,11 @@ package com.mmodding.library.datagen.impl.management.handler;
 import com.mmodding.library.datagen.api.management.DataContentType;
 import com.mmodding.library.datagen.api.model.block.BlockStateModelProcessor;
 import com.mmodding.library.java.api.list.BiList;
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.models.ItemModelGenerators;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.world.level.block.Block;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class BlockModelTypeImpl implements DataContentType<Block, BlockStateMode
 
 		private final BiList<BlockStateModelProcessor, List<Block>> contentToProcess;
 
-		public AutomatedBlockStateProvider(BiList<BlockStateModelProcessor, List<Block>> contentToProcess, FabricDataOutput output) {
+		public AutomatedBlockStateProvider(BiList<BlockStateModelProcessor, List<Block>> contentToProcess, FabricPackOutput output) {
 			super(output);
 			this.contentToProcess = contentToProcess;
 		}

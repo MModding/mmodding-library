@@ -1,11 +1,11 @@
 package com.mmodding.library.core.api;
 
 import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
-import com.mmodding.library.core.api.registry.factory.RegistryKeyFactory;
+import com.mmodding.library.core.api.registry.factory.ResourceKeyFactory;
 import com.mmodding.library.core.impl.AdvancedContainerImpl;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.slf4j.Logger;
@@ -52,19 +52,19 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Creates a {@link RegistryKeyFactory} of the specified {@link Registry}.
+	 * Creates a {@link ResourceKeyFactory} of the specified {@link Registry}.
 	 * @param registry the registry
 	 */
-	default <T> RegistryKeyFactory<T> keyFactory(Registry<T> registry) {
+	default <T> ResourceKeyFactory<T> keyFactory(Registry<T> registry) {
 		return this.keyFactory(registry.key());
 	}
 
 	/**
-	 * Creates a {@link RegistryKeyFactory} of the specified registry's {@link ResourceKey}.
+	 * Creates a {@link ResourceKeyFactory} of the specified registry's {@link ResourceKey}.
 	 * @param registry the registry key of the registry
 	 */
-	default <T> RegistryKeyFactory<T> keyFactory(ResourceKey<? extends Registry<T>> registry) {
-		return RegistryKeyFactory.create(registry, this.getMetadata().getId());
+	default <T> ResourceKeyFactory<T> keyFactory(ResourceKey<? extends Registry<T>> registry) {
+		return ResourceKeyFactory.create(registry, this.getMetadata().getId());
 	}
 
 	/**
@@ -77,9 +77,9 @@ public interface AdvancedContainer extends ModContainer {
 
 	/**
 	 * A registration method filling the mod namespace automatically.
-	 * @see BootstapContext#register(ResourceKey, Object)
+	 * @see BootstrapContext#register(ResourceKey, Object)
 	 */
-	default <T> T register(ResourceKey<? extends Registry<T>> registry, BootstapContext<T> registerable, String path, T element) {
+	default <T> T register(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> registerable, String path, T element) {
 		registerable.register(ResourceKey.create(registry, Identifier.tryBuild(this.getMetadata().getId(), path)), element);
 		return element;
 	}
@@ -94,12 +94,12 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Allows to make a bunch of registrations for a specified {@link BootstapContext}.
+	 * Allows to make a bunch of registrations for a specified {@link BootstrapContext}.
 	 * @param registry the registry key of the registry
 	 * @param registerable the registrable
 	 * @param consumer the registrations
 	 */
-	default <T> void register(ResourceKey<? extends Registry<T>> registry, BootstapContext<T> registerable, Consumer<RegistrationFactory<T>> consumer) {
+	default <T> void register(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> registerable, Consumer<RegistrationFactory<T>> consumer) {
 		consumer.accept(RegistrationFactory.create(registry, registerable, this.getMetadata().getId()));
 	}
 }

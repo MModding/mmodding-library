@@ -1,11 +1,11 @@
 package com.mmodding.library.java.impl.object;
 
-import com.mmodding.library.java.api.object.Holder;
+import com.mmodding.library.java.api.object.Seal;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class HolderImpl<T> implements Holder<T> {
+public class SealImpl<T> implements Seal<T> {
 
 	private T object = null;
 	private boolean sealed = false;

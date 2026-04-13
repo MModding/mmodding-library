@@ -3,14 +3,16 @@ package com.mmodding.library.worldgen.test;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockPileConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -18,26 +20,21 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 public class FeatureTests {
 
-	public static final FeaturePack<RandomPatchConfiguration> RANDOM_PATCH = FeaturePack.of(Feature.RANDOM_PATCH)
+	public static final FeaturePack<BlockPileConfiguration> RANDOM_PATCH = FeaturePack.of(Feature.BLOCK_PILE)
 		.appendConfiguredFeature(
 			configured("test"),
-			new RandomPatchConfiguration(0, 0, 0, null),
+			new BlockPileConfiguration(BlockStateProvider.simple(Blocks.DIAMOND_BLOCK)),
 			configuredPack -> configuredPack.appendPlacedFeature(
 				placed("test"),
 				BiomeFilter.biome()
 			)
 		)
 		.replicateConfiguredFeature(
-			VegetationFeatures.FLOWER_DEFAULT,
+			VegetationFeatures.SUGAR_CANE,
 			configured("inner_test"),
-			fc -> {
-				int tries = 3;
-				return new RandomPatchConfiguration(
-					tries, fc.xzSpread(), fc.ySpread(), fc.feature()
-				);
-			},
+			fc -> new BlockPileConfiguration(fc.stateProvider),
 			configuredPack -> configuredPack.replicatePlacedFeature(
-				VegetationPlacements.FLOWER_DEFAULT,
+				VegetationPlacements.PATCH_SUGAR_CANE,
 				placed("inner_test"),
 				modifiers -> modifiers.mutateTypeTo(
 					PlacementModifierType.COUNT,
@@ -54,11 +51,11 @@ public class FeatureTests {
 		return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath("mmodding_worldgen_test", path));
 	}
 
-	public static void registerConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatures, AdvancedContainer mod) {
+	public static void registerConfiguredFeatures(BootstrapContext<ConfiguredFeature<?, ?>> configuredFeatures, AdvancedContainer mod) {
 		RANDOM_PATCH.registerConfiguredFeatures(configuredFeatures);
 	}
 
-	public static void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures) {
+	public static void registerPlacedFeatures(BootstrapContext<PlacedFeature> placedFeatures) {
 		RANDOM_PATCH.registerPlacedFeatures(placedFeatures);
 	}
 }

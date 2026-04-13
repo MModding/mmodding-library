@@ -1,6 +1,7 @@
 package com.mmodding.library.item.api.category;
 
 import com.mmodding.library.item.impl.category.ItemCategoryImpl;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Optional;
@@ -25,16 +26,16 @@ public interface ItemCategory {
 	@ApiStatus.NonExtendable
 	interface Settings {
 
-		Settings name(Component name);
+		Settings title(Component name);
 
 		Settings icon(Supplier<ItemStack> iconSupplier);
 
-		Settings special();
+		Settings alignRight();
 
-		Settings hideName();
+		Settings hideTitle();
 
-		Settings hideScrollbar();
+		Settings noScrollbar();
 
-		Settings backgroundTextureName(String textureName);
+		Settings backgroundTexture(Identifier backgroundTexture);
 	}
 }

@@ -13,8 +13,8 @@ public class ShapelessRecipeImpl implements RecipeHelper.ShapelessRecipe {
 
 	final ShapelessRecipeBuilder factory;
 
-	public ShapelessRecipeImpl(ItemLike item, int count, RecipeCategory category) {
-		this.factory = new ShapelessRecipeBuilder(category, item, count).unlockedBy(RecipeProvider.getHasName(item), RecipeProvider.has(item));
+	public ShapelessRecipeImpl(RecipeProvider provider, ItemLike item, int count, RecipeCategory category) {
+		this.factory = provider.shapeless(category, item, count).unlockedBy(RecipeProvider.getHasName(item), provider.has(item));
 	}
 
 	@Override

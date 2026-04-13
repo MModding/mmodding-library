@@ -1,8 +1,12 @@
 package com.mmodding.library.datagen.api.recipe;
 
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
+
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -41,13 +45,13 @@ public interface RecipeHelper {
 	 */
 	void shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer);
 
-	void smelting(ItemLike item, RecipeCategory category, int experience, int time);
+	void smelting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void smelting(Ingredient ingredient, RecipeCategory category, int experience, int time);
+	void smelting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void blasting(ItemLike item, RecipeCategory category, int experience, int time);
+	void blasting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void blasting(Ingredient ingredient, RecipeCategory category, int experience, int time);
+	void blasting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
 	void smoking(ItemLike item, RecipeCategory category, int experience, int time);
 
@@ -57,7 +61,7 @@ public interface RecipeHelper {
 
 	void campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void factory(RecipeBuilder factory);
+	void custom(Function<RecipeProvider, RecipeBuilder> factory);
 
 	@ApiStatus.NonExtendable
 	interface ShapedRecipe {

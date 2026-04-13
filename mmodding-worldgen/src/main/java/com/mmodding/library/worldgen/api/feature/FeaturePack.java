@@ -5,7 +5,7 @@ import com.mmodding.library.worldgen.impl.feature.FeaturePackImpl;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -57,13 +57,13 @@ public interface FeaturePack<FC extends FeatureConfiguration> {
 	 * Registers configured features of this feature pack.
 	 * @param configuredFeatures the configured feature registry
 	 */
-	void registerConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatures);
+	void registerConfiguredFeatures(BootstrapContext<ConfiguredFeature<?, ?>> configuredFeatures);
 
 	/**
 	 * Registers placed features of this feature pack.
 	 * @param placedFeatures the placed feature registry
 	 */
-	void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures);
+	void registerPlacedFeatures(BootstrapContext<PlacedFeature> placedFeatures);
 
 	@FunctionalInterface
 	interface ConfiguredFeatureLookup<FC extends FeatureConfiguration> {

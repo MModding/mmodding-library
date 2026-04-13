@@ -1,31 +1,28 @@
 package com.mmodding.library.worldgen.api.feature.catalog;
 
 import com.mmodding.library.block.api.catalog.UpsideSensitiveBlock;
+import com.mmodding.library.worldgen.api.feature.catalog.configurations.AdvancedFreezeTopLayerConfiguration;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public class AdvancedFreezeTopLayerFeature extends Feature<AdvancedFreezeTopLayerFeature.Config> {
+public class AdvancedFreezeTopLayerFeature extends Feature<AdvancedFreezeTopLayerConfiguration> {
 
-	public AdvancedFreezeTopLayerFeature(Codec<Config> codec) {
+	public AdvancedFreezeTopLayerFeature(Codec<AdvancedFreezeTopLayerConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<Config> context) {
+	public boolean place(FeaturePlaceContext<AdvancedFreezeTopLayerConfiguration> context) {
 		WorldGenLevel world = context.level();
 		BlockPos pos = context.origin();
 		BlockPos.MutableBlockPos abovePosition = new BlockPos.MutableBlockPos();
@@ -43,16 +40,16 @@ public class AdvancedFreezeTopLayerFeature extends Feature<AdvancedFreezeTopLaye
 					if (biome.shouldFreeze(world, blockPos, false)) {
 						world.setBlock(
 							blockPos,
-							context.config().iceBlock.getState(context.random(), blockPos),
+							context.config().iceBlock.getState(context.level(), context.random(), blockPos),
 							Block.UPDATE_CLIENTS
 						);
 					}
 
 					if (biome.shouldSnow(world, abovePosition)) {
-						world.setBlock(abovePosition, context.config().snowLayer.getState(context.random(), abovePosition), Block.UPDATE_CLIENTS);
+						world.setBlock(abovePosition, context.config().snowLayer.getState(context.level(), context.random(), abovePosition), Block.UPDATE_CLIENTS);
 						BlockState state = world.getBlockState(blockPos);
-						if (state.hasProperty(SnowyDirtBlock.SNOWY)) {
-							world.setBlock(blockPos, state.setValue(SnowyDirtBlock.SNOWY, Boolean.TRUE), Block.UPDATE_CLIENTS);
+						if (state.hasProperty(BlockStateProperties.SNOWY)) {
+							world.setBlock(blockPos, state.setValue(BlockStateProperties.SNOWY, Boolean.TRUE), Block.UPDATE_CLIENTS);
 						}
 						this.updateUpsideSensitiveBlock(state, world, new BlockPos(blockPos));
 					}
@@ -78,22 +75,5 @@ public class AdvancedFreezeTopLayerFeature extends Feature<AdvancedFreezeTopLaye
 		}
 	}
 
-	public static class Config implements FeatureConfiguration {
 
-		public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			BlockStateProvider.CODEC.fieldOf("ice_block").forGetter(config -> config.iceBlock),
-			BlockStateProvider.CODEC.fieldOf("snow_layer").forGetter(config -> config.snowLayer),
-			IntProvider.POSITIVE_CODEC.fieldOf("depth_coverage").forGetter(config -> config.depthCoverage)
-		).apply(instance, Config::new));
-
-		private final BlockStateProvider iceBlock;
-		private final BlockStateProvider snowLayer;
-		private final IntProvider depthCoverage;
-
-		public Config(BlockStateProvider iceBlock, BlockStateProvider snowLayer, IntProvider depthCoverage) {
-			this.iceBlock = iceBlock;
-			this.snowLayer = snowLayer;
-			this.depthCoverage = depthCoverage;
-		}
-	}
 }

@@ -3,6 +3,7 @@ package com.mmodding.library.fluid.test;
 import com.mmodding.library.fluid.api.UnitedFlowableFluid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +31,7 @@ public class CoolFluid extends UnitedFlowableFluid {
 	}
 
 	@Override
-	protected boolean canConvertToSource(Level level) {
+	protected boolean canConvertToSource(ServerLevel level) {
 		return false;
 	}
 

@@ -1,7 +1,8 @@
 package com.mmodding.library.worldgen.api.feature.catalog;
 
+import com.mmodding.library.worldgen.api.feature.catalog.configurations.AdvancedLargeDripstoneConfiguration;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,7 +10,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,24 +18,22 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.LargeDripstoneConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.phys.Vec3;
 
-public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripstoneFeature.Config> {
+public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripstoneConfiguration> {
 
-	public AdvancedLargeDripstoneFeature(Codec<AdvancedLargeDripstoneFeature.Config> codec) {
+	public AdvancedLargeDripstoneFeature(Codec<AdvancedLargeDripstoneConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<AdvancedLargeDripstoneFeature.Config> context) {
+	public boolean place(FeaturePlaceContext<AdvancedLargeDripstoneConfiguration> context) {
 
-		Block dripstoneBlock = context.config().stoneBlock.getState(context.random(), context.origin()).getBlock();
+		Block dripstoneBlock = context.config().dripstoneBlock.getState(context.level(), context.random(), context.origin()).getBlock();
 
 		WorldGenLevel structureWorldAccess = context.level();
 		BlockPos blockPos = context.origin();
-		AdvancedLargeDripstoneFeature.Config largeStoneSpikeFeatureConfig = context.config();
+		AdvancedLargeDripstoneConfiguration largeStoneSpikeFeatureConfig = context.config();
 		RandomSource randomGenerator = context.random();
 		if (DripstoneUtils.isEmptyOrWater(structureWorldAccess, blockPos)) {
 			Optional<Column> optional = Column.scan(
@@ -46,8 +44,8 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 					return false;
 				} else {
 					int i = (int)((float)bounded.height() * largeStoneSpikeFeatureConfig.maxColumnRadiusToCaveHeightRatio);
-					int j = Mth.clamp(i, largeStoneSpikeFeatureConfig.columnRadius.getMinValue(), largeStoneSpikeFeatureConfig.columnRadius.getMaxValue());
-					int k = Mth.randomBetweenInclusive(randomGenerator, largeStoneSpikeFeatureConfig.columnRadius.getMinValue(), j);
+					int j = Mth.clamp(i, largeStoneSpikeFeatureConfig.columnRadius.minInclusive(), largeStoneSpikeFeatureConfig.columnRadius.maxInclusive());
+					int k = Mth.randomBetweenInclusive(randomGenerator, largeStoneSpikeFeatureConfig.columnRadius.minInclusive(), j);
 					StoneSpikeGenerator ceilingSpikeGenerator = createGenerator(
 						blockPos.atY(bounded.ceiling() - 1),
 						false,
@@ -178,7 +176,7 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 			}
 		}
 
-		boolean generateWind(AdvancedLargeDripstoneFeature.Config config) {
+		boolean generateWind(AdvancedLargeDripstoneConfiguration config) {
 			return this.scale >= config.minRadiusForWind && this.bluntness >= (double) config.minBluntnessForWind;
 		}
 	}
@@ -212,29 +210,6 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 				Vec3 vec3d = this.wind.scale(i);
 				return pos.offset(BlockPos.containing(vec3d.x, 0.0, vec3d.z));
 			}
-		}
-	}
-
-	public static class Config extends LargeDripstoneConfiguration {
-
-		public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			BlockStateProvider.CODEC.fieldOf("dripstone_block").forGetter(config -> config.stoneBlock),
-			Codec.intRange(1, 512).fieldOf("floor_to_ceiling_search_range").orElse(30).forGetter(config -> config.floorToCeilingSearchRange),
-			IntProvider.codec(1, 60).fieldOf("column_radius").forGetter(config -> config.columnRadius),
-			FloatProvider.codec(0.0F, 20.0F).fieldOf("height_scale").forGetter(config -> config.heightScale),
-			Codec.floatRange(0.1F, 1.0F).fieldOf("max_column_radius_to_cave_height_ratio").forGetter(config -> config.maxColumnRadiusToCaveHeightRatio),
-			FloatProvider.codec(0.1F, 10.0F).fieldOf("stalactite_bluntness").forGetter(config -> config.stalactiteBluntness),
-			FloatProvider.codec(0.1F, 10.0F).fieldOf("stalagmite_bluntness").forGetter(config -> config.stalagmiteBluntness),
-			FloatProvider.codec(0.0F, 2.0F).fieldOf("wind_speed").forGetter(config -> config.windSpeed),
-			Codec.intRange(0, 100).fieldOf("min_radius_for_wind").forGetter(config -> config.minRadiusForWind),
-			Codec.floatRange(0.0F, 5.0F).fieldOf("min_bluntness_for_wind").forGetter(config -> config.minBluntnessForWind)
-		).apply(instance, Config::new));
-
-		private final BlockStateProvider stoneBlock;
-
-		public Config(BlockStateProvider stoneBlock, int floorToCeilingSearchRange, IntProvider columnRadius, FloatProvider heightScale, float maxColumnRadiusToCaveHeightRatio, FloatProvider stalactiteBluntness, FloatProvider stalagmiteBluntness, FloatProvider windSpeed, int minRadiusForWind, float minBluntnessForWind) {
-			super(floorToCeilingSearchRange, columnRadius, heightScale, maxColumnRadiusToCaveHeightRatio, stalactiteBluntness, stalagmiteBluntness, windSpeed, minRadiusForWind, minBluntnessForWind);
-			this.stoneBlock = stoneBlock;
 		}
 	}
 }

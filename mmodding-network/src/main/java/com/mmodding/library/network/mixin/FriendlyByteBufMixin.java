@@ -7,6 +7,8 @@ import com.mmodding.library.network.api.FriendlyByteBufExtension;
 import com.mmodding.library.network.impl.NetworkHandlersImpl;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.IdentifierException;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,25 +25,25 @@ import net.minecraft.network.FriendlyByteBuf;
 public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 
 	@Shadow
-	public abstract <T, C extends Collection<T>> C readCollection(IntFunction<C> collectionFactory, FriendlyByteBuf.Reader<T> entryReader);
+	public abstract <T, C extends Collection<T>> C readCollection(IntFunction<C> ctor, StreamDecoder<? super FriendlyByteBuf, T> elementDecoder);
 
 	@Shadow
 	public abstract Identifier readIdentifier();
 
 	@Shadow
-	public abstract <T> void writeCollection(Collection<T> collection, FriendlyByteBuf.Writer<T> entryWriter);
+	public abstract <T> void writeCollection(Collection<T> collection, StreamEncoder<? super FriendlyByteBuf, T> encoder);
 
 	@Shadow
-	public abstract FriendlyByteBuf writeIdentifier(Identifier id);
+	public abstract FriendlyByteBuf writeIdentifier(Identifier identifier);
 
 	@Shadow
 	public abstract ByteBuf copy();
 
 	@Shadow
-	public abstract <K, V, M extends Map<K, V>> M readMap(IntFunction<M> mapFactory, FriendlyByteBuf.Reader<K> keyReader, FriendlyByteBuf.Reader<V> valueReader);
+	public abstract <K, V, M extends Map<K, V>> M readMap(IntFunction<M> ctor, StreamDecoder<? super FriendlyByteBuf, K> keyDecoder, StreamDecoder<? super FriendlyByteBuf, V> valueDecoder);
 
 	@Shadow
-	public abstract <K, V> void writeMap(Map<K, V> map, FriendlyByteBuf.Writer<K> keyWriter, FriendlyByteBuf.Writer<V> valueWriter);
+	public abstract <K, V> void writeMap(Map<K, V> map, StreamEncoder<? super FriendlyByteBuf, K> keyEncoder, StreamEncoder<? super FriendlyByteBuf, V> valueEncoder);
 
 	@Override
 	public Optional<Class<?>> peekNextType() {
@@ -64,22 +66,12 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 
 	@Override
 	public <T> T readByHandling(Class<T> type) {
-		return this.handlingReader(type).apply((FriendlyByteBuf) (Object) this);
+		return this.handlingReader(type).decode((FriendlyByteBuf) (Object) this);
 	}
 
 	@Override
 	public <T> void writeByHandling(T value) {
-		this.handlingWriter(value.getClass()).accept((FriendlyByteBuf) (Object) this, value);
-	}
-
-	@Override
-	public <T> Optional<T> readOptionalByHandling(Class<T> type) {
-		return this.handlingReader(type).asOptional().apply((FriendlyByteBuf) (Object) this);
-	}
-
-	@Override
-	public <T> void writeOptionalByHandling(T value) {
-		this.handlingWriter(value.getClass()).asOptional().accept((FriendlyByteBuf) (Object) this, Optional.ofNullable(value));
+		this.handlingWriter(value.getClass()).encode((FriendlyByteBuf) (Object) this, value);
 	}
 
 	@Override
@@ -99,7 +91,7 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 	}
 
 	@Override
-	public <T> MixedMap<T> readMixedMap(FriendlyByteBuf.Reader<T> entryReader) {
+	public <T> MixedMap<T> readMixedMap(StreamDecoder<? super FriendlyByteBuf, T> entryReader) {
 		return this.readMap(
 			i -> MixedMap.create(),
 			entryReader,
@@ -108,7 +100,7 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 	}
 
 	@Override
-	public <T> void writeMixedMap(MixedMap<T> map, FriendlyByteBuf.Writer<T> entryWriter) {
+	public <T> void writeMixedMap(MixedMap<T> map, StreamEncoder<? super FriendlyByteBuf, T> entryWriter) {
 		this.writeMap(
 			map,
 			entryWriter,
@@ -118,25 +110,25 @@ public abstract class FriendlyByteBufMixin implements FriendlyByteBufExtension {
 
 	@Unique
 	@SuppressWarnings("unchecked")
-	private <T> FriendlyByteBuf.Reader<T> handlingReader(Class<T> type) {
+	private <T> StreamDecoder<? super FriendlyByteBuf, T> handlingReader(Class<T> type) {
 		if (this.peekNextType().isEmpty()) {
 			throw new IllegalStateException("Next value is not network-handled!");
 		}
 		else if (this.peekNextType().get() != type) {
 			throw new IllegalArgumentException("Next value is not an instance of " + type + "!");
 		}
-		return (FriendlyByteBuf.Reader<T>) NetworkHandlersImpl.HANDLERS.getFirstValue(this.readIdentifier());
+		return (StreamDecoder<? super FriendlyByteBuf, T>) NetworkHandlersImpl.HANDLERS.getFirstValue(this.readIdentifier());
 	}
 
 	@Unique
 	@SuppressWarnings("unchecked")
-	private <T> FriendlyByteBuf.Writer<T> handlingWriter(Class<?> type) {
+	private <T> StreamEncoder<? super FriendlyByteBuf, T> handlingWriter(Class<?> type) {
 		if (!NetworkHandlersImpl.IDS.containsKey(type)) {
 			throw new IllegalArgumentException("Value cannot be network-handled as " + type + " does not have any registered handling factories!");
 		}
 		else {
 			this.writeIdentifier(NetworkHandlersImpl.IDS.get(type));
-			return (FriendlyByteBuf.Writer<T>) NetworkHandlersImpl.HANDLERS.getSecondValue(NetworkHandlersImpl.IDS.get(type));
+			return (StreamEncoder<? super FriendlyByteBuf, T>) NetworkHandlersImpl.HANDLERS.getSecondValue(NetworkHandlersImpl.IDS.get(type));
 		}
 	}
 }

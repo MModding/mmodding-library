@@ -1,8 +1,8 @@
 package com.mmodding.library.worldgen.api.feature.catalog;
 
+import com.mmodding.library.worldgen.api.feature.catalog.configurations.AdvancedDripstoneClusterConfiguration;
 import com.mmodding.library.worldgen.impl.feature.helper.AdvancedDripstoneUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.Optional;
 import java.util.OptionalInt;
 import net.minecraft.core.BlockPos;
@@ -11,9 +11,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.valueproviders.ClampedNormalFloat;
-import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.WorldGenLevel;
@@ -25,25 +23,24 @@ import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.DripstoneClusterConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneClusterFeature.Config> {
+public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneClusterConfiguration> {
 
-	public AdvancedDripstoneClusterFeature(Codec<AdvancedDripstoneClusterFeature.Config> codec) {
+	public AdvancedDripstoneClusterFeature(Codec<AdvancedDripstoneClusterConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<AdvancedDripstoneClusterFeature.Config> context) {
+	public boolean place(FeaturePlaceContext<AdvancedDripstoneClusterConfiguration> context) {
 
-		Block pointedDripstoneBlock = context.config().pointedDripstoneBlock.getState(context.random(), context.origin()).getBlock();
-		Block dripstoneBlock = context.config().dripstoneBlock.getState(context.random(), context.origin()).getBlock();
+		Block pointedDripstoneBlock = context.config().pointedDripstoneBlock.getState(context.level(), context.random(), context.origin()).getBlock();
+		Block dripstoneBlock = context.config().dripstoneBlock.getState(context.level(), context.random(), context.origin()).getBlock();
 
-		WorldGenLevel structureWorldAccess = context.level();
+		WorldGenLevel level = context.level();
 		BlockPos blockPos = context.origin();
 		DripstoneClusterConfiguration dripstoneClusterFeatureConfig = context.config();
 		RandomSource random = context.random();
-		if (DripstoneUtils.isEmptyOrWater(structureWorldAccess, blockPos)) {
+		if (DripstoneUtils.isEmptyOrWater(level, blockPos)) {
 			int i = dripstoneClusterFeatureConfig.height.sample(random);
 			float f = dripstoneClusterFeatureConfig.wetness.sample(random);
 			float g = dripstoneClusterFeatureConfig.density.sample(random);
@@ -54,7 +51,7 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 				for(int m = -k; m <= k; m++) {
 					double d = this.dripstoneChance(j, k, l, m, dripstoneClusterFeatureConfig);
 					BlockPos blockPos2 = blockPos.offset(l, 0, m);
-					this.generate(pointedDripstoneBlock, dripstoneBlock, structureWorldAccess, random, blockPos2, l, m, f, d, i, g, dripstoneClusterFeatureConfig);
+					this.generate(pointedDripstoneBlock, dripstoneBlock, level, random, blockPos2, l, m, f, d, i, g, dripstoneClusterFeatureConfig);
 				}
 			}
 
@@ -68,7 +65,7 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 	private void generate(
 		Block pointedDripstoneBlock,
 		Block dripstoneBlock,
-		WorldGenLevel world,
+		WorldGenLevel level,
 		RandomSource random,
 		BlockPos pos,
 		int localX,
@@ -80,7 +77,7 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 		DripstoneClusterConfiguration config
 	) {
 		Optional<Column> optional = Column.scan(
-			world, pos, config.floorToCeilingSearchRange, DripstoneUtils::isEmptyOrWater, DripstoneUtils::isNeitherEmptyNorWater
+			level, pos, config.floorToCeilingSearchRange, DripstoneUtils::isEmptyOrWater, DripstoneUtils::isNeitherEmptyNorWater
 		);
 		if (optional.isPresent()) {
 			OptionalInt optionalInt = optional.get().getCeiling();
@@ -88,10 +85,10 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 			if (optionalInt.isPresent() || optionalInt2.isPresent()) {
 				boolean bl = random.nextFloat() < wetness;
 				Column caveSurface;
-				if (bl && optionalInt2.isPresent() && this.canWaterSpawn(pointedDripstoneBlock, dripstoneBlock, world, pos.atY(optionalInt2.getAsInt()))) {
+				if (bl && optionalInt2.isPresent() && this.canWaterSpawn(pointedDripstoneBlock, dripstoneBlock, level, pos.atY(optionalInt2.getAsInt()))) {
 					int i = optionalInt2.getAsInt();
 					caveSurface = optional.get().withFloor(OptionalInt.of(i - 1));
-					world.setBlock(pos.atY(i), Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
+					level.setBlock(pos.atY(i), Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
 				} else {
 					caveSurface = optional.get();
 				}
@@ -99,9 +96,9 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 				OptionalInt optionalInt3 = caveSurface.getFloor();
 				boolean bl2 = random.nextDouble() < dripstoneChance;
 				int l;
-				if (optionalInt.isPresent() && bl2 && this.isNotLava(world, pos.atY(optionalInt.getAsInt()))) {
+				if (optionalInt.isPresent() && bl2 && this.isNotLava(level, pos.atY(optionalInt.getAsInt()))) {
 					int j = config.dripstoneBlockLayerThickness.sample(random);
-					this.placeDripstoneBlocks(dripstoneBlock, world, pos.atY(optionalInt.getAsInt()), j, Direction.UP);
+					this.placeDripstoneBlocks(dripstoneBlock, level, pos.atY(optionalInt.getAsInt()), j, Direction.UP);
 					int k;
 					if (optionalInt3.isPresent()) {
 						k = Math.min(height, optionalInt.getAsInt() - optionalInt3.getAsInt());
@@ -116,9 +113,9 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 
 				boolean bl3 = random.nextDouble() < dripstoneChance;
 				int j;
-				if (optionalInt3.isPresent() && bl3 && this.isNotLava(world, pos.atY(optionalInt3.getAsInt()))) {
+				if (optionalInt3.isPresent() && bl3 && this.isNotLava(level, pos.atY(optionalInt3.getAsInt()))) {
 					int m = config.dripstoneBlockLayerThickness.sample(random);
-					this.placeDripstoneBlocks(dripstoneBlock, world, pos.atY(optionalInt3.getAsInt()), m, Direction.DOWN);
+					this.placeDripstoneBlocks(dripstoneBlock, level, pos.atY(optionalInt3.getAsInt()), m, Direction.DOWN);
 					if (optionalInt.isPresent()) {
 						j = Math.max(0, l + Mth.randomBetweenInclusive(random, -config.maxStalagmiteStalactiteHeightDiff, config.maxStalagmiteStalactiteHeightDiff));
 					} else {
@@ -146,18 +143,18 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 
 				boolean bl4 = random.nextBoolean() && m > 0 && t > 0 && caveSurface.getHeight().isPresent() && m + t == caveSurface.getHeight().getAsInt();
 				if (optionalInt.isPresent()) {
-					AdvancedDripstoneUtils.generatePointedDripstone(pointedDripstoneBlock, world, pos.atY(optionalInt.getAsInt() - 1), Direction.DOWN, m, bl4);
+					AdvancedDripstoneUtils.generatePointedDripstone(pointedDripstoneBlock, level, pos.atY(optionalInt.getAsInt() - 1), Direction.DOWN, m, bl4);
 				}
 
 				if (optionalInt3.isPresent()) {
-					AdvancedDripstoneUtils.generatePointedDripstone(pointedDripstoneBlock, world, pos.atY(optionalInt3.getAsInt() + 1), Direction.UP, t, bl4);
+					AdvancedDripstoneUtils.generatePointedDripstone(pointedDripstoneBlock, level, pos.atY(optionalInt3.getAsInt() + 1), Direction.UP, t, bl4);
 				}
 			}
 		}
 	}
 
-	private boolean isNotLava(LevelReader world, BlockPos pos) {
-		return !world.getBlockState(pos).is(Blocks.LAVA);
+	private boolean isNotLava(LevelReader level, BlockPos pos) {
+		return !level.getBlockState(pos).is(Blocks.LAVA);
 	}
 
 	private int getHeight(RandomSource random, int localX, int localZ, float density, int height, DripstoneClusterConfiguration config) {
@@ -213,37 +210,5 @@ public class AdvancedDripstoneClusterFeature extends Feature<AdvancedDripstoneCl
 
 	private static float clampedGaussian(RandomSource random, float min, float max, float mean, float deviation) {
 		return ClampedNormalFloat.sample(random, mean, deviation, min, max);
-	}
-
-	public static class Config extends DripstoneClusterConfiguration {
-
-		public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			BlockStateProvider.CODEC.fieldOf("pointed_dripstone_block").forGetter(config -> config.pointedDripstoneBlock),
-			BlockStateProvider.CODEC.fieldOf("dripstone_block").forGetter(config -> config.dripstoneBlock),
-			Codec.intRange(1, 512).fieldOf("floor_to_ceiling_search_range").forGetter(config -> config.floorToCeilingSearchRange),
-			IntProvider.codec(1, 128).fieldOf("height").forGetter(config -> config.height),
-			IntProvider.codec(1, 128).fieldOf("radius").forGetter(config -> config.radius),
-			Codec.intRange(0, 64).fieldOf("max_stalagmite_stalactite_height_diff").forGetter(config -> config.maxStalagmiteStalactiteHeightDiff),
-			Codec.intRange(1, 64).fieldOf("height_deviation").forGetter(config -> config.heightDeviation),
-			IntProvider.codec(0, 128).fieldOf("dripstone_block_layer_thickness").forGetter(config -> config.dripstoneBlockLayerThickness),
-			FloatProvider.codec(0.0F, 2.0F).fieldOf("density").forGetter(config -> config.density),
-			FloatProvider.codec(0.0F, 2.0F).fieldOf("wetness").forGetter(config -> config.wetness),
-			Codec.floatRange(0.0F, 1.0F)
-				.fieldOf("chance_of_dripstone_column_at_max_distance_from_center")
-				.forGetter(config -> config.chanceOfDripstoneColumnAtMaxDistanceFromCenter),
-			Codec.intRange(1, 64)
-				.fieldOf("max_distance_from_edge_affecting_chance_of_dripstone_column")
-				.forGetter(config -> config.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn),
-			Codec.intRange(1, 64).fieldOf("max_distance_from_center_affecting_height_bias").forGetter(config -> config.maxDistanceFromCenterAffectingHeightBias)
-		).apply(instance, Config::new));
-
-		private final BlockStateProvider pointedDripstoneBlock;
-		private final BlockStateProvider dripstoneBlock;
-
-		public Config(BlockStateProvider pointedDripstoneBlock, BlockStateProvider dripstoneBlock, int floorToCeilingSearchRange, IntProvider height, IntProvider radius, int maxStalagmiteStalactiteHeightDiff, int heightDeviation, IntProvider dripstoneBlockLayerThickness, FloatProvider density, FloatProvider wetness, float wetnessMean, int maxDistanceFromCenterAffectingChanceOfDripstoneColumn, int maxDistanceFromCenterAffectingHeightBias) {
-			super(floorToCeilingSearchRange, height, radius, maxStalagmiteStalactiteHeightDiff, heightDeviation, dripstoneBlockLayerThickness, density, wetness, wetnessMean, maxDistanceFromCenterAffectingChanceOfDripstoneColumn, maxDistanceFromCenterAffectingHeightBias);
-			this.pointedDripstoneBlock = pointedDripstoneBlock;
-			this.dripstoneBlock = dripstoneBlock;
-		}
 	}
 }

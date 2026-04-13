@@ -6,7 +6,7 @@ import com.mmodding.library.worldgen.api.feature.ConfiguredFeaturePack;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -20,7 +20,7 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 
 	private final Feature<FC> feature;
 
-	private final BiList<ConfiguredFeaturePack<FC>, Function<BootstapContext<ConfiguredFeature<?, ?>>, FC>> configuredFeaturePacks;
+	private final BiList<ConfiguredFeaturePack<FC>, Function<BootstrapContext<ConfiguredFeature<?, ?>>, FC>> configuredFeaturePacks;
 
 	public FeaturePackImpl(Feature<FC> feature) {
 		this.feature = feature;
@@ -59,7 +59,7 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 	}
 
 	@Override
-	public void registerConfiguredFeatures(BootstapContext<ConfiguredFeature<?, ?>> configuredFeatures) {
+	public void registerConfiguredFeatures(BootstrapContext<ConfiguredFeature<?, ?>> configuredFeatures) {
 		this.configuredFeaturePacks.forEach((pack, featureConfig) -> {
 			ConfiguredFeaturePackImpl<FC> impl = (ConfiguredFeaturePackImpl<FC>) pack;
 			FeatureUtils.register(configuredFeatures, impl.configuredFeatureKey, this.feature, featureConfig.apply(configuredFeatures));
@@ -67,7 +67,7 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 	}
 
 	@Override
-	public void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures) {
+	public void registerPlacedFeatures(BootstrapContext<PlacedFeature> placedFeatures) {
 		this.configuredFeaturePacks.forEach((pack, featureConfig) -> pack.registerPlacedFeatures(placedFeatures));
 	}
 }

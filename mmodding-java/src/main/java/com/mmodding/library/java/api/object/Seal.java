@@ -1,14 +1,14 @@
 package com.mmodding.library.java.api.object;
 
-import com.mmodding.library.java.impl.object.HolderImpl;
+import com.mmodding.library.java.impl.object.SealImpl;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public interface Holder<T> {
+public interface Seal<T> {
 
-	static <T> Holder<T> create() {
-		return new HolderImpl<>();
+	static <T> Seal<T> create() {
+		return new SealImpl<>();
 	}
 
 	/**

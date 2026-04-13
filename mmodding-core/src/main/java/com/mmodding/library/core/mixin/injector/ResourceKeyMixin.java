@@ -14,7 +14,7 @@ public abstract class ResourceKeyMixin<T> implements ResourceKeyExtension<T> {
 	public abstract Identifier registry();
 
 	@Shadow
-	public abstract Identifier location();
+	public abstract Identifier identifier();
 
 	@Shadow
 	private static <T> ResourceKey<T> create(Identifier identifier, Identifier identifier2) {
@@ -24,6 +24,6 @@ public abstract class ResourceKeyMixin<T> implements ResourceKeyExtension<T> {
 	@Override
 	@SuppressWarnings("AddedMixinMembersNamePattern")
 	public ResourceKey<T> mapValue(AutoMapper<Identifier> mapper) {
-		return create(this.registry(), mapper.map(this.location()));
+		return create(this.registry(), mapper.map(this.identifier()));
 	}
 }

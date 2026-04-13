@@ -1,8 +1,11 @@
 package com.mmodding.library.enchantment.impl.family;
 
-import com.mmodding.library.enchantment.api.AdvancedEnchantment;
 import com.mmodding.library.enchantment.api.family.EnchantmentFamily;
 import com.mmodding.library.java.api.list.filter.FilterList;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Items;
 
 @ApiStatus.Internal
@@ -18,9 +20,9 @@ public class EnchantmentFamilyBuilderImpl implements EnchantmentFamily.Builder {
 
 	private final String qualifier;
 
-	private Supplier<EnchantedBookItem> bookItem = () -> (EnchantedBookItem) Items.ENCHANTED_BOOK;
+	private Supplier<Item> bookItem = () -> Items.ENCHANTED_BOOK;
 	private Component prefix = Component.empty();
-	private Function<AdvancedEnchantment, List<ChatFormatting>> formattings = enchantment -> List.of(enchantment.isCurse() ? ChatFormatting.RED : ChatFormatting.GRAY);
+	private Function<Holder<Enchantment>, List<ChatFormatting>> formattings = enchantment -> List.of(enchantment.is(EnchantmentTags.CURSE) ? ChatFormatting.RED : ChatFormatting.GRAY);
 	private boolean inEnchantingTable = true;
 	private FilterList<EnchantmentFamily> familyCompatibilities = FilterList.always();
 
@@ -29,7 +31,7 @@ public class EnchantmentFamilyBuilderImpl implements EnchantmentFamily.Builder {
 	}
 
 	@Override
-	public EnchantmentFamily.Builder bookItem(Supplier<EnchantedBookItem> bookItem) {
+	public EnchantmentFamily.Builder bookItem(Supplier<Item> bookItem) {
 		this.bookItem = bookItem;
 		return this;
 	}
@@ -41,7 +43,7 @@ public class EnchantmentFamilyBuilderImpl implements EnchantmentFamily.Builder {
 	}
 
 	@Override
-	public EnchantmentFamily.Builder formattings(Function<AdvancedEnchantment, List<ChatFormatting>> formattings) {
+	public EnchantmentFamily.Builder formattings(Function<Holder<Enchantment>, List<ChatFormatting>> formattings) {
 		this.formattings = formattings;
 		return this;
 	}

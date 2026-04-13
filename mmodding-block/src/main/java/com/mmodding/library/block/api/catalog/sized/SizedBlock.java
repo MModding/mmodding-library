@@ -15,7 +15,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -98,7 +97,6 @@ public abstract class SizedBlock extends Block {
 				state.setValue(this.getXProperty(), ijk.first()).setValue(this.getYProperty(), ijk.second()).setValue(this.getZProperty(), ijk.third()),
 				Block.UPDATE_ALL
 			));
-			level.blockUpdated(pos, Blocks.AIR);
 			state.updateNeighbourShapes(level, pos, Block.UPDATE_ALL);
 		}
 	}

@@ -6,49 +6,50 @@ import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.management.DataContentType;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.java.api.list.BiList;
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
-import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.models.ItemModelGenerators;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFamilyProcessor> {
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
-		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyTranslations(output, contentToProcess));
-		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyModels(output, contentToProcess));
-		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyRecipes(output, contentToProcess));
-		AutomatedBlockFamilyBlockTags blockTags = pack.addProvider((output, lookup) -> new AutomatedBlockFamilyBlockTags(output, lookup, contentToProcess));
-		pack.addProvider((output, lookup) -> new AutomatedBlockFamilyItemTags(output, lookup, blockTags));
+		pack.addProvider((output, future) -> new AutomatedBlockFamilyTranslations(output, future, contentToProcess));
+		pack.addProvider((output, future) -> new AutomatedBlockFamilyModels(output, contentToProcess));
+		pack.addProvider((output, future) -> new AutomatedBlockFamilyRecipes(output, future, contentToProcess));
+		AutomatedBlockFamilyBlockTags blockTags = pack.addProvider((output, future) -> new AutomatedBlockFamilyBlockTags(output, future, contentToProcess));
+		pack.addProvider((output, future) -> new AutomatedBlockFamilyItemTags(output, future, blockTags));
 	}
 
 	private static class AutomatedBlockFamilyTranslations extends MModdingLanguageProvider {
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
-		public AutomatedBlockFamilyTranslations(FabricDataOutput output, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
-			super(output);
+		public AutomatedBlockFamilyTranslations(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
-		public void generateTranslations(TranslationBuilder translationBuilder) {
+		public void generateTranslations(HolderLookup.Provider lookup, TranslationBuilder translationBuilder) {
 			TranslationProcessor<Block> classicProcessor = DefaultLangProcessors.getClassic(); // I don't think that it really needs to be customized here. Block Families are meant to naming conventions.
 			this.contentToProcess.forEach((processor, families) -> {
 				families.forEach(family -> {
@@ -72,7 +73,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
-		public AutomatedBlockFamilyModels(FabricDataOutput output, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+		public AutomatedBlockFamilyModels(FabricPackOutput output, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
 			super(output);
 			this.contentToProcess = contentToProcess;
 		}
@@ -99,31 +100,37 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
-		public AutomatedBlockFamilyRecipes(FabricDataOutput output, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
-			super(output);
+		public AutomatedBlockFamilyRecipes(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
-		public void buildRecipes(Consumer<FinishedRecipe> exporter) {
-			this.contentToProcess.forEach(
-				(processor, families) -> families.forEach(
-					family -> processor.process(exporter, family)
-				)
-			);
+		protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+			return new RecipeProvider(registries, output) {
+
+				@Override
+				public void buildRecipes() {
+					AutomatedBlockFamilyRecipes.this.contentToProcess.forEach(
+						(ignored, families) -> families.forEach(
+							family -> this.generateRecipes(family, FeatureFlags.DEFAULT_FLAGS)
+						)
+					);
+				}
+			};
 		}
 
 		@Override
 		public String getName() {
-			return "Automated Block Family " + super.getName();
+			return "Automated Block Family Recipes";
 		}
 	}
 
-	private static class AutomatedBlockFamilyBlockTags extends FabricTagProvider.BlockTagProvider {
+	private static class AutomatedBlockFamilyBlockTags extends FabricTagsProvider.BlockTagsProvider {
 
 		private final BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess;
 
-		public AutomatedBlockFamilyBlockTags(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
+		public AutomatedBlockFamilyBlockTags(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future, BiList<BlockFamilyProcessor, List<BlockFamily>> contentToProcess) {
 			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
@@ -131,7 +138,7 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		@Override
 		protected void addTags(HolderLookup.Provider arg) {
 			this.contentToProcess.forEach((processor, families) -> families.forEach(
-				family -> processor.process(this::getOrCreateTagBuilder, family)
+				family -> processor.process(this::valueLookupBuilder, family)
 			));
 		}
 
@@ -141,9 +148,9 @@ public class BlockFamilyTypeImpl implements DataContentType<BlockFamily, BlockFa
 		}
 	}
 
-	private static class AutomatedBlockFamilyItemTags extends FabricTagProvider.ItemTagProvider {
+	private static class AutomatedBlockFamilyItemTags extends FabricTagsProvider.ItemTagsProvider {
 
-		public AutomatedBlockFamilyItemTags(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, @Nullable BlockTagProvider blockTagProvider) {
+		public AutomatedBlockFamilyItemTags(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture, @Nullable BlockTagsProvider blockTagProvider) {
 			super(output, completableFuture, blockTagProvider);
 		}
 

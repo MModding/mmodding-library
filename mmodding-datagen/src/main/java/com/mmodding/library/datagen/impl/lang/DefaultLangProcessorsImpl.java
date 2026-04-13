@@ -9,7 +9,7 @@ public class DefaultLangProcessorsImpl {
 
 		@Override
 		public String process(ResourceKey<T> key) {
-			String path = key.location().getPath();
+			String path = key.identifier().getPath();
 			String[] words = path.split("_");
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < words.length; i++) {

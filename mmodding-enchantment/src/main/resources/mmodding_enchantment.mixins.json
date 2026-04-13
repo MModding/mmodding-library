@@ -2,11 +2,13 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.mmodding.library.enchantment.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "EnchantedBookItemMixin",
+    "AnvilMenuMixin",
     "EnchantmentHelperMixin",
-    "EnchantmentMixin"
+    "EnchantmentMenuMixin",
+    "EnchantmentMixin",
+    "GrindstoneMenuMixin"
   ],
   "client": [],
   "injectors": {

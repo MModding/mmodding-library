@@ -7,13 +7,15 @@ import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class TranslationTypeImpl<T> implements DataContentType<T, TranslationProcessor<T>> {
 
@@ -25,7 +27,7 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<TranslationProcessor<T>, List<T>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output));
+		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output, future));
 	}
 
 	private static class AutomatedLanguageProvider<T> extends MModdingLanguageProvider {
@@ -33,19 +35,19 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 		private final ResourceKey<? extends Registry<T>> registry;
 		private final BiList<TranslationProcessor<T>, List<T>> contentToProcess;
 
-		protected AutomatedLanguageProvider(ResourceKey<? extends Registry<T>> registry, BiList<TranslationProcessor<T>, List<T>> contentToProcess, FabricDataOutput output) {
-			super(output);
+		protected AutomatedLanguageProvider(ResourceKey<? extends Registry<T>> registry, BiList<TranslationProcessor<T>, List<T>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+			super(output, future);
 			this.registry = registry;
 			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
 		@SuppressWarnings({"unchecked", "rawtypes"})
-		public void generateTranslations(TranslationBuilder translationBuilder) {
+		public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (T element : elements) {
 					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
-						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get((ResourceKey) this.registry);
+						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get((ResourceKey) this.registry).orElseThrow();
 						assert registry != null;
 						Optional<ResourceKey<T>> optional = registry.getResourceKey(element);
 						optional.ifPresentOrElse(
@@ -69,7 +71,7 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 
 		@Override
 		public String getName() {
-			return "Automated " + this.registry.location() + " " + super.getName();
+			return "Automated " + this.registry.identifier() + " " + super.getName();
 		}
 	}
 
@@ -77,8 +79,6 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 		TranslationSupport.addTranslationSupport(Registries.ITEM, (callback, object) -> callback.apply(object.getDescriptionId()));
 		TranslationSupport.addTranslationSupport(Registries.BLOCK, (callback, object) -> callback.apply(object.getDescriptionId()));
 		TranslationSupport.addTranslationSupport(Registries.ENTITY_TYPE, (callback, object) -> callback.apply(object.getDescriptionId()));
-		TranslationSupport.addTranslationSupport(Registries.ENCHANTMENT, (callback, object) -> callback.apply(object.getDescriptionId()));
 		TranslationSupport.addTranslationSupport(Registries.ATTRIBUTE, (callback, object) -> callback.apply(object.getDescriptionId()));
-		TranslationSupport.addTranslationSupport(Registries.STAT_TYPE, (callback, object) -> callback.apply(object.getTranslationKey()));
 	}
 }

@@ -15,9 +15,9 @@ public enum ConfigLevel {
 	IN_GAME_MODIFICATION,
 
 	/**
-	 * The configuration is updated when a world is loaded.
+	 * The configuration is updated when a level is loaded.
 	 */
-	WORLD_LOAD,
+	LEVEL_LOAD,
 
 	/**
 	 * The configuration is updated when an instance is loaded.

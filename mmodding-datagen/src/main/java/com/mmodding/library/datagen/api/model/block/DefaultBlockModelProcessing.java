@@ -1,19 +1,18 @@
 package com.mmodding.library.datagen.api.model.block;
 
-import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.models.blockstates.Condition;
-import net.minecraft.data.models.blockstates.MultiPartGenerator;
-import net.minecraft.data.models.blockstates.Variant;
-import net.minecraft.data.models.blockstates.VariantProperties;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplate;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.data.models.model.TextureSlot;
+import com.mojang.math.Quadrant;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
+import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import static net.minecraft.client.data.models.BlockModelGenerators.condition;
+import static net.minecraft.client.data.models.BlockModelGenerators.variant;
 
 public class DefaultBlockModelProcessing {
 
@@ -24,10 +23,10 @@ public class DefaultBlockModelProcessing {
 	 * @param generator the generator
 	 * @param block the ladder-like block
 	 */
-	public static void ladder(BlockModelGenerators generator, Block block) {
+	public static void createLadder(BlockModelGenerators generator, Block block) {
 		generator.createNonTemplateHorizontalBlock(block);
 		LADDER.create(block, TextureMapping.defaultTexture(block).put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(block)), generator.modelOutput);
-		generator.createSimpleFlatItemModel(block);
+		generator.registerSimpleFlatItemModel(block);
 	}
 
 	/**
@@ -36,8 +35,8 @@ public class DefaultBlockModelProcessing {
 	 * @param glassBlock the block from which the pane block is made
 	 * @param paneBlock the pane block
 	 */
-	public static void pane(BlockModelGenerators generator, Block glassBlock, Block paneBlock) {
-		DefaultBlockModelProcessing.pane(generator, glassBlock, paneBlock, TextureMapping.getBlockTexture(paneBlock, "_top"));
+	public static void createGlassPane(BlockModelGenerators generator, Block glassBlock, Block paneBlock) {
+		DefaultBlockModelProcessing.createGlassPane(generator, glassBlock, paneBlock, TextureMapping.getBlockTexture(paneBlock, "_top"));
 	}
 
 	/**
@@ -45,11 +44,11 @@ public class DefaultBlockModelProcessing {
 	 * @param generator the generator
 	 * @param glassBlock the block from which the pane block is made
 	 * @param paneBlock the pane block
-	 * @param paneTopPath the location of the pane top texture
+	 * @param paneTopMaterial the pane top material
 	 */
-	public static void pane(BlockModelGenerators generator, Block glassBlock, Block paneBlock, Identifier paneTopPath) {
+	public static void createGlassPane(BlockModelGenerators generator, Block glassBlock, Block paneBlock, Material paneTopMaterial) {
 		TextureMapping textures = new TextureMapping();
-		textures.put(TextureSlot.PANE, TextureMapping.getBlockTexture(glassBlock)).put(TextureSlot.EDGE, paneTopPath);
+		textures.put(TextureSlot.PANE, TextureMapping.getBlockTexture(glassBlock)).put(TextureSlot.EDGE, paneTopMaterial.withForceTranslucent(true));
 		Identifier panePost = ModelTemplates.STAINED_GLASS_PANE_POST.create(paneBlock, textures, generator.modelOutput);
 		Identifier paneSide = ModelTemplates.STAINED_GLASS_PANE_SIDE.create(paneBlock, textures, generator.modelOutput);
 		Identifier paneSideAlt = ModelTemplates.STAINED_GLASS_PANE_SIDE_ALT.create(paneBlock, textures, generator.modelOutput);
@@ -60,52 +59,15 @@ public class DefaultBlockModelProcessing {
 		}
 		generator.blockStateOutput.accept(
 			MultiPartGenerator.multiPart(paneBlock)
-				.with(
-					Variant.variant()
-						.with(VariantProperties.MODEL, panePost)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.NORTH, true),
-					Variant.variant()
-						.with(VariantProperties.MODEL, paneSide)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.EAST, true),
-					Variant.variant()
-						.with(VariantProperties.MODEL, paneSide)
-						.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.SOUTH, true),
-					Variant.variant()
-						.with(VariantProperties.MODEL, paneSideAlt)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.WEST, true),
-					Variant.variant()
-						.with(VariantProperties.MODEL, paneSideAlt)
-						.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.NORTH, false),
-					Variant.variant()
-						.with(VariantProperties.MODEL, paneNoSide)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.EAST, false),
-					Variant.variant()
-						.with(VariantProperties.MODEL, paneNoSideAlt)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.SOUTH, false),
-					Variant.variant().with(VariantProperties.MODEL, paneNoSideAlt)
-						.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R90)
-				)
-				.with(
-					Condition.condition().term(BlockStateProperties.WEST, false),
-					Variant.variant().with(VariantProperties.MODEL, paneNoSide)
-						.with(VariantProperties.Y_ROT, VariantProperties.Rotation.R270)
-				)
+				.with(variant(new Variant(panePost)))
+				.with(condition().term(BlockStateProperties.NORTH, true), variant(new Variant(paneSide)))
+				.with(condition().term(BlockStateProperties.EAST, true), variant(new Variant(paneSide).withYRot(Quadrant.R90)))
+				.with(condition().term(BlockStateProperties.SOUTH, true), variant(new Variant(paneSideAlt)))
+				.with(condition().term(BlockStateProperties.WEST, true), variant(new Variant(paneSideAlt).withYRot(Quadrant.R90)))
+				.with(condition().term(BlockStateProperties.NORTH, false), variant(new Variant(paneNoSide)))
+				.with(condition().term(BlockStateProperties.EAST, false), variant(new Variant(paneNoSideAlt)))
+				.with(condition().term(BlockStateProperties.SOUTH, false), variant(new Variant(paneNoSideAlt).withYRot(Quadrant.R90)))
+				.with(condition().term(BlockStateProperties.WEST, false), variant(new Variant(paneNoSide).withYRot(Quadrant.R270)))
 		);
 	}
 }

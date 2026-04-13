@@ -6,7 +6,7 @@ import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
 import com.mmodding.library.worldgen.impl.feature.replication.PlacementModifiersImpl;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implements ConfiguredFeaturePack<FC> {
 
 	final ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureKey;
-	private final BiList<ResourceKey<PlacedFeature>, Function<BootstapContext<PlacedFeature>, List<PlacementModifier>>> placedFeatures;
+	private final BiList<ResourceKey<PlacedFeature>, Function<BootstrapContext<PlacedFeature>, List<PlacementModifier>>> placedFeatures;
 
 	public ConfiguredFeaturePackImpl(ResourceKey<ConfiguredFeature<?, ?>> key) {
 		this.configuredFeatureKey = key;
@@ -50,7 +50,7 @@ public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implemen
 	}
 
 	@Override
-	public void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures) {
+	public void registerPlacedFeatures(BootstrapContext<PlacedFeature> placedFeatures) {
 		Holder.Reference<ConfiguredFeature<?, ?>> entry = placedFeatures.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(this.configuredFeatureKey);
 		this.placedFeatures.forEach((placedFeatureKey, modifiers) -> PlacementUtils.register(placedFeatures, placedFeatureKey, entry, modifiers.apply(placedFeatures)));
 	}

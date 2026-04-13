@@ -2,7 +2,7 @@ package com.mmodding.library.core.api.management.content;
 
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 
 /**
  * A functional interface that allows generating resources filling dynamic registries, all thanks to data generation.
@@ -12,5 +12,5 @@ import net.minecraft.data.worldgen.BootstapContext;
 @FunctionalInterface
 public interface ResourceProvider<T> {
 
-	void run(AdvancedContainer mod, BootstapContext<T> registerable);
+	void run(AdvancedContainer mod, BootstrapContext<T> registerable);
 }

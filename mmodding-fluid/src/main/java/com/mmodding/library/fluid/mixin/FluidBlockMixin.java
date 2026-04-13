@@ -22,10 +22,10 @@ public class FluidBlockMixin {
 	protected FlowingFluid fluid;
 
 	@Inject(method = "shouldSpreadLiquid", at = @At("HEAD"))
-	private void injectedCollisions(Level world, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
+	private void injectedCollisions(Level level, BlockPos pos, BlockState state, CallbackInfoReturnable<Boolean> cir) {
 		if (this.fluid instanceof AdvancedFlowableFluid advanced) {
 			for (Direction direction : LiquidBlock.POSSIBLE_FLOW_DIRECTIONS) {
-				advanced.neighborCollision(world, pos, direction, pos.relative(direction));
+				advanced.neighborCollision(level, pos, direction, pos.relative(direction));
 			}
 		}
 	}

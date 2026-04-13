@@ -3,7 +3,8 @@ package com.mmodding.library.worldgen.api.feature;
 import com.mmodding.library.worldgen.impl.feature.ConfiguredFeaturePackImpl;
 import java.util.List;
 import java.util.function.Consumer;
-import net.minecraft.data.worldgen.BootstapContext;
+
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -52,5 +53,5 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfiguration> {
 	 * Registers placed features of this configured feature pack.
 	 * @param placedFeatures the placed feature registry
 	 */
-	void registerPlacedFeatures(BootstapContext<PlacedFeature> placedFeatures);
+	void registerPlacedFeatures(BootstrapContext<PlacedFeature> placedFeatures);
 }

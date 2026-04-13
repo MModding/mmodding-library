@@ -6,7 +6,7 @@ import com.mmodding.library.config.api.ConfigNetworkManagement;
 import com.mmodding.library.config.api.schema.ConfigSchema;
 import com.mmodding.library.core.api.MModdingLibrary;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
 
 public class ConfigInitializer implements ModInitializer {
 
@@ -24,9 +24,9 @@ public class ConfigInitializer implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ServerWorldEvents.LOAD.register((server, world) -> {
+		ServerLevelEvents.LOAD.register((server, level) -> {
 			ConfigsImpl.getAll().forEach((identifier, config) -> {
-				if (config.getLevel().equals(ConfigLevel.WORLD_LOAD)) {
+				if (config.getLevel().equals(ConfigLevel.LEVEL_LOAD)) {
 					ConfigLoader.load(config);
 				}
 			});

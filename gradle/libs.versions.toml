@@ -4,12 +4,12 @@ java = "25"
 minecraft = "26.1"
 fabric_loader = "0.18.6"
 
-yumi_commons = "1.0.0"
+yumi_commons = "2.0.0"
 
 fabric_api = "0.145.1+26.1"
 modmenu = "4.0.6"
 
-# For Gradle And MModding Config
+# For Gradle And MModding AdvancedPointedDripstoneConfiguration
 quilt_parsers = "0.3.0"
 
 [libraries]
@@ -25,7 +25,7 @@ yumi_commons_event = { module = "dev.yumi.commons:yumi-commons-event", version.r
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 
-# For Gradle And MModding Config
+# For Gradle And MModding AdvancedPointedDripstoneConfiguration
 quilt_parsers_json = { module = "org.quiltmc.parsers:json", version.ref = "quilt_parsers" }
 
 [plugins]

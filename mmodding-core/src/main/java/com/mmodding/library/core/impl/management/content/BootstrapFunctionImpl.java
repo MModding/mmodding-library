@@ -3,7 +3,7 @@ package com.mmodding.library.core.impl.management.content;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.content.ResourceProvider;
 import net.minecraft.core.RegistrySetBuilder;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
@@ -18,7 +18,7 @@ public class BootstrapFunctionImpl<T> implements RegistrySetBuilder.RegistryBoot
 	}
 
 	@Override
-	public void run(BootstapContext<T> registerable) {
+	public void run(BootstrapContext<T> registerable) {
 		this.provider.run(this.mod, registerable);
 	}
 }

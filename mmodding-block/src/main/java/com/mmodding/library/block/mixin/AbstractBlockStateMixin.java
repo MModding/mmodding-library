@@ -32,7 +32,7 @@ public abstract class AbstractBlockStateMixin {
 	}
 
 	@Inject(method = "updateNeighbourShapes(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;II)V", at = @At("TAIL"))
-	private void injectIfAdvancedLeavesBlockThatDoNotHaveConnectedLeaves(LevelAccessor world, BlockPos pos, int flags, int maxUpdateDepth, CallbackInfo ci) {
+	private void injectIfAdvancedLeavesBlockThatDoNotHaveConnectedLeaves(LevelAccessor level, BlockPos pos, int flags, int maxUpdateDepth, CallbackInfo ci) {
 		// Those Leaves need to update their neighbors in a 3x3x3 cube
 		if (this.getBlock() instanceof AdvancedLeavesBlock leaves && !leaves.areLeavesConnected()) {
 			for (int i = -1; i <= 1; i++) {
@@ -45,7 +45,7 @@ public abstract class AbstractBlockStateMixin {
 							}
 						}
 						if (bl) {
-							world.neighborShapeChanged(Direction.NORTH, this.asState(), pos.offset(i, j, k), pos, flags, maxUpdateDepth);
+							level.neighborShapeChanged(Direction.NORTH, pos, pos.offset(i, j, k), level.getBlockState(pos.offset(i, j, k)), flags, maxUpdateDepth);
 						}
 					}
 				}

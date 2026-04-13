@@ -1,30 +1,50 @@
 package com.mmodding.library.block.api.catalog;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ColorParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.TintedParticleLeavesBlock;
+import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedLeavesBlock extends LeavesBlock {
 
-	public AdvancedLeavesBlock(Properties settings) {
-		super(settings);
+	private final ParticleOptions leafParticle;
+
+	// Leave leafParticle parameter as null to use tinted leaf particles.
+	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, Properties settings) {
+		super(leafParticleChance, settings);
+		this.leafParticle = leafParticle;
 		this.registerDefaultState(
 			this.defaultBlockState()
 				.setValue(this.getDistanceProperty(), this.getMaxDistance())
 				.setValue(AdvancedLeavesBlock.PERSISTENT, false)
 				.setValue(AdvancedLeavesBlock.WATERLOGGED, false)
 		);
+	}
+
+	@Override
+	public MapCodec<? extends LeavesBlock> codec() {
+		return this.leafParticle == null ? TintedParticleLeavesBlock.CODEC : UntintedParticleLeavesBlock.CODEC;
 	}
 
 	public IntegerProperty getDistanceProperty() {
@@ -52,8 +72,6 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 		return state.getValue(this.getDistanceProperty()) == this.getMaxDistance() && !state.getValue(AdvancedLeavesBlock.PERSISTENT);
 	}
 
-
-
 	@Override
 	protected boolean decaying(BlockState state) {
 		return !state.getValue(AdvancedLeavesBlock.PERSISTENT) && state.getValue(this.getDistanceProperty()) == this.getMaxDistance();
@@ -65,14 +83,14 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 	}
 
 	@Override
-	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+	protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
 		if (state.getValue(AdvancedLeavesBlock.WATERLOGGED)) {
-			world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+			ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
 		}
 
-		int i = this.getDistanceAt(neighborState) + 1;
+		int i = this.getDistanceAt(neighbourState) + 1;
 		if (i != 1 || state.getValue(this.getDistanceProperty()) != i) {
-			world.scheduleTick(pos, this, 1);
+			ticks.scheduleTick(pos, this, 1);
 		}
 
 		return state;
@@ -117,6 +135,17 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 		}
 		else {
 			return this.getMaxDistance();
+		}
+	}
+
+	@Override
+	protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
+		if (this.leafParticle == null) {
+			ColorParticleOption particle = ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, level.getClientLeafTintColor(pos));
+			ParticleUtils.spawnParticleBelow(level, pos, random, particle);
+		}
+		else {
+			ParticleUtils.spawnParticleBelow(level, pos, random, this.leafParticle);
 		}
 	}
 

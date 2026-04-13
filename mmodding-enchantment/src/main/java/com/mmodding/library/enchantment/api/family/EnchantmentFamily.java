@@ -1,21 +1,29 @@
 package com.mmodding.library.enchantment.api.family;
 
-import com.mmodding.library.enchantment.api.AdvancedEnchantment;
+import com.mmodding.library.core.api.registry.attachment.DynamicResourceKeyAttachment;
 import com.mmodding.library.enchantment.impl.family.EnchantmentFamilyBuilderImpl;
 import com.mmodding.library.java.api.list.filter.FilterList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * An {@link EnchantmentFamily} can be defined as an attribute of an {@link AdvancedEnchantment} to classify them to.
- * Those families define generalized attributes applying to all their {@link AdvancedEnchantment} objects such as an
- * {@link EnchantedBookItem}, family compatibilities or visual details.
+ * An {@link EnchantmentFamily} can be defined as an attribute of an {@link Enchantment} to classify them to.
+ * Those families define generalized attributes applying to all their {@link Enchantment} objects such as an
+ * enchanted book item, family compatibilities or visual details.
  */
 public interface EnchantmentFamily {
+
+	/**
+	 * The registry to register families into.
+	 */
+	DynamicResourceKeyAttachment<Enchantment, EnchantmentFamily> REGISTRY = DynamicResourceKeyAttachment.create(Registries.ENCHANTMENT);
 
 	/**
 	 * The default enchantment family.
@@ -47,26 +55,26 @@ public interface EnchantmentFamily {
 	String getQualifier();
 
 	/**
-	 * The associated {@link EnchantedBookItem} to the {@link EnchantmentFamily}.
+	 * The associated enchanted book item to the {@link EnchantmentFamily}.
 	 * @return the enchanted book item
 	 */
-	EnchantedBookItem getBookItem();
+	Item getEnchantedBookItem();
 
 	/**
-	 * The prefix displayed before the name of every {@link AdvancedEnchantment} of the {@link EnchantmentFamily}.
+	 * The prefix displayed before the name of every {@link Enchantment} of the {@link EnchantmentFamily}.
 	 * @return the prefix
 	 */
 	Component getPrefix();
 
 	/**
-	 * A list of {@link ChatFormatting} applied to the name of an {@link AdvancedEnchantment} of the {@link EnchantmentFamily}.
-	 * @param enchantment the advanced enchantment
-	 * @return the formattings of the advanced enchantment
+	 * A list of {@link ChatFormatting} applied to the name of an {@link Enchantment} of the {@link EnchantmentFamily}.
+	 * @param enchantment the enchantment
+	 * @return the formattings of the enchantment
 	 */
-	List<ChatFormatting> getFormattings(AdvancedEnchantment enchantment);
+	List<ChatFormatting> getFormattings(Holder<Enchantment> enchantment);
 
 	/**
-	 * Indicates if the {@link AdvancedEnchantment} of the {@link EnchantmentFamily} can be obtained through enchanting tables.
+	 * Indicates if the {@link Enchantment} of the {@link EnchantmentFamily} can be obtained through enchanting tables.
 	 * @return a boolean indicating if it can be obtained in enchanting tables
 	 */
 	boolean isObtainableInEnchantingTable();
@@ -83,11 +91,11 @@ public interface EnchantmentFamily {
 	 */
 	interface Builder {
 
-		Builder bookItem(Supplier<EnchantedBookItem> bookItem);
+		Builder bookItem(Supplier<Item> enchantedBookItem);
 
 		Builder prefix(Component prefix);
 
-		Builder formattings(Function<AdvancedEnchantment, List<ChatFormatting>> formattings);
+		Builder formattings(Function<Holder<Enchantment>, List<ChatFormatting>> formattings);
 
 		Builder setInEnchantingTable(boolean inEnchantingTable);
 

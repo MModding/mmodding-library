@@ -4,24 +4,26 @@ import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.management.DataContentType;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class BlockLootTypeImpl implements DataContentType<Block, BlockLootProcessor> {
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<BlockLootProcessor, List<Block>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedBlockLootProvider(contentToProcess, output));
+		pack.addProvider((output, future) -> new AutomatedBlockLootProvider(contentToProcess, future, output));
 	}
 
-	private static class AutomatedBlockLootProvider extends FabricBlockLootTableProvider {
+	private static class AutomatedBlockLootProvider extends FabricBlockLootSubProvider {
 
 		private final BiList<BlockLootProcessor, List<Block>> contentToProcess;
 
-		public AutomatedBlockLootProvider(BiList<BlockLootProcessor, List<Block>> contentToProcess, FabricDataOutput output) {
-			super(output);
+		public AutomatedBlockLootProvider(BiList<BlockLootProcessor, List<Block>> contentToProcess, CompletableFuture<HolderLookup.Provider> future, FabricPackOutput output) {
+			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
 

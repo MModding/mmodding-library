@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.mmodding.library.datagen.mixin.DataProviderAccessor;
+import net.minecraft.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +14,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
-import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.util.GsonHelper;
 

@@ -45,7 +45,7 @@ public class DelayedNetworkImpl {
 		}
 		while (DelayedNetworkImpl.CLIENT_DELAYED_ACTIONS.containsKey(tracker));
 		DelayedNetworkImpl.CLIENT_DELAYED_ACTIONS.put(tracker, action);
-		ClientPlayNetworking.send(new DelayedNetworkPackets.RequestPacket(tracker, requestIdentifier, requestArguments));
+		ClientPlayNetworking.send(new DelayedNetworkPackets.RequestPayload(tracker, requestIdentifier, requestArguments));
 	}
 
 	public static void executeS2C(ServerPlayer requestTarget, Identifier requestIdentifier, MixedList requestArguments, DelayedServerAction action) {
@@ -55,6 +55,6 @@ public class DelayedNetworkImpl {
 		}
 		while (DelayedNetworkImpl.SERVER_DELAYED_ACTIONS.containsKey(tracker));
 		DelayedNetworkImpl.SERVER_DELAYED_ACTIONS.put(tracker, action);
-		ServerPlayNetworking.send(requestTarget, new DelayedNetworkPackets.RequestPacket(tracker, requestIdentifier, requestArguments));
+		ServerPlayNetworking.send(requestTarget, new DelayedNetworkPackets.RequestPayload(tracker, requestIdentifier, requestArguments));
 	}
 }

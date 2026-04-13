@@ -5,16 +5,13 @@ import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.function.Mapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,9 +24,9 @@ public class BlockHeapImpl implements BlockHeap {
 
 	private final Map<String, Block> blocks;
 
-	public BlockHeapImpl(BlockHeap.NameBlockFactory<? extends Block> factory, AutoMapper<String> nameMapper, Mapper<String, FabricBlockSettings> settingsMapper, List<String> constructors) {
+	public BlockHeapImpl(BlockHeap.NameBlockFactory<? extends Block> factory, AutoMapper<String> nameMapper, Mapper<String, BlockBehaviour.Properties> propertiesMapper, List<String> constructors) {
 		Map<String, Block> blocks = new Object2ObjectLinkedOpenHashMap<>();
-		constructors.forEach(constructor -> blocks.put(nameMapper.map(constructor), factory.make(constructor, settingsMapper.map(constructor))));
+		constructors.forEach(constructor -> blocks.put(nameMapper.map(constructor), factory.make(constructor, propertiesMapper.map(constructor))));
 		this.blocks = blocks;
 	}
 
@@ -62,22 +59,10 @@ public class BlockHeapImpl implements BlockHeap {
 			Identifier identifier = identifierMaker.apply(entry.getKey());
 			Registry.register(BuiltInRegistries.BLOCK, identifier, entry.getValue());
 			Item item = entry.getValue().asItem();
-			if (item != null) {
+			if (!item.equals(Items.AIR)) {
 				Registry.register(BuiltInRegistries.ITEM, identifier, item);
 			}
 		}
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public void cutout() {
-		this.getEntries().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout()));
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public void translucent() {
-		this.getEntries().forEach(block -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.translucent()));
 	}
 
 	static {

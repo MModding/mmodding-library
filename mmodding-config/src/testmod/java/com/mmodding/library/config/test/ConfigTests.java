@@ -25,7 +25,7 @@ public class ConfigTests implements ExtendedModInitializer {
 		);
 
 	public static final Config CONFIG = Config.builder("mmodding", "common/mmodding")
-		.withLevel(ConfigLevel.WORLD_LOAD)
+		.withLevel(ConfigLevel.LEVEL_LOAD)
 		.withNetworkManagement(ConfigNetworkManagement.LOCALLY_MANAGED)
 		.withSchema(ConfigTests.SCHEMA)
 		.withDefaultContent(mutable -> mutable

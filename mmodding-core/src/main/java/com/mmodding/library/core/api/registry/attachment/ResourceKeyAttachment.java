@@ -12,9 +12,9 @@ import net.minecraft.resources.ResourceKey;
 public interface ResourceKeyAttachment<T, E> {
 
 	/**
-	 * Creates a new registry key attachment.
+	 * Creates a new resource key attachment.
 	 * @param registry the registry to attach to
-	 * @return the new registry key attachment
+	 * @return the new resource key attachment
 	 * @param <T> the type of the registry object
 	 * @param <E> the type of the attached value
 	 */
@@ -23,41 +23,41 @@ public interface ResourceKeyAttachment<T, E> {
 	}
 
 	/**
-	 * Attaches a value to an object by retrieving its registry key.
+	 * Attaches a value to an object by retrieving its resource key.
 	 * @param object the object
 	 * @param value the attached value
 	 */
 	void put(T object, E value);
 
 	/**
-	 * Attaches a value to a registry key.
-	 * @param key the registry key
+	 * Attaches a value to a resource key.
+	 * @param key the resource key
 	 * @param value the attached value
 	 */
 	void put(ResourceKey<T> key, E value);
 
 	/**
-	 * Checks if an object has an attached value through its registry key.
+	 * Checks if an object has an attached value through its resource key.
 	 * @param object the object
 	 */
 	boolean contains(T object);
 
 	/**
-	 * Checks if a registry key has an associated value.
-	 * @param key the registry key
+	 * Checks if a resource key has an associated value.
+	 * @param key the resource key
 	 */
 	boolean contains(ResourceKey<T> key);
 
 	/**
-	 * Retrieves an attached value of an object using object's registry key.
+	 * Retrieves an attached value of an object using object's resource key.
 	 * @param object the object
 	 * @return the attached value
 	 */
 	E get(T object);
 
 	/**
-	 * Retrieves a value from a registry key.
-	 * @param key the registry key
+	 * Retrieves a value from a resource key.
+	 * @param key the resource key
 	 * @return the attached value
 	 */
 	E get(ResourceKey<T> key);

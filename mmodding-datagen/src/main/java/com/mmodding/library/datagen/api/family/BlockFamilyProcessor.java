@@ -1,16 +1,12 @@
 package com.mmodding.library.datagen.api.family;
 
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.data.BlockFamily;
-import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -24,13 +20,7 @@ public final class BlockFamilyProcessor {
 		}
 	}
 
-	public void process(Consumer<FinishedRecipe> exporter, BlockFamily family) {
-		if (family.shouldGenerateRecipe(FeatureFlags.REGISTRY.allFlags())) {
-			RecipeProvider.generateRecipes(exporter, family);
-		}
-	}
-
-	public void process(Function<TagKey<Block>, FabricTagProvider<Block>.FabricTagBuilder> builderProvider, BlockFamily family) {
+	public void process(Function<TagKey<Block>, TagAppender<Block, Block>> builderProvider, BlockFamily family) {
 		for (Map.Entry<BlockFamily.Variant, Block> entry : family.getVariants().entrySet()) {
 			switch (entry.getKey()) {
 				case BUTTON -> builderProvider.apply(BlockTags.BUTTONS).add(entry.getValue());

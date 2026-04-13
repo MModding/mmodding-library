@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 
 public interface IndependentSeed {
 
-	static void configureFor(ResourceKey<Level> world) {
-		IndependentSeedImpl.ATTACHMENT.put(world, true);
+	static void configureFor(ResourceKey<Level> level) {
+		IndependentSeedImpl.ATTACHMENT.put(level, true);
 	}
 }

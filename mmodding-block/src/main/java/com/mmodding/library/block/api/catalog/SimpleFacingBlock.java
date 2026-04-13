@@ -1,5 +1,6 @@
 package com.mmodding.library.block.api.catalog;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -10,8 +11,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 
 public class SimpleFacingBlock extends DirectionalBlock {
 
+	public static final MapCodec<SimpleFacingBlock> CODEC = simpleCodec(SimpleFacingBlock::new);
+
 	public SimpleFacingBlock(Properties settings) {
 		super(settings);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

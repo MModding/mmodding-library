@@ -4,20 +4,20 @@ import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.ExtendedModInitializer;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FurnaceBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class BlockTests implements ExtendedModInitializer {
 
-	public static final Block FIRST_BLOCK = new Block(FabricBlockSettings.copyOf(Blocks.AIR)).withItem(new FabricItemSettings());
+	public static final Block FIRST_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).withItem(new Item.Properties());
 
-	public static final Block SECOND_BLOCK = new Block(FabricBlockSettings.copyOf(Blocks.AIR)).withItem(new FabricItemSettings());
+	public static final Block SECOND_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).withItem(new Item.Properties());
 
-	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.create(FurnaceBlock::new, FabricBlockSettings.copyOf(Blocks.FURNACE), "red", "green", "blue");
+	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.create(FurnaceBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE), "red", "green", "blue");
 
 	@Override
 	public void setupManager(ElementsManager manager) {

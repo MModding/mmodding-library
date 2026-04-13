@@ -5,6 +5,8 @@ import com.mmodding.library.java.api.list.MixedList;
 import com.mmodding.library.java.api.map.MixedMap;
 import java.util.Optional;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamDecoder;
+import net.minecraft.network.codec.StreamEncoder;
 
 @InjectedContent(FriendlyByteBuf.class)
 public interface FriendlyByteBufExtension {
@@ -36,23 +38,6 @@ public interface FriendlyByteBufExtension {
 	}
 
 	/**
-	 * Reads the next handled value as an {@link Optional} instance.
-	 * @param type the type of the next handled value
-	 * @return the read value as an optional instance
-	 */
-	default <T> Optional<T> readOptionalByHandling(Class<T> type) {
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Writes a handled value as an {@link Optional} instance.
-	 * @param value the written value as an optional instance
-	 */
-	default <T> void writeOptionalByHandling(T value) {
-		throw new IllegalStateException();
-	}
-
-	/**
 	 * Reads a {@link MixedList} object.
 	 * @return the {@link MixedList} object
 	 */
@@ -73,7 +58,7 @@ public interface FriendlyByteBufExtension {
 	 * @param entryReader the entry reader
 	 * @return the {@link MixedMap} object
 	 */
-	default <T> MixedMap<T> readMixedMap(FriendlyByteBuf.Reader<T> entryReader) {
+	default <T> MixedMap<T> readMixedMap(StreamDecoder<? super FriendlyByteBuf, T> entryReader) {
 		throw new IllegalStateException();
 	}
 
@@ -82,7 +67,7 @@ public interface FriendlyByteBufExtension {
 	 * @param map the {@link MixedMap} object
 	 * @param entryWriter the entry writer
 	 */
-	default <T> void writeMixedMap(MixedMap<T> map, FriendlyByteBuf.Writer<T> entryWriter) {
+	default <T> void writeMixedMap(MixedMap<T> map, StreamEncoder<? super FriendlyByteBuf, T> entryWriter) {
 		throw new IllegalStateException();
 	}
 }

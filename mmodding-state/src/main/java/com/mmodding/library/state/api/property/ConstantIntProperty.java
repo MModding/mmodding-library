@@ -21,4 +21,9 @@ public class ConstantIntProperty extends ConstantProperty<Integer> {
 			return Optional.empty();
 		}
 	}
+
+	@Override
+	public int getInternalIndex(Integer value) {
+		return 0;
+	}
 }

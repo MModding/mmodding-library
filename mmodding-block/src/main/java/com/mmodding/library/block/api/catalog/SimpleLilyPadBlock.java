@@ -4,12 +4,12 @@ import java.util.function.BiPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.IceBlock;
-import net.minecraft.world.level.block.WaterlilyBlock;
+import net.minecraft.world.level.block.LilyPadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
-public class SimpleLilyPadBlock extends WaterlilyBlock {
+public class SimpleLilyPadBlock extends LilyPadBlock {
 
 	private final BiPredicate<FluidState, BlockState> placementConditions;
 

@@ -4,33 +4,35 @@ import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
 import com.mmodding.library.datagen.api.management.DataContentType;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
-import net.minecraft.resources.Identifier;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class EntityLootTypeImpl implements DataContentType<EntityType<?>, EntityLootProcessor> {
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedEntityLootProvider(contentToProcess, output));
+		pack.addProvider((output, future) -> new AutomatedEntityLootProvider(contentToProcess, future, output));
 	}
 
-	private static class AutomatedEntityLootProvider extends SimpleFabricLootTableProvider {
+	private static class AutomatedEntityLootProvider extends SimpleFabricLootTableSubProvider {
 
 		private final BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess;
 
-		public AutomatedEntityLootProvider(BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess, FabricDataOutput output) {
-			super(output, LootContextParamSets.ENTITY);
+		public AutomatedEntityLootProvider(BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess, CompletableFuture<HolderLookup.Provider> future, FabricPackOutput output) {
+			super(output, future, LootContextParamSets.ENTITY);
 			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
-		public void generate(BiConsumer<Identifier, LootTable.Builder> biConsumer) {
+		public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
 			this.contentToProcess.forEach((processor, entityTypes) -> {
 				for (EntityType<?> entityType : entityTypes) {
 					processor.process(entityType);

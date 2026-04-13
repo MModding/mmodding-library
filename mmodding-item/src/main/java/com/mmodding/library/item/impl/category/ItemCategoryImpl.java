@@ -3,8 +3,9 @@ package com.mmodding.library.item.impl.category;
 import com.mmodding.library.core.api.registry.LiteRegistry;
 import com.mmodding.library.core.impl.PostContent;
 import com.mmodding.library.item.api.category.ItemCategory;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -41,27 +42,27 @@ public class ItemCategoryImpl implements ItemCategory {
 	}
 
 	public void init() {
-		CreativeModeTab.Builder builder = FabricItemGroup.builder();
-		if (this.settings.name != null) {
-			builder.title(this.settings.name);
+		CreativeModeTab.Builder builder = FabricCreativeModeTab.builder();
+		if (this.settings.title != null) {
+			builder.title(this.settings.title);
 		}
-		if (this.settings.iconSupplier != null) {
-			builder.icon(this.settings.iconSupplier);
+		if (this.settings.icon != null) {
+			builder.icon(this.settings.icon);
 		}
-		if (this.settings.special) {
+		if (this.settings.alignedRight) {
 			builder.alignedRight();
 		}
-		if (this.settings.hideName) {
+		if (this.settings.hideTitle) {
 			builder.hideTitle();
 		}
-		if (this.settings.hideScrollbar) {
+		if (this.settings.noScrollbar) {
 			builder.noScrollBar();
 		}
-		if (this.settings.textureName != null) {
-			builder.backgroundSuffix(this.settings.textureName);
+		if (this.settings.backgroundTexture != null) {
+			builder.backgroundTexture(this.settings.backgroundTexture);
 		}
 		builder.displayItems((parameters, collector) -> collector.acceptAll(this.entries));
-		ItemCategoryImpl.GROUPS.register(this.key.location(), builder.build()); // replaces the future registry
+		ItemCategoryImpl.GROUPS.register(this.key.identifier(), builder.build()); // replaces the future registry
 	}
 
 	@Override
@@ -71,8 +72,8 @@ public class ItemCategoryImpl implements ItemCategory {
 
 	@Override
 	public Optional<CreativeModeTab> getCreativeModeTab() {
-		if (ItemCategoryImpl.GROUPS.contains(this.key.location())) {
-			return Optional.of(ItemCategoryImpl.GROUPS.get(this.key.location()));
+		if (ItemCategoryImpl.GROUPS.contains(this.key.identifier())) {
+			return Optional.of(ItemCategoryImpl.GROUPS.get(this.key.identifier()));
 		}
 		else {
 			return Optional.empty();
@@ -81,46 +82,46 @@ public class ItemCategoryImpl implements ItemCategory {
 
 	public static class SettingsImpl implements Settings {
 
-		private Component name;
-		private Supplier<ItemStack> iconSupplier;
-		private boolean special;
-		private boolean hideName;
-		private boolean hideScrollbar;
-		private String textureName;
+		private Component title;
+		private Supplier<ItemStack> icon;
+		private boolean alignedRight;
+		private boolean hideTitle;
+		private boolean noScrollbar;
+		private Identifier backgroundTexture;
 
 		@Override
-		public Settings name(Component name) {
-			this.name = name;
+		public Settings title(Component name) {
+			this.title = name;
 			return this;
 		}
 
 		@Override
 		public Settings icon(Supplier<ItemStack> iconSupplier) {
-			this.iconSupplier = iconSupplier;
+			this.icon = iconSupplier;
 			return this;
 		}
 
 		@Override
-		public Settings special() {
-			this.special = true;
+		public Settings alignRight() {
+			this.alignedRight = true;
 			return this;
 		}
 
 		@Override
-		public Settings hideName() {
-			this.hideName = true;
+		public Settings hideTitle() {
+			this.hideTitle = true;
 			return this;
 		}
 
 		@Override
-		public Settings hideScrollbar() {
-			this.hideScrollbar = true;
+		public Settings noScrollbar() {
+			this.noScrollbar = true;
 			return this;
 		}
 
 		@Override
-		public Settings backgroundTextureName(String textureName) {
-			this.textureName = textureName;
+		public Settings backgroundTexture(Identifier backgroundTexture) {
+			this.backgroundTexture = backgroundTexture;
 			return this;
 		}
 	}

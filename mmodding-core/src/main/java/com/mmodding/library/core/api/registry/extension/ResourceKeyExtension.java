@@ -13,7 +13,7 @@ public interface ResourceKeyExtension<T> {
 	/**
 	 * Maps the current key value to a new key of the same assigned registry.
 	 * @param mapper the mapper
-	 * @return the newly created registry key
+	 * @return the newly created resource key
 	 */
 	default ResourceKey<T> mapValue(AutoMapper<Identifier> mapper) {
 		throw new IllegalStateException();

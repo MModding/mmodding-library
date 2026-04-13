@@ -3,6 +3,7 @@ package com.mmodding.library.block.api.catalog;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.BlockGetter;
@@ -14,11 +15,11 @@ public class SimpleFlowerBlock extends FlowerBlock {
 
 	private final Predicate<BlockState> placementConditions;
 
-	public SimpleFlowerBlock(MobEffect suspiciousStewEffect, int effectDuration, Properties settings) {
+	public SimpleFlowerBlock(Holder<MobEffect> suspiciousStewEffect, int effectDuration, Properties settings) {
 		this(floor -> floor.is(BlockTags.DIRT) || floor.is(Blocks.FARMLAND), suspiciousStewEffect, effectDuration, settings);
 	}
 
-	public SimpleFlowerBlock(Predicate<BlockState> placementConditions, MobEffect suspiciousStewEffect, int effectDuration, Properties settings) {
+	public SimpleFlowerBlock(Predicate<BlockState> placementConditions, Holder<MobEffect> suspiciousStewEffect, int effectDuration, Properties settings) {
 		super(suspiciousStewEffect, effectDuration, settings);
 		this.placementConditions = placementConditions;
 	}

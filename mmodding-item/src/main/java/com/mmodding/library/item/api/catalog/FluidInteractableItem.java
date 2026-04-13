@@ -5,11 +5,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -27,7 +26,7 @@ public class FluidInteractableItem extends Item {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+	public InteractionResult use(Level world, Player user, InteractionHand hand) {
 		BlockHitResult hitResult = FluidInteractableItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
 		if (hitResult.getType() == HitResult.Type.BLOCK) {
 			BlockPos pos = hitResult.getBlockPos();
@@ -37,11 +36,11 @@ public class FluidInteractableItem extends Item {
 					world.playSound(user, user.getX(), user.getY(), user.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0f, 1.0f);
 					world.gameEvent(user, GameEvent.FLUID_PICKUP, pos);
 					user.awardStat(Stats.ITEM_USED.get(this));
-					return InteractionResultHolder.sidedSuccess(ItemUtils.createFilledResult(user.getItemInHand(hand), user, stack), world.isClientSide());
+					return InteractionResult.SUCCESS;
 				}
 			}
 		}
-		return InteractionResultHolder.pass(user.getItemInHand(hand));
+		return InteractionResult.PASS;
 	}
 
 	public interface FluidPickup {
