@@ -17,7 +17,7 @@ public class BlockTests implements ExtendedModInitializer {
 
 	public static final Block SECOND_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).registerItem(new Item.Properties());
 
-	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.register(FurnaceBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE), "mmodding_test", "red", "green", "blue");
+	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.register(FurnaceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE), "mmodding_test", "red", "green", "blue");
 
 	@Override
 	public void setupManager(ElementsManager manager) {

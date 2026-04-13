@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A simple class allowing to create and manipulate a bunch of blocks at the same time.
@@ -29,8 +30,8 @@ public interface BlockHeap {
 	 * @return the block heap
 	 * @param <T> the block class type
 	 */
-	static <T extends Block> BlockHeap register(BlockFactory<T> factory, BlockBehaviour.Properties properties, String namespace, String... names) {
-		return BlockHeap.register(factory, name -> name, name -> properties, namespace, names);
+	static <T extends Block> BlockHeap register(BlockFactory<T> factory, Supplier<BlockBehaviour.Properties> properties, String namespace, String... names) {
+		return BlockHeap.register(factory, name -> name, name -> properties.get(), namespace, names);
 	}
 
 	/**
@@ -42,8 +43,8 @@ public interface BlockHeap {
 	 * @return the block heap
 	 * @param <T> the block class type
 	 */
-	static <T extends Block> BlockHeap register(BlockFactory<T> factory, BlockBehaviour.Properties properties, String namespace, List<String> names) {
-		return new BlockHeapImpl(NameBlockFactory.of(factory), name -> name, name -> properties, namespace, names);
+	static <T extends Block> BlockHeap register(BlockFactory<T> factory, Supplier<BlockBehaviour.Properties> properties, String namespace, List<String> names) {
+		return new BlockHeapImpl(NameBlockFactory.of(factory), name -> name, name -> properties.get(), namespace, names);
 	}
 
 	/**

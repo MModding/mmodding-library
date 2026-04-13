@@ -36,7 +36,7 @@ public interface BlockRelatives {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(identifier);
 		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava());
 		return BlockRelatives.create(identifier, setType, sharedProperties, "_planks", Block::new)
-				.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 30, Blocks.buttonProperties()))
+				.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 30, properties.noCollision().strength(0.5F).pushReaction(PushReaction.DESTROY)))
 				.register(BlockFamily.Variant.FENCE, properties -> new FenceBlock(properties.forceSolidOn()))
 				.register(BlockFamily.Variant.FENCE_GATE, properties -> new FenceGateBlock(type, properties.forceSolidOn()))
 				.register(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)))
@@ -63,7 +63,7 @@ public interface BlockRelatives {
 			result.register(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)));
 		}
 		if (hasButton) {
-			result.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 20, Blocks.buttonProperties()));
+			result.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 20, properties.noCollision().strength(0.5f).pushReaction(PushReaction.DESTROY)));
 		}
 		return result;
 	}
