@@ -47,7 +47,7 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (T element : elements) {
 					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
-						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get((ResourceKey) this.registry).orElseThrow();
+						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValueOrThrow((ResourceKey) this.registry);
 						assert registry != null;
 						Optional<ResourceKey<T>> optional = registry.getResourceKey(element);
 						optional.ifPresentOrElse(
