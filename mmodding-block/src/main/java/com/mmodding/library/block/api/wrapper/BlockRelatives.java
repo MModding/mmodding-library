@@ -4,8 +4,6 @@ import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.core.api.registry.IdentifierUtil;
 import com.mmodding.library.java.api.function.AutoMapper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
@@ -38,16 +36,16 @@ public interface BlockRelatives {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.OAK).build(identifier);
 		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava());
 		return BlockRelatives.create(identifier, setType, sharedProperties, "_planks", Block::new)
-				.push(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 30, Blocks.buttonProperties()))
-				.push(BlockFamily.Variant.FENCE, properties -> new FenceBlock(properties.forceSolidOn()))
-				.push(BlockFamily.Variant.FENCE_GATE, properties -> new FenceGateBlock(type, properties.forceSolidOn()))
-				.push(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)))
-				.push(BlockFamily.Variant.SIGN, properties -> new StandingSignBlock(type, properties.forceSolidOn().noCollision()))
-				.push(BlockFamily.Variant.WALL_SIGN, properties -> new WallSignBlock(type, properties.forceSolidOn().noCollision().overrideLootTable(BuiltInRegistries.BLOCK.get(IdentifierUtil.extend(identifier, "sign")).orElseThrow().value().getLootTable())))
-				.push(BlockFamily.Variant.SLAB, SlabBlock::new)
-				.push(BlockFamily.Variant.STAIRS, properties -> new StairBlock(BuiltInRegistries.BLOCK.get(IdentifierUtil.extend(identifier, "planks")).orElseThrow().value().defaultBlockState(), properties))
-				.push(BlockFamily.Variant.DOOR, properties -> new DoorBlock(setType, properties.noOcclusion()))
-				.push(BlockFamily.Variant.TRAPDOOR, properties -> new TrapDoorBlock(setType, properties.noOcclusion().isValidSpawn(Blocks::never)));
+				.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 30, Blocks.buttonProperties()))
+				.register(BlockFamily.Variant.FENCE, properties -> new FenceBlock(properties.forceSolidOn()))
+				.register(BlockFamily.Variant.FENCE_GATE, properties -> new FenceGateBlock(type, properties.forceSolidOn()))
+				.register(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)))
+				.register(BlockFamily.Variant.SIGN, properties -> new StandingSignBlock(type, properties.forceSolidOn().noCollision()))
+				.register(BlockFamily.Variant.WALL_SIGN, properties -> new WallSignBlock(type, properties.forceSolidOn().noCollision().overrideLootTable(BuiltInRegistries.BLOCK.get(IdentifierUtil.extend(identifier, "sign")).orElseThrow().value().getLootTable())))
+				.register(BlockFamily.Variant.SLAB, SlabBlock::new)
+				.register(BlockFamily.Variant.STAIRS, properties -> new StairBlock(BuiltInRegistries.BLOCK.get(IdentifierUtil.extend(identifier, "planks")).orElseThrow().value().defaultBlockState(), properties))
+				.register(BlockFamily.Variant.DOOR, properties -> new DoorBlock(setType, properties.noOcclusion()))
+				.register(BlockFamily.Variant.TRAPDOOR, properties -> new TrapDoorBlock(setType, properties.noOcclusion().isValidSpawn(Blocks::never)));
 	}
 
 	static BlockRelatives createStone(Identifier identifier, AutoMapper<Block.Properties> patch, boolean hasPressurePlate, boolean hasButton) {
@@ -58,14 +56,14 @@ public interface BlockRelatives {
 		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(identifier);
 		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5f, 6.0f));
 		BlockRelatives result = BlockRelatives.create(identifier, setType, sharedProperties, pluralOnMain ? "s" : "", Block::new)
-			.push(BlockFamily.Variant.SLAB, SlabBlock::new)
-			.push(BlockFamily.Variant.STAIRS, properties -> new StairBlock(BuiltInRegistries.BLOCK.get(identifier).orElseThrow().value().defaultBlockState(), properties))
-			.push(BlockFamily.Variant.WALL, WallBlock::new);
+			.register(BlockFamily.Variant.SLAB, SlabBlock::new)
+			.register(BlockFamily.Variant.STAIRS, properties -> new StairBlock(BuiltInRegistries.BLOCK.get(identifier).orElseThrow().value().defaultBlockState(), properties))
+			.register(BlockFamily.Variant.WALL, WallBlock::new);
 		if (hasPressurePlate) {
-			result.push(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)));
+			result.register(BlockFamily.Variant.PRESSURE_PLATE, properties -> new PressurePlateBlock(setType, properties.forceSolidOn().noCollision().pushReaction(PushReaction.DESTROY)));
 		}
 		if (hasButton) {
-			result.push(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 20, Blocks.buttonProperties()));
+			result.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(setType, 20, Blocks.buttonProperties()));
 		}
 		return result;
 	}
@@ -84,13 +82,11 @@ public interface BlockRelatives {
 
 	Block get(BlockFamily.Variant variant);
 
-	<T extends Block> BlockRelatives push(BlockFamily.Variant variant, BlockFactory<T> factory);
+	<T extends Block> BlockRelatives register(BlockFamily.Variant variant, BlockFactory<T> factory);
 
 	TagKey<Block> getBlockTagKey();
 
 	TagKey<Item> getItemTagKey();
 
 	List<Block> getEntries();
-
-	void register();
 }

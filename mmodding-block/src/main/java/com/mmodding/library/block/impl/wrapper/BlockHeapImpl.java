@@ -5,12 +5,12 @@ import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.function.Mapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,15 +24,23 @@ public class BlockHeapImpl implements BlockHeap {
 
 	private final Map<String, Block> blocks;
 
-	public BlockHeapImpl(BlockHeap.NameBlockFactory<? extends Block> factory, AutoMapper<String> nameMapper, Mapper<String, BlockBehaviour.Properties> propertiesMapper, List<String> constructors) {
+	public BlockHeapImpl(BlockHeap.NameBlockFactory<? extends Block> factory, AutoMapper<String> nameMapper, Mapper<String, BlockBehaviour.Properties> propertiesMapper, String namespace, List<String> constructors) {
 		Map<String, Block> blocks = new Object2ObjectLinkedOpenHashMap<>();
-		constructors.forEach(constructor -> blocks.put(nameMapper.map(constructor), factory.make(constructor, propertiesMapper.map(constructor))));
+		for (String constructor : constructors) {
+			String name = nameMapper.map(constructor);
+			Block block = Blocks.register(
+				ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(namespace, name)),
+				properties -> factory.make(constructor, properties),
+				propertiesMapper.map(constructor)
+			);
+			blocks.put(constructor, block);
+		}
 		this.blocks = blocks;
 	}
 
 	@Override
-	public BlockHeap withItem(Item.@NotNull Properties settings, @NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker) {
-		this.getEntries().forEach(block -> block.withItem(settings, factory, tweaker));
+	public BlockHeap registerBlockItems(Item.@NotNull Properties properties, @NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker) {
+		this.getEntries().forEach(block -> block.registerItem(properties, factory, tweaker));
 		return this;
 	}
 
@@ -48,21 +56,6 @@ public class BlockHeapImpl implements BlockHeap {
 
 	public void forEach(Consumer<Block> consumer) {
 		this.blocks.forEach((name, block) -> consumer.accept(block));
-	}
-
-	/**
-	 * Registers every block inside the heap.
-	 * @param identifierMaker the identifier maker turning the heap's block string names into usable identifiers for registration
-	 */
-	public void register(Function<String, Identifier> identifierMaker) {
-		for (Map.Entry<String, Block> entry : this.blocks.entrySet()) {
-			Identifier identifier = identifierMaker.apply(entry.getKey());
-			Registry.register(BuiltInRegistries.BLOCK, identifier, entry.getValue());
-			Item item = entry.getValue().asItem();
-			if (!item.equals(Items.AIR)) {
-				Registry.register(BuiltInRegistries.ITEM, identifier, item);
-			}
-		}
 	}
 
 	static {

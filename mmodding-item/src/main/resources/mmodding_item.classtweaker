@@ -1,3 +1,14 @@
 classTweaker v1 official
 
+transitive-accessible method net/minecraft/world/item/Items blockIdToItemId (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/resources/ResourceKey;
+transitive-accessible method net/minecraft/world/item/Items registerSpawnEgg (Lnet/minecraft/world/entity/EntityType;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;Ljava/util/function/UnaryOperator;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;Ljava/util/function/BiFunction;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerBlock (Lnet/minecraft/world/level/block/Block;Ljava/util/function/BiFunction;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerItem (Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Function;)Lnet/minecraft/world/item/Item;
+transitive-accessible method net/minecraft/world/item/Items registerItem (Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;
+
 transitive-inject-interface net/minecraft/world/item/Item com/mmodding/library/item/api/category/ItemCategoryContainer

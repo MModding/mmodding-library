@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class BlockTests implements ExtendedModInitializer {
 
-	public static final Block FIRST_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).withItem(new Item.Properties());
+	public static final Block FIRST_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).registerItem(new Item.Properties());
 
-	public static final Block SECOND_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).withItem(new Item.Properties());
+	public static final Block SECOND_BLOCK = new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.AIR)).registerItem(new Item.Properties());
 
-	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.create(FurnaceBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE), "red", "green", "blue");
+	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.register(FurnaceBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE), "mmodding_test", "red", "green", "blue");
 
 	@Override
 	public void setupManager(ElementsManager manager) {
@@ -36,6 +36,5 @@ public class BlockTests implements ExtendedModInitializer {
 			factory.register("first_block", FIRST_BLOCK.asItem());
 			factory.register("second_block", SECOND_BLOCK.asItem());
 		});
-		FURNACE_BLOCKS.register(name -> mod.createId(name + "_furnace"));
 	}
 }

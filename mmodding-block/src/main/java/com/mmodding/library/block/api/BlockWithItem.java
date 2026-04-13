@@ -14,23 +14,23 @@ import net.minecraft.world.level.block.Block;
 @InjectedContent(Block.class)
 public interface BlockWithItem {
 
-	default <T extends Block> T withItem() {
-		return this.withItem(new Item.Properties(), BlockItem::new);
+	default <T extends Block> T registerItem() {
+		return this.registerItem(new Item.Properties(), BlockItem::new);
 	}
 
-	default <T extends Block> T withItem(@NotNull Item.Properties settings) {
-		return this.withItem(settings, BlockItem::new);
+	default <T extends Block> T registerItem(@NotNull Item.Properties settings) {
+		return this.registerItem(settings, BlockItem::new);
 	}
 
-	default <T extends Block> T withItem(@NotNull Item.Properties settings, @NotNull Function<Item, Item> tweaker) {
-		return this.withItem(settings, BlockItem::new, tweaker);
+	default <T extends Block> T registerItem(@NotNull Item.Properties settings, @NotNull Function<Item, Item> tweaker) {
+		return this.registerItem(settings, BlockItem::new, tweaker);
 	}
 
-	default <T extends Block> T withItem(@NotNull Item.Properties settings, @NotNull BiFunction<T, Item.Properties, Item> factory) {
-		return this.withItem(settings, factory, item -> item);
+	default <T extends Block> T registerItem(@NotNull Item.Properties settings, @NotNull BiFunction<T, Item.Properties, Item> factory) {
+		return this.registerItem(settings, factory, item -> item);
 	}
 
-	default <T extends Block> T withItem(@NotNull Item.Properties settings, @NotNull BiFunction<T, Item.Properties, Item> factory,  @NotNull Function<Item, Item> tweaker) {
+	default <T extends Block> T registerItem(@NotNull Item.Properties settings, @NotNull BiFunction<T, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker) {
 		throw new IllegalStateException();
 	}
 }

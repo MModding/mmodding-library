@@ -2,6 +2,7 @@ package com.mmodding.library.block.mixin;
 
 import com.mmodding.library.block.api.BlockWithItem;
 import com.mmodding.library.block.api.MModdingBlock;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,9 +23,9 @@ public class BlockMixin implements BlockWithItem, MModdingBlock {
 
 	@Override
 	@SuppressWarnings({"unchecked", "DataFlowIssue"})
-	public <T extends Block> T withItem(Item.@NotNull Properties settings, @NotNull BiFunction<T, Item.Properties, Item> factory,  @NotNull Function<Item, Item> tweaker) {
+	public <T extends Block> T registerItem(Item.@NotNull Properties properties, @NotNull BiFunction<T, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker) {
 		if (this.item == null) {
-			this.item = tweaker.apply(factory.apply((T) (Object) this, settings));
+			this.item = tweaker.apply(Items.registerBlock((Block) (Object) this, (BiFunction<Block, Item.Properties, Item>) factory, properties));
 			return (T) (Object) this;
 		}
 		else {
