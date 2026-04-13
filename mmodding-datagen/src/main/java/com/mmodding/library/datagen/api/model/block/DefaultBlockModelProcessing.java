@@ -55,7 +55,8 @@ public class DefaultBlockModelProcessing {
 		Identifier paneNoSide = ModelTemplates.STAINED_GLASS_PANE_NOSIDE.create(paneBlock, textures, generator.modelOutput);
 		Identifier paneNoSideAlt = ModelTemplates.STAINED_GLASS_PANE_NOSIDE_ALT.create(paneBlock, textures, generator.modelOutput);
 		if (paneBlock.asItem() != Items.AIR) {
-			ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(paneBlock.asItem()), TextureMapping.layer0(glassBlock), generator.modelOutput);
+			Identifier itemModel = generator.createFlatItemModelWithBlockTexture(paneBlock.asItem(), glassBlock);
+			generator.registerSimpleItemModel(paneBlock, itemModel);
 		}
 		generator.blockStateOutput.accept(
 			MultiPartGenerator.multiPart(paneBlock)
