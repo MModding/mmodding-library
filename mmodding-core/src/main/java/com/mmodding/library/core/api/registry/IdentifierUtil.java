@@ -5,6 +5,16 @@ import net.minecraft.resources.Identifier;
 public class IdentifierUtil {
 
 	/**
+	 * Returns a new {@link Identifier} that represents a texture location.
+	 * @param namespace the namespace
+	 * @param path the path
+	 * @return the newly created identifier
+	 */
+	public static Identifier texture(String namespace, String path) {
+		return Identifier.fromNamespaceAndPath(namespace, "textures/" + path + ".png");
+	}
+
+	/**
 	 * Returns a new {@link Identifier} following this pattern: `[namespace]:[path]_[extension]`.
 	 * @param identifier the original identifier
 	 * @param extension the path extension
