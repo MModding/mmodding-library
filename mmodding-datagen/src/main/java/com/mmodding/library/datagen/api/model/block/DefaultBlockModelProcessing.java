@@ -1,5 +1,6 @@
 package com.mmodding.library.datagen.api.model.block;
 
+import com.mmodding.library.java.api.function.AutoMapper;
 import com.mojang.math.Quadrant;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
@@ -32,15 +33,46 @@ public class DefaultBlockModelProcessing {
 	}
 
 	/**
-	 * Registers a pane block state, block model, and item model, by getting its associated glass block automatically.
+	 * Registers a glass pane block state, block model, and item model.
 	 * @param generator the generator
 	 * @param paneBlock the pane block
 	 */
 	public static void createGlassPane(BlockModelGenerators generator, Block paneBlock) {
+		DefaultBlockModelProcessing.createPaneLike(generator, paneBlock, path -> path.substring(0, path.length() - 5), TextureMapping.getBlockTexture(paneBlock, "_top"));
+	}
+
+	/**
+	 * Registers a pane block state, block model, and item model, by getting its associated glass block automatically.
+	 * @param generator the generator
+	 * @param paneBlock the pane block
+	 * @param paneTopMaterial the pane top material
+	 */
+	public static void createPaneLike(BlockModelGenerators generator, Block paneBlock, Material paneTopMaterial) {
+		DefaultBlockModelProcessing.createPaneLike(generator, paneBlock, path -> path.substring(0, path.length() - 5), paneTopMaterial);
+	}
+
+	/**
+	 * Registers a pane block state, block model, and item model, by getting its associated glass block automatically.
+	 * @param generator the generator
+	 * @param paneBlock the pane block
+	 * @param paneToGlass a mapper to get the glass path from the pane path
+	 */
+	public static void createPaneLike(BlockModelGenerators generator, Block paneBlock, AutoMapper<String> paneToGlass) {
+		DefaultBlockModelProcessing.createPaneLike(generator, paneBlock, paneToGlass, TextureMapping.getBlockTexture(paneBlock, "_top"));
+	}
+
+	/**
+	 * Registers a pane block state, block model, and item model, by getting its associated glass block automatically.
+	 * @param generator the generator
+	 * @param paneBlock the pane block
+	 * @param paneToGlass a mapper to get the glass path from the pane path
+	 * @param paneTopMaterial the pane top material
+	 */
+	public static void createPaneLike(BlockModelGenerators generator, Block paneBlock, AutoMapper<String> paneToGlass, Material paneTopMaterial) {
 		ResourceKey<Block> glassBlockKey = paneBlock.builtInRegistryHolder().key()
-			.mapIdentifier(identifier -> identifier.withPath(path -> path.substring(0, path.length() - 5)));
+			.mapIdentifier(identifier -> identifier.withPath(paneToGlass::map));
 		Block glassBlock = BuiltInRegistries.BLOCK.getValueOrThrow(glassBlockKey);
-		DefaultBlockModelProcessing.createGlassPane(generator, glassBlock, paneBlock);
+		DefaultBlockModelProcessing.createPaneLike(generator, glassBlock, paneBlock, paneTopMaterial);
 	}
 
 	/**
@@ -49,8 +81,8 @@ public class DefaultBlockModelProcessing {
 	 * @param glassBlock the block from which the pane block is made
 	 * @param paneBlock the pane block
 	 */
-	public static void createGlassPane(BlockModelGenerators generator, Block glassBlock, Block paneBlock) {
-		DefaultBlockModelProcessing.createGlassPane(generator, glassBlock, paneBlock, TextureMapping.getBlockTexture(paneBlock, "_top"));
+	public static void createPaneLike(BlockModelGenerators generator, Block glassBlock, Block paneBlock) {
+		DefaultBlockModelProcessing.createPaneLike(generator, glassBlock, paneBlock, TextureMapping.getBlockTexture(paneBlock, "_top"));
 	}
 
 	/**
@@ -60,7 +92,7 @@ public class DefaultBlockModelProcessing {
 	 * @param paneBlock the pane block
 	 * @param paneTopMaterial the pane top material
 	 */
-	public static void createGlassPane(BlockModelGenerators generator, Block glassBlock, Block paneBlock, Material paneTopMaterial) {
+	public static void createPaneLike(BlockModelGenerators generator, Block glassBlock, Block paneBlock, Material paneTopMaterial) {
 		TextureMapping textures = new TextureMapping();
 		textures.put(TextureSlot.PANE, TextureMapping.getBlockTexture(glassBlock)).put(TextureSlot.EDGE, paneTopMaterial.withForceTranslucent(true));
 		Identifier panePost = ModelTemplates.STAINED_GLASS_PANE_POST.create(paneBlock, textures, generator.modelOutput);
