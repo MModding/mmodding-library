@@ -12,3 +12,4 @@ transitive-accessible method net/minecraft/world/item/Items registerItem (Lnet/m
 transitive-accessible method net/minecraft/world/item/Items registerItem (Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;
 
 transitive-inject-interface net/minecraft/world/item/Item com/mmodding/library/item/api/category/ItemCategoryContainer
+transitive-inject-interface net/minecraft/world/item/Item$Properties com/mmodding/library/item/api/properties/MModdingItemProperties

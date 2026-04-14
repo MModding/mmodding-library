@@ -4,11 +4,12 @@
   "package": "com.mmodding.library.item.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "ProjectileWeaponItemMixin",
     "EntityMixin",
     "FishingBobberEntityMixin",
     "ItemMixin",
-    "PlayerEntityMixin"
+    "ItemPropertiesMixin",
+    "PlayerEntityMixin",
+    "ProjectileWeaponItemMixin"
   ],
   "client": [],
   "injectors": {

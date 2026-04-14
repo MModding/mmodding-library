@@ -40,6 +40,16 @@ public class RegistryCompanionImpl<T, E> implements RegistryCompanion<T, E> {
 	}
 
 	@Override
+	public boolean hasCompanion(T object) {
+		return this.rka.contains(object);
+	}
+
+	@Override
+	public boolean hasCompanion(ResourceKey<T> key) {
+		return this.rka.contains(key);
+	}
+
+	@Override
 	public LiteRegistry<E> getCompanion(T object) {
 		return this.map.get(this.rka.get(object));
 	}

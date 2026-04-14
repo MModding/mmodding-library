@@ -25,29 +25,43 @@ public interface RegistryCompanion<T, E> {
 	}
 
 	/**
-	 * Retrieves (or creates if not present) the registry associated to an object by retrieving its registry key.
+	 * Retrieves (or creates if not present) the registry associated to an object by retrieving its resource key.
 	 * @param object the object
 	 * @return the attached registry
 	 */
 	LiteRegistry<E> getOrCreateCompanion(T object);
 
 	/**
-	 * Retrieves (or creates if not present) the registry associated to a registry key.
-	 * @param key the registry key
+	 * Retrieves (or creates if not present) the registry associated to a resource key.
+	 * @param key the resource key
 	 * @return the attached registry
 	 */
 	LiteRegistry<E> getOrCreateCompanion(ResourceKey<T> key);
 
 	/**
-	 * Retrieves the registry associated to an object by retrieving its registry key.
+	 * Checks if an object has an associated companion by retrieving its resource key.
+	 * @param object the object
+	 * @return the check value
+	 */
+	boolean hasCompanion(T object);
+
+	/**
+	 * Checks if a resource key has an associated companion.
+	 * @param key the resource key
+	 * @return the check value
+	 */
+	boolean hasCompanion(ResourceKey<T> key);
+
+	/**
+	 * Retrieves the registry associated to an object by retrieving its resource key.
 	 * @param object the object
 	 * @return the attached registry
 	 */
 	LiteRegistry<E> getCompanion(T object);
 
 	/**
-	 * Retrieves the registry associated to a registry key.
-	 * @param key the registry key
+	 * Retrieves the registry associated to a resource key.
+	 * @param key the resource key
 	 * @return the attached registry
 	 */
 	LiteRegistry<E> getCompanion(ResourceKey<T> key);
