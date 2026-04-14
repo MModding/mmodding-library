@@ -6,7 +6,9 @@ import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,6 +29,18 @@ public class DefaultBlockModelProcessing {
 		generator.createNonTemplateHorizontalBlock(block);
 		LADDER.create(block, TextureMapping.defaultTexture(block).put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(block)), generator.modelOutput);
 		generator.registerSimpleFlatItemModel(block);
+	}
+
+	/**
+	 * Registers a pane block state, block model, and item model, by getting its associated glass block automatically.
+	 * @param generator the generator
+	 * @param paneBlock the pane block
+	 */
+	public static void createGlassPane(BlockModelGenerators generator, Block paneBlock) {
+		ResourceKey<Block> glassBlockKey = paneBlock.builtInRegistryHolder().key()
+			.mapIdentifier(identifier -> identifier.withPath(path -> path.substring(0, path.length() - 5)));
+		Block glassBlock = BuiltInRegistries.BLOCK.getValueOrThrow(glassBlockKey);
+		DefaultBlockModelProcessing.createGlassPane(generator, glassBlock, paneBlock);
 	}
 
 	/**

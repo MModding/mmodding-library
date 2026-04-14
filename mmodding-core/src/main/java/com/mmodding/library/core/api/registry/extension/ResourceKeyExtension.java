@@ -11,11 +11,11 @@ import net.minecraft.resources.ResourceKey;
 public interface ResourceKeyExtension<T> {
 
 	/**
-	 * Maps the current key value to a new key of the same assigned registry.
+	 * Maps the current key identifier to a new key of the same assigned registry.
 	 * @param mapper the mapper
 	 * @return the newly created resource key
 	 */
-	default ResourceKey<T> mapValue(AutoMapper<Identifier> mapper) {
+	default ResourceKey<T> mapIdentifier(AutoMapper<Identifier> mapper) {
 		throw new IllegalStateException();
 	}
 }

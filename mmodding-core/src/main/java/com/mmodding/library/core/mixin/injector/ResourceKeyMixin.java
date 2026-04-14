@@ -23,7 +23,7 @@ public abstract class ResourceKeyMixin<T> implements ResourceKeyExtension<T> {
 
 	@Override
 	@SuppressWarnings("AddedMixinMembersNamePattern")
-	public ResourceKey<T> mapValue(AutoMapper<Identifier> mapper) {
+	public ResourceKey<T> mapIdentifier(AutoMapper<Identifier> mapper) {
 		return create(this.registry(), mapper.map(this.identifier()));
 	}
 }
