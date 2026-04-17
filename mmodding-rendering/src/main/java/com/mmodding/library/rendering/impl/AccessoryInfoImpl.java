@@ -21,7 +21,7 @@ public class AccessoryInfoImpl implements AccessoryInfo {
 	}
 
 	@Override
-	public EntityModel<HumanoidRenderState> getModel(EntityRendererProvider.Context context) {
+	public EntityModel<HumanoidRenderState> createModel(EntityRendererProvider.Context context) {
 		return this.factory.apply(context);
 	}
 

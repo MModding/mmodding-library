@@ -24,11 +24,11 @@ public interface AccessoryInfo {
 	}
 
 	/**
-	 * Returns the model of an accessory from the entity renderer's context.
+	 * Creates the model of an accessory from the entity renderer's context.
 	 * @param context the context
 	 * @return the accessory's model
 	 */
-	EntityModel<HumanoidRenderState> getModel(EntityRendererProvider.Context context);
+	EntityModel<HumanoidRenderState> createModel(EntityRendererProvider.Context context);
 
 	/**
 	 * @return the accessory's texture
