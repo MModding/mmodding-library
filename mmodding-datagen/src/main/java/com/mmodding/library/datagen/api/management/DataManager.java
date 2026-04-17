@@ -33,13 +33,11 @@ public interface DataManager {
 	 * @param sourceClass the class to extract contents from
 	 * @param type the type of content to extract
 	 * @param handler the data handler
-	 * @param filter the data filter
-	 * @param processor the data processor
 	 * @return the chain manager
 	 * @param <T> the data class type
 	 * @param <P> the data processor class type
 	 */
-	<T, P> ChainManager<T, P> chain(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, Predicate<T> filter, P processor);
+	<T, P> ChainManager<T, P> chain(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler);
 
 	interface ChainManager<T, P> {
 

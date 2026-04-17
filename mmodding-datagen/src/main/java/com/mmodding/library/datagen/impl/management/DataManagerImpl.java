@@ -73,9 +73,8 @@ public class DataManagerImpl implements DataManager {
 	}
 
 	@Override
-	public <T, P> ChainManager<T, P> chain(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler, Predicate<T> filter, P processor) {
-		this.task(sourceClass, type, handler, filter, processor);
-		return new ChainManagerImpl<>(this, sourceClass, type, handler, Predicate.not(filter));
+	public <T, P> ChainManager<T, P> chain(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler) {
+		return new ChainManagerImpl<>(this, sourceClass, type, handler, ignored -> false);
 	}
 
 	public static class ChainManagerImpl<T, P> implements ChainManager<T, P> {

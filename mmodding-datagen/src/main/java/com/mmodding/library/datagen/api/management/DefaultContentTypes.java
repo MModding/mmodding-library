@@ -4,7 +4,7 @@ import com.mmodding.library.datagen.api.family.BlockFamilyProcessor;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
-import com.mmodding.library.datagen.api.model.block.BlockStateModelProcessor;
+import com.mmodding.library.datagen.api.model.block.BlockModelProcessor;
 import com.mmodding.library.datagen.api.model.item.ItemModelProcessor;
 import com.mmodding.library.datagen.api.recipe.RecipeProcessor;
 import com.mmodding.library.datagen.api.tag.ValueTagProcessor;
@@ -23,7 +23,7 @@ public class DefaultContentTypes {
 
 	public static final DataContentType<Item, ItemModelProcessor> ITEM_MODELS = new ItemModelTypeImpl();
 
-	public static final DataContentType<Block, BlockStateModelProcessor> BLOCK_MODELS = new BlockModelTypeImpl();
+	public static final DataContentType<Block, BlockModelProcessor> BLOCK_MODELS = new BlockModelTypeImpl();
 
 	public static final DataContentType<Block, BlockLootProcessor> BLOCK_LOOTS = new BlockLootTypeImpl();
 
