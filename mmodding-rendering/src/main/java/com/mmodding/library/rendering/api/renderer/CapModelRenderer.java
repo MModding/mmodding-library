@@ -34,7 +34,8 @@ public class CapModelRenderer implements ArmorRenderer {
 		poseStack.pushPose();
 		contextModel.root().translateAndRotate(poseStack);
 		contextModel.translateToHead(poseStack);
-		poseStack.translate(Vec3.Y_AXIS.scale(-state.eyeHeight));
+		// state.eyeHeight changes with the pose, but the translation we want is always the standard eye height
+		poseStack.translate(Vec3.Y_AXIS.scale(-state.entityType.getDimensions().eyeHeight()));
 		int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0f);
 		submitNodeCollector.submitModel(this.model, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 		poseStack.popPose();
