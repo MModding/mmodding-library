@@ -93,7 +93,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 		return List.copyOf(entries);
 	}
 
-	private BlockFamily initDataFamily() {
+	public BlockFamily initDataFamily() {
 		BlockFamily family = BlockFamilyAccessor.mmodding$init(this.mainBlock);
 		((BlockFamilyAccessor) family).mmodding$getVariants().putAll(this.variants);
 		return family;
