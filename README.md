@@ -37,6 +37,7 @@ Current Modules Table:
 | mmodding-network      | Experimental | Network Object Types, Delayed Networking          |
 | mmodding-rendering    | Experimental | Common Renderers and Useful Rendering Stuff       |
 | mmodding-state        | Experimental | State Properties                                  |
+| mmodding-woodset      | Experimental | Powerful Tools to create whole WoodSets.          |
 | mmodding-worldgen     | Experimental | World Generation Systems                          |
 
 Badge for Modders:

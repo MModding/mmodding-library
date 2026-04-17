@@ -1,0 +1,17 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+mmodding {
+	loom.accessWidenerPath = file("src/main/resources/mmodding_woodset.classtweaker")
+	configureFabricModJson {
+		environment = EnvironmentTarget.ANY
+		accessWidener = "mmodding_woodset.classtweaker"
+	}
+	modules {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+		implementation("mmodding-datagen")
+		implementation("mmodding-item")
+		implementation("mmodding-block")
+		implementation("mmodding-worldgen")
+	}
+}

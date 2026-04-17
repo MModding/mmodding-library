@@ -187,6 +187,7 @@ mmodding {
 		include("mmodding-network")
 		include("mmodding-rendering")
 		include("mmodding-state")
+		include("mmodding-woodset")
 		include("mmodding-worldgen")
 
 		// Required for Full Bundle Classes
