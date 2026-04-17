@@ -35,6 +35,7 @@ Current Modules Table:
 | mmodding-java         | Experimental | Collection of Java Utilities                      |
 | mmodding-math         | Experimental | Collection of Math Utilities                      |
 | mmodding-network      | Experimental | Network Object Types, Delayed Networking          |
+| mmodding-rendering    | Experimental | Common Renderers and Useful Rendering Stuff       |
 | mmodding-state        | Experimental | State Properties                                  |
 | mmodding-worldgen     | Experimental | World Generation Systems                          |
 

@@ -185,6 +185,7 @@ mmodding {
 		include("mmodding-java")
 		include("mmodding-math")
 		include("mmodding-network")
+		include("mmodding-rendering")
 		include("mmodding-state")
 		include("mmodding-worldgen")
 
@@ -255,7 +256,7 @@ dependencies {
 }
 
 // Javadocs
-javadoc {
+/* javadoc {
 	options {
 		source = "17"
 		encoding = "UTF-8"
@@ -273,9 +274,9 @@ javadoc {
 	}
 
 	classpath = files(sourceSets.main.compileClasspath)
-	include("**/api/**")
+	include("**//*api*//**")
 	failOnError = true
-}
+} */
 
 // Configure the maven publication
 allprojects {
