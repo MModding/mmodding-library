@@ -134,7 +134,7 @@ public class PlankSetImpl implements PlankSet {
 	}
 
 	static {
-		DataContentResolver.<PlankSetImpl, BlockFamily>register(WoodSetImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input.getPlankRelatives()).initDataFamily()));
+		DataContentResolver.<PlankSetImpl, BlockFamily>register(PlankSetImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input.getPlankRelatives()).initDataFamily()));
 		DataContentResolver.<PlankSetImpl, Block>register(PlankSetImpl.class, Block.class, input -> {
 			List<Block> output = new ArrayList<>();
 			output.add(input.hangingSign);
