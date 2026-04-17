@@ -17,6 +17,7 @@ import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,24 +60,14 @@ public class BlockRelativesImpl implements BlockRelatives {
 	public <T extends Block> BlockRelatives register(BlockFamily.Variant variant, BlockFactory<T> factory) {
 		ResourceKey<Block> variantKey = ResourceKey.create(Registries.BLOCK, IdentifierUtil.extend(this.identifier, variant.getRecipeGroup()));
 		Block block = Blocks.register(variantKey, factory::make, Block.Properties.ofFullCopy(this.mainBlock));
-		this.variants.put(variant, block);
 		if (!variant.equals(BlockFamily.Variant.SIGN) && !variant.equals(BlockFamily.Variant.WALL_SIGN)) {
 			block.registerItem();
 		}
-		else if (!this.variants.containsKey(BlockFamily.Variant.SIGN) || !this.variants.containsKey(BlockFamily.Variant.WALL_SIGN)) {
-			Block signBlock;
-			Block wallSignBlock;
-			if (this.variants.containsKey(BlockFamily.Variant.SIGN)) {
-				signBlock = this.variants.get(BlockFamily.Variant.SIGN);
-				wallSignBlock = block;
-			}
-			else {
-				signBlock = block;
-				wallSignBlock = this.variants.get(BlockFamily.Variant.WALL_SIGN);
-			}
+		else if (variant.equals(BlockFamily.Variant.WALL_SIGN)) {
 			ResourceKey<Item> signKey = ResourceKey.create(Registries.ITEM, IdentifierUtil.extend(this.identifier, BlockFamily.Variant.SIGN.getRecipeGroup()));
-			Items.registerItem(signKey, properties -> new SignItem(signBlock, wallSignBlock, properties));
+			Items.registerItem(signKey, properties -> new SignItem(this.variants.get(BlockFamily.Variant.SIGN), block, properties));
 		}
+		this.variants.put(variant, block);
 		return this;
 	}
 
