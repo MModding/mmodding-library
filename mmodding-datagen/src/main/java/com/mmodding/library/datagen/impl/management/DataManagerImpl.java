@@ -35,13 +35,12 @@ public class DataManagerImpl implements DataManager {
 							.stream()
 							.filter(
 								element -> pair.first().isAssignableFrom(element.getClass()) ||
-									(DataContentResolverImpl.REGISTRY.containsKey(element.getClass())
-										&& pair.first().isAssignableFrom(DataContentResolverImpl.REGISTRY.getFirstValue(element.getClass())))
+									DataContentResolverImpl.linkExists(element.getClass(), pair.first())
 							)
 							.flatMap(
 								element -> pair.first().isAssignableFrom(element.getClass())
 									? Stream.of(element)
-									: ((DataContentResolver<Object, ?>) DataContentResolverImpl.REGISTRY.getSecondValue(element.getClass())).resolve(element).stream()
+									: ((DataContentResolver<Object, ?>) DataContentResolverImpl.resolver(element.getClass(), pair.first())).resolve(element).stream()
 							)
 							.toList()
 					);
@@ -74,7 +73,7 @@ public class DataManagerImpl implements DataManager {
 
 	@Override
 	public <T, P> ChainManager<T, P> chain(Class<?> sourceClass, Class<T> type, DataContentType<T, P> handler) {
-		return new ChainManagerImpl<>(this, sourceClass, type, handler, ignored -> false);
+		return new ChainManagerImpl<>(this, sourceClass, type, handler, ignored -> true);
 	}
 
 	public static class ChainManagerImpl<T, P> implements ChainManager<T, P> {
