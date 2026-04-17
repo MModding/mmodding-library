@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 import java.util.ArrayList;
@@ -63,7 +64,10 @@ public class BlockRelativesImpl implements BlockRelatives {
 		if (!variant.equals(BlockFamily.Variant.SIGN) && !variant.equals(BlockFamily.Variant.WALL_SIGN)) {
 			block.registerItem();
 		}
-		else if (variant.equals(BlockFamily.Variant.WALL_SIGN)) {
+		else {
+			BlockEntityType.SIGN.addValidBlock(block);
+		}
+		if (variant.equals(BlockFamily.Variant.WALL_SIGN)) {
 			ResourceKey<Item> signKey = ResourceKey.create(Registries.ITEM, IdentifierUtil.extend(this.identifier, BlockFamily.Variant.SIGN.getRecipeGroup()));
 			Items.registerItem(signKey, properties -> new SignItem(this.variants.get(BlockFamily.Variant.SIGN), block, properties));
 		}

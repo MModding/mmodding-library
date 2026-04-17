@@ -22,6 +22,7 @@ import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -51,6 +52,8 @@ public class PlankSetImpl implements PlankSet {
 		this.plankRelatives = BlockRelatives.registerPlanks(this.identifier, this.type, patch);
 		this.hangingSign = this.registerBlock("_hanging_sign", properties -> new CeilingHangingSignBlock(this.type, properties), patch);
 		this.wallHangingSign = this.registerBlock("_hangign_sign_wall", properties -> new WallHangingSignBlock(this.type, properties), patch);
+		BlockEntityType.HANGING_SIGN.addValidBlock(this.hangingSign);
+		BlockEntityType.HANGING_SIGN.addValidBlock(this.wallHangingSign);
 		Items.registerBlock(this.hangingSign, (block, properties) -> new HangingSignItem(block, this.wallHangingSign, properties), new Item.Properties().stacksTo(16));
 		this.shelf = this.registerBlock("_shelf", ShelfBlock::new, patch).registerItem();
 		this.boatEntityType = this.registerEntityType("_boat", EntityType.Builder.of(boatFactory.make(this::getBoatItem), MobCategory.MISC).noLootTable().sized(1.375f, 0.5625f).eyeHeight(0.5625f).clientTrackingRange(10));
