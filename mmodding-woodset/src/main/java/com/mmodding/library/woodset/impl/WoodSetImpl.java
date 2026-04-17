@@ -2,12 +2,14 @@ package com.mmodding.library.woodset.impl;
 
 import com.mmodding.library.block.api.catalog.AdvancedLeavesBlock;
 import com.mmodding.library.block.api.util.BlockFactory;
+import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.woodset.api.WoodSet;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -73,6 +75,7 @@ public class WoodSetImpl extends PlankSetImpl implements WoodSet {
 	}
 
 	static {
+		DataContentResolver.<WoodSetImpl, BlockFamily>register(WoodSetImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input.getPlankRelatives()).initDataFamily()));
 		DataContentResolver.<WoodSetImpl, Block>register(WoodSetImpl.class, Block.class, input -> {
 			List<Block> output = new ArrayList<>();
 			output.add(input.log);
@@ -81,7 +84,6 @@ public class WoodSetImpl extends PlankSetImpl implements WoodSet {
 			output.add(input.strippedWood);
 			output.add(input.leaves);
 			output.add(input.sapling);
-			output.addAll(input.getPlankRelatives().getEntries());
 			output.add(input.getHangingSign());
 			output.add(input.getWallHangingSign());
 			output.add(input.getShelf());

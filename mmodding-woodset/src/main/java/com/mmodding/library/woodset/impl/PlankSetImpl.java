@@ -2,6 +2,7 @@ package com.mmodding.library.woodset.impl;
 
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
+import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.woodset.api.PlankSet;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
@@ -132,8 +134,10 @@ public class PlankSetImpl implements PlankSet {
 	}
 
 	static {
+
+		DataContentResolver.<WoodSetImpl, BlockFamily>register(WoodSetImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input.getPlankRelatives()).initDataFamily()));
 		DataContentResolver.<PlankSetImpl, Block>register(PlankSetImpl.class, Block.class, input -> {
-			List<Block> output = new ArrayList<>(input.plankRelatives.getEntries());
+			List<Block> output = new ArrayList<>();
 			output.add(input.hangingSign);
 			output.add(input.wallHangingSign);
 			output.add(input.shelf);
