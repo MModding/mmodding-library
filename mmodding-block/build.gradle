@@ -11,7 +11,6 @@ mmodding {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 		implementation("mmodding-math")
-		implementation("mmodding-datagen")
 		implementation("mmodding-state")
 		implementation("mmodding-item")
 	}

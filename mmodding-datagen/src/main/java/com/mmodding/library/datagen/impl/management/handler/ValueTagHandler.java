@@ -1,6 +1,6 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
-import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.tag.ValueTagProcessor;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -14,16 +14,31 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class ValueTagTypeImpl<T> implements DataContentType<T, ValueTagProcessor<T>> {
+@ApiStatus.Internal
+public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcessor<T>> {
 
 	private final SupportedElement supportedElement;
+	private final Class<T> type;
 
-	public ValueTagTypeImpl(SupportedElement supportedElement) {
+	@Override
+	public Class<T> getType() {
+		return this.type;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ValueTagHandler(SupportedElement supportedElement) {
 		this.supportedElement = supportedElement;
+		this.type = (Class<T>) switch (supportedElement) {
+			case BLOCK -> Block.class;
+			case ITEM -> Item.class;
+			case FLUID -> Fluid.class;
+			case ENTITY_TYPE -> EntityType.class;
+		};
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.mixin.BlockFamilyAccessor;
 import com.mmodding.library.core.api.registry.IdentifierUtil;
-import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
@@ -97,10 +96,5 @@ public class BlockRelativesImpl implements BlockRelatives {
 		BlockFamily family = BlockFamilyAccessor.mmodding$init(this.mainBlock);
 		((BlockFamilyAccessor) family).mmodding$getVariants().putAll(this.variants);
 		return family;
-	}
-
-	static {
-		// even if the BlockRelatives is using the interface type in a mod, at runtime its class is the implementation class
-		DataContentResolver.register(BlockRelativesImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input).initDataFamily()));
 	}
 }

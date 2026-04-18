@@ -10,7 +10,6 @@ mmodding {
 	}
 	modules {
 		implementation("mmodding-core")
-		implementation("mmodding-datagen")
 		implementation("mmodding-block")
 		implementation("mmodding-java")
 	}

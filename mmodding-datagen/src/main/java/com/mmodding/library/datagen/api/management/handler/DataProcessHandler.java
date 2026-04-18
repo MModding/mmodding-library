@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.api.management;
+package com.mmodding.library.datagen.api.management.handler;
 
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -10,7 +10,7 @@ import java.util.List;
  * @param <T> the data type
  * @param <P> the data processor type
  */
-public interface DataContentType<T, P> {
+public interface DataProcessHandler<T, P> extends DataHandler<T> {
 
 	void handleContent(FabricDataGenerator.Pack pack, BiList<P, List<T>> contentToProcess);
 }

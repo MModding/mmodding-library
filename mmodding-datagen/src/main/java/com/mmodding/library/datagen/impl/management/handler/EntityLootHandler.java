@@ -1,7 +1,7 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
 import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
-import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -11,11 +11,20 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class EntityLootTypeImpl implements DataContentType<EntityType<?>, EntityLootProcessor> {
+@ApiStatus.Internal
+public class EntityLootHandler implements DataProcessHandler<EntityType<?>, EntityLootProcessor> {
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Class<EntityType<?>> getType() {
+		return (Class<EntityType<?>>) (Object) EntityType.class;
+	}
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess) {

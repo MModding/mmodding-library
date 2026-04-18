@@ -1,7 +1,7 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
 import com.mmodding.library.datagen.api.lang.TranslationSupport;
-import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.datagen.impl.lang.TranslationSupportImpl;
@@ -13,16 +13,26 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public class TranslationTypeImpl<T> implements DataContentType<T, TranslationProcessor<T>> {
+@ApiStatus.Internal
+public class TranslationHandler<T> implements DataProcessHandler<T, TranslationProcessor<T>> {
 
 	private final ResourceKey<? extends Registry<T>> registry;
+	private final Class<T> type;
 
-	public TranslationTypeImpl(ResourceKey<? extends Registry<T>> registry) {
+	@Override
+	public Class<T> getType() {
+		return this.type;
+	}
+
+	public TranslationHandler(ResourceKey<? extends Registry<T>> registry, Class<T> type) {
 		this.registry = registry;
+		this.type = type;
 	}
 
 	@Override
@@ -48,7 +58,6 @@ public class TranslationTypeImpl<T> implements DataContentType<T, TranslationPro
 				for (T element : elements) {
 					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
 						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValueOrThrow((ResourceKey) this.registry);
-						assert registry != null;
 						Optional<ResourceKey<T>> optional = registry.getResourceKey(element);
 						optional.ifPresentOrElse(
 							key -> {

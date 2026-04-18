@@ -9,9 +9,7 @@ mmodding {
 	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
-		implementation("mmodding-datagen")
 		implementation("mmodding-item")
 		implementation("mmodding-block")
-		implementation("mmodding-worldgen")
 	}
 }

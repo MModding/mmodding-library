@@ -1,7 +1,6 @@
 package com.mmodding.library.block.impl.wrapper;
 
 import com.mmodding.library.block.api.wrapper.BlockHeap;
-import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.function.Mapper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
@@ -56,10 +55,5 @@ public class BlockHeapImpl implements BlockHeap {
 
 	public void forEach(Consumer<Block> consumer) {
 		this.blocks.forEach((name, block) -> consumer.accept(block));
-	}
-
-	static {
-		// even if the BlockRelatives is using the interface type in a mod, at runtime its class is the implementation class
-		DataContentResolver.register(BlockHeapImpl.class, Block.class, BlockHeap::getEntries);
 	}
 }

@@ -10,6 +10,8 @@ mmodding {
 	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
+		implementation("mmodding-block")
+		implementation("mmodding-woodset")
 	}
 	configureTestmod {
 		withEntrypoints {

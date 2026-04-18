@@ -1,6 +1,6 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
-import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.model.item.ItemModelProcessor;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
@@ -9,9 +9,17 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.List;
 
-public class ItemModelTypeImpl implements DataContentType<Item, ItemModelProcessor> {
+@ApiStatus.Internal
+public class ItemModelHandler implements DataProcessHandler<Item, ItemModelProcessor> {
+
+	@Override
+	public Class<Item> getType() {
+		return Item.class;
+	}
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<ItemModelProcessor, List<Item>> contentToProcess) {

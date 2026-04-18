@@ -1,6 +1,6 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
-import com.mmodding.library.datagen.api.management.DataContentType;
+import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.recipe.RecipeProcessor;
 import com.mmodding.library.datagen.impl.recipe.RecipeHelperImpl;
 import com.mmodding.library.java.api.list.BiList;
@@ -11,10 +11,19 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.ApiStatus;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class RecipeTypeImpl<T extends ItemLike> implements DataContentType<T, RecipeProcessor<T>> {
+@ApiStatus.Internal
+public class RecipeHandler<T extends ItemLike> implements DataProcessHandler<T, RecipeProcessor<T>> {
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Class<T> getType() {
+		return (Class<T>) ItemLike.class;
+	}
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<RecipeProcessor<T>, List<T>> contentToProcess) {
@@ -22,6 +31,7 @@ public class RecipeTypeImpl<T extends ItemLike> implements DataContentType<T, Re
 	}
 
 	private static class AutomatedRecipeProvider<T extends ItemLike> extends FabricRecipeProvider {
+
 
 		private final BiList<RecipeProcessor<T>, List<T>> contentToProcess;
 

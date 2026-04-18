@@ -2,8 +2,6 @@ package com.mmodding.library.woodset.impl;
 
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
-import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
-import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.woodset.api.PlankSet;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
@@ -11,7 +9,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
@@ -30,8 +27,6 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 @ApiStatus.Internal
@@ -131,28 +126,5 @@ public class PlankSetImpl implements PlankSet {
 	@Override
 	public Item getChestBoatItem() {
 		return this.chestBoatItem;
-	}
-
-	static {
-		DataContentResolver.<PlankSetImpl, BlockFamily>register(PlankSetImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input.getPlankRelatives()).initDataFamily()));
-		DataContentResolver.<PlankSetImpl, Block>register(PlankSetImpl.class, Block.class, input -> {
-			List<Block> output = new ArrayList<>();
-			output.add(input.hangingSign);
-			output.add(input.wallHangingSign);
-			output.add(input.shelf);
-			return output;
-		});
-		DataContentResolver.<PlankSetImpl, Item>register(PlankSetImpl.class, Item.class, input -> {
-			List<Item> output = new ArrayList<>();
-			output.add(input.boatItem);
-			output.add(input.chestBoatItem);
-			return output;
-		});
-		DataContentResolver.<PlankSetImpl, EntityType<?>>register(PlankSetImpl.class, EntityType.class, input -> {
-			List<EntityType<?>> output = new ArrayList<>();
-			output.add(input.boatEntityType);
-			output.add(input.chestBoatEntityType);
-			return output;
-		});
 	}
 }
