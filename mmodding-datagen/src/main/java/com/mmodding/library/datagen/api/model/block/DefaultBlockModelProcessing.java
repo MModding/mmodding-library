@@ -25,7 +25,7 @@ public class DefaultBlockModelProcessing {
 	public static void createChain(BlockModelGenerators generator, Block block) {
 		MultiVariant variant = BlockModelGenerators.plainVariant(TexturedModel.CHAIN.create(block, generator.modelOutput));
 		generator.createAxisAlignedPillarBlockCustomModel(block, variant);
-		generator.registerSimpleFlatItemModel(block);
+		generator.registerSimpleFlatItemModel(block.asItem());
 	}
 
 	/**
