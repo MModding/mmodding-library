@@ -11,6 +11,7 @@ mmodding {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 		implementation("mmodding-block")
+		implementation("mmodding-item")
 		implementation("mmodding-woodset")
 	}
 	configureTestmod {

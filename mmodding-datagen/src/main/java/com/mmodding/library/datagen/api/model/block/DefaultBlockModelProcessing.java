@@ -3,6 +3,7 @@ package com.mmodding.library.datagen.api.model.block;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mojang.math.Quadrant;
 import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
@@ -20,6 +21,12 @@ import static net.minecraft.client.data.models.BlockModelGenerators.variant;
 public class DefaultBlockModelProcessing {
 
 	public static final ModelTemplate LADDER = ModelTemplates.create("ladder", TextureSlot.TEXTURE, TextureSlot.PARTICLE);
+
+	public static void createChain(BlockModelGenerators generator, Block block) {
+		MultiVariant variant = BlockModelGenerators.plainVariant(TexturedModel.CHAIN.create(block, generator.modelOutput));
+		generator.createAxisAlignedPillarBlockCustomModel(block, variant);
+		generator.registerSimpleFlatItemModel(block);
+	}
 
 	/**
 	 * Registers a ladder-like block state, block model, and item model.
