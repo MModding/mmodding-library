@@ -13,9 +13,8 @@ import java.util.Map;
 @Mixin(SpriteLoader.Preparations.class)
 public class SpriteLoaderPreparationsMixin {
 
-	@SuppressWarnings("unchecked")
 	@WrapOperation(method = "getSprite", at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"))
 	private <K, V> V applyAliases(Map<K, V> instance, K o, Operation<V> original) {
-		return (V) TextureAliasesImpl.applyAliases((Identifier) o);
+		return original.call(instance, TextureAliasesImpl.applyAliases((Identifier) o));
 	}
 }
