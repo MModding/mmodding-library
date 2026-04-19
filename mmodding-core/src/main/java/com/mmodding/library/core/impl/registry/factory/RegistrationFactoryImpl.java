@@ -4,8 +4,9 @@ import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
+
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 
@@ -21,9 +22,9 @@ public class RegistrationFactoryImpl<T> implements RegistrationFactory<T> {
 		this.namespace = namespace;
 	}
 
-	public RegistrationFactoryImpl(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> registerable, String namespace) {
+	public RegistrationFactoryImpl(ResourceKey<? extends Registry<T>> registry, FabricDynamicRegistryProvider.Entries registerable, String namespace) {
 		this.registry = registry;
-		this.biFunction = (key, value) -> { registerable.register(key, value); return value; };
+		this.biFunction = (key, value) -> { registerable.add(key, value); return value; };
 		this.namespace = namespace;
 	}
 

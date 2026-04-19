@@ -4,10 +4,9 @@ import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.worldgen.api.feature.ConfiguredFeaturePack;
 import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
 import com.mmodding.library.worldgen.impl.feature.replication.PlacementModifiersImpl;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -20,7 +19,7 @@ import java.util.function.Function;
 public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implements ConfiguredFeaturePack<FC> {
 
 	final ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureKey;
-	private final BiList<ResourceKey<PlacedFeature>, Function<BootstrapContext<PlacedFeature>, List<PlacementModifier>>> placedFeatures;
+	private final BiList<ResourceKey<PlacedFeature>, Function<FabricDynamicRegistryProvider.Entries, List<PlacementModifier>>> placedFeatures;
 
 	public ConfiguredFeaturePackImpl(ResourceKey<ConfiguredFeature<?, ?>> key) {
 		this.configuredFeatureKey = key;
@@ -41,7 +40,7 @@ public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implemen
 	@Override
 	public ConfiguredFeaturePack<FC> replicatePlacedFeature(ResourceKey<PlacedFeature> source, ResourceKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher) {
 		this.placedFeatures.add(key, placedFeatures -> {
-			PlacedFeature sourcePlacedFeature = placedFeatures.lookup(Registries.PLACED_FEATURE).getOrThrow(source).value();
+			PlacedFeature sourcePlacedFeature = placedFeatures.getLookup(Registries.PLACED_FEATURE).getOrThrow(source).value();
 			PlacementModifiersImpl modifiers = new PlacementModifiersImpl(sourcePlacedFeature.placement());
 			patcher.accept(modifiers);
 			return modifiers.retrieve();
@@ -50,8 +49,8 @@ public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implemen
 	}
 
 	@Override
-	public void registerPlacedFeatures(BootstrapContext<PlacedFeature> placedFeatures) {
-		Holder.Reference<ConfiguredFeature<?, ?>> entry = placedFeatures.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(this.configuredFeatureKey);
-		this.placedFeatures.forEach((placedFeatureKey, modifiers) -> PlacementUtils.register(placedFeatures, placedFeatureKey, entry, modifiers.apply(placedFeatures)));
+	public void register(FabricDynamicRegistryProvider.Entries registrable) {
+		Holder.Reference<ConfiguredFeature<?, ?>> entry = registrable.getLookup(Registries.CONFIGURED_FEATURE).getOrThrow(this.configuredFeatureKey);
+		this.placedFeatures.forEach((placedFeatureKey, modifiers) -> registrable.add(placedFeatureKey, new PlacedFeature(entry, List.copyOf(modifiers.apply(registrable)))));
 	}
 }

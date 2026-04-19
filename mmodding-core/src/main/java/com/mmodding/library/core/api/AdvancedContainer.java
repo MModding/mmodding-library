@@ -3,9 +3,9 @@ package com.mmodding.library.core.api;
 import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
 import com.mmodding.library.core.api.registry.factory.ResourceKeyFactory;
 import com.mmodding.library.core.impl.AdvancedContainerImpl;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.slf4j.Logger;
@@ -77,10 +77,10 @@ public interface AdvancedContainer extends ModContainer {
 
 	/**
 	 * A registration method filling the mod namespace automatically.
-	 * @see BootstrapContext#register(ResourceKey, Object)
+	 * @see FabricDynamicRegistryProvider.Entries#add(ResourceKey, Object)
 	 */
-	default <T> T register(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> registerable, String path, T element) {
-		registerable.register(ResourceKey.create(registry, Identifier.tryBuild(this.getMetadata().getId(), path)), element);
+	default <T> T register(ResourceKey<? extends Registry<T>> registry, FabricDynamicRegistryProvider.Entries registerable, String path, T element) {
+		registerable.add(ResourceKey.create(registry, Identifier.tryBuild(this.getMetadata().getId(), path)), element);
 		return element;
 	}
 
@@ -94,12 +94,12 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Allows to make a bunch of registrations for a specified {@link BootstrapContext}.
+	 * Allows to make a bunch of registrations for a specified {@link FabricDynamicRegistryProvider.Entries}.
 	 * @param registry the registry key of the registry
 	 * @param registerable the registrable
 	 * @param consumer the registrations
 	 */
-	default <T> void register(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> registerable, Consumer<RegistrationFactory<T>> consumer) {
+	default <T> void register(ResourceKey<? extends Registry<T>> registry, FabricDynamicRegistryProvider.Entries registerable, Consumer<RegistrationFactory<T>> consumer) {
 		consumer.accept(RegistrationFactory.create(registry, registerable, this.getMetadata().getId()));
 	}
 }

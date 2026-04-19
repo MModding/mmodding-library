@@ -1,8 +1,7 @@
 package com.mmodding.library.core.api.management;
 
-import com.mmodding.library.core.api.management.content.*;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
+import com.mmodding.library.core.api.management.content.ContentProvider;
+import com.mmodding.library.core.api.management.content.ResourceProvider;
 
 public interface ElementsManager {
 
@@ -14,13 +13,11 @@ public interface ElementsManager {
 	ElementsManager content(ContentProvider provider);
 
 	/**
-	 * Adds a {@link ResourceProvider} which allows generating json files of builtin registry elements.
-	 * @param key the registry
-	 * @param provider the bootstrap provider
+	 * Adds a {@link ResourceProvider} which allows generating JSON files of builtin registry elements.
+	 * @param provider the resource provider
 	 * @return the builder
-	 * @param <T> the element class
 	 */
-	<T> ElementsManager resource(ResourceKey<Registry<T>> key, ResourceProvider<T> provider);
+	ElementsManager resource(ResourceProvider provider);
 
 	/**
 	 * Adds a {@link ContentProvider} if a specific mod is loaded.

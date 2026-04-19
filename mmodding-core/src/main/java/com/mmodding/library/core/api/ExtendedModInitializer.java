@@ -2,11 +2,10 @@ package com.mmodding.library.core.api;
 
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.impl.management.ElementsManagerImpl;
+import com.mmodding.library.core.impl.management.content.ResourceHandlerContainer;
 import com.mmodding.library.core.impl.registry.data.DatagenContainerCallback;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import org.jetbrains.annotations.ApiStatus;
 
 public interface ExtendedModInitializer extends ModInitializer {
@@ -21,26 +20,12 @@ public interface ExtendedModInitializer extends ModInitializer {
 		this.setupManager(manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.loadElements(advanced);
-		DatagenContainerCallback.EVENT.register(containers -> {
-			for (int i = 0; i < containers.size(); i++) {
-				EntrypointContainer<DataGeneratorEntrypoint> container = containers.get(i);
-				if (container.getProvider().getMetadata().getId().equals(advanced.getMetadata().getId())) {
-					containers.set(i, DatagenContainerCallback.createDummyEntrypointContainer(
-						advanced.getMetadata().getId(),
-						builder -> manager.loadBootstraps(advanced, builder),
-						containers.get(i).getEntrypoint()
-					));
-					return;
-				}
-			}
-			containers.add(
-				DatagenContainerCallback.createDummyEntrypointContainer(
-					advanced.getMetadata().getId(),
-					builder -> manager.loadBootstraps(advanced, builder),
-					null
-				)
-			);
-		});
+		DatagenContainerCallback.EVENT.register(containers -> containers.add(
+			ResourceHandlerContainer.createEntrypointContainer(
+				advanced.getMetadata().getId(),
+				entries -> manager.loadBootstraps(advanced, entries)
+			)
+		));
 		this.onInitialize(advanced);
 	}
 
