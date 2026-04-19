@@ -2,6 +2,7 @@ package com.mmodding.library.datagen.impl.management;
 
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.block.impl.wrapper.BlockHeapImpl;
+import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.management.DataManager;
 import com.mmodding.library.datagen.api.management.handler.DataHandler;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
@@ -11,6 +12,7 @@ import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.java.api.list.TriList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
@@ -127,5 +129,6 @@ public class DataManagerImpl implements DataManager {
 
 	static {
 		DataContentResolver.register(BlockHeapImpl.class, Block.class, BlockHeap::getEntries);
+		DataContentResolver.register(BlockRelativesImpl.class, BlockFamily.class, input -> List.of(((BlockRelativesImpl) input).initDataFamily()));
 	}
 }

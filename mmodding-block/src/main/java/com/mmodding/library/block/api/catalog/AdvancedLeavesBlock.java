@@ -1,5 +1,6 @@
 package com.mmodding.library.block.api.catalog;
 
+import com.mmodding.library.java.api.color.RGB;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,11 +30,22 @@ import org.jetbrains.annotations.Nullable;
 public class AdvancedLeavesBlock extends LeavesBlock {
 
 	private final ParticleOptions leafParticle;
+	private final RGB itemTintColor;
 
-	// Leave leafParticle parameter as null to use tinted leaf particles.
-	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, Properties settings) {
+	// Tinted
+	public AdvancedLeavesBlock(float leafParticleChance, RGB itemTintColor, Properties properties) {
+		this(leafParticleChance, null, itemTintColor, properties);
+	}
+
+	// Untinted
+	public AdvancedLeavesBlock(float leafParticleChance, ParticleOptions leafParticle, Properties properties) {
+		this(leafParticleChance, leafParticle, null, properties);
+	}
+
+	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable RGB itemTintColor, Properties settings) {
 		super(leafParticleChance, settings);
 		this.leafParticle = leafParticle;
+		this.itemTintColor = itemTintColor;
 		this.registerDefaultState(
 			this.defaultBlockState()
 				.setValue(this.getDistanceProperty(), this.getMaxDistance())
@@ -65,6 +77,15 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 
 	public boolean areLeavesConnected() {
 		return true;
+	}
+
+	public boolean isTinted() {
+		return this.itemTintColor != null;
+	}
+
+	@Nullable
+	public RGB getItemTintColor() {
+		return this.itemTintColor;
 	}
 
 	@Override

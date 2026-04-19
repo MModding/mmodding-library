@@ -1,7 +1,6 @@
 package com.mmodding.library.datagen.impl.management.handler;
 
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
-import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
@@ -17,13 +16,15 @@ import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.tags.TagAppender;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SignBlock;
+import net.minecraft.world.level.block.WallSignBlock;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashSet;
@@ -49,7 +50,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		pack.addProvider((output, future) -> new AutomatedBlockFamilyItemTags(output, future, blockTags));
 	}
 
-	private static class AutomatedBlockFamilyTranslations extends MModdingLanguageProvider {
+	static class AutomatedBlockFamilyTranslations extends MModdingLanguageProvider {
 
 		private final List<BlockFamily> families;
 
@@ -60,14 +61,18 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 
 		@Override
 		public void generateTranslations(HolderLookup.Provider lookup, TranslationBuilder translationBuilder) {
-			TranslationProcessor<Block> classicProcessor = DefaultLangProcessors.getClassic();
 			this.families.forEach(family -> {
-				ResourceKey<Block> mainKey = BuiltInRegistries.BLOCK.getResourceKey(family.getBaseBlock()).orElseThrow();
-				translationBuilder.add(family.getBaseBlock(), classicProcessor.process(mainKey));
-				family.getVariants().values().forEach(block -> {
-					ResourceKey<Block> variantKey = BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow();
-					translationBuilder.add(block, classicProcessor.process(variantKey));
+				Identifier mainId = BuiltInRegistries.BLOCK.getKey(family.getBaseBlock());
+				translationBuilder.add(family.getBaseBlock(), DefaultLangProcessors.CLASSIC.process(mainId));
+				family.getVariants().values().stream().filter(block -> !(block instanceof SignBlock || block instanceof WallSignBlock)).toList().forEach(block -> {
+					Identifier variantId = BuiltInRegistries.BLOCK.getKey(block);
+					translationBuilder.add(block, DefaultLangProcessors.CLASSIC.process(variantId));
 				});
+				if (family.getVariants().containsKey(BlockFamily.Variant.SIGN)) {
+					Item item = family.get(BlockFamily.Variant.SIGN).asItem();
+					Identifier identifier = BuiltInRegistries.ITEM.getKey(item);
+					translationBuilder.add(item, DefaultLangProcessors.CLASSIC.process(identifier));
+				}
 			});
 		}
 
@@ -77,7 +82,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		}
 	}
 
-	private static class AutomatedBlockFamilyModels extends FabricModelProvider {
+	static class AutomatedBlockFamilyModels extends FabricModelProvider {
 
 		private final List<BlockFamily> families;
 
@@ -104,7 +109,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		}
 	}
 
-	private static class AutomatedBlockFamilyRecipes extends FabricRecipeProvider {
+	static class AutomatedBlockFamilyRecipes extends FabricRecipeProvider {
 
 		private final List<BlockFamily> families;
 
@@ -130,7 +135,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		}
 	}
 
-	private static class AutomatedBlockFamilyBlockTags extends FabricTagsProvider.BlockTagsProvider {
+	static class AutomatedBlockFamilyBlockTags extends FabricTagsProvider.BlockTagsProvider {
 
 		private final List<BlockFamily> families;
 		private final Set<TagKey<Block>> memory;
@@ -162,7 +167,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 			});
 		}
 
-		protected TagAppender<Block, Block> buildAndMemorize(TagKey<Block> tag) {
+		private TagAppender<Block, Block> buildAndMemorize(TagKey<Block> tag) {
 			this.memory.add(tag);
 			return this.valueLookupBuilder(tag);
 		}
@@ -173,7 +178,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		}
 	}
 
-	private static class AutomatedBlockFamilyItemTags extends FabricTagsProvider.ItemTagsProvider {
+	static class AutomatedBlockFamilyItemTags extends FabricTagsProvider.ItemTagsProvider {
 
 		private final Set<TagKey<Block>> memory;
 
@@ -196,7 +201,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 			this.copyIfMemorized(BlockTags.WALLS, ItemTags.WALLS);
 		}
 
-		protected void copyIfMemorized(TagKey<Block> blockTag, TagKey<Item> itemTag) {
+		private void copyIfMemorized(TagKey<Block> blockTag, TagKey<Item> itemTag) {
 			if (this.memory.contains(blockTag)) this.copy(blockTag, itemTag);
 		}
 

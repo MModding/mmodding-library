@@ -12,15 +12,15 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @ApiStatus.Internal
-public class TranslationHandler<T> implements DataProcessHandler<T, TranslationProcessor<T>> {
+public class TranslationHandler<T> implements DataProcessHandler<T, TranslationProcessor> {
 
 	private final ResourceKey<? extends Registry<T>> registry;
 	private final Class<T> type;
@@ -36,16 +36,16 @@ public class TranslationHandler<T> implements DataProcessHandler<T, TranslationP
 	}
 
 	@Override
-	public void handleContent(FabricDataGenerator.Pack pack, BiList<TranslationProcessor<T>, List<T>> contentToProcess) {
+	public void handleContent(FabricDataGenerator.Pack pack, BiList<TranslationProcessor, List<T>> contentToProcess) {
 		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output, future));
 	}
 
 	private static class AutomatedLanguageProvider<T> extends MModdingLanguageProvider {
 
 		private final ResourceKey<? extends Registry<T>> registry;
-		private final BiList<TranslationProcessor<T>, List<T>> contentToProcess;
+		private final BiList<TranslationProcessor, List<T>> contentToProcess;
 
-		protected AutomatedLanguageProvider(ResourceKey<? extends Registry<T>> registry, BiList<TranslationProcessor<T>, List<T>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+		protected AutomatedLanguageProvider(ResourceKey<? extends Registry<T>> registry, BiList<TranslationProcessor, List<T>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future);
 			this.registry = registry;
 			this.contentToProcess = contentToProcess;
@@ -58,18 +58,14 @@ public class TranslationHandler<T> implements DataProcessHandler<T, TranslationP
 				for (T element : elements) {
 					if (TranslationSupportImpl.REGISTRY.containsKey(this.registry)) {
 						Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValueOrThrow((ResourceKey) this.registry);
-						Optional<ResourceKey<T>> optional = registry.getResourceKey(element);
-						optional.ifPresentOrElse(
-							key -> {
-								TranslationSupport.TranslationCallback callback = translation -> translationBuilder.add(
-									translation,
-									processor.process(key)
-								);
-								TranslationSupportImpl.REGISTRY.get(this.registry).accept(callback, element);
-							},
-							() -> { throw new IllegalStateException(element + " does not exist in " + this.registry + "!"); }
-						);
-
+						Identifier identifier = registry.getKey(element);
+						if (identifier != null) {
+							TranslationSupport.TranslationCallback callback = translation -> translationBuilder.add(translation, processor.process(identifier));
+							TranslationSupportImpl.REGISTRY.get(this.registry).accept(callback, element);
+						}
+						else {
+							throw new IllegalStateException(element + " does not exist in " + this.registry + "!");
+						}
 					}
 					else {
 						throw new IllegalStateException(this.registry + " is not a valid translation support type!");

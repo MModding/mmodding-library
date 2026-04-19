@@ -11,6 +11,7 @@ import com.mmodding.library.datagen.api.recipe.RecipeProcessor;
 import com.mmodding.library.datagen.api.tag.ValueTagProcessor;
 import com.mmodding.library.datagen.api.tag.KeyTagProcessor;
 import com.mmodding.library.datagen.impl.management.handler.*;
+import com.mmodding.library.woodset.api.WoodSet;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.ResourceKey;
@@ -41,9 +42,11 @@ public class DefaultDataHandlers {
 		return new KeyTagHandler<>(registry, type);
 	}
 
-	public static <T> DataProcessHandler<T, TranslationProcessor<T>> getTranslationHandler(ResourceKey<? extends Registry<T>> registry, Class<T> type) {
+	public static <T> DataProcessHandler<T, TranslationProcessor> getTranslationHandler(ResourceKey<? extends Registry<T>> registry, Class<T> type) {
 		return new TranslationHandler<>(registry, type);
 	}
 
 	public static final FinalDataHandler<BlockFamily> BLOCK_FAMILIES = new BlockFamilyFinalDataHandler();
+
+	public static final FinalDataHandler<WoodSet> WOOD_SETS = new WoodSetFinalDataHandler();
 }
