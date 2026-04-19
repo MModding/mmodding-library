@@ -44,7 +44,7 @@ public class ElementsManagerImpl implements ElementsManager {
 	@SuppressWarnings("unchecked")
 	public <T> ElementsManagerImpl resource(ResourceKey<Registry<T>> key, ResourceProvider<T> provider) {
 		if (System.getProperty("fabric-api.datagen") != null) {
-			this.resourceProviders.add((ResourceKey<Registry<?>>) (Registry<?>) key, provider);
+			this.resourceProviders.add((ResourceKey<Registry<?>>) (ResourceKey<?>) key, provider);
 		}
 		return this;
 	}
