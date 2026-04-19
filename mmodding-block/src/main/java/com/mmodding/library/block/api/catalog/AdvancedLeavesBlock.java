@@ -1,6 +1,6 @@
 package com.mmodding.library.block.api.catalog;
 
-import com.mmodding.library.java.api.color.RGB;
+import com.mmodding.library.java.api.color.Color;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,10 +30,10 @@ import org.jetbrains.annotations.Nullable;
 public class AdvancedLeavesBlock extends LeavesBlock {
 
 	private final ParticleOptions leafParticle;
-	private final RGB itemTintColor;
+	private final Color itemTintColor;
 
 	// Tinted
-	public AdvancedLeavesBlock(float leafParticleChance, RGB itemTintColor, Properties properties) {
+	public AdvancedLeavesBlock(float leafParticleChance, Color itemTintColor, Properties properties) {
 		this(leafParticleChance, null, itemTintColor, properties);
 	}
 
@@ -42,7 +42,7 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 		this(leafParticleChance, leafParticle, null, properties);
 	}
 
-	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable RGB itemTintColor, Properties settings) {
+	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable Color itemTintColor, Properties settings) {
 		super(leafParticleChance, settings);
 		this.leafParticle = leafParticle;
 		this.itemTintColor = itemTintColor;
@@ -84,7 +84,7 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 	}
 
 	@Nullable
-	public RGB getItemTintColor() {
+	public Color getItemTintColor() {
 		return this.itemTintColor;
 	}
 

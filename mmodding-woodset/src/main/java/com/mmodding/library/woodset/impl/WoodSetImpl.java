@@ -29,6 +29,8 @@ import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Function;
@@ -60,21 +62,22 @@ public class WoodSetImpl implements WoodSet {
 	private final Item boatItem;
 	private final Item chestBoatItem;
 
-	public WoodSetImpl(String namespace, String name, String log, String wood, boolean burnable, LogDisplay logDisplay, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, TreeGrower grower, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch) {
+	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, String woodName, boolean burnable, SoundType woodSoundType, LogDisplay logDisplay, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch) {
 		this.identifier = Identifier.fromNamespaceAndPath(namespace, name);
 		this.type = woodTypeBuilder.build(this.identifier, setTypeBuilder.register(this.identifier));
-		this.log = this.registerBlock("_" + log, RotatedPillarBlock::new, patch).registerItem();
-		this.wood = this.registerBlock("_" + wood, RotatedPillarBlock::new, patch).registerItem();
-		this.strippedLog = this.registerBlock("stripped_", "_" + log, RotatedPillarBlock::new, patch).registerItem();
-		this.strippedWood = this.registerBlock("stripped_", "_" + wood, RotatedPillarBlock::new, patch).registerItem();
+		this.log = this.registerBlock("_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.wood = this.registerBlock("_" + woodName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.strippedLog = this.registerBlock("stripped_", "_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.strippedWood = this.registerBlock("stripped_", "_" + woodName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
 		StrippableBlockRegistry.register(this.log, this.strippedLog);
 		StrippableBlockRegistry.register(this.wood, this.strippedWood);
 		this.logsBlockTag = TagKey.create(Registries.BLOCK, this.identifier.withPath(path -> path + "_logs"));
 		this.logsItemTag = TagKey.create(Registries.ITEM, this.identifier.withPath(path -> path + "_logs"));
 		this.burnable = burnable;
 		this.logDisplay = logDisplay;
-		this.leaves = this.registerBlock("_leaves", leavesFactory, patch).registerItem();
-		this.sapling = this.registerBlock("_sapling", properties -> new SaplingBlock(grower, properties), patch).registerItem();
+		this.leaves = this.registerBlock("_leaves", leavesFactory, _ -> patch.map(Blocks.leavesProperties(leavesSoundType))).registerItem();
+		BlockBehaviour.Properties saplingSettings = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(saplingSoundType).pushReaction(PushReaction.DESTROY);
+		this.sapling = this.registerBlock("_sapling", _ -> new SaplingBlock(grower, saplingSettings), patch).registerItem();
 		this.pottedSapling = this.registerBlock("potted_", "_sapling", properties -> new FlowerPotBlock(this.sapling, properties), patch);
 		this.plankRelatives = BlockRelatives.registerPlanks(this.identifier, this.type, patch);
 		this.hangingSign = this.registerBlock("_hanging_sign", properties -> new CeilingHangingSignBlock(this.type, properties), patch);
@@ -82,7 +85,8 @@ public class WoodSetImpl implements WoodSet {
 		BlockEntityType.HANGING_SIGN.addValidBlock(this.hangingSign);
 		BlockEntityType.HANGING_SIGN.addValidBlock(this.wallHangingSign);
 		Items.registerBlock(this.hangingSign, (block, properties) -> new HangingSignItem(block, this.wallHangingSign, properties), new Item.Properties().stacksTo(16));
-		this.shelf = this.registerBlock("_shelf", ShelfBlock::new, patch).registerItem();
+		this.shelf = this.registerBlock("_shelf", ShelfBlock::new, properties -> patch.map(properties.sound(SoundType.SHELF))).registerItem();
+		BlockEntityType.SHELF.addValidBlock(this.shelf);
 		this.boatEntityType = this.registerEntityType("_boat", EntityType.Builder.of(boatFactory.make(this::getBoatItem), MobCategory.MISC).noLootTable().sized(1.375f, 0.5625f).eyeHeight(0.5625f).clientTrackingRange(10));
 		this.chestBoatEntityType = this.registerEntityType("_chest_boat", EntityType.Builder.of(chestBoatFactory.make(this::getChestBoatItem), MobCategory.MISC).noLootTable().sized(1.375f, 0.5625f).eyeHeight(0.5625f).clientTrackingRange(10));
 		this.boatItem = this.registerItem("_boat", properties -> new BoatItem(this.boatEntityType, properties), new Item.Properties().stacksTo(1));
