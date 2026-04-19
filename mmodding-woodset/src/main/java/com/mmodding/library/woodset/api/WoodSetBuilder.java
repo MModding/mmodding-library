@@ -4,6 +4,7 @@ import com.mmodding.library.block.api.catalog.AdvancedLeavesBlock;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.function.AutoMapper;
+import com.mmodding.library.woodset.impl.WoodSetBuilderImpl;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.core.particles.ParticleOptions;
@@ -29,7 +30,7 @@ public interface WoodSetBuilder {
 	 * @return the newly created builder
 	 */
 	static WoodSetBuilder create(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder) {
-		return null;
+		return new WoodSetBuilderImpl(namespace, name, woodTypeBuilder, setTypeBuilder);
 	}
 
 	/**
