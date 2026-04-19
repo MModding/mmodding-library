@@ -83,7 +83,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 
 		private void block(TranslationBuilder builder, Block block) {
-			builder.add(block, DefaultLangProcessors.CHEST_BOAT.process(BuiltInRegistries.BLOCK.getKey(block)));
+			builder.add(block, DefaultLangProcessors.CLASSIC.process(BuiltInRegistries.BLOCK.getKey(block)));
 		}
 
 		@Override
