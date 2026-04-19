@@ -77,7 +77,7 @@ public class WoodSetImpl implements WoodSet {
 		this.logDisplay = logDisplay;
 		this.leaves = this.registerBlock("_leaves", leavesFactory, _ -> patch.map(Blocks.leavesProperties(leavesSoundType))).registerItem();
 		BlockBehaviour.Properties saplingSettings = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(saplingSoundType).pushReaction(PushReaction.DESTROY);
-		this.sapling = this.registerBlock("_sapling", _ -> new SaplingBlock(grower, saplingSettings), patch).registerItem();
+		this.sapling = this.registerBlock("_sapling", properties -> new SaplingBlock(grower, properties), _ -> patch.map(saplingSettings)).registerItem();
 		this.pottedSapling = this.registerBlock("potted_", "_sapling", properties -> new FlowerPotBlock(this.sapling, properties), patch);
 		this.plankRelatives = BlockRelatives.registerPlanks(this.identifier, this.type, patch);
 		this.hangingSign = this.registerBlock("_hanging_sign", properties -> new CeilingHangingSignBlock(this.type, properties), patch);
