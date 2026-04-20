@@ -10,7 +10,7 @@ public interface CustomItemProperty<T> {
 	/**
 	 * Creates the {@link CustomItemProperty} instance for these parameters.
 	 */
-	static <T> CustomItemProperty<T> of(Identifier identifier, Class<T> type, T defaultValue) {
+	static <T> CustomItemProperty<T> create(Identifier identifier, Class<T> type, T defaultValue) {
 		return new CustomItemPropertyImpl<>(identifier, type, defaultValue);
 	}
 

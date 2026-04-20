@@ -14,7 +14,7 @@ public interface CustomBlockProperty<T> {
 	/**
 	 * Creates the {@link CustomBlockProperty} instance for these parameters.
 	 */
-	static <T> CustomBlockProperty<T> of(Identifier identifier, Class<T> type, T defaultValue) {
+	static <T> CustomBlockProperty<T> create(Identifier identifier, Class<T> type, T defaultValue) {
 		return new CustomBlockPropertyImpl<>(identifier, type, defaultValue);
 	}
 
