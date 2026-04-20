@@ -61,7 +61,12 @@ public abstract class DoubleCropBlock extends PitcherCropBlock {
 		final RandomSource random
 	) {
 		if (this.isDoubleBlock(this.getAge(state))) {
-			return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
+			DoubleBlockHalf half = state.getValue(HALF);
+			if (directionToNeighbour.getAxis() != Direction.Axis.Y || half == DoubleBlockHalf.LOWER != (directionToNeighbour == Direction.UP) || neighbourState.is(this) && neighbourState.getValue(HALF) != half) {
+				return half == DoubleBlockHalf.LOWER && directionToNeighbour == Direction.DOWN && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
+			} else {
+				return Blocks.AIR.defaultBlockState();
+			}
 		} else {
 			return state.canSurvive(level, pos) ? state : Blocks.AIR.defaultBlockState();
 		}
