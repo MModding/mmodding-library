@@ -10,6 +10,7 @@
     "BlockMixin",
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
+    "PitcherCropBlockMixin",
     "PointedDripstoneBlockAccessor"
   ],
   "client": [],
