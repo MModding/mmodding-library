@@ -3,6 +3,7 @@ package com.mmodding.library.datagen.api.management;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
 
+import java.util.Set;
 import java.util.function.Predicate;
 
 public interface DataManager {
@@ -24,6 +25,17 @@ public interface DataManager {
 	 * @param <P> the data processor class type
 	 */
 	<T, P> void task(Class<?> source, DataProcessHandler<T, P> handler, P processor);
+
+	/**
+	 * Extracts and processes selected contents of a specific type from a specified class to perform data generation associated to the content.
+	 * @param source the class to extract contents from
+	 * @param handler the data handler
+	 * @param selection the selection
+	 * @param <T> the data class type
+	 * @param <P> the data processor class type
+	 * @param processor the data processor
+	 */
+	<T, P> void task(Class<?> source, DataProcessHandler<T, P> handler, Set<T> selection, P processor);
 
 	/**
 	 * Extracts and processes filtered contents of a specific type from a specified class to perform data generation associated to the content.
@@ -48,6 +60,14 @@ public interface DataManager {
 	<T, P> ChainManager<T, P> chain(Class<?> source, DataProcessHandler<T, P> handler);
 
 	interface ChainManager<T, P> {
+
+		/**
+		 * Chains a new selection for elements reaching this point, and processes them.
+		 * @param selection the selection
+		 * @param processor the processor
+		 * @return the chain manager
+		 */
+		ChainManager<T, P> chain(Set<T> selection, P processor);
 
 		/**
 		 * Chains a new filter for elements reaching this point, and processes them.

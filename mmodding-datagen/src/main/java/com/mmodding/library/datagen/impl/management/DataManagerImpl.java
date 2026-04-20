@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -85,7 +86,15 @@ public class DataManagerImpl implements DataManager {
 	public <T, P> void task(Class<?> source, DataProcessHandler<T, P> handler, P processor) {
 		if (!this.rawElements.containsKey(source)) this.rawElements.put(source, ClassContentOperator.extract(source));
 		this.dataProcessCoverage.computeIfAbsent((DataProcessHandler<?, Object>) handler, ignored -> TriList.create())
-				.add(source, ignored -> true, processor);
+			.add(source, ignored -> true, processor);
+	}
+
+	@Override
+	@SuppressWarnings({"unchecked", "SuspiciousMethodCalls"})
+	public <T, P> void task(Class<?> source, DataProcessHandler<T, P> handler, Set<T> selection, P processor) {
+		if (!this.rawElements.containsKey(source)) this.rawElements.put(source, ClassContentOperator.extract(source));
+		this.dataProcessCoverage.computeIfAbsent((DataProcessHandler<?, Object>) handler, ignored -> TriList.create())
+			.add(source, selection::contains, processor);
 	}
 
 	@Override
@@ -93,7 +102,7 @@ public class DataManagerImpl implements DataManager {
 	public <T, P> void task(Class<?> source, DataProcessHandler<T, P> handler, Predicate<T> filter, P processor) {
 		if (!this.rawElements.containsKey(source)) this.rawElements.put(source, ClassContentOperator.extract(source));
 		this.dataProcessCoverage.computeIfAbsent((DataProcessHandler<?, Object>) handler, ignored -> TriList.create())
-				.add(source, filter, processor);
+			.add(source, filter, processor);
 	}
 
 	@Override
@@ -113,6 +122,12 @@ public class DataManagerImpl implements DataManager {
 			this.source = source;
 			this.handler = handler;
 			this.exclusion = exclusion;
+		}
+
+		@Override
+		public ChainManager<T, P> chain(Set<T> selection, P processor) {
+			this.manager.task(this.source, this.handler, element -> this.exclusion.test(element) && selection.contains(element), processor);
+			return new ChainManagerImpl<>(this.manager, this.source, this.handler, element -> this.exclusion.test(element) && !selection.contains(element));
 		}
 
 		@Override
