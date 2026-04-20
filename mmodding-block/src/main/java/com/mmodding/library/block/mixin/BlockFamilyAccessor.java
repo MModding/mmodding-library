@@ -18,4 +18,7 @@ public interface BlockFamilyAccessor {
 
 	@Accessor("variants")
 	Map<BlockFamily.Variant, Block> mmodding$getVariants();
+
+	@Accessor("generateStonecutterRecipe")
+	void setGenerateStonecutterRecipe(boolean generateStonecutterRecipe);
 }

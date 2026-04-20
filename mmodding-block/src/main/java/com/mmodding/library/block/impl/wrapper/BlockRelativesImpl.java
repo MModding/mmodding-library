@@ -95,6 +95,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 	public BlockFamily initDataFamily() {
 		BlockFamily family = BlockFamilyAccessor.mmodding$init(this.mainBlock);
 		((BlockFamilyAccessor) family).mmodding$getVariants().putAll(this.variants);
+		((BlockFamilyAccessor) family).setGenerateStonecutterRecipe(true);
 		return family;
 	}
 }
