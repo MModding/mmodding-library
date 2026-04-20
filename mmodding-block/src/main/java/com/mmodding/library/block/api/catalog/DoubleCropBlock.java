@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.Nullable;
 
 public abstract class DoubleCropBlock extends PitcherCropBlock {
 
@@ -69,6 +72,14 @@ public abstract class DoubleCropBlock extends PitcherCropBlock {
 			}
 		} else {
 			return state.canSurvive(level, pos) ? state : Blocks.AIR.defaultBlockState();
+		}
+	}
+
+	@Override
+	public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, @Nullable final LivingEntity by, final ItemStack itemStack) {
+		if (this.isDoubleBlock(0)) {
+			BlockPos abovePos = pos.above();
+			level.setBlock(abovePos, copyWaterloggedFrom(level, abovePos, this.defaultBlockState().setValue(HALF, DoubleBlockHalf.UPPER)), 3);
 		}
 	}
 
