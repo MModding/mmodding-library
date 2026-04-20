@@ -4,6 +4,7 @@ import com.mmodding.library.item.api.properties.CustomItemProperty;
 import com.mmodding.library.item.api.properties.MModdingItemProperties;
 import com.mmodding.library.item.impl.setting.CustomItemPropertyImpl;
 import com.mmodding.library.java.api.list.BiList;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import org.jspecify.annotations.Nullable;
@@ -21,13 +22,12 @@ public class ItemPropertiesMixin implements MModdingItemProperties {
 	private @Nullable ResourceKey<Item> id;
 
 	@Unique
-	private final BiList<CustomItemProperty<?>, Object> customItemPropertiesQueue = BiList.create();
+	private final BiList<Identifier, Object> customItemPropertiesQueue = BiList.create();
 
 	@Inject(method = "setId", at = @At("TAIL"))
 	private void dequeueAll(ResourceKey<Item> id, CallbackInfoReturnable<Item.Properties> cir) {
 		this.customItemPropertiesQueue.forEach((property, value) ->
-			CustomItemPropertyImpl.REGISTRY.getOrCreateCompanion(this.id)
-				.register(property.getIdentifier(), value)
+			CustomItemPropertyImpl.REGISTRY.getOrCreateCompanion(this.id).register(property, value)
 		);
 		this.customItemPropertiesQueue.clear();
 	}
@@ -36,7 +36,7 @@ public class ItemPropertiesMixin implements MModdingItemProperties {
 	@SuppressWarnings("AddedMixinMembersNamePattern")
 	public <T> Item.Properties custom(CustomItemProperty<T> property, T value) {
 		if (this.id == null) {
-			this.customItemPropertiesQueue.add(property, value);
+			this.customItemPropertiesQueue.add(property.getIdentifier(), value);
 		}
 		else {
 			CustomItemPropertyImpl.REGISTRY.getOrCreateCompanion(this.id).register(property.getIdentifier(), value);

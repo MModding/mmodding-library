@@ -2,4 +2,5 @@ classTweaker v1 official
 
 transitive-inject-interface net/minecraft/world/level/block/Block com/mmodding/library/block/api/BlockWithItem
 transitive-inject-interface net/minecraft/world/level/block/Block com/mmodding/library/block/api/MModdingBlock
+transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour$Properties com/mmodding/library/block/api/properties/MModdingBlockProperties
 transitive-inject-interface net/minecraft/world/level/block/state/BlockState com/mmodding/library/block/api/MModdingBlockState
