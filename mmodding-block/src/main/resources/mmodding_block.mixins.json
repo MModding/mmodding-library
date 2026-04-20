@@ -8,6 +8,7 @@
     "BlockBehaviorPropertiesMixin",
     "BlockFamilyAccessor",
     "BlockMixin",
+    "DoublePlantBlockMixin",
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
     "PitcherCropBlockMixin",
