@@ -64,7 +64,7 @@ public class WoodSetImpl implements WoodSet {
 
 	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, String woodName, boolean burnable, SoundType woodSoundType, LogDisplay logDisplay, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch) {
 		this.identifier = Identifier.fromNamespaceAndPath(namespace, name);
-		this.type = woodTypeBuilder.build(this.identifier, setTypeBuilder.register(this.identifier));
+		this.type = woodTypeBuilder.register(this.identifier, setTypeBuilder.register(this.identifier));
 		this.log = this.registerBlock("_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
 		this.wood = this.registerBlock("_" + woodName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
 		this.strippedLog = this.registerBlock("stripped_", "_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
