@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.model.block.BlockModelProcessor;
@@ -23,7 +23,7 @@ public class BlockModelHandler implements DataProcessHandler<Block, BlockModelPr
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<BlockModelProcessor, List<Block>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedBlockStateProvider(contentToProcess, output));
+		DataProcessHandler.provider(pack, contentToProcess, AutomatedBlockStateProvider::new);
 	}
 
 	private static class AutomatedBlockStateProvider extends FabricModelProvider {

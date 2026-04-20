@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.lang.TranslationSupport;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
@@ -37,7 +37,7 @@ public class TranslationHandler<T> implements DataProcessHandler<T, TranslationP
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<TranslationProcessor, List<T>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedLanguageProvider<>(this.registry, contentToProcess, output, future));
+		DataProcessHandler.provider(pack, contentToProcess, (c, o, f) -> new AutomatedLanguageProvider<>(this.registry, c, o, f));
 	}
 
 	private static class AutomatedLanguageProvider<T> extends MModdingLanguageProvider {

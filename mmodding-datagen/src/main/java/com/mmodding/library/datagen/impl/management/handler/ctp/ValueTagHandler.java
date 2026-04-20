@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.tag.ValueTagProcessor;
@@ -44,12 +44,24 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 	@Override
 	@SuppressWarnings("unchecked")
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<ValueTagProcessor<T>, List<T>> contentToProcess) {
-		pack.addProvider((output, future) -> switch (this.supportedElement) {
-			case BLOCK -> new AutomatedBlockTagsProvider((BiList<ValueTagProcessor<Block>, List<Block>>) (BiList<?, ?>) contentToProcess, output, future);
-			case ITEM -> new AutomatedItemTagsProvider((BiList<ValueTagProcessor<Item>, List<Item>>) (BiList<?, ?>) contentToProcess, output, future);
-			case FLUID -> new AutomatedFluidTagsProvider((BiList<ValueTagProcessor<Fluid>, List<Fluid>>) (BiList<?, ?>) contentToProcess, output, future);
-			case ENTITY_TYPE -> new AutomatedEntityTypeTagsProvider((BiList<ValueTagProcessor<EntityType<?>>, List<EntityType<?>>>) (BiList<?, ?>) contentToProcess, output, future);
-		});
+		switch (this.supportedElement) {
+			case BLOCK -> {
+				var cast = (BiList<ValueTagProcessor<Block>, List<Block>>) (BiList<?, ?>) contentToProcess;
+				DataProcessHandler.provider(pack, cast, AutomatedBlockTagsProvider::new);
+			}
+			case ITEM -> {
+				var cast = (BiList<ValueTagProcessor<Item>, List<Item>>) (BiList<?, ?>) contentToProcess;
+				DataProcessHandler.provider(pack, cast, AutomatedItemTagsProvider::new);
+			}
+			case FLUID -> {
+				var cast = (BiList<ValueTagProcessor<Fluid>, List<Fluid>>) (BiList<?, ?>) contentToProcess;
+				DataProcessHandler.provider(pack, cast, AutomatedFluidTagsProvider::new);
+			}
+			case ENTITY_TYPE -> {
+				var cast = (BiList<ValueTagProcessor<EntityType<?>>, List<EntityType<?>>>) (BiList<?, ?>) contentToProcess;
+				DataProcessHandler.provider(pack, cast, AutomatedEntityTypeTagsProvider::new);
+			}
+		}
 	}
 
 	private static class AutomatedBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {

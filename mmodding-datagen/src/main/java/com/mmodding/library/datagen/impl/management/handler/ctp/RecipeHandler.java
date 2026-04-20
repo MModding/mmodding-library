@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.recipe.RecipeProcessor;
@@ -27,7 +27,7 @@ public class RecipeHandler<T extends ItemLike> implements DataProcessHandler<T, 
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<RecipeProcessor<T>, List<T>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedRecipeProvider<>(contentToProcess, future, output));
+		DataProcessHandler.provider(pack, contentToProcess, AutomatedRecipeProvider::new);
 	}
 
 	private static class AutomatedRecipeProvider<T extends ItemLike> extends FabricRecipeProvider {
@@ -35,7 +35,7 @@ public class RecipeHandler<T extends ItemLike> implements DataProcessHandler<T, 
 
 		private final BiList<RecipeProcessor<T>, List<T>> contentToProcess;
 
-		public AutomatedRecipeProvider(BiList<RecipeProcessor<T>, List<T>> contentToProcess, CompletableFuture<HolderLookup.Provider> future, FabricPackOutput output) {
+		public AutomatedRecipeProvider(BiList<RecipeProcessor<T>, List<T>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}

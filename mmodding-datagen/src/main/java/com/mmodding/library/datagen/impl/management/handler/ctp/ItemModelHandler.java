@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.model.item.ItemModelProcessor;
@@ -23,7 +23,7 @@ public class ItemModelHandler implements DataProcessHandler<Item, ItemModelProce
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<ItemModelProcessor, List<Item>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedModelProvider(contentToProcess, output));
+		DataProcessHandler.provider(pack, contentToProcess, AutomatedModelProvider::new);
 	}
 
 	private static class AutomatedModelProvider extends FabricModelProvider {

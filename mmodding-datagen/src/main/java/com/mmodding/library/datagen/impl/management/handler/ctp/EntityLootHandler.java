@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
@@ -28,14 +28,14 @@ public class EntityLootHandler implements DataProcessHandler<EntityType<?>, Enti
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedEntityLootProvider(contentToProcess, future, output));
+		DataProcessHandler.provider(pack, contentToProcess, AutomatedEntityLootProvider::new);
 	}
 
 	private static class AutomatedEntityLootProvider extends SimpleFabricLootTableSubProvider {
 
 		private final BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess;
 
-		public AutomatedEntityLootProvider(BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess, CompletableFuture<HolderLookup.Provider> future, FabricPackOutput output) {
+		public AutomatedEntityLootProvider(BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future, LootContextParamSets.ENTITY);
 			this.contentToProcess = contentToProcess;
 		}

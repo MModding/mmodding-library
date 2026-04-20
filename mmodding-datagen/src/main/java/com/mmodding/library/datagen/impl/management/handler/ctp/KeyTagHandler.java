@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.tag.KeyTagProcessor;
@@ -32,7 +32,7 @@ public class KeyTagHandler<T> implements DataProcessHandler<T, KeyTagProcessor<T
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<KeyTagProcessor<T>, List<T>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedTagProvider<>(this.registry, contentToProcess, output, future));
+		DataProcessHandler.provider(pack, contentToProcess, (c, o, f) -> new AutomatedTagProvider<>(this.registry, c, o, f));
 	}
 
 	private static class AutomatedTagProvider<T> extends FabricTagsProvider<T> {

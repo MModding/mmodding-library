@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.fc;
 
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
@@ -6,6 +6,7 @@ import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -42,11 +43,12 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 	}
 
 	@Override
-	public void handleContent(FabricDataGenerator.Pack pack, List<BlockFamily> finalContents) {
-		pack.addProvider((output, future) -> new AutomatedBlockFamilyTranslations(output, future, finalContents));
-		pack.addProvider((output, future) -> new AutomatedBlockFamilyModels(output, finalContents));
-		pack.addProvider((output, future) -> new AutomatedBlockFamilyRecipes(output, future, finalContents));
-		AutomatedBlockFamilyBlockTags blockTags = pack.addProvider((output, future) -> new AutomatedBlockFamilyBlockTags(output, future, finalContents));
+	public void handleContent(FabricDataGenerator.Pack pack, List<BlockFamily> finalContent) {
+		FinalDataHandler.with(pack, finalContent, AutomatedBlockFamilyTranslations::new);
+		FinalDataHandler.with(pack, finalContent, AutomatedBlockFamilyModels::new);
+		FinalDataHandler.with(pack, finalContent, AutomatedBlockFamilyBlockLootTables::new);
+		FinalDataHandler.with(pack, finalContent, AutomatedBlockFamilyRecipes::new);
+		AutomatedBlockFamilyBlockTags blockTags = FinalDataHandler.with(pack, finalContent, AutomatedBlockFamilyBlockTags::new);
 		pack.addProvider((output, future) -> new AutomatedBlockFamilyItemTags(output, future, blockTags));
 	}
 
@@ -54,7 +56,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 
 		private final List<BlockFamily> families;
 
-		public AutomatedBlockFamilyTranslations(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future, List<BlockFamily> families) {
+		public AutomatedBlockFamilyTranslations(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future);
 			this.families = families;
 		}
@@ -86,7 +88,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 
 		private final List<BlockFamily> families;
 
-		public AutomatedBlockFamilyModels(FabricPackOutput output, List<BlockFamily> families) {
+		public AutomatedBlockFamilyModels(List<BlockFamily> families, FabricPackOutput output) {
 			super(output);
 			this.families = families;
 		}
@@ -109,11 +111,31 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		}
 	}
 
+	static class AutomatedBlockFamilyBlockLootTables extends FabricBlockLootSubProvider {
+
+		private final List<BlockFamily> families;
+
+		public AutomatedBlockFamilyBlockLootTables(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+			super(output, future);
+			this.families = families;
+		}
+
+		@Override
+		public void generate() {
+			for (BlockFamily family : this.families) {
+				this.dropSelf(family.getBaseBlock());
+				for (Block block : family.getVariants().values()) {
+					this.dropSelf(block);
+				}
+			}
+		}
+	}
+
 	static class AutomatedBlockFamilyRecipes extends FabricRecipeProvider {
 
 		private final List<BlockFamily> families;
 
-		public AutomatedBlockFamilyRecipes(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future, List<BlockFamily> families) {
+		public AutomatedBlockFamilyRecipes(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future);
 			this.families = families;
 		}
@@ -140,7 +162,7 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 		private final List<BlockFamily> families;
 		private final Set<TagKey<Block>> memory;
 
-		public AutomatedBlockFamilyBlockTags(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future, List<BlockFamily> families) {
+		public AutomatedBlockFamilyBlockTags(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future);
 			this.families = families;
 			this.memory = new HashSet<>();

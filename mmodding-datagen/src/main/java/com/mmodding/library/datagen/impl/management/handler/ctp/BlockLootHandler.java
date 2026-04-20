@@ -1,4 +1,4 @@
-package com.mmodding.library.datagen.impl.management.handler;
+package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
@@ -23,14 +23,14 @@ public class BlockLootHandler implements DataProcessHandler<Block, BlockLootProc
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, BiList<BlockLootProcessor, List<Block>> contentToProcess) {
-		pack.addProvider((output, future) -> new AutomatedBlockLootProvider(contentToProcess, future, output));
+		DataProcessHandler.provider(pack, contentToProcess, AutomatedBlockLootProvider::new);
 	}
 
 	private static class AutomatedBlockLootProvider extends FabricBlockLootSubProvider {
 
 		private final BiList<BlockLootProcessor, List<Block>> contentToProcess;
 
-		public AutomatedBlockLootProvider(BiList<BlockLootProcessor, List<Block>> contentToProcess, CompletableFuture<HolderLookup.Provider> future, FabricPackOutput output) {
+		public AutomatedBlockLootProvider(BiList<BlockLootProcessor, List<Block>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
 			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
