@@ -14,10 +14,10 @@ public class CustomBlockPropertyImpl<T> implements CustomBlockProperty<T> {
 	public static final RegistryCompanion<Block, Object> REGISTRY = RegistryCompanion.create(BuiltInRegistries.BLOCK);
 
 	private final Identifier identifier;
-	private final Class<T> type;
+	private final Class<?> type;
 	private final T defaultValue;
 
-	public CustomBlockPropertyImpl(Identifier identifier, Class<T> type, T defaultValue) {
+	public CustomBlockPropertyImpl(Identifier identifier, Class<?> type, T defaultValue) {
 		this.identifier = identifier;
 		this.type = type;
 		this.defaultValue = defaultValue;
@@ -40,7 +40,7 @@ public class CustomBlockPropertyImpl<T> implements CustomBlockProperty<T> {
 	}
 
 	@Override
-	public Class<T> getType() {
+	public Class<?> getType() {
 		return this.type;
 	}
 

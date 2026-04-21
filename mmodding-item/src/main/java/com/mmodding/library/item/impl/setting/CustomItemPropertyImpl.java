@@ -15,10 +15,10 @@ public class CustomItemPropertyImpl<T> implements CustomItemProperty<T> {
 	public static final RegistryCompanion<Item, Object> REGISTRY = RegistryCompanion.create(BuiltInRegistries.ITEM);
 
 	private final Identifier identifier;
-	private final Class<T> type;
+	private final Class<?> type;
 	private final T defaultValue;
 
-	public CustomItemPropertyImpl(Identifier identifier, Class<T> type, T defaultValue) {
+	public CustomItemPropertyImpl(Identifier identifier, Class<?> type, T defaultValue) {
 		this.identifier = identifier;
 		this.type = type;
 		this.defaultValue = defaultValue;
@@ -41,7 +41,7 @@ public class CustomItemPropertyImpl<T> implements CustomItemProperty<T> {
 	}
 
 	@Override
-	public Class<T> getType() {
+	public Class<?> getType() {
 		return this.type;
 	}
 

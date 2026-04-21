@@ -14,7 +14,7 @@ public interface CustomBlockProperty<T> {
 	/**
 	 * Creates the {@link CustomBlockProperty} instance for these parameters.
 	 */
-	static <T> CustomBlockProperty<T> create(Identifier identifier, Class<T> type, T defaultValue) {
+	static <T> CustomBlockProperty<T> create(Identifier identifier, Class<?> type, T defaultValue) {
 		return new CustomBlockPropertyImpl<>(identifier, type, defaultValue);
 	}
 
@@ -38,7 +38,7 @@ public interface CustomBlockProperty<T> {
 	 * The class object of the value type.
 	 * @return the class object
 	 */
-	Class<T> getType();
+	Class<?> getType();
 
 	/**
 	 * Returns the default value of this setting for a block not specifying it.

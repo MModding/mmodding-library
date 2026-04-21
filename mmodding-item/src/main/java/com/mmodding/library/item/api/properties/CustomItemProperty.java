@@ -10,7 +10,7 @@ public interface CustomItemProperty<T> {
 	/**
 	 * Creates the {@link CustomItemProperty} instance for these parameters.
 	 */
-	static <T> CustomItemProperty<T> create(Identifier identifier, Class<T> type, T defaultValue) {
+	static <T> CustomItemProperty<T> create(Identifier identifier, Class<?> type, T defaultValue) {
 		return new CustomItemPropertyImpl<>(identifier, type, defaultValue);
 	}
 
@@ -34,7 +34,7 @@ public interface CustomItemProperty<T> {
 	 * The class object of the value type.
 	 * @return the class object
 	 */
-	Class<T> getType();
+	Class<?> getType();
 
 	/**
 	 * Returns the default value of this setting for an item not specifying it.

@@ -4,6 +4,7 @@
   "package": "com.mmodding.library.item.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "DecoratedPotPatternsMixin",
     "EntityMixin",
     "FishingBobberEntityMixin",
     "ItemMixin",
