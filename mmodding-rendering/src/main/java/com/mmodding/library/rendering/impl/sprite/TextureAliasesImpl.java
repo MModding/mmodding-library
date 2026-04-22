@@ -1,4 +1,4 @@
-package com.mmodding.library.rendering.impl;
+package com.mmodding.library.rendering.impl.sprite;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.resources.Identifier;

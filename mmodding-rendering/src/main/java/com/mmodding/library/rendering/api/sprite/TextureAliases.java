@@ -1,6 +1,6 @@
 package com.mmodding.library.rendering.api.sprite;
 
-import com.mmodding.library.rendering.impl.TextureAliasesImpl;
+import com.mmodding.library.rendering.impl.sprite.TextureAliasesImpl;
 import net.minecraft.resources.Identifier;
 
 public class TextureAliases {
