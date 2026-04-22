@@ -1,6 +1,6 @@
-package com.mmodding.library.rendering.test.accessory;
+package com.mmodding.library.rendering.test.cosmetic;
 
-import com.mmodding.library.rendering.api.accessory.Accessory;
+import com.mmodding.library.rendering.api.cosmetic.Cosmetic;
 import com.mmodding.library.rendering.api.model.EntityModelFactory;
 import com.mmodding.library.rendering.test.RenderingTestsClient;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
@@ -9,11 +9,11 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
-public class TestCap implements Accessory {
+public class TestPants implements Cosmetic {
 
 	@Override
 	public Map<String, EntityModelFactory<HumanoidRenderState>> getModelFactories() {
-		return Map.of("main", EntityModelFactory.of(RenderingTestsClient.CAP));
+		return Map.of("main", EntityModelFactory.of(RenderingTestsClient.PANTS));
 	}
 
 	@Override
@@ -23,6 +23,6 @@ public class TestCap implements Accessory {
 
 	@Override
 	public Identifier getTexture(ItemStack stack, boolean isSlim) {
-		return Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "cap/dummy.png");
+		return Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "pants/dummy.png");
 	}
 }

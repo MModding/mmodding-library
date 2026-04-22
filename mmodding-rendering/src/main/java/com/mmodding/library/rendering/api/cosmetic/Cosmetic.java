@@ -1,4 +1,4 @@
-package com.mmodding.library.rendering.api.accessory;
+package com.mmodding.library.rendering.api.cosmetic;
 
 import com.mmodding.library.rendering.api.model.EntityModelFactory;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
@@ -9,9 +9,8 @@ import java.util.Map;
 
 /**
  * A representation of "armor" model parts with deeply-customized models and textures.
- * It is called an accessory because I had no better idea, but it applies on every thing that you can wear.
  */
-public interface Accessory {
+public interface Cosmetic {
 
 	/**
 	 * A map which indicates the models that are about to be used, identified by strings for model selection.

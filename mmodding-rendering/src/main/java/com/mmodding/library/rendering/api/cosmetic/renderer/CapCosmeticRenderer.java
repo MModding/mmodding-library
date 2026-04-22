@@ -1,6 +1,6 @@
-package com.mmodding.library.rendering.api.accessory.renderer;
+package com.mmodding.library.rendering.api.cosmetic.renderer;
 
-import com.mmodding.library.rendering.api.accessory.Accessory;
+import com.mmodding.library.rendering.api.cosmetic.Cosmetic;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -14,14 +14,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Rendering {@link Accessory} stuff as a cap-like.
+ * Rendering {@link Cosmetic} stuff as a cap-like.
  */
-public class CapModelRenderer extends AccessoryRenderer {
+public class CapCosmeticRenderer extends CosmeticRenderer {
 
 	private final Anchor anchor;
 
-	public CapModelRenderer(Accessory accessory, Anchor anchor, EntityRendererProvider.Context context) {
-		super(accessory, context);
+	public CapCosmeticRenderer(Cosmetic cosmetic, Anchor anchor, EntityRendererProvider.Context context) {
+		super(cosmetic, context);
 		this.anchor = anchor;
 	}
 

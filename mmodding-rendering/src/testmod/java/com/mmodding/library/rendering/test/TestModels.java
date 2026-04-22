@@ -38,4 +38,43 @@ public class TestModels {
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
+
+	public static LayerDefinition createTestPantsLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		PartDefinition junction = partdefinition.addOrReplaceChild("junction", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+
+		PartDefinition leftLegging = partdefinition.addOrReplaceChild("left_legging", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+
+		PartDefinition rightLegging = partdefinition.addOrReplaceChild("right_legging", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
+
+	public static LayerDefinition createTestShoesLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		PartDefinition leftShoe = partdefinition.addOrReplaceChild("left_shoe", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+
+		PartDefinition rightShoe = partdefinition.addOrReplaceChild("right_shoe", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
+			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+
+		return LayerDefinition.create(meshdefinition, 64, 64);
+	}
 }
