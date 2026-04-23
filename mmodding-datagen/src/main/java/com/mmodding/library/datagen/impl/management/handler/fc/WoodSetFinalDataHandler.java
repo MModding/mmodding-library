@@ -1,6 +1,7 @@
 package com.mmodding.library.datagen.impl.management.handler.fc;
 
 import com.mmodding.library.block.api.catalog.AdvancedLeavesBlock;
+import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
@@ -39,15 +40,15 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 
 	@Override
 	public void handleContent(FabricDataGenerator.Pack pack, List<WoodSet> finalContent) {
-		List<BlockFamily> extracted = finalContent.stream().map(this::extractFamily).toList();
+		List<BlockRelatives> plankRelatives = finalContent.stream().map(WoodSet::getPlankRelatives).toList();
 		FinalDataHandler.with(pack, finalContent, AutomatedTranslations::new);
-		FinalDataHandler.with(pack, extracted, AutomatedBlockFamilyTranslations::new);
+		FinalDataHandler.with(pack, plankRelatives, AutomatedPlankRelativesTranslations::new);
 		FinalDataHandler.with(pack, finalContent, AutomatedModels::new);
-		FinalDataHandler.with(pack, extracted, AutomatedBlockFamilyModels::new);
+		FinalDataHandler.with(pack, plankRelatives, AutomatedPlankRelativesModels::new);
 		FinalDataHandler.with(pack, finalContent, AutomatedBlockLootTables::new);
-		FinalDataHandler.with(pack, extracted, AutomatedBlockFamilyBlockLootTables::new);
+		FinalDataHandler.with(pack, plankRelatives, AutomatedPlankRelativesBlockLootTables::new);
 		FinalDataHandler.with(pack, finalContent, AutomatedRecipes::new);
-		FinalDataHandler.with(pack, extracted, AutomatedBlockFamilyRecipes::new);
+		FinalDataHandler.with(pack, plankRelatives, AutomatedPlankRelativesRecipes::new);
 		AutomatedBlockTags blockTags = FinalDataHandler.with(pack, finalContent, AutomatedBlockTags::new);
 		pack.addProvider((output, future) -> new AutomatedItemTags(finalContent, output, future, blockTags));
 		FinalDataHandler.with(pack, finalContent, AutomatedEntityTypeTags::new);
@@ -326,10 +327,10 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedBlockFamilyTranslations extends BlockFamilyFinalDataHandler.AutomatedBlockFamilyTranslations {
+	private static class AutomatedPlankRelativesTranslations extends BlockRelativesFinalDataHandler.AutomatedBlockRelativesTranslations {
 
-		public AutomatedBlockFamilyTranslations(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-			super(families, output, future);
+		public AutomatedPlankRelativesTranslations(List<BlockRelatives> relatives, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+			super(relatives, output, future);
 		}
 
 		@Override
@@ -338,10 +339,10 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedBlockFamilyModels extends BlockFamilyFinalDataHandler.AutomatedBlockFamilyModels {
+	private static class AutomatedPlankRelativesModels extends BlockRelativesFinalDataHandler.AutomatedBlockRelativesModels {
 
-		public AutomatedBlockFamilyModels(List<BlockFamily> families, FabricPackOutput output) {
-			super(families, output);
+		public AutomatedPlankRelativesModels(List<BlockRelatives> relatives, FabricPackOutput output) {
+			super(relatives, output);
 		}
 
 		@Override
@@ -350,10 +351,10 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedBlockFamilyBlockLootTables extends BlockFamilyFinalDataHandler.AutomatedBlockFamilyBlockLootTables {
+	private static class AutomatedPlankRelativesBlockLootTables extends BlockRelativesFinalDataHandler.AutomatedBlockRelativesBlockLootTables {
 
-		public AutomatedBlockFamilyBlockLootTables(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-			super(families, output, future);
+		public AutomatedPlankRelativesBlockLootTables(List<BlockRelatives> relatives, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+			super(relatives, output, future);
 		}
 
 		@Override
@@ -362,10 +363,10 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedBlockFamilyRecipes extends BlockFamilyFinalDataHandler.AutomatedBlockFamilyRecipes {
+	private static class AutomatedPlankRelativesRecipes extends BlockRelativesFinalDataHandler.AutomatedBlockRelativesRecipes {
 
-		public AutomatedBlockFamilyRecipes(List<BlockFamily> families, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-			super(families, output, future);
+		public AutomatedPlankRelativesRecipes(List<BlockRelatives> relatives, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
+			super(relatives, output, future);
 		}
 
 		@Override

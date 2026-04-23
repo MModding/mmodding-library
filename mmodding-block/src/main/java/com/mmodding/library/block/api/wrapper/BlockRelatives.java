@@ -90,5 +90,7 @@ public interface BlockRelatives {
 
 	TagKey<Item> getItemTagKey();
 
+	List<BlockFamily.Variant> getVariants();
+
 	List<Block> getEntries();
 }

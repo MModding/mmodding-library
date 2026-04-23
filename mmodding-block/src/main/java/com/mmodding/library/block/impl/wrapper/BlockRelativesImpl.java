@@ -85,11 +85,16 @@ public class BlockRelativesImpl implements BlockRelatives {
 	}
 
 	@Override
+	public List<BlockFamily.Variant> getVariants() {
+		return new ArrayList<>(this.variants.keySet());
+	}
+
+	@Override
 	public List<Block> getEntries() {
 		List<Block> entries = new ArrayList<>();
 		entries.add(this.mainBlock);
 		entries.addAll(this.variants.values());
-		return List.copyOf(entries);
+		return entries;
 	}
 
 	public BlockFamily initDataFamily() {

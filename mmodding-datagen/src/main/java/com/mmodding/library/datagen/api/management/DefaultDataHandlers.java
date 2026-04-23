@@ -1,5 +1,6 @@
 package com.mmodding.library.datagen.api.management;
 
+import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.datagen.api.lang.TranslationProcessor;
 import com.mmodding.library.datagen.api.loot.block.BlockLootProcessor;
 import com.mmodding.library.datagen.api.loot.entity.EntityLootProcessor;
@@ -11,11 +12,10 @@ import com.mmodding.library.datagen.api.recipe.RecipeProcessor;
 import com.mmodding.library.datagen.api.tag.ValueTagProcessor;
 import com.mmodding.library.datagen.api.tag.KeyTagProcessor;
 import com.mmodding.library.datagen.impl.management.handler.ctp.*;
-import com.mmodding.library.datagen.impl.management.handler.fc.BlockFamilyFinalDataHandler;
+import com.mmodding.library.datagen.impl.management.handler.fc.BlockRelativesFinalDataHandler;
 import com.mmodding.library.datagen.impl.management.handler.fc.WoodSetFinalDataHandler;
 import com.mmodding.library.woodset.api.WoodSet;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -48,7 +48,7 @@ public class DefaultDataHandlers {
 		return new TranslationHandler<>(registry, type);
 	}
 
-	public static final FinalDataHandler<BlockFamily> BLOCK_FAMILIES = new BlockFamilyFinalDataHandler();
+	public static final FinalDataHandler<BlockRelatives> BLOCK_RELATIVES = new BlockRelativesFinalDataHandler();
 
 	public static final FinalDataHandler<WoodSet> WOOD_SETS = new WoodSetFinalDataHandler();
 }
