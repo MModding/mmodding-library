@@ -4,8 +4,9 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -20,7 +21,7 @@ public interface RecipeHelper {
 	 * @param category the recipe category
 	 * @param consumer the recipe options
 	 */
-	void shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer);
+	RecipeHelper shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer);
 
 	/**
 	 * Creates a shaped recipe for the current item.
@@ -28,14 +29,14 @@ public interface RecipeHelper {
 	 * @param category the recipe category
 	 * @param consumer the recipe options
 	 */
-	void shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer);
+	RecipeHelper shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer);
 
 	/**
 	 * Creates a shapeless recipe for the current item.
 	 * @param category the recipe category
 	 * @param consumer the recipe options
 	 */
-	void shapeless(RecipeCategory category, Consumer<ShapelessRecipe> consumer);
+	RecipeHelper shapeless(RecipeCategory category, Consumer<ShapelessRecipe> consumer);
 
 	/**
 	 * Creates a shapeless recipe for the current item.
@@ -43,65 +44,67 @@ public interface RecipeHelper {
 	 * @param category the recipe category
 	 * @param consumer the recipe options
 	 */
-	void shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer);
+	RecipeHelper shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer);
 
-	void smelting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
+	RecipeHelper smelting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void smelting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
+	RecipeHelper smelting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void blasting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
+	RecipeHelper blasting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void blasting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
+	RecipeHelper blasting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	void smoking(ItemLike item, RecipeCategory category, int experience, int time);
+	RecipeHelper smoking(ItemLike item, RecipeCategory category, int experience, int time);
 
-	void smoking(Ingredient ingredient, RecipeCategory category, int experience, int time);
+	RecipeHelper smoking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void campfireCooking(ItemLike item, RecipeCategory category, int experience, int time);
+	RecipeHelper campfireCooking(ItemLike item, RecipeCategory category, int experience, int time);
 
-	void campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time);
+	RecipeHelper campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time);
 
-	void custom(Function<RecipeProvider, RecipeBuilder> factory);
+	RecipeHelper custom(BiFunction<RecipeProvider, ItemLike, RecipeBuilder> factory);
+
+	RecipeHelper provide(BiConsumer<RecipeProvider, ItemLike> consumer);
 
 	@ApiStatus.NonExtendable
 	interface ShapedRecipe {
 
-		default void key(char key, ItemLike item) {
-			this.key(key, Ingredient.of(item));
+		default ShapedRecipe key(char key, ItemLike item) {
+			return this.key(key, Ingredient.of(item));
 		}
 
-		void key(char key, Ingredient ingredient);
+		ShapedRecipe key(char key, Ingredient ingredient);
 
-		void pattern(String firstLine, String secondLine, String thirdLine);
+		ShapedRecipe pattern(String firstLine, String secondLine, String thirdLine);
 
-		void pattern(String firstLine, String secondLine);
+		ShapedRecipe pattern(String firstLine, String secondLine);
 	}
 
 	@ApiStatus.NonExtendable
 	interface ShapelessRecipe {
 
-		void with(ItemLike... items);
+		ShapelessRecipe with(ItemLike... items);
 
-		void with(Ingredient... ingredients);
+		ShapelessRecipe with(Ingredient... ingredients);
 	}
 
 	@ApiStatus.NonExtendable
 	interface SmeltingRecipe {
 
-		default void input(ItemLike item) {
-			this.input(Ingredient.of(item));
+		default SmeltingRecipe input(ItemLike item) {
+			return this.input(Ingredient.of(item));
 		}
 
-		void input(Ingredient ingredient);
+		SmeltingRecipe input(Ingredient ingredient);
 
-		void time(int time);
+		SmeltingRecipe time(int time);
 
-		default void output(ItemLike item) {
-			this.input(Ingredient.of(item));
+		default SmeltingRecipe output(ItemLike item) {
+			return this.input(Ingredient.of(item));
 		}
 
-		void output(Ingredient ingredient);
+		SmeltingRecipe output(Ingredient ingredient);
 
-		void experience(int experience);
+		SmeltingRecipe experience(int experience);
 	}
 }
