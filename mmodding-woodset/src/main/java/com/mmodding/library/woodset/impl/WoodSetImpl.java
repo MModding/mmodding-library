@@ -5,6 +5,7 @@ import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.woodset.api.WoodSet;
+import com.mmodding.library.woodset.api.WoodSetSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
@@ -47,8 +48,6 @@ public class WoodSetImpl implements WoodSet {
 	private final Block strippedWood;
 	private final TagKey<Block> logsBlockTag;
 	private final TagKey<Item> logsItemTag;
-	private final boolean burnable;
-	private final LogDisplay logDisplay;
 	private final Block leaves;
 	private final Block sapling;
 	private final Block pottedSapling;
@@ -62,7 +61,9 @@ public class WoodSetImpl implements WoodSet {
 	private final Item boatItem;
 	private final Item chestBoatItem;
 
-	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, String woodName, boolean burnable, SoundType woodSoundType, LogDisplay logDisplay, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch) {
+	private final WoodSetSettings settings;
+
+	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, String woodName, SoundType woodSoundType, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch, WoodSetSettings settings) {
 		this.identifier = Identifier.fromNamespaceAndPath(namespace, name);
 		this.type = woodTypeBuilder.register(this.identifier, setTypeBuilder.register(this.identifier));
 		this.log = this.registerBlock("_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
@@ -73,8 +74,6 @@ public class WoodSetImpl implements WoodSet {
 		StrippableBlockRegistry.register(this.wood, this.strippedWood);
 		this.logsBlockTag = TagKey.create(Registries.BLOCK, this.identifier.withPath(path -> path + "_logs"));
 		this.logsItemTag = TagKey.create(Registries.ITEM, this.identifier.withPath(path -> path + "_logs"));
-		this.burnable = burnable;
-		this.logDisplay = logDisplay;
 		this.leaves = this.registerBlock("_leaves", leavesFactory, _ -> patch.map(Blocks.leavesProperties(leavesSoundType))).registerItem();
 		BlockBehaviour.Properties saplingSettings = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(saplingSoundType).pushReaction(PushReaction.DESTROY);
 		this.sapling = this.registerBlock("_sapling", properties -> new SaplingBlock(grower, properties), _ -> patch.map(saplingSettings)).registerItem();
@@ -91,6 +90,7 @@ public class WoodSetImpl implements WoodSet {
 		this.chestBoatEntityType = this.registerEntityType("_chest_boat", EntityType.Builder.of(chestBoatFactory.make(this::getChestBoatItem), MobCategory.MISC).noLootTable().sized(1.375f, 0.5625f).eyeHeight(0.5625f).clientTrackingRange(10));
 		this.boatItem = this.registerItem("_boat", properties -> new BoatItem(this.boatEntityType, properties), new Item.Properties().stacksTo(1));
 		this.chestBoatItem = this.registerItem("_chest_boat", properties -> new BoatItem(this.chestBoatEntityType, properties), new Item.Properties().stacksTo(1));
+		this.settings = settings;
 	}
 
 	private <T extends Block> Block registerBlock(String suffix, BlockFactory<T> factory, AutoMapper<BlockBehaviour.Properties> patch) {
@@ -153,16 +153,6 @@ public class WoodSetImpl implements WoodSet {
 	}
 
 	@Override
-	public boolean isBurnable() {
-		return this.burnable;
-	}
-
-	@Override
-	public LogDisplay getLogDisplay() {
-		return this.logDisplay;
-	}
-
-	@Override
 	public Block getLeaves() {
 		return this.leaves;
 	}
@@ -215,5 +205,10 @@ public class WoodSetImpl implements WoodSet {
 	@Override
 	public Item getChestBoatItem() {
 		return this.chestBoatItem;
+	}
+
+	@Override
+	public WoodSetSettings getSettings() {
+		return this.settings;
 	}
 }

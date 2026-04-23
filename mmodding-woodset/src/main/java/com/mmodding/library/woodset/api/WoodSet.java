@@ -33,10 +33,6 @@ public interface WoodSet {
 
 	TagKey<Item> getLogsItemTag();
 
-	boolean isBurnable();
-
-	LogDisplay getLogDisplay();
-
 	Block getLeaves();
 
 	Block getSapling();
@@ -59,15 +55,7 @@ public interface WoodSet {
 
 	Item getChestBoatItem();
 
-	/**
-	 * Indicates which model should be used for the log.
-	 * This is useful for automated datagen.
-	 */
-	enum LogDisplay {
-		NORMAL, // Like nether logs.
-		WITH_HORIZONTAL, // Like most of vanilla logs.
-		UV_LOCKED // Like cherry log and bamboo log.
-	}
+	WoodSetSettings getSettings();
 
 	interface BoatFactory {
 

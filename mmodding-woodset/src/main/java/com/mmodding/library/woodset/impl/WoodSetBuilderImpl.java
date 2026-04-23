@@ -6,6 +6,7 @@ import com.mmodding.library.java.api.color.Color;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.woodset.api.WoodSet;
 import com.mmodding.library.woodset.api.WoodSetBuilder;
+import com.mmodding.library.woodset.api.WoodSetSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.world.entity.EntityType;
@@ -24,9 +25,7 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 
 	private String logName = "log";
 	private String woodName = "wood";
-	private boolean burnable = true;
 	private SoundType woodSoundType = SoundType.WOOD;
-	private WoodSet.LogDisplay logDisplay = WoodSet.LogDisplay.WITH_HORIZONTAL;
 	private BlockFactory<? extends AdvancedLeavesBlock> leavesFactory = properties -> new AdvancedLeavesBlock(0.01f, Color.rgb(-12012264), properties);
 	private SoundType leavesSoundType = SoundType.GRASS;
 	private TreeGrower grower = TreeGrower.OAK;
@@ -34,6 +33,7 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	private WoodSet.BoatFactory boatFactory = EntityType::boatFactory;
 	private WoodSet.ChestBoatFactory chestBoatFactory = EntityType::chestBoatFactory;
 	private AutoMapper<BlockBehaviour.Properties> patch = AutoMapper.identity();
+	private WoodSetSettings settings = WoodSetSettings.DEFAULT;
 
 	public WoodSetBuilderImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder) {
 		this.namespace = namespace;
@@ -55,20 +55,8 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	}
 
 	@Override
-	public WoodSetBuilder doesNotBurn() {
-		this.burnable = false;
-		return this;
-	}
-
-	@Override
 	public WoodSetBuilder withWoodSounds(SoundType soundType) {
 		this.woodSoundType = soundType;
-		return this;
-	}
-
-	@Override
-	public WoodSetBuilder withLogDisplay(WoodSet.LogDisplay logDisplay) {
-		this.logDisplay = logDisplay;
 		return this;
 	}
 
@@ -115,6 +103,12 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	}
 
 	@Override
+	public WoodSetBuilder withSettings(WoodSetSettings settings) {
+		this.settings = settings;
+		return this;
+	}
+
+	@Override
 	public WoodSet buildAndRegister() {
 		return new WoodSetImpl(
 			this.namespace,
@@ -123,16 +117,15 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 			this.setTypeBuilder,
 			this.logName,
 			this.woodName,
-			this.burnable,
 			this.woodSoundType,
-			this.logDisplay,
 			this.leavesFactory,
 			this.leavesSoundType,
 			this.grower,
 			this.saplingSoundType,
 			this.boatFactory,
 			this.chestBoatFactory,
-			this.patch
+			this.patch,
+			this.settings
 		);
 	}
 }

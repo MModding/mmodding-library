@@ -45,9 +45,9 @@ public interface WoodSetBuilder {
 		return WoodSetBuilder.create(namespace, name, woodTypeBuilder, setTypeBuilder)
 			.withLogName("stem")
 			.withWoodName("hyphae")
-			.doesNotBurn()
 			.withWoodSounds(SoundType.NETHER_WOOD)
-			.withUntintedLeaves(0.0f, ParticleTypes.SOUL_FIRE_FLAME);
+			.withUntintedLeaves(0.0f, ParticleTypes.SOUL_FIRE_FLAME)
+			.withSettings(WoodSetSettings.create(false, WoodSetSettings.LogDisplay.NORMAL));
 	}
 
 	/**
@@ -67,26 +67,12 @@ public interface WoodSetBuilder {
 	WoodSetBuilder withWoodName(String wood);
 
 	/**
-	 * Indicates that the wood set entries are not burnable.
-	 * @return the builder
-	 */
-	WoodSetBuilder doesNotBurn();
-
-	/**
 	 * Sets a {@link SoundType} for standard wood objects.
 	 * <br>Defaults to {@link SoundType#WOOD}.
 	 * @param soundType the sound type
 	 * @return the builder
 	 */
 	WoodSetBuilder withWoodSounds(SoundType soundType);
-
-	/**
-	 * Sets a {@link WoodSet.LogDisplay}, indicating which model should be used for the log.
-	 * <br>Defaults to {@link WoodSet.LogDisplay#WITH_HORIZONTAL}.
-	 * @param logDisplay the log display
-	 * @return the builder
-	 */
-	WoodSetBuilder withLogDisplay(WoodSet.LogDisplay logDisplay);
 
 	/**
 	 * Sets tinted leaves parameters.
@@ -163,6 +149,14 @@ public interface WoodSetBuilder {
 	 * @return the builder
 	 */
 	WoodSetBuilder withOverallPatch(AutoMapper<BlockBehaviour.Properties> patch);
+
+	/**
+	 * Sets {@link WoodSetSettings} for the wood set.
+	 * <br>Defaults to {@link WoodSetSettings#DEFAULT}.
+	 * @param settings the settings
+	 * @return the builder
+	 */
+	WoodSetBuilder withSettings(WoodSetSettings settings);
 
 	/**
 	 * Builds and registers the {@link WoodSet}.

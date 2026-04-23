@@ -20,12 +20,14 @@ import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
@@ -112,7 +114,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 			for (WoodSet set : this.sets) {
 				BlockModelGenerators.WoodProvider provider = generator.woodProvider(set.getLog()).wood(set.getWood());
 				BlockModelGenerators.WoodProvider stripped = generator.woodProvider(set.getStrippedLog()).wood(set.getStrippedWood());
-				switch (set.getLogDisplay()) {
+				switch (set.getSettings().getLogDisplay()) {
 					case NORMAL -> { provider.log(set.getLog()); stripped.log(set.getStrippedLog()); }
 					case WITH_HORIZONTAL -> { provider.logWithHorizontal(set.getLog()); stripped.logWithHorizontal(set.getStrippedLog()); }
 					case UV_LOCKED -> { provider.logUVLocked(set.getLog()); stripped.logUVLocked(set.getStrippedLog()); }
@@ -187,13 +189,25 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
 			return new RecipeProvider(registries, output) {
 
+				private void hangingSign(final ItemLike result, final ItemLike ingredient, final ItemLike chain) {
+					this.shaped(RecipeCategory.DECORATIONS, result, 6)
+						.group("hanging_sign")
+						.define('#', ingredient)
+						.define('X', chain)
+						.pattern("X X")
+						.pattern("###")
+						.pattern("###")
+						.unlockedBy("has_stripped_logs", this.has(ingredient))
+						.save(this.output);
+				}
+
 				@Override
 				public void buildRecipes() {
 					for (WoodSet set : AutomatedRecipes.this.sets) {
 						this.woodFromLogs(set.getWood(), set.getLog());
 						this.woodFromLogs(set.getStrippedWood(), set.getStrippedLog());
 						this.planksFromLog(set.getPlankRelatives().getMain(), set.getLogsItemTag(), 4);
-						this.hangingSign(set.getHangingSign(), set.getStrippedLog());
+						this.hangingSign(set.getHangingSign(), set.getStrippedLog(), set.getSettings().getHangingSignChain());
 						this.shelf(set.getShelf(), set.getStrippedLog());
 						this.woodenBoat(set.getBoatItem(), set.getPlankRelatives().getMain());
 						this.chestBoat(set.getChestBoatItem(), set.getPlankRelatives().getMain());
@@ -223,7 +237,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		protected void addTags(HolderLookup.Provider registries) {
 			for (WoodSet set : this.sets) {
 				this.valueLookupBuilder(set.getLogsBlockTag()).add(set.getLog(), set.getWood(), set.getStrippedLog(), set.getStrippedWood());
-				if (set.isBurnable()) {
+				if (set.getSettings().isBurnable()) {
 					this.hasBurnable = true;
 					this.valueLookupBuilder(BlockTags.LOGS_THAT_BURN).addTag(set.getLogsBlockTag());
 				}
