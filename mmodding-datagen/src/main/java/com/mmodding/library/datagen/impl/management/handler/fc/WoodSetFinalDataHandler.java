@@ -166,6 +166,11 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 				this.dropSelf(set.getShelf());
 			}
 		}
+
+		@Override
+		public String getName() {
+			return "Automated Wood Set " + super.getName();
+		}
 	}
 
 	private static class AutomatedRecipes extends FabricRecipeProvider {
@@ -313,6 +318,11 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 			for (WoodSet set : this.sets) {
 				this.valueLookupBuilder(EntityTypeTags.BOAT).add(set.getBoatEntityType());
 			}
+		}
+
+		@Override
+		public String getName() {
+			return "Automated Wood Set " + super.getName();
 		}
 	}
 

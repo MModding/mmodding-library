@@ -129,6 +129,11 @@ public class BlockFamilyFinalDataHandler implements FinalDataHandler<BlockFamily
 				}
 			}
 		}
+
+		@Override
+		public String getName() {
+			return "Automated Block Family " + super.getName();
+		}
 	}
 
 	static class AutomatedBlockFamilyRecipes extends FabricRecipeProvider {
