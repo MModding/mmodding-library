@@ -184,6 +184,7 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		@Override
 		protected void addTags(HolderLookup.Provider arg) {
 			this.relatives.forEach(current -> {
+				this.valueLookupBuilder(current.getBlockTagKey()).add(current.getMain());
 				for (BlockFamily.Variant variant : current.getVariants()) {
 					Block block = current.get(variant);
 					this.valueLookupBuilder(current.getBlockTagKey()).add(block);

@@ -36,8 +36,8 @@ public class BlockRelativesImpl implements BlockRelatives {
 		this.identifier = identifier;
 		this.mainBlock = Blocks.register(ResourceKey.create(Registries.BLOCK, this.identifier.withPath(path -> path + mainSuffix)), mainFactory::make, sharedProperties);
 		this.mainBlock.registerItem(new Item.Properties());
-		this.blockTagKey = TagKey.create(Registries.BLOCK, identifier);
-		this.itemTagKey = TagKey.create(Registries.ITEM, identifier);
+		this.blockTagKey = TagKey.create(Registries.BLOCK, identifier.withPath(path -> path + mainSuffix));
+		this.itemTagKey = TagKey.create(Registries.ITEM, identifier.withPath(path -> path + mainSuffix));
 		this.variants = new Object2ObjectOpenHashMap<>();
 	}
 
