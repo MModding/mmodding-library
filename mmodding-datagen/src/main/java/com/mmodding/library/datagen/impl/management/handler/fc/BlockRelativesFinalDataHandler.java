@@ -65,11 +65,9 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		@Override
 		public void generateTranslations(HolderLookup.Provider lookup, TranslationBuilder translationBuilder) {
 			this.relatives.forEach(current -> {
-				Identifier mainId = BuiltInRegistries.BLOCK.getKey(current.getMain());
-				translationBuilder.add(current.getMain(), DefaultLangProcessors.CLASSIC.process(mainId));
 				current.getEntries().stream().filter(block -> !(block instanceof SignBlock || block instanceof WallSignBlock)).toList().forEach(block -> {
-					Identifier variantId = BuiltInRegistries.BLOCK.getKey(block);
-					translationBuilder.add(block, DefaultLangProcessors.CLASSIC.process(variantId));
+					Identifier blockId = BuiltInRegistries.BLOCK.getKey(block);
+					translationBuilder.add(block, DefaultLangProcessors.CLASSIC.process(blockId));
 				});
 				if (current.getVariants().contains(BlockFamily.Variant.SIGN)) {
 					Item item = current.get(BlockFamily.Variant.SIGN).asItem();
