@@ -18,16 +18,18 @@ public class ShapelessRecipeImpl implements RecipeHelper.ShapelessRecipe {
 	}
 
 	@Override
-	public void with(ItemLike... items) {
+	public RecipeHelper.ShapelessRecipe with(ItemLike... items) {
 		for (ItemLike item : items) {
 			this.factory.requires(item);
 		}
+		return this;
 	}
 
 	@Override
-	public void with(Ingredient... ingredients) {
+	public RecipeHelper.ShapelessRecipe with(Ingredient... ingredients) {
 		for (Ingredient ingredient : ingredients) {
 			this.factory.requires(ingredient);
 		}
+		return this;
 	}
 }

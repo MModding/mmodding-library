@@ -18,17 +18,20 @@ public class ShapedRecipeImpl implements RecipeHelper.ShapedRecipe {
 	}
 
 	@Override
-	public void key(char key, Ingredient ingredient) {
+	public RecipeHelper.ShapedRecipe key(char key, Ingredient ingredient) {
 		this.factory.define(key, ingredient);
+		return this;
 	}
 
 	@Override
-	public void pattern(String firstLine, String secondLine, String thirdLine) {
+	public RecipeHelper.ShapedRecipe pattern(String firstLine, String secondLine, String thirdLine) {
 		this.factory.pattern(firstLine).pattern(secondLine).pattern(thirdLine);
+		return this;
 	}
 
 	@Override
-	public void pattern(String firstLine, String secondLine) {
+	public RecipeHelper.ShapedRecipe pattern(String firstLine, String secondLine) {
 		this.factory.pattern(firstLine).pattern(secondLine);
+		return this;
 	}
 }
