@@ -65,6 +65,6 @@ public class ResourceGenerator implements DataGeneratorEntrypoint {
 
 	@Override
 	public void addJsonKeySortOrders(JsonKeySortOrderCallback callback) {
-		if (this.wrapped != null) this.addJsonKeySortOrders(callback);
+		if (this.wrapped != null) this.wrapped.addJsonKeySortOrders(callback);
 	}
 }
