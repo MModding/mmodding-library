@@ -12,6 +12,8 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +43,7 @@ public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implemen
 	public ConfiguredFeaturePack<FC> replicatePlacedFeature(ResourceKey<PlacedFeature> source, ResourceKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher) {
 		this.placedFeatures.add(key, placedFeatures -> {
 			PlacedFeature sourcePlacedFeature = placedFeatures.getLookup(Registries.PLACED_FEATURE).getOrThrow(source).value();
-			PlacementModifiersImpl modifiers = new PlacementModifiersImpl(sourcePlacedFeature.placement());
+			PlacementModifiersImpl modifiers = new PlacementModifiersImpl(new ArrayList<>(sourcePlacedFeature.placement()));
 			patcher.accept(modifiers);
 			return modifiers.retrieve();
 		});
