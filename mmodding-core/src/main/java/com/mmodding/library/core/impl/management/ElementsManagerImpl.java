@@ -4,8 +4,10 @@ import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.management.content.ResourceProvider;
 import com.mmodding.library.core.api.management.content.ContentProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +15,14 @@ import java.util.List;
 public class ElementsManagerImpl implements ElementsManager {
 
 	private final List<ContentProvider> contentProviders = new ArrayList<>();
-	private final List<ResourceProvider> resourceProviders = new ArrayList<>();
+	private final BiList<ResourceKey<? extends Registry<Object>>, ResourceProvider<Object>> resourceProviders = BiList.create();
 
 	public void loadElements(AdvancedContainer mod) {
 		this.contentProviders.forEach(provider -> provider.register(mod));
 	}
 
-	public void loadBootstraps(AdvancedContainer mod, FabricDynamicRegistryProvider.Entries registrable) {
-		this.resourceProviders.forEach(provider -> provider.run(mod, registrable));
+	public BiList<ResourceKey<? extends Registry<Object>>, ResourceProvider<Object>> getBootstraps() {
+		return this.resourceProviders;
 	}
 
 	@Override
@@ -30,9 +32,10 @@ public class ElementsManagerImpl implements ElementsManager {
 	}
 
 	@Override
-	public ElementsManagerImpl resource(ResourceProvider provider) {
+	@SuppressWarnings("unchecked")
+	public <T> ElementsManagerImpl resource(ResourceKey<? extends Registry<T>> registry, ResourceProvider<T> provider) {
 		if (System.getProperty("fabric-api.datagen") != null) {
-			this.resourceProviders.add(provider);
+			this.resourceProviders.add((ResourceKey<? extends Registry<Object>>) registry, (ResourceProvider<Object>) provider);
 		}
 		return this;
 	}
