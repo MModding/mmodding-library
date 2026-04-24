@@ -197,7 +197,7 @@ mmodding {
 }
 
 dependencies {
-	api(include(mmodding.configureFMJForDependency(libs.yumi.commons.core.get()) {
+	api(mmodding.configureFMJForDependency(include(libs.yumi.commons.core.get())) {
 		name = "Yumi Commons: Core"
 		namespace = "yumi-commons-core"
 		withContact {
@@ -211,9 +211,9 @@ dependencies {
 		withParent("yumi-commons") {
 			applyYumiCommonsParent(it)
 		}
-	}))
+	})
 
-	api(include(mmodding.configureFMJForDependency(libs.yumi.commons.collections.get()) {
+	api(mmodding.configureFMJForDependency(include(libs.yumi.commons.collections.get())) {
 		name = "Yumi Commons: Collections"
 		namespace = "yumi-commons-collections"
 		withContact {
@@ -227,9 +227,9 @@ dependencies {
 		withParent("yumi-commons") {
 			applyYumiCommonsParent(it)
 		}
-	}))
+	})
 
-	api(include(mmodding.configureFMJForDependency(libs.yumi.commons.event.get()) {
+	api(mmodding.configureFMJForDependency(include(libs.yumi.commons.event.get())) {
 		name = "Yumi Commons: Event"
 		namespace = "yumi-commons-event"
 		withContact {
@@ -243,13 +243,13 @@ dependencies {
 		withParent("yumi-commons") {
 			applyYumiCommonsParent(it)
 		}
-	}))
+	})
 
-	api(include(mmodding.configureFMJForDependency(libs.quilt.parsers.json.get()) {
+	api(mmodding.configureFMJForDependency(include(libs.quilt.parsers.json.get())) {
 		name = "Quilt Parsers"
 		namespace = "quilt_parsers"
 		addAuthor("QuiltMC")
-	}))
+	})
 }
 
 // Javadocs
