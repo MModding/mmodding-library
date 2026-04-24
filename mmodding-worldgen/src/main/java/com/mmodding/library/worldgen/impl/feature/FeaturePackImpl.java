@@ -5,6 +5,7 @@ import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.worldgen.api.feature.ConfiguredFeaturePack;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -61,8 +62,8 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 	public void register(FabricDynamicRegistryProvider.Entries registrable) {
 		this.configuredFeaturePacks.forEach((pack, featureConfig) -> {
 			ConfiguredFeaturePackImpl<FC> impl = (ConfiguredFeaturePackImpl<FC>) pack;
-			registrable.add(impl.configuredFeatureKey, new ConfiguredFeature<>(this.feature, featureConfig.apply(registrable)));
-			pack.register(registrable);
+			Holder<ConfiguredFeature<?, ?>> holder = registrable.add(impl.configuredFeatureKey, new ConfiguredFeature<>(this.feature, featureConfig.apply(registrable)));
+			pack.register(holder, registrable);
 		});
 	}
 }

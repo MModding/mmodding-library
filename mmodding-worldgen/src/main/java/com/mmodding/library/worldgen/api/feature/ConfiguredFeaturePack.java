@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -50,8 +51,9 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfiguration> {
 	ConfiguredFeaturePack<FC> replicatePlacedFeature(ResourceKey<PlacedFeature> source, ResourceKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher);
 
 	/**
-	 * Registers placed features of this configured feature pack.
+	 * Registers this configured feature pack content.
+	 * @param configuredFeatureRef the configured feature reference
 	 * @param registrable the registrable
 	 */
-	void register(FabricDynamicRegistryProvider.Entries registrable);
+	void register(Holder<ConfiguredFeature<?, ?>> configuredFeatureRef, FabricDynamicRegistryProvider.Entries registrable);
 }
