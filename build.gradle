@@ -10,8 +10,12 @@ plugins {
 version = "$project.version+${libs.versions.minecraft.get()}"
 group = project.maven_group
 
+subprojects {
+	group = project.module_maven_group
+}
+
 static def getMModdingLibraryNamespace(Project project) {
-	return project.name.replace("-", "_")
+	return project.rootProject == project ? "mmodding" : project.name.replace("-", "_")
 }
 
 static def getMModdingLibraryName(Project project) {
@@ -173,32 +177,27 @@ jar {
 
 mmodding {
 	modules {
-		include("mmodding-block")
-		include("mmodding-block-entity")
-		include("mmodding-config")
-		include("mmodding-core")
-		include("mmodding-datagen")
-		include("mmodding-enchantment")
-		include("mmodding-fluid")
-		include("mmodding-inventory")
-		include("mmodding-item")
-		include("mmodding-java")
-		include("mmodding-math")
-		include("mmodding-network")
-		include("mmodding-rendering")
-		include("mmodding-state")
-		include("mmodding-woodset")
-		include("mmodding-worldgen")
-
-		// Required for Full Bundle Classes
-		api("mmodding-core")
-		api("mmodding-worldgen")
+		bundle("mmodding-block")
+		bundle("mmodding-block-entity")
+		bundle("mmodding-config")
+		bundle("mmodding-core")
+		bundle("mmodding-datagen")
+		bundle("mmodding-enchantment")
+		bundle("mmodding-fluid")
+		bundle("mmodding-inventory")
+		bundle("mmodding-item")
+		bundle("mmodding-java")
+		bundle("mmodding-math")
+		bundle("mmodding-network")
+		bundle("mmodding-rendering")
+		bundle("mmodding-state")
+		bundle("mmodding-woodset")
+		bundle("mmodding-worldgen")
 	}
 }
 
 dependencies {
-	include(libs.yumi.commons.core)
-	/* mmodding.configureFMJForDependency(libs.yumi.commons.core.get()) {
+	api(include(mmodding.configureFMJForDependency(libs.yumi.commons.core.get()) {
 		name = "Yumi Commons: Core"
 		namespace = "yumi-commons-core"
 		withContact {
@@ -212,10 +211,9 @@ dependencies {
 		withParent("yumi-commons") {
 			applyYumiCommonsParent(it)
 		}
-	} */
+	}))
 
-	include(libs.yumi.commons.collections)
-	/* mmodding.configureFMJForDependency(libs.yumi.commons.collections.get()) {
+	api(include(mmodding.configureFMJForDependency(libs.yumi.commons.collections.get()) {
 		name = "Yumi Commons: Collections"
 		namespace = "yumi-commons-collections"
 		withContact {
@@ -229,10 +227,9 @@ dependencies {
 		withParent("yumi-commons") {
 			applyYumiCommonsParent(it)
 		}
-	} */
+	}))
 
-	include(libs.yumi.commons.event)
-	/* mmodding.configureFMJForDependency(libs.yumi.commons.event.get()) {
+	api(include(mmodding.configureFMJForDependency(libs.yumi.commons.event.get()) {
 		name = "Yumi Commons: Event"
 		namespace = "yumi-commons-event"
 		withContact {
@@ -246,14 +243,13 @@ dependencies {
 		withParent("yumi-commons") {
 			applyYumiCommonsParent(it)
 		}
-	} */
+	}))
 
-	include(libs.quilt.parsers.json)
-	/* mmodding.configureFMJForDependency(libs.quilt.parsers.json.get()) {
+	api(include(mmodding.configureFMJForDependency(libs.quilt.parsers.json.get()) {
 		name = "Quilt Parsers"
 		namespace = "quilt_parsers"
 		addAuthor("QuiltMC")
-	} */
+	}))
 }
 
 // Javadocs
