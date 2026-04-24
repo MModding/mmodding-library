@@ -1,10 +1,10 @@
 package com.mmodding.library.worldgen.api.feature;
 
+import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.worldgen.impl.feature.ConfiguredFeaturePackImpl;
 import java.util.List;
-import java.util.function.Consumer;
 
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -47,11 +47,11 @@ public interface ConfiguredFeaturePack<FC extends FeatureConfiguration> {
 	 * @return the configured feature pack
 	 * @apiNote In case you depend on external mods for those placed features, make sure the source mod's resources are loaded before yours, so that the data generator does not fail.
 	 */
-	ConfiguredFeaturePack<FC> replicatePlacedFeature(ResourceKey<PlacedFeature> source, ResourceKey<PlacedFeature> key, Consumer<PlacementModifiers> patcher);
+	ConfiguredFeaturePack<FC> replicatePlacedFeature(ResourceKey<PlacedFeature> source, ResourceKey<PlacedFeature> key, AutoMapper<PlacementModifiers> patcher);
 
 	/**
 	 * Registers placed features of this configured feature pack.
-	 * @param registrable the registrable
+	 * @param context the context
 	 */
-	void register(FabricDynamicRegistryProvider.Entries registrable);
+	void register(BootstrapContext<PlacedFeature> context);
 }

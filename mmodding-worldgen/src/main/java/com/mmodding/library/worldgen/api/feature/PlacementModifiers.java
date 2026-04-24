@@ -17,5 +17,5 @@ public interface PlacementModifiers {
 
 	void remove(PlacementModifierType<?> type);
 
-	<P extends PlacementModifier> void mutateTypeTo(PlacementModifierType<P> type, Function<P, PlacementModifier> mutator);
+	<P extends PlacementModifier> PlacementModifiers mutateTypeTo(PlacementModifierType<P> type, Function<P, PlacementModifier> mutator);
 }

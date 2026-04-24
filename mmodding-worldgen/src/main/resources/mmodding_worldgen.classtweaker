@@ -3,6 +3,9 @@ classTweaker v1 official
 transitive-accessible method net/minecraft/data/worldgen/features/VegetationFeatures flowerBedPatchBuilder (Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/util/random/WeightedList$Builder;
 transitive-accessible method net/minecraft/data/worldgen/features/VegetationFeatures segmentedBlockPatchBuilder (Lnet/minecraft/world/level/block/Block;IILnet/minecraft/world/level/block/state/properties/IntegerProperty;Lnet/minecraft/world/level/block/state/properties/EnumProperty;)Lnet/minecraft/util/random/WeightedList$Builder;
 
+mutable field net/minecraft/world/level/levelgen/feature/ConfiguredFeature config Lnet/minecraft/world/level/levelgen/feature/configurations/FeatureConfiguration;
+mutable field net/minecraft/world/level/levelgen/placement/PlacedFeature placement Ljava/util/List;
+
 accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/block/state/BlockState;)Z
 accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
 accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWaterOrLava (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z

@@ -2,8 +2,8 @@ package com.mmodding.library.worldgen.test;
 
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.Identifier;
@@ -51,7 +51,11 @@ public class FeatureTests {
 		return ResourceKey.create(Registries.PLACED_FEATURE, Identifier.fromNamespaceAndPath("mmodding_worldgen_test", path));
 	}
 
-	public static void register(FabricDynamicRegistryProvider.Entries registrable, AdvancedContainer mod) {
-		RANDOM_PATCH.register(registrable);
+	public static void registerConfigs(AdvancedContainer mod, BootstrapContext<ConfiguredFeature<?, ?>> context) {
+		RANDOM_PATCH.registerConfigs(context);
+	}
+
+	public static void registerPlacements(AdvancedContainer mod, BootstrapContext<PlacedFeature> context) {
+		RANDOM_PATCH.registerPlacements(context);
 	}
 }

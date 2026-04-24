@@ -47,11 +47,12 @@ public class PlacementModifiersImpl implements PlacementModifiers {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <P extends PlacementModifier> void mutateTypeTo(PlacementModifierType<P> type, Function<P, PlacementModifier> mutator) {
+	public <P extends PlacementModifier> PlacementModifiers mutateTypeTo(PlacementModifierType<P> type, Function<P, PlacementModifier> mutator) {
 		P modifier = (P) this.fetchFirst(type);
 		PlacementModifier mutated = mutator.apply(modifier);
 		this.remove(type);
 		this.add(mutated);
+		return this;
 	}
 
 	public List<PlacementModifier> retrieve() {
