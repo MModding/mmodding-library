@@ -51,7 +51,8 @@ public class ConfiguredFeaturePackImpl<FC extends FeatureConfiguration> implemen
 	}
 
 	@Override
-	public void register(Holder<ConfiguredFeature<?, ?>> configuredFeatureRef, FabricDynamicRegistryProvider.Entries registrable) {
+	public void register(FabricDynamicRegistryProvider.Entries registrable) {
+		Holder<ConfiguredFeature<?, ?>> configuredFeatureRef = registrable.ref(this.configuredFeatureKey);
 		this.placedFeatures.forEach((placedFeatureKey, modifiers) -> registrable.add(placedFeatureKey, new PlacedFeature(configuredFeatureRef, List.copyOf(modifiers.apply(registrable)))));
 	}
 }
