@@ -36,23 +36,22 @@ public class PantsCosmeticRenderer extends CosmeticRenderer {
 		int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0f);
 		poseStack.pushPose();
 		contextModel.root().translateAndRotate(poseStack);
-		modelToRender.root().translateAndRotate(poseStack); // Applying root model transformations.
 		if (junctionModel != null) {
 			poseStack.pushPose();
 			contextModel.body.translateAndRotate(poseStack);
-			poseStack.translate(0.0f, -0.375f, 0.0f);
+			poseStack.translate(0.0f, -0.125f, 0.0f);
 			submitNodeCollector.submitModel(junctionModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 		}
 		if (leftLeggingModel != null && rightLeggingModel != null) {
 			poseStack.pushPose();
 			contextModel.leftLeg.translateAndRotate(poseStack);
-			poseStack.translate(0.0f, -0.75f, 0.0f); // Standard from: https://github.com/Patbox/trinkets/blob/6277184520132e1195b899057f8d7b56a15f4e9c/src/main/java/eu/pb4/trinkets/api/client/TrinketRenderer.java#L165.
+			poseStack.translate(-0.125f, -0.875f, 0.0f);
 			submitNodeCollector.submitModel(leftLeggingModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 			poseStack.pushPose();
 			contextModel.rightLeg.translateAndRotate(poseStack);
-			poseStack.translate(-0.0f, -0.75f, 0.0f); // Standard from: https://github.com/Patbox/trinkets/blob/6277184520132e1195b899057f8d7b56a15f4e9c/src/main/java/eu/pb4/trinkets/api/client/TrinketRenderer.java#L155.
+			poseStack.translate(0.125f, -0.875f, 0.0f);
 			submitNodeCollector.submitModel(rightLeggingModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 		}

@@ -36,24 +36,23 @@ public class SuitCosmeticRenderer extends CosmeticRenderer {
 		}
 		int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0f);
 		poseStack.pushPose();
-		modelToRender.root().translateAndRotate(poseStack); // Applying root model transformations.
 		if (bodyModel != null) {
 			poseStack.pushPose();
 			contextModel.root().translateAndRotate(poseStack);
 			contextModel.body.translateAndRotate(poseStack);
-			poseStack.translate(0.0f, -0.8125f, 0.0f);
+			poseStack.translate(0.0f, -0.625f, 0.0f);
 			submitNodeCollector.submitModel(bodyModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 		}
 		if (leftSleeveModel != null && rightSleeveModel != null) {
 			poseStack.pushPose();
 			contextModel.translateToHand(state, HumanoidArm.LEFT, poseStack);
-			poseStack.translate(0.0625f, -0.875f, 0.0f);
+			poseStack.translate(-0.3125f, -0.75f, 0.0f);
 			submitNodeCollector.submitModel(leftSleeveModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 			poseStack.pushPose();
 			contextModel.translateToHand(state, HumanoidArm.RIGHT, poseStack);
-			poseStack.translate(-0.0625f, -0.875f, 0.0f);
+			poseStack.translate(0.3125f, -0.75f, 0.0f);
 			submitNodeCollector.submitModel(rightSleeveModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 		}

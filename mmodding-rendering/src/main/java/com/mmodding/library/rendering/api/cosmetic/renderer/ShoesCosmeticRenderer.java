@@ -34,16 +34,15 @@ public class ShoesCosmeticRenderer extends CosmeticRenderer {
 		int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0f);
 		poseStack.pushPose();
 		contextModel.root().translateAndRotate(poseStack);
-		modelToRender.root().translateAndRotate(poseStack); // Applying root model transformations.
 		if (leftShoe != null && rightShoe != null) {
 			poseStack.pushPose();
 			contextModel.leftLeg.translateAndRotate(poseStack);
-			poseStack.translate(0.0f, -0.625, 0.0f);
+			poseStack.translate(-0.125f, -0.625, 0.0f);
 			submitNodeCollector.submitModel(leftShoe, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 			poseStack.pushPose();
 			contextModel.rightLeg.translateAndRotate(poseStack);
-			poseStack.translate(0.0f, -0.625, 0.0f);
+			poseStack.translate(0.125f, -0.625, 0.0f);
 			submitNodeCollector.submitModel(rightShoe, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
 			poseStack.popPose();
 		}

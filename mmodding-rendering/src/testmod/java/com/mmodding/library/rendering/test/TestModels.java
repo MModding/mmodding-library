@@ -3,16 +3,14 @@ package com.mmodding.library.rendering.test;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 
+// Blockbench Generated Models
 public class TestModels {
 
 	public static LayerDefinition createTestCapLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition bb_main = partdefinition.addOrReplaceChild("bb_main", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
@@ -21,20 +19,11 @@ public class TestModels {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -5.0F, -2.0F, 8.0F, 10.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 15.0F, 0.0F));
 
-		PartDefinition leftSleeve = partdefinition.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition left_sleeve = partdefinition.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(16, 14).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(6.0F, 16.0F, 0.0F));
 
-		PartDefinition rightSleeve = partdefinition.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition right_sleeve = partdefinition.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(0, 14).addBox(-2.0F, -6.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, 16.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
@@ -43,20 +32,11 @@ public class TestModels {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition junction = partdefinition.addOrReplaceChild("junction", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition junction = partdefinition.addOrReplaceChild("junction", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -1.0F, -2.0F, 8.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 13.0F, 0.0F));
 
-		PartDefinition leftLegging = partdefinition.addOrReplaceChild("left_legging", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition left_legging = partdefinition.addOrReplaceChild("left_legging", CubeListBuilder.create().texOffs(16, 6).addBox(-2.0F, -4.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 18.0F, 0.0F));
 
-		PartDefinition rightLegging = partdefinition.addOrReplaceChild("right_legging", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition right_legging = partdefinition.addOrReplaceChild("right_legging", CubeListBuilder.create().texOffs(0, 6).addBox(-2.0F, -4.0F, -2.0F, 4.0F, 8.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 18.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
@@ -65,15 +45,9 @@ public class TestModels {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition leftShoe = partdefinition.addOrReplaceChild("left_shoe", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition left_shoe = partdefinition.addOrReplaceChild("left_shoe", CubeListBuilder.create().texOffs(0, 8).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 20.0F, 0.0F));
 
-		PartDefinition rightShoe = partdefinition.addOrReplaceChild("right_shoe", CubeListBuilder.create().texOffs(0, 0).addBox(-12.0F, -9.0F, 4.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 12.0F, 8.0F, 8.0F, 0.0F, new CubeDeformation(0.0F))
-			.texOffs(0, 0).addBox(-4.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-			.texOffs(16, 0).addBox(-12.0F, -9.0F, 4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, 23.0F, 8.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition right_shoe = partdefinition.addOrReplaceChild("right_shoe", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 20.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
