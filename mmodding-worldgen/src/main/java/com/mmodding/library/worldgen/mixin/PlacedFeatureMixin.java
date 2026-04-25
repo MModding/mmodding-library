@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(PlacedFeature.class)
@@ -54,7 +55,7 @@ public class PlacedFeatureMixin implements PlacedFeatureReplicator {
 	@Unique
 	private void possiblyReplicate() {
 		if (this.replicateTarget != null) {
-			PlacementModifiersImpl input = new PlacementModifiersImpl(this.replicateTarget.first().value().placement());
+			PlacementModifiersImpl input = new PlacementModifiersImpl(new ArrayList<>(this.replicateTarget.first().value().placement()));
 			PlacementModifiersImpl output = (PlacementModifiersImpl) this.replicateTarget.second().map(input);
 			this.placement = output.retrieve();
 		}
