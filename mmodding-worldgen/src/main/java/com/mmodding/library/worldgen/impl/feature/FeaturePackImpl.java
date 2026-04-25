@@ -31,7 +31,7 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 
 	@Override
 	public FeaturePack<FC> appendConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<ConfiguredFeaturePack<FC>> action) {
-		ConfiguredFeaturePack<FC> configuredFeaturePack = ConfiguredFeaturePack.of(key);
+		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(key);
 		this.configuredFeaturePacks.add(configuredFeaturePack, Either.ofFirst(featureConfig));
 		action.accept(configuredFeaturePack);
 		return this;
@@ -41,6 +41,7 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 	public FeaturePack<FC> replicateConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> source, ResourceKey<ConfiguredFeature<?, ?>> key, AutoMapper<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action) {
 		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(key);
 		this.configuredFeaturePacks.add(configuredFeaturePack, Either.ofSecond(Pair.create(source, patcher)));
+		action.accept(configuredFeaturePack);
 		return this;
 	}
 
