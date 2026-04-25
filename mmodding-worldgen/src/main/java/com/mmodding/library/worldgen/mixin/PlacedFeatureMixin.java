@@ -1,5 +1,7 @@
 package com.mmodding.library.worldgen.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mmodding.library.java.api.container.Pair;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.worldgen.api.feature.PlacementModifiers;
@@ -28,6 +30,11 @@ public class PlacedFeatureMixin implements PlacedFeatureReplicator {
 
 	@Unique
 	private Pair<Holder<PlacedFeature>, AutoMapper<PlacementModifiers>> replicateTarget = null;
+
+	@WrapMethod(method = "lambda$static$2")
+	private static List<PlacementModifier> useMethodInstead(PlacedFeature c, Operation<Holder<PlacedFeature>> original) {
+		return c.placement();
+	}
 
 	@Inject(method = "placement", at = @At("HEAD"))
 	private void applyReplication(CallbackInfoReturnable<List<PlacedFeature>> cir) {
