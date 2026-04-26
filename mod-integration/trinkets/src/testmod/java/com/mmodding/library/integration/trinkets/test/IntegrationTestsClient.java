@@ -1,4 +1,4 @@
-package com.mmodding.library.rendering.test;
+package com.mmodding.library.integration.trinkets.test;
 
 import com.mmodding.library.rendering.api.cosmetic.renderer.CosmeticRendererRegistry;
 import com.mmodding.library.rendering.api.cosmetic.renderer.HeadAnchor;
@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.Identifier;
 
-public class RenderingTestsClient implements ClientModInitializer {
+public class IntegrationTestsClient implements ClientModInitializer {
 
 	public static final ModelLayerLocation CAP = new ModelLayerLocation(Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_cap"), "main");
 	public static final ModelLayerLocation SUIT = new ModelLayerLocation(Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_suit"), "main");
@@ -20,9 +20,9 @@ public class RenderingTestsClient implements ClientModInitializer {
 		ModelLayerRegistry.registerModelLayer(SUIT, TestModels::createTestSuitLayer);
 		ModelLayerRegistry.registerModelLayer(PANTS, TestModels::createTestPantsLayer);
 		ModelLayerRegistry.registerModelLayer(SHOES, TestModels::createTestShoesLayer);
-		CosmeticRendererRegistry.registerCapRenderer(TestCosmetics.CAP, HeadAnchor.HEAD_CENTER, RenderingTests.TEST_CAP);
-		CosmeticRendererRegistry.registerSuitRenderer(TestCosmetics.SUIT, RenderingTests.TEST_SUIT);
-		CosmeticRendererRegistry.registerPantsRenderer(TestCosmetics.PANTS, RenderingTests.TEST_PANTS);
-		CosmeticRendererRegistry.registerShoesRenderer(TestCosmetics.SHOES, RenderingTests.TEST_SHOES);
+		CosmeticRendererRegistry.registerCapRenderer(TestCosmetics.CAP, HeadAnchor.HEAD_CENTER, IntegrationTests.TEST_CAP);
+		CosmeticRendererRegistry.registerSuitRenderer(TestCosmetics.SUIT, IntegrationTests.TEST_SUIT);
+		CosmeticRendererRegistry.registerPantsRenderer(TestCosmetics.PANTS, IntegrationTests.TEST_PANTS);
+		CosmeticRendererRegistry.registerShoesRenderer(TestCosmetics.SHOES, IntegrationTests.TEST_SHOES);
 	}
 }

@@ -49,3 +49,7 @@ include("mmodding-rendering")
 include("mmodding-state")
 include("mmodding-woodset")
 include("mmodding-worldgen")
+rootDir.toPath().resolve("mod-integration").toFile().list().each {
+    include("mod-integration-mmodding-" + it)
+    project(":mod-integration-mmodding-" + it).projectDir = file("mod-integration/" + it)
+}

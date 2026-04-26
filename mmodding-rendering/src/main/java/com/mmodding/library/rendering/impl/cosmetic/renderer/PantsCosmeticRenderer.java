@@ -1,6 +1,7 @@
-package com.mmodding.library.rendering.api.cosmetic.renderer;
+package com.mmodding.library.rendering.impl.cosmetic.renderer;
 
 import com.mmodding.library.rendering.api.cosmetic.Cosmetic;
+import com.mmodding.library.rendering.api.cosmetic.renderer.CosmeticRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -11,12 +12,9 @@ import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 
-/**
- * Rendering {@link Cosmetic} stuff as a pants-like.
- * <br>A pants model should have three named parts: <code>junction</code>, <code>left_legging</code> and <code>right_legging</code>.
- * <br>But, the model can actually miss either <code>junction</code> or both <code>left_legging</code> and <code>right_legging</code> if you only want the junction or the leggings to render.
- */
+@ApiStatus.Internal
 public class PantsCosmeticRenderer extends CosmeticRenderer {
 
 	public PantsCosmeticRenderer(Cosmetic cosmetic, EntityRendererProvider.Context context) {

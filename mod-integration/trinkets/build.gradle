@@ -1,0 +1,35 @@
+import com.mmodding.gradle.api.EnvironmentTarget
+
+repositories {
+	maven {
+		name = "Nucleoid"
+		url = "https://maven.nucleoid.xyz/releases"
+	}
+}
+
+mmodding {
+	modules {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+		implementation("mmodding-item")
+		implementation("mmodding-rendering")
+	}
+	configureFabricModJson {
+		environment = EnvironmentTarget.CLIENT
+		withDependencies {
+			it.addDependency("trinkets_updated", ">=" + libs.versions.trinkets.updated.get())
+		}
+		addMixin("mmodding_integration_trinkets.mixins.json")
+	}
+	configureTestmod {
+		environment = EnvironmentTarget.CLIENT
+		withEntrypoints {
+			it.init("com.mmodding.library.integration.trinkets.test.IntegrationTests")
+			it.client("com.mmodding.library.integration.trinkets.test.IntegrationTestsClient")
+		}
+	}
+}
+
+dependencies {
+	implementation libs.trinkets
+}

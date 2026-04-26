@@ -14,6 +14,8 @@ subprojects {
 	group = project.module_maven_group
 }
 
+def included_integrations = allowed_integrations.split(",")
+
 static def getMModdingLibraryNamespace(Project project) {
 	return project.rootProject == project ? "mmodding" : project.name.replace("-", "_")
 }
@@ -28,7 +30,12 @@ static def getMModdingLibraryName(Project project) {
 			projectName = projectName + it[0].toUpperCase() + it.substring(1) + " "
 		}
 	}
-	return projectName + "Library"
+	if (!projectName.contains("Mod Integration")) {
+		return projectName + "Library"
+	}
+	else {
+		return projectName.substring(0, projectName.length() - 1)
+	}
 }
 
 static def getMModdingLibraryDescription(Project project) {
@@ -45,10 +52,12 @@ static def applyMModdingLibraryProvider(Project project, NamespaceProvider provi
 	if (projectId != "mmodding") {
 		provider.provide(projectId.replace("_", "-"))
 	}
-	provider.provide(projectId + "_library")
-	provider.provide(projectId.replace("_", "-") + "-library")
-	provider.provide(projectId + "_api")
-	provider.provide(projectId.replace("_", "-") + "-api")
+	if (!projectId.contains("mod_integration")) {
+		provider.provide(projectId + "_library")
+		provider.provide(projectId.replace("_", "-") + "-library")
+		provider.provide(projectId + "_api")
+		provider.provide(projectId.replace("_", "-") + "-api")
+	}
 }
 
 static def applyYumiCommonsParent(ParentSchema parent) {
@@ -194,63 +203,24 @@ mmodding {
 		bundle("mmodding-state")
 		bundle("mmodding-woodset")
 		bundle("mmodding-worldgen")
+		rootDir.toPath().resolve("mod-integration").toFile().list().each {
+			if (included_integrations.contains(it)) {
+				include("mod-integration-mmodding-" + it) // we don't need to depend on it for the root project
+			}
+		}
 	}
 }
 
 dependencies {
-	api(mmodding.configureFMJForDependency(include(libs.yumi.commons.core.get())) {
-		name = "Yumi Commons: Core"
-		namespace = "yumi-commons-core"
-		withContact {
-			it.email = "email@yumi.dev"
-		}
-		addAuthor("LambdAurora") {
-			withContact {
-				it.email = "email@lambdaurora.dev"
-			}
-		}
-		withParent("yumi-commons") {
-			applyYumiCommonsParent(it)
-		}
-	})
+	api(include(libs.yumi.commons.core.get()))
+	api(include(libs.yumi.commons.collections.get()))
+	api(include(libs.yumi.commons.event.get()))
 
-	api(mmodding.configureFMJForDependency(include(libs.yumi.commons.collections.get())) {
-		name = "Yumi Commons: Collections"
-		namespace = "yumi-commons-collections"
-		withContact {
-			it.email = "email@yumi.dev"
-		}
-		addAuthor("LambdAurora") {
-			withContact {
-				it.email = "email@lambdaurora.dev"
-			}
-		}
-		withParent("yumi-commons") {
-			applyYumiCommonsParent(it)
-		}
-	})
-
-	api(mmodding.configureFMJForDependency(include(libs.yumi.commons.event.get())) {
-		name = "Yumi Commons: Event"
-		namespace = "yumi-commons-event"
-		withContact {
-			it.email = "email@yumi.dev"
-		}
-		addAuthor("LambdAurora") {
-			withContact {
-				it.email = "email@lambdaurora.dev"
-			}
-		}
-		withParent("yumi-commons") {
-			applyYumiCommonsParent(it)
-		}
-	})
-
-	api(mmodding.configureFMJForDependency(include(libs.quilt.parsers.json.get())) {
+	mmodding.configureFMJForDependency(api(include(libs.quilt.parsers.json.get()))) {
 		name = "Quilt Parsers"
 		namespace = "quilt_parsers"
 		addAuthor("QuiltMC")
-	})
+	}
 }
 
 // Javadocs

@@ -55,4 +55,14 @@ public abstract class CosmeticRenderer implements ArmorRenderer {
 	public boolean shouldRenderDefaultHeadItem(LivingEntity entity, ItemStack stack) {
 		return false;
 	}
+
+	/**
+	 * A factory to create an {@link CosmeticRenderer} instance.
+	 * @see ArmorRenderer.Factory
+	 */
+	@FunctionalInterface
+	public interface Factory {
+
+		CosmeticRenderer createCosmeticRenderer(Cosmetic cosmetic, EntityRendererProvider.Context context);
+	}
 }

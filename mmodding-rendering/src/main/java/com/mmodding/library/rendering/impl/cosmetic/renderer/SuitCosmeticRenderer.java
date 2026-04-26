@@ -1,6 +1,7 @@
-package com.mmodding.library.rendering.api.cosmetic.renderer;
+package com.mmodding.library.rendering.impl.cosmetic.renderer;
 
 import com.mmodding.library.rendering.api.cosmetic.Cosmetic;
+import com.mmodding.library.rendering.api.cosmetic.renderer.CosmeticRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -13,11 +14,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Rendering {@link Cosmetic} stuff as a suit-like.
- * <br>A suit model should have three named parts: <code>body</code>, <code>left_sleeve</code> and <code>right_sleeve</code>.
- * <br>But, the model can actually miss either <code>body</code> or both <code>left_sleeve</code> and <code>right_sleeve</code> if you only want the body or the sleeves to render.
- */
 public class SuitCosmeticRenderer extends CosmeticRenderer {
 
 	public SuitCosmeticRenderer(Cosmetic cosmetic, EntityRendererProvider.Context context) {

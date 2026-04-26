@@ -1,6 +1,7 @@
-package com.mmodding.library.rendering.api.cosmetic.renderer;
+package com.mmodding.library.rendering.impl.cosmetic.renderer;
 
 import com.mmodding.library.rendering.api.cosmetic.Cosmetic;
+import com.mmodding.library.rendering.api.cosmetic.renderer.CosmeticRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -12,10 +13,6 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Rendering {@link Cosmetic} stuff as a shoes-like.
- * <br>A shoes model should have two named parts: <code>left_shoe</code> and <code>right_shoe</code>.
- */
 public class ShoesCosmeticRenderer extends CosmeticRenderer {
 
 	public ShoesCosmeticRenderer(Cosmetic cosmetic, EntityRendererProvider.Context context) {
