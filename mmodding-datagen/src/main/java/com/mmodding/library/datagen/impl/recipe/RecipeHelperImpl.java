@@ -113,7 +113,10 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public RecipeHelper campfireCooking(ItemLike item, RecipeCategory category, int experience, int time) {
-		return this.campfireCooking(Ingredient.of(item), category, experience, time, item);
+		SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(item), category, this.target, experience, time)
+			.unlockedBy(RecipeProvider.getHasName(item), this.provider.has(item))
+			.save(this.output, RecipeProvider.getConversionRecipeName(this.target, item) + "_stonecutting");
+		return this;
 	}
 
 	@Override
