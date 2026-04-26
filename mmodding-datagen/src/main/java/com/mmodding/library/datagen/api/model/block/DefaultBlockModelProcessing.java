@@ -24,9 +24,9 @@ public class DefaultBlockModelProcessing {
 	public static final ModelTemplate LADDER = ModelTemplates.create("ladder", TextureSlot.TEXTURE, TextureSlot.PARTICLE);
 
 	public static void createStandaloneSlab(BlockModelGenerators generator, Block block) {
-		Identifier bottom = ModelTemplates.SLAB_BOTTOM.create(ModelLocationUtils.getModelLocation(block, "_bottom"), TextureMapping.cube(block), generator.modelOutput);
+		Identifier bottom = ModelTemplates.SLAB_BOTTOM.create(block, TextureMapping.cube(block), generator.modelOutput);
 		Identifier top = ModelTemplates.SLAB_TOP.create(ModelLocationUtils.getModelLocation(block, "_top"), TextureMapping.cube(block), generator.modelOutput);
-		Identifier full = ModelTemplates.CUBE_ALL.create(block, TextureMapping.cube(block), generator.modelOutput);
+		Identifier full = ModelTemplates.CUBE_ALL.create(ModelLocationUtils.getModelLocation(block, "_full"), TextureMapping.cube(block), generator.modelOutput);
 		generator.blockStateOutput.accept(BlockModelGenerators.createSlab(block, plainVariant(bottom), plainVariant(top), plainVariant(full)));
 		generator.registerSimpleItemModel(block, bottom);
 	}
