@@ -46,7 +46,7 @@ public interface LiteRegistry<T> extends Iterable<LiteRegistry.Entry<T>> {
 	 * @param identifier the identifier for the object
 	 * @param entry the object to register
 	 * @return the newly registered object
-	 * @exception IllegalStateException an entry with the same identifier is already present in the registry
+	 * @exception IllegalStateException an entry with the same identifier is already present in the registry, or the same entry is already present in the registry
 	 */
 	T register(Identifier identifier, T entry);
 

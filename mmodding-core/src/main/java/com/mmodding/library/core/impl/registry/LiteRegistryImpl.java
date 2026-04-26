@@ -34,13 +34,16 @@ public class LiteRegistryImpl<T> implements LiteRegistry<T> {
 
 	@Override
 	public T register(Identifier identifier, T entry) {
-		if (!this.content.containsKey(identifier)) {
+		if (this.content.containsKey(identifier)) {
+			throw new IllegalStateException("Object with identifier " + identifier + " already exists in the lite registry");
+		}
+		else if (this.reversed.containsKey(entry)) {
+			throw new IllegalStateException("Object " + entry + " is already present in the lite registry");
+		}
+		else {
 			this.content.put(identifier, entry);
 			this.reversed.put(entry, identifier);
 			return entry;
-		}
-		else {
-			throw new IllegalStateException("Object with identifier " + identifier + " already exists in the lite registry");
 		}
 	}
 

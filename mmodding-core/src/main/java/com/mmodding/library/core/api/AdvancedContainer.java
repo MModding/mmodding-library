@@ -72,7 +72,7 @@ public interface AdvancedContainer extends ModContainer {
 	 * @see Registry#register(Registry, Identifier, Object)
 	 */
 	default <T> T register(Registry<T> registry, String path, T element) {
-		return Registry.register(registry, ResourceKey.create(registry.key(), Identifier.tryBuild(this.getMetadata().getId(), path)), element);
+		return Registry.register(registry, ResourceKey.create(registry.key(), Identifier.fromNamespaceAndPath(this.getMetadata().getId(), path)), element);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public interface AdvancedContainer extends ModContainer {
 	 * @see BootstrapContext#register(ResourceKey, Object)
 	 */
 	default <T> T register(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> context, String path, T element) {
-		context.register(ResourceKey.create(registry, Identifier.tryBuild(this.getMetadata().getId(), path)), element);
+		context.register(ResourceKey.create(registry, Identifier.fromNamespaceAndPath(this.getMetadata().getId(), path)), element);
 		return element;
 	}
 
