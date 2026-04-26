@@ -31,6 +31,26 @@ public class DefaultBlockModelProcessing {
 		generator.registerSimpleItemModel(block, bottom);
 	}
 
+	public static Block unwax(Block waxed) {
+		return BuiltInRegistries.BLOCK.getValueOrThrow(waxed.builtInRegistryHolder().key().mapIdentifier(id -> id.withPath(s -> s.replace("waxed_", ""))));
+	}
+
+	public static void createWaxed(BlockModelGenerators generator, Block block) {
+		generator.copyModel(unwax(block), block);
+	}
+
+	public static void createWaxedDoor(BlockModelGenerators generator, Block block) {
+		generator.copyDoorModel(unwax(block), block);
+	}
+
+	public static void createWaxedTrapdoor(BlockModelGenerators generator, Block block) {
+		generator.copyTrapdoorModel(unwax(block), block);
+	}
+
+	public static void createWaxedBulb(BlockModelGenerators generator, Block block) {
+		generator.copyCopperBulbModel(unwax(block), block);
+	}
+
 	public static void createChain(BlockModelGenerators generator, Block block) {
 		MultiVariant variant = BlockModelGenerators.plainVariant(TexturedModel.CHAIN.create(block, generator.modelOutput));
 		generator.createAxisAlignedPillarBlockCustomModel(block, variant);
