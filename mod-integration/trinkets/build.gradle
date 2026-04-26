@@ -15,7 +15,7 @@ mmodding {
 		implementation("mmodding-rendering")
 	}
 	configureFabricModJson {
-		environment = EnvironmentTarget.CLIENT
+		environment = EnvironmentTarget.ANY
 		withDependencies {
 			it.addDependency("trinkets_updated", ">=" + libs.versions.trinkets.updated.get())
 		}
