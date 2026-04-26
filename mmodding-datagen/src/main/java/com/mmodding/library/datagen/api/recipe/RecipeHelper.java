@@ -20,47 +20,55 @@ public interface RecipeHelper {
 	 * Creates a shaped recipe for the current item
 	 * @param category the recipe category
 	 * @param consumer the recipe options
+	 * @param unlockers the recipe unlockers
 	 */
-	RecipeHelper shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer);
+	RecipeHelper shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers);
 
 	/**
 	 * Creates a shaped recipe for the current item.
 	 * @param count the recipe output count
 	 * @param category the recipe category
 	 * @param consumer the recipe options
+	 * @param unlockers the recipe unlockers
 	 */
-	RecipeHelper shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer);
+	RecipeHelper shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers);
 
 	/**
 	 * Creates a shapeless recipe for the current item.
 	 * @param category the recipe category
 	 * @param consumer the recipe options
+	 * @param unlockers the recipe unlockers
 	 */
-	RecipeHelper shapeless(RecipeCategory category, Consumer<ShapelessRecipe> consumer);
+	RecipeHelper shapeless(RecipeCategory category, Consumer<ShapelessRecipe> consumer, ItemLike... unlockers);
 
 	/**
 	 * Creates a shapeless recipe for the current item.
 	 * @param count the recipe output count
 	 * @param category the recipe category
 	 * @param consumer the recipe options
+	 * @param unlockers the recipe unlockers
 	 */
-	RecipeHelper shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer);
+	RecipeHelper shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer, ItemLike... unlockers);
+
+	RecipeHelper cutting(ItemLike item, RecipeCategory category, int count);
+
+	RecipeHelper cutting(Ingredient ingredient, RecipeCategory category, int count, ItemLike... unlockers);
 
 	RecipeHelper smelting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	RecipeHelper smelting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
+	RecipeHelper smelting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time, ItemLike... unlockers);
 
 	RecipeHelper blasting(ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
 
-	RecipeHelper blasting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time);
+	RecipeHelper blasting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time, ItemLike... unlockers);
 
 	RecipeHelper smoking(ItemLike item, RecipeCategory category, int experience, int time);
 
-	RecipeHelper smoking(Ingredient ingredient, RecipeCategory category, int experience, int time);
+	RecipeHelper smoking(Ingredient ingredient, RecipeCategory category, int experience, int time, ItemLike... unlockers);
 
 	RecipeHelper campfireCooking(ItemLike item, RecipeCategory category, int experience, int time);
 
-	RecipeHelper campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time);
+	RecipeHelper campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time, ItemLike... unlockers);
 
 	RecipeHelper custom(BiFunction<RecipeProvider, ItemLike, RecipeBuilder> factory);
 

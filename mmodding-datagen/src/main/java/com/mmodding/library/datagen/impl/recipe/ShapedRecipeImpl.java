@@ -13,8 +13,11 @@ public class ShapedRecipeImpl implements RecipeHelper.ShapedRecipe {
 
 	final ShapedRecipeBuilder factory;
 
-	public ShapedRecipeImpl(RecipeProvider provider, ItemLike item, int count, RecipeCategory category) {
-		this.factory = provider.shaped(category, item, count).unlockedBy(RecipeProvider.getHasName(item), provider.has(item));
+	public ShapedRecipeImpl(RecipeProvider provider, ItemLike item, int count, RecipeCategory category, ItemLike... unlockers) {
+		this.factory = provider.shaped(category, item, count);
+		for (ItemLike unlocker : unlockers) {
+			this.factory.unlockedBy(RecipeProvider.getHasName(unlocker), provider.has(unlocker));
+		}
 	}
 
 	@Override
