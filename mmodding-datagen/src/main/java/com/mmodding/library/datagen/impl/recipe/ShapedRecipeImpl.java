@@ -11,13 +11,21 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public class ShapedRecipeImpl implements RecipeHelper.ShapedRecipe {
 
+	private final RecipeProvider provider;
 	final ShapedRecipeBuilder factory;
 
 	public ShapedRecipeImpl(RecipeProvider provider, ItemLike item, int count, RecipeCategory category, ItemLike... unlockers) {
-		this.factory = provider.shaped(category, item, count);
+		this.provider = provider;
+		this.factory = this.provider.shaped(category, item, count);
 		for (ItemLike unlocker : unlockers) {
-			this.factory.unlockedBy(RecipeProvider.getHasName(unlocker), provider.has(unlocker));
+			this.factory.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
+	}
+
+	@Override
+	public RecipeHelper.ShapedRecipe key(char key, ItemLike item) {
+		this.factory.unlockedBy(RecipeProvider.getHasName(item), this.provider.has(item));
+		return this.key(key, Ingredient.of(item));
 	}
 
 	@Override

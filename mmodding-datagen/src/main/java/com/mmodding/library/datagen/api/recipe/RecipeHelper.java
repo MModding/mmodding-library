@@ -77,9 +77,7 @@ public interface RecipeHelper {
 	@ApiStatus.NonExtendable
 	interface ShapedRecipe {
 
-		default ShapedRecipe key(char key, ItemLike item) {
-			return this.key(key, Ingredient.of(item));
-		}
+		ShapedRecipe key(char key, ItemLike item);
 
 		ShapedRecipe key(char key, Ingredient ingredient);
 
