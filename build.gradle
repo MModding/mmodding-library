@@ -1,3 +1,4 @@
+import com.mmodding.gradle.api.EnvironmentTarget
 import com.mmodding.gradle.api.mod.json.NamespaceProvider;
 import com.mmodding.gradle.api.mod.json.ParentSchema;
 
@@ -115,6 +116,7 @@ allprojects {
 			description = getMModdingLibraryDescription(project)
 			license = "Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved"
 			icon = "assets/" + getMModdingLibraryNamespace(project) + "/icon.png"
+			environment = EnvironmentTarget.ANY
 			addAuthor("MModding Team")
 			addContributor("FirstMegaGame4")
 			withContact {

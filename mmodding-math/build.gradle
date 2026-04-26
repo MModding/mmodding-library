@@ -1,9 +1,6 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 
 mmodding {
-	configureFabricModJson {
-		environment = EnvironmentTarget.ANY
-	}
 	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
