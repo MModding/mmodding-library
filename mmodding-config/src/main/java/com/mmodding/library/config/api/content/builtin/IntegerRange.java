@@ -1,6 +1,6 @@
-package com.mmodding.library.config.api.element.builtin;
+package com.mmodding.library.config.api.content.builtin;
 
-import com.mmodding.library.config.api.element.ConfigElement;
+import com.mmodding.library.config.api.content.ConfigElement;
 import com.mmodding.library.java.api.object.Copyable;
 import net.minecraft.util.Mth;
 

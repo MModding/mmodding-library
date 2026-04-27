@@ -83,14 +83,6 @@ allprojects {
 
     repositories {
 		mavenCentral()
-		maven {
-			name = "QuiltMC"
-			url = "https://maven.quiltmc.org/repository/release"
-		}
-		maven {
-			name = "ParchmentMC"
-			url = "https://maven.parchmentmc.org"
-		}
     }
 
 	// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -216,12 +208,6 @@ dependencies {
 	api(include(libs.yumi.commons.core.get()))
 	api(include(libs.yumi.commons.collections.get()))
 	api(include(libs.yumi.commons.event.get()))
-
-	mmodding.configureFMJForDependency(api(include(libs.quilt.parsers.json.get()))) {
-		name = "Quilt Parsers"
-		namespace = "quilt_parsers"
-		addAuthor("QuiltMC")
-	}
 }
 
 // Javadocs

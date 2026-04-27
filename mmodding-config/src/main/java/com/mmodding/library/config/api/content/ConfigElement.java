@@ -1,4 +1,4 @@
-package com.mmodding.library.config.api.element;
+package com.mmodding.library.config.api.content;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;

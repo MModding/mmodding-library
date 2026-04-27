@@ -7,14 +7,11 @@ mmodding {
 	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
+		implementation("mmodding-network")
 	}
 	configureTestmod {
 		withEntrypoints {
 			it.init("com.mmodding.library.config.test.ConfigTests")
 		}
 	}
-}
-
-dependencies {
-	implementation libs.quilt.parsers.json
 }

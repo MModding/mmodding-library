@@ -1,14 +1,25 @@
 package com.mmodding.library.java.api.color;
 
 import com.mmodding.library.java.api.object.Copyable;
-
-import java.util.function.Supplier;
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public interface Color extends Copyable<Color> {
 
-	Supplier<Color> EMPTY = () -> Color.rgb(0, 0, 0);
+	Codec<Color> CODEC = Codec.INT.xmap(Color::argb, Color::toDecimal);
+	StreamCodec<ByteBuf, Color> STREAM_CODEC = StreamCodec.of(
+		(output, value) -> output.writeInt(value.toDecimal()),
+		input -> Color.argb(input.readInt())
+	);
 
-	Supplier<Color> BLANK = () -> Color.rgb(255, 255, 255);
+	static Color empty() {
+		return Color.rgb(0, 0, 0);
+	}
+
+	static Color blank() {
+		return Color.rgb(255, 255, 255);
+	}
 
 	static RGB rgb(Color color) {
 		return Color.rgb(color.toDecimal());
@@ -32,7 +43,6 @@ public interface Color extends Copyable<Color> {
 	static RGB rgb(java.awt.Color javaColor) {
 		return new RGB(javaColor.getRed(), javaColor.getGreen(), javaColor.getBlue());
 	}
-
 
 	/**
 	 * ARGB Color Format

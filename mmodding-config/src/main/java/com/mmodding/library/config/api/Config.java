@@ -1,19 +1,17 @@
 package com.mmodding.library.config.api;
 
 import com.mmodding.library.config.api.content.ConfigContent;
-import com.mmodding.library.config.api.content.MutableConfigContent;
-import com.mmodding.library.config.api.schema.ConfigSchema;
+import com.mmodding.library.config.api.content.ConfigSpec;
 import com.mmodding.library.config.impl.ConfigBuilderImpl;
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
-
-import java.util.function.Consumer;
 
 @ApiStatus.NonExtendable
 public interface Config {
 
-	static Config.Builder builder(String translationKey, String filePath) {
-		return new ConfigBuilderImpl(translationKey, filePath);
+	static Config.Builder builder(String translationKey, String filePath, ConfigSpec specification) {
+		return new ConfigBuilderImpl(translationKey, filePath, specification);
 	}
 
 	/**
@@ -42,11 +40,17 @@ public interface Config {
 	ConfigNetworkManagement getNetworkManagement();
 
 	/**
+	 * The configuration codec. It handles serialization and deserialization.
+	 * @return the configuration codec
+	 */
+	Codec<ConfigContent> getCodec();
+
+	/**
 	 * The configuration schema. Defines multiple information
 	 * such as supported qualifiers and their associated types.
 	 * @return the configuration schema
 	 */
-	ConfigSchema getSchema();
+	// ConfigSchema getSchema();
 
 	/**
 	 * The default content of this configuration.
@@ -74,20 +78,6 @@ public interface Config {
 		 * @param networkManagement the new configuration network management
 		 */
 		Config.Builder withNetworkManagement(ConfigNetworkManagement networkManagement);
-
-		/**
-		 * Default value is an instance of {@link ConfigSchema#empty()}.
-		 * @param schema the new configuration schema
-		 * @apiNote It is highly recommended to not keep an empty schema!
-		 */
-		Config.Builder withSchema(ConfigSchema schema);
-
-		/**
-		 * Default value is an empty {@link Consumer<MutableConfigContent>}.
-		 * @param content the default configuration content consumer
-		 * @apiNote It is highly recommended to set default values to your configuration!
-		 */
-		Config.Builder withDefaultContent(Consumer<MutableConfigContent> content);
 
 		/**
 		 * Builds the configuration under an identifier reference

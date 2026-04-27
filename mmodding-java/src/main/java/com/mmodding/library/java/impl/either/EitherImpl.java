@@ -1,10 +1,10 @@
 package com.mmodding.library.java.impl.either;
 
 import com.mmodding.library.java.api.either.Either;
+import com.mmodding.library.java.api.function.Mapper;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class EitherImpl<F, S> implements Either<F, S> {
 
@@ -39,22 +39,22 @@ public class EitherImpl<F, S> implements Either<F, S> {
 	}
 
 	@Override
+	public <R> R map(Mapper<F, R> mapFirst, Mapper<S, R> mapSecond) {
+		if (this.firstValue != null) {
+			return mapFirst.map(this.firstValue);
+		}
+		else {
+			return mapSecond.map(this.secondValue);
+		}
+	}
+
+	@Override
 	public void execute(Consumer<F> executeFirst, Consumer<S> executeSecond) {
 		if (this.firstValue != null) {
 			executeFirst.accept(this.firstValue);
 		}
 		else {
 			executeSecond.accept(this.secondValue);
-		}
-	}
-
-	@Override
-	public <R> R map(Function<F, R> mapFirst, Function<S, R> mapSecond) {
-		if (this.firstValue != null) {
-			return mapFirst.apply(this.firstValue);
-		}
-		else {
-			return mapSecond.apply(this.secondValue);
 		}
 	}
 }
