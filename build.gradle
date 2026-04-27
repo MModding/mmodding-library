@@ -190,7 +190,6 @@ allprojects {
 mmodding {
 	modules {
 		bundle("mmodding-block")
-		bundle("mmodding-block-entity")
 		bundle("mmodding-config")
 		bundle("mmodding-core")
 		bundle("mmodding-datagen")

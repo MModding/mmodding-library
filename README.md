@@ -25,7 +25,6 @@ Current Modules Table:
 | Module                | Status       | Description                                       |
 |:----------------------|:-------------|:--------------------------------------------------|
 | mmodding-block        | Experimental | Block Management, Interactions, Settings, Catalog |
-| mmodding-block-entity | Experimental | Block Entity Management                           |
 | mmodding-config       | Experimental | Configuration System, Level, Networking           |
 | mmodding-core         | Experimental | The Core of the Library                           |
 | mmodding-datagen      | Early Stage  | Data Generation Management and Automation         |
