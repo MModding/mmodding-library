@@ -130,9 +130,9 @@ public interface BlockHeap {
 	interface NameBlockFactory<T extends Block> {
 
 		static <T extends Block> NameBlockFactory<T> of(BlockFactory<T> factory) {
-			return (string, properties) -> factory.make(properties);
+			return (_, properties) -> factory.make(properties);
 		}
 
-		T make(String string, BlockBehaviour.Properties properties);
+		T make(String constructor, BlockBehaviour.Properties properties);
 	}
 }
