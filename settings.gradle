@@ -45,7 +45,6 @@ include("mmodding-java")
 include("mmodding-math")
 include("mmodding-network")
 include("mmodding-rendering")
-include("mmodding-state")
 include("mmodding-woodset")
 include("mmodding-worldgen")
 rootDir.toPath().resolve("mod-integration").toFile().list().each {

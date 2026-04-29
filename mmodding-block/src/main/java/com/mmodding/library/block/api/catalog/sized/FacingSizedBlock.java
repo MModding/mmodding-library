@@ -1,10 +1,10 @@
 package com.mmodding.library.block.api.catalog.sized;
 
-import com.mmodding.library.java.api.container.Triple;
 import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.math.api.OrientedBlockPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -22,20 +22,20 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	private final boolean horizontal;
 
-	public FacingSizedBlock(int xSize, int ySize, int zSize, boolean horizontal, Properties settings) {
-		super(xSize, ySize, zSize, settings);
+	public FacingSizedBlock(boolean horizontal, Properties settings) {
+		super(settings);
 		this.registerDefaultState(this.defaultBlockState().setValue(this.getFacingProperty(), Direction.NORTH));
 		this.horizontal = horizontal;
 	}
 
 	@Override
-	public void forEach(LevelReader world, BlockPos pos, BlockState state, TriConsumer<BlockPos, BlockState, Triple<Integer, Integer, Integer>> action) {
+	public void forEach(LevelReader world, BlockPos pos, BlockState state, TriConsumer<BlockPos, BlockState, Vec3i> action) {
 		OrientedBlockPos blockOrigin = OrientedBlockPos.of(state.getValue(this.getFacingProperty()), this.getBlockOrigin(pos, state));
-		for (int i = 0; i < this.xSize; i++) {
-			for (int j = 0; j < this.ySize; j++) {
-				for (int k = 0; k < this.zSize; k++) {
-					OrientedBlockPos currentPos = blockOrigin.front(i).top(j).left(k);
-					action.accept(currentPos, world.getBlockState(currentPos), Triple.create(i, j, k));
+		for (int x = 0; x < this.getLength(); x++) {
+			for (int y = 0; y < this.getHeight(); y++) {
+				for (int z = 0; z < this.getWidth(); z++) {
+					OrientedBlockPos currentPos = blockOrigin.front(x).top(y).left(z);
+					action.accept(currentPos, world.getBlockState(currentPos), new Vec3i(x, y, z));
 				}
 			}
 		}
@@ -48,31 +48,28 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rotation) {
-		int prevX = state.getValue(this.getXProperty());
-		int prevY = state.getValue(this.getYProperty());
-		int prevZ = state.getValue(this.getZProperty());
-		BlockState rotated = state
-			.setValue(this.getXProperty(), this.zSize - prevZ)
-			.setValue(this.getYProperty(), prevY)
-			.setValue(this.getZProperty(), this.xSize - prevX);
+		Vec3i prevInnerPos = this.getInnerPos(state);
+		BlockState rotated = this.setInnerPos(state, new Vec3i(
+			this.getWidth() - prevInnerPos.getZ(),
+			this.getHeight(),
+			this.getLength() - prevInnerPos.getX()
+		));
 		return rotated.setValue(this.getFacingProperty(), rotation.rotate(state.getValue(this.getFacingProperty())));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		int prevX = state.getValue(this.getXProperty());
-		int prevY = state.getValue(this.getYProperty());
-		int prevZ = state.getValue(this.getZProperty());
-		BlockState mirrored = state
-			.setValue(this.getXProperty(), this.xSize - prevX)
-			.setValue(this.getYProperty(), prevY)
-			.setValue(this.getZProperty(), this.zSize - prevZ);
+		Vec3i prevInnerPos = this.getInnerPos(state);
+		BlockState mirrored = this.setInnerPos(state, new Vec3i(
+			this.getLength() - prevInnerPos.getX(),
+			this.getHeight(),
+			this.getWidth() - prevInnerPos.getZ()
+		));
 		return mirrored.rotate(mirror.getRotation(state.getValue(this.getFacingProperty())));
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder);
 		builder.add(this.getFacingProperty());
 	}
 
