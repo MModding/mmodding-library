@@ -34,11 +34,11 @@ public class MixedListImpl extends ArrayList<Typed<?>> implements MixedList {
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
 		}
-		if (type.equals(typed.getType())) {
+		if (type.isAssignableFrom(typed.getType())) {
 			return (E) typed.getValue();
 		}
 		else {
-			throw new IllegalArgumentException("Given type does not match the targeted type!");
+			throw new IllegalArgumentException("Found type does not inherit from given type!");
 		}
 	}
 

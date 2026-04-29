@@ -25,12 +25,12 @@ public class MixedMapImpl<K> extends Object2ObjectOpenHashMap<K, Typed<?>> imple
 	}
 
 	@Override
-	public <V> boolean containsValue(Class<V> type, V value) {
+	public <V> boolean containsValue(Class<?> type, V value) {
 		return super.containsValue(Typed.of(type, value));
 	}
 
 	@Override
-	public <V> V get(K key, Class<V> type) {
+	public <V> V get(K key, Class<?> type) {
 		Typed<?> typed = super.get(key);
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
@@ -44,7 +44,7 @@ public class MixedMapImpl<K> extends Object2ObjectOpenHashMap<K, Typed<?>> imple
 	}
 
 	@Override
-	public <V> V getOrDefault(K key, Class<V> type, V defaultValue) {
+	public <V> V getOrDefault(K key, Class<?> type, V defaultValue) {
 		Typed<?> typed = super.getOrDefault(key, Typed.of(type, defaultValue));
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
@@ -58,18 +58,13 @@ public class MixedMapImpl<K> extends Object2ObjectOpenHashMap<K, Typed<?>> imple
 	}
 
 	@Override
-	public <V> V put(K key, Class<V> type, V value) {
+	public <V> V put(K key, Class<?> type, V value) {
 		Typed<V> typed = (Typed<V>) super.put(key, Typed.of(type, value));
-		if (typed != null) {
-			return typed.getValue();
-		}
-		else {
-			return MixedMap.emptyValue(type).getValue();
-		}
+		return typed != null ? typed.getValue() : null;
 	}
 
 	@Override
-	public <V> void forEach(TriConsumer<? super K, ? super Class<V>, ? super V> action) {
-		this.forEach((key, value) -> action.accept(key, (Class<V>) value.getType(), (V) value.getValue()));
+	public <V> void forEach(TriConsumer<? super K, ? super Class<?>, ? super V> action) {
+		this.forEach((key, value) -> action.accept(key, value.getType(), (V) value.getValue()));
 	}
 }

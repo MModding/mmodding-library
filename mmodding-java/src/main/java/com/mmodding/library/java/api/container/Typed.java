@@ -2,20 +2,19 @@ package com.mmodding.library.java.api.container;
 
 public class Typed<T> {
 
-	private final Class<T> type;
+	private final Class<?> type;
 	private final T value;
 
-	private Typed(Class<T> type, T value) {
+	private Typed(Class<?> type, T value) {
 		this.type = type;
 		this.value = value;
 	}
 
-	@SuppressWarnings("unchecked")
 	public static <T> Typed<T> of(T value) {
-		return Typed.of((Class<T>) value.getClass(), value);
+		return Typed.of(value.getClass(), value);
 	}
 
-	public static <T> Typed<T> of(Class<T> type, T value) {
+	public static <T> Typed<T> of(Class<?> type, T value) {
 		return new Typed<>(type, value);
 	}
 
@@ -34,7 +33,7 @@ public class Typed<T> {
 		return "Typed[type=" + this.type.toString() + ", value=" + this.value + "]";
 	}
 
-	public Class<T> getType() {
+	public Class<?> getType() {
 		return this.type;
 	}
 

@@ -1,21 +1,20 @@
 package com.mmodding.library.config.impl.content;
 
 import com.mmodding.library.config.api.content.ConfigContent;
-import com.mmodding.library.config.api.content.builtin.FloatingRange;
-import com.mmodding.library.config.api.content.builtin.IntegerRange;
-import com.mmodding.library.java.api.color.Color;
+import com.mmodding.library.config.api.content.ConfigSchema;
 import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.java.api.map.MixedMap;
 import com.mmodding.library.java.impl.map.linked.LinkedMixedMapImpl;
 
-import java.util.List;
-import java.util.Map;
-
 public class ConfigContentImpl implements ConfigContent {
 
+	private final ConfigSchema schema;
+	private final String path;
 	private final MixedMap<String> raw;
 
-	public ConfigContentImpl(MixedMap<String> raw) {
+	public ConfigContentImpl(ConfigSchema schema, String path, MixedMap<String> raw) {
+		this.schema = schema;
+		this.path = path;
 		if (raw != null) {
 			if (raw instanceof LinkedMixedMapImpl<String>) {
 				this.raw = raw;
@@ -30,60 +29,18 @@ public class ConfigContentImpl implements ConfigContent {
 	}
 
 	@Override
-	public boolean bool(String qualifier) {
-		return this.element(qualifier, Boolean.class);
+	public ConfigSchema schema() {
+		return this.schema;
 	}
 
 	@Override
-	public int intValue(String qualifier) {
-		return this.element(qualifier, Integer.class);
+	public String path() {
+		return this.path;
 	}
 
 	@Override
-	public double doubleValue(String qualifier) {
-		return this.element(qualifier, Double.class);
-	}
-
-	@Override
-	public String string(String qualifier) {
-		return this.element(qualifier, String.class);
-	}
-
-	@Override
-	public Color color(String qualifier) {
-		return this.element(qualifier, Color.class);
-	}
-
-	@Override
-	public IntegerRange integerRange(String qualifier) {
-		return this.element(qualifier, IntegerRange.class);
-	}
-
-	@Override
-	public FloatingRange floatingRange(String qualifier) {
-		return this.element(qualifier, FloatingRange.class);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T extends Enum<T>> Enum<T> enumValue(String qualifier) {
-		return this.element(qualifier, (Class<Enum<T>>) (Class<?>) Enum.class);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T> List<T> list(String qualifier) {
-		return (List<T>) this.raw.get(qualifier, List.class);
-	}
-
-	@Override
-	public <K, V> Map<K, V> map(String property) {
-		return Map.of();
-	}
-
-	@Override
-	public <T> T element(String property, Class<T> type) {
-		return this.raw.get(property, type);
+	public <T> T element(String property, Class<?> type) {
+		return this.raw.get(property, this.schema.validate(ConfigContent.resolve(this.path, property), type));
 	}
 
 	@Override

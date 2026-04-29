@@ -17,17 +17,17 @@ public interface MixedMap<K> extends Map<K, Typed<?>> {
 		return new LinkedMixedMapImpl<>();
 	}
 
-	static <V> Typed<V> emptyValue(Class<V> type) {
+	static <V> Typed<V> emptyValue(Class<?> type) {
 		return Typed.of(type, null);
 	}
 
-	<V> boolean containsValue(Class<V> type, V value);
+	<V> boolean containsValue(Class<?> type, V value);
 
-	<V> V get(K key, Class<V> type);
+	<V> V get(K key, Class<?> type);
 
-	<V> V getOrDefault(K key, Class<V> type, V defaultValue);
+	<V> V getOrDefault(K key, Class<?> type, V defaultValue);
 
-	<V> V put(K key, Class<V> type, V value);
+	<V> V put(K key, Class<?> type, V value);
 
-	<V> void forEach(TriConsumer<? super K, ? super Class<V>, ? super V> action);
+	<V> void forEach(TriConsumer<? super K, ? super Class<?>, ? super V> action);
 }

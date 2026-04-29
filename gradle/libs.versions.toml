@@ -8,9 +8,6 @@ yumi_commons = "2.0.0"
 
 fabric_api = "0.145.1+26.1"
 
-# For Gradle And MModding AdvancedPointedDripstoneConfiguration
-quilt_parsers = "0.3.0"
-
 # Mod Integrations
 trinkets_updated = "4.0.0-alpha.8+26.1"
 
@@ -25,9 +22,6 @@ yumi_commons_collections = { module = "dev.yumi.commons:yumi-commons-collections
 yumi_commons_event = { module = "dev.yumi.commons:yumi-commons-event", version.ref = "yumi_commons" }
 
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
-
-# For Gradle And MModding AdvancedPointedDripstoneConfiguration
-quilt_parsers_json = { module = "org.quiltmc.parsers:json", version.ref = "quilt_parsers" }
 
 # Mod Integrations
 trinkets = { module = "eu.pb4:trinkets", version.ref = "trinkets_updated" }

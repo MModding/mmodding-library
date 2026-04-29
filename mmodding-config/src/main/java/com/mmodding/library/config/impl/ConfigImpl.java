@@ -4,7 +4,9 @@ import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.ConfigLevel;
 import com.mmodding.library.config.api.ConfigNetworkManagement;
 import com.mmodding.library.config.api.content.ConfigContent;
+import com.mmodding.library.config.api.content.ConfigSchema;
 import com.mmodding.library.config.api.content.ConfigSpec;
+import com.mmodding.library.config.impl.content.ConfigSchemaImpl;
 import com.mmodding.library.config.impl.content.ConfigSpecImpl;
 import com.mojang.serialization.Codec;
 
@@ -14,8 +16,8 @@ public class ConfigImpl implements Config {
 	private final String filePath;
 	private final ConfigLevel level;
 	private final ConfigNetworkManagement networkManagement;
+	private final ConfigSchema schema;
 	private final Codec<ConfigContent> codec;
-	// private final ConfigSchema schema;
 	private final ConfigContent defaultContent;
 
 	private ConfigContent cachedContent = null;
@@ -25,9 +27,9 @@ public class ConfigImpl implements Config {
 		this.filePath = filePath;
 		this.level = level;
 		this.networkManagement = networkManagement;
-		this.codec = ConfigSpecImpl.buildCodec(spec);
-		// this.schema = ConfigSpecImpl.retrieveSchema(spec);
-		this.defaultContent = ConfigSpecImpl.retrieveDefaultContent(spec);
+		this.schema = ConfigSpecImpl.retrieveSchema(spec);
+		this.codec = ConfigSpecImpl.buildCodec(this.schema, "", spec);
+		this.defaultContent = ConfigSpecImpl.retrieveDefaultContent((ConfigSchemaImpl) this.schema, "", spec);
 	}
 
 	@Override
@@ -51,14 +53,14 @@ public class ConfigImpl implements Config {
 	}
 
 	@Override
+	public ConfigSchema getSchema() {
+		return this.schema;
+	}
+
+	@Override
 	public Codec<ConfigContent> getCodec() {
 		return this.codec;
 	}
-
-	/* @Override
-	public ConfigSchema getSchema() {
-		return this.schema;
-	} */
 
 	@Override
 	public ConfigContent getDefaultContent() {

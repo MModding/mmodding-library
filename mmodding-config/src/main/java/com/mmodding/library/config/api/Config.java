@@ -1,6 +1,7 @@
 package com.mmodding.library.config.api;
 
 import com.mmodding.library.config.api.content.ConfigContent;
+import com.mmodding.library.config.api.content.ConfigSchema;
 import com.mmodding.library.config.api.content.ConfigSpec;
 import com.mmodding.library.config.impl.ConfigBuilderImpl;
 import com.mojang.serialization.Codec;
@@ -40,17 +41,17 @@ public interface Config {
 	ConfigNetworkManagement getNetworkManagement();
 
 	/**
-	 * The configuration codec. It handles serialization and deserialization.
-	 * @return the configuration codec
-	 */
-	Codec<ConfigContent> getCodec();
-
-	/**
 	 * The configuration schema. Defines multiple information
 	 * such as supported qualifiers and their associated types.
 	 * @return the configuration schema
 	 */
-	// ConfigSchema getSchema();
+	ConfigSchema getSchema();
+
+	/**
+	 * The configuration codec. It handles serialization and deserialization.
+	 * @return the configuration codec
+	 */
+	Codec<ConfigContent> getCodec();
 
 	/**
 	 * The default content of this configuration.
@@ -80,7 +81,11 @@ public interface Config {
 		Config.Builder withNetworkManagement(ConfigNetworkManagement networkManagement);
 
 		/**
-		 * Builds the configuration under an identifier reference
+		 * Builds the configuration under a specified identifier.
+		 * <br>The configuration content is instantly loaded, so that it can be used directly.
+		 * <br>Make sure your configuration is not trying to access elements to early!
+		 * <br>For example, some registry holders / registry values might be too early to get.
+		 * <br>In that case, consider using identifiers instead.
 		 * @param identifier the configuration identifier
 		 * @return the configuration
 		 */

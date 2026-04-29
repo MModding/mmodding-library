@@ -2,7 +2,7 @@ package com.mmodding.library.item.mixin;
 
 import com.mmodding.library.item.api.properties.CustomItemProperty;
 import com.mmodding.library.item.api.properties.MModdingItemProperties;
-import com.mmodding.library.item.impl.setting.CustomItemPropertyImpl;
+import com.mmodding.library.item.impl.property.CustomItemPropertyImpl;
 import com.mmodding.library.java.api.list.BiList;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
