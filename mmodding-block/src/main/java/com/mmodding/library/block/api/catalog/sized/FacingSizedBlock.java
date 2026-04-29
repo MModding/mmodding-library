@@ -24,8 +24,8 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	public FacingSizedBlock(boolean horizontal, Properties settings) {
 		super(settings);
-		this.registerDefaultState(this.defaultBlockState().setValue(this.getFacingProperty(), Direction.NORTH));
 		this.horizontal = horizontal;
+		this.registerDefaultState(this.defaultBlockState().setValue(this.getFacingProperty(), Direction.NORTH));
 	}
 
 	@Override
