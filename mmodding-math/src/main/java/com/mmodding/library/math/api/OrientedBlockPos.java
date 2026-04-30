@@ -8,10 +8,14 @@ import java.util.Arrays;
 
 /**
  * Moving the block position without knowing directions.
- * Consider you're facing a direction you don't know and that you put a (x, y, z) base for it.
- * x++ will be {@link OrientedBlockPos#right()}
- * y++ will be {@link OrientedBlockPos#top()}
- * z++ will be {@link OrientedBlockPos#back()}
+ * Consider you're facing a direction you don't know.
+ * We define the relative (ux, uy, uz) as such:
+ * - Stepping forwards follows -uz. (not +uz because NORTH follows the general -uz)
+ * - Stepping backwards follows uz.
+ * - Stepping left follows -ux.
+ * - Stepping right follows +ux.
+ * - Ascending to the sky follows +uy.
+ * - Descending to the earth follows -uy.
  */
 public class OrientedBlockPos extends BlockPos {
 
@@ -102,22 +106,22 @@ public class OrientedBlockPos extends BlockPos {
 	 * Relative Z--
 	 */
 	public OrientedBlockPos front() {
-		return this.relative(this.relativeZ);
+		return this.relative(this.relativeZ.getOpposite());
 	}
 
 	public OrientedBlockPos front(int step) {
-		return this.relative(this.relativeZ, step);
+		return this.relative(this.relativeZ.getOpposite(), step);
 	}
 
 	/**
 	 * Relative Z++
 	 */
 	public OrientedBlockPos back() {
-		return this.relative(this.relativeZ.getOpposite());
+		return this.relative(this.relativeZ);
 	}
 
 	public OrientedBlockPos back(int steps) {
-		return this.relative(this.relativeZ.getOpposite(), steps);
+		return this.relative(this.relativeZ, steps);
 	}
 
 
