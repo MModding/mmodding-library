@@ -98,6 +98,9 @@ public class OrientedBlockPos extends BlockPos {
 			.relative(this.relativeZ, z);
 	}
 
+	/**
+	 * Relative Z--
+	 */
 	public OrientedBlockPos front() {
 		return this.relative(this.relativeZ);
 	}
@@ -106,6 +109,9 @@ public class OrientedBlockPos extends BlockPos {
 		return this.relative(this.relativeZ, step);
 	}
 
+	/**
+	 * Relative Z++
+	 */
 	public OrientedBlockPos back() {
 		return this.relative(this.relativeZ.getOpposite());
 	}
@@ -114,6 +120,10 @@ public class OrientedBlockPos extends BlockPos {
 		return this.relative(this.relativeZ.getOpposite(), steps);
 	}
 
+
+	/**
+	 * Relative X--
+	 */
 	public OrientedBlockPos left() {
 		return this.relative(this.relativeX.getOpposite());
 	}
@@ -122,6 +132,9 @@ public class OrientedBlockPos extends BlockPos {
 		return this.relative(this.relativeX.getOpposite(), steps);
 	}
 
+	/**
+	 * Relative X++
+	 */
 	public OrientedBlockPos right() {
 		return this.relative(this.relativeX);
 	}
@@ -130,20 +143,26 @@ public class OrientedBlockPos extends BlockPos {
 		return this.relative(this.relativeX, steps);
 	}
 
-	public OrientedBlockPos top() {
-		return this.relative(this.relativeY);
-	}
-
-	public OrientedBlockPos top(int steps) {
-		return this.relative(this.relativeY, steps);
-	}
-
+	/**
+	 * Relative Y--
+	 */
 	public OrientedBlockPos bottom() {
 		return this.relative(this.relativeY.getOpposite());
 	}
 
 	public OrientedBlockPos bottom(int steps) {
 		return this.relative(this.relativeY.getOpposite(), steps);
+	}
+
+	/**
+	 * Relative Y++
+	 */
+	public OrientedBlockPos top() {
+		return this.relative(this.relativeY);
+	}
+
+	public OrientedBlockPos top(int steps) {
+		return this.relative(this.relativeY, steps);
 	}
 
 	@Override
