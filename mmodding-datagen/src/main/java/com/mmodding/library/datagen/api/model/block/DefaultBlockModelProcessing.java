@@ -23,6 +23,10 @@ public class DefaultBlockModelProcessing {
 
 	public static final ModelTemplate LADDER = ModelTemplates.create("ladder", TextureSlot.TEXTURE, TextureSlot.PARTICLE);
 
+	public static BlockModelProcessor createWithProvider(TexturedModel.Provider provider) {
+		return (generator, block) -> generator.createTrivialBlock(block, provider);
+	}
+
 	public static void createStandaloneSlab(BlockModelGenerators generator, Block block) {
 		Identifier bottom = ModelTemplates.SLAB_BOTTOM.create(block, TextureMapping.cube(block), generator.modelOutput);
 		Identifier top = ModelTemplates.SLAB_TOP.create(ModelLocationUtils.getModelLocation(block, "_top"), TextureMapping.cube(block), generator.modelOutput);
