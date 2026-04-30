@@ -4,94 +4,146 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 
+import java.util.Arrays;
+
+/**
+ * Moving the block position without knowing directions.
+ * Consider you're facing a direction you don't know and that you put a (x, y, z) base for it.
+ * x++ will be {@link OrientedBlockPos#right()}
+ * y++ will be {@link OrientedBlockPos#top()}
+ * z++ will be {@link OrientedBlockPos#back()}
+ */
 public class OrientedBlockPos extends BlockPos {
 
-	private final Direction direction;
+	private final Direction relativeX;
+	private final Direction relativeY;
+	private final Direction relativeZ;
 
-	private OrientedBlockPos(Direction direction, int i, int j, int k) {
-		super(i, j, k);
-		this.direction = direction;
+	private OrientedBlockPos(Direction relativeX, Direction relativeY, Direction relativeZ, Vec3i vec3i) {
+		super(vec3i);
+		this.relativeX = relativeX;
+		this.relativeY = relativeY;
+		this.relativeZ = relativeZ;
 	}
 
-	private OrientedBlockPos(Direction direction, Vec3i pos) {
-		super(pos);
-		this.direction = direction;
+	private OrientedBlockPos(Direction relativeX, Direction relativeY, Direction relativeZ, int x, int y, int z) {
+		super(x, y, z);
+		this.relativeX = relativeX;
+		this.relativeY = relativeY;
+		this.relativeZ = relativeZ;
 	}
 
-	public static OrientedBlockPos of(Direction direction, int i, int j, int k) {
-		return new OrientedBlockPos(direction, i, j, k);
+	public static OrientedBlockPos of(Direction front, Direction up, Vec3i vec3i) {
+		return OrientedBlockPos.of(front, up, vec3i.getX(), vec3i.getY(), vec3i.getZ());
 	}
 
-	public static OrientedBlockPos of(Direction direction, Vec3i vec3i) {
-		return new OrientedBlockPos(direction, vec3i);
+	public static OrientedBlockPos of(Direction front, Direction up, int x, int y, int z) {
+		// "north" is negative z, so we make "front" the negative relative z too
+		Direction relativeZ = front.getOpposite();
+		Direction relativeY = up;
+		Direction.Axis last = Arrays.stream(Direction.Axis.VALUES)
+			.filter(axis -> !axis.equals(relativeZ.getAxis()) && !axis.equals(relativeY.getAxis()))
+			.findFirst()
+			.orElseThrow();
+		Vec3i uy = new Vec3i(relativeY.getStepX(), relativeY.getStepY(), relativeY.getStepZ());
+		Vec3i uz = new Vec3i(relativeZ.getStepX(), relativeZ.getStepY(), relativeZ.getStepZ());
+		Vec3i vecProd = uy.cross(uz);
+		// if vecProd = ux, then last axis is positive, otherwise it's negative
+		Direction relativeX = Direction.fromAxisAndDirection(
+			last, vecProd.get(last) == 1 ? Direction.AxisDirection.POSITIVE : Direction.AxisDirection.NEGATIVE
+		);
+		return new OrientedBlockPos(relativeX, relativeY, relativeZ, x, y, z);
 	}
 
-	public OrientedBlockPos top() {
-		Direction transformed = DirectionMapper.TOP.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed));
+	public BlockPos defaultBase() {
+		return new BlockPos(this);
 	}
 
-	public OrientedBlockPos top(int i) {
-		Direction transformed = DirectionMapper.TOP.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
+	public int getRelativeX() {
+		return this.get(this.relativeX.getAxis()) * this.relativeX.getAxisDirection().getStep();
 	}
 
-	public OrientedBlockPos bottom() {
-		Direction transformed = DirectionMapper.BOTTOM.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed));
+	public int getRelativeY() {
+		return this.get(this.relativeY.getAxis()) * this.relativeY.getAxisDirection().getStep();
 	}
 
-	public OrientedBlockPos bottom(int i) {
-		Direction transformed = DirectionMapper.BOTTOM.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
+	public int getRelativeZ() {
+		return this.get(this.relativeZ.getAxis()) * this.relativeZ.getAxisDirection().getStep();
+	}
+
+	@Override
+	public OrientedBlockPos relative(Direction direction) {
+		return new OrientedBlockPos(
+			this.relativeX,
+			this.relativeY,
+			this.relativeZ,
+			super.relative(direction)
+		);
+	}
+
+	@Override
+	public OrientedBlockPos relative(Direction direction, int steps) {
+		return new OrientedBlockPos(
+			this.relativeX,
+			this.relativeY,
+			this.relativeZ,
+			super.relative(direction, steps)
+		);
+	}
+
+	@Override
+	public OrientedBlockPos offset(int x, int y, int z) {
+		return this.relative(this.relativeX, x)
+			.relative(this.relativeY, y)
+			.relative(this.relativeZ, z);
 	}
 
 	public OrientedBlockPos front() {
-		Direction transformed = DirectionMapper.FRONT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed));
+		return this.relative(this.relativeZ.getOpposite());
 	}
 
-	public OrientedBlockPos front(int i) {
-		Direction transformed = DirectionMapper.FRONT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
+	public OrientedBlockPos front(int step) {
+		return this.relative(this.relativeZ.getOpposite(), step);
 	}
 
-	public OrientedBlockPos behind() {
-		Direction transformed = DirectionMapper.BEHIND.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed));
+	public OrientedBlockPos back() {
+		return this.relative(this.relativeZ);
 	}
 
-	public OrientedBlockPos behind(int i) {
-		Direction transformed = DirectionMapper.BEHIND.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
+	public OrientedBlockPos back(int steps) {
+		return this.relative(this.relativeZ, steps);
 	}
 
 	public OrientedBlockPos left() {
-		Direction transformed = DirectionMapper.LEFT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed));
+		return this.relative(this.relativeX.getOpposite());
 	}
 
-	public OrientedBlockPos left(int i) {
-		Direction transformed = DirectionMapper.LEFT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
+	public OrientedBlockPos left(int steps) {
+		return this.relative(this.relativeX.getOpposite(), steps);
 	}
 
 	public OrientedBlockPos right() {
-		Direction transformed = DirectionMapper.RIGHT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed));
+		return this.relative(this.relativeX);
 	}
 
-	public OrientedBlockPos right(int i) {
-		Direction transformed = DirectionMapper.RIGHT.transform(this.direction);
-		return new OrientedBlockPos(this.direction, super.relative(transformed, i));
+	public OrientedBlockPos right(int steps) {
+		return this.relative(this.relativeX, steps);
 	}
 
-	public OrientedBlockPos rotateClockwise(Direction.Axis axis) {
-		return new OrientedBlockPos(this.direction.getClockWise(axis), this);
+	public OrientedBlockPos top() {
+		return this.relative(this.relativeY);
 	}
 
-	public OrientedBlockPos rotateCounterClockWise(Direction.Axis axis) {
-		return new OrientedBlockPos(this.direction.getCounterClockWise(axis), this);
+	public OrientedBlockPos top(int steps) {
+		return this.relative(this.relativeY, steps);
+	}
+
+	public OrientedBlockPos bottom() {
+		return this.relative(this.relativeY.getOpposite());
+	}
+
+	public OrientedBlockPos bottom(int steps) {
+		return this.relative(this.relativeY.getOpposite(), steps);
 	}
 
 	@Override

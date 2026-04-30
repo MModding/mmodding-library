@@ -12,5 +12,5 @@ public interface OrientedTerrainConsumer {
 		return new OrientedTerrainConsumerImpl(basePos, consumer);
 	}
 
-	void apply(Direction direction);
+	void apply(Direction front, Direction up);
 }

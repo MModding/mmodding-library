@@ -16,7 +16,7 @@ public class OrientedTerrainConsumerImpl implements OrientedTerrainConsumer {
 		this.consumer = consumer;
 	}
 
-	public void apply(Direction direction) {
-		this.consumer.accept(OrientedBlockPos.of(direction, this.basePos));
+	public void apply(Direction front, Direction up) {
+		this.consumer.accept(OrientedBlockPos.of(front, up, this.basePos));
 	}
 }

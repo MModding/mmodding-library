@@ -5,10 +5,21 @@ import java.util.Set;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec3;
 
 // Will need to hide that to impl later.
 public class AreaUtil {
+
+	public static Vec3i rotatePlacementInArea(Vec3i pos, int areaLength, int areaWidth, Rotation rotation) {
+		return switch (rotation) {
+			case NONE -> new Vec3i(pos.getX(), pos.getY(), pos.getZ());
+			case CLOCKWISE_90 -> new Vec3i(pos.getZ(), pos.getY(), pos.getX());
+			case CLOCKWISE_180 -> new Vec3i(areaLength - pos.getX(), pos.getY(), areaWidth - pos.getZ());
+			case COUNTERCLOCKWISE_90 -> new Vec3i(areaWidth - pos.getZ(), pos.getY(), areaLength - pos.getX());
+		};
+	}
 
 	public static void forBlockPosInLine(BlockPos pos1, BlockPos pos2, Consumer<? super BlockPos> consumer) {
 		Vec3 vector = Vec3.atCenterOf(pos1).vectorTo(Vec3.atCenterOf(pos2)).normalize();
