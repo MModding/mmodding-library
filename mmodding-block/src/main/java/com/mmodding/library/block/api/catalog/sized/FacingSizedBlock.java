@@ -1,6 +1,7 @@
 package com.mmodding.library.block.api.catalog.sized;
 
 import com.mmodding.library.java.api.function.consumer.TriConsumer;
+import com.mmodding.library.math.api.AreaUtil;
 import com.mmodding.library.math.api.OrientedBlockPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,12 +30,21 @@ public abstract class FacingSizedBlock extends SizedBlock {
 	}
 
 	@Override
+	public BlockPos getBlockOrigin(BlockPos pos, BlockState state) {
+		return OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, pos)
+			.left(this.getInnerX(state))
+			.bottom(this.getInnerY(state))
+			.front(this.getInnerZ(state));
+	}
+
+	@Override
 	public void forEach(LevelReader world, BlockPos pos, BlockState state, TriConsumer<BlockPos, BlockState, Vec3i> action) {
-		OrientedBlockPos blockOrigin = OrientedBlockPos.of(state.getValue(this.getFacingProperty()), this.getBlockOrigin(pos, state));
+		System.out.println(pos);
+		OrientedBlockPos blockOrigin = OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, this.getBlockOrigin(pos, state));
 		for (int x = 0; x < this.getLength(); x++) {
 			for (int y = 0; y < this.getHeight(); y++) {
 				for (int z = 0; z < this.getWidth(); z++) {
-					OrientedBlockPos currentPos = blockOrigin.front(x).top(y).left(z);
+					OrientedBlockPos currentPos = blockOrigin.right(x).top(y).back(z);
 					action.accept(currentPos, world.getBlockState(currentPos), new Vec3i(x, y, z));
 				}
 			}
@@ -48,24 +58,13 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rotation) {
-		Vec3i prevInnerPos = this.getInnerPos(state);
-		BlockState rotated = this.setInnerPos(state, new Vec3i(
-			this.getWidth() - prevInnerPos.getZ(),
-			this.getHeight(),
-			this.getLength() - prevInnerPos.getX()
-		));
-		return rotated.setValue(this.getFacingProperty(), rotation.rotate(state.getValue(this.getFacingProperty())));
+		return this.setInnerPos(state, AreaUtil.rotatePlacementInArea(this.getInnerPos(state), this.getLength(), this.getWidth(), rotation))
+			.setValue(this.getFacingProperty(), rotation.rotate(state.getValue(this.getFacingProperty())));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		Vec3i prevInnerPos = this.getInnerPos(state);
-		BlockState mirrored = this.setInnerPos(state, new Vec3i(
-			this.getLength() - prevInnerPos.getX(),
-			this.getHeight(),
-			this.getWidth() - prevInnerPos.getZ()
-		));
-		return mirrored.rotate(mirror.getRotation(state.getValue(this.getFacingProperty())));
+		return state.rotate(mirror.getRotation(state.getValue(this.getFacingProperty())));
 	}
 
 	@Override

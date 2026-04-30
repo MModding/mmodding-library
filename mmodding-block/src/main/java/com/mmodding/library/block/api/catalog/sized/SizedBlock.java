@@ -61,7 +61,13 @@ public abstract class SizedBlock extends Block {
 			ctx.getLevel(), ctx.getClickedPos(), ctx.getLevel().getBlockState(ctx.getClickedPos()),
 			(_, state, _) -> canBeReplaced.mutateValue(canBeReplaced.value() && state.canBeReplaced())
 		);
-		return canBeReplaced.value() ? super.getStateForPlacement(ctx) : null;
+		if (canBeReplaced.value()) {
+			BlockPos relativePos = ctx.getClickedPos().subtract(ctx.getPlayer() != null ? ctx.getPlayer().blockPosition() : ctx.getClickedPos());
+			return this.setInnerPos(super.getStateForPlacement(ctx), relativePos);
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override
