@@ -19,6 +19,6 @@ public class MathTests implements ExtendedModInitializer {
 
 	public static void register(AdvancedContainer mod) {
 		OrientedTerrainConsumer consumer = OrientedTerrainConsumer.create(new BlockPos(0, 1, 0), pos -> {});
-		consumer.apply(Direction.NORTH);
+		consumer.apply(Direction.NORTH, Direction.UP);
 	}
 }
