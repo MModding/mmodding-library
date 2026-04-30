@@ -99,19 +99,19 @@ public class OrientedBlockPos extends BlockPos {
 	}
 
 	public OrientedBlockPos front() {
-		return this.relative(this.relativeZ.getOpposite());
-	}
-
-	public OrientedBlockPos front(int step) {
-		return this.relative(this.relativeZ.getOpposite(), step);
-	}
-
-	public OrientedBlockPos back() {
 		return this.relative(this.relativeZ);
 	}
 
+	public OrientedBlockPos front(int step) {
+		return this.relative(this.relativeZ, step);
+	}
+
+	public OrientedBlockPos back() {
+		return this.relative(this.relativeZ.getOpposite());
+	}
+
 	public OrientedBlockPos back(int steps) {
-		return this.relative(this.relativeZ, steps);
+		return this.relative(this.relativeZ.getOpposite(), steps);
 	}
 
 	public OrientedBlockPos left() {
