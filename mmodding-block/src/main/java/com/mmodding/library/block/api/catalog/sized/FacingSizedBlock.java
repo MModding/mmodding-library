@@ -31,7 +31,7 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	@Override
 	public BlockPos getBlockOrigin(BlockPos pos, BlockState state) {
-		return OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, pos)
+		return OrientedBlockPos.of(state.getValue(this.getFacingProperty()).getOpposite(), Direction.UP, pos)
 			.left(this.getInnerX(state))
 			.bottom(this.getInnerY(state))
 			.back(this.getInnerZ(state));

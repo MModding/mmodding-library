@@ -9,11 +9,11 @@ import java.util.Optional;
 public class MModdingModelTemplates {
 
 	/**
-	 * <code>CUBE_DIRECTIONAL</code> variant but it applies on x-axis and not z-axis
+	 * Like if it was "enrolled" in with SIDE, with noticeable ENDs.
 	 */
 	public static final ModelTemplate CUBE_ROLL = create(
-		"cube_roll", TextureSlot.UP, TextureSlot.DOWN,
-		TextureSlot.NORTH, TextureSlot.SOUTH, TextureSlot.EAST, TextureSlot.WEST
+		"cube_roll",
+		TextureSlot.SIDE, TextureSlot.END
 	);
 
 	public static final ModelTemplate CUBE_ORIENTABLE_TOP_BOTTOM_BACK = create(
