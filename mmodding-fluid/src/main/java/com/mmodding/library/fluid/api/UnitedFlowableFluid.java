@@ -19,6 +19,7 @@ public abstract class UnitedFlowableFluid extends FlowingFluid {
 		this.levels = levels;
 		this.maxLevel = levels.getPossibleValues().stream().max(Integer::compare).orElseThrow();
 		this.source = source;
+		super(); // Fields need to receive their values before super-call.
 	}
 
 	@Override
