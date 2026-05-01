@@ -40,7 +40,7 @@ public abstract class FacingSizedBlock extends SizedBlock {
 	@Override
 	public void forEach(LevelReader world, BlockPos pos, BlockState state, TriConsumer<BlockPos, BlockState, Vec3i> action) {
 		System.out.println(pos);
-		OrientedBlockPos blockOrigin = OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, this.getBlockOrigin(pos, state));
+		OrientedBlockPos blockOrigin = OrientedBlockPos.of(state.getValue(this.getFacingProperty()).getOpposite(), Direction.UP, this.getBlockOrigin(pos, state));
 		for (int xStep = 0; xStep < this.getLength(); xStep++) {
 			for (int yStep = 0; yStep < this.getHeight(); yStep++) {
 				for (int zStep = 0; zStep < this.getWidth(); zStep++) {
