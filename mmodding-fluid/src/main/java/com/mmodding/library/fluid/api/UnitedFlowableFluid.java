@@ -39,4 +39,9 @@ public abstract class UnitedFlowableFluid extends FlowingFluid {
 	public boolean isSource(FluidState state) {
 		return this.source;
 	}
+
+	@Override
+	public boolean isSame(Fluid other) {
+		return other == this.getSource() || other == this.getFlowing();
+	}
 }
