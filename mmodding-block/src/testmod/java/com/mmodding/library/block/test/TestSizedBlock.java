@@ -1,20 +1,19 @@
 package com.mmodding.library.block.test;
 
-import com.mmodding.library.block.api.catalog.sized.FacingSizedBlock;
 import com.mmodding.library.block.api.catalog.sized.SizedBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-public class TestFacingSizedBlock extends FacingSizedBlock {
+public class TestSizedBlock extends SizedBlock {
 
 	public static final IntegerProperty X = SizedBlock.makeOfSize(SizeAxis.LENGTH, 2);
 	public static final IntegerProperty Y = SizedBlock.makeOfSize(SizeAxis.HEIGHT, 2);
 	public static final IntegerProperty Z = SizedBlock.makeOfSize(SizeAxis.WIDTH, 2);
 
-	public TestFacingSizedBlock(Properties properties) {
-		super(true, properties);
+	public TestSizedBlock(Properties properties) {
+		super(properties);
 	}
 
 	@Override

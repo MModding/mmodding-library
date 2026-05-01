@@ -1,13 +1,10 @@
 package com.mmodding.library.block.api.catalog.sized;
 
-import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import com.mmodding.library.math.api.AreaUtil;
 import com.mmodding.library.math.api.OrientedBlockPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -23,37 +20,26 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	private final boolean horizontal;
 
-	public FacingSizedBlock(boolean horizontal, Properties settings) {
+	public FacingSizedBlock(boolean horizontal, Properties properties) {
 		this.horizontal = horizontal; // Needs to be set before createBlockStateDefinition getting called.
-		super(settings);
+		super(properties);
 		this.registerDefaultState(this.defaultBlockState().setValue(this.getFacingProperty(), Direction.NORTH));
 	}
 
 	@Override
 	public BlockPos getBlockOrigin(BlockPos pos, BlockState state) {
-		return OrientedBlockPos.of(state.getValue(this.getFacingProperty()).getOpposite(), Direction.UP, pos)
-			.left(this.getInnerX(state))
-			.bottom(this.getInnerY(state))
-			.back(this.getInnerZ(state));
-	}
-
-	@Override
-	public void forEach(LevelReader world, BlockPos pos, BlockState state, TriConsumer<BlockPos, BlockState, Vec3i> action) {
-		System.out.println(pos);
-		OrientedBlockPos blockOrigin = OrientedBlockPos.of(state.getValue(this.getFacingProperty()).getOpposite(), Direction.UP, this.getBlockOrigin(pos, state));
-		for (int xStep = 0; xStep < this.getLength(); xStep++) {
-			for (int yStep = 0; yStep < this.getHeight(); yStep++) {
-				for (int zStep = 0; zStep < this.getWidth(); zStep++) {
-					OrientedBlockPos currentPos = blockOrigin.right(xStep).top(yStep).front(zStep);
-					action.accept(currentPos, world.getBlockState(currentPos), new Vec3i(xStep, yStep, zStep));
-				}
-			}
-		}
+		return super.getBlockOrigin(OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, pos), state);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		return this.defaultBlockState().setValue(this.getFacingProperty(), this.horizontal ? ctx.getHorizontalDirection().getOpposite() : ctx.getNearestLookingDirection().getOpposite());
+		BlockState stateForPlacement = super.getStateForPlacement(ctx);
+		if (stateForPlacement != null) {
+			return stateForPlacement.setValue(this.getFacingProperty(), ctx.getHorizontalDirection().getOpposite());
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override

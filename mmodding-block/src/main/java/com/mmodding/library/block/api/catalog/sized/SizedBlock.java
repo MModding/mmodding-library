@@ -3,6 +3,7 @@ package com.mmodding.library.block.api.catalog.sized;
 import com.mmodding.library.java.api.container.Unit;
 import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -37,8 +38,8 @@ public abstract class SizedBlock extends Block {
 
 	protected abstract int getWidth();
 
-	public SizedBlock(Properties settings) {
-		super(settings);
+	public SizedBlock(Properties properties) {
+		super(properties);
 		this.registerDefaultState(this.setInnerPos(this.defaultBlockState(), Vec3i.ZERO));
 	}
 
@@ -56,14 +57,14 @@ public abstract class SizedBlock extends Block {
 
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		Unit.Mutable<Boolean> canBeReplaced = Unit.mutable(true);
+		BlockState candidate = super.getStateForPlacement(ctx);
+		Unit.Mutable<Boolean> noBlockCollisions = Unit.mutable(true);
 		this.forEach(
-			ctx.getLevel(), ctx.getClickedPos(), ctx.getLevel().getBlockState(ctx.getClickedPos()),
-			(_, state, _) -> canBeReplaced.mutateValue(canBeReplaced.value() && state.canBeReplaced())
+			ctx.getLevel(), ctx.getClickedPos(), candidate,
+			(_, state, _) -> noBlockCollisions.mutateValue(noBlockCollisions.value() && state.canBeReplaced())
 		);
-		if (canBeReplaced.value()) {
-			BlockPos relativePos = ctx.getClickedPos().subtract(ctx.getPlayer() != null ? ctx.getPlayer().blockPosition() : ctx.getClickedPos());
-			return this.setInnerPos(super.getStateForPlacement(ctx), relativePos);
+		if (noBlockCollisions.value()) {
+			return candidate;
 		}
 		else {
 			return null;

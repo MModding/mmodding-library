@@ -21,6 +21,8 @@ public class BlockTests implements ExtendedModInitializer {
 
 	public static final BlockHeap FURNACE_BLOCKS = BlockHeap.register(FurnaceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE), "mmodding_block_tests", "red", "green", "blue").registerBlockItems();
 
+	public static final Block TEST_SIZED = register("test_sized", TestSizedBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)).registerItem();
+
 	public static final Block TEST_FACING_SIZED = register("test_facing_sized", TestFacingSizedBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)).registerItem();
 
 	@Override
