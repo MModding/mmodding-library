@@ -24,7 +24,7 @@ public abstract class UnitedFlowableFluid extends FlowingFluid {
 	@Override
 	protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
 		super.createFluidStateDefinition(builder);
-		if (this.source) {
+		if (!this.source) {
 			builder.add(this.levels);
 		}
 	}

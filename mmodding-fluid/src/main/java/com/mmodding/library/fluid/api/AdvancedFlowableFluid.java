@@ -17,8 +17,8 @@ public abstract class AdvancedFlowableFluid extends UnitedFlowableFluid {
 
 	private final FluidProperties properties;
 
-	public AdvancedFlowableFluid(IntegerProperty levels, boolean still) {
-		super(levels, still);
+	public AdvancedFlowableFluid(IntegerProperty levels, boolean source) {
+		super(levels, source);
 		FluidPropertiesImpl.Builder builder = new FluidPropertiesImpl.Builder();
 		this.createFluidProperties(builder);
 		this.properties = builder.build();
