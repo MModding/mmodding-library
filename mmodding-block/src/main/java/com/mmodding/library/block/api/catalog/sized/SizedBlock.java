@@ -3,6 +3,8 @@ package com.mmodding.library.block.api.catalog.sized;
 import com.mmodding.library.java.api.container.Unit;
 import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,23 +87,26 @@ public abstract class SizedBlock extends Block {
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		super.setPlacedBy(level, pos, state, entity, stack);
 		if (!level.isClientSide()) {
-			this.forEach(level, pos, state, (blockPos, _, innerPos) ->
-				level.setBlock(blockPos, this.setInnerPos(state, innerPos), Block.UPDATE_ALL));
+			this.forEach(level, pos, state, (blockPos, _, innerPos) -> {
+				level.setBlock(blockPos, this.setInnerPos(state, innerPos), Block.UPDATE_ALL);
+
+			});
+			level.updateNeighborsAt(pos, Blocks.AIR);
 			state.updateNeighbourShapes(level, pos, Block.UPDATE_ALL);
 		}
 	}
 
 	@Override
-	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-		super.playerWillDestroy(world, pos, state, player);
-		if (!world.isClientSide()) {
-			this.forEach(world, pos, state, (blockPos, blockState, _) -> {
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+		super.playerWillDestroy(level, pos, state, player);
+		if (!level.isClientSide()) {
+			this.forEach(level, pos, state, (blockPos, blockState, _) -> {
 				if (!pos.equals(blockPos)) {
-					world.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+					level.setBlock(blockPos, blockState.getFluidState().createLegacyBlock(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
+					level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(blockState));
 				}
 			});
 		}
-		world.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
 		return state;
 	}
 
