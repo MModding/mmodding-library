@@ -1,8 +1,11 @@
 package com.mmodding.library.block.api.catalog;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.Level;
@@ -10,6 +13,7 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.storage.TagValueOutput;
 
 public abstract class LootingPropertiesEntityBlock extends BaseEntityBlock {
 
@@ -28,6 +32,11 @@ public abstract class LootingPropertiesEntityBlock extends BaseEntityBlock {
 			for (Property property : state.getProperties()) {
 				itemStateProperties = itemStateProperties.with(property, state.getValue(property));
 			}
+			stack.set(DataComponents.BLOCK_STATE, itemStateProperties);
+			TagValueOutput output = TagValueOutput.createWithContext(new ProblemReporter.Collector(), level.registryAccess());
+			blockEntity.saveCustomOnly(output);
+			blockEntity.removeComponentsFromTag(output);
+			BlockItem.setBlockEntityData(stack, blockEntity.getType(), output);
 			ItemEntity entity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack);
 			entity.setDefaultPickUpDelay();
 			level.addFreshEntity(entity);
