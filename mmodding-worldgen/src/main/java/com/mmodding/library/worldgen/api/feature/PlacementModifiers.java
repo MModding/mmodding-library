@@ -2,6 +2,8 @@ package com.mmodding.library.worldgen.api.feature;
 
 import java.util.List;
 import java.util.function.Function;
+
+import com.mmodding.library.java.api.function.AutoMapper;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
@@ -47,10 +49,19 @@ public interface PlacementModifiers {
 	PlacementModifiers remove(PlacementModifierType<?> type);
 
 	/**
+	 * Replaces all placement modifiers of a specified type for the provided one.
+	 * @param type the type
+	 * @return the placement modifiers access object
+	 */
+	default <P extends PlacementModifier> PlacementModifiers replace(PlacementModifierType<P> type, P placementModifier) {
+		return this.mutateTypeTo(type, _ -> placementModifier);
+	}
+
+	/**
 	 * Finds the first placement modifiers of the type, mutates it, and replaces every placement modifiers of this type by the mutated one.
 	 * @param type the type
 	 * @param mutator the mutator
 	 * @return the placement modifiers access object
 	 */
-	<P extends PlacementModifier> PlacementModifiers mutateTypeTo(PlacementModifierType<P> type, Function<P, PlacementModifier> mutator);
+	<P extends PlacementModifier> PlacementModifiers mutateTypeTo(PlacementModifierType<P> type, AutoMapper<P> mutator);
 }
