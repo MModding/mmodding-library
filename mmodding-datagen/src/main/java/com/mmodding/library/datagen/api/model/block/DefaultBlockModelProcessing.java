@@ -5,6 +5,7 @@ import com.mojang.math.Quadrant;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.Variant;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -15,9 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
-import static net.minecraft.client.data.models.BlockModelGenerators.condition;
-import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
-import static net.minecraft.client.data.models.BlockModelGenerators.variant;
+import static net.minecraft.client.data.models.BlockModelGenerators.*;
 
 public class DefaultBlockModelProcessing {
 
@@ -25,6 +24,13 @@ public class DefaultBlockModelProcessing {
 
 	public static BlockModelProcessor createWithProvider(TexturedModel.Provider provider) {
 		return (generator, block) -> generator.createTrivialBlock(block, provider);
+	}
+
+	public static void createDefinedModelHorizontalVariants(BlockModelGenerators generator, Block block) {
+		generator.blockStateOutput.accept(
+			MultiVariantGenerator.dispatch(block, plainVariant(ModelLocationUtils.getModelLocation(block)))
+				.with(ROTATION_HORIZONTAL_FACING)
+		);
 	}
 
 	public static void createStandaloneSlab(BlockModelGenerators generator, Block block) {
