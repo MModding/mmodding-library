@@ -29,21 +29,24 @@ public class PlacementModifiersImpl implements PlacementModifiers {
 		return this.fetch(type).get(0);
 	}
 
-	public void add(PlacementModifier... modifiers) {
+	public PlacementModifiers add(PlacementModifier... modifiers) {
 		this.add(List.of(modifiers));
+		return this;
 	}
 
-	public void add(List<PlacementModifier> modifiers) {
+	public PlacementModifiers add(List<PlacementModifier> modifiers) {
 		this.placementModifiers.addAll(modifiers);
+		return this;
 	}
 
-	public void remove(PlacementModifierType<?> type) {
+	public PlacementModifiers remove(PlacementModifierType<?> type) {
 		for (int i = 0; i < this.placementModifiers.size(); i++) {
 			if (this.placementModifiers.get(i).type() == type) {
 				this.placementModifiers.remove(i);
 				i--;
 			}
 		}
+		return this;
 	}
 
 	@SuppressWarnings("unchecked")
