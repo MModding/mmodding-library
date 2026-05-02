@@ -18,15 +18,15 @@ public abstract class LootingPropertiesEntityBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		BlockEntity blockEntity = level.getBlockEntity(pos);
 		if (blockEntity != null) {
 			ItemStack stack = new ItemStack(this);
 			stack.applyComponents(blockEntity.collectComponents());
 			BlockItemStateProperties itemStateProperties = BlockItemStateProperties.EMPTY;
-			for (Property<? extends Comparable<?>> property : state.getProperties()) {
-				itemStateProperties = itemStateProperties.with(property, (Comparable) state.getValue(property));
+			for (Property property : state.getProperties()) {
+				itemStateProperties = itemStateProperties.with(property, state.getValue(property));
 			}
 			ItemEntity entity = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack);
 			entity.setDefaultPickUpDelay();
