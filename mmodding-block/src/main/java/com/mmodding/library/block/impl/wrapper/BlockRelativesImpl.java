@@ -4,7 +4,7 @@ import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.mixin.BlockFamilyAccessor;
 import com.mmodding.library.core.api.registry.IdentifierUtil;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.Identifier;
@@ -38,7 +38,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 		this.mainBlock.registerItem(new Item.Properties());
 		this.blockTagKey = TagKey.create(Registries.BLOCK, identifier.withPath(path -> path + mainSuffix));
 		this.itemTagKey = TagKey.create(Registries.ITEM, identifier.withPath(path -> path + mainSuffix));
-		this.variants = new Object2ObjectOpenHashMap<>();
+		this.variants = new Object2ObjectLinkedOpenHashMap<>();
 	}
 
 	@Override
