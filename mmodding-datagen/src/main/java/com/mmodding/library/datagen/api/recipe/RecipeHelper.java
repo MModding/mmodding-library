@@ -84,6 +84,8 @@ public interface RecipeHelper {
 		ShapedRecipe pattern(String firstLine, String secondLine, String thirdLine);
 
 		ShapedRecipe pattern(String firstLine, String secondLine);
+
+		ShapedRecipe pattern(String firstLine);
 	}
 
 	@ApiStatus.NonExtendable

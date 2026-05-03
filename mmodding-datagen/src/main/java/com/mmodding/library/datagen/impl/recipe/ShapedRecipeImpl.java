@@ -45,4 +45,10 @@ public class ShapedRecipeImpl implements RecipeHelper.ShapedRecipe {
 		this.factory.pattern(firstLine).pattern(secondLine);
 		return this;
 	}
+
+	@Override
+	public RecipeHelper.ShapedRecipe pattern(String firstLine) {
+		this.factory.pattern(firstLine);
+		return this;
+	}
 }
