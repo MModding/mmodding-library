@@ -14,6 +14,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.loot.LootParams;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class LootingPropertiesEntityBlock extends BaseEntityBlock {
 
@@ -42,5 +46,10 @@ public abstract class LootingPropertiesEntityBlock extends BaseEntityBlock {
 			level.addFreshEntity(entity);
 		}
 		return super.playerWillDestroy(level, pos, state, player);
+	}
+
+	@Override
+	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+		return Collections.emptyList();
 	}
 }
