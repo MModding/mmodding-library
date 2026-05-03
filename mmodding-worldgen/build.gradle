@@ -11,4 +11,9 @@ mmodding {
 		implementation("mmodding-block")
 		implementation("mmodding-java")
 	}
+	configureFabricModJson {
+		withEntrypoints {
+			it.init("com.mmodding.library.worldgen.impl.MModdingWorldgenInitializer")
+		}
+	}
 }
