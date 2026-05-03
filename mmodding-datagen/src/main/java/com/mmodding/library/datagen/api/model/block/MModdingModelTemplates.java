@@ -16,7 +16,7 @@ public class MModdingModelTemplates {
 		TextureSlot.WEST,
 		TextureSlot.UP,
 		TextureSlot.DOWN,
-		TextureSlot.TEXTURE
+		TextureSlot.PARTICLE
 	);
 
 	/**
