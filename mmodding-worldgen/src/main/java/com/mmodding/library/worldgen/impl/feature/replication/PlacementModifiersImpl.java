@@ -51,10 +51,12 @@ public class PlacementModifiersImpl implements PlacementModifiers {
 
 	@SuppressWarnings("unchecked")
 	public <P extends PlacementModifier> PlacementModifiers mutateTypeTo(PlacementModifierType<P> type, AutoMapper<P> mutator) {
-		P modifier = (P) this.fetchFirst(type);
-		PlacementModifier mutated = mutator.map(modifier);
-		this.remove(type);
-		this.add(mutated);
+		for (int i = 0; i < this.placementModifiers.size(); i++) {
+			if (this.placementModifiers.get(i).type() == type) {
+				this.placementModifiers.set(i, mutator.map((P) this.placementModifiers.get(i)));
+				break;
+			}
+		}
 		return this;
 	}
 

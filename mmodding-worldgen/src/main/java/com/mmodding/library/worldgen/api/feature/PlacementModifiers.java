@@ -49,7 +49,7 @@ public interface PlacementModifiers {
 	PlacementModifiers remove(PlacementModifierType<?> type);
 
 	/**
-	 * Replaces all placement modifiers of a specified type for the provided one.
+	 * Replaces the first placement modifiers of the type and keeps its order.
 	 * @param type the type
 	 * @return the placement modifiers access object
 	 */
@@ -58,7 +58,7 @@ public interface PlacementModifiers {
 	}
 
 	/**
-	 * Finds the first placement modifiers of the type, mutates it, and replaces every placement modifiers of this type by the mutated one.
+	 * Finds the first placement modifiers of the type, mutates it, and keeps its order.
 	 * @param type the type
 	 * @param mutator the mutator
 	 * @return the placement modifiers access object
