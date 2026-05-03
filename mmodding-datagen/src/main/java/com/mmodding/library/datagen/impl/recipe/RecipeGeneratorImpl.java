@@ -18,11 +18,6 @@ public class RecipeGeneratorImpl implements RecipeGenerator {
 
 	@Override
 	public RecipeHelper forItem(ItemLike item) {
-		return new RecipeHelperImpl(this.provider, this.output, item, null);
-	}
-
-	@Override
-	public RecipeHelper forItem(ItemLike item, String suffix) {
-		return new RecipeHelperImpl(this.provider, this.output, item, suffix);
+		return new RecipeHelperImpl(this.provider, this.output, item);
 	}
 }

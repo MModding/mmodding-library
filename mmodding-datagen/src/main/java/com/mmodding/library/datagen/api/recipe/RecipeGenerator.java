@@ -10,12 +10,4 @@ public interface RecipeGenerator {
 	 * @return the helper
 	 */
 	RecipeHelper forItem(ItemLike item);
-
-	/**
-	 * Creates a {@link RecipeHelper} for a target, and specifies a suffix.
-	 * @param item the target
-	 * @param suffix the suffix
-	 * @return the helper
-	 */
-	RecipeHelper forItem(ItemLike item, String suffix);
 }

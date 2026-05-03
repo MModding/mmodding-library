@@ -19,18 +19,16 @@ public class RecipeHelperImpl implements RecipeHelper {
 	private final RecipeProvider provider;
 	private final RecipeOutput output;
 	private final ItemLike target;
-	private final @Nullable String suffix;
 
-	public RecipeHelperImpl(RecipeProvider provider, RecipeOutput output, ItemLike target, @Nullable String suffix) {
+	public RecipeHelperImpl(RecipeProvider provider, RecipeOutput output, ItemLike target) {
 		this.provider = provider;
 		this.output = output;
 		this.target = target;
-		this.suffix = suffix;
 	}
 
-	private RecipeHelper save(RecipeBuilder builder) {
-		if (this.suffix != null) {
-			builder.save(this.output, builder.defaultId().mapIdentifier(id -> id.withPath(s -> s + this.suffix)));
+	private RecipeHelper save(RecipeBuilder builder, @Nullable String suffix) {
+		if (suffix != null) {
+			builder.save(this.output, builder.defaultId().mapIdentifier(id -> id.withPath(s -> s + suffix)));
 		}
 		else {
 			builder.save(this.output);
@@ -44,10 +42,20 @@ public class RecipeHelperImpl implements RecipeHelper {
 	}
 
 	@Override
+	public RecipeHelper shaped(String suffix, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
+		return this.shaped(suffix, 1, category, consumer);
+	}
+
+	@Override
 	public RecipeHelper shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
+		return this.shaped(null, count, category, consumer, unlockers);
+	}
+
+	@Override
+	public RecipeHelper shaped(String suffix, int count, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
 		ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.provider, this.target, count, category);
 		consumer.accept(recipe);
-		return this.save(recipe.factory);
+		return this.save(recipe.factory, suffix);
 	}
 
 	@Override
@@ -56,14 +64,29 @@ public class RecipeHelperImpl implements RecipeHelper {
 	}
 
 	@Override
+	public RecipeHelper shapeless(String suffix, RecipeCategory category, Consumer<ShapelessRecipe> consumer, ItemLike... unlockers) {
+		return this.shapeless(suffix, 1, category, consumer, unlockers);
+	}
+
+	@Override
 	public RecipeHelper shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer, ItemLike... unlockers) {
+		return this.shapeless(null, count, category, consumer, unlockers);
+	}
+
+	@Override
+	public RecipeHelper shapeless(String suffix, int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer, ItemLike... unlockers) {
 		ShapelessRecipeImpl recipe = new ShapelessRecipeImpl(this.provider, this.target, count, category, unlockers);
 		consumer.accept(recipe);
-		return this.save(recipe.factory);
+		return this.save(recipe.factory, suffix);
 	}
 
 	@Override
 	public RecipeHelper cutting(ItemLike item, RecipeCategory category, int count) {
+		return this.cutting(null, item, category, count);
+	}
+
+	@Override
+	public RecipeHelper cutting(String suffix, ItemLike item, RecipeCategory category, int count) {
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(item), category, this.target, count)
 			.unlockedBy(RecipeProvider.getHasName(item), this.provider.has(item))
 			.save(this.output, RecipeProvider.getConversionRecipeName(this.target, item) + "_stonecutting");
@@ -72,11 +95,16 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public RecipeHelper cutting(Ingredient ingredient, RecipeCategory category, int count, ItemLike... unlockers) {
+		return this.cutting(null, ingredient, category, count, unlockers);
+	}
+
+	@Override
+	public RecipeHelper cutting(String suffix, Ingredient ingredient, RecipeCategory category, int count, ItemLike... unlockers) {
 		RecipeBuilder builder = SingleItemRecipeBuilder.stonecutting(ingredient, category, this.target, count);
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		return this.save(builder);
+		return this.save(builder, suffix);
 	}
 
 	@Override
@@ -85,12 +113,22 @@ public class RecipeHelperImpl implements RecipeHelper {
 	}
 
 	@Override
+	public RecipeHelper smelting(String suffix, ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time) {
+		return this.smelting(suffix, Ingredient.of(item), category, bookCategory, experience, time, item);
+	}
+
+	@Override
 	public RecipeHelper smelting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time, ItemLike... unlockers) {
+		return this.smelting(null, ingredient, category, bookCategory, experience, time, unlockers);
+	}
+
+	@Override
+	public RecipeHelper smelting(String suffix, Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time, ItemLike... unlockers) {
 		RecipeBuilder builder = SimpleCookingRecipeBuilder.smelting(ingredient, category, bookCategory, this.target, experience, time);
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		return this.save(builder);
+		return this.save(builder, suffix);
 	}
 
 	@Override
@@ -99,12 +137,22 @@ public class RecipeHelperImpl implements RecipeHelper {
 	}
 
 	@Override
+	public RecipeHelper blasting(String suffix, ItemLike item, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time) {
+		return this.blasting(suffix, Ingredient.of(item), category, bookCategory, experience, time, item);
+	}
+
+	@Override
 	public RecipeHelper blasting(Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time, ItemLike... unlockers) {
+		return this.blasting(null, ingredient, category, bookCategory, experience, time, unlockers);
+	}
+
+	@Override
+	public RecipeHelper blasting(String suffix, Ingredient ingredient, RecipeCategory category, CookingBookCategory bookCategory, int experience, int time, ItemLike... unlockers) {
 		RecipeBuilder builder = SimpleCookingRecipeBuilder.blasting(ingredient, category, bookCategory, this.target, experience, time);
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		return this.save(builder);
+		return this.save(builder, suffix);
 	}
 
 	@Override
@@ -113,12 +161,22 @@ public class RecipeHelperImpl implements RecipeHelper {
 	}
 
 	@Override
+	public RecipeHelper smoking(String suffix, ItemLike item, RecipeCategory category, int experience, int time) {
+		return this.smoking(suffix, Ingredient.of(item), category, experience, time, item);
+	}
+
+	@Override
 	public RecipeHelper smoking(Ingredient ingredient, RecipeCategory category, int experience, int time, ItemLike... unlockers) {
+		return this.smoking(null, ingredient, category, experience, time, unlockers);
+	}
+
+	@Override
+	public RecipeHelper smoking(String suffix, Ingredient ingredient, RecipeCategory category, int experience, int time, ItemLike... unlockers) {
 		RecipeBuilder builder = SimpleCookingRecipeBuilder.smoking(ingredient, category, this.target, experience, time);
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		return this.save(builder);
+		return this.save(builder, suffix);
 	}
 
 	@Override
@@ -127,19 +185,37 @@ public class RecipeHelperImpl implements RecipeHelper {
 	}
 
 	@Override
+	public RecipeHelper campfireCooking(String suffix, ItemLike item, RecipeCategory category, int experience, int time) {
+		return this.campfireCooking(suffix, Ingredient.of(item), category, experience, time, item);
+	}
+
+	@Override
 	public RecipeHelper campfireCooking(Ingredient ingredient, RecipeCategory category, int experience, int time, ItemLike... unlockers) {
+		return this.campfireCooking(null, ingredient, category, experience, time, unlockers);
+	}
+
+	@Override
+	public RecipeHelper campfireCooking(String suffix, Ingredient ingredient, RecipeCategory category, int experience, int time, ItemLike... unlockers) {
 		RecipeBuilder builder = SimpleCookingRecipeBuilder.campfireCooking(ingredient, category, this.target, experience, time);
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		return this.save(builder);
+		return this.save(builder, suffix);
 	}
 
 	@Override
 	public RecipeHelper custom(BiFunction<RecipeProvider, ItemLike, RecipeBuilder> factory) {
 		return this.provide(
 			(provider, target) -> this.save(factory.apply(provider, target)
-				.unlockedBy(RecipeProvider.getHasName(target), provider.has(target)))
+				.unlockedBy(RecipeProvider.getHasName(target), provider.has(target)), null)
+		);
+	}
+
+	@Override
+	public RecipeHelper custom(String suffix, BiFunction<RecipeProvider, ItemLike, RecipeBuilder> factory) {
+		return this.provide(
+			(provider, target) -> this.save(factory.apply(provider, target)
+				.unlockedBy(RecipeProvider.getHasName(target), provider.has(target)), suffix)
 		);
 	}
 
