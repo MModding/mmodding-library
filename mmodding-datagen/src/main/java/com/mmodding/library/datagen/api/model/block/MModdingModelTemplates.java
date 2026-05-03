@@ -8,6 +8,17 @@ import java.util.Optional;
 
 public class MModdingModelTemplates {
 
+	public static final ModelTemplate CUBE_NORTH_INVERTED = create(
+		"cube_north_inverted",
+		TextureSlot.NORTH,
+		TextureSlot.SOUTH,
+		TextureSlot.EAST,
+		TextureSlot.WEST,
+		TextureSlot.UP,
+		TextureSlot.DOWN,
+		TextureSlot.TEXTURE
+	);
+
 	/**
 	 * Like if it was "enrolled" in with SIDE, with noticeable ENDs.
 	 */
