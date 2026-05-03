@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public class RecipeHelperImpl implements RecipeHelper {
@@ -18,11 +19,23 @@ public class RecipeHelperImpl implements RecipeHelper {
 	private final RecipeProvider provider;
 	private final RecipeOutput output;
 	private final ItemLike target;
+	private final @Nullable String suffix;
 
-	public RecipeHelperImpl(RecipeProvider provider, RecipeOutput output, ItemLike target) {
+	public RecipeHelperImpl(RecipeProvider provider, RecipeOutput output, ItemLike target, @Nullable String suffix) {
 		this.provider = provider;
 		this.output = output;
 		this.target = target;
+		this.suffix = suffix;
+	}
+
+	private RecipeHelper save(RecipeBuilder builder) {
+		if (this.suffix != null) {
+			builder.save(this.output, builder.defaultId().mapIdentifier(id -> id.withPath(s -> s + this.suffix)));
+		}
+		else {
+			builder.save(this.output);
+		}
+		return this;
 	}
 
 	@Override
@@ -34,8 +47,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 	public RecipeHelper shaped(int count, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
 		ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.provider, this.target, count, category);
 		consumer.accept(recipe);
-		recipe.factory.save(this.output);
-		return this;
+		return this.save(recipe.factory);
 	}
 
 	@Override
@@ -47,8 +59,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 	public RecipeHelper shapeless(int count, RecipeCategory category, Consumer<ShapelessRecipe> consumer, ItemLike... unlockers) {
 		ShapelessRecipeImpl recipe = new ShapelessRecipeImpl(this.provider, this.target, count, category, unlockers);
 		consumer.accept(recipe);
-		recipe.factory.save(this.output);
-		return this;
+		return this.save(recipe.factory);
 	}
 
 	@Override
@@ -65,8 +76,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		builder.save(this.output);
-		return this;
+		return this.save(builder);
 	}
 
 	@Override
@@ -80,8 +90,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		builder.save(this.output);
-		return this;
+		return this.save(builder);
 	}
 
 	@Override
@@ -95,8 +104,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		builder.save(this.output);
-		return this;
+		return this.save(builder);
 	}
 
 	@Override
@@ -110,8 +118,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		builder.save(this.output);
-		return this;
+		return this.save(builder);
 	}
 
 	@Override
@@ -125,16 +132,14 @@ public class RecipeHelperImpl implements RecipeHelper {
 		for (ItemLike unlocker : unlockers) {
 			builder.unlockedBy(RecipeProvider.getHasName(unlocker), this.provider.has(unlocker));
 		}
-		builder.save(this.output);
-		return this;
+		return this.save(builder);
 	}
 
 	@Override
 	public RecipeHelper custom(BiFunction<RecipeProvider, ItemLike, RecipeBuilder> factory) {
 		return this.provide(
-			(provider, target) -> factory.apply(provider, target)
-				.unlockedBy(RecipeProvider.getHasName(target), provider.has(target))
-				.save(this.output)
+			(provider, target) -> this.save(factory.apply(provider, target)
+				.unlockedBy(RecipeProvider.getHasName(target), provider.has(target)))
 		);
 	}
 
