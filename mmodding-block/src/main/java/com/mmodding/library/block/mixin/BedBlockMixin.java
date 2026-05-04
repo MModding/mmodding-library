@@ -42,6 +42,11 @@ public class BedBlockMixin {
 		return ((BedBlock) (Object) this) instanceof SimpleBedBlock ? original.getOpposite() : original;
 	}
 
+	@WrapOperation(method = "getStateForPlacement", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;relative(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos;"))
+	private BlockPos invertIfSimple(BlockPos instance, Direction direction, Operation<BlockPos> original) {
+		return ((BedBlock) (Object) this) instanceof SimpleBedBlock ? original.call(instance, direction.getOpposite()) : original.call(instance, direction);
+	}
+
 	@ModifyExpressionValue(method = "playerWillDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BedBlock;getNeighbourDirection(Lnet/minecraft/world/level/block/state/properties/BedPart;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;"))
 	private Direction invertIfSimple(Direction original, Level level, BlockPos pos, BlockState state) {
 		return state.getBlock() instanceof SimpleBedBlock ? original.getOpposite() : original;
