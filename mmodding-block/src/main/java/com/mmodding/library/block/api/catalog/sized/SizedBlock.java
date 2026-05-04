@@ -4,9 +4,8 @@ import com.mmodding.library.java.api.container.Unit;
 import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -61,9 +60,19 @@ public abstract class SizedBlock extends Block {
 		return new Vec3i(this.getInnerX(state), this.getInnerY(state), this.getInnerZ(state));
 	}
 
+	/**
+	 * Useful to put properties that are required for the placement validation.
+	 * @param ctx the block place context
+	 * @return the candidate for placement
+	 */
+	@ApiStatus.OverrideOnly
+	public BlockState getCandidateForPlacement(BlockPlaceContext ctx) {
+		return this.defaultBlockState();
+	}
+
 	@Override
 	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		BlockState candidate = super.getStateForPlacement(ctx);
+		BlockState candidate = this.getCandidateForPlacement(ctx);
 		Unit.Mutable<Boolean> noBlockCollisions = Unit.mutable(true);
 		this.forEach(
 			ctx.getLevel(), ctx.getClickedPos(), candidate,

@@ -31,14 +31,17 @@ public abstract class FacingSizedBlock extends SizedBlock {
 		return super.getBlockOrigin(OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, pos), state);
 	}
 
+	/*
+	 * Putting the property for the candidate allows the SizedBlock#getBlockOrigin in SizedBlock#forEach
+	 * to the facing property. Otherwise, it does not check placement availability properly for facing sized blocks.
+	 */
 	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		BlockState stateForPlacement = super.getStateForPlacement(ctx);
-		if (stateForPlacement != null) {
-			return stateForPlacement.setValue(this.getFacingProperty(), ctx.getHorizontalDirection().getOpposite());
+	public BlockState getCandidateForPlacement(BlockPlaceContext ctx) {
+		if (this.horizontal) {
+			return super.getCandidateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getHorizontalDirection().getOpposite());
 		}
 		else {
-			return null;
+			return super.getCandidateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getNearestLookingDirection().getOpposite());
 		}
 	}
 
