@@ -1,7 +1,5 @@
 classTweaker v1 official
 
-accessible field net/minecraft/world/level/block/BedBlock SHAPES Ljava/util/Map;
-
 transitive-accessible method net/minecraft/world/level/block/CropBlock getGrowthSpeed (Lnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F
 transitive-accessible method net/minecraft/world/level/block/CropBlock hasSufficientLight (Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z
 
