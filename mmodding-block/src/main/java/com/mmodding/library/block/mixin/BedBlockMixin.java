@@ -39,7 +39,7 @@ public class BedBlockMixin {
 
 	@ModifyExpressionValue(method = "getStateForPlacement", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/context/BlockPlaceContext;getHorizontalDirection()Lnet/minecraft/core/Direction;"))
 	private Direction invertIfSimple(Direction original, BlockPlaceContext context) {
-		return context.getLevel().getBlockState(context.getClickedPos()).getBlock() instanceof SimpleBedBlock ? original.getOpposite() : original;
+		return ((BedBlock) (Object) this) instanceof SimpleBedBlock ? original.getOpposite() : original;
 	}
 
 	@ModifyExpressionValue(method = "playerWillDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BedBlock;getNeighbourDirection(Lnet/minecraft/world/level/block/state/properties/BedPart;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;"))
