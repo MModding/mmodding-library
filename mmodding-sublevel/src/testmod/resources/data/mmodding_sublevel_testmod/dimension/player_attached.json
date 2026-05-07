@@ -1,0 +1,11 @@
+{
+  "type": "mmodding_sublevel_testmod:player_attached",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "preset": "minecraft:overworld"
+    },
+    "settings": "minecraft:overworld"
+  }
+}
