@@ -13,7 +13,8 @@
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
     "PitcherCropBlockMixin",
-    "PointedDripstoneBlockAccessor"
+    "PointedDripstoneBlockAccessor",
+    "ServerPlayerMixin"
   ],
   "client": [],
   "injectors": {
