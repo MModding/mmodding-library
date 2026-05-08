@@ -13,13 +13,6 @@ public interface SublevelType<A> {
 		return new SublevelTypeImpl<>(mapper, stem, chunkSquareRadius);
 	}
 
-	/**
-	 * The codec for the attachment. It allows mapping a sublevel data from an attachment.
-	 * <br>The parsed content is used to resolve a directory! As such, do not use non-conventional characters.
-	 * @return the codec
-	 */
-	Mapper<A, String> attachmentStringMapper();
-
 	ResourceKey<Level> dimension();
 
 	ResourceKey<LevelStem> stem();

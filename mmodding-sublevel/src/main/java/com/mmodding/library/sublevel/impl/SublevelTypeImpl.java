@@ -42,11 +42,6 @@ public class SublevelTypeImpl<A> implements SublevelType<A> {
 	}
 
 	@Override
-	public Mapper<A, String> attachmentStringMapper() {
-		return this.mapper;
-	}
-
-	@Override
 	public ResourceKey<Level> dimension() {
 		return this.level;
 	}
