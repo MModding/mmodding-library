@@ -5,4 +5,6 @@ accessible field net/minecraft/server/MinecraftServer levels Ljava/util/Map;
 accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
 accessible field net/minecraft/world/level/biome/BiomeManager biomeZoomSeed J
 
+accessible method net/minecraft/resources/ResourceKey <init> (Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)V
+
 mutable field net/minecraft/server/MinecraftServer levels Ljava/util/Map;

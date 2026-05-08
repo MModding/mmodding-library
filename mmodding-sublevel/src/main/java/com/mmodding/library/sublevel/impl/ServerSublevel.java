@@ -24,7 +24,7 @@ public class ServerSublevel<T> extends ServerLevel {
 			server.executor,
 			server.storageSource,
 			new DerivedLevelData(server.getWorldData(), (ServerLevelData) Objects.requireNonNull(server.getLevel(ServerSublevel.OVERWORLD)).getLevelData()),
-			type.dimension(),
+			SublevelKey.of(type.dimension()),
 			parent.registryAccess().lookupOrThrow(Registries.LEVEL_STEM).getValueOrThrow(type.stem()),
 			parent.isDebug(),
 			parent.getBiomeManager().biomeZoomSeed,
