@@ -1,9 +1,14 @@
 package com.mmodding.library.sublevel.impl;
 
 import com.mmodding.library.sublevel.api.SublevelType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.DerivedLevelData;
 import net.minecraft.world.level.storage.ServerLevelData;
 
@@ -33,6 +38,33 @@ public class ServerSublevel<T> extends ServerLevel {
 		);
 		this.getWorldBorder().setAbsoluteMaxSize(type.chunkSquareRadius() * 16);
 		server.getPlayerList().addWorldborderListener(this);
+	}
+
+	private boolean isInBounds(ChunkPos pos) {
+		int x = pos.x(); if (x > 0) x += 1;
+		int z = pos.z(); if (z > 0) z += 1;
+		return Math.abs(x) <= this.type.chunkSquareRadius() && Math.abs(z) <= this.type.chunkSquareRadius();
+	}
+
+	@Override
+	public void tickChunk(LevelChunk chunk, int tickSpeed) {
+		if (this.isInBounds(chunk.getPos())) {
+			super.tickChunk(chunk, tickSpeed);
+		}
+	}
+
+	@Override
+	protected void tickFluid(BlockPos pos, Fluid type) {
+		if (this.isInBounds(ChunkPos.containing(pos))) {
+			super.tickFluid(pos, type);
+		}
+	}
+
+	@Override
+	protected void tickBlock(BlockPos pos, Block type) {
+		if (this.isInBounds(ChunkPos.containing(pos))) {
+			super.tickBlock(pos, type);
+		}
 	}
 
 	public final SublevelType<T> getType() {
