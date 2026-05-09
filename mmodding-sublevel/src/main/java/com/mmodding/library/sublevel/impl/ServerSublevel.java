@@ -30,8 +30,8 @@ public class ServerSublevel<T> extends ServerLevel {
 			centerPos = ChunkPos.ZERO;
 		}
 		else {
-			int x = mappedAttachment.hashCode() / 10000;
-			int z = String.valueOf(x).hashCode() / 10000;
+			int x = mappedAttachment.hashCode() % (server.getAbsoluteMaxWorldSize() / 16);
+			int z = String.valueOf(x).hashCode() % (server.getAbsoluteMaxWorldSize() / 16);
 			centerPos = new ChunkPos(x, z);
 		}
 		this.centerPos = centerPos;
