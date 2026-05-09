@@ -19,11 +19,22 @@ public class ServerSublevel<T> extends ServerLevel {
 
 	private final SublevelType<T> type;
 	private final String mappedAttachment;
+	private final ChunkPos centerPos;
 
 	public ServerSublevel(SublevelType<T> type, String mappedAttachment, ServerLevel parent) {
 		this.type = type;
 		this.mappedAttachment = mappedAttachment;
 		MinecraftServer server = parent.getServer();
+		ChunkPos centerPos;
+		if (type.alwaysOrigin()) {
+			centerPos = ChunkPos.ZERO;
+		}
+		else {
+			int x = mappedAttachment.hashCode() / 10000;
+			int z = String.valueOf(x).hashCode() / 10000;
+			centerPos = new ChunkPos(x, z);
+		}
+		this.centerPos = centerPos;
 		super(
 			server,
 			server.executor,
@@ -36,13 +47,18 @@ public class ServerSublevel<T> extends ServerLevel {
 			Collections.emptyList(),
 			true
 		);
-		this.getWorldBorder().setAbsoluteMaxSize(type.chunkSquareRadius() * 16);
+		// "absoluteMaxSize" is misnamed, it clamps the world border area
+		// to an area centered at the origin and of the given size
+		// so we just set the normal size instead of the "clamp"
+		this.getWorldBorder().setAbsoluteMaxSize(server.getAbsoluteMaxWorldSize());
 		server.getPlayerList().addWorldborderListener(this);
+		this.getWorldBorder().setSize(type.chunkSquareRadius() * 16 * 2); // size needs the diameter, we have the radius
+		this.getWorldBorder().setCenter(this.centerPos.getWorldPosition().getX(), this.centerPos.getWorldPosition().getZ());
 	}
 
 	private boolean isInBounds(ChunkPos pos) {
-		int x = pos.x(); if (x > 0) x += 1;
-		int z = pos.z(); if (z > 0) z += 1;
+		int x = pos.x() - this.centerPos.x(); if (x > 0) x += 1;
+		int z = pos.z() - this.centerPos.z(); if (z > 0) z += 1;
 		return Math.abs(x) <= this.type.chunkSquareRadius() && Math.abs(z) <= this.type.chunkSquareRadius();
 	}
 
@@ -73,5 +89,9 @@ public class ServerSublevel<T> extends ServerLevel {
 
 	public final String getMappedAttachment() {
 		return this.mappedAttachment;
+	}
+
+	public final ChunkPos getCenterPos() {
+		return this.centerPos;
 	}
 }

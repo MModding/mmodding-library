@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
 
 public class SubLevelTests implements ModInitializer {
 
-	public static final SublevelType<Player> PLAYER_ATTACHED = Sublevels.createPlayerAttachedType(createKey(Registries.LEVEL_STEM, "player_attached"), 4);
+	public static final SublevelType<Player> PLAYER_ATTACHED = Sublevels.createPlayerAttachedType(createKey(Registries.LEVEL_STEM, "player_attached"), 4, false);
 
 	public static final ResourceKey<Item> TELEPORT_ITEM_KEY = createKey(Registries.ITEM, "teleport_item");
 

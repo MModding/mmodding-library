@@ -1,6 +1,7 @@
 package com.mmodding.library.sublevel.impl;
 
 import com.mmodding.library.java.api.function.Mapper;
+import com.mmodding.library.sublevel.api.SublevelInfo;
 import com.mmodding.library.sublevel.api.SublevelType;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.registries.Registries;
@@ -27,9 +28,10 @@ public class SublevelTypeImpl<A> implements SublevelType<A> {
 	private final ResourceKey<Level> level;
 	private final ResourceKey<LevelStem> stem;
 	private final int chunkSquareRadius;
+	private final boolean alwaysOrigin;
 	private final Map<String, ServerSublevel<?>> levels = new Object2ObjectOpenHashMap<>();
 
-	public SublevelTypeImpl(Mapper<A, String> mapper, ResourceKey<LevelStem> stem, int chunkSquareRadius) {
+	public SublevelTypeImpl(Mapper<A, String> mapper, ResourceKey<LevelStem> stem, int chunkSquareRadius, boolean alwaysOrigin) {
 		if (stem.equals(LevelStem.OVERWORLD) || stem.equals(LevelStem.NETHER) || stem.equals(LevelStem.END)) {
 			throw new IllegalArgumentException("What? You should not reduce vanilla dimensions as sublevel roots.");
 		}
@@ -37,6 +39,7 @@ public class SublevelTypeImpl<A> implements SublevelType<A> {
 		this.level = ResourceKey.create(Registries.DIMENSION, stem.identifier());
 		this.stem = stem;
 		this.chunkSquareRadius = chunkSquareRadius;
+		this.alwaysOrigin = alwaysOrigin;
 		ROOT_LEVEL_DISABLED.add(stem.identifier());
 		TYPES.put(stem.identifier(), this);
 	}
@@ -57,14 +60,24 @@ public class SublevelTypeImpl<A> implements SublevelType<A> {
 	}
 
 	@Override
-	public ServerLevel getOrCreate(ServerLevel parent, A attachment) {
-		return this.getOrCreate(parent, this.mapper.map(attachment));
+	public boolean alwaysOrigin() {
+		return this.alwaysOrigin;
+	}
+
+	@Override
+	public SublevelInfo getOrCreate(ServerLevel parent, A attachment) {
+		ServerSublevel<?> sub = this.getOrCreate(parent, this.mapper.map(attachment));
+		return new SublevelInfo(
+			sub,
+			sub.getCenterPos(),
+			sub.getCenterPos().getWorldPosition()
+		);
 	}
 
 	/**
 	 * @implNote is used by {@link com.mmodding.library.sublevel.mixin.MinecraftServerMixin} to load sublevels when the world is loaded
 	 */
-	public ServerLevel getOrCreate(ServerLevel parent, String mappedAttachment) {
+	public ServerSublevel<?> getOrCreate(ServerLevel parent, String mappedAttachment) {
 		return this.levels.computeIfAbsent(mappedAttachment, _ -> new ServerSublevel<>(this, mappedAttachment, parent));
 	}
 

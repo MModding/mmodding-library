@@ -2,14 +2,18 @@ package com.mmodding.library.sublevel.mixin;
 
 import com.google.common.collect.Iterators;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mmodding.library.sublevel.api.SublevelType;
 import com.mmodding.library.sublevel.impl.ServerSublevel;
 import com.mmodding.library.sublevel.impl.SublevelTypeImpl;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.core.LayeredRegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.RegistryLayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.LevelStem;
@@ -47,6 +51,10 @@ public abstract class MinecraftServerMixin {
 	@Shadow
 	public abstract Iterable<ServerLevel> getAllLevels();
 
+	@Shadow
+	@Final
+	private LayeredRegistryAccess<RegistryLayer> registries;
+
 	@SuppressWarnings("unchecked")
 	@ModifyExpressionValue(method = "createLevels", at = @At(value = "INVOKE", target = "Ljava/util/Set;iterator()Ljava/util/Iterator;"))
 	private <E> Iterator<E> preventSubLevelRoots(Iterator<E> original) {
@@ -55,31 +63,33 @@ public abstract class MinecraftServerMixin {
 			assert entry != null;
 			return !SublevelTypeImpl.ROOT_LEVEL_DISABLED.contains(entry.getKey().identifier());
 		};
-		Iterator<E> opposite = Iterators.filter(original, rootDisabled.negate()::test); // not sure loading them before nether and end is a good idea?
-		opposite.forEachRemaining(element -> {
-			Map.Entry<ResourceKey<LevelStem>, LevelStem> entry = (Map.Entry<ResourceKey<LevelStem>, LevelStem>) element;
-			SublevelTypeImpl<?> subLevelType = SublevelTypeImpl.TYPES.get(entry.getKey().identifier());
-			Path subRoot = this.storageSource.getDimensionPath(subLevelType.dimension());
-			if (subRoot.toFile().exists()) {
-				try {
-					Files.list(subRoot).forEach(subPath -> subLevelType.getOrCreate(this.levels.get(Level.OVERWORLD), subPath.toFile().getName()));
-				} catch (IOException error) {
-					throw new RuntimeException(error);
-				}
-			}
-		});
 		return Iterators.filter(original, rootDisabled::test);
 	}
 
-	@SuppressWarnings("unchecked")
-	@ModifyExpressionValue(method = "getAllLevels", at = @At(value = "INVOKE", target = "Ljava/util/Map;values()Ljava/util/Collection;"))
-	private <V> Collection<V> addSubLevels(Collection<V> original) {
-		Collection<Level> casted = (Collection<Level>) original;
-		Collection<Level> result = new ArrayList<>(casted);
+	@Inject(method = "createLevels", at = @At("TAIL"))
+	private void loadSublevels(CallbackInfo ci) {
+		for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : this.registries.compositeAccess().lookupOrThrow(Registries.LEVEL_STEM).entrySet()) {
+			if (SublevelTypeImpl.TYPES.containsKey(entry.getKey().identifier())) {
+				SublevelTypeImpl<?> subLevelType = SublevelTypeImpl.TYPES.get(entry.getKey().identifier());
+				Path subRoot = this.storageSource.getDimensionPath(subLevelType.dimension());
+				if (subRoot.toFile().exists()) {
+					try {
+						Files.list(subRoot).forEach(subPath -> subLevelType.getOrCreate(this.levels.get(Level.OVERWORLD), subPath.toFile().getName()));
+					} catch (IOException error) {
+						throw new RuntimeException(error);
+					}
+				}
+			}
+		}
+	}
+
+	@WrapMethod(method = "getAllLevels")
+	private Iterable<ServerLevel> addSublevels(Operation<Iterable<ServerLevel>> original) {
+		Collection<ServerLevel> result = new ArrayList<>((Collection<ServerLevel>) original.call());
 		for (SublevelTypeImpl<?> type : SublevelTypeImpl.TYPES.values()) {
 			result.addAll(type.levelValues());
 		}
-		return (Collection<V>) result;
+		return result;
 	}
 
 	// We silence them individually to log them by types

@@ -21,17 +21,18 @@ public class LimitedLevelSource extends ChunkGenerator {
 
 	private final ChunkGenerator delegate;
 	private final int squareChunkRadius;
+	private final ChunkPos centerPos;
 
-	public LimitedLevelSource(ChunkGenerator delegate, int squareChunkRadius) {
+	public LimitedLevelSource(ChunkGenerator delegate, int squareChunkRadius, ChunkPos centerPos) {
 		super(delegate.getBiomeSource(), delegate.generationSettingsGetter);
 		this.delegate = delegate;
 		this.squareChunkRadius = squareChunkRadius;
+		this.centerPos = centerPos;
 	}
 
 	private boolean isInBounds(ChunkAccess chunk) {
-		ChunkPos pos = chunk.getPos();
-		int x = pos.x(); if (x > 0) x += 1;
-		int z = pos.z(); if (z > 0) z += 1;
+		int x = chunk.getPos().x() - this.centerPos.x(); if (x > 0) x += 1;
+		int z = chunk.getPos().z() - this.centerPos.z(); if (z > 0) z += 1;
 		return Math.abs(x) <= this.squareChunkRadius && Math.abs(z) <= this.squareChunkRadius;
 	}
 

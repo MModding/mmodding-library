@@ -9,8 +9,8 @@ import net.minecraft.world.level.dimension.LevelStem;
 
 public interface SublevelType<A> {
 
-	static <A> SublevelType<A> create(Mapper<A, String> mapper, ResourceKey<LevelStem> stem, int chunkSquareRadius) {
-		return new SublevelTypeImpl<>(mapper, stem, chunkSquareRadius);
+	static <A> SublevelType<A> create(Mapper<A, String> mapper, ResourceKey<LevelStem> stem, int chunkSquareRadius, boolean alwaysOrigin) {
+		return new SublevelTypeImpl<>(mapper, stem, chunkSquareRadius, alwaysOrigin);
 	}
 
 	ResourceKey<Level> dimension();
@@ -18,6 +18,8 @@ public interface SublevelType<A> {
 	ResourceKey<LevelStem> stem();
 
 	int chunkSquareRadius();
+
+	boolean alwaysOrigin();
 
 	/**
 	 * Creates a sublevel from a parent level (which can be a sublevel too, if you like inception).
@@ -27,5 +29,5 @@ public interface SublevelType<A> {
 	 * @param attachment the attachment
 	 * @return the sublevel
 	 */
-	ServerLevel getOrCreate(ServerLevel parent, A attachment);
+	SublevelInfo getOrCreate(ServerLevel parent, A attachment);
 }
