@@ -3,10 +3,7 @@ package com.mmodding.library.sublevel.impl;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.NoiseColumn;
-import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -39,6 +36,13 @@ public class LimitedLevelSource extends ChunkGenerator {
 	@Override
 	public MapCodec<? extends ChunkGenerator> codec() {
 		return this.delegate.codec();
+	}
+
+	@Override
+	public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureManager structureManager) {
+		if (this.isInBounds(chunk)) {
+			super.applyBiomeDecoration(level, chunk, structureManager);
+		}
 	}
 
 	@Override

@@ -12,7 +12,7 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.sublevel.test.SubLevelTests")
+			it.init("com.mmodding.library.sublevel.test.SublevelTests")
 		}
 	}
 }
