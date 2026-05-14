@@ -3,9 +3,6 @@ mmodding {
 	configureFabricModJson {
 		accessWidener = "mmodding_item.classtweaker"
 		addMixin("mmodding_item.mixins.json")
-		withInjectedInterfaces {
-			it.injectTo("net/minecraft/class_1792", "com/mmodding/library/item/api/category/ItemCategoryContainer")
-		}
 	}
 	modules {
 		implementation("mmodding-core")
