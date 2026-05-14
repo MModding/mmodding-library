@@ -193,6 +193,7 @@ mmodding {
 		bundle("mmodding-math")
 		bundle("mmodding-network")
 		bundle("mmodding-rendering")
+		bundle("mmodding-sublevel")
 		bundle("mmodding-woodset")
 		bundle("mmodding-worldgen")
 		rootDir.toPath().resolve("mod-integration").toFile().list().each {

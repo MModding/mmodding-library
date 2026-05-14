@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "AbstractBlockStateMixin",
+    "BedBlockMixin",
     "BlockBehaviorPropertiesMixin",
     "BlockFamilyAccessor",
     "BlockMixin",
@@ -12,7 +13,8 @@
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
     "PitcherCropBlockMixin",
-    "PointedDripstoneBlockAccessor"
+    "PointedDripstoneBlockAccessor",
+    "ServerPlayerMixin"
   ],
   "client": [],
   "injectors": {

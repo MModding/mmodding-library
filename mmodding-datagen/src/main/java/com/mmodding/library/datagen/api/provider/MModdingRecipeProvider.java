@@ -1,7 +1,7 @@
 package com.mmodding.library.datagen.api.provider;
 
 import com.mmodding.library.datagen.api.recipe.RecipeGenerator;
-import com.mmodding.library.datagen.impl.recipe.RecipeHelperImpl;
+import com.mmodding.library.datagen.impl.recipe.RecipeGeneratorImpl;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
@@ -25,7 +25,7 @@ public abstract class MModdingRecipeProvider extends FabricRecipeProvider {
 
 			@Override
 			public void buildRecipes() {
-				MModdingRecipeProvider.this.createRecipes(item -> new RecipeHelperImpl(this, this.output, item));
+				MModdingRecipeProvider.this.createRecipes(new RecipeGeneratorImpl(this, this.output));
 			}
 		};
 	}

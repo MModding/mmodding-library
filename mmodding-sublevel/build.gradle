@@ -1,0 +1,18 @@
+mmodding {
+	loom {
+		accessWidenerPath = file("src/main/resources/mmodding_sublevel.classtweaker")
+	}
+	modules {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+	}
+	configureFabricModJson {
+		accessWidener = "mmodding_sublevel.classtweaker"
+		addMixin("mmodding_sublevel.mixins.json")
+	}
+	configureTestmod {
+		withEntrypoints {
+			it.init("com.mmodding.library.sublevel.test.SublevelTests")
+		}
+	}
+}

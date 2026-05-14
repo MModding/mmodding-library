@@ -1,0 +1,15 @@
+classTweaker v1 official
+
+accessible field net/minecraft/server/MinecraftServer executor Ljava/util/concurrent/Executor;
+accessible field net/minecraft/server/MinecraftServer levels Ljava/util/Map;
+accessible field net/minecraft/server/MinecraftServer storageSource Lnet/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess;
+accessible field net/minecraft/world/level/biome/BiomeManager biomeZoomSeed J
+accessible field net/minecraft/world/level/chunk/ChunkGenerator generationSettingsGetter Ljava/util/function/Function;
+
+accessible method net/minecraft/resources/ResourceKey <init> (Lnet/minecraft/resources/Identifier;Lnet/minecraft/resources/Identifier;)V
+accessible method net/minecraft/world/level/chunk/ChunkGenerator codec ()Lcom/mojang/serialization/MapCodec;
+
+mutable field net/minecraft/server/MinecraftServer levels Ljava/util/Map;
+
+extendable method net/minecraft/server/level/ServerLevel tickFluid (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/material/Fluid;)V
+extendable method net/minecraft/server/level/ServerLevel tickBlock (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;)V
