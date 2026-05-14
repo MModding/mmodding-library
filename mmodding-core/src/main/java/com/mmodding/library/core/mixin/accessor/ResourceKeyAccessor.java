@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(ResourceKey.class)
-public interface RegistryKeyAccessor {
+public interface ResourceKeyAccessor {
 
 	@Invoker("create")
 	static <T> ResourceKey<T> mmodding$of(Identifier registry, Identifier value) {

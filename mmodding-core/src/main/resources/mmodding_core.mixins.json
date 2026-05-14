@@ -4,8 +4,7 @@
   "package": "com.mmodding.library.core.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "accessor.RegistryKeyAccessor",
-    "injector.BootstrapMixin",
+    "accessor.ResourceKeyAccessor",
     "injector.FabricDataGenHelperMixin",
     "injector.ResourceKeyMixin"
   ],
