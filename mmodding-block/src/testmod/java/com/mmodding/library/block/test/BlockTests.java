@@ -1,5 +1,6 @@
 package com.mmodding.library.block.test;
 
+import com.mmodding.library.block.api.catalog.AdvancedAnvilBlock;
 import com.mmodding.library.block.api.catalog.SimpleBedBlock;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
@@ -26,7 +27,9 @@ public class BlockTests implements ExtendedModInitializer {
 
 	public static final Block TEST_FACING_SIZED = register("test_facing_sized", TestFacingSizedBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)).registerItem();
 
-	public static final Block TEST_BED_BLOCK = register("test_bed_block", SimpleBedBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_BED)).registerItem();
+	public static final Block TEST_BED = register("test_bed", SimpleBedBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_BED)).registerItem();
+
+	public static final Block TEST_ANVIL = register("test_anvil", p -> new AdvancedAnvilBlock(1.0f, 10, 10.0f, 100, null, p), BlockBehaviour.Properties.ofFullCopy(Blocks.ANVIL)).registerItem();
 
 	@Override
 	public void setupManager(ElementsManager manager) {
