@@ -30,5 +30,9 @@ public interface Either<F, S> {
 		return this.map(Either::ofFirst, second -> Either.ofSecond(mapper.map(second)));
 	}
 
+	default <RF, RS> Either<RF, RS> mapBoth(Mapper<F, RF> mapFirst, Mapper<S, RS> mapSecond) {
+		return this.mapFirst(mapFirst).mapSecond(mapSecond);
+	}
+
 	void execute(Consumer<F> executeFirst, Consumer<S> executeSecond);
 }

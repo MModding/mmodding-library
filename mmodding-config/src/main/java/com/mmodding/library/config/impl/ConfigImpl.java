@@ -6,9 +6,14 @@ import com.mmodding.library.config.api.ConfigNetworkManagement;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.ConfigSchema;
 import com.mmodding.library.config.api.content.ConfigSpec;
+import com.mmodding.library.config.impl.content.ConfigCodec;
 import com.mmodding.library.config.impl.content.ConfigSchemaImpl;
 import com.mmodding.library.config.impl.content.ConfigSpecImpl;
+import com.mmodding.library.config.impl.content.ConfigStreamCodec;
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import org.jspecify.annotations.Nullable;
 
 public class ConfigImpl implements Config {
 
@@ -18,9 +23,11 @@ public class ConfigImpl implements Config {
 	private final ConfigNetworkManagement networkManagement;
 	private final ConfigSchema schema;
 	private final Codec<ConfigContent> codec;
+	private final StreamCodec<? super ByteBuf, ConfigContent> streamCodec;
 	private final ConfigContent defaultContent;
 
-	private ConfigContent cachedContent = null;
+	private ConfigContent localCachedContent = null;
+	private ConfigContent upstreamCachedContent = null;
 
 	public ConfigImpl(String translationKey, String filePath, ConfigLevel level, ConfigNetworkManagement networkManagement, ConfigSpec spec) {
 		this.translationKey = translationKey;
@@ -28,7 +35,8 @@ public class ConfigImpl implements Config {
 		this.level = level;
 		this.networkManagement = networkManagement;
 		this.schema = ConfigSpecImpl.retrieveSchema(spec);
-		this.codec = ConfigSpecImpl.buildCodec(this.schema, "", spec);
+		this.codec = new ConfigCodec(this.schema, spec);
+		this.streamCodec = new ConfigStreamCodec<>(this.schema, spec);
 		this.defaultContent = ConfigSpecImpl.retrieveDefaultContent((ConfigSchemaImpl) this.schema, "", spec);
 	}
 
@@ -63,16 +71,29 @@ public class ConfigImpl implements Config {
 	}
 
 	@Override
+	public StreamCodec<? super ByteBuf, ConfigContent> getStreamCodec() {
+		return this.streamCodec;
+	}
+
+	@Override
 	public ConfigContent getDefaultContent() {
 		return this.defaultContent;
 	}
 
 	@Override
 	public ConfigContent getContent() {
-		return this.level.equals(ConfigLevel.ALWAYS_UPDATED) ? ConfigLoader.load(this) : this.cachedContent;
+		if (this.networkManagement.equals(ConfigNetworkManagement.UPSTREAM_SERVER) && this.upstreamCachedContent != null) {
+			return this.upstreamCachedContent;
+		}
+		return this.level.equals(ConfigLevel.ALWAYS_UPDATED) ? ConfigLoader.load(this) : this.localCachedContent;
 	}
 
-	public void updateContent(ConfigContent content) {
-		this.cachedContent = content;
+	public void updateLocalContent(ConfigContent content) {
+		this.localCachedContent = content;
+	}
+
+	// Should only get called on client side; if not, server will cache upstream content, which will make #getContent misbehave on server side.
+	public void updateUpstreamContent(@Nullable ConfigContent content) {
+		this.upstreamCachedContent = content;
 	}
 }

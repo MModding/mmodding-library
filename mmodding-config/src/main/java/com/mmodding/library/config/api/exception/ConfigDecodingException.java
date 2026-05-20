@@ -1,4 +1,4 @@
-package com.mmodding.library.config.api;
+package com.mmodding.library.config.api.exception;
 
 import com.mmodding.library.config.api.content.ConfigContent;
 

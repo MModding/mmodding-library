@@ -1,7 +1,7 @@
 package com.mmodding.library.config.impl.content;
 
-import com.mmodding.library.config.api.ConfigDecodingException;
-import com.mmodding.library.config.api.ConfigEncodingException;
+import com.mmodding.library.config.api.exception.ConfigDecodingException;
+import com.mmodding.library.config.api.exception.ConfigEncodingException;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mmodding.library.config.api.content.ConfigSchema;
 import com.mmodding.library.config.api.content.ConfigSchemaNode;
@@ -18,20 +18,23 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.network.codec.StreamCodec;
 
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ConfigCodec implements Codec<ConfigContent> {
 
 	private final ConfigSchema schema;
 	private final String path;
-	private final Map<String, Either<ConfigSpec, Codec<Object>>> raw;
+	private final CategoryInfo info;
 
-	public ConfigCodec(ConfigSchema schema, String path, Map<String, Either<ConfigSpec, Pair<Codec<Object>, StreamCodec<? extends ByteBuf, Object>>>> raw) {
+	public ConfigCodec(ConfigSchema schema, ConfigSpec spec) {
+		this(schema, "", CategoryInfo.compileSpec(spec));
+	}
+
+	private ConfigCodec(ConfigSchema schema, String path, CategoryInfo info) {
 		this.schema = schema;
 		this.path = path;
-		this.raw = raw.entrySet().stream()
-			.map(entry -> Map.entry(entry.getKey(), entry.getValue().mapSecond(Pair::first)))
-			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		this.info = info;
 	}
 
 	@Override
@@ -45,14 +48,14 @@ public class ConfigCodec implements Codec<ConfigContent> {
 				String propertyPath = ConfigContent.resolve(this.path, property);
 				DataResult<MapLike<T>> maybeInner = ops.getMap(entry.getSecond());
 				if (maybeInner.isSuccess()) {
-					var innerRaw = ConfigSpecImpl.getRaw(this.raw.get(property).getFirst().orElseThrow(() -> new ConfigDecodingException("Expected an element to decode for field " + propertyPath)));
-					ConfigCodec innerCodec = new ConfigCodec(this.schema, propertyPath, innerRaw);
+					CategoryInfo inner = this.info.getCategory(property, () -> new ConfigDecodingException("Expected an element to decode for field " + propertyPath));
+					ConfigCodec innerCodec = new ConfigCodec(this.schema, propertyPath, inner);
 					ConfigContent innerParsed = innerCodec.decode(ops, entry.getSecond()).getOrThrow().getFirst();
 					result.put(ops.getStringValue(entry.getFirst()).getOrThrow(), ConfigContent.class, innerParsed);
 				}
 				else {
 					ConfigSchemaNode node = this.schema.findNodeOrThrow(propertyPath); // Check for presence in schema.
-					Codec<Object> valueCodec = this.raw.get(property).getSecond().orElseThrow(() -> new ConfigDecodingException("Expected a category to decode for field " + propertyPath));
+					Codec<Object> valueCodec = this.info.getElementCodec(property, () -> new ConfigDecodingException("Expected a category to decode for field " + propertyPath));
 					Object valueParsed = valueCodec.decode(ops, entry.getSecond()).getOrThrow(s -> new ConfigDecodingException("Decoding of field " + propertyPath + " failed: " + s)).getFirst();
 					result.put(ops.getStringValue(entry.getFirst()).getOrThrow(), this.schema.validate(propertyPath, valueParsed.getClass(), node), valueParsed);
 				}
@@ -70,17 +73,42 @@ public class ConfigCodec implements Codec<ConfigContent> {
 		for (Pair<String, Class<?>> property : input.getAllProperties()) {
 			String propertyPath = ConfigContent.resolve(this.path, property.first());
 			if (property.second().equals(ConfigContent.class)) {
-				var innerRaw = ConfigSpecImpl.getRaw(this.raw.get(property.first()).getFirst().orElseThrow(() -> new ConfigEncodingException("Expected an element to encode for field " + propertyPath)));
-				ConfigCodec innerCodec = new ConfigCodec(this.schema, propertyPath, innerRaw);
+				var inner = this.info.getCategory(property.first(), () -> new ConfigEncodingException("Expected an element to encode for field " + propertyPath));
+				ConfigCodec innerCodec = new ConfigCodec(this.schema, propertyPath, inner);
 				T serialized = innerCodec.encodeStart(ops, input.category(property.first())).getOrThrow();
 				map = ops.mergeToMap(map, ops.createString(property.first()), serialized).getOrThrow();
 			}
 			else {
-				Codec<Object> valueCodec = this.raw.get(property.first()).getSecond().orElseThrow(() -> new ConfigEncodingException("Expected a category to encode for field " + propertyPath));
+				Codec<Object> valueCodec = this.info.getElementCodec(property.first(), () -> new ConfigEncodingException("Expected a category to encode for field " + propertyPath));
 				T serialized = valueCodec.encodeStart(ops, input.element(property.first(), property.second())).getOrThrow(s -> new ConfigEncodingException("Encoding of field " + propertyPath + " failed: " + s));
 				map = ops.mergeToMap(map, ops.createString(property.first()), serialized).getOrThrow();
 			}
 		}
 		return DataResult.success(map);
+	}
+
+	private static class CategoryInfo {
+
+		private final Map<String, Either<CategoryInfo, Codec<Object>>> raw;
+
+		public CategoryInfo(Map<String, Either<CategoryInfo, Codec<Object>>> raw) {
+			this.raw = raw;
+		}
+
+		private static CategoryInfo compileSpec(ConfigSpec spec) {
+			Map<String, Either<ConfigSpec, Pair<Codec<Object>, StreamCodec<? extends ByteBuf, Object>>>> rawSpec = ConfigSpecImpl.getRaw(spec);
+			Map<String, Either<CategoryInfo, Codec<Object>>> raw = rawSpec.entrySet().stream()
+				.map(entry -> Map.entry(entry.getKey(), entry.getValue().mapBoth(CategoryInfo::compileSpec, Pair::first)))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			return new CategoryInfo(raw);
+		}
+
+		public <T extends Throwable> CategoryInfo getCategory(String property, Supplier<T> exceptionSupplier) throws T {
+			return this.raw.get(property).getFirst().orElseThrow(exceptionSupplier);
+		}
+
+		public <T extends Throwable> Codec<Object> getElementCodec(String property, Supplier<T> exceptionSupplier) throws T {
+			return this.raw.get(property).getSecond().orElseThrow(exceptionSupplier);
+		}
 	}
 }

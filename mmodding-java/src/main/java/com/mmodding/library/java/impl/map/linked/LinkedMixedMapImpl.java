@@ -36,7 +36,7 @@ public class LinkedMixedMapImpl<K> extends LinkedHashMap<K, Typed<?>> implements
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
 		}
-		if (type.equals(typed.getType())) {
+		if (type.isAssignableFrom(typed.getType())) {
 			return (V) typed.getValue();
 		}
 		else {
@@ -50,7 +50,7 @@ public class LinkedMixedMapImpl<K> extends LinkedHashMap<K, Typed<?>> implements
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
 		}
-		if (type.equals(typed.getType())) {
+		if (type.isAssignableFrom(typed.getType())) {
 			return (V) typed.getValue();
 		}
 		else {

@@ -35,7 +35,7 @@ public class MixedMapImpl<K> extends Object2ObjectOpenHashMap<K, Typed<?>> imple
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
 		}
-		if (type.equals(typed.getType())) {
+		if (type.isAssignableFrom(typed.getType())) {
 			return (V) typed.getValue();
 		}
 		else {
@@ -49,7 +49,7 @@ public class MixedMapImpl<K> extends Object2ObjectOpenHashMap<K, Typed<?>> imple
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
 		}
-		if (type.equals(typed.getType())) {
+		if (type.isAssignableFrom(typed.getType())) {
 			return (V) typed.getValue();
 		}
 		else {

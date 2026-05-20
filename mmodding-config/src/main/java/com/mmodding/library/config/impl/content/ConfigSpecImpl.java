@@ -31,10 +31,6 @@ public class ConfigSpecImpl implements ConfigSpec {
 		return ((ConfigSpecImpl) spec).schema;
 	}
 
-	public static Codec<ConfigContent> buildCodec(ConfigSchema schema, String path, ConfigSpec spec) {
-		return new ConfigCodec(schema, path, getRaw(spec));
-	}
-
 	public static ConfigContent retrieveDefaultContent(ConfigSchemaImpl schema, String path, ConfigSpec spec) {
 		return new ConfigContentImpl(schema, path, ((ConfigSpecImpl) spec).defaults);
 	}

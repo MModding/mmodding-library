@@ -8,13 +8,17 @@ import com.google.gson.stream.JsonWriter;
 import com.mmodding.library.config.api.Config;
 import com.mmodding.library.config.api.content.ConfigContent;
 import com.mojang.serialization.JsonOps;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 @ApiStatus.Internal
 public class ConfigLoader {
@@ -22,7 +26,7 @@ public class ConfigLoader {
 	public static void initialLoad(Config config) {
 		boolean exists = FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json").toFile().exists();
 		ConfigContent content = !exists ? ConfigLoader.createAndLoad(config) : ConfigLoader.load(config);
-		((ConfigImpl) config).updateContent(content);
+		((ConfigImpl) config).updateLocalContent(content);
 	}
 
 	private static JsonWriter writer(Config config) throws IOException {
@@ -49,6 +53,7 @@ public class ConfigLoader {
 		return JsonParser.parseReader(new FileReader(FabricLoader.getInstance().getConfigDir().resolve(config.getFilePath() + ".json").toFile()));
 	}
 
+	// Called on config boostrap, and then only on server side (so that if client side is using upstream server config, it does not erase the cache).
 	public static ConfigContent load(Config config) {
 		try {
 			JsonElement parsed = ConfigLoader.parse(config);
@@ -57,5 +62,11 @@ public class ConfigLoader {
 		catch (IOException error) {
 			throw new RuntimeException("Failed to read configuration!", error);
 		}
+	}
+
+	public static ConfigContent loadAndSend(MinecraftServer server, Identifier identifier, Config config) {
+		ConfigContent content = ConfigLoader.load(config);
+		server.getPlayerList().getPlayers().forEach(player -> ServerPlayNetworking.send(player, new ConfigsPayload(Map.of(identifier, content))));
+		return content;
 	}
 }

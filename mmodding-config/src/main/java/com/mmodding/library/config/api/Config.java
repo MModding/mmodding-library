@@ -5,6 +5,8 @@ import com.mmodding.library.config.api.content.ConfigSchema;
 import com.mmodding.library.config.api.content.ConfigSpec;
 import com.mmodding.library.config.impl.ConfigBuilderImpl;
 import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -52,6 +54,12 @@ public interface Config {
 	 * @return the configuration codec
 	 */
 	Codec<ConfigContent> getCodec();
+
+	/**
+	 * The configuration stream codec. It handles networking transmission.
+	 * @return the configuration stream codec
+	 */
+	StreamCodec<? super ByteBuf, ConfigContent> getStreamCodec();
 
 	/**
 	 * The default content of this configuration.

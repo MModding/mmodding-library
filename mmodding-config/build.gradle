@@ -2,6 +2,7 @@ mmodding {
 	configureFabricModJson {
 		withEntrypoints {
 			it.init("com.mmodding.library.config.impl.ConfigInitializer")
+			it.client("com.mmodding.library.config.impl.client.ConfigClientInitializer")
 		}
 	}
 	modules {
