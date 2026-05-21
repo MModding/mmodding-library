@@ -4,10 +4,13 @@ import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.ExtendedModInitializer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.task.api.Task;
-import com.mmodding.library.task.api.TaskRegistry;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
+import com.mmodding.library.task.api.PersistentTaskRegistry;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.player.BlockEvents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Blocks;
 
 public class TaskTests implements ExtendedModInitializer {
 
@@ -17,17 +20,22 @@ public class TaskTests implements ExtendedModInitializer {
 
 	@Override
 	public void onInitialize(AdvancedContainer mod) {
-		TaskRegistry.register(createId("candies"), CandiesTask.CODEC);
-		TaskRegistry.register(createId("server_auto_shutdown"), ServerAutoShutdownTask.CODEC);
-		TaskRegistry.register(createId("diamond_giver"), DiamondGiverTask.CODEC);
+		PersistentTaskRegistry.register(createId("candies"), CandiesTask.CODEC);
+		PersistentTaskRegistry.register(createId("diamond_giver"), DiamondGiverTask.CODEC);
 
-		ServerLevelEvents.LOAD.register((server, _) -> {
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			Task.schedule(server, new CandiesTask(10));
 			Task.schedule(server, new ServerAutoShutdownTask("Why did you AFK on the testmod for so long..."), 20 * 3600);
 		});
 
-		ServerPlayerEvents.JOIN.register(player -> {
-			Task.schedule(player.level().getServer(), new DiamondGiverTask(player.getUUID(), 2));
+		BlockEvents.USE_WITHOUT_ITEM.register((state, _, _, player, _) -> {
+			if (player instanceof ServerPlayer serverPlayer) {
+				if (state.is(Blocks.DIAMOND_BLOCK)) {
+					Task.schedule(serverPlayer.level().getServer(), new DiamondGiverTask(serverPlayer.getUUID(), 3));
+					return InteractionResult.SUCCESS_SERVER;
+				}
+			}
+			return null;
 		});
 	}
 

@@ -22,7 +22,7 @@ public class InternalTaskManager extends SavedData {
 					result.holders.addAll(holders);
 					return result;
 				},
-				manager -> manager.holders.stream().toList()
+				manager -> manager.holders.stream().filter(TaskHolder::isPersistent).toList()
 			),
 		null
 	);
