@@ -3,7 +3,6 @@ package com.mmodding.library.task.api;
 import com.mmodding.library.task.impl.InternalTaskManager;
 import com.mojang.serialization.Codec;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -39,5 +38,9 @@ public interface Task {
 		InternalTaskManager.schedule(server, task, after);
 	}
 
+	/**
+	 * The codec handling the serialization for persistent data.
+	 * @return the codec
+	 */
 	Codec<? extends Task> codec();
 }
