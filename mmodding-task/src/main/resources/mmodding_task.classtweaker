@@ -1,0 +1,3 @@
+classTweaker v1 official
+
+accessible method net/minecraft/world/level/storage/SavedDataStorage getDataFile (Lnet/minecraft/resources/Identifier;)Ljava/nio/file/Path;

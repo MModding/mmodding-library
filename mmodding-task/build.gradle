@@ -1,0 +1,18 @@
+mmodding {
+	loom {
+		accessWidenerPath = file("src/main/resources/mmodding_task.classtweaker")
+	}
+	configureFabricModJson {
+		addMixin("mmodding_task.mixins.json")
+		accessWidener = "mmodding_task.classtweaker"
+	}
+	modules {
+		implementation("mmodding-core")
+		implementation("mmodding-java")
+	}
+	configureTestmod {
+		withEntrypoints {
+			it.init("com.mmodding.library.task.test.TaskTests")
+		}
+	}
+}
