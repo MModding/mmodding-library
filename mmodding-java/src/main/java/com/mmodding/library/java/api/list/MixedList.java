@@ -18,17 +18,17 @@ public interface MixedList extends List<Typed<?>>, Copyable<MixedList> {
 		return Typed.of(type, null);
 	}
 
-	<E> boolean contains(Class<E> type, E e);
+	<E> boolean contains(Class<?> type, E e);
 
-	<E> E get(int index, Class<E> type);
+	<E> E get(int index, Class<?> type);
 
-	<E> boolean add(Class<E> type, E e);
+	<E> boolean add(Class<?> type, E e);
 
-	<E> boolean remove(Class<E> type, E e);
+	<E> boolean remove(Class<?> type, E e);
 
-	<E> E set(int index, Class<E> type, E element);
+	<E> E set(int index, Class<?> type, E element);
 
-	<E> void forEach(BiConsumer<? super Class<E>, ? super E> action);
+	<E> void forEach(BiConsumer<? super Class<?>, ? super E> action);
 
 	@SuppressWarnings("unchecked")
 	static MixedList generateMixedListFromTrustedArray(Object... input) {

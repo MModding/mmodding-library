@@ -1,12 +1,6 @@
 mmodding {
-	loom.accessWidenerPath = file("src/main/resources/mmodding_network.classtweaker")
 	configureFabricModJson {
-		accessWidener = "mmodding_network.classtweaker"
 		addMixin("mmodding_network.mixins.json")
-		withEntrypoints {
-			it.init("com.mmodding.library.network.impl.NetworkInitializer")
-			it.client("com.mmodding.library.network.impl.NetworkClientInitializer")
-		}
 	}
 	modules {
 		implementation("mmodding-core")

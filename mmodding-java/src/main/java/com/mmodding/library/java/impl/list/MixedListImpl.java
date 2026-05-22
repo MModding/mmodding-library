@@ -24,12 +24,12 @@ public class MixedListImpl extends ArrayList<Typed<?>> implements MixedList {
 	}
 
 	@Override
-	public <E> boolean contains(Class<E> type, E e) {
+	public <E> boolean contains(Class<?> type, E e) {
 		return super.contains(Typed.of(type, e));
 	}
 
 	@Override
-	public <E> E get(int index, Class<E> type) {
+	public <E> E get(int index, Class<?> type) {
 		Typed<?> typed = super.get(index);
 		if (typed == null) {
 			typed = MixedMap.emptyValue(type);
@@ -43,23 +43,23 @@ public class MixedListImpl extends ArrayList<Typed<?>> implements MixedList {
 	}
 
 	@Override
-	public <E> boolean add(Class<E> type, E e) {
+	public <E> boolean add(Class<?> type, E e) {
 		return super.add(Typed.of(type, e));
 	}
 
 	@Override
-	public <E> boolean remove(Class<E> type, E e) {
+	public <E> boolean remove(Class<?> type, E e) {
 		return super.remove(Typed.of(type, e));
 	}
 
 	@Override
-	public <E> E set(int index, Class<E> type, E element) {
+	public <E> E set(int index, Class<?> type, E element) {
 		return (E) super.set(index, Typed.of(type, element)).getValue();
 	}
 
 	@Override
-	public <E> void forEach(BiConsumer<? super Class<E>, ? super E> action) {
-		this.forEach(value -> action.accept((Class<E>) value.getType(), (E) value.getValue()));
+	public <E> void forEach(BiConsumer<? super Class<?>, ? super E> action) {
+		this.forEach(value -> action.accept(value.getType(), (E) value.getValue()));
 	}
 
 	@Override
