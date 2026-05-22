@@ -33,7 +33,7 @@ Current Modules Table:
 | mmodding-item        | Stable       | Item Management, Catalog                          |
 | mmodding-java        | Experimental | Collection of Java Utilities                      |
 | mmodding-math        | Experimental | Collection of Math Utilities                      |
-| mmodding-network     | Experimental | Network Object Types, Delayed Networking          |
+| mmodding-network     | Experimental | Additionnal Network Codecs                        |
 | mmodding-rendering   | Stable       | Cosmetic Renderers, Rendering Tools               |
 | mmodding-sublevel    | Experimental | SubLevel Management                               |
 | mmodding-task        | Candidate    | Task Scheduling, Persistent Tasks                 |
