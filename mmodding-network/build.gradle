@@ -1,7 +1,4 @@
 mmodding {
-	configureFabricModJson {
-		addMixin("mmodding_network.mixins.json")
-	}
 	modules {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
