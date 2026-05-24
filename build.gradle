@@ -1,6 +1,5 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 import com.mmodding.gradle.api.mod.json.NamespaceProvider;
-import com.mmodding.gradle.api.mod.json.ParentSchema;
 
 plugins {
     id 'maven-publish'
@@ -59,12 +58,6 @@ static def applyMModdingLibraryProvider(Project project, NamespaceProvider provi
 		provider.provide(projectId + "_api")
 		provider.provide(projectId.replace("_", "-") + "-api")
 	}
-}
-
-static def applyYumiCommonsParent(ParentSchema parent) {
-	parent.name = "Yumi Commons"
-	parent.description = "A library containing common utilities."
-	parent.addBadge("library")
 }
 
 allprojects {
