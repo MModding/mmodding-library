@@ -176,6 +176,11 @@ allprojects {
 		from(rootProject.projectDir.path + "/LICENSE.md") {
 			rename { "${it}_${base.archivesName.get()}" }
 		}
+		if (project != rootProject) {
+			from(rootProject.projectDir.path + "/src/main/resources/assets/mmodding/icon.png") {
+				into("assets/" + getMModdingLibraryNamespace(project))
+			}
+		}
 	}
 }
 
