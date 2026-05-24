@@ -11,7 +11,10 @@ import net.minecraft.resources.ResourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public interface AdvancedContainer extends ModContainer {
 
@@ -101,5 +104,48 @@ public interface AdvancedContainer extends ModContainer {
 	 */
 	default <T> void register(ResourceKey<? extends Registry<T>> registry, BootstrapContext<T> context, Consumer<RegistrationFactory<T>> consumer) {
 		consumer.accept(RegistrationFactory.create(registry, context, this.getMetadata().getId()));
+	}
+
+	/**
+	 * Creates a stream of entries of the current mod from a specified registry.
+	 * @param registry the registry
+	 * @return the stream
+	 * @param <T> the element type
+	 */
+	default <T> Stream<Map.Entry<ResourceKey<T>, T>> streamRegistryEntries(Registry<T> registry) {
+		return registry.entrySet()
+			.stream()
+			.filter(e -> e.getKey().identifier().getNamespace().equals(getMetadata().getId()));
+	}
+
+	/**
+	 * Creates a stream of values of the current mod from a specified registry.
+	 * @param registry the registry
+	 * @return the stream
+	 * @param <T> the element type
+	 */
+	default <T> Stream<T> streamRegistryValues(Registry<T> registry) {
+		return this.streamRegistryEntries(registry).map(Map.Entry::getValue);
+	}
+
+	/**
+	 * Iterates over entries of the current mod from a specified registry.
+	 * @param registry the registry
+	 * @param consumer the consumer
+	 * @param <T> the element type
+	 */
+	default <T> void iterateOverRegistry(Registry<T> registry, BiConsumer<ResourceKey<T>, T> consumer) {
+		this.streamRegistryEntries(registry)
+			.forEachOrdered(e -> consumer.accept(e.getKey(), e.getValue()));
+	}
+
+	/**
+	 * Iterates over values of the current mod from a specified registry.
+	 * @param registry the registry
+	 * @param consumer the consumer
+	 * @param <T> the element type
+	 */
+	default <T> void iterateOverRegistry(Registry<T> registry, Consumer<T> consumer) {
+		this.streamRegistryValues(registry).forEachOrdered(consumer);
 	}
 }
