@@ -62,8 +62,10 @@ public class ConfigStreamCodec<B extends ByteBuf> implements StreamCodec<B, Conf
 		BiList<String, Class<?>> properties = value.getAllProperties();
 		output.writeInt(properties.size());
 		for (Pair<String, Class<?>> property : properties) {
+			ByteBufCodecs.STRING_UTF8.encode(output, property.first());
 			String propertyPath = ConfigContent.resolve(this.path, property.first());
 			boolean isCategory = property.second().equals(ConfigContent.class);
+			output.writeBoolean(isCategory);
 			if (isCategory) {
 				CategoryInfo inner = this.info.getCategory(property.first(), () -> new ConfigNetworkEncodingException("Expected a field to encode at " + propertyPath));
 				new ConfigStreamCodec<>(this.schema, propertyPath, inner).encode(output, value.category(property.first()));

@@ -37,13 +37,15 @@ public class ConfigInitializer implements ModInitializer {
 			});
 		});
 		ServerPlayerEvents.JOIN.register(player -> {
-			Map<Identifier, ConfigContent> contents = new Object2ObjectOpenHashMap<>();
-			ConfigsImpl.getAll().forEach((identifier, config) -> {
-				if (config.getNetworkManagement().equals(ConfigNetworkManagement.UPSTREAM_SERVER)) {
-					contents.put(identifier, config.getContent());
-				}
-			});
-			ServerPlayNetworking.send(player, new ConfigsPayload(contents));
+			if (player.level().getServer().isDedicatedServer()) {
+				Map<Identifier, ConfigContent> contents = new Object2ObjectOpenHashMap<>();
+				ConfigsImpl.getAll().forEach((identifier, config) -> {
+					if (config.getNetworkManagement().equals(ConfigNetworkManagement.UPSTREAM_SERVER)) {
+						contents.put(identifier, config.getContent());
+					}
+				});
+				ServerPlayNetworking.send(player, new ConfigsPayload(contents));
+			}
 		});
 	}
 }
