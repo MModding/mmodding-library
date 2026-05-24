@@ -56,7 +56,7 @@ public class MModdingStreamCodecs {
 	public static <B extends ByteBuf> StreamCodec<B, Double> doubleRange(double min, double max) {
 		return ByteBufCodecs.DOUBLE.map(
 			decoded -> Mth.clamp(decoded, min, max),
-			encoding -> ObjectUtil.checkInRange(min, max, encoding, "encoding")
+			encoding -> ObjectUtil.checkInRange(encoding, min, max, "encoding")
 		).cast();
 	}
 

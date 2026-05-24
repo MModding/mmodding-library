@@ -83,7 +83,7 @@ public interface ConfigContent {
 		return this.elementWithContext(property, Double.class);
 	}
 
-	default <T extends Enum<T>> Enum<T> enumValue(String property, Class<?> enumClass) {
+	default <T extends Enum<T>> T enumValue(String property, Class<T> enumClass) {
 		return this.element(property, enumClass);
 	}
 

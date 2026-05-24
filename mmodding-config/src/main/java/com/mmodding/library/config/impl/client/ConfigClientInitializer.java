@@ -6,7 +6,7 @@ import com.mmodding.library.config.api.Configs;
 import com.mmodding.library.config.impl.ConfigImpl;
 import com.mmodding.library.config.impl.ConfigsPayload;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class ConfigClientInitializer implements ClientModInitializer {
 				}
 			});
 		});
-		ClientLoginConnectionEvents.DISCONNECT.register((_, _) -> {
+		ClientPlayConnectionEvents.DISCONNECT.register((_, _) -> {
 			for (Config config : Configs.getAll().values()) {
 				if (config.getNetworkManagement().equals(ConfigNetworkManagement.UPSTREAM_SERVER)) {
 					((ConfigImpl) config).updateUpstreamContent(null); // allows client to use back its own content
