@@ -16,7 +16,6 @@
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
     "PitcherCropBlockMixin",
-    "PointedDripstoneBlockAccessor",
     "ServerPlayerMixin"
   ],
   "client": [],

@@ -112,7 +112,8 @@ allprojects {
 			withDependencies {
 				it.javaVersion = ">=" + 25
 				if (libs.versions.minecraft.get().contains("snapshot")) {
-					it.minecraftVersion = libs.versions.minecraft.get().replace("snapshot-", "alpha.")
+					String mcv = libs.versions.minecraft.get().split("-")[0]
+					it.fabricApiVersion = ">=${mcv}- <${mcv}"
 				}
 				else {
 					it.minecraftVersion = "~" + libs.versions.minecraft.get()
