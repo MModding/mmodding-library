@@ -111,7 +111,7 @@ allprojects {
 			}
 			withDependencies {
 				it.javaVersion = ">=" + 17
-				it.minecraftVersion = "~" + libs.versions.minecraft.get()
+				it.minecraftVersion = "~" + libs.versions.minecraft.get().split("-")[0]
 				it.fabricLoaderVersion = ">=" + libs.versions.fabric.loader.get()
 				it.fabricApiVersion = ">=" + libs.versions.fabric.api.get()
 			}
