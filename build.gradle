@@ -110,8 +110,13 @@ allprojects {
 				it.issues = "https://github.com/MModding/mmodding-library/issues"
 			}
 			withDependencies {
-				it.javaVersion = ">=" + 17
-				it.minecraftVersion = "~" + libs.versions.minecraft.get().split("-")[0]
+				it.javaVersion = ">=" + 25
+				if (libs.versions.minecraft.get().contains("snapshot")) {
+					it.minecraftVersion = libs.versions.minecraft.get().replace("snapshot-", "alpha.")
+				}
+				else {
+					it.minecraftVersion = "~" + libs.versions.minecraft.get()
+				}
 				it.fabricLoaderVersion = ">=" + libs.versions.fabric.loader.get()
 				it.fabricApiVersion = ">=" + libs.versions.fabric.api.get()
 			}
