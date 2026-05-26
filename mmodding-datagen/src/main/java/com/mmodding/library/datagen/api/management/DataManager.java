@@ -1,12 +1,23 @@
 package com.mmodding.library.datagen.api.management;
 
+import com.mmodding.library.core.api.management.content.ResourceProvider;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 
 import java.util.Set;
 import java.util.function.Predicate;
 
 public interface DataManager {
+
+	/**
+	 * Adds a {@link ResourceProvider} which allows generating JSON files of dynamic registry elements.
+	 * @param registry the targeted registry
+	 * @param provider the resource provider
+	 * @return the builder
+	 */
+	<T> DataManager resource(ResourceKey<? extends Registry<T>> registry, ResourceProvider<T> provider);
 
 	/**
 	 * Extracts elements of a specific type from a specified class to perform data generation associated to the content.

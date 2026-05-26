@@ -29,8 +29,8 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 		AdvancedLiquidVegetationPatchConfiguration config = context.config();
 		RandomSource random = context.random();
 		BlockPos pos = context.origin();
-		Predicate<BlockState> predicate = state -> state.is(config.replaceable);
-		Set<BlockPos> positions = this.placeGroundAndGetPositions(world, config, random, pos, predicate, config.xzRadius.sample(random) + 1, config.xzRadius.sample(random) + 1);
+		Predicate<BlockState> predicate = state -> state.is(config.replaceable());
+		Set<BlockPos> positions = this.placeGroundAndGetPositions(world, config, random, pos, predicate, config.xzRadius().sample(random) + 1, config.xzRadius().sample(random) + 1);
 		this.generateVegetation(context, world, config, random, positions);
 		return !positions.isEmpty();
 	}
@@ -38,7 +38,7 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 	protected Set<BlockPos> placeGroundAndGetPositions(WorldGenLevel level, AdvancedLiquidVegetationPatchConfiguration config, RandomSource random, BlockPos pos, Predicate<BlockState> replaceable, int radiusX, int radiusZ) {
 		BlockPos.MutableBlockPos mutable = pos.mutable();
 		BlockPos.MutableBlockPos result = mutable.mutable();
-		Direction direction = config.surface.getDirection();
+		Direction direction = config.surface().getDirection();
 		Direction opposite = direction.getOpposite();
 		Set<BlockPos> positions = new HashSet<>();
 
@@ -51,21 +51,21 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 				boolean equal = xCheck && zCheck;
 				boolean xor = or && !equal;
 
-				if (!equal && (!xor || config.extraEdgeColumnChance != 0.0f && !(random.nextFloat() > config.extraEdgeColumnChance))) {
+				if (!equal && (!xor || config.extraEdgeColumnChance() != 0.0f && !(random.nextFloat() > config.extraEdgeColumnChance()))) {
 					mutable.setWithOffset(pos, i, 0, j);
 
-					for (int k = 0; level.isStateAtPosition(mutable, BlockBehaviour.BlockStateBase::isAir) && k < config.verticalRange; k++) {
+					for (int k = 0; level.isStateAtPosition(mutable, BlockBehaviour.BlockStateBase::isAir) && k < config.verticalRange(); k++) {
 						mutable.move(direction);
 					}
 
-					for (int l = 0; level.isStateAtPosition(mutable, state -> !state.isAir()) && l < config.verticalRange; l++) {
+					for (int l = 0; level.isStateAtPosition(mutable, state -> !state.isAir()) && l < config.verticalRange(); l++) {
 						mutable.move(opposite);
 					}
 
-					result.setWithOffset(mutable, config.surface.getDirection());
+					result.setWithOffset(mutable, config.surface().getDirection());
 					BlockState blockState = level.getBlockState(result);
-					if (level.isEmptyBlock(mutable) && blockState.isFaceSturdy(level, result, config.surface.getDirection().getOpposite())) {
-						int depth = config.depth.sample(random) + (config.extraBottomBlockChance > 0.0f && random.nextFloat() < config.extraBottomBlockChance ? 1 : 0);
+					if (level.isEmptyBlock(mutable) && blockState.isFaceSturdy(level, result, config.surface().getDirection().getOpposite())) {
+						int depth = config.depth().sample(random) + (config.extraBottomBlockChance() > 0.0f && random.nextFloat() < config.extraBottomBlockChance() ? 1 : 0);
 						BlockPos blockPos = result.immutable();
 						if (this.placeGround(level, config, replaceable, random, result, depth)) {
 							positions.add(blockPos);
@@ -93,22 +93,22 @@ public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquid
 
 	protected void generateVegetation(FeaturePlaceContext<AdvancedLiquidVegetationPatchConfiguration> context, WorldGenLevel world, VegetationPatchConfiguration config, RandomSource random, Set<BlockPos> positions) {
 		for(BlockPos pos : positions) {
-			if (config.vegetationChance > 0.0f && random.nextFloat() < config.vegetationChance) {
-				config.vegetationFeature.value().placeWithBiomeCheck(world, context.chunkGenerator(), random, pos.below().relative(config.surface.getDirection().getOpposite()));
+			if (config.vegetationChance() > 0.0f && random.nextFloat() < config.vegetationChance()) {
+				config.vegetationFeature().value().placeWithBiomeCheck(world, context.chunkGenerator(), random, pos.below().relative(config.surface().getDirection().getOpposite()));
 			}
 		}
 	}
 
 	protected boolean placeGround(WorldGenLevel level, AdvancedLiquidVegetationPatchConfiguration config, Predicate<BlockState> replaceable, RandomSource random, BlockPos.MutableBlockPos pos, int depth) {
 		for (int i = 0; i < depth; ++i) {
-			BlockState groundState = config.groundState.getState(level, random, pos);
+			BlockState groundState = config.groundState().getState(level, random, pos);
 			BlockState currentState = level.getBlockState(pos);
 			if (!groundState.is(currentState.getBlock())) {
 				if (!replaceable.test(currentState)) {
 					return i != 0;
 				}
 				level.setBlock(pos, groundState, Block.UPDATE_CLIENTS);
-				pos.move(config.surface.getDirection());
+				pos.move(config.surface().getDirection());
 			}
 		}
 		return true;

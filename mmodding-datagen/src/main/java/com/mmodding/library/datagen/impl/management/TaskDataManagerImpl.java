@@ -2,6 +2,7 @@ package com.mmodding.library.datagen.impl.management;
 
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.block.impl.wrapper.BlockHeapImpl;
+import com.mmodding.library.core.api.management.content.ResourceProvider;
 import com.mmodding.library.datagen.api.management.DataManager;
 import com.mmodding.library.datagen.api.management.handler.DataHandler;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
@@ -11,16 +12,24 @@ import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.java.api.list.TriList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class DataManagerImpl implements DataManager {
+/**
+ * DataManager impl when used by the initializer.
+ */
+public class TaskDataManagerImpl implements DataManager {
+
+	private final Set<ResourceKey<? extends Registry<?>>> registriesToExport = new LinkedHashSet<>();
 
 	// dynamic approach
 	private final Map<Class<?>, List<?>> rawElements = new Object2ObjectOpenHashMap<>();
@@ -71,6 +80,12 @@ public class DataManagerImpl implements DataManager {
 			);
 		}
 		return typeFiltered;
+	}
+
+	@Override
+	public <T> DataManager resource(ResourceKey<? extends Registry<T>> registry, ResourceProvider<T> provider) {
+		this.registriesToExport.add(registry);
+		return this;
 	}
 
 	@Override
@@ -137,6 +152,26 @@ public class DataManagerImpl implements DataManager {
 		@Override
 		public void chain(P processor) {
 			this.manager.task(this.source, this.handler, this.exclusion, processor);
+		}
+	}
+
+	public static class WorldRegistriesExporter extends FabricDynamicRegistryProvider {
+
+		private final Set<ResourceKey<? extends Registry<?>>> registriesToExport;
+
+		public WorldRegistriesExporter(TaskDataManagerImpl manager, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+			super(output, registriesFuture);
+			this.registriesToExport = manager.registriesToExport;
+		}
+
+		@Override
+		protected void configure(HolderLookup.Provider registries, FabricDynamicRegistryProvider.Entries entries) {
+			this.registriesToExport.forEach(registry -> entries.addAll(registries.lookupOrThrow(registry)));
+		}
+
+		@Override
+		public String getName() {
+			return "World Registries Exporter";
 		}
 	}
 

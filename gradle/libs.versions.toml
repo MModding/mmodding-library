@@ -1,12 +1,12 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 java = "25"
-minecraft = "26.1"
-fabric_loader = "0.18.6"
+minecraft = "26.2-snapshot-8"
+fabric_loader = "0.19.2"
 
 yumi_commons = "2.0.0"
 
-fabric_api = "0.145.1+26.1"
+fabric_api = "0.149.1+26.2"
 
 # Mod Integrations
 trinkets_updated = "4.0.0-alpha.8+26.1"

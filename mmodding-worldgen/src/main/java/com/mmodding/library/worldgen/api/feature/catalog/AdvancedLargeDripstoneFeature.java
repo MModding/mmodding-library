@@ -15,9 +15,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Column;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.SpeleothemUtils;
 import net.minecraft.world.phys.Vec3;
 
 public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripstoneConfiguration> {
@@ -35,9 +35,9 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 		BlockPos blockPos = context.origin();
 		AdvancedLargeDripstoneConfiguration largeStoneSpikeFeatureConfig = context.config();
 		RandomSource randomGenerator = context.random();
-		if (DripstoneUtils.isEmptyOrWater(structureWorldAccess, blockPos)) {
+		if (SpeleothemUtils.isEmptyOrWater(structureWorldAccess, blockPos)) {
 			Optional<Column> optional = Column.scan(
-				structureWorldAccess, blockPos, largeStoneSpikeFeatureConfig.floorToCeilingSearchRange, DripstoneUtils::isEmptyOrWater, DripstoneUtils::isDripstoneBaseOrLava
+				structureWorldAccess, blockPos, largeStoneSpikeFeatureConfig.floorToCeilingSearchRange, SpeleothemUtils::isEmptyOrWater, state -> SpeleothemUtils.isBaseOrLava(state, Blocks.DRIPSTONE_BLOCK, context.config().replaceableBlocks)
 			);
 			if (optional.isPresent() && optional.get() instanceof Column.Range bounded) {
 				if (bounded.height() < 4) {
@@ -126,7 +126,7 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 						return false;
 					}
 
-					if (DripstoneUtils.isCircleMostlyEmbeddedInStone(world, wind.modify(mutable), this.scale)) {
+					if (SpeleothemUtils.isCircleMostlyEmbeddedInStone(world, wind.modify(mutable), this.scale)) {
 						this.pos = mutable;
 						return true;
 					}
@@ -141,7 +141,7 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 		}
 
 		private int scale(float height) {
-			return (int) DripstoneUtils.getDripstoneHeight(height, this.scale, this.heightScale, this.bluntness);
+			return (int) SpeleothemUtils.getSpeleothemHeight(height, this.scale, this.heightScale, this.bluntness);
 		}
 
 		void generate(Block stoneBlock, WorldGenLevel world, RandomSource random, AdvancedLargeDripstoneFeature.WindModifier wind) {
@@ -161,7 +161,7 @@ public class AdvancedLargeDripstoneFeature extends Feature<AdvancedLargeDripston
 
 							for(int m = 0; m < k && mutable.getY() < l; m++) {
 								BlockPos blockPos = wind.modify(mutable);
-								if (DripstoneUtils.isEmptyOrWaterOrLava(world, blockPos)) {
+								if (SpeleothemUtils.isEmptyOrWaterOrLava(world, blockPos)) {
 									bl = true;
 									world.setBlock(blockPos, stoneBlock.defaultBlockState(), Block.UPDATE_CLIENTS);
 								} else if (bl && world.getBlockState(blockPos).is(BlockTags.BASE_STONE_OVERWORLD)) {

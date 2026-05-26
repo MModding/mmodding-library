@@ -104,22 +104,22 @@ public interface BlockHeap {
 	}
 
 	default BlockHeap registerBlockItems() {
-		return this.registerBlockItems(new Item.Properties(), BlockItem::new);
+		return this.registerBlockItems(BlockItem::new, new Item.Properties());
 	}
 
 	default BlockHeap registerBlockItems(@NotNull Item.Properties properties) {
-		return this.registerBlockItems(properties, BlockItem::new);
+		return this.registerBlockItems(BlockItem::new, properties);
 	}
 
 	default BlockHeap registerBlockItems(@NotNull Item.Properties properties, @NotNull Function<Item, Item> tweaker) {
-		return this.registerBlockItems(properties, BlockItem::new, tweaker);
+		return this.registerBlockItems(BlockItem::new, properties, tweaker);
 	}
 
-	default BlockHeap registerBlockItems(@NotNull Item.Properties properties, @NotNull BiFunction<Block, Item.Properties, Item> factory) {
-		return this.registerBlockItems(properties, factory, item -> item);
+	default BlockHeap registerBlockItems(@NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Item.Properties properties) {
+		return this.registerBlockItems(factory, properties, item -> item);
 	}
 
-	BlockHeap registerBlockItems(@NotNull Item.Properties properties, @NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker);
+	BlockHeap registerBlockItems(@NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Item.Properties properties, @NotNull Function<Item, Item> tweaker);
 
 	List<Block> getEntries();
 

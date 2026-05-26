@@ -9,7 +9,7 @@ import com.mmodding.library.woodset.api.WoodSetBuilder;
 import com.mmodding.library.woodset.api.WoodSetSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -30,8 +30,8 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	private SoundType leavesSoundType = SoundType.GRASS;
 	private TreeGrower grower = TreeGrower.OAK;
 	private SoundType saplingSoundType = SoundType.GRASS;
-	private WoodSet.BoatFactory boatFactory = EntityType::boatFactory;
-	private WoodSet.ChestBoatFactory chestBoatFactory = EntityType::chestBoatFactory;
+	private WoodSet.BoatFactory boatFactory = EntityTypes::boatFactory;
+	private WoodSet.ChestBoatFactory chestBoatFactory = EntityTypes::chestBoatFactory;
 	private AutoMapper<BlockBehaviour.Properties> patch = AutoMapper.identity();
 	private WoodSetSettings settings = WoodSetSettings.DEFAULT;
 

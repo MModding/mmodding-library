@@ -1,9 +1,6 @@
 package com.mmodding.library.core.api.management;
 
 import com.mmodding.library.core.api.management.content.ContentProvider;
-import com.mmodding.library.core.api.management.content.ResourceProvider;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 
 public interface ElementsManager {
 
@@ -13,14 +10,6 @@ public interface ElementsManager {
 	 * @return the builder
 	 */
 	ElementsManager content(ContentProvider provider);
-
-	/**
-	 * Adds a {@link ResourceProvider} which allows generating JSON files of dynamic registry elements.
-	 * @param registry the targeted registry
-	 * @param provider the resource provider
-	 * @return the builder
-	 */
-	<T> ElementsManager resource(ResourceKey<? extends Registry<T>> registry, ResourceProvider<T> provider);
 
 	/**
 	 * Adds a {@link ContentProvider} if a specific mod is loaded.

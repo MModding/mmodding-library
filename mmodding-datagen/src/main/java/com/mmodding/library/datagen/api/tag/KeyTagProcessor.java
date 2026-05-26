@@ -1,7 +1,6 @@
 package com.mmodding.library.datagen.api.tag;
 
 import net.minecraft.data.tags.TagAppender;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
 import java.util.function.Function;
@@ -17,5 +16,5 @@ public interface KeyTagProcessor<T> {
 	 * @param appenderProvider provider function to retrieve tag appender objects
 	 * @param element the element to process
 	 */
-	void process(Function<TagKey<T>, TagAppender<ResourceKey<T>, T>> appenderProvider, T element);
+	void process(Function<TagKey<T>, TagAppender<T>> appenderProvider, T element);
 }

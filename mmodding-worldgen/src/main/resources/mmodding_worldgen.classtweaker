@@ -6,8 +6,12 @@ transitive-accessible method net/minecraft/data/worldgen/features/VegetationFeat
 mutable field net/minecraft/world/level/levelgen/feature/ConfiguredFeature config Lnet/minecraft/world/level/levelgen/feature/configurations/FeatureConfiguration;
 mutable field net/minecraft/world/level/levelgen/placement/PlacedFeature placement Ljava/util/List;
 
-accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/block/state/BlockState;)Z
-accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWater (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
-accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isEmptyOrWaterOrLava (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
-accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils getDripstoneHeight (DDDD)D
-accessible method net/minecraft/world/level/levelgen/feature/DripstoneUtils isCircleMostlyEmbeddedInStone (Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/core/BlockPos;I)Z
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils getSpeleothemHeight (DDDD)D
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils isCircleMostlyEmbeddedInStone (Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/core/BlockPos;I)Z
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils isEmptyOrWater (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils isEmptyOrWaterOrLava (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;)Z
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils buildBaseToTipColumn (Lnet/minecraft/core/Direction;IZLjava/util/function/Consumer;Lnet/minecraft/world/level/block/Block;)V
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils growSpeleothem (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/Direction;IZLnet/minecraft/world/level/block/Block;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/HolderSet;)V
+accessible method net/minecraft/world/level/levelgen/feature/SpeleothemUtils placeBaseBlockIfPossible (Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/core/HolderSet;)Z
+
+extendable class net/minecraft/world/level/levelgen/feature/configurations/VegetationPatchConfiguration

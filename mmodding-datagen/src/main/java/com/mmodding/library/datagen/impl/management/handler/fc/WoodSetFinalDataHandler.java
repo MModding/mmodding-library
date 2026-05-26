@@ -5,6 +5,7 @@ import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
+import com.mmodding.library.datagen.api.provider.BuiltinRegistryTagsProvider;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.woodset.api.WoodSet;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
@@ -12,7 +13,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelTemplates;
@@ -24,6 +24,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
@@ -127,7 +128,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 					generator.createTrivialBlock(leaves, TexturedModel.LEAVES);
 				}
 				generator.createPlantWithDefaultItem(set.getSapling(), set.getPottedSapling(), BlockModelGenerators.PlantType.NOT_TINTED);
-				generator.createHangingSign(set.getStrippedLog(), set.getHangingSign(), set.getWallHangingSign());
+				generator.family(set.getPlankRelatives().getMain()).hangingSign(set.getHangingSign());
 				generator.createShelf(set.getShelf(), set.getStrippedLog());
 			}
 		}
@@ -222,7 +223,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedBlockTags extends FabricTagsProvider.BlockTagsProvider {
+	private static class AutomatedBlockTags extends BuiltinRegistryTagsProvider.BlockTagsProvider {
 
 		private final List<WoodSet> sets;
 		private boolean hasBurnable = false;
@@ -236,32 +237,32 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		@Override
 		protected void addTags(HolderLookup.Provider registries) {
 			for (WoodSet set : this.sets) {
-				this.valueLookupBuilder(set.getLogsBlockTag()).add(set.getLog(), set.getWood(), set.getStrippedLog(), set.getStrippedWood());
+				this.valueBuilder(set.getLogsBlockTag()).add(set.getLog(), set.getWood(), set.getStrippedLog(), set.getStrippedWood());
 				if (set.getSettings().isBurnable()) {
 					this.hasBurnable = true;
-					this.valueLookupBuilder(BlockTags.LOGS_THAT_BURN).addTag(set.getLogsBlockTag());
+					this.valueBuilder(BlockItemTags.LOGS_THAT_BURN.block()).addTag(set.getLogsBlockTag());
 				}
 				else {
 					this.hasNonBurnable = true;
-					this.valueLookupBuilder(BlockTags.LOGS).addTag(set.getLogsBlockTag());
+					this.valueBuilder(BlockTags.LOGS).addTag(set.getLogsBlockTag());
 				}
-				this.valueLookupBuilder(BlockTags.LEAVES).add(set.getLeaves());
-				this.valueLookupBuilder(BlockTags.SAPLINGS).add(set.getSapling());
-				this.valueLookupBuilder(BlockTags.FLOWER_POTS).add(set.getPottedSapling());
-				this.valueLookupBuilder(BlockTags.PLANKS).add(set.getPlankRelatives().getMain());
-				this.valueLookupBuilder(BlockTags.WOODEN_BUTTONS).add(set.getPlankRelatives().get(BlockFamily.Variant.BUTTON));
-				this.valueLookupBuilder(BlockTags.WOODEN_DOORS).add(set.getPlankRelatives().get(BlockFamily.Variant.DOOR));
-				this.valueLookupBuilder(BlockTags.WOODEN_FENCES).add(set.getPlankRelatives().get(BlockFamily.Variant.FENCE));
-				this.valueLookupBuilder(BlockTags.FENCE_GATES).add(set.getPlankRelatives().get(BlockFamily.Variant.FENCE_GATE));
-				this.valueLookupBuilder(BlockTags.SIGNS).add(set.getPlankRelatives().get(BlockFamily.Variant.SIGN));
-				this.valueLookupBuilder(BlockTags.WOODEN_SLABS).add(set.getPlankRelatives().get(BlockFamily.Variant.SLAB));
-				this.valueLookupBuilder(BlockTags.WOODEN_STAIRS).add(set.getPlankRelatives().get(BlockFamily.Variant.STAIRS));
-				this.valueLookupBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(set.getPlankRelatives().get(BlockFamily.Variant.PRESSURE_PLATE));
-				this.valueLookupBuilder(BlockTags.WOODEN_TRAPDOORS).add(set.getPlankRelatives().get(BlockFamily.Variant.TRAPDOOR));
-				this.valueLookupBuilder(BlockTags.WALL_SIGNS).add(set.getPlankRelatives().get(BlockFamily.Variant.WALL_SIGN));
-				this.valueLookupBuilder(BlockTags.CEILING_HANGING_SIGNS).add(set.getHangingSign());
-				this.valueLookupBuilder(BlockTags.WALL_HANGING_SIGNS).add(set.getWallHangingSign());
-				this.valueLookupBuilder(BlockTags.WOODEN_SHELVES).add(set.getShelf());
+				this.valueBuilder(BlockTags.LEAVES).add(set.getLeaves());
+				this.valueBuilder(BlockItemTags.SAPLINGS.block()).add(set.getSapling());
+				this.valueBuilder(BlockTags.FLOWER_POTS).add(set.getPottedSapling());
+				this.valueBuilder(BlockTags.PLANKS).add(set.getPlankRelatives().getMain());
+				this.valueBuilder(BlockTags.WOODEN_BUTTONS).add(set.getPlankRelatives().get(BlockFamily.Variant.BUTTON));
+				this.valueBuilder(BlockTags.WOODEN_DOORS).add(set.getPlankRelatives().get(BlockFamily.Variant.DOOR));
+				this.valueBuilder(BlockTags.WOODEN_FENCES).add(set.getPlankRelatives().get(BlockFamily.Variant.FENCE));
+				this.valueBuilder(BlockTags.FENCE_GATES).add(set.getPlankRelatives().get(BlockFamily.Variant.FENCE_GATE));
+				this.valueBuilder(BlockTags.SIGNS).add(set.getPlankRelatives().get(BlockFamily.Variant.SIGN));
+				this.valueBuilder(BlockTags.WOODEN_SLABS).add(set.getPlankRelatives().get(BlockFamily.Variant.SLAB));
+				this.valueBuilder(BlockTags.WOODEN_STAIRS).add(set.getPlankRelatives().get(BlockFamily.Variant.STAIRS));
+				this.valueBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(set.getPlankRelatives().get(BlockFamily.Variant.PRESSURE_PLATE));
+				this.valueBuilder(BlockTags.WOODEN_TRAPDOORS).add(set.getPlankRelatives().get(BlockFamily.Variant.TRAPDOOR));
+				this.valueBuilder(BlockTags.WALL_SIGNS).add(set.getPlankRelatives().get(BlockFamily.Variant.WALL_SIGN));
+				this.valueBuilder(BlockTags.CEILING_HANGING_SIGNS).add(set.getHangingSign());
+				this.valueBuilder(BlockTags.WALL_HANGING_SIGNS).add(set.getWallHangingSign());
+				this.valueBuilder(BlockTags.WOODEN_SHELVES).add(set.getShelf());
 			}
 		}
 
@@ -271,7 +272,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedItemTags extends FabricTagsProvider.ItemTagsProvider {
+	private static class AutomatedItemTags extends BuiltinRegistryTagsProvider.ItemTagsProvider {
 
 		private final List<WoodSet> sets;
 		private final boolean hasBurnable;
@@ -288,17 +289,17 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		protected void addTags(HolderLookup.Provider registries) {
 			for (WoodSet set : this.sets) {
 				this.copy(set.getLogsBlockTag(), set.getLogsItemTag());
-				this.valueLookupBuilder(ItemTags.BOATS).add(set.getBoatItem());
-				this.valueLookupBuilder(ItemTags.CHEST_BOATS).add(set.getChestBoatItem());
+				this.valueBuilder(ItemTags.BOATS).add(set.getBoatItem());
+				this.valueBuilder(ItemTags.CHEST_BOATS).add(set.getChestBoatItem());
 			}
 			if (this.hasBurnable) {
-				this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
+				this.copy(BlockItemTags.LOGS_THAT_BURN.block(), ItemTags.LOGS_THAT_BURN);
 			}
 			if (this.hasNonBurnable) {
 				this.copy(BlockTags.LOGS, ItemTags.LOGS);
 			}
 			this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
-			this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
+			this.copy(BlockItemTags.SAPLINGS.block(), ItemTags.SAPLINGS);
 			this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
 			this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
 			this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
@@ -319,7 +320,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		}
 	}
 
-	private static class AutomatedEntityTypeTags extends FabricTagsProvider.EntityTypeTagsProvider {
+	private static class AutomatedEntityTypeTags extends BuiltinRegistryTagsProvider.EntityTypeTagsProvider {
 
 		private final List<WoodSet> sets;
 
@@ -331,7 +332,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		@Override
 		protected void addTags(HolderLookup.Provider registries) {
 			for (WoodSet set : this.sets) {
-				this.valueLookupBuilder(EntityTypeTags.BOAT).add(set.getBoatEntityType());
+				this.valueBuilder(EntityTypeTags.BOAT).add(set.getBoatEntityType());
 			}
 		}
 

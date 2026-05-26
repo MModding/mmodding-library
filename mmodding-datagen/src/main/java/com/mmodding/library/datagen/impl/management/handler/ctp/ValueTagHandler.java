@@ -1,11 +1,11 @@
 package com.mmodding.library.datagen.impl.management.handler.ctp;
 
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
+import com.mmodding.library.datagen.api.provider.BuiltinRegistryTagsProvider;
 import com.mmodding.library.datagen.api.tag.ValueTagProcessor;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -64,7 +64,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		}
 	}
 
-	private static class AutomatedBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {
+	private static class AutomatedBlockTagsProvider extends BuiltinRegistryTagsProvider.BlockTagsProvider {
 
 		private final BiList<ValueTagProcessor<Block>, List<Block>> contentToProcess;
 
@@ -77,7 +77,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		protected void addTags(HolderLookup.Provider registries) {
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (Block block : elements) {
-					processor.process(this::valueLookupBuilder, block);
+					processor.process(this::valueBuilder, block);
 				}
 			});
 		}
@@ -88,7 +88,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		}
 	}
 
-	private static class AutomatedItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
+	private static class AutomatedItemTagsProvider extends BuiltinRegistryTagsProvider.ItemTagsProvider {
 
 		private final BiList<ValueTagProcessor<Item>, List<Item>> contentToProcess;
 
@@ -101,7 +101,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		protected void addTags(HolderLookup.Provider registries) {
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (Item item : elements) {
-					processor.process(this::valueLookupBuilder, item);
+					processor.process(this::valueBuilder, item);
 				}
 			});
 		}
@@ -112,7 +112,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		}
 	}
 
-	private static class AutomatedFluidTagsProvider extends FabricTagsProvider.FluidTagsProvider {
+	private static class AutomatedFluidTagsProvider extends BuiltinRegistryTagsProvider.FluidTagsProvider {
 
 		private final BiList<ValueTagProcessor<Fluid>, List<Fluid>> contentToProcess;
 
@@ -125,7 +125,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		protected void addTags(HolderLookup.Provider registries) {
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (Fluid fluid : elements) {
-					processor.process(this::valueLookupBuilder, fluid);
+					processor.process(this::valueBuilder, fluid);
 				}
 			});
 		}
@@ -136,7 +136,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		}
 	}
 
-	private static class AutomatedEntityTypeTagsProvider extends FabricTagsProvider.EntityTypeTagsProvider {
+	private static class AutomatedEntityTypeTagsProvider extends BuiltinRegistryTagsProvider.EntityTypeTagsProvider {
 
 		private final BiList<ValueTagProcessor<EntityType<?>>, List<EntityType<?>>> contentToProcess;
 
@@ -149,7 +149,7 @@ public class ValueTagHandler<T> implements DataProcessHandler<T, ValueTagProcess
 		protected void addTags(HolderLookup.Provider registries) {
 			this.contentToProcess.forEach((processor, elements) -> {
 				for (EntityType<?> type : elements) {
-					processor.process(this::valueLookupBuilder, type);
+					processor.process(this::valueBuilder, type);
 				}
 			});
 		}

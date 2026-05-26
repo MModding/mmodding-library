@@ -1,28 +1,31 @@
-package com.mmodding.library.core.api;
+package com.mmodding.library.core.api.client;
 
+import com.mmodding.library.core.api.AdvancedContainer;
+import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.impl.management.ElementsManagerImpl;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.ModContainer;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * An extension of {@link ModInitializer} with utilities to ensure proper content management.
+ * @see com.mmodding.library.core.api.ExtendedModInitializer
+ * @see ClientModInitializer
  */
-public interface ExtendedModInitializer extends ModInitializer {
+public interface ExtendedClientModInitializer extends ClientModInitializer {
 
 	@Override
 	@ApiStatus.Internal
-	default void onInitialize() {
+	default void onInitializeClient() {
 		ModContainer mod = MModdingLibrary.getModContainer(this.getClass());
 		ElementsManagerImpl manager = new ElementsManagerImpl();
 		this.setupManager(manager);
 		AdvancedContainer advanced = AdvancedContainer.of(mod);
 		manager.loadElements(advanced);
-		this.onInitialize(advanced);
+		this.onInitializeClient(advanced);
 	}
 
 	void setupManager(ElementsManager manager);
 
-	void onInitialize(AdvancedContainer mod);
+	void onInitializeClient(AdvancedContainer mod);
 }

@@ -4,13 +4,14 @@ import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
+import com.mmodding.library.datagen.api.provider.BuiltinRegistryTagsProvider;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
+import com.mmodding.library.datagen.api.tag.ValueTagAppender;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.core.HolderLookup;
@@ -18,8 +19,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -170,7 +171,7 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		}
 	}
 
-	static class AutomatedBlockFamilyBlockTags extends FabricTagsProvider.BlockTagsProvider {
+	static class AutomatedBlockFamilyBlockTags extends BuiltinRegistryTagsProvider.BlockTagsProvider {
 
 		private final List<BlockRelatives> relatives;
 		private final Set<TagKey<Block>> memory;
@@ -184,10 +185,10 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		@Override
 		protected void addTags(HolderLookup.Provider arg) {
 			this.relatives.forEach(current -> {
-				this.valueLookupBuilder(current.getBlockTagKey()).add(current.getMain());
+				this.valueBuilder(current.getBlockTagKey()).add(current.getMain());
 				for (BlockFamily.Variant variant : current.getVariants()) {
 					Block block = current.get(variant);
-					this.valueLookupBuilder(current.getBlockTagKey()).add(block);
+					this.valueBuilder(current.getBlockTagKey()).add(block);
 					switch (variant) {
 						case BUTTON -> this.buildAndMemorize(BlockTags.BUTTONS).add(block);
 						case DOOR -> this.buildAndMemorize(BlockTags.DOORS).add(block);
@@ -205,9 +206,9 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 			});
 		}
 
-		private TagAppender<Block, Block> buildAndMemorize(TagKey<Block> tag) {
+		private ValueTagAppender<Block> buildAndMemorize(TagKey<Block> tag) {
 			this.memory.add(tag);
-			return this.valueLookupBuilder(tag);
+			return this.valueBuilder(tag);
 		}
 
 		@Override
@@ -216,7 +217,7 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		}
 	}
 
-	static class AutomatedBlockFamilyItemTags extends FabricTagsProvider.ItemTagsProvider {
+	static class AutomatedBlockFamilyItemTags extends BuiltinRegistryTagsProvider.ItemTagsProvider {
 
 		private final List<BlockRelatives> relatives;
 		private final Set<TagKey<Block>> memory;
@@ -230,15 +231,15 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		@Override
 		protected void addTags(HolderLookup.Provider arg) {
 			this.relatives.forEach(current -> this.copy(current.getBlockTagKey(), current.getItemTagKey()));
-			this.copyIfMemorized(BlockTags.BUTTONS, ItemTags.BUTTONS);
-			this.copyIfMemorized(BlockTags.DOORS, ItemTags.DOORS);
-			this.copyIfMemorized(BlockTags.FENCES, ItemTags.FENCES);
-			this.copyIfMemorized(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
-			this.copyIfMemorized(BlockTags.SIGNS, ItemTags.SIGNS);
-			this.copyIfMemorized(BlockTags.SLABS, ItemTags.SLABS);
-			this.copyIfMemorized(BlockTags.STAIRS, ItemTags.STAIRS);
+			this.copyIfMemorized(BlockTags.BUTTONS, BlockItemTags.BUTTONS.item());
+			this.copyIfMemorized(BlockTags.DOORS, BlockItemTags.DOORS.item());
+			this.copyIfMemorized(BlockTags.FENCES, BlockItemTags.FENCES.item());
+			this.copyIfMemorized(BlockTags.FENCE_GATES, BlockItemTags.FENCE_GATES.item());
+			this.copyIfMemorized(BlockTags.SIGNS, BlockItemTags.SIGNS.item());
+			this.copyIfMemorized(BlockTags.SLABS, BlockItemTags.SLABS.item());
+			this.copyIfMemorized(BlockTags.STAIRS, BlockItemTags.STAIRS.item());
 			// no pressure plates item tag?
-			this.copyIfMemorized(BlockTags.TRAPDOORS, ItemTags.TRAPDOORS);
+			this.copyIfMemorized(BlockTags.TRAPDOORS, BlockItemTags.TRAPDOORS.item());
 			this.copyIfMemorized(BlockTags.WALLS, ItemTags.WALLS);
 		}
 

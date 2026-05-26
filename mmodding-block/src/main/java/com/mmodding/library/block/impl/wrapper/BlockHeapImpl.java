@@ -38,8 +38,8 @@ public class BlockHeapImpl implements BlockHeap {
 	}
 
 	@Override
-	public BlockHeap registerBlockItems(Item.@NotNull Properties properties, @NotNull BiFunction<Block, Item.Properties, Item> factory, @NotNull Function<Item, Item> tweaker) {
-		this.getEntries().forEach(block -> block.registerItem(properties, factory, tweaker));
+	public BlockHeap registerBlockItems(@NotNull BiFunction<Block, Item.Properties, Item> factory, Item.@NotNull Properties properties, @NotNull Function<Item, Item> tweaker) {
+		this.getEntries().forEach(block -> block.registerItem(factory, properties, tweaker));
 		return this;
 	}
 
