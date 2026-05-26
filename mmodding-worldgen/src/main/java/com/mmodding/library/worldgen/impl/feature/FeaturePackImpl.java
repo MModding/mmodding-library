@@ -1,8 +1,8 @@
 package com.mmodding.library.worldgen.impl.feature;
 
+import com.mmodding.library.core.api.registry.RegistryLooker;
 import com.mmodding.library.java.api.container.Pair;
 import com.mmodding.library.java.api.either.Either;
-import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.worldgen.api.feature.ConfiguredFeaturePack;
 import com.mmodding.library.worldgen.api.feature.FeaturePack;
@@ -22,7 +22,7 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 
 	private final Feature<FC> feature;
 
-	private final BiList<ConfiguredFeaturePack<FC>, Either<FC, Pair<ResourceKey<ConfiguredFeature<?, ?>>, AutoMapper<FC>>>> configuredFeaturePacks;
+	private final BiList<ConfiguredFeaturePack<FC>, Either<Factory<FC>, Pair<ResourceKey<ConfiguredFeature<?, ?>>, Patcher<FC>>>> configuredFeaturePacks;
 
 	public FeaturePackImpl(Feature<FC> feature) {
 		this.feature = feature;
@@ -30,15 +30,15 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 	}
 
 	@Override
-	public FeaturePack<FC> appendConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> key, FC featureConfig, Consumer<ConfiguredFeaturePack<FC>> action) {
+	public FeaturePack<FC> appendConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> key, Factory<FC> featureConfigFactory, Consumer<ConfiguredFeaturePack<FC>> action) {
 		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(key);
-		this.configuredFeaturePacks.add(configuredFeaturePack, Either.ofFirst(featureConfig));
+		this.configuredFeaturePacks.add(configuredFeaturePack, Either.ofFirst(featureConfigFactory));
 		action.accept(configuredFeaturePack);
 		return this;
 	}
 
 	@Override
-	public FeaturePack<FC> replicateConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> source, ResourceKey<ConfiguredFeature<?, ?>> key, AutoMapper<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action) {
+	public FeaturePack<FC> replicateConfiguredFeature(ResourceKey<ConfiguredFeature<?, ?>> source, ResourceKey<ConfiguredFeature<?, ?>> key, Patcher<FC> patcher, Consumer<ConfiguredFeaturePack<FC>> action) {
 		ConfiguredFeaturePack<FC> configuredFeaturePack = new ConfiguredFeaturePackImpl<>(key);
 		this.configuredFeaturePacks.add(configuredFeaturePack, Either.ofSecond(Pair.create(source, patcher)));
 		action.accept(configuredFeaturePack);
@@ -49,11 +49,12 @@ public class FeaturePackImpl<FC extends FeatureConfiguration> implements Feature
 	@SuppressWarnings({"DataFlowIssue", "unchecked"}) // remove "null" related warning => the "null" won't last long
 	public void registerConfigs(BootstrapContext<ConfiguredFeature<?, ?>> context) {
 		HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+		RegistryLooker looker = context::lookup;
 		this.configuredFeaturePacks.forEach((pack, either) -> either.execute(
-			featureConfig -> context.register(((ConfiguredFeaturePackImpl<FC>) pack).configuredFeatureKey, new ConfiguredFeature<>(this.feature, featureConfig)),
+			featureConfigFactory -> context.register(((ConfiguredFeaturePackImpl<FC>) pack).configuredFeatureKey, new ConfiguredFeature<>(this.feature, featureConfigFactory.createConfiguration(looker))),
 			pair -> {
 				ConfiguredFeature<?, ?> configuredFeature = new ConfiguredFeature<>(this.feature, null);
-				((ConfiguredFeatureReplicator<FC>) (Object) configuredFeature).mmodding$replicate(configuredFeatures.getOrThrow(pair.first()), pair.second());
+				((ConfiguredFeatureReplicator<FC>) (Object) configuredFeature).mmodding$replicate(configuredFeatures.getOrThrow(pair.first()), c -> pair.second().patchConfiguration(looker, c));
 				context.register(((ConfiguredFeaturePackImpl<FC>) pack).configuredFeatureKey, configuredFeature);
 			}
 		));
