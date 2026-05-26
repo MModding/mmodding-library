@@ -20,10 +20,7 @@ import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
-import net.minecraft.tags.BlockItemTags;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.*;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -231,20 +228,20 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 		@Override
 		protected void addTags(HolderLookup.Provider arg) {
 			this.relatives.forEach(current -> this.copy(current.getBlockTagKey(), current.getItemTagKey()));
-			this.copyIfMemorized(BlockTags.BUTTONS, BlockItemTags.BUTTONS.item());
-			this.copyIfMemorized(BlockTags.DOORS, BlockItemTags.DOORS.item());
-			this.copyIfMemorized(BlockTags.FENCES, BlockItemTags.FENCES.item());
-			this.copyIfMemorized(BlockTags.FENCE_GATES, BlockItemTags.FENCE_GATES.item());
-			this.copyIfMemorized(BlockTags.SIGNS, BlockItemTags.SIGNS.item());
-			this.copyIfMemorized(BlockTags.SLABS, BlockItemTags.SLABS.item());
-			this.copyIfMemorized(BlockTags.STAIRS, BlockItemTags.STAIRS.item());
+			this.copyIfMemorized(BlockItemTags.BUTTONS);
+			this.copyIfMemorized(BlockItemTags.DOORS);
+			this.copyIfMemorized(BlockItemTags.FENCES);
+			this.copyIfMemorized(BlockItemTags.FENCE_GATES);
+			this.copyIfMemorized(BlockItemTags.SIGNS);
+			this.copyIfMemorized(BlockItemTags.SLABS);
+			this.copyIfMemorized(BlockItemTags.STAIRS);
 			// no pressure plates item tag?
-			this.copyIfMemorized(BlockTags.TRAPDOORS, BlockItemTags.TRAPDOORS.item());
-			this.copyIfMemorized(BlockTags.WALLS, ItemTags.WALLS);
+			this.copyIfMemorized(BlockItemTags.TRAPDOORS);
+			this.copyIfMemorized(BlockItemTags.WALLS);
 		}
 
-		private void copyIfMemorized(TagKey<Block> blockTag, TagKey<Item> itemTag) {
-			if (this.memory.contains(blockTag)) this.copy(blockTag, itemTag);
+		private void copyIfMemorized(BlockItemTagId blockItemTag) {
+			if (this.memory.contains(blockItemTag.block())) this.copy(blockItemTag);
 		}
 
 		@Override

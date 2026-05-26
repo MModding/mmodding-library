@@ -10,6 +10,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.tags.BlockItemTagAppender;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockItemTagId;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -88,6 +89,10 @@ public abstract class BuiltinRegistryTagsProvider<T> extends FabricTagsProvider<
 
 		public ItemTagsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture) {
 			this(output, registryLookupFuture, null);
+		}
+
+		public void copy(BlockItemTagId blockItemTag) {
+			this.copy(blockItemTag.block(), blockItemTag.item());
 		}
 
 		public void copy(TagKey<Block> blockTag, TagKey<Item> itemTag) {

@@ -293,25 +293,25 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 				this.valueBuilder(ItemTags.CHEST_BOATS).add(set.getChestBoatItem());
 			}
 			if (this.hasBurnable) {
-				this.copy(BlockItemTags.LOGS_THAT_BURN.block(), ItemTags.LOGS_THAT_BURN);
+				this.copy(BlockItemTags.LOGS_THAT_BURN);
 			}
 			if (this.hasNonBurnable) {
-				this.copy(BlockTags.LOGS, ItemTags.LOGS);
+				this.copy(BlockItemTags.LOGS);
 			}
-			this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
-			this.copy(BlockItemTags.SAPLINGS.block(), ItemTags.SAPLINGS);
-			this.copy(BlockTags.PLANKS, ItemTags.PLANKS);
-			this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
-			this.copy(BlockTags.WOODEN_DOORS, ItemTags.WOODEN_DOORS);
-			this.copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
-			this.copy(BlockTags.FENCE_GATES, ItemTags.FENCE_GATES);
-			this.copy(BlockTags.SIGNS, ItemTags.SIGNS);
-			this.copy(BlockTags.WOODEN_SLABS, ItemTags.WOODEN_SLABS);
-			this.copy(BlockTags.WOODEN_STAIRS, ItemTags.WOODEN_STAIRS);
-			this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
-			this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
-			this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
-			this.copy(BlockTags.WOODEN_SHELVES, ItemTags.WOODEN_SHELVES);
+			this.copy(BlockItemTags.LEAVES);
+			this.copy(BlockItemTags.SAPLINGS);
+			this.copy(BlockItemTags.PLANKS);
+			this.copy(BlockItemTags.WOODEN_BUTTONS);
+			this.copy(BlockItemTags.WOODEN_DOORS);
+			this.copy(BlockItemTags.WOODEN_FENCES);
+			this.copy(BlockItemTags.FENCE_GATES);
+			this.copy(BlockItemTags.SIGNS);
+			this.copy(BlockItemTags.WOODEN_SLABS);
+			this.copy(BlockItemTags.WOODEN_STAIRS);
+			this.copy(BlockItemTags.WOODEN_PRESSURE_PLATES);
+			this.copy(BlockItemTags.WOODEN_TRAPDOORS);
+			this.copy(BlockItemTags.HANGING_SIGNS);
+			this.copy(BlockItemTags.WOODEN_SHELVES);
 		}
 
 		@Override
