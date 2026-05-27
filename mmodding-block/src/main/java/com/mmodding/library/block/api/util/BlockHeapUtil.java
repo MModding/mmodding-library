@@ -3,7 +3,9 @@ package com.mmodding.library.block.api.util;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
 import com.mmodding.library.java.api.function.Mapper;
 import com.mmodding.library.java.api.list.ListUtil;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ColorCollection;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
@@ -19,8 +21,8 @@ public class BlockHeapUtil {
 
 	public static final List<String> COLORS = List.of("white", "orange", "magenta", "light_blue", "yellow", "lime", "pink", "gray", "light_gray", "cyan", "purple", "blue", "brown", "green", "red", "black");
 
-	public static Mapper<String, BlockBehaviour.Properties> mapForColors(Supplier<BlockBehaviour.Properties> base) {
-		return constructor -> base.get().mapColor(switch (constructor) {
+	public static MapColor stringToMapColor(String color) {
+		return switch (color) {
 			case "white" -> MapColor.SNOW;
 			case "orange" -> MapColor.COLOR_ORANGE;
 			case "magenta" -> MapColor.COLOR_MAGENTA;
@@ -38,7 +40,19 @@ public class BlockHeapUtil {
 			case "red" -> MapColor.COLOR_RED;
 			case "black" -> MapColor.COLOR_BLACK;
 			default -> MapColor.NONE;
-		});
+		};
+	}
+
+	public static DyeColor stringToDyeColor(String color) {
+		return DyeColor.byName(color, DyeColor.WHITE);
+	}
+
+	public static Mapper<String, BlockBehaviour.Properties> mapForColors(Supplier<BlockBehaviour.Properties> base) {
+		return constructor -> base.get().mapColor(stringToMapColor(constructor));
+	}
+
+	public static <T extends BlockBehaviour> Mapper<String, BlockBehaviour.Properties> copyCollectionProperties(ColorCollection<T> collection) {
+		return constructor -> BlockBehaviour.Properties.ofFullCopy(collection.pick(stringToDyeColor(constructor)));
 	}
 
 	public static final List<String> OVERWORLD_WOODS = List.of("acacia", "cherry", "jungle", "dark_oak", "pale_oak", "mangrove", "bamboo", "oak", "spruce", "birch");
