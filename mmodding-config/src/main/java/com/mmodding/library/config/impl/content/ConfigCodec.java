@@ -50,13 +50,13 @@ public class ConfigCodec implements Codec<ConfigContent> {
 				if (maybeInner.isSuccess()) {
 					CategoryInfo inner = this.info.getCategory(property, () -> new ConfigDecodingException("Expected an element to decode for field " + propertyPath));
 					ConfigCodec innerCodec = new ConfigCodec(this.schema, propertyPath, inner);
-					ConfigContent innerParsed = innerCodec.decode(ops, entry.getSecond()).getOrThrow().getFirst();
+					ConfigContent innerParsed = innerCodec.parse(ops, entry.getSecond()).getOrThrow();
 					result.put(ops.getStringValue(entry.getFirst()).getOrThrow(), ConfigContent.class, innerParsed);
 				}
 				else {
 					ConfigSchemaNode node = this.schema.findNodeOrThrow(propertyPath); // Check for presence in schema.
 					Codec<Object> valueCodec = this.info.getElementCodec(property, () -> new ConfigDecodingException("Expected a category to decode for field " + propertyPath));
-					Object valueParsed = valueCodec.decode(ops, entry.getSecond()).getOrThrow(s -> new ConfigDecodingException("Decoding of field " + propertyPath + " failed: " + s)).getFirst();
+					Object valueParsed = valueCodec.parse(ops, entry.getSecond()).getOrThrow(s -> new ConfigDecodingException("Decoding of field " + propertyPath + " failed: " + s));
 					result.put(ops.getStringValue(entry.getFirst()).getOrThrow(), this.schema.validate(propertyPath, valueParsed.getClass(), node), valueParsed);
 				}
 			});
