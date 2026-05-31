@@ -48,4 +48,10 @@ public class LazyImpl<T> implements Lazy<T> {
 			consumer.accept(this.object);
 		}
 	}
+
+	@Override
+	public T maybeInitGet() {
+		if (!this.isInitialized()) this.initialize();
+		return this.get();
+	}
 }
