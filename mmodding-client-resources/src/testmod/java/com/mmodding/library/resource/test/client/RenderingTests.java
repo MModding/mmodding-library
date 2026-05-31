@@ -12,10 +12,10 @@ import net.minecraft.world.item.Item;
 
 public class RenderingTests implements ModInitializer {
 
-	public static final ResourceKey<Item> TEST_CAP_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_cap"));
-	public static final ResourceKey<Item> TEST_SUIT_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_suit"));
-	public static final ResourceKey<Item> TEST_PANTS_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_pants"));
-	public static final ResourceKey<Item> TEST_SHOES_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_shoes"));
+	public static final ResourceKey<Item> TEST_CAP_KEY = ResourceKey.create(Registries.ITEM, createId("test_cap"));
+	public static final ResourceKey<Item> TEST_SUIT_KEY = ResourceKey.create(Registries.ITEM, createId("test_suit"));
+	public static final ResourceKey<Item> TEST_PANTS_KEY = ResourceKey.create(Registries.ITEM, createId("test_pants"));
+	public static final ResourceKey<Item> TEST_SHOES_KEY = ResourceKey.create(Registries.ITEM, createId("test_shoes"));
 
 	public static final Item TEST_CAP = new Item(new Item.Properties().equippable(EquipmentSlot.HEAD).setId(TEST_CAP_KEY));
 	public static final Item TEST_SUIT = new Item(new Item.Properties().equippable(EquipmentSlot.CHEST).setId(TEST_SUIT_KEY));
@@ -30,7 +30,15 @@ public class RenderingTests implements ModInitializer {
 		Registry.register(BuiltInRegistries.ITEM, TEST_SHOES_KEY, TEST_SHOES);
 	}
 
+	public static String namespace() {
+		return "mmodding_client_resources_testmod";
+	}
+
+	public static Identifier createId(String path) {
+		return Identifier.fromNamespaceAndPath(namespace(), path);
+	}
+
 	public static Identifier createTexture(String path) {
-		return IdentifierUtil.texture("mmodding_rendering_testmod", path);
+		return IdentifierUtil.texture(namespace(), path);
 	}
 }

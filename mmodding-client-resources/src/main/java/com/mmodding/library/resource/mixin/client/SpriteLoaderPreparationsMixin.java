@@ -1,8 +1,8 @@
-package com.mmodding.library.resource.mixin;
+package com.mmodding.library.resource.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mmodding.library.resource.impl.sprite.TextureAliasesImpl;
+import com.mmodding.library.resource.impl.client.sprite.TextureAliasesImpl;
 import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;

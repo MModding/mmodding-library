@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [],
   "client": [
-    "SpriteLoaderPreparationsMixin"
+    "client.SpriteLoaderPreparationsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

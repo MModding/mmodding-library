@@ -11,10 +11,10 @@ import net.minecraft.resources.Identifier;
 
 public class RenderingTestsClient implements ClientModInitializer {
 
-	public static final ModelLayerLocation CAP = new ModelLayerLocation(Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_cap"), "main");
-	public static final ModelLayerLocation SUIT = new ModelLayerLocation(Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_suit"), "main");
-	public static final ModelLayerLocation PANTS = new ModelLayerLocation(Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_pants"), "main");
-	public static final ModelLayerLocation SHOES = new ModelLayerLocation(Identifier.fromNamespaceAndPath("mmodding_rendering_testmod", "test_shoes"), "main");
+	public static final ModelLayerLocation CAP = new ModelLayerLocation(RenderingTests.createId("test_cap"), "main");
+	public static final ModelLayerLocation SUIT = new ModelLayerLocation(RenderingTests.createId("test_suit"), "main");
+	public static final ModelLayerLocation PANTS = new ModelLayerLocation(RenderingTests.createId("test_pants"), "main");
+	public static final ModelLayerLocation SHOES = new ModelLayerLocation(RenderingTests.createId("test_shoes"), "main");
 
 	@Override
 	public void onInitializeClient() {

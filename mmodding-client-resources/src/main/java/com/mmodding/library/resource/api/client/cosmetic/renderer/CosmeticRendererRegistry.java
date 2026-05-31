@@ -1,7 +1,7 @@
 package com.mmodding.library.resource.api.client.cosmetic.renderer;
 
 import com.mmodding.library.resource.api.client.cosmetic.Cosmetic;
-import com.mmodding.library.resource.impl.cosmetic.renderer.*;
+import com.mmodding.library.resource.impl.client.cosmetic.renderer.*;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
