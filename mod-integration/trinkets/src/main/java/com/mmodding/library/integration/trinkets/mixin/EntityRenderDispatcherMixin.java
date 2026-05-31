@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mmodding.library.integration.trinkets.client.TrinketRendererImpl;
 import com.mmodding.library.item.api.properties.CustomItemProperty;
 import com.mmodding.library.item.api.properties.MModdingItemProperties;
-import com.mmodding.library.rendering.impl.cosmetic.renderer.CosmeticRendererRegistryImpl;
+import com.mmodding.library.resource.impl.client.cosmetic.renderer.CosmeticRendererRegistryImpl;
 import eu.pb4.trinkets.api.client.TrinketRendererRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

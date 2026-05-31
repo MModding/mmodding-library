@@ -1,7 +1,7 @@
 package com.mmodding.library.integration.trinkets.test;
 
-import com.mmodding.library.rendering.api.cosmetic.Cosmetic;
-import com.mmodding.library.rendering.api.cosmetic.SimpleCosmetic;
+import com.mmodding.library.resource.api.client.cosmetic.Cosmetic;
+import com.mmodding.library.resource.api.client.cosmetic.catalog.SimpleCosmetic;
 
 public class TestCosmetics {
 

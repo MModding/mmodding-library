@@ -12,7 +12,7 @@ mmodding {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 		implementation("mmodding-item")
-		implementation("mmodding-rendering")
+		implementation("mmodding-client-resources")
 	}
 	configureFabricModJson {
 		withDependencies {

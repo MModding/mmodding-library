@@ -34,6 +34,7 @@ dependencyResolutionManagement {
 rootProject.name = "mmodding-library"
 
 include("mmodding-block")
+include("mmodding-client-resources")
 include("mmodding-config")
 include("mmodding-core")
 include("mmodding-datagen")
@@ -44,7 +45,6 @@ include("mmodding-item")
 include("mmodding-java")
 include("mmodding-math")
 include("mmodding-network")
-include("mmodding-rendering")
 include("mmodding-sublevel")
 include("mmodding-task")
 include("mmodding-woodset")

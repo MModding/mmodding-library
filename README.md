@@ -22,23 +22,23 @@ The MModding organization provides a detailed documentation of the modules in th
 
 Current Modules Table:
 
-| Module               | Status       | Description                                       |
-|:---------------------|:-------------|:--------------------------------------------------|
-| mmodding-block       | Stable       | Block Management, Interactions, Settings, Catalog |
-| mmodding-config      | Candidate    | Configuration System, Level, Networking           |
-| mmodding-core        | Candidate    | The Core of the Library                           |
-| mmodding-datagen     | Candidate    | Data Generation Management and Automation         |
-| mmodding-enchantment | Experimental | Enchantment Management, Families                  |
-| mmodding-fluid       | Experimental | Fluid Management, Properties                      |
-| mmodding-item        | Stable       | Item Management, Catalog                          |
-| mmodding-java        | Experimental | Collection of Java Utilities                      |
-| mmodding-math        | Experimental | Collection of Math Utilities                      |
-| mmodding-network     | Experimental | Additionnal Network Codecs                        |
-| mmodding-rendering   | Stable       | Cosmetic Renderers, Rendering Tools               |
-| mmodding-sublevel    | Experimental | SubLevel Management                               |
-| mmodding-task        | Candidate    | Task Scheduling, Persistent Tasks                 |
-| mmodding-woodset     | Stable       | Powerful Tools to create whole WoodSets.          |
-| mmodding-worldgen    | Experimental | World Generation Systems                          |
+| Module                    | Status       | Description                                            |
+|:--------------------------|:-------------|:-------------------------------------------------------|
+| mmodding-block            | Stable       | Block Management, Interactions, Settings, Catalog      |
+| mmodding-client-resources | Stable       | Cosmetic Renderers, Entity Models, Block Entity Models |
+| mmodding-config           | Candidate    | Configuration System, Level, Networking                |
+| mmodding-core             | Candidate    | The Core of the Library                                |
+| mmodding-datagen          | Candidate    | Data Generation Management and Automation              |
+| mmodding-enchantment      | Experimental | Enchantment Management, Families                       |
+| mmodding-fluid            | Experimental | Fluid Management, Properties                           |
+| mmodding-item             | Stable       | Item Management, Catalog                               |
+| mmodding-java             | Experimental | Collection of Java Utilities                           |
+| mmodding-math             | Experimental | Collection of Math Utilities                           |
+| mmodding-network          | Experimental | Additionnal Network Codecs                             |
+| mmodding-sublevel         | Experimental | SubLevel Management                                    |
+| mmodding-task             | Candidate    | Task Scheduling, Persistent Tasks                      |
+| mmodding-woodset          | Stable       | Powerful Tools to create whole WoodSets.               |
+| mmodding-worldgen         | Experimental | World Generation Systems                               |
 
 Badge for Modders:
 

@@ -186,6 +186,7 @@ allprojects {
 mmodding {
 	modules {
 		bundle("mmodding-block")
+		bundle("mmodding-client-resources")
 		bundle("mmodding-config")
 		bundle("mmodding-core")
 		bundle("mmodding-datagen")
@@ -196,7 +197,6 @@ mmodding {
 		bundle("mmodding-java")
 		bundle("mmodding-math")
 		bundle("mmodding-network")
-		bundle("mmodding-rendering")
 		bundle("mmodding-sublevel")
 		bundle("mmodding-task")
 		bundle("mmodding-woodset")
