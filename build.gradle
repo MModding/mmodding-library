@@ -197,6 +197,7 @@ mmodding {
 		bundle("mmodding-java")
 		bundle("mmodding-math")
 		bundle("mmodding-network")
+		bundle("mmodding-portal")
 		bundle("mmodding-sublevel")
 		bundle("mmodding-task")
 		bundle("mmodding-woodset")
