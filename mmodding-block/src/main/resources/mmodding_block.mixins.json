@@ -15,6 +15,7 @@
     "ItemCombinerMenuAccessor",
     "LeavesBlockMixin",
     "LeveledCauldronBlockAccessor",
+    "LevelMixin",
     "PitcherCropBlockMixin",
     "ServerPlayerMixin"
   ],
