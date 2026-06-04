@@ -39,9 +39,19 @@ public interface Colliders {
 
 	Set<Vec3i> collisions();
 
+	Set<Vec3i> lowestCollisions();
+
+	Set<Vec3i> highestCollisions();
+
+	int getMinX();
+
 	int getMaxX();
 
+	int getMinY();
+
 	int getMaxY();
+
+	int getMinZ();
 
 	int getMaxZ();
 }
