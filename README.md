@@ -35,6 +35,7 @@ Current Modules Table:
 | mmodding-java             | Experimental | Collection of Java Utilities                           |
 | mmodding-math             | Experimental | Collection of Math Utilities                           |
 | mmodding-network          | Experimental | Additionnal Network Codecs                             |
+| mmodding-portal           | Experimental | Node Binding Portals, Node Building Portals            |
 | mmodding-sublevel         | Experimental | SubLevel Management                                    |
 | mmodding-task             | Candidate    | Task Scheduling, Persistent Tasks                      |
 | mmodding-woodset          | Stable       | Powerful Tools to create whole WoodSets.               |
