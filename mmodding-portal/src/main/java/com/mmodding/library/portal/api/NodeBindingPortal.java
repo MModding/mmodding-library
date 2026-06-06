@@ -1,6 +1,7 @@
 package com.mmodding.library.portal.api;
 
 import com.mmodding.library.math.api.PosAndRot;
+import com.mmodding.library.portal.api.util.PortalLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -32,18 +33,14 @@ public interface NodeBindingPortal extends Portal {
 	 * The comparator defining which portal position should take priority if multiple
 	 * are found. The minimal value is the one to take priority.
 	 *
-	 * <br><br>In example, the Nether Portal does:
-	 * <br>
-	 * <code>Comparator.comparingDouble<\u0000BlockPos>(p -> p.distSqr(lookupOrigin)).thenComparingInt(Vec3i::getY)</code>
-	 * which priorities positions near the origin, and then prioritizes the lower ones
-	 *
-	 * <br><br>In example, if you want instead to select the higher positions first, you could do:
-	 * <br>
-	 * <code>Comparator.comparingDouble<\u0000BlockPos>(p -> p.distSqr(lookupOrigin)).thenComparingInt(p -> level.getMaxY() - p.getY())</code>
+	 * <br><br>If you want to understand how it works, you can look in {@link PortalLookup}
+	 * to find presets of the required comparators.
+	 * @param level the level
+	 * @param lookupOrigin the position where the lookup originated from
 	 * @return the comparator
 	 */
 	@ApiStatus.OverrideOnly
-	Comparator<BlockPos> closestSuitableComparator(ServerLevel level, BlockPos lookupOrigin);
+	Comparator<BlockPos> closestSuitableComparator(LevelReader level, BlockPos lookupOrigin);
 
 	/**
 	 * Evaluates the destination position from the found suitable block position.
@@ -62,9 +59,11 @@ public interface NodeBindingPortal extends Portal {
 	 * The {@link NodeBindingPortal}'s persistence states that once another portal
 	 * is selected as the destination node, both nodes are storing each other
 	 * position information in order to ensure the link between them.
+	 *
 	 * <br><br>In the case of two bound portals with persistence, the implementation of
 	 * {@link #getPortalDestination(ServerLevel, Entity, BlockPos)} is not getting
 	 * called anymore. {@link #evaluateDestinationPosition(LevelReader, Entity, BlockPos, BlockPos)} still is.
+	 *
 	 * <br><br>The persistence concept does not exist in vanilla: taking a nether portal
 	 * in the end takes you to the nether, and going back in will put you in the overworld.
 	 * @return the persistence

@@ -64,11 +64,11 @@ public class PortalBinderImpl implements PortalBinder {
 	@Override
 	public <C extends Record> Optional<PosAndRot> buildClosestForPosAndRot(NodeBuildingPortal<C> portal, Entity entity, BlockPos sourcePortalPos, C context, BlockPos lookupOrigin, int radius) {
 		Colliders portalFrameColliders = portal.createPortalFrameColliders(context);
-		ToIntFunction<BlockPos> comesFirst = pos -> portal.isPlacementFitting(this.destinationLevel, lookupOrigin, context, portalFrameColliders, pos) ? -1 : 1;
+		ToIntFunction<BlockPos> comesFirst = pos -> portal.isPlacementFitting(this.destinationLevel, lookupOrigin, context, portalFrameColliders, pos) ? -1 : 1;;
 		return StreamSupport.stream(BlockPos.spiralAround(lookupOrigin, radius, Direction.EAST, Direction.SOUTH).spliterator(), false)
 			.map(BlockPos::new)
-			.filter(pos -> pos.getY() + portalFrameColliders.getMinY() >= this.destinationLevel.getMinY() && pos.getY() + portalFrameColliders.getMaxY() <= this.destinationLevel.getMaxY())
-			.<BlockPos>mapMulti((pos, collector) -> BlockPos.betweenClosedStream(pos.atY(this.destinationLevel.getMinY()), pos.atY(this.destinationLevel.getMaxY())).forEach(collector))
+			.<BlockPos>mapMulti((pos, collector) -> BlockPos.betweenClosedStream(pos.atY(this.destinationLevel.getMinY()), pos.atY(this.destinationLevel.getMaxY())).forEach(p -> collector.accept(new BlockPos(p))))
+			.filter(pos -> pos.getY() + portalFrameColliders.getMinY() > this.destinationLevel.getMinY() && pos.getY() + portalFrameColliders.getMaxY() < this.destinationLevel.getMaxY())
 			.sorted(Comparator.comparingInt(comesFirst).thenComparing(portal.closestSuitableComparator(this.destinationLevel, lookupOrigin))) // since it's a sequential stream, it checks in order, that's what we want
 			.dropWhile(pos -> isFrameUnsuitable(portalFrameColliders, pos)) // cheap on sequential stream, just drops any non-suitable higher-priority position
 			.findFirst()

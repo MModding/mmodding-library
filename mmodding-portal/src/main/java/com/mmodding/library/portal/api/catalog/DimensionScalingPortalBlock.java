@@ -19,25 +19,20 @@ import net.minecraft.world.level.portal.TeleportTransition;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
-import java.util.function.ToIntBiFunction;
 
 /**
  * A {@link NodeBindingPortal} dedicated to a specified dimension, which will look up for an associated
  * portal at the scaled position from original coordinates, and for a given radius, and will bind to it
  * if found. It does not create portals in situations where it does not find any destination portal.
  */
-public class DimensionScaledPortalBlock extends Block implements NodeBindingPortal {
+public class DimensionScalingPortalBlock extends Block implements NodeBindingPortal {
 
 	protected final ResourceKey<Level> dimension;
 	protected final ResourceKey<PoiType> pointOfInterest;
 	protected final int lookupRadius;
 	protected final PortalLookup portalLookup;
 
-	public DimensionScaledPortalBlock(ResourceKey<Level> dimension, ResourceKey<PoiType> pointOfInterest, int lookupRadius, ToIntBiFunction<ServerLevel, BlockPos> heightComparator, Properties properties) {
-		this(dimension, pointOfInterest, lookupRadius, (PortalLookup) (level, lookupOrigin) -> PortalLookup.AROUND_ORIGIN.provide(level, lookupOrigin).thenComparingInt(pos -> heightComparator.applyAsInt(level, pos)), properties);
-	}
-
-	public DimensionScaledPortalBlock(ResourceKey<Level> dimension, ResourceKey<PoiType> pointOfInterest, int lookupRadius, PortalLookup portalLookup, Properties properties) {
+	public DimensionScalingPortalBlock(ResourceKey<Level> dimension, ResourceKey<PoiType> pointOfInterest, int lookupRadius, PortalLookup portalLookup, Properties properties) {
 		super(properties);
 		this.dimension = dimension;
 		this.pointOfInterest = pointOfInterest;
@@ -51,7 +46,7 @@ public class DimensionScaledPortalBlock extends Block implements NodeBindingPort
 	}
 
 	@Override
-	public Comparator<BlockPos> closestSuitableComparator(ServerLevel level, BlockPos lookupOrigin) {
+	public Comparator<BlockPos> closestSuitableComparator(LevelReader level, BlockPos lookupOrigin) {
 		return this.portalLookup.provide(level, lookupOrigin);
 	}
 

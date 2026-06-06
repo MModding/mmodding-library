@@ -10,4 +10,9 @@ mmodding {
 		implementation("mmodding-java")
 		implementation("mmodding-math")
 	}
+	configureTestmod {
+		withEntrypoints {
+			it.init("com.mmodding.library.portal.test.MModdingPortalTests")
+		}
+	}
 }

@@ -1,9 +1,8 @@
 package com.mmodding.library.portal.api.util;
 
+import com.mmodding.library.portal.impl.PortalLookupImpl;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.LevelReader;
 
 import java.util.Comparator;
 
@@ -11,30 +10,29 @@ import java.util.Comparator;
 public interface PortalLookup {
 
 	/**
-	 * Prioritizes closest positions on the xz plane.
-	 */
-	PortalLookup AROUND_ORIGIN = (level, lookupOrigin) -> Comparator.<BlockPos>comparingDouble(pos -> pos.distSqr(lookupOrigin));
-
-	/**
 	 * Prioritizes closest positions on the xz plane that are deeper.
 	 */
-	PortalLookup DEPTH = (level, lookupOrigin) -> AROUND_ORIGIN.provide(level, lookupOrigin).thenComparingInt(Vec3i::getY);
+	PortalLookup DEPTH = (level, lookupOrigin) -> anchoring((int) (level.getMinY() + 0.125f * level.getHeight())).provide(level, lookupOrigin);
 
 	/**
 	 * Prioritizes closest positions on the xz plane that are near the surface.
 	 */
-	PortalLookup SURFACE = (level, lookupOrigin) -> AROUND_ORIGIN.provide(level, lookupOrigin).thenComparingInt(pos -> Math.abs(level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, pos).getY() - pos.getY()));
+	PortalLookup SURFACE = (level, lookupOrigin) -> anchoring(PortalLookupImpl.getMotionBlockingForceLoad(level, lookupOrigin)).provide(level, lookupOrigin);
 
 	/**
 	 * Prioritizes closest positions on the xz plane that are higher in the sky.
 	 */
-	PortalLookup SKY = (level, lookupOrigin) -> AROUND_ORIGIN.provide(level, lookupOrigin).thenComparingInt(pos -> level.getMaxY() - pos.getY());
+	PortalLookup SKY = (level, lookupOrigin) -> anchoring((int) (level.getMinY() + 0.75f * level.getHeight())).provide(level, lookupOrigin);
+
+	static PortalLookup anchoring(int y) {
+		return (_, lookupOrigin) -> Comparator.comparingDouble(pos -> pos.distSqr(lookupOrigin.atY(y)));
+	}
 
 	/**
 	 * Provides the comparator instance from the server level and the lookup origin.
-	 * @param level the server level
+	 * @param level the level
 	 * @param lookupOrigin the lookup origin
 	 * @return the comparator
 	 */
-	Comparator<BlockPos> provide(ServerLevel level, BlockPos lookupOrigin);
+	Comparator<BlockPos> provide(LevelReader level, BlockPos lookupOrigin);
 }

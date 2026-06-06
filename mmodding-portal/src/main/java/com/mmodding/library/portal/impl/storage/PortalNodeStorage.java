@@ -10,14 +10,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Portal;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public class PortalNodeStorage extends SavedData {
@@ -42,29 +41,32 @@ public class PortalNodeStorage extends SavedData {
 	}
 
 	private PortalNodeStorage(Map<ResourceKey<Level>, Map<BlockPos, GlobalPos>> storage) {
-		this.storage = storage;
+		this.storage = new Object2ObjectOpenHashMap<>(storage);
 	}
 
 	private Map<ResourceKey<Level>, Map<BlockPos, GlobalPos>> storage() {
 		return this.storage;
 	}
 
-	private Set<BlockPos> addToStorage(Set<BlockPos> checked, ServerLevel originLevel, BlockPos sourcePos, ServerLevel destinationLevel, BlockPos destinationPos) {
+	private void addToStorage(Set<BlockPos> checked, Block instance, ServerLevel originLevel, BlockPos sourcePos, ServerLevel destinationLevel, BlockPos destinationPos) {
 		this.storage.computeIfAbsent(originLevel.dimension(), _ -> new Object2ObjectOpenHashMap<>()).put(sourcePos, new GlobalPos(destinationLevel.dimension(), destinationPos));
 		checked.add(sourcePos);
 		for (Direction direction : Direction.values()) {
 			BlockPos relative = sourcePos.relative(direction);
-			if (!checked.contains(relative)) {
-				this.addToStorage(checked, originLevel, relative, destinationLevel, destinationPos);
+			if (originLevel.getBlockState(relative).is(instance) && !checked.contains(relative)) {
+				this.addToStorage(checked, instance, originLevel, relative, destinationLevel, destinationPos);
 			}
 		}
-		return checked;
 	}
 
 	public BlockPos maybeCreateBound(ServerLevel sourceLevel, BlockPos sourcePos, ServerLevel newLevel, BlockPos newPos, boolean enabled) {
 		if (enabled) {
-			this.addToStorage(new HashSet<>(), sourceLevel, sourcePos, newLevel, newPos).clear();
-			this.addToStorage(new HashSet<>(), newLevel, newPos, sourceLevel, sourcePos).clear();
+			Block block = sourceLevel.getBlockState(sourcePos).getBlock();
+			HashSet<BlockPos> cache = new HashSet<>();
+			this.addToStorage(cache, block, sourceLevel, sourcePos, newLevel, newPos);
+			cache.clear();
+			this.addToStorage(cache, block, newLevel, newPos, sourceLevel, sourcePos);
+			cache.clear();
 		}
 		return newPos;
 	}

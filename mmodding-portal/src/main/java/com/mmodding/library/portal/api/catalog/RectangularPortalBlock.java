@@ -39,13 +39,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.function.ToIntBiFunction;
 
 /**
  * A rectangular portal working like the Nether portal you know so well.
  */
-public class RectangularPortalBlock extends DimensionScaledPortalBlock implements NodeBuildingPortal<RectangularPortalBlock.Context> {
+public class RectangularPortalBlock extends DimensionScalingPortalBlock implements NodeBuildingPortal<RectangularPortalBlock.Context> {
 
 	public static final Property<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
@@ -53,16 +53,23 @@ public class RectangularPortalBlock extends DimensionScaledPortalBlock implement
 
 	private final Supplier<Block> frameBlockSupplier;
 
-	public RectangularPortalBlock(Supplier<Block> frameBlockSupplier, ResourceKey<Level> dimension, ResourceKey<PoiType> pointOfInterest, int lookupRadius, ToIntBiFunction<ServerLevel, BlockPos> heightComparator, Properties properties) {
-		super(dimension, pointOfInterest, lookupRadius, heightComparator, properties);
-		this.frameBlockSupplier = frameBlockSupplier;
-		this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.X));
-	}
-
 	public RectangularPortalBlock(Supplier<Block> frameBlockSupplier, ResourceKey<Level> dimension, ResourceKey<PoiType> pointOfInterest, int lookupRadius, PortalLookup portalLookup, Properties properties) {
 		super(dimension, pointOfInterest, lookupRadius, portalLookup, properties);
 		this.frameBlockSupplier = frameBlockSupplier;
 		this.registerDefaultState(this.defaultBlockState().setValue(AXIS, Direction.Axis.X));
+	}
+
+	/**
+	 * Tries igniting the specified {@link RectangularPortalBlock} from the specified position.
+	 * @param level the level
+	 * @param portal the rectangular portal instance
+	 * @param pos the position
+	 * @return a boolean which indicates if the portal was ignited or not
+	 */
+	public static boolean maybeIgnitePortal(ServerLevel level, RectangularPortalBlock portal, BlockPos pos) {
+		Optional<RectangularPortalShape> maybeShape = RectangularPortalShape.findEmptyPortalShape(level, portal, pos, Direction.Axis.X);
+		maybeShape.ifPresent(shape -> shape.createPortalBlocks(level, portal));
+		return maybeShape.isPresent();
 	}
 
 	@Override
