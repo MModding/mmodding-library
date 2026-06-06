@@ -30,6 +30,10 @@ public class AreaUtil {
 		} while (!BlockPos.containing(mutable).equals(pos2));
 	}
 
+	public static void forBlockPosInBox(BlockPos first, BlockPos second, Consumer<? super BlockPos> execute) {
+		BlockPos.betweenClosed(first, second).forEach(p -> execute.accept(new BlockPos(p)));
+	}
+
 	public static void forBlockPosInCubicRadius(BlockPos pos, int radius, Consumer<? super BlockPos> execute) {
 		BlockPos.betweenClosed(
 			pos.getX() - radius,
@@ -38,7 +42,7 @@ public class AreaUtil {
 			pos.getX() + radius,
 			pos.getY() + radius,
 			pos.getZ() + radius
-		).forEach(execute);
+		).forEach(p -> execute.accept(new BlockPos(p)));
 	}
 
 	public static void iterateFromCenterInSquare(BlockPos center, int radius, Consumer<? super BlockPos> action) {
