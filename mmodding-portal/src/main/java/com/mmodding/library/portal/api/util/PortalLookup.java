@@ -1,6 +1,6 @@
 package com.mmodding.library.portal.api.util;
 
-import com.mmodding.library.portal.impl.PortalLookupImpl;
+import com.mmodding.library.portal.impl.util.PortalLookupImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 

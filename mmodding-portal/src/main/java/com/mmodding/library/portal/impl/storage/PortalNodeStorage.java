@@ -1,6 +1,8 @@
 package com.mmodding.library.portal.impl.storage;
 
 import com.mmodding.library.core.api.MModdingLibrary;
+import com.mmodding.library.core.api.serialization.MModdingCodecs;
+import com.mmodding.library.math.api.Colliders;
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -27,9 +29,9 @@ public class PortalNodeStorage extends SavedData {
 		Codec.unboundedMap(
 			ResourceKey.codec(Registries.DIMENSION),
 			Codec.unboundedMap(
-				BlockPos.CODEC,
+				MModdingCodecs.STRING_BLOCKPOS,
 				GlobalPos.CODEC
-			)
+			).xmap(m -> (Map<BlockPos, GlobalPos>) new Object2ObjectOpenHashMap<>(m), m -> m)
 		).xmap(PortalNodeStorage::new, PortalNodeStorage::storage),
 		null
 	);
@@ -48,43 +50,72 @@ public class PortalNodeStorage extends SavedData {
 		return this.storage;
 	}
 
-	private void addToStorage(Set<BlockPos> checked, Block instance, ServerLevel originLevel, BlockPos sourcePos, ServerLevel destinationLevel, BlockPos destinationPos) {
+	// adding teleportation source and matching neighbors as portal binders to the storage -> it relies on portals to be stacked together
+	private void addSourceToStorage(Set<BlockPos> checked, Block instance, ServerLevel originLevel, BlockPos sourcePos, ServerLevel destinationLevel, BlockPos destinationPos) {
 		this.storage.computeIfAbsent(originLevel.dimension(), _ -> new Object2ObjectOpenHashMap<>()).put(sourcePos, new GlobalPos(destinationLevel.dimension(), destinationPos));
 		checked.add(sourcePos);
 		for (Direction direction : Direction.values()) {
 			BlockPos relative = sourcePos.relative(direction);
 			if (originLevel.getBlockState(relative).is(instance) && !checked.contains(relative)) {
-				this.addToStorage(checked, instance, originLevel, relative, destinationLevel, destinationPos);
+				this.addSourceToStorage(checked, instance, originLevel, relative, destinationLevel, destinationPos);
 			}
 		}
 	}
 
-	public BlockPos maybeCreateBound(ServerLevel sourceLevel, BlockPos sourcePos, ServerLevel newLevel, BlockPos newPos, boolean enabled) {
+	// going through the built portal frame to find portal binders and storage the node for those
+	private void addBuiltSourceToStorage(Block instance, ServerLevel originLevel, BlockPos sourcePos, ServerLevel destinationLevel, BlockPos destinationPos, Colliders colliders) {
+		colliders.collisions().stream()
+			.map(destinationPos::offset)
+			.forEach(pos -> {
+				if (destinationLevel.getBlockState(pos).is(instance)) {
+					this.storage.computeIfAbsent(destinationLevel.dimension(), _ -> new Object2ObjectOpenHashMap<>()).put(pos, new GlobalPos(originLevel.dimension(), sourcePos));
+				}
+			});
+	}
+
+	public BlockPos maybeBindLookup(ServerLevel sourceLevel, BlockPos sourcePos, ServerLevel newLevel, BlockPos newPos, boolean enabled) {
 		if (enabled) {
-			Block block = sourceLevel.getBlockState(sourcePos).getBlock();
+			Block portalInstance = sourceLevel.getBlockState(sourcePos).getBlock();
 			HashSet<BlockPos> cache = new HashSet<>();
-			this.addToStorage(cache, block, sourceLevel, sourcePos, newLevel, newPos);
+			this.addSourceToStorage(cache, portalInstance, sourceLevel, sourcePos, newLevel, newPos);
 			cache.clear();
-			this.addToStorage(cache, block, newLevel, newPos, sourceLevel, sourcePos);
+			this.addSourceToStorage(cache, portalInstance, newLevel, newPos, sourceLevel, sourcePos);
 			cache.clear();
+			this.setDirty();
+		}
+		return newPos;
+	}
+
+	public BlockPos maybeBindBuilt(ServerLevel sourceLevel, BlockPos sourcePos, ServerLevel newLevel, BlockPos newPos, Colliders portalFrameColliders, boolean enabled) {
+		if (enabled) {
+			Block portalInstance = sourceLevel.getBlockState(sourcePos).getBlock();
+			HashSet<BlockPos> cache = new HashSet<>();
+			this.addSourceToStorage(cache, portalInstance, sourceLevel, sourcePos, newLevel, newPos);
+			cache.clear();
+			this.addBuiltSourceToStorage(portalInstance, sourceLevel, sourcePos, newLevel, newPos, portalFrameColliders);
+			this.setDirty();
 		}
 		return newPos;
 	}
 
 	public void removeBoundFrom(ServerLevel level, BlockPos pos) {
-		this.storage.get(level.dimension()).remove(pos);
-		Set<ResourceKey<Level>> pendingDeletion = new HashSet<>();
-		if (this.storage.get(level.dimension()).isEmpty()) {
-			pendingDeletion.add(level.dimension());
-		}
-		this.storage.forEach((key, map) -> {
-			map.entrySet().removeIf(e -> e.getValue().equals(new GlobalPos(level.dimension(), pos)));
-			if (this.storage.get(key).isEmpty()) {
-				pendingDeletion.add(key);
+		Map<BlockPos, GlobalPos> bounds = this.storage.get(level.dimension());
+		if (bounds != null) {
+			bounds.remove(pos);
+			Set<ResourceKey<Level>> pendingDeletion = new HashSet<>();
+			if (this.storage.get(level.dimension()).isEmpty()) {
+				pendingDeletion.add(level.dimension());
 			}
-		});
-		pendingDeletion.forEach(this.storage::remove);
-		pendingDeletion.clear();
+			this.storage.forEach((key, map) -> {
+				map.entrySet().removeIf(e -> e.getValue().equals(new GlobalPos(level.dimension(), pos)));
+				if (this.storage.get(key).isEmpty()) {
+					pendingDeletion.add(key);
+				}
+			});
+			pendingDeletion.forEach(this.storage::remove);
+			pendingDeletion.clear();
+			this.setDirty();
+		}
 	}
 
 	@Nullable

@@ -6,6 +6,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.DynamicOps;
 import io.netty.util.internal.ObjectUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -29,6 +31,11 @@ public class MModdingCodecs {
 		v -> new Vector3f(v.getFirst(), v.get(1), v.getLast()),
 		v -> List.of(v.x, v.y, v.z)
 	);
+
+	public static final Codec<BlockPos> STRING_BLOCKPOS = Codec.STRING.xmap(representation -> {
+		String[] coords = representation.split(", ");
+		return new BlockPos(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2]));
+	}, Vec3i::toShortString);
 
 	public static Codec<Integer> intRange(int min, int max) {
 		return Codec.INT.xmap(

@@ -19,12 +19,10 @@ public interface NodeBuildingPortal<C extends Record> extends NodeBindingPortal 
 	 * The colliders of the portal frame. It is used to determine
 	 * if the portal frame is suitable for placement at a given position.
 	 * @return the box which represents the required space
-	 * @apiNote The origin vector of your collider will be used to compute the placement origin; keep that in made
-	 * when implementing {@link #evaluateDestinationPosition(LevelReader, Entity, BlockPos, BlockPos)}, as you will
-	 * very likely want the behavior of this method on the suitable position (determined from the point of interest
-	 * lookup position results) to be the same for the placement origin.
-	 * <br>In example, if your point of interest targets the portal block directly, you should consider setting the origin
-	 * of your collider as a position where a portal block would be.
+	 * @apiNote The origin vector of your collider will be used to compute the placement origin, which will
+	 * then be used in {@link #evaluateDestinationPosition(LevelReader, Entity, BlockPos, BlockPos)} as your
+	 * suitable position. As such, your origin vector of your collider <b>must</b> represent a block instance
+	 * of this current node binding portal.
 	 */
 	@ApiStatus.OverrideOnly
 	Colliders createPortalFrameColliders(C context);

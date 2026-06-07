@@ -35,10 +35,9 @@ public class PortalBinderImpl implements PortalBinder {
 		PoiManager poiManager = this.destinationLevel.getPoiManager();
 		poiManager.ensureLoadedAndValid(this.destinationLevel, lookupOrigin, radius);
 		return poiManager.getInSquare(type -> type.is(portal.pointOfInterest()), lookupOrigin, radius, PoiManager.Occupancy.ANY)
-			.map(PoiRecord::getPos)
-			.filter(this.destinationLevel.getWorldBorder()::isWithinBounds) // there's not need to filter more here, modders know what blocks can be detected by their POI
+			.map(PoiRecord::getPos).filter(this.destinationLevel.getWorldBorder()::isWithinBounds) // there's no need to filter more here, modders know what blocks can be detected by their POI
 			.min(portal.closestSuitableComparator(this.destinationLevel, lookupOrigin))
-			.map(suitablePos -> ((PortalNodeStorage.Duck) this.destinationLevel.getServer()).mmodding$getPortalNodeStorage().maybeCreateBound((ServerLevel) entity.level(), sourcePortalPos, this.destinationLevel, suitablePos, portal.persistent()))
+			.map(suitablePos -> ((PortalNodeStorage.Duck) this.destinationLevel.getServer()).mmodding$getPortalNodeStorage().maybeBindLookup((ServerLevel) entity.level(), sourcePortalPos, this.destinationLevel, suitablePos, portal.persistent()))
 			.map(pos -> portal.evaluateDestinationPosition(this.destinationLevel, entity, sourcePortalPos, pos));
 	}
 
@@ -74,7 +73,7 @@ public class PortalBinderImpl implements PortalBinder {
 			.findFirst()
 			.map(placementOrigin -> {
 				portal.createPortal(this.destinationLevel, placementOrigin, context);
-				((PortalNodeStorage.Duck) this.destinationLevel.getServer()).mmodding$getPortalNodeStorage().maybeCreateBound((ServerLevel) entity.level(), sourcePortalPos, this.destinationLevel, placementOrigin, portal.persistent());
+				((PortalNodeStorage.Duck) this.destinationLevel.getServer()).mmodding$getPortalNodeStorage().maybeBindBuilt((ServerLevel) entity.level(), sourcePortalPos, this.destinationLevel, placementOrigin, portalFrameColliders, portal.persistent());
 				return portal.evaluateDestinationPosition(this.destinationLevel, entity, sourcePortalPos, placementOrigin);
 			});
 	}

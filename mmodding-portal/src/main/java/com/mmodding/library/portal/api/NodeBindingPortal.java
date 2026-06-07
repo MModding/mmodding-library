@@ -22,8 +22,7 @@ public interface NodeBindingPortal extends Portal {
 
 	/**
 	 * The {@link PoiType} which allows to handle the portal nodes.
-	 * <br>The blocks that are being supported for this point of interest indicates which
-	 * blocks you will have to handle at found suitable positions.
+	 * @apiNote The point of interest should be looking for your portal block; expect issues otherwise.
 	 * @return the point of interest resource key
 	 */
 	@ApiStatus.OverrideOnly
@@ -43,7 +42,7 @@ public interface NodeBindingPortal extends Portal {
 	Comparator<BlockPos> closestSuitableComparator(LevelReader level, BlockPos lookupOrigin);
 
 	/**
-	 * Evaluates the destination position from the found suitable block position.
+	 * Evaluates the destination position from the found suitable portal block position.
 	 * @param level the server level
 	 * @param entity the traveling entity
 	 * @param sourcePortalPos the source portal position the entity traveled from
@@ -66,6 +65,10 @@ public interface NodeBindingPortal extends Portal {
 	 *
 	 * <br><br>The persistence concept does not exist in vanilla: taking a nether portal
 	 * in the end takes you to the nether, and going back in will put you in the overworld.
+	 *
+	 * <br><br>The persistence concept also allows for way faster dimension travels: as the
+	 * bounds are being stored, no lookup is being achieved. Once two portals are bound together,
+	 * teleportation will be nearly instant.
 	 * @return the persistence
 	 */
 	@ApiStatus.OverrideOnly

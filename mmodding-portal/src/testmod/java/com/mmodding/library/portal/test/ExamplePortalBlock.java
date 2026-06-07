@@ -33,7 +33,7 @@ public class ExamplePortalBlock extends DimensionScalingPortalBlock implements N
 		AreaUtil.forBlockPosInBox(placementOrigin.offset(-1, -1, -1), placementOrigin.offset(1, 1, 1), pos -> {
 			level.setBlockAndUpdate(pos, pos.getY() - placementOrigin.getY() < 0 ? Blocks.OBSIDIAN.defaultBlockState() : Blocks.AIR.defaultBlockState());
 		});
-		level.setBlockAndUpdate(placementOrigin.offset(1,0, 1), this.defaultBlockState());
+		level.setBlockAndUpdate(placementOrigin, this.defaultBlockState());
 	}
 
 	@Override
