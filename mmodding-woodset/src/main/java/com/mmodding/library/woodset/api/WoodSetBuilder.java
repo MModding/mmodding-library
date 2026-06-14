@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
@@ -128,7 +128,7 @@ public interface WoodSetBuilder {
 
 	/**
 	 * Sets a {@link WoodSet.BoatFactory} to use when creating the boat entity type.
-	 * <br>Defaults to the factory used by {@link EntityType#OAK_BOAT}.
+	 * <br>Defaults to the factory used by {@link EntityTypes#OAK_BOAT}.
 	 * @param boatFactory the boat factory
 	 * @return the builder
 	 */
@@ -136,7 +136,7 @@ public interface WoodSetBuilder {
 
 	/**
 	 * Sets a {@link WoodSet.ChestBoatFactory} to use when creating the chest boat entity type.
-	 * <br>Defaults to the factory used by {@link EntityType#CHERRY_BOAT}.
+	 * <br>Defaults to the factory used by {@link EntityTypes#CHERRY_BOAT}.
 	 * @param chestBoatFactory the chest boat factory
 	 * @return the builder
 	 */

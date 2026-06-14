@@ -1,5 +1,10 @@
+plugins {
+	id("mmodding.common-base")
+}
+
+loom.accessWidenerPath = file("src/main/resources/mmodding_woodset.classtweaker")
+
 mmodding {
-	loom.accessWidenerPath = file("src/main/resources/mmodding_woodset.classtweaker")
 	configureFabricModJson {
 		accessWidener = "mmodding_woodset.classtweaker"
 	}

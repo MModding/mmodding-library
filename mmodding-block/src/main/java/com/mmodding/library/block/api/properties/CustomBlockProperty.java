@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
- * @apiNote Supports {@link Block.Properties#ofLegacyCopy(BlockBehaviour)} && {@link Block.Properties#ofFullCopy(BlockBehaviour)}.
+ * @apiNote Supports {@link Block.Properties#ofLegacyCopy(BlockBehaviour)} and {@link Block.Properties#ofFullCopy(BlockBehaviour)}.
  */
 public interface CustomBlockProperty<T> {
 

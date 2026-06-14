@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 mmodding {
 	loom.accessWidenerPath = file("src/main/resources/mmodding_block.classtweaker")
 	configureFabricModJson {
@@ -12,7 +16,7 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.block.test.BlockTests")
+			init("com.mmodding.library.block.test.BlockTests")
 		}
 	}
 }

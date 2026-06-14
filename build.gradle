@@ -1,10 +1,6 @@
-import com.mmodding.gradle.api.EnvironmentTarget
-import com.mmodding.gradle.api.mod.json.NamespaceProvider;
-
 plugins {
     id 'maven-publish'
-    alias libs.plugins.fabric.loom apply false
-	alias libs.plugins.mmodding.gradle apply false
+	id "mmodding.common-base"
 }
 
 version = "$project.version+${libs.versions.minecraft.get()}"
@@ -16,171 +12,12 @@ subprojects {
 
 def included_integrations = allowed_integrations.split(",")
 
-static def getMModdingLibraryNamespace(Project project) {
-	return project.rootProject == project ? "mmodding" : project.name.replace("-", "_")
-}
-
-static def getMModdingLibraryName(Project project) {
-	String projectName = ""
-	getMModdingLibraryNamespace(project).split("_").each {
-		if (it[0] == "m" && it[1] == "m") {
-			projectName = projectName + it[0].toUpperCase() + it[1].toUpperCase() + it.substring(2) + " "
-		}
-		else {
-			projectName = projectName + it[0].toUpperCase() + it.substring(1) + " "
-		}
-	}
-	if (!projectName.contains("Mod Integration")) {
-		return projectName + "Library"
-	}
-	else {
-		return projectName.substring(0, projectName.length() - 1)
-	}
-}
-
-static def getMModdingLibraryDescription(Project project) {
-	if (getMModdingLibraryNamespace(project) == "mmodding") {
-		return "Library made by MModding Team to provide few sets of modding tools."
-	}
-	else {
-		return getMModdingLibraryName(project) - "MModding " + " of MModding"
-	}
-}
-
-static def applyMModdingLibraryProvider(Project project, NamespaceProvider provider) {
-	String projectId = getMModdingLibraryNamespace(project);
-	if (projectId != "mmodding") {
-		provider.provide(projectId.replace("_", "-"))
-	}
-	if (!projectId.contains("mod_integration")) {
-		provider.provide(projectId + "_library")
-		provider.provide(projectId.replace("_", "-") + "-library")
-		provider.provide(projectId + "_api")
-		provider.provide(projectId.replace("_", "-") + "-api")
-	}
-}
-
-allprojects {
-
-    apply plugin: 'net.fabricmc.fabric-loom'
-	apply plugin: 'com.mmodding.gradle'
-
-	base {
-		if (project == rootProject) {
-			archivesName = project.archives_base_name
-		}
-		else {
-			archivesName = getMModdingLibraryNamespace(project)
-		}
-	}
-
-    repositories {
-		mavenCentral()
-    }
-
-	// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-	// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
-	dependencies {
-		minecraft libs.minecraft
-		implementation libs.fabric.loader
-
-		implementation libs.yumi.commons
-		implementation libs.fabric.api
-	}
-
-    tasks.withType(JavaCompile).configureEach {
-        it.options.encoding = 'UTF-8'
-        // Minecraft 26.1 upwards uses Java 25.
-        it.options.release = Integer.valueOf(libs.versions.java.get())
-    }
-
-	mmodding {
-		configureFabricModJson {
-			name = getMModdingLibraryName(project)
-			namespace = getMModdingLibraryNamespace(project)
-			description = getMModdingLibraryDescription(project)
-			license = "Code: PolyForm-Shield-1.0.0\\nAssets: All Rights Reserved"
-			icon = "assets/" + getMModdingLibraryNamespace(project) + "/icon.png"
-			environment = EnvironmentTarget.ANY
-			addAuthor("MModding Team")
-			addContributor("FirstMegaGame4")
-			withContact {
-				it.homepage = "https://mmodding.com"
-				it.sources = "https://github.com/MModding/mmodding-library"
-				it.issues = "https://github.com/MModding/mmodding-library/issues"
-			}
-			withDependencies {
-				it.javaVersion = ">=" + 25
-				if (libs.versions.minecraft.get().contains("snapshot")) {
-					String mcv = libs.versions.minecraft.get().split("-")[0]
-					it.fabricApiVersion = ">=${mcv}- <${mcv}"
-				}
-				else {
-					it.minecraftVersion = "~" + libs.versions.minecraft.get()
-				}
-				it.fabricLoaderVersion = ">=" + libs.versions.fabric.loader.get()
-				it.fabricApiVersion = ">=" + libs.versions.fabric.api.get()
-			}
-			withProvider {
-				applyMModdingLibraryProvider(project, it)
-			}
-			if (getMModdingLibraryNamespace(project) != "mmodding") withParent("mmodding")
-			withCustom {
-				it.withBlock("modmenu") {
-					it.withArray("badges") {
-						it.addUnique("library")
-					}
-				}
-			}
-		}
-		loomModRegistration()
-		loomTestmodRegistration()
-		configureTestmod {
-			name = getMModdingLibraryName(project) + " Test Mod"
-			namespace = getMModdingLibraryNamespace(project) + "_testmod"
-			withDependencies {
-				it.addDependency(getMModdingLibraryNamespace(project))
-			}
-		}
-	}
-
-	processResources {
-		inputs.properties 'version': version
-
-		filesMatching('fabric.mod.json') {
-			expand 'version': version
-		}
-	}
-
-    java {
-        // Still required by IDEs such as Eclipse and Visual Studio Code
-        sourceCompatibility = JavaVersion.VERSION_25
-        targetCompatibility = JavaVersion.VERSION_25
-
-        withSourcesJar()
-        // withJavadocJar()
-    }
-}
-
 subprojects {
     afterEvaluate {
         // Disable the gen sources task on sub projects
         genSourcesWithVineflower.enabled = false
         genSourcesWithCfr.enabled = false
     }
-}
-
-allprojects {
-	jar {
-		from(rootProject.projectDir.path + "/LICENSE.md") {
-			rename { "${it}_${base.archivesName.get()}" }
-		}
-		if (project != rootProject) {
-			from(rootProject.projectDir.path + "/src/main/resources/assets/mmodding/icon.png") {
-				into("assets/" + getMModdingLibraryNamespace(project))
-			}
-		}
-	}
 }
 
 mmodding {

@@ -1,4 +1,6 @@
-import com.mmodding.gradle.api.EnvironmentTarget
+plugins {
+	id("mmodding.common-base")
+}
 
 mmodding {
 	modules {

@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 mmodding {
 	loom {
 		accessWidenerPath = file("src/main/resources/mmodding_sublevel.classtweaker")
@@ -12,7 +16,7 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.sublevel.test.SublevelTests")
+			init("com.mmodding.library.sublevel.test.SublevelTests")
 		}
 	}
 }

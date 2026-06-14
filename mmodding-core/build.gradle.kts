@@ -1,10 +1,15 @@
+plugins {
+	id("mmodding.common-base")
+}
+
+loom.accessWidenerPath = file("src/main/resources/mmodding_core.classtweaker")
+
 mmodding {
-	loom.accessWidenerPath = file("src/main/resources/mmodding_core.classtweaker")
 	configureFabricModJson {
 		accessWidener = "mmodding_core.classtweaker"
 		addMixin("mmodding_core.mixins.json")
 		withEntrypoints {
-			it.init("com.mmodding.library.core.impl.MModdingInitializer")
+			init("com.mmodding.library.core.impl.MModdingInitializer")
 		}
 	}
 	modules {

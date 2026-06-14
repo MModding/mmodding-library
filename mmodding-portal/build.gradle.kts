@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 loom.accessWidenerPath = file("src/main/resources/mmodding_portal.classtweaker")
 
 mmodding {
@@ -12,7 +16,7 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.portal.test.MModdingPortalTests")
+			init("com.mmodding.library.portal.test.MModdingPortalTests")
 		}
 	}
 }

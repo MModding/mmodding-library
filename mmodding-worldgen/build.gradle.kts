@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 mmodding {
 	loom {
 		accessWidenerPath = file("src/main/resources/mmodding_worldgen.classtweaker")
@@ -13,7 +17,7 @@ mmodding {
 	}
 	configureFabricModJson {
 		withEntrypoints {
-			it.init("com.mmodding.library.worldgen.impl.MModdingWorldgenInitializer")
+			init("com.mmodding.library.worldgen.impl.MModdingWorldgenInitializer")
 		}
 	}
 }

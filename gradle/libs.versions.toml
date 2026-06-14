@@ -1,5 +1,9 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
+# For Convention Plugins
+fabric_loom = "1.16-SNAPSHOT"
+mmodding_gradle = "0.1.5"
+
 java = "25"
 minecraft = "26.2-snapshot-8"
 fabric_loader = "0.19.2"
@@ -12,6 +16,10 @@ fabric_api = "0.149.1+26.2"
 trinkets_updated = "4.0.0-alpha.8+26.1"
 
 [libraries]
+# For Convention Plugins
+fabric_loom = { module = "net.fabricmc:fabric-loom", version.ref = "fabric_loom" }
+mmodding_gradle = { module = "com.mmodding:mmodding-gradle", version.ref = "mmodding_gradle" }
+
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
 
@@ -25,7 +33,3 @@ fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 
 # Mod Integrations
 trinkets = { module = "eu.pb4:trinkets", version.ref = "trinkets_updated" }
-
-[plugins]
-fabric_loom = { id = "net.fabricmc.fabric-loom", version = "1.16-SNAPSHOT" }
-mmodding_gradle = { id = "com.mmodding.gradle", version = "0.1.5" }

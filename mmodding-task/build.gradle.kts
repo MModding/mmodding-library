@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 mmodding {
 	configureFabricModJson {
 		addMixin("mmodding_task.mixins.json")
@@ -8,7 +12,7 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.task.test.TaskTests")
+			init("com.mmodding.library.task.test.TaskTests")
 		}
 	}
 }

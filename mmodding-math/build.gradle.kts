@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 mmodding {
 	modules {
 		implementation("mmodding-core")

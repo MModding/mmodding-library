@@ -1,5 +1,9 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 
+plugins {
+	id("mmodding.common-base")
+}
+
 loom.accessWidenerPath = file("src/main/resources/mmodding_client_resources.classtweaker")
 
 mmodding {
@@ -8,7 +12,7 @@ mmodding {
 		accessWidener = "mmodding_client_resources.classtweaker"
 		addMixin("mmodding_client_resources.mixins.json")
 		withEntrypoints {
-			it.client("com.mmodding.library.resource.impl.client.MModdingClientResourceSetup")
+			client("com.mmodding.library.resource.impl.client.MModdingClientResourceSetup")
 		}
 	}
 	modules {
@@ -17,8 +21,8 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.resource.test.client.RenderingTests")
-			it.client("com.mmodding.library.resource.test.client.RenderingTestsClient")
+			init("com.mmodding.library.resource.test.client.RenderingTests")
+			client("com.mmodding.library.resource.test.client.RenderingTestsClient")
 		}
 	}
 }

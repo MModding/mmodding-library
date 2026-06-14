@@ -1,3 +1,7 @@
+plugins {
+	id("mmodding.common-base")
+}
+
 mmodding {
 	loom.accessWidenerPath = file("src/main/resources/mmodding_datagen.classtweaker")
 	configureFabricModJson {
@@ -13,8 +17,8 @@ mmodding {
 	}
 	configureTestmod {
 		withEntrypoints {
-			it.init("com.mmodding.library.datagen.test.DatagenTests")
-			it.custom("fabric-datagen", "com.mmodding.library.datagen.test.DatagenTests")
+			init("com.mmodding.library.datagen.test.DatagenTests")
+			custom("fabric-datagen", "com.mmodding.library.datagen.test.DatagenTests")
 		}
 	}
 }
