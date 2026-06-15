@@ -11,7 +11,7 @@ plugins {
 }
 
 val baseVersion = project.properties["version"]
-val version = "$baseVersion+${catalogedVersion("minecraft")}"
+version = "$baseVersion+${catalogedVersion("minecraft")}"
 
 fun provideNamespaceAlternatives(provider: NamespaceProvider) {
     val projectId = getModuleNamespace();

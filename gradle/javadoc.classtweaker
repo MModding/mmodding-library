@@ -1,0 +1,4 @@
+classTweaker v1 official
+# Just like in FAPI, we use this file to let javadocs be built correctly, by providing the required class tweakers
+
+extendable class net/minecraft/world/level/levelgen/feature/configurations/VegetationPatchConfiguration

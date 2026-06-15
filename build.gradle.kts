@@ -7,7 +7,7 @@ plugins {
 
 group = project.properties["maven_group"] as String
 
-val included_integrations = (project.properties["allowed_integrations"] as String).split(",")
+val supportedIntegrations = (project.properties["allowed_integrations"] as String).split(",")
 
 mmodding {
 	modules {
@@ -29,7 +29,7 @@ mmodding {
 		bundle("mmodding-woodset")
 		bundle("mmodding-worldgen")
 		rootDir.toPath().resolve("mod-integration").toFile().list().forEach { suffix ->
-			if (included_integrations.contains(suffix)) {
+			if (supportedIntegrations.contains(suffix)) {
 				include("mod-integration-mmodding-$suffix") // we don't need to depend on it for the root project
 			}
 		}
@@ -42,28 +42,41 @@ dependencies {
 	api(include(libs.yumi.commons.event.get())!!)
 }
 
-// Javadocs
-/* javadoc {
+// Javadocs (we're basically doing the same as FAPI here)
+tasks.named<Javadoc>("javadoc") {
+	enabled = true
+
 	options {
-		source = "17"
+		this as StandardJavadocDocletOptions
+		source = catalogedVersion("java")
 		encoding = "UTF-8"
-		charSet = "UTF-8"
+		charset("UTF-8")
 		memberLevel = JavadocMemberLevel.PACKAGE
-		addStringOption("Xdoclint:none", "-quiet")
-		tags(
-			'apiNote:a:API Note:',
-			'implNote:a:Implementation Note:'
-		)
+		tags = listOf("apiNote:a:API Note:", "implNote:a:Implementation Note:")
+		addStringOption("Xdoclint:all,-missing", "-quiet")
 	}
 
-	allprojects.each {
-		source(sourceSets.main.allJava)
+	subprojects.forEach { p ->
+		if (p.plugins.hasPlugin("com.mmodding.library.module")) {
+			source(p.sourceSets.main.get().allJava)
+		}
 	}
+	classpath = sourceSets.main.get().compileClasspath
+	include("**/api/**")
+	isFailOnError = true
+}
 
-	classpath = files(sourceSets.main.compileClasspath)
-	include("**//*api*//**")
-	failOnError = true
-} */
+tasks.register<Jar>("javadocJar") {
+    description = "Bundling Javadoc Jar"
+	dependsOn(tasks.named("javadoc"))
+	from(tasks.named<Javadoc>("javadoc").get().destinationDir)
+	archiveClassifier = "fatjavadoc"
+}
+
+tasks.named("build").get().dependsOn(tasks.named("javadocJar"))
+
+// This file prevents javadoc generation from failing because of javadoc compile-time issues
+loom.accessWidenerPath = file("gradle/javadoc.classtweaker")
 
 // Configure the maven publication
 /* allprojects {
