@@ -1,5 +1,5 @@
 plugins {
-	id("mmodding.common-base")
+	id("com.mmodding.library.module")
 }
 
 loom.accessWidenerPath = file("src/main/resources/mmodding_item.classtweaker")

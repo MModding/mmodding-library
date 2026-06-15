@@ -1,35 +1,20 @@
 pluginManagement {
-	resolutionStrategy {
-		eachPlugin {
-			if (requested.id.toString() == "com.mmodding.gradle") {
-				useModule("com.mmodding:mmodding-gradle:${requested.version}")
-			}
-		}
-	}
     repositories {
 		maven {
 			name = "JitPack"
-			url = "https://jitpack.io"
+			url = uri("https://jitpack.io")
 		}
 		maven {
             name = "Quilt"
-            url = "https://maven.quiltmc.org/repository/release"
+            url = uri("https://maven.quiltmc.org/repository/release")
         }
         maven {
             name = "Fabric"
-            url = "https://maven.fabricmc.net/"
+            url = uri("https://maven.fabricmc.net/")
         }
         gradlePluginPortal()
     }
     includeBuild("./build-logic")
-}
-
-dependencyResolutionManagement {
-    versionCatalogs {
-        projectLibs {
-            from(files("gradle/libs.versions.toml"))
-        }
-    }
 }
 
 rootProject.name = "mmodding-library"
@@ -51,7 +36,7 @@ include("mmodding-sublevel")
 include("mmodding-task")
 include("mmodding-woodset")
 include("mmodding-worldgen")
-rootDir.toPath().resolve("mod-integration").toFile().list().each {
-    include("mod-integration-mmodding-" + it)
-    project(":mod-integration-mmodding-" + it).projectDir = file("mod-integration/" + it)
+rootDir.toPath().resolve("mod-integration").toFile().list().forEach { suffix ->
+    include("mod-integration-mmodding-$suffix")
+    project(":mod-integration-mmodding-$suffix").projectDir = file("mod-integration/$suffix")
 }

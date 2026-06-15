@@ -1,24 +1,13 @@
+import com.mmodding.library.buildscript.*
+
 plugins {
-    id 'maven-publish'
-	id "mmodding.common-base"
+    id("maven-publish")
+	id("com.mmodding.library.project-meta")
 }
 
-version = "$project.version+${libs.versions.minecraft.get()}"
-group = project.maven_group
+group = project.properties["maven_group"] as String
 
-subprojects {
-	group = project.module_maven_group
-}
-
-def included_integrations = allowed_integrations.split(",")
-
-subprojects {
-    afterEvaluate {
-        // Disable the gen sources task on sub projects
-        genSourcesWithVineflower.enabled = false
-        genSourcesWithCfr.enabled = false
-    }
-}
+val included_integrations = (project.properties["allowed_integrations"] as String).split(",")
 
 mmodding {
 	modules {
@@ -39,18 +28,18 @@ mmodding {
 		bundle("mmodding-task")
 		bundle("mmodding-woodset")
 		bundle("mmodding-worldgen")
-		rootDir.toPath().resolve("mod-integration").toFile().list().each {
-			if (included_integrations.contains(it)) {
-				include("mod-integration-mmodding-" + it) // we don't need to depend on it for the root project
+		rootDir.toPath().resolve("mod-integration").toFile().list().forEach { suffix ->
+			if (included_integrations.contains(suffix)) {
+				include("mod-integration-mmodding-$suffix") // we don't need to depend on it for the root project
 			}
 		}
 	}
 }
 
 dependencies {
-	api(include(libs.yumi.commons.core.get()))
-	api(include(libs.yumi.commons.collections.get()))
-	api(include(libs.yumi.commons.event.get()))
+	api(include(libs.yumi.commons.core.get())!!)
+	api(include(libs.yumi.commons.collections.get())!!)
+	api(include(libs.yumi.commons.event.get())!!)
 }
 
 // Javadocs
@@ -77,7 +66,7 @@ dependencies {
 } */
 
 // Configure the maven publication
-allprojects {
+/* allprojects {
 	if (!project.name.contains("mod-integration")) {
 		apply plugin: 'maven-publish'
 
@@ -89,14 +78,18 @@ allprojects {
 					}
 				}
 
-				// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 				repositories {
-					// Add repositories to publish to here.
-					// Notice: This block does NOT have the same function as the block in the top level.
-					// The repositories here will be used for publishing your artifact, not for
-					// retrieving dependencies.
+					maven {
+						name = "MModding Maven Repository"
+						url = "https://maven.mmodding.com/releases"
+						credentials {
+							username = providers.environmentVariable("MAVEN_USERNAME")
+							password = providers.environmentVariable("MAVEN_PASSWORD")
+						}
+					}
 				}
 			}
 		}
 	}
 }
+ */

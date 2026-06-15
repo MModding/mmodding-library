@@ -1,7 +1,7 @@
 import com.mmodding.gradle.api.EnvironmentTarget
 
 plugins {
-	id("mmodding.common-base")
+	id("com.mmodding.library.module")
 }
 
 loom.accessWidenerPath = file("src/main/resources/mmodding_client_resources.classtweaker")

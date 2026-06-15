@@ -1,7 +1,8 @@
-package mmodding
+package com.mmodding.library
 
 import com.mmodding.gradle.api.EnvironmentTarget
 import com.mmodding.gradle.api.mod.json.NamespaceProvider
+import com.mmodding.library.buildscript.*
 import org.gradle.api.tasks.compile.JavaCompile
 
 plugins {
@@ -9,41 +10,8 @@ plugins {
     id("com.mmodding.gradle")
 }
 
-val rootLibs = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
-
-fun catalogedVersion(alias: String) : String {
-    return (rootLibs.findVersion(alias).orElseThrow() as VersionConstraint).requiredVersion
-}
-
-fun catalogedLibrary(alias: String) : Provider<MinimalExternalModuleDependency> {
-    return rootLibs.findLibrary(alias).orElseThrow() as Provider<MinimalExternalModuleDependency>
-}
-
 val baseVersion = project.properties["version"]
 val version = "$baseVersion+${catalogedVersion("minecraft")}"
-
-fun getModuleNamespace() : String {
-    return if (project.rootProject == project) "mmodding"
-    else project.name.replace('-', '_')
-}
-
-fun getModuleName() : String {
-    var projectName = ""
-    getModuleNamespace().split("_").forEach { sub ->
-        projectName += if (sub[0] == 'm' && sub[1] == 'm') {
-            sub[0].uppercase() + sub[1].uppercase() + sub.substring(2) + " "
-        } else {
-            projectName + sub[0].uppercase() + sub.substring(1) + " "
-        }
-    }
-    return if (!projectName.contains("Mod Integration")) projectName + "Library"
-    else projectName.substring(0, projectName.length - 1)
-}
-
-fun getModuleDescription() : String {
-    return if (getModuleNamespace() == "mmodding") "Library made by MModding Team to provide few sets of modding tools."
-    else getModuleName().substring(9) + " of MModding"
-}
 
 fun provideNamespaceAlternatives(provider: NamespaceProvider) {
     val projectId = getModuleNamespace();
