@@ -2,7 +2,7 @@ pluginManagement {
     repositories {
 		maven {
 			name = "JitPack"
-			url = uri("https://jitpack.io")
+			url = uri("https://maven.mmodding.com/releases")
 		}
 		maven {
             name = "Quilt"
