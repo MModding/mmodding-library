@@ -1,16 +1,16 @@
 [versions]
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 # For Convention Plugins
-fabric_loom = "1.16-SNAPSHOT"
+fabric_loom = "1.17-SNAPSHOT"
 mmodding_gradle = "0.1.6-beta"
 
 java = "25"
-minecraft = "26.2-snapshot-8"
+minecraft = "26.2-rc-2"
 fabric_loader = "0.19.2"
 
 yumi_commons = "2.0.0"
 
-fabric_api = "0.149.1+26.2"
+fabric_api = "0.152.1+26.2"
 
 # Mod Integrations
 trinkets_updated = "4.0.0-alpha.8+26.1"
