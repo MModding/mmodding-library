@@ -56,7 +56,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_25
 
     withSourcesJar()
-    withJavadocJar()
 }
 
 tasks.withType<JavaCompile>().forEach { task ->
