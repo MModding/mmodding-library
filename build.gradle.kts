@@ -149,7 +149,7 @@ publishMods {
 		modLoaders.add("quilt")
 
 		modrinth {
-			projectId = providers.environmentVariable("MODRINTH_PROJECT").get()
+			projectId = project.properties["modrinth_project"] as String
 			accessToken = providers.environmentVariable("MODRINTH_TOKEN").get()
 
 			minecraftVersions = extractSupportedVersions()
@@ -158,7 +158,7 @@ publishMods {
 		}
 
 		curseforge {
-			projectId = providers.environmentVariable("CURSEFORGE_PROJECT").get()
+			projectId = project.properties["curseforge_project"] as String
 			accessToken = providers.environmentVariable("CURSEFORGE_TOKEN").get()
 
 			javaVersions.add(JavaVersion.entries.first { v -> v.name == "VERSION_" + catalogedVersion("java") })

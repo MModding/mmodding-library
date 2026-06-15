@@ -1,0 +1,38 @@
+name: release
+on: [release]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+      - name: Make the Gradle Wrapper an Executable
+        run: chmod +x ./gradlew
+      - name: build
+        run: |
+          ./gradlew generateFMJ
+          ./gradlew build
+      - name: Provide Release Artifacts
+        uses: softprops/action-gh-release@v3
+        with:
+          files: build/libs/*.jar
+      - name: Publish to Maven Repository
+        run: ./gradlew publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_USERNAME }}
+      - name: Publish to Mod Distribution Services
+        run: ./graldew publishMods
+        env:
+          TITLE: ${{ github.event.release.name }}
+          CHANGELOG: ${{ github.event.release.body }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
