@@ -91,7 +91,7 @@ publishing {
 	repositories {
 		if (providers.environmentVariable("MAVEN_USERNAME").isPresent) {
 			maven {
-				name = "MModding Maven Repository"
+				name = "MModding"
 				url = uri("https://maven.mmodding.com/releases")
 				credentials {
 					username = providers.environmentVariable("MAVEN_USERNAME").get()
