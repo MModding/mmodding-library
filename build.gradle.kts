@@ -79,30 +79,24 @@ tasks.named("build").get().dependsOn(tasks.named("javadocJar"))
 loom.accessWidenerPath = file("gradle/javadoc.classtweaker")
 
 // Configure the maven publication
-/* allprojects {
-	if (!project.name.contains("mod-integration")) {
-		apply plugin: 'maven-publish'
+publishing {
+	publications {
+		create<MavenPublication>("mavenJava") {
+			from(components["java"])
+			artifact(tasks.named("javadocJar"))
+		}
+	}
 
-		afterEvaluate {
-			publishing {
-				publications {
-					mavenJava(MavenPublication) {
-						from components.java
-					}
-				}
-
-				repositories {
-					maven {
-						name = "MModding Maven Repository"
-						url = "https://maven.mmodding.com/releases"
-						credentials {
-							username = providers.environmentVariable("MAVEN_USERNAME")
-							password = providers.environmentVariable("MAVEN_PASSWORD")
-						}
-					}
+	repositories {
+		if (providers.environmentVariable("MAVEN_USERNAME").isPresent) {
+			maven {
+				name = "MModding Maven Repository"
+				url = uri("https://maven.mmodding.com/releases")
+				credentials {
+					username = providers.environmentVariable("MAVEN_USERNAME").get()
+					password = providers.environmentVariable("MAVEN_PASSWORD").get()
 				}
 			}
 		}
 	}
 }
- */

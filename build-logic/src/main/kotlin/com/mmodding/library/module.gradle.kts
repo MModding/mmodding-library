@@ -1,8 +1,7 @@
 package com.mmodding.library
 
-import com.mmodding.library.buildscript.*
-
 plugins {
+    id("maven-publish")
     id("com.mmodding.library.project-meta")
 }
 
@@ -16,4 +15,25 @@ afterEvaluate {
 
 tasks.named("javadoc") {
     enabled = false
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        if (providers.environmentVariable("MAVEN_USERNAME").isPresent) {
+            maven {
+                name = "MModding Maven Repository"
+                url = uri("https://maven.mmodding.com/releases")
+                credentials {
+                    username = providers.environmentVariable("MAVEN_USERNAME").get()
+                    password = providers.environmentVariable("MAVEN_PASSWORD").get()
+                }
+            }
+        }
+    }
 }
