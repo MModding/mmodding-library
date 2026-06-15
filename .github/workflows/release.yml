@@ -36,7 +36,7 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
       - name: Publish to Mod Distribution Services
-        run: ./graldew publishMods
+        run: ./gradlew publishMods
         env:
           TITLE: ${{ github.event.release.name }}
           CHANGELOG: ${{ github.event.release.body }}
