@@ -2,6 +2,7 @@ import com.mmodding.library.buildscript.*
 
 plugins {
     id("maven-publish")
+	id("me.modmuss50.mod-publish-plugin") version "2.0.0"
 	id("com.mmodding.library.project-meta")
 }
 
@@ -78,7 +79,7 @@ tasks.named("build").get().dependsOn(tasks.named("javadocJar"))
 // This file prevents javadoc generation from failing because of javadoc compile-time issues
 loom.accessWidenerPath = file("gradle/javadoc.classtweaker")
 
-// Configure the maven publication
+// Configures the maven publication
 publishing {
 	publications {
 		create<MavenPublication>("mavenJava") {
@@ -97,6 +98,77 @@ publishing {
 					password = providers.environmentVariable("MAVEN_PASSWORD").get()
 				}
 			}
+		}
+	}
+}
+
+fun extractSupportedVersions() : List<String> {
+	var mcVer = catalogedVersion("minecraft")
+	if (mcVer.contains("snapshot")) {
+		return listOf(mcVer)
+	}
+	else {
+		// published artifacts on these versions should also cover the proper Minecraft release correctly
+		if (mcVer.contains("-pre")) mcVer = mcVer.split("-pre").first()
+		if (mcVer.contains("-rc")) mcVer = mcVer.split("-rc").first()
+		val versionComponents = mcVer.split(".")
+		if (versionComponents.size == 2) {
+			return listOf(mcVer)
+		}
+		else {
+			val lastComponent = versionComponents.last().toInt()
+			val versionBase = versionComponents.subList(0, 1).joinToString(".")
+			val versions = mutableListOf(versionBase)
+			for (i in 1..lastComponent) {
+				versions.add("$versionBase.$i")
+			}
+			return versions
+		}
+	}
+}
+
+// Configures the mod publication
+publishMods {
+	if (providers.environmentVariable("CHANGELOG").isPresent) {
+		changelog.set(providers.environmentVariable("CHANGELOG").get())
+
+		val title = providers.environmentVariable("TITLE").get()
+		if (title.contains("alpha")) {
+			type.set(ALPHA)
+		}
+		else if (title.contains("beta")) {
+			type.set(BETA)
+		}
+		else {
+			type.set(STABLE)
+		}
+
+		file.set(tasks.named<Jar>("jar").get().archiveFile)
+
+		modLoaders.add("fabric")
+		modLoaders.add("quilt")
+
+		modrinth {
+			projectId = providers.environmentVariable("MODRINTH_PROJECT").get()
+			accessToken = providers.environmentVariable("MODRINTH_TOKEN").get()
+
+			minecraftVersions = extractSupportedVersions()
+
+			projectDescription = providers.fileContents(layout.projectDirectory.file("README.md")).asText
+		}
+
+		curseforge {
+			projectId = providers.environmentVariable("CURSEFORGE_PROJECT").get()
+			accessToken = providers.environmentVariable("CURSEFORGE_TOKEN").get()
+
+			javaVersions.add(JavaVersion.entries.first { v -> v.name == "VERSION_" + catalogedVersion("java") })
+
+			minecraftVersions = extractSupportedVersions()
+
+			client = true
+			server = true
+
+			changelogType = "markdown"
 		}
 	}
 }

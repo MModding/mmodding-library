@@ -82,7 +82,7 @@ mmodding {
         withDependencies {
             javaVersion = ">=" + catalogedVersion("java")
             val minecraftVer = catalogedVersion("java")
-            if (minecraftVer.contains("snapshot")) {
+            if (minecraftVer.contains("snapshot") || minecraftVer.contains("pre") || minecraftVer.contains("rc")) {
                 val mcv = minecraftVer.split("-")[0]
                 minecraftVersion = ">=${mcv}- <${mcv}"
             }
