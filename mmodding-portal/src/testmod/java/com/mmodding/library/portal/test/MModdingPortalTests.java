@@ -15,9 +15,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class MModdingPortalTests implements ExtendedModInitializer {
 
-	public static final Block EXAMPLE_PORTAL_BLOCK = new ExamplePortalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noCollision().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("mmodding_portal_testmod", "example_portal_block"))));
-
 	public static final ResourceKey<PoiType> EXAMPLE_POI = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, Identifier.fromNamespaceAndPath("mmodding_portal_testmod", "example_poi"));
+
+	public static final Block EXAMPLE_PORTAL_BLOCK = new ExamplePortalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noCollision().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("mmodding_portal_testmod", "example_portal_block"))));
 
 	@Override
 	public void setupManager(ElementsManager manager) {}
