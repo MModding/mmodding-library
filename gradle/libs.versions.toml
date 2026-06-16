@@ -5,7 +5,7 @@ fabric_loom = "1.17-SNAPSHOT"
 mmodding_gradle = "0.1.6-beta"
 
 java = "25"
-minecraft = "26.2-rc-2"
+minecraft = "26.2"
 fabric_loader = "0.19.2"
 
 yumi_commons = "2.0.0"
