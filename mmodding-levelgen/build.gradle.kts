@@ -17,7 +17,7 @@ mmodding {
 	}
 	configureFabricModJson {
 		withEntrypoints {
-			init("com.mmodding.library.levelgen.impl.MModdingWorldgenInitializer")
+			init("com.mmodding.library.levelgen.impl.MModdingLevelgenInitializer")
 		}
 	}
 }

@@ -6,7 +6,7 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-public class MModdingWorldgenInitializer implements ModInitializer {
+public class MModdingLevelgenInitializer implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
