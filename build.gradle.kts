@@ -133,17 +133,20 @@ publishMods {
 		changelog.set(providers.environmentVariable("CHANGELOG").get())
 
 		val title = providers.environmentVariable("TITLE").get()
-		if (title.contains("alpha")) {
+        if (title.contains("alpha")) {
 			type.set(ALPHA)
 		}
-		else if (title.contains("beta")) {
+        else if (title.contains("beta")) {
 			type.set(BETA)
 		}
 		else {
 			type.set(STABLE)
 		}
 
+        displayName = "${getModuleName()} $title"
+
 		file.set(tasks.named<Jar>("jar").get().archiveFile)
+        additionalFiles.from(tasks.named<Jar>("sourcesJar").get().archiveFile, tasks.named<Jar>("javadocJar").get().archiveFile)
 
 		modLoaders.add("fabric")
 		modLoaders.add("quilt")
