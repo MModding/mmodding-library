@@ -17,6 +17,7 @@ mmodding {
 		bundle("mmodding-config")
 		bundle("mmodding-core")
 		bundle("mmodding-datagen")
+		bundle("mmodding-energy")
 		bundle("mmodding-enchantment")
 		bundle("mmodding-fluid")
 		bundle("mmodding-inventory")
@@ -130,6 +131,7 @@ fun extractSupportedVersions() : List<String> {
 // Configures the mod publication
 publishMods {
 	if (providers.environmentVariable("CHANGELOG").isPresent) {
+		displayName = "${properties["mod_name"]} $version"
 		changelog.set(providers.environmentVariable("CHANGELOG").get())
 
 		val title = providers.environmentVariable("TITLE").get()
@@ -142,8 +144,6 @@ publishMods {
 		else {
 			type.set(STABLE)
 		}
-
-        displayName = "${getModuleName()} $title"
 
 		file.set(tasks.named<Jar>("jar").get().archiveFile)
         additionalFiles.from(tasks.named<Jar>("sourcesJar").get().archiveFile, tasks.named<Jar>("javadocJar").get().archiveFile)
