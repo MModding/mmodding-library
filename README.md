@@ -32,9 +32,9 @@ Current Modules Table:
 | mmodding-enchantment      | Experimental | Enchantment Management, Families                       |
 | mmodding-fluid            | Experimental | Fluid Management, Properties                           |
 | mmodding-item             | Stable       | Item Management, Catalog                               |
-| mmodding-java             | Experimental | Collection of Java Utilities                           |
-| mmodding-math             | Experimental | Collection of Math Utilities                           |
-| mmodding-network          | Experimental | Additionnal Network Codecs                             |
+| mmodding-java             | Candidate    | Collection of Java Utilities                           |
+| mmodding-math             | Candidate    | Collection of Math Utilities                           |
+| mmodding-network          | Candidate    | Additionnal Network Codecs                             |
 | mmodding-portal           | Experimental | Node Binding Portals, Node Building Portals            |
 | mmodding-sublevel         | Experimental | SubLevel Management                                    |
 | mmodding-task             | Candidate    | Task Scheduling, Persistent Tasks                      |
