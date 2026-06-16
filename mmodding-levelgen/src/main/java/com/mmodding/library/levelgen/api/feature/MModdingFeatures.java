@@ -1,0 +1,13 @@
+package com.mmodding.library.levelgen.api.feature;
+
+import com.mmodding.library.levelgen.api.feature.catalog.*;
+import com.mmodding.library.levelgen.api.feature.catalog.configurations.*;
+import net.minecraft.world.level.levelgen.feature.Feature;
+
+public class MModdingFeatures {
+
+	public static final Feature<AdvancedFreezeTopLayerConfiguration> ADVANCED_FREEZE_TOP_LAYER = new AdvancedFreezeTopLayerFeature(AdvancedFreezeTopLayerConfiguration.CODEC);
+	public static final Feature<AdvancedLargeDripstoneConfiguration> ADVANCED_LARGE_DRIPSTONE = new AdvancedLargeDripstoneFeature(AdvancedLargeDripstoneConfiguration.CODEC);
+	public static final Feature<AdvancedLiquidVegetationPatchConfiguration> ADVANCED_LIQUID_VEGETATION_PATCH = new AdvancedLiquidVegetationPatchFeature(AdvancedLiquidVegetationPatchConfiguration.CODEC);
+	public static final Feature<LayeredConfiguration> LAYERED = new LayeredFeature(LayeredConfiguration.CODEC);
+}

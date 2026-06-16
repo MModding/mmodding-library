@@ -33,13 +33,13 @@ Current Modules Table:
 | mmodding-fluid            | Experimental | Fluid Management, Properties                           |
 | mmodding-item             | Stable       | Item Management, Catalog                               |
 | mmodding-java             | Candidate    | Collection of Java Utilities                           |
+| mmodding-levelgen         | Experimental | Level Generation Systems                               |
 | mmodding-math             | Candidate    | Collection of Math Utilities                           |
 | mmodding-network          | Candidate    | Additionnal Network Codecs                             |
 | mmodding-portal           | Experimental | Node Binding Portals, Node Building Portals            |
 | mmodding-sublevel         | Experimental | SubLevel Management                                    |
 | mmodding-task             | Candidate    | Task Scheduling, Persistent Tasks                      |
 | mmodding-woodset          | Stable       | Powerful Tools to create whole WoodSets.               |
-| mmodding-worldgen         | Experimental | World Generation Systems                               |
 
 Badge for Modders:
 

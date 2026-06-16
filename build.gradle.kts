@@ -22,13 +22,13 @@ mmodding {
 		bundle("mmodding-inventory")
 		bundle("mmodding-item")
 		bundle("mmodding-java")
+		bundle("mmodding-levelgen")
 		bundle("mmodding-math")
 		bundle("mmodding-network")
 		bundle("mmodding-portal")
 		bundle("mmodding-sublevel")
 		bundle("mmodding-task")
 		bundle("mmodding-woodset")
-		bundle("mmodding-worldgen")
 		rootDir.toPath().resolve("mod-integration").toFile().list().forEach { suffix ->
 			if (supportedIntegrations.contains(suffix)) {
 				include("mod-integration-mmodding-$suffix") // we don't need to depend on it for the root project
