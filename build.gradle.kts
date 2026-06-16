@@ -158,6 +158,8 @@ publishMods {
 			minecraftVersions = extractSupportedVersions()
 
 			projectDescription = providers.fileContents(layout.projectDirectory.file("README.md")).asText
+
+			requires("fabric-api")
 		}
 
 		curseforge {
@@ -172,6 +174,8 @@ publishMods {
 			server = true
 
 			changelogType = "markdown"
+
+			requires("fabric-api")
 		}
 	}
 }
