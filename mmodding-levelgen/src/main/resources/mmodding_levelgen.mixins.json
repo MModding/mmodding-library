@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "ConfiguredFeatureMixin",
-    "PlacedFeatureMixin"
+    "MinecraftServerMixin",
+    "PlacedFeatureMixin",
+    "ServerLevelMixin"
   ],
   "client": [],
   "injectors": {
