@@ -20,6 +20,14 @@ fun Project.catalogedLibrary(alias: String) : Provider<MinimalExternalModuleDepe
     return rootLibs().findLibrary(alias).orElseThrow() as Provider<MinimalExternalModuleDependency>
 }
 
+fun Project.flattenedMinecraftVersion() : String {
+    var mcVer = catalogedVersion("minecraft")
+    if (mcVer.contains("-pre") || mcVer.contains("-rc")) {
+        mcVer = mcVer.split("-").first()
+    }
+    return mcVer
+}
+
 fun Project.getModuleNamespace() : String {
     return if (project.rootProject == project) "mmodding"
     else project.name.replace('-', '_')

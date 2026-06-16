@@ -11,7 +11,7 @@ plugins {
 }
 
 val baseVersion = project.properties["version"]
-version = "$baseVersion+${catalogedVersion("minecraft")}"
+version = "$baseVersion+${flattenedMinecraftVersion()}"
 
 fun provideNamespaceAlternatives(provider: NamespaceProvider) {
     val projectId = getModuleNamespace();
@@ -81,7 +81,7 @@ mmodding {
         }
         withDependencies {
             javaVersion = ">=" + catalogedVersion("java")
-            val minecraftVer = catalogedVersion("java")
+            val minecraftVer = catalogedVersion("minecraft")
             if (minecraftVer.contains("snapshot") || minecraftVer.contains("pre") || minecraftVer.contains("rc")) {
                 val mcv = minecraftVer.split("-")[0]
                 minecraftVersion = ">=${mcv}- <${mcv}"
