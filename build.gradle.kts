@@ -130,7 +130,7 @@ fun extractSupportedVersions() : List<String> {
 // Configures the mod publication
 publishMods {
 	if (providers.environmentVariable("CHANGELOG").isPresent) {
-		displayName = "${properties["mod_name"]} $version"
+		displayName = "${properties["mod_name"]} ${project.version}"
 		changelog.set(providers.environmentVariable("CHANGELOG").get())
 
 		val title = providers.environmentVariable("TITLE").get()
