@@ -5,7 +5,6 @@ import com.mmodding.library.core.api.serialization.MModdingCodecs;
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.storage.EnergyStorage;
 import com.mmodding.library.energy.impl.storage.EnergyStorageImpl;
-import com.mmodding.library.java.api.map.BiMap;
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -24,49 +23,35 @@ public class BlockEnergySavedData extends SavedData {
 		BlockEnergySavedData::new,
 		Codec.unboundedMap(
 			MModdingCodecs.STRING_BLOCKPOS,
-			Codec.unboundedMap(Codec.STRING, Codec.LONG)
+			Codec.LONG
 		).xmap(BlockEnergySavedData::new, BlockEnergySavedData::storage),
 		null
 	);
 
-	private final Map<BlockPos, Map<String, Long>> loaded;
-	private final Map<BlockPos, Map<String, EnergyStorage>> storage;
+	private final Map<BlockPos, Long> loaded;
+	private final Map<BlockPos, EnergyStorage> storage;
 
 	public BlockEnergySavedData() {
 		this.loaded = new Object2ObjectOpenHashMap<>();
 		this.storage = new Object2ObjectOpenHashMap<>();
 	}
 
-	public BlockEnergySavedData(Map<BlockPos, Map<String, Long>> loaded) {
+	public BlockEnergySavedData(Map<BlockPos, Long> loaded) {
 		this.loaded = loaded;
 		this.storage = new Object2ObjectOpenHashMap<>();
 	}
 
-	public Map<String, EnergyStorage> getOrComputeDefinitions(BlockPos pos, BiMap<String, Long, EnergyUnit> storageDefinitions) {
+	public EnergyStorage getOrComputeDefinition(BlockPos pos, long capacity, EnergyUnit unit) {
 		this.setDirty();
 		return this.storage.computeIfAbsent(pos, p -> {
-			Map<String, EnergyStorage> creating = new Object2ObjectOpenHashMap<>();
-			storageDefinitions.forEach((name, capacity, unit) -> {
-				creating.put(name, new EnergyStorageImpl(capacity, unit));
-			});
-			if (this.loaded.containsKey(p)) {
-				this.loaded.get(p).forEach((id, data) -> {
-					((EnergyStorageImpl) creating.get(id)).setAmount(data);
-				});
-			}
-			return creating;
+			EnergyStorageImpl impl = new EnergyStorageImpl(capacity, unit);
+			if (this.loaded.containsKey(p)) impl.setAmount(this.loaded.get(p));
+			return impl;
 		});
 	}
 
-	public Map<BlockPos, Map<String, Long>> storage() {
-		Map<BlockPos, Map<String, Long>> result = new Object2ObjectOpenHashMap<>();
-		result.putAll(this.loaded);
-		this.storage.forEach((pos, storages) -> {
-			Map<String, Long> data = result.computeIfAbsent(pos, _ -> new Object2ObjectOpenHashMap<>());
-			storages.forEach((name, storage) -> data.put(name, storage.amount()));
-		});
-		this.loaded.clear();
-		this.loaded.putAll(result);
+	public Map<BlockPos, Long> storage() {
+		this.storage.forEach((pos, storage) -> this.loaded.put(pos, storage.amount()));
 		return this.loaded;
 	}
 }
