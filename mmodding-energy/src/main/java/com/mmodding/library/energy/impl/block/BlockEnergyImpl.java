@@ -34,4 +34,14 @@ public final class BlockEnergyImpl {
 			);
 		}, block);
 	}
+
+	public static void defineStorageQueryDelegate(Block block, BlockEnergy.StorageQueryDelegator handler) {
+		if (DEFINITIONS_LOCK.contains(block)) {
+			throw new IllegalStateException();
+		}
+		SIDED.registerForBlocks((level, pos, _, _, side) -> {
+			ServerLevel serverLevel = (ServerLevel) level;
+			return handler.handle(serverLevel, pos, side);
+		});
+	}
 }

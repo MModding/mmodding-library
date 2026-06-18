@@ -26,7 +26,7 @@ public final class BlockEnergy {
 	}
 
 	/**
-	 * Defines an identifier energy storage for this block.
+	 * Defines an energy storage for this block.
 	 * @param block the block
 	 * @param capacity the energy capacity
 	 * @param unit the energy unit
@@ -34,6 +34,16 @@ public final class BlockEnergy {
 	 */
 	public static void defineEnergyStorage(Block block, long capacity, EnergyUnit unit, StorageQueryHandler handler) {
 		BlockEnergyImpl.defineEnergyStorage(block, capacity, unit, handler);
+	}
+
+	/**
+	 * Defines only a query for the current block.
+	 * <br>For example, it allows delegating the storage query to other block storages.
+	 * @param block the block
+	 * @param handler the storage query handler, without an internal storage
+	 */
+	public static void defineStorageQueryDelegate(Block block, StorageQueryDelegator handler) {
+		BlockEnergyImpl.defineStorageQueryDelegate(block, handler);
 	}
 
 	public interface StorageQueryHandler {
@@ -48,5 +58,18 @@ public final class BlockEnergy {
 		 */
 		@Nullable
 		EnergyStorage handle(ServerLevel level, BlockPos pos, Direction side, EnergyStorage internalStorage);
+	}
+
+	public interface StorageQueryDelegator {
+
+		/**
+		 * Handles a storage query with the provided context.
+		 * @param level the level
+		 * @param pos the block position
+		 * @param side the side
+		 * @return the possible energy storage
+		 */
+		@Nullable
+		EnergyStorage handle(ServerLevel level, BlockPos pos, Direction side);
 	}
 }
