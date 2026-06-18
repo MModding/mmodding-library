@@ -122,9 +122,4 @@ public class PortalNodeStorage extends SavedData {
 	public GlobalPos getPossibleNodeTarget(ServerLevel sourcePortalLevel, BlockPos sourcePortalPos) {
 		return this.storage.getOrDefault(sourcePortalLevel.dimension(), Map.of()).getOrDefault(sourcePortalPos, null);
 	}
-
-	public interface Duck {
-
-		PortalNodeStorage mmodding$getPortalNodeStorage();
-	}
 }

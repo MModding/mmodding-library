@@ -17,8 +17,9 @@ public class LevelMixin {
 	private void triggerDirtyChange(BlockPos pos, BlockState oldState, BlockState newState, Operation<Void> original) {
 		original.call(pos, oldState, newState);
 		if ((Object) this instanceof ServerLevel serverLevel) {
-			if (oldState.getBlock() instanceof NodeBindingPortal portal && portal.persistent()) {
-				((PortalNodeStorage.Duck) serverLevel.getServer()).mmodding$getPortalNodeStorage().removeBoundFrom(serverLevel, pos);
+			PortalNodeStorage storage = serverLevel.getServer().getDataStorage().get(PortalNodeStorage.TYPE);
+			if (storage != null && oldState.getBlock() instanceof NodeBindingPortal portal && portal.persistent()) {
+				storage.removeBoundFrom(serverLevel, pos);
 			}
 		}
 	}

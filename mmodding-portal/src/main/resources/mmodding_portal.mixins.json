@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "LevelMixin",
-    "MinecraftServerMixin",
     "PortalProcessorMixin",
     "ServerLevelMixin"
   ],

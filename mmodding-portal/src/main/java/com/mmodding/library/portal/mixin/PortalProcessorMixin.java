@@ -32,8 +32,9 @@ public class PortalProcessorMixin {
 
 	@WrapMethod(method = "getPortalDestination")
 	private TeleportTransition applyNodePersistence(ServerLevel serverLevel, Entity entity, Operation<TeleportTransition> original) {
-		if (this.portal instanceof NodeBindingPortal nodeBased && nodeBased.persistent()) {
-			GlobalPos maybePos = ((PortalNodeStorage.Duck) serverLevel.getServer()).mmodding$getPortalNodeStorage().getPossibleNodeTarget(serverLevel, this.entryPosition);
+		PortalNodeStorage storage = serverLevel.getServer().getDataStorage().get(PortalNodeStorage.TYPE);
+		if (storage != null && this.portal instanceof NodeBindingPortal nodeBased && nodeBased.persistent()) {
+			GlobalPos maybePos = storage.getPossibleNodeTarget(serverLevel, this.entryPosition);
 			if (maybePos != null) {
 				ServerLevel destinationLevel = Objects.requireNonNull(serverLevel.getServer().getLevel(maybePos.dimension()), "Invalid level: " + maybePos.dimension());
 				BlockPos suitablePos = maybePos.pos();
