@@ -2,7 +2,7 @@
 # The latest versions are available at https://lambdaurora.dev/tools/import_quilt.html
 # For Convention Plugins
 fabric_loom = "1.17-SNAPSHOT"
-mmodding_gradle = "0.1.6-beta"
+mmodding_gradle = "0.1.7-beta"
 
 java = "25"
 minecraft = "26.2"
