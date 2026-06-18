@@ -17,6 +17,7 @@ mmodding {
 		bundle("mmodding-config")
 		bundle("mmodding-core")
 		bundle("mmodding-datagen")
+		bundle("mmodding-energy")
 		bundle("mmodding-enchantment")
 		bundle("mmodding-fluid")
 		bundle("mmodding-inventory")
