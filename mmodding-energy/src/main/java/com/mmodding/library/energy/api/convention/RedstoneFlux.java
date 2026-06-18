@@ -9,7 +9,7 @@ import com.mmodding.library.energy.api.EnergyUnit;
  */
 public final class RedstoneFlux implements EnergyUnit {
 
-	public static final EnergyUnit INSTANCE = new RedstoneFlux();
+	public static final EnergyUnit UNIT = new RedstoneFlux();
 
 	private RedstoneFlux() {}
 

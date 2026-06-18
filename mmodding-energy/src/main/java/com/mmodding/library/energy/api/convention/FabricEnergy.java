@@ -7,7 +7,7 @@ import com.mmodding.library.energy.api.EnergyUnit;
  */
 public final class FabricEnergy implements EnergyUnit {
 
-	public static final EnergyUnit INSTANCE = new FabricEnergy();
+	public static final EnergyUnit UNIT = new FabricEnergy();
 
 	private FabricEnergy() {}
 
