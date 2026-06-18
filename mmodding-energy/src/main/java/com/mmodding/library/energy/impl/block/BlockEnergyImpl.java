@@ -16,14 +16,15 @@ public final class BlockEnergyImpl {
 
 	public static final BlockApiLookup<EnergyStorage, Direction> SIDED = BlockApiLookup.get(MModdingLibrary.createId("energy"), EnergyStorage.class, Direction.class);
 
-	public static final Set<Block> DEFINITIONS_LOCK = Sets.newIdentityHashSet();
+	private static final Set<Block> DEFINITIONS_LOCK = Sets.newIdentityHashSet();
 
 	private BlockEnergyImpl() {}
 
 	public static void defineEnergyStorage(Block block, long capacity, EnergyUnit unit, BlockEnergy.StorageQueryHandler handler) {
 		if (DEFINITIONS_LOCK.contains(block)) {
-			throw new IllegalStateException("Block " + block + " already has a defined storage selector!");
+			throw new IllegalStateException("Block " + block + " already has a defined storage query!");
 		}
+		DEFINITIONS_LOCK.add(block);
 		SIDED.registerForBlocks((level, pos, _, _, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
 			return handler.handle(
@@ -37,8 +38,9 @@ public final class BlockEnergyImpl {
 
 	public static void defineStorageQueryDelegate(Block block, BlockEnergy.StorageQueryDelegator handler) {
 		if (DEFINITIONS_LOCK.contains(block)) {
-			throw new IllegalStateException();
+			throw new IllegalStateException("Block " + block + " already has a defined storage query!");
 		}
+		DEFINITIONS_LOCK.add(block);
 		SIDED.registerForBlocks((level, pos, _, _, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
 			return handler.handle(serverLevel, pos, side);

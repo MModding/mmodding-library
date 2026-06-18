@@ -5,47 +5,38 @@ import com.mmodding.library.energy.api.storage.EnergyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 
-public class EnergyStorageImpl extends SnapshotParticipant<Long> implements EnergyStorage {
+public abstract class AbstractEnergyStorageImpl extends SnapshotParticipant<Long> implements EnergyStorage {
 
 	private final long capacity;
 	private final EnergyUnit unit;
 
-	private long energyAmount = 0;
-
-	public EnergyStorageImpl(long capacity, EnergyUnit unit) {
+	public AbstractEnergyStorageImpl(long capacity, EnergyUnit unit) {
 		this.capacity = capacity;
 		this.unit = unit;
 	}
 
-	public void setAmount(long energyAmount) {
-		this.energyAmount = energyAmount;
-	}
+	public abstract void setAmount(long amount);
 
 	@Override
 	public void append(TransactionContext context, long amount) {
 		updateSnapshots(context);
-		this.energyAmount += Math.min(this.capacity - this.energyAmount, amount);
+		this.setAmount(this.amount() + Math.min(this.capacity - this.amount(), amount));
 	}
 
 	@Override
 	public void revoke(TransactionContext context, long amount) {
 		updateSnapshots(context);
-		this.energyAmount -= Math.max(this.energyAmount, amount);
+		this.setAmount(this.amount() - Math.max(this.amount(), amount));
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return this.energyAmount == 0;
+		return this.amount() == 0;
 	}
 
 	@Override
 	public boolean isFull() {
-		return this.energyAmount == this.capacity;
-	}
-
-	@Override
-	public long amount() {
-		return this.energyAmount;
+		return this.amount() == this.capacity;
 	}
 
 	@Override
@@ -60,11 +51,11 @@ public class EnergyStorageImpl extends SnapshotParticipant<Long> implements Ener
 
 	@Override
 	protected Long createSnapshot() {
-		return this.energyAmount;
+		return this.amount();
 	}
 
 	@Override
 	protected void readSnapshot(Long snapshot) {
-		this.energyAmount = snapshot;
+		this.setAmount(snapshot);
 	}
 }

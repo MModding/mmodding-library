@@ -4,7 +4,8 @@ import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.core.api.serialization.MModdingCodecs;
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.storage.EnergyStorage;
-import com.mmodding.library.energy.impl.storage.EnergyStorageImpl;
+import com.mmodding.library.energy.impl.storage.AbstractEnergyStorageImpl;
+import com.mmodding.library.energy.impl.storage.DedicatedEnergyStorageImpl;
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -44,7 +45,7 @@ public class BlockEnergySavedData extends SavedData {
 	public EnergyStorage getOrComputeDefinition(BlockPos pos, long capacity, EnergyUnit unit) {
 		this.setDirty();
 		return this.storage.computeIfAbsent(pos, p -> {
-			EnergyStorageImpl impl = new EnergyStorageImpl(capacity, unit);
+			AbstractEnergyStorageImpl impl = new DedicatedEnergyStorageImpl(capacity, unit);
 			if (this.loaded.containsKey(p)) impl.setAmount(this.loaded.get(p));
 			return impl;
 		});
