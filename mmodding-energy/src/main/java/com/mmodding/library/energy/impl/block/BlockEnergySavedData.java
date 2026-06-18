@@ -51,6 +51,12 @@ public class BlockEnergySavedData extends SavedData {
 		});
 	}
 
+	public void removeIfPresent(BlockPos pos) {
+		this.loaded.remove(pos);
+		this.storage.remove(pos);
+		this.setDirty();
+	}
+
 	public Map<BlockPos, Long> storage() {
 		this.storage.forEach((pos, storage) -> this.loaded.put(pos, storage.amount()));
 		return this.loaded;
