@@ -30,6 +30,7 @@ Current Modules Table:
 | mmodding-core             | Candidate    | The Core of the Library                                |
 | mmodding-datagen          | Candidate    | Data Generation Management and Automation              |
 | mmodding-enchantment      | Experimental | Enchantment Management, Families                       |
+| mmodding-energy           | Experimental | Energy Definitions, Energy Storages, Energy Units      |
 | mmodding-fluid            | Experimental | Fluid Management, Properties                           |
 | mmodding-item             | Stable       | Item Management, Catalog                               |
 | mmodding-java             | Candidate    | Collection of Java Utilities                           |
