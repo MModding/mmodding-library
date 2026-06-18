@@ -7,4 +7,9 @@ mmodding {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 	}
+	configureFabricModJson {
+		withEntrypoints {
+			init("com.mmodding.library.energy.impl.MModdingEnergyInitializer")
+		}
+	}
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
-public class ItemEnergy {
+public final class ItemEnergy {
 
 	private ItemEnergy() {}
 
