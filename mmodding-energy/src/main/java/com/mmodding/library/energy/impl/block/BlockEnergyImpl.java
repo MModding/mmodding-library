@@ -42,6 +42,6 @@ public final class BlockEnergyImpl {
 		SIDED.registerForBlocks((level, pos, _, _, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
 			return handler.handle(serverLevel, pos, side);
-		});
+		}, block);
 	}
 }
