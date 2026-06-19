@@ -39,7 +39,7 @@ fun Project.getModuleName() : String {
         projectName += if (sub[0] == 'm' && sub[1] == 'm') {
             sub[0].uppercase() + sub[1].uppercase() + sub.substring(2) + " "
         } else {
-            projectName + sub[0].uppercase() + sub.substring(1) + " "
+            sub[0].uppercase() + sub.substring(1) + " "
         }
     }
     return if (!projectName.contains("Mod Integration")) projectName + "Library"
