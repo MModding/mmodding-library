@@ -7,8 +7,8 @@
 [![CurseForge](https://img.shields.io/curseforge/dt/694928?style=for-the-badge&logo=curseforge&color=orange
 )](https://www.curseforge.com/minecraft/mc-mods/mmodding-library)
 
-[![JitPack](https://jitpack.io/v/com.mmodding/mmodding-library.svg)](https://jitpack.io/#com.mmodding/mmodding-library)
-![Java CI with Gradle](https://github.com/MModding/mmodding-library/actions/workflows/gradle.yml/badge.svg?branch=main)
+[![MModding Maven](https://maven.mmodding.com/api/badge/latest/releases/com/mmodding/mmodding-library?name=MModding%20Maven)](https://maven.mmodding.com/#/releases/com/mmodding/mmodding-library)
+![Java CI with Gradle](https://github.com/MModding/mmodding-library/actions/workflows/build.yml/badge.svg)
 
 ## Overview
 
