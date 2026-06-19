@@ -115,12 +115,12 @@ mmodding {
     }
 }
 
-tasks.named<Jar>("jar") {
-    from(rootProject.projectDir.path + "/LICENSE.md") {
+setOf(tasks.named<Jar>("jar").get(), tasks.named<Jar>("sourcesJar").get()).forEach { task ->
+    task.from(rootProject.projectDir.path + "/LICENSE.md") {
         rename { "${it}_${base.archivesName.get()}" }
     }
     if (project != rootProject) {
-        from(rootProject.projectDir.path + "/src/main/resources/assets/mmodding/icon.png") {
+        task.from(rootProject.projectDir.path + "/src/main/resources/assets/mmodding/icon.png") {
             into("assets/" + getModuleNamespace())
         }
     }
