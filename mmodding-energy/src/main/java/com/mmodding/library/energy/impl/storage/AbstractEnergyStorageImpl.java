@@ -26,7 +26,7 @@ public abstract class AbstractEnergyStorageImpl extends SnapshotParticipant<Long
 	@Override
 	public void revoke(TransactionContext context, long amount) {
 		updateSnapshots(context);
-		this.setAmount(this.amount() - Math.max(this.amount(), amount));
+		this.setAmount(this.amount() - Math.min(this.amount(), amount));
 	}
 
 	@Override

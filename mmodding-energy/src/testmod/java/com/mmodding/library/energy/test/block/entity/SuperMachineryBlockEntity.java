@@ -23,7 +23,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 public class SuperMachineryBlockEntity extends BaseContainerBlockEntity {
 
-	private final NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
+	private NonNullList<ItemStack> items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 
 	public SuperMachineryBlockEntity(BlockPos worldPosition, BlockState blockState) {
 		super(EnergyTestBlockEntities.SUPER_MACHINERY, worldPosition, blockState);
@@ -41,15 +41,13 @@ public class SuperMachineryBlockEntity extends BaseContainerBlockEntity {
 
 	@Override
 	protected void setItems(NonNullList<ItemStack> items) {
-		this.items.clear();
-		this.items.addAll(items);
+		this.items = items;
 	}
 
 	@Override
 	protected void loadAdditional(ValueInput input) {
 		super.loadAdditional(input);
-		this.items.clear();
-		this.items.addAll(NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY));
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(input, this.items);
 	}
 
@@ -61,7 +59,7 @@ public class SuperMachineryBlockEntity extends BaseContainerBlockEntity {
 
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return new SuperMachineryMenu(containerId, inventory);
+		return new SuperMachineryMenu(containerId, inventory, this);
 	}
 
 	@Override
@@ -78,9 +76,9 @@ public class SuperMachineryBlockEntity extends BaseContainerBlockEntity {
 			if (storage.amount() >= 20 && blockEntity.getItem(0).is(Items.EMERALD)) {
 				try (Transaction transaction = Transaction.openOuter()) {
 					storage.revoke(transaction, 20);
-					if ((blockEntity.getItem(0).is(Items.DIAMOND) || blockEntity.isEmpty()) && blockEntity.getItem(1).getCount() < blockEntity.getItem(1).getMaxStackSize()) {
+					if ((blockEntity.getItem(1).is(Items.DIAMOND) || blockEntity.getItem(1).isEmpty()) && blockEntity.getItem(1).getCount() < blockEntity.getItem(1).getMaxStackSize()) {
 						blockEntity.removeItem(0, 1);
-						blockEntity.setItem(1, new ItemStack(Items.EMERALD, blockEntity.getItem(1).count() + 1));
+						blockEntity.setItem(1, new ItemStack(Items.DIAMOND, blockEntity.getItem(1).count() + 1));
 						transaction.commit();
 					}
 				}

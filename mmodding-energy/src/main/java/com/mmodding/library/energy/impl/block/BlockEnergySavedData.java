@@ -38,7 +38,7 @@ public class BlockEnergySavedData extends SavedData {
 	}
 
 	public BlockEnergySavedData(Map<BlockPos, Long> loaded) {
-		this.loaded = loaded;
+		this.loaded = new Object2ObjectOpenHashMap<>(loaded);
 		this.storage = new Object2ObjectOpenHashMap<>();
 	}
 

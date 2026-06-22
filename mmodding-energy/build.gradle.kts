@@ -16,6 +16,7 @@ mmodding {
 	configureTestmod {
 		withEntrypoints {
 			init("com.mmodding.library.energy.test.EnergyTests")
+			client("com.mmodding.library.energy.test.client.EnergyClientTests")
 		}
 	}
 }
