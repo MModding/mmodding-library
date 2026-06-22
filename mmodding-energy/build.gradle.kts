@@ -9,6 +9,7 @@ mmodding {
 		testmodImplementation("mmodding-block")
 	}
 	configureFabricModJson {
+		addMixin("mmodding_energy.mixins.json")
 		withEntrypoints {
 			init("com.mmodding.library.energy.impl.MModdingEnergyInitializer")
 		}
