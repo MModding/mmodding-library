@@ -7,6 +7,7 @@ mmodding {
 		implementation("mmodding-core")
 		implementation("mmodding-java")
 		testmodImplementation("mmodding-block")
+		testmodImplementation("mmodding-inventory")
 	}
 	configureFabricModJson {
 		addMixin("mmodding_energy.mixins.json")
