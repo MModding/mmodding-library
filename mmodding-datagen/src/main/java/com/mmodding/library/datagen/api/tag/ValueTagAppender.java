@@ -1,5 +1,6 @@
 package com.mmodding.library.datagen.api.tag;
 
+import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 
 import java.util.Arrays;
@@ -29,4 +30,18 @@ public interface ValueTagAppender<T> {
 	ValueTagAppender<T> addTag(TagKey<T> tag);
 
 	ValueTagAppender<T> addOptionalTag(TagKey<T> tag);
+
+	ValueTagAppender<T> setReplace(boolean replace);
+
+	ValueTagAppender<T> forceAddTag(TagKey<T> tag);
+
+	ValueTagAppender<T> remove(T element);
+
+	ValueTagAppender<T> removeAll(final Collection<T> elements);
+
+	ValueTagAppender<T> removeAll(final Stream<T> elements);
+
+	ValueTagAppender<T> removeTag(TagKey<T> tag);
+
+	TagBuilder getBuilder();
 }
