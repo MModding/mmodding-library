@@ -9,8 +9,10 @@ import net.minecraft.world.item.Item;
  */
 public class SimpleEnergyItem extends Item {
 
+	protected final ItemEnergy.AccessKey accessKey;
+
 	public SimpleEnergyItem(int capacity, EnergyUnit unit, Properties properties) {
 		super(properties);
-		ItemEnergy.defineEnergyStorage(this, capacity, unit, (_, internalStorage) -> internalStorage);
+		this.accessKey = ItemEnergy.defineEnergyStorage(this, capacity, unit, (_, internalStorage) -> internalStorage);
 	}
 }

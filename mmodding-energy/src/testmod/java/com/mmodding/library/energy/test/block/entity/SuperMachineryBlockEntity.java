@@ -6,7 +6,6 @@ import com.mmodding.library.energy.test.init.EnergyTestBlockEntities;
 import com.mmodding.library.energy.test.inventory.SuperMachineryMenu;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -68,11 +67,8 @@ public class SuperMachineryBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState blockState, SuperMachineryBlockEntity blockEntity) {
-		if (level instanceof ServerLevel serverLevel) {
-			EnergyStorage storage = BlockEnergy.queryStorage(serverLevel, pos, Direction.UP);
-			if (storage == null) {
-				throw new IllegalStateException();
-			}
+		if (level instanceof ServerLevel) {
+			EnergyStorage storage = BlockEnergy.accessStorage(blockEntity);
 			if (storage.amount() >= 20 && blockEntity.getItem(0).is(Items.EMERALD)) {
 				try (Transaction transaction = Transaction.openOuter()) {
 					storage.revoke(transaction, 20);
