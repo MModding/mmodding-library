@@ -28,10 +28,10 @@ public final class BlockEnergy {
 
 	/**
 	 * Accesses the {@link EnergyStorage} associated to the given {@link BlockEntity}.
-	 * <br>You can see it as a block "instance"; the purpose of this method is, by such,
-	 * to give access to the storage associated to the block entity, only when defining
-	 * its behavior through its implementation. To look up and interact with other storages
-	 * you will <b>always use</b> {@link BlockEnergy#queryStorage(ServerLevel, BlockPos, Direction)}.
+	 * <br>You can see a block entity as a block "instance"; the purpose of this method is, by such, to give access
+	 * to the storage associated to the block entity, only when defining its behavior through its implementation.
+	 * To look up and interact with other storages you will <b>always use</b>
+	 * {@link BlockEnergy#queryStorage(ServerLevel, BlockPos, Direction)}.
 	 * @param blockEntity the block entity
 	 * @return the energy storage
 	 * @throws IllegalStateException if the block entity is not in any level

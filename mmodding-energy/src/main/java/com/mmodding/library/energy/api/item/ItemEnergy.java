@@ -3,6 +3,7 @@ package com.mmodding.library.energy.api.item;
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.storage.EnergyStorage;
 import com.mmodding.library.energy.impl.item.ItemEnergyImpl;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -52,11 +53,12 @@ public final class ItemEnergy {
 		/**
 		 * Handles a storage query with provided context.
 		 * @param stack the item stack
+		 * @param context the container item context
 		 * @param internalStorage the internal storage for the item instance
 		 * @return the possible energy storage
 		 */
 		@Nullable
-		EnergyStorage handle(ItemStack stack, EnergyStorage internalStorage);
+		EnergyStorage handle(ItemStack stack, ContainerItemContext context, EnergyStorage internalStorage);
 	}
 
 	/**

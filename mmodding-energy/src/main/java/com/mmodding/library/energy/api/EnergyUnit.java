@@ -1,12 +1,14 @@
 package com.mmodding.library.energy.api;
 
-import org.jetbrains.annotations.ApiStatus;
-
 /**
  * A way to represent an {@link EnergyUnit}, with conversions to standards for interconnected
  * energy transfers.
  */
 public interface EnergyUnit {
+
+	static long convert(EnergyUnit current, long amount, EnergyUnit other) {
+		return current == other ? amount : other.fromFabricEnergy(current.toFabricEnergy(amount));
+	}
 
 	/**
 	 * Converts a specified amount of energy from this unit into Fabric Energy (E).
@@ -21,9 +23,4 @@ public interface EnergyUnit {
 	 * @return the converted amount
 	 */
 	long fromFabricEnergy(long amount);
-
-	@ApiStatus.NonExtendable
-	default long convertTo(EnergyUnit another, long amount) {
-		return this == another ? amount : another.fromFabricEnergy(this.toFabricEnergy(amount));
-	}
 }

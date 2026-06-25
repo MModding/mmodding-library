@@ -2,6 +2,8 @@ package com.mmodding.library.energy.api.storage;
 
 import com.mmodding.library.energy.api.EnergyUnit;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,37 @@ public abstract class EnergyStorageCollection implements EnergyStorage {
 		this.totalCapacity = 0L;
 	}
 
+	@Override
+	@ApiStatus.NonExtendable
+	public long push(EnergyStorage target, long amount, @Nullable TransactionContext maybeParent) {
+		return EnergyStorage.super.push(target, amount, maybeParent);
+	}
+
+	@Override
+	@ApiStatus.NonExtendable
+	public long pull(EnergyStorage target, long amount, @Nullable TransactionContext maybeParent) {
+		return EnergyStorage.super.pull(target, amount, maybeParent);
+	}
+
+	@Override
+	@ApiStatus.NonExtendable
+	public void pushFixed(EnergyStorage target, long amount, @Nullable TransactionContext maybeParent) {
+		EnergyStorage.super.pushFixed(target, amount, maybeParent);
+	}
+
+	@Override
+	@ApiStatus.NonExtendable
+	public void pullFixed(EnergyStorage target, long amount, @Nullable TransactionContext maybeParent) {
+		EnergyStorage.super.pullFixed(target, amount, maybeParent);
+	}
+
 	/**
 	 * Pushes a new storage into this storage collection.
 	 * @param storage the energy storage
 	 */
 	public final void pushStorage(EnergyStorage storage) {
 		this.collection.add(storage);
-		this.totalCapacity += storage.unit().convertTo(this.unit, storage.capacity());
+		this.totalCapacity += EnergyUnit.convert(storage.unit(), storage.capacity(), this.unit);
 	}
 
 	@Override
@@ -52,7 +78,7 @@ public abstract class EnergyStorageCollection implements EnergyStorage {
 	@Override
 	public long amount() {
 		return this.collection.stream()
-			.map(storage -> storage.unit().convertTo(this.unit, storage.amount()))
+			.map(storage -> EnergyUnit.convert(storage.unit(), storage.amount(), this.unit))
 			.reduce(0L, Long::sum);
 	}
 

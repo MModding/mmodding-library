@@ -9,6 +9,7 @@ import com.mmodding.library.energy.impl.storage.ItemEnergyStorageImpl;
 import com.mmodding.library.java.api.container.Pair;
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,7 +23,7 @@ import java.util.Set;
 
 public class ItemEnergyImpl {
 
-	public static final ItemApiLookup<EnergyStorage, Void> ENERGY = ItemApiLookup.get(MModdingLibrary.createId("energy"), EnergyStorage.class, Void.class);
+	public static final ItemApiLookup<EnergyStorage, ContainerItemContext> ENERGY = ItemApiLookup.get(MModdingLibrary.createId("energy"), EnergyStorage.class, ContainerItemContext.class);
 
 	public static final DataComponentType<Long> ENERGY_AMOUNT = DataComponentType.<Long>builder()
 		.persistent(Codec.LONG)
@@ -54,7 +55,7 @@ public class ItemEnergyImpl {
 		ItemEnergy.AccessKey key = new ItemEnergy.AccessKey();
 		ACCESS_KEYS.put(key, item);
 		ENERGY.registerForItems(
-			(stack, _) -> handler.handle(stack, new ItemEnergyStorageImpl(
+			(stack, context) -> handler.handle(stack, context, new ItemEnergyStorageImpl(
 				stack,
 				DEFINITIONS.get(item).first(),
 				DEFINITIONS.get(item).second())
