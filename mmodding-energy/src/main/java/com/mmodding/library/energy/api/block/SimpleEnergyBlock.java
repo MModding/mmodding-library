@@ -1,16 +1,16 @@
 package com.mmodding.library.energy.api.block;
 
 import com.mmodding.library.energy.api.EnergyUnit;
-import com.mmodding.library.energy.api.storage.EnergyStorage;
+import com.mmodding.library.energy.api.access.EnergyAccess;
 import net.minecraft.world.level.block.Block;
 
 /**
- * A simple {@link Block} holding a {@link EnergyStorage}, always accessible from any context.
+ * A simple {@link Block} holding a {@link EnergyAccess}, always accessible from any context.
  */
 public class SimpleEnergyBlock extends Block {
 
 	public SimpleEnergyBlock(int capacity, EnergyUnit unit, Properties properties) {
 		super(properties);
-		BlockEnergy.defineEnergyStorage(this, capacity, unit, (_, _, _, internalStorage) -> internalStorage);
+		BlockEnergy.defineEnergy(this, capacity, unit, (_, _, _, internalStorage) -> EnergyAccess.from(internalStorage));
 	}
 }

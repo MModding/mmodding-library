@@ -2,10 +2,10 @@ package com.mmodding.library.energy.impl.block;
 
 import com.mmodding.library.core.api.MModdingLibrary;
 import com.mmodding.library.core.api.serialization.MModdingCodecs;
+import com.mmodding.library.energy.api.EnergyComponent;
 import com.mmodding.library.energy.api.EnergyUnit;
-import com.mmodding.library.energy.api.storage.EnergyStorage;
-import com.mmodding.library.energy.impl.storage.AbstractEnergyStorageImpl;
-import com.mmodding.library.energy.impl.storage.DedicatedEnergyStorageImpl;
+import com.mmodding.library.energy.impl.EnergyComponentImpl;
+import com.mmodding.library.energy.impl.data.DedicatedEnergyData;
 import com.mmodding.library.java.api.container.Pair;
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -27,42 +27,33 @@ public class BlockEnergySavedData extends SavedData {
 		BlockEnergySavedData::new,
 		Codec.unboundedMap(
 			MModdingCodecs.STRING_BLOCKPOS,
-			Codec.LONG
+			Codec.LONG.xmap(DedicatedEnergyData::new, DedicatedEnergyData::getAmount)
 		).xmap(BlockEnergySavedData::new, BlockEnergySavedData::storage),
 		null
 	);
 
-	private final Map<BlockPos, Long> loaded;
-	private final Map<BlockPos, EnergyStorage> storage;
+	private final Map<BlockPos, DedicatedEnergyData> storage;
 
 	public BlockEnergySavedData() {
-		this.loaded = new Object2ObjectOpenHashMap<>();
 		this.storage = new Object2ObjectOpenHashMap<>();
 	}
 
-	public BlockEnergySavedData(Map<BlockPos, Long> loaded) {
-		this.loaded = new Object2ObjectOpenHashMap<>(loaded);
-		this.storage = new Object2ObjectOpenHashMap<>();
+	public BlockEnergySavedData(Map<BlockPos, DedicatedEnergyData> storage) {
+		this.storage = new Object2ObjectOpenHashMap<>(storage);
 	}
 
-	public EnergyStorage getOrComputeDefinition(BlockPos pos, Block type) {
+	public EnergyComponent getComponent(BlockPos pos, Block type) {
 		this.setDirty();
-		return this.storage.computeIfAbsent(pos, p -> {
-			Pair<Long, EnergyUnit> definition = Objects.requireNonNull(BlockEnergyImpl.DEFINITIONS.get(type), "Unregistered Block Energy Definition for block " + type);
-			AbstractEnergyStorageImpl impl = new DedicatedEnergyStorageImpl(definition.first(), definition.second());
-			if (this.loaded.containsKey(p)) impl.setAmount(this.loaded.get(p));
-			return impl;
-		});
+		Pair<Long, EnergyUnit> definition = Objects.requireNonNull(BlockEnergyImpl.DEFINITIONS.get(type), "Unregistered Block Energy Definition for block " + type);
+		return new EnergyComponentImpl(definition.first(), definition.second(), this.storage.computeIfAbsent(pos, _ -> new DedicatedEnergyData(0L)));
 	}
 
 	public void removeIfPresent(BlockPos pos) {
-		this.loaded.remove(pos);
 		this.storage.remove(pos);
 		this.setDirty();
 	}
 
-	public Map<BlockPos, Long> storage() {
-		this.storage.forEach((pos, storage) -> this.loaded.put(pos, storage.amount()));
-		return this.loaded;
+	public Map<BlockPos, DedicatedEnergyData> storage() {
+		return this.storage;
 	}
 }

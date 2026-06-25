@@ -2,6 +2,7 @@ package com.mmodding.library.energy.test.block;
 
 import com.mmodding.library.energy.api.block.BlockEnergy;
 import com.mmodding.library.energy.api.convention.FabricEnergy;
+import com.mmodding.library.energy.api.access.EnergyAccess;
 import com.mmodding.library.energy.test.block.entity.SuperMachineryBlockEntity;
 import com.mmodding.library.energy.test.init.EnergyTestBlockEntities;
 import com.mojang.serialization.MapCodec;
@@ -24,9 +25,9 @@ public class SuperMachineryBlock extends BaseEntityBlock {
 
 	public SuperMachineryBlock(Properties properties) {
 		super(properties);
-		BlockEnergy.defineEnergyStorage(
+		BlockEnergy.defineEnergy(
 			this, 10000L, FabricEnergy.UNIT,
-			(_, _, side, internalStorage) -> side.equals(Direction.UP) ? internalStorage : null
+			(_, _, side, internalStorage) -> Direction.UP.equals(side) ? EnergyAccess.from(internalStorage) : null
 		);
 	}
 

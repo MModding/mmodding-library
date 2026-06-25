@@ -1,7 +1,8 @@
 package com.mmodding.library.energy.api.block;
 
+import com.mmodding.library.energy.api.EnergyComponent;
 import com.mmodding.library.energy.api.EnergyUnit;
-import com.mmodding.library.energy.api.storage.EnergyStorage;
+import com.mmodding.library.energy.api.access.EnergyAccess;
 import com.mmodding.library.energy.impl.block.BlockEnergyImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,40 +16,40 @@ public final class BlockEnergy {
 	private BlockEnergy() {}
 
 	/**
-	 * Queries an {@link EnergyStorage} in a specified level, at a specified block position, and for a specified side.
+	 * Queries an {@link EnergyAccess} in a specified level, at a specified block position, and for a specified side.
 	 * @param level the level
 	 * @param pos the block position
 	 * @param side the side
-	 * @return the possibly found energy storage
+	 * @return the possibly found energy access
 	 */
 	@Nullable
-	public static EnergyStorage queryStorage(ServerLevel level, BlockPos pos, Direction side) {
+	public static EnergyAccess query(ServerLevel level, BlockPos pos, @Nullable Direction side) {
 		return BlockEnergyImpl.SIDED.find(level, pos, side);
 	}
 
 	/**
-	 * Accesses the {@link EnergyStorage} associated to the given {@link BlockEntity}.
+	 * Accesses the {@link EnergyComponent} associated to the given {@link BlockEntity}.
 	 * <br>You can see a block entity as a block "instance"; the purpose of this method is, by such, to give access
-	 * to the storage associated to the block entity, only when defining its behavior through its implementation.
-	 * To look up and interact with other storages you will <b>always use</b>
-	 * {@link BlockEnergy#queryStorage(ServerLevel, BlockPos, Direction)}.
+	 * to the component associated to the block entity, only when defining its behavior through its implementation.
+	 * To look up and interact with storages you will <b>always use</b>
+	 * {@link BlockEnergy#query(ServerLevel, BlockPos, Direction)}.
 	 * @param blockEntity the block entity
-	 * @return the energy storage
+	 * @return the energy component
 	 * @throws IllegalStateException if the block entity is not in any level
 	 */
-	public static EnergyStorage accessStorage(BlockEntity blockEntity) {
-		return BlockEnergyImpl.accessStorage(blockEntity);
+	public static EnergyComponent retrieveFrom(BlockEntity blockEntity) {
+		return BlockEnergyImpl.retrieveFrom(blockEntity);
 	}
 
 	/**
-	 * Defines an energy storage for this block.
+	 * Defines the energy specification for this block.
 	 * @param block the block
 	 * @param capacity the energy capacity
 	 * @param unit the energy unit
 	 * @param handler the storage query handler
 	 */
-	public static void defineEnergyStorage(Block block, long capacity, EnergyUnit unit, StorageQueryHandler handler) {
-		BlockEnergyImpl.defineEnergyStorage(block, capacity, unit, handler);
+	public static void defineEnergy(Block block, long capacity, EnergyUnit unit, AccessQueryHandler handler) {
+		BlockEnergyImpl.defineEnergy(block, capacity, unit, handler);
 	}
 
 	/**
@@ -57,25 +58,25 @@ public final class BlockEnergy {
 	 * @param block the block
 	 * @param handler the storage query handler, without an internal storage
 	 */
-	public static void defineStorageQueryDelegate(Block block, StorageQueryDelegator handler) {
-		BlockEnergyImpl.defineStorageQueryDelegate(block, handler);
+	public static void defineEnergyDelegate(Block block, HeadlessQueryHandler handler) {
+		BlockEnergyImpl.defineEnergyDelegate(block, handler);
 	}
 
-	public interface StorageQueryHandler {
+	public interface AccessQueryHandler {
 
 		/**
 		 * Handles a storage query with provided context.
 		 * @param level the level
 		 * @param pos the block position
 		 * @param side the side
-		 * @param internalStorage the internal storage for the block instance
+		 * @param internalComponent the internal component for the block instance
 		 * @return the possible energy storage
 		 */
 		@Nullable
-		EnergyStorage handle(ServerLevel level, BlockPos pos, Direction side, EnergyStorage internalStorage);
+		EnergyAccess handle(ServerLevel level, BlockPos pos, @Nullable Direction side, EnergyComponent internalComponent);
 	}
 
-	public interface StorageQueryDelegator {
+	public interface HeadlessQueryHandler {
 
 		/**
 		 * Handles a storage query with the provided context.
@@ -85,6 +86,6 @@ public final class BlockEnergy {
 		 * @return the possible energy storage
 		 */
 		@Nullable
-		EnergyStorage handle(ServerLevel level, BlockPos pos, Direction side);
+		EnergyAccess handle(ServerLevel level, BlockPos pos, @Nullable Direction side);
 	}
 }
