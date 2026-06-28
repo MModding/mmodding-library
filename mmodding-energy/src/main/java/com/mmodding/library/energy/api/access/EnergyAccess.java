@@ -43,7 +43,8 @@ public interface EnergyAccess extends EnergyView {
 	 * @param maybeParent the possibly specified transition context parent, in case of nested transactions
 	 */
 	@ApiStatus.NonExtendable
-	default long transferTo(EnergyAccess target, long amount, @Nullable TransactionContext maybeParent) {
+	default long transferTo(@Nullable EnergyAccess target, long amount, @Nullable TransactionContext maybeParent) {
+		if (target == null) return 0;
 		long sourceClamped = Math.min(this.amount(), amount);
 		long targetClamped = Math.min(EnergyUnit.convert(target.unit(), target.remaining(), this.unit()), sourceClamped);
 		this.transferToFixed(target, targetClamped, maybeParent);
@@ -60,7 +61,8 @@ public interface EnergyAccess extends EnergyView {
 	 * @param maybeParent the possibly specified transition context parent, in case of nested transactions
 	 */
 	@ApiStatus.NonExtendable
-	default void transferToFixed(EnergyAccess target, long amount, @Nullable TransactionContext maybeParent) {
+	default void transferToFixed(@Nullable EnergyAccess target, long amount, @Nullable TransactionContext maybeParent) {
+		if (target == null) return;
 		try (Transaction transaction = Transaction.openNested(maybeParent)) {
 			if (this.amount() >= amount) {
 				this.revoke(transaction, amount);

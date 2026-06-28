@@ -31,7 +31,7 @@ public final class BlockEnergy {
 	 * Accesses the {@link EnergyComponent} associated to the given {@link BlockEntity}.
 	 * <br>You can see a block entity as a block "instance"; the purpose of this method is, by such, to give access
 	 * to the component associated to the block entity, only when defining its behavior through its implementation.
-	 * To look up and interact with storages you will <b>always use</b>
+	 * To look up and interact with other blocks you will <b>always use</b>
 	 * {@link BlockEnergy#query(ServerLevel, BlockPos, Direction)}.
 	 * @param blockEntity the block entity
 	 * @return the energy component
@@ -54,7 +54,7 @@ public final class BlockEnergy {
 
 	/**
 	 * Defines only a query for the current block.
-	 * <br>For example, it allows delegating the storage query to other block storages.
+	 * <br>For example, it allows delegating the access query to other block accesses.
 	 * @param block the block
 	 * @param handler the storage query handler, without an internal storage
 	 */

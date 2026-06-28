@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A special-case implementation of {@link EnergyAccess}, delegating to multiple other energy storages.
+ * A special-case implementation of {@link EnergyAccess}, delegating to multiple other energy accesses.
  * <br>You will need to implement the behavior of the storage collection with the two following methods:
  * <ul>
  *     <li>{@link EnergyAccess#append(TransactionContext, long)}</li>
  *     <li>{@link EnergyAccess#revoke(TransactionContext, long)}</li>
  * </ul>
- * <br>An application of this is storage redirection to multiple other energy storages.
- * <br><br>A good example would be energy cables: you collect energy storages linked through the cables,
- * and make this the energy storage of the cable, and using it would spread to other storages.
+ * <br>An application of this is storage redirection to multiple other energy accesses.
+ * <br><br>A good example would be energy cables: you collect energy accesses linked through the cables,
+ * and make this the energy storage of the cable, and using it would spread to other accesses.
  * @apiNote Collection order is preserved.
  */
 public abstract class CompilingEnergyAccess implements EnergyAccess {
@@ -31,12 +31,12 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 	}
 
 	/**
-	 * Pushes a new storage into this storage collection.
-	 * @param storage the energy storage
+	 * Pushes another access into this storage collection.
+	 * @param access the energy access
 	 */
-	public final void pushStorage(EnergyAccess storage) {
-		this.collection.add(storage);
-		this.totalCapacity += EnergyUnit.convert(storage.unit(), storage.capacity(), this.unit);
+	public final void pushAccess(EnergyAccess access) {
+		this.collection.add(access);
+		this.totalCapacity += EnergyUnit.convert(access.unit(), access.capacity(), this.unit);
 	}
 
 	@Override
