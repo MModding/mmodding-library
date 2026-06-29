@@ -13,12 +13,6 @@ public class InfiniteEnergyAccess implements EnergyAccess {
 	}
 
 	@Override
-	public void append(TransactionContext context, long amount) {}
-
-	@Override
-	public void revoke(TransactionContext context, long amount) {}
-
-	@Override
 	public boolean isEmpty() {
 		return false;
 	}
@@ -46,5 +40,25 @@ public class InfiniteEnergyAccess implements EnergyAccess {
 	@Override
 	public EnergyUnit unit() {
 		return this.unit;
+	}
+
+	@Override
+	public boolean supportsInsertion() {
+		return false;
+	}
+
+	@Override
+	public long insert(long amount, TransactionContext context) {
+		return Long.MAX_VALUE;
+	}
+
+	@Override
+	public boolean supportsExtraction() {
+		return true;
+	}
+
+	@Override
+	public long extract(long amount, TransactionContext context) {
+		return Long.MAX_VALUE;
 	}
 }

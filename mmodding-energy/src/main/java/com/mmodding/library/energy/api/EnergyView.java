@@ -4,7 +4,7 @@ import com.mmodding.library.energy.api.access.EnergyAccess;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * Abstraction of read-only property accesses for {@link EnergyComponent} and {@link EnergyAccess}
+ * Abstraction of read-only property accesses for {@link EnergyComponent} and {@link EnergyAccess}.
  */
 @ApiStatus.NonExtendable
 public interface EnergyView {

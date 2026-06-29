@@ -6,8 +6,15 @@ package com.mmodding.library.energy.api;
  */
 public interface EnergyUnit {
 
-	static long convert(EnergyUnit current, long amount, EnergyUnit other) {
-		return current == other ? amount : other.fromFabricEnergy(current.toFabricEnergy(amount));
+	/**
+	 * A method to convert an energy amount from an energy unit, to another.
+	 * @param amount the specified amount
+	 * @param from the sourcing energy unit
+	 * @param to the targeted energy unit
+	 * @return the converted amount
+	 */
+	static long convert(long amount, EnergyUnit from, EnergyUnit to) {
+		return from == to ? amount : to.fromFabricEnergy(from.toFabricEnergy(amount));
 	}
 
 	/**

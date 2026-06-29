@@ -6,8 +6,9 @@ import com.mmodding.library.energy.api.access.EnergyAccess;
 import com.mmodding.library.energy.impl.EnergyComponentImpl;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import org.jetbrains.annotations.NotNull;
 
-public class EnergyComponentAccess extends SnapshotParticipant<Long> implements EnergyAccess {
+public class EnergyComponentAccess extends SnapshotParticipant<@NotNull Long> implements EnergyAccess {
 
 	protected final EnergyComponentImpl component;
 
@@ -46,15 +47,29 @@ public class EnergyComponentAccess extends SnapshotParticipant<Long> implements 
 	}
 
 	@Override
-	public void append(TransactionContext context, long amount) {
-		updateSnapshots(context);
-		this.component.data().setAmount(this.amount() + amount);
+	public boolean supportsInsertion() {
+		return true;
 	}
 
 	@Override
-	public void revoke(TransactionContext context, long amount) {
+	public long insert(long amount, TransactionContext context) {
 		updateSnapshots(context);
-		this.component.data().setAmount(this.amount() - amount);
+		long actualAmount = Math.min(this.remaining(), amount);
+		this.component.data().setAmount(this.component.data().getAmount() + actualAmount);
+		return actualAmount;
+	}
+
+	@Override
+	public boolean supportsExtraction() {
+		return true;
+	}
+
+	@Override
+	public long extract(long amount, TransactionContext context) {
+		updateSnapshots(context);
+		long actualAmount = Math.min(this.amount(), amount);
+		this.component.data().setAmount(this.component.data().getAmount() - actualAmount);
+		return actualAmount;
 	}
 
 	@Override

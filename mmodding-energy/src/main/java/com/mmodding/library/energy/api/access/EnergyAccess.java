@@ -35,9 +35,8 @@ public interface EnergyAccess extends EnergyView {
 
 	/**
 	 * Pushes a specified amount of energy to a targeted {@link EnergyAccess}.
-	 * <br><br>This amount is adaptive: the amount is capped to the remaining energy
-	 * amount of the source and to the remaining space of the target before
-	 * being transferred.
+	 * <br><br>This amount is adaptive: it will be clamped to what's actually being inserted into the targeted
+	 * access and what's actually being extracted from the current access.
 	 * @param target the targeted access
 	 * @param amount the specified energy amount in this current access' energy unit
 	 * @param maybeParent the possibly specified transition context parent, in case of nested transactions
@@ -45,51 +44,52 @@ public interface EnergyAccess extends EnergyView {
 	@ApiStatus.NonExtendable
 	default long transferTo(@Nullable EnergyAccess target, long amount, @Nullable TransactionContext maybeParent) {
 		if (target == null) return 0;
-		long sourceClamped = Math.min(this.amount(), amount);
-		long targetClamped = Math.min(EnergyUnit.convert(target.unit(), target.remaining(), this.unit()), sourceClamped);
-		this.transferToFixed(target, targetClamped, maybeParent);
-		return targetClamped;
-	}
-
-	/**
-	 * Pushes a specified amount of energy to a targeted {@link EnergyAccess}.
-	 * <br><br>This amount is not adaptive: if the source does not have enough
-	 * energy amount or that the target does not have enough remaining space,
-	 * the transaction is canceled.
-	 * @param target the targeted access
-	 * @param amount the specified energy amount in this current access' energy unit
-	 * @param maybeParent the possibly specified transition context parent, in case of nested transactions
-	 */
-	@ApiStatus.NonExtendable
-	default void transferToFixed(@Nullable EnergyAccess target, long amount, @Nullable TransactionContext maybeParent) {
-		if (target == null) return;
-		try (Transaction transaction = Transaction.openNested(maybeParent)) {
-			if (this.amount() >= amount) {
-				this.revoke(transaction, amount);
-				long converted = EnergyUnit.convert(this.unit(), amount, target.unit());
-				if (target.remaining() >= converted) {
-					target.append(transaction, converted);
-					transaction.commit();
+		long extracted;
+		try (Transaction simulation = Transaction.openNested(maybeParent)) { extracted = this.extract(amount, simulation); }
+		long computed = 0;
+		try (Transaction transfer = Transaction.openNested(maybeParent)) {
+			if (extracted > 0) {
+				long extractedInTargetUnit = EnergyUnit.convert(extracted, this.unit(), target.unit());
+				long insertedInTargetUnit = target.insert(extractedInTargetUnit, transfer);
+				long inserted = EnergyUnit.convert(insertedInTargetUnit, target.unit(), this.unit());
+				if (inserted > 0) {
+					computed = this.extract(inserted, transfer);
+					transfer.commit();
 				}
 			}
 		}
+		return computed;
 	}
 
 	/**
-	 * <b>Should only be used by method overriders.</b>
-	 * <br>Appending a given amount of energy. Assumes it is capable of receiving it.
-	 * @param context the transaction context
-	 * @param amount the amount
+	 * Indicates if the insertion method will always return <code>0</code>, meaning that this access
+	 * does not have to be considered for insertion.
+	 * <br>In example, this is useful for energy cables.
+	 * @return a boolean which indicates if insertion is supported
 	 */
-	@ApiStatus.OverrideOnly
-	void append(TransactionContext context, long amount);
+	boolean supportsInsertion();
 
 	/**
-	 * <b>Should only be used by method overriders.</b>
-	 * <br>Revoking a given amount of energy. Assumes it is capable of removing it.
+	 * Inserting an amount of energy, computed from a specified amount.
 	 * @param context the transaction context
-	 * @param amount the amount
+	 * @param amount the energy amount
+	 * @return the actually inserted amount
 	 */
-	@ApiStatus.OverrideOnly
-	void revoke(TransactionContext context, long amount);
+	long insert(long amount, TransactionContext context);
+
+	/**
+	 * Indicates if the extraction method will always return <code>0</code>, meaning that this storage
+	 * does not have to be considered for extraction.
+	 * <br>In example, this is useful for energy cables.
+	 * @return a boolean which indicates if extraction is supported
+	 */
+	boolean supportsExtraction();
+
+	/**
+	 * Extracting an amount of energy, computed from a specified amount.
+	 * @param context the transaction context
+	 * @param amount the energy amount
+	 * @return the actually extracted amount
+	 */
+	long extract(long amount, TransactionContext context);
 }
