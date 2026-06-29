@@ -10,8 +10,8 @@ import java.util.List;
  * A special-case implementation of {@link EnergyAccess}, delegating to multiple other energy accesses.
  * <br>You will need to implement the behavior of the storage collection with the two following methods:
  * <ul>
- *     <li>{@link EnergyAccess#insert(TransactionContext, long)}</li>
- *     <li>{@link EnergyAccess#extract(TransactionContext, long)}</li>
+ *     <li>{@link EnergyAccess#insert(long, TransactionContext)}</li>
+ *     <li>{@link EnergyAccess#extract(long, TransactionContext)}</li>
  * </ul>
  * <br>An application of this is storage redirection to multiple other energy accesses.
  * <br><br>A good example would be energy cables: you collect energy accesses linked through the cables,
@@ -64,5 +64,15 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 	@Override
 	public EnergyUnit unit() {
 		return this.unit;
+	}
+
+	@Override
+	public boolean supportsInsertion() {
+		return this.collection.stream().anyMatch(EnergyAccess::supportsInsertion);
+	}
+
+	@Override
+	public boolean supportsExtraction() {
+		return this.collection.stream().anyMatch(EnergyAccess::supportsExtraction);
 	}
 }
