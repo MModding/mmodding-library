@@ -2,6 +2,7 @@ package com.mmodding.library.energy.api.access.catalog;
 
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.access.EnergyAccess;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.NotNull;
@@ -101,6 +102,9 @@ public class SidedEnergyAccess implements EnergyAccess {
 		}
 
 		private SideAccess(long insertionRate, long extractionRate) {
+			StoragePreconditions.notNegative(insertionRate);
+			StoragePreconditions.notNegative(extractionRate);
+
 			this.insertionRate = insertionRate;
 			this.extractionRate = extractionRate;
 		}

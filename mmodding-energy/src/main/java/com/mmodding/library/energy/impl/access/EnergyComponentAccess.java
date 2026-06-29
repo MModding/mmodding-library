@@ -4,6 +4,7 @@ import com.mmodding.library.energy.api.EnergyComponent;
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.access.EnergyAccess;
 import com.mmodding.library.energy.impl.EnergyComponentImpl;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +54,8 @@ public class EnergyComponentAccess extends SnapshotParticipant<@NotNull Long> im
 
 	@Override
 	public long insert(long amount, TransactionContext context) {
+		StoragePreconditions.notNegative(amount);
+
 		updateSnapshots(context);
 		long actualAmount = Math.min(this.remaining(), amount);
 		this.component.data().setAmount(this.component.data().getAmount() + actualAmount);
@@ -66,6 +69,8 @@ public class EnergyComponentAccess extends SnapshotParticipant<@NotNull Long> im
 
 	@Override
 	public long extract(long amount, TransactionContext context) {
+		StoragePreconditions.notNegative(amount);
+
 		updateSnapshots(context);
 		long actualAmount = Math.min(this.amount(), amount);
 		this.component.data().setAmount(this.component.data().getAmount() - actualAmount);

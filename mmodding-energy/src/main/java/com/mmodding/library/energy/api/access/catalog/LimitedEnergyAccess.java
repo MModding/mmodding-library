@@ -2,6 +2,7 @@ package com.mmodding.library.energy.api.access.catalog;
 
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.access.EnergyAccess;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 /**
@@ -14,6 +15,9 @@ public class LimitedEnergyAccess implements EnergyAccess {
 	private final long extractionRate;
 
 	public LimitedEnergyAccess(EnergyAccess delegate, long insertionRate, long extractionRate) {
+		StoragePreconditions.notNegative(insertionRate);
+		StoragePreconditions.notNegative(extractionRate);
+
 		this.delegate = delegate;
 		this.insertionRate = insertionRate;
 		this.extractionRate = extractionRate;
@@ -26,6 +30,8 @@ public class LimitedEnergyAccess implements EnergyAccess {
 
 	@Override
 	public long insert(long amount, TransactionContext context) {
+		StoragePreconditions.notNegative(amount);
+
 		return this.delegate.insert(Math.min(this.insertionRate, amount), context);
 	}
 
@@ -36,6 +42,8 @@ public class LimitedEnergyAccess implements EnergyAccess {
 
 	@Override
 	public long extract(long amount, TransactionContext context) {
+		StoragePreconditions.notNegative(amount);
+
 		return this.delegate.extract(Math.min(this.extractionRate, amount), context);
 	}
 
