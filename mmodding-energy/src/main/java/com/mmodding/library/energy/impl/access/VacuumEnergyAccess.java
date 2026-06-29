@@ -14,22 +14,22 @@ public class VacuumEnergyAccess implements EnergyAccess {
 
 	@Override
 	public boolean isEmpty() {
-		return false;
-	}
-
-	@Override
-	public boolean isFull() {
 		return true;
 	}
 
 	@Override
+	public boolean isFull() {
+		return false;
+	}
+
+	@Override
 	public long amount() {
-		return Long.MAX_VALUE;
+		return 0L;
 	}
 
 	@Override
 	public long remaining() {
-		return 0;
+		return Long.MAX_VALUE;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class VacuumEnergyAccess implements EnergyAccess {
 
 	@Override
 	public boolean supportsInsertion() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -54,11 +54,11 @@ public class VacuumEnergyAccess implements EnergyAccess {
 
 	@Override
 	public boolean supportsExtraction() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public long extract(long amount, TransactionContext context) {
-		return Long.MAX_VALUE;
+		return 0L;
 	}
 }

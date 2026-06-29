@@ -49,7 +49,7 @@ public class InfiniteEnergyAccess implements EnergyAccess {
 
 	@Override
 	public long insert(long amount, TransactionContext context) {
-		return Long.MAX_VALUE;
+		return 0L;
 	}
 
 	@Override
