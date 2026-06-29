@@ -3,12 +3,18 @@ package com.mmodding.library.energy.api.access;
 import com.mmodding.library.energy.api.EnergyComponent;
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.api.EnergyView;
+import com.mmodding.library.energy.api.access.catalog.LimitedEnergyAccess;
+import com.mmodding.library.energy.api.access.catalog.SidedEnergyAccess;
 import com.mmodding.library.energy.impl.access.EnergyComponentAccess;
 import com.mmodding.library.energy.impl.access.InfiniteEnergyAccess;
+import com.mmodding.library.energy.impl.access.VacuumEnergyAccess;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.core.Direction;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * Access to energy. It has the ability to do transfer operations with others accesses.
@@ -22,6 +28,57 @@ public interface EnergyAccess extends EnergyView {
 	 */
 	static EnergyAccess from(EnergyComponent component) {
 		return new EnergyComponentAccess(component);
+	}
+
+	/**
+	 * Creates an {@link EnergyAccess}, with a limited insertion rate and no extraction support.
+	 * @param access the delegated energy access
+	 * @param insertionRate the insertion rate
+	 * @return the newly created access
+	 */
+	static EnergyAccess onlyInput(EnergyAccess access, long insertionRate) {
+		return new LimitedEnergyAccess(access, insertionRate, 0L);
+	}
+
+	/**
+	 * Creates an {@link EnergyAccess}, with no insertion support and a limited extraction rate.
+	 * @param access the delegated energy access
+	 * @param extractionRate the extraction rate
+	 * @return the newly created access
+	 */
+	static EnergyAccess onlyOutput(EnergyAccess access, long extractionRate) {
+		return new LimitedEnergyAccess(access, 0L, extractionRate);
+	}
+
+	/**
+	 * Creates an {@link EnergyAccess}, with a limited insertion rate and a limited extraction rate.
+	 * @param access the delegated energy access
+	 * @param insertionRate the insertion rate
+	 * @param extractionRate the extraction rate
+	 * @return the newly created access
+	 */
+	static EnergyAccess limited(EnergyAccess access, long insertionRate, long extractionRate) {
+		return new LimitedEnergyAccess(access, insertionRate, extractionRate);
+	}
+
+	/**
+	 * Creates an {@link EnergyAccess}, providing sided access definition and passing along the current side.
+	 * @param access the delegated energy access
+	 * @param definition the definition
+	 * @param side the current side
+	 * @return the newly created access
+	 */
+	static EnergyAccess sided(EnergyAccess access, Map<Direction, SidedEnergyAccess.SideAccess> definition, Direction side) {
+		return new SidedEnergyAccess(access, definition, side);
+	}
+
+	/**
+	 * Creates an {@link EnergyAccess} to vacuum energy.
+	 * @param unit the energy unit
+	 * @return the newly created access
+	 */
+	static EnergyAccess vacuum(EnergyUnit unit) {
+		return new VacuumEnergyAccess(unit);
 	}
 
 	/**

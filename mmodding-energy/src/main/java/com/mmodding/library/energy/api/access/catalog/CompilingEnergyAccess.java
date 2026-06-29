@@ -1,6 +1,7 @@
-package com.mmodding.library.energy.api.access;
+package com.mmodding.library.energy.api.access.catalog;
 
 import com.mmodding.library.energy.api.EnergyUnit;
+import com.mmodding.library.energy.api.access.EnergyAccess;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 import java.util.ArrayList;
