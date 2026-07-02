@@ -17,6 +17,7 @@ mmodding {
 	configureTestmod {
 		withEntrypoints {
 			init("com.mmodding.library.portal.test.MModdingPortalTests")
+            client("com.mmodding.library.portal.test.client.MModdingPortalClientTests")
 		}
 	}
 }

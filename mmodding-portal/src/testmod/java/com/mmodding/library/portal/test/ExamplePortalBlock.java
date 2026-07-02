@@ -24,6 +24,16 @@ public class ExamplePortalBlock extends DimensionScalingPortalBlock implements N
 	}
 
 	@Override
+	public int getPortalTransitionTime(ServerLevel level, Entity entity) {
+		return 40;
+	}
+
+	@Override
+	public Transition getLocalTransition() {
+		return Transition.CONFUSION; // Enables Transition Screen
+	}
+
+	@Override
 	public Colliders createPortalFrameColliders(Context context) {
 		return Colliders.box(new Vec3i(-1, -1, -1), new Vec3i(1, 1, 1));
 	}

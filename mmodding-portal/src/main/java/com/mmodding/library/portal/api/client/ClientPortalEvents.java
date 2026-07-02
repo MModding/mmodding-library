@@ -6,8 +6,10 @@ import dev.yumi.commons.event.Event;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Portal;
 import org.jspecify.annotations.Nullable;
 
@@ -53,9 +55,10 @@ public class ClientPortalEvents {
 		 * @param defaultPitch the default pitch
 		 * @param defaultVolume the default volume
 		 * @return the modulated sound
+		 * @apiNote If you do not pass your portal instance through {@link Entity#setAsInsidePortal(Portal, BlockPos)} on client, the {@link Portal} instance will be null.
 		 */
 		@Nullable
-		ModulatedSound changeSound(ClientLevel level, LocalPlayer player, Portal portal, float defaultPitch, float defaultVolume);
+		ModulatedSound changeSound(ClientLevel level, LocalPlayer player, @Nullable Portal portal, float defaultPitch, float defaultVolume);
 
 		/**
 		 * A record containing information about the sound redirection.
@@ -77,9 +80,10 @@ public class ClientPortalEvents {
 		 * @param portalIntensity the default pitch
 		 * @param defaultColor the default volume
 		 * @return the colored sprite
+		 * @apiNote If you do not pass your portal instance through {@link Entity#setAsInsidePortal(Portal, BlockPos)} on client, the {@link Portal} instance will be null.
 		 */
 		@Nullable
-		ColoredSprite changeColoredSprite(ClientLevel level, LocalPlayer player, Portal portal, float portalIntensity, Color defaultColor);
+		ColoredSprite changeColoredSprite(ClientLevel level, LocalPlayer player, @Nullable Portal portal, float portalIntensity, Color defaultColor);
 
 		/**
 		 * A record containing information about the sprite redirection.
