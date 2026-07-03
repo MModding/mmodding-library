@@ -43,10 +43,11 @@ fun Project.getModuleName() : String {
         }
     }
     return if (!projectName.contains("Mod Integration")) projectName + "Library"
-    else projectName.substring(0, projectName.length - 1)
+    else projectName.dropLast(1)
 }
 
 fun Project.getModuleDescription() : String {
     return if (getModuleNamespace() == "mmodding") "Library made by MModding Team to provide few sets of modding tools."
+    else if (getModuleNamespace().contains("integration")) getModuleName().substring(25) + " Integration with MModding Library"
     else getModuleName().substring(9) + " of MModding"
 }
