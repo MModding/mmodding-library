@@ -1,5 +1,6 @@
 package com.mmodding.library.energy.test.block.entity;
 
+import com.mmodding.library.energy.api.block.BlockEnergy;
 import com.mmodding.library.energy.api.block.entity.BaseContainerEnergyBlockEntity;
 import com.mmodding.library.energy.test.init.EnergyTestBlockEntities;
 import com.mmodding.library.energy.test.inventory.SuperMachineryMenu;
@@ -65,9 +66,9 @@ public class SuperMachineryBlockEntity extends BaseContainerEnergyBlockEntity {
 
 	public static void tick(Level level, BlockPos pos, BlockState blockState, SuperMachineryBlockEntity blockEntity) {
 		if (level instanceof ServerLevel) {
-			if (blockEntity.energy.amount() >= 20 && blockEntity.getItem(0).is(Items.EMERALD)) {
+			if (blockEntity.getEnergy().amount() >= 20 && blockEntity.getItem(0).is(Items.EMERALD)) {
 				if ((blockEntity.getItem(1).is(Items.DIAMOND) || blockEntity.getItem(1).isEmpty()) && blockEntity.getItem(1).getCount() < blockEntity.getItem(1).getMaxStackSize()) {
-					blockEntity.energy.consume(20);
+					blockEntity.getEnergy().consume(20);
 					blockEntity.removeItem(0, 1);
 					blockEntity.setItem(1, new ItemStack(Items.DIAMOND, blockEntity.getItem(1).count() + 1));
 				}

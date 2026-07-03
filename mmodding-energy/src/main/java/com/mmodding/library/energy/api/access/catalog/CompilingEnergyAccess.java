@@ -23,12 +23,10 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 
 	private final EnergyUnit unit;
 	protected final List<EnergyAccess> collection;
-	protected long totalCapacity;
 
 	protected CompilingEnergyAccess(EnergyUnit unit) {
 		this.unit = unit;
 		this.collection = new ArrayList<>();
-		this.totalCapacity = 0L;
 	}
 
 	/**
@@ -37,7 +35,6 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 	 */
 	public final void push(EnergyAccess access) {
 		this.collection.add(access);
-		this.totalCapacity += EnergyUnit.convert(access.capacity(), access.unit(), this.unit);
 	}
 
 	@Override
@@ -59,7 +56,9 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 
 	@Override
 	public long capacity() {
-		return this.totalCapacity;
+		return this.collection.stream()
+			.map(storage -> EnergyUnit.convert(storage.amount(), storage.unit(), this.unit))
+			.reduce(0L, Long::sum);
 	}
 
 	@Override

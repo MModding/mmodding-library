@@ -12,11 +12,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 public final class BlockEnergyImpl {
 
@@ -24,7 +26,7 @@ public final class BlockEnergyImpl {
 
 	private static final Set<Block> DEFINITIONS_LOCK = Sets.newIdentityHashSet();
 
-	public static final Map<Block, Pair<Long, EnergyUnit>> DEFINITIONS = new IdentityHashMap<>();
+	public static final Map<Block, Pair<BiFunction<BlockState, @Nullable BlockEntity, Long>, EnergyUnit>> DEFINITIONS = new IdentityHashMap<>();
 
 	private BlockEnergyImpl() {}
 
@@ -32,26 +34,27 @@ public final class BlockEnergyImpl {
 		if (blockEntity.getLevel() instanceof ServerLevel level) {
 			return level.getDataStorage()
 				.computeIfAbsent(BlockEnergySavedData.TYPE)
-				.getComponent(blockEntity.getBlockPos(), blockEntity.getBlockState().getBlock());
+				.getComponent(level, blockEntity.getBlockPos(), blockEntity.getBlockState().getBlock());
 		}
 		else {
 			throw new IllegalStateException("Block entity is not in a level!");
 		}
 	}
 
-	public static void defineEnergy(Block block, long capacity, EnergyUnit unit, BlockEnergy.AccessQueryHandler handler) {
+	@SuppressWarnings("unchecked")
+	public static <T extends BlockEntity> void defineEnergy(Block block, BiFunction<BlockState, @Nullable T, Long> capacityGetter, EnergyUnit unit, BlockEnergy.AccessQueryHandler handler) {
 		if (DEFINITIONS_LOCK.contains(block)) {
 			throw new IllegalStateException("Block " + block + " already has a defined access query!");
 		}
 		DEFINITIONS_LOCK.add(block);
-		DEFINITIONS.put(block, Pair.create(capacity, unit));
+		DEFINITIONS.put(block, Pair.create((BiFunction<BlockState, BlockEntity, Long>) capacityGetter, unit));
 		SIDED.registerForBlocks((level, pos, _, _, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
 			return handler.handle(
 				serverLevel, pos, side,
 				serverLevel.getDataStorage()
 					.computeIfAbsent(BlockEnergySavedData.TYPE)
-					.getComponent(pos, block)
+					.getComponent(serverLevel, pos, block)
 			);
 		}, block);
 	}

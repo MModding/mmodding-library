@@ -7,8 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link BlockEntity} with predefined fields for accessing its internal {@link EnergyComponent}
@@ -16,12 +15,24 @@ import java.util.Objects;
  */
 public abstract class EnergyBlockEntity extends BlockEntity {
 
-	protected final EnergyComponent energy;
-	protected final EnergyAccess energyAccess;
+	protected @Nullable EnergyComponent energy;
+	protected @Nullable EnergyAccess energyAccess;
 
 	protected EnergyBlockEntity(BlockEntityType<?> type, BlockPos worldPosition, BlockState blockState) {
 		super(type, worldPosition, blockState);
-		this.energy = Objects.requireNonNull(BlockEnergy.retrieveFrom(this));
-		this.energyAccess = EnergyAccess.from(this.energy);
+	}
+
+	protected EnergyComponent getEnergy() {
+		if (this.energy == null) {
+			this.energy = BlockEnergy.retrieveFrom(this);
+		}
+		return this.energy;
+	}
+
+	protected EnergyAccess getEnergyAccess() {
+		if (this.energyAccess == null) {
+			this.energyAccess = EnergyAccess.from(this.getEnergy());
+		}
+		return this.energyAccess;
 	}
 }

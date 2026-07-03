@@ -9,7 +9,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
+
+import java.util.function.BiFunction;
 
 public final class BlockEnergy {
 
@@ -35,7 +38,7 @@ public final class BlockEnergy {
 	 * {@link BlockEnergy#query(ServerLevel, BlockPos, Direction)}.
 	 * @param blockEntity the block entity
 	 * @return the energy component
-	 * @throws IllegalStateException if the block entity is not in any level
+	 * @throws IllegalStateException if the block entity is not in any level or if it is client-sided
 	 */
 	public static EnergyComponent retrieveFrom(BlockEntity blockEntity) {
 		return BlockEnergyImpl.retrieveFrom(blockEntity);
@@ -46,17 +49,28 @@ public final class BlockEnergy {
 	 * @param block the block
 	 * @param capacity the energy capacity
 	 * @param unit the energy unit
-	 * @param handler the storage query handler
+	 * @param handler the access query handler
 	 */
 	public static void defineEnergy(Block block, long capacity, EnergyUnit unit, AccessQueryHandler handler) {
-		BlockEnergyImpl.defineEnergy(block, capacity, unit, handler);
+		BlockEnergy.defineEnergy(block, (_, _) -> capacity, unit, handler);
+	}
+
+	/**
+	 * Defines the energy specification for this block.
+	 * @param block the block
+	 * @param capacityGetter the energy capacity getter
+	 * @param unit the energy unit
+	 * @param handler the access query handler
+	 */
+	public static <T extends BlockEntity> void defineEnergy(Block block, BiFunction<BlockState, @Nullable T, Long> capacityGetter, EnergyUnit unit, AccessQueryHandler handler) {
+		BlockEnergyImpl.defineEnergy(block, capacityGetter, unit, handler);
 	}
 
 	/**
 	 * Defines only a query for the current block.
 	 * <br>For example, it allows delegating the access query to other block accesses.
 	 * @param block the block
-	 * @param handler the storage query handler, without an internal storage
+	 * @param handler the access query handler, without an internal storage
 	 */
 	public static void defineEnergyDelegate(Block block, HeadlessQueryHandler handler) {
 		BlockEnergyImpl.defineEnergyDelegate(block, handler);

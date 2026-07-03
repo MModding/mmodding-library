@@ -17,7 +17,14 @@ public class LevelMixin {
 		original.call(pos, oldState, newState);
 		if ((Object) this instanceof ServerLevel serverLevel) {
 			BlockEnergySavedData storage = serverLevel.getDataStorage().get(BlockEnergySavedData.TYPE);
-			if (storage != null) storage.removeIfPresent(pos);
+			if (storage != null) {
+				if (oldState.getBlock() == newState.getBlock()) {
+					storage.updateState(pos, newState);
+				}
+				else {
+					storage.removeIfPresent(pos);
+				}
+			}
 		}
 	}
 }

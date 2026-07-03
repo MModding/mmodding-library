@@ -4,7 +4,9 @@ import com.mmodding.library.energy.api.EnergyComponent;
 import com.mmodding.library.energy.api.EnergyUnit;
 import com.mmodding.library.energy.impl.data.EnergyData;
 
-public record EnergyComponentImpl(long capacity, EnergyUnit unit, EnergyData data) implements EnergyComponent {
+import java.util.function.Supplier;
+
+public record EnergyComponentImpl(Supplier<Long> capacitySupplier, EnergyUnit unit, EnergyData data) implements EnergyComponent {
 
 	@Override
 	public long generate(long amount) {
@@ -60,5 +62,10 @@ public record EnergyComponentImpl(long capacity, EnergyUnit unit, EnergyData dat
 	@Override
 	public long remaining() {
 		return this.capacity() - this.amount();
+	}
+
+	@Override
+	public long capacity() {
+		return this.capacitySupplier.get();
 	}
 }

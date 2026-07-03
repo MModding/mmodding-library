@@ -38,7 +38,7 @@ public class ItemEnergyImpl {
 
 	public static EnergyComponent retrieveFrom(ItemStack stack) {
 		Pair<Long, EnergyUnit> definition = DEFINITIONS.get(stack.getItem());
-		return new EnergyComponentImpl(definition.first(), definition.second(), new ItemEnergyData(stack));
+		return new EnergyComponentImpl(definition::first, definition.second(), new ItemEnergyData(stack));
 	}
 
 	public static void defineEnergyStorage(Item item, long capacity, EnergyUnit unit, ItemEnergy.StorageQueryHandler handler) {
@@ -48,7 +48,7 @@ public class ItemEnergyImpl {
 		DEFINITIONS_LOCK.add(item);
 		DEFINITIONS.put(item, Pair.create(capacity, unit));
 		ENERGY.registerForItems(
-			(stack, context) -> handler.handle(stack, context, new EnergyComponentImpl(capacity, unit, new ItemEnergyData(stack))), item
+			(stack, context) -> handler.handle(stack, context, new EnergyComponentImpl(() -> capacity, unit, new ItemEnergyData(stack))), item
 		);
 	}
 
