@@ -1,6 +1,5 @@
 package com.mmodding.library.energy.test.block.entity;
 
-import com.mmodding.library.energy.api.block.BlockEnergy;
 import com.mmodding.library.energy.api.block.entity.BaseContainerEnergyBlockEntity;
 import com.mmodding.library.energy.test.init.EnergyTestBlockEntities;
 import com.mmodding.library.energy.test.inventory.SuperMachineryMenu;

@@ -11,6 +11,6 @@ public class SimpleEnergyItem extends Item {
 
 	public SimpleEnergyItem(int capacity, EnergyUnit unit, Properties properties) {
 		super(properties);
-		ItemEnergy.defineEnergyStorage(this, capacity, unit, (_, _, internalComponent) -> EnergyAccess.from(internalComponent));
+		ItemEnergy.defineEnergy(this, capacity, unit, (_, _, internalComponent) -> EnergyAccess.from(internalComponent));
 	}
 }

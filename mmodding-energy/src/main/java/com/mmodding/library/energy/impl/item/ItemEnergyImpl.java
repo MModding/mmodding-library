@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 public class ItemEnergyImpl {
 
@@ -34,21 +35,21 @@ public class ItemEnergyImpl {
 
 	private static final Set<Item> DEFINITIONS_LOCK = Sets.newIdentityHashSet();
 
-	private static final Map<Item, Pair<Long, EnergyUnit>> DEFINITIONS = new IdentityHashMap<>();
+	private static final Map<Item, Pair<Function<ItemStack, Long>, EnergyUnit>> DEFINITIONS = new IdentityHashMap<>();
 
 	public static EnergyComponent retrieveFrom(ItemStack stack) {
-		Pair<Long, EnergyUnit> definition = DEFINITIONS.get(stack.getItem());
-		return new EnergyComponentImpl(definition::first, definition.second(), new ItemEnergyData(stack));
+		Pair<Function<ItemStack, Long>, EnergyUnit> definition = DEFINITIONS.get(stack.getItem());
+		return new EnergyComponentImpl(() -> definition.first().apply(stack), definition.second(), new ItemEnergyData(stack));
 	}
 
-	public static void defineEnergyStorage(Item item, long capacity, EnergyUnit unit, ItemEnergy.StorageQueryHandler handler) {
+	public static void defineEnergy(Item item, Function<ItemStack, Long> capacityGetter, EnergyUnit unit, ItemEnergy.AccessQueryHandler handler) {
 		if (DEFINITIONS_LOCK.contains(item)) {
-			throw new IllegalStateException("Item " + item + " already has a defined storage query!");
+			throw new IllegalStateException("Item " + item + " already has a defined query handler!");
 		}
 		DEFINITIONS_LOCK.add(item);
-		DEFINITIONS.put(item, Pair.create(capacity, unit));
+		DEFINITIONS.put(item, Pair.create(capacityGetter, unit));
 		ENERGY.registerForItems(
-			(stack, context) -> handler.handle(stack, context, new EnergyComponentImpl(() -> capacity, unit, new ItemEnergyData(stack))), item
+			(stack, context) -> handler.handle(stack, context, new EnergyComponentImpl(() -> capacityGetter.apply(stack), unit, new ItemEnergyData(stack))), item
 		);
 	}
 

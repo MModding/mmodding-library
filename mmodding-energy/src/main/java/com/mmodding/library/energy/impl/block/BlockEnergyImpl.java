@@ -44,7 +44,7 @@ public final class BlockEnergyImpl {
 	@SuppressWarnings("unchecked")
 	public static <T extends BlockEntity> void defineEnergy(Block block, BiFunction<BlockState, @Nullable T, Long> capacityGetter, EnergyUnit unit, BlockEnergy.AccessQueryHandler handler) {
 		if (DEFINITIONS_LOCK.contains(block)) {
-			throw new IllegalStateException("Block " + block + " already has a defined access query!");
+			throw new IllegalStateException("Block " + block + " already has a defined query handler!");
 		}
 		DEFINITIONS_LOCK.add(block);
 		DEFINITIONS.put(block, Pair.create((BiFunction<BlockState, BlockEntity, Long>) capacityGetter, unit));
@@ -61,7 +61,7 @@ public final class BlockEnergyImpl {
 
 	public static void defineEnergyDelegate(Block block, BlockEnergy.HeadlessQueryHandler handler) {
 		if (DEFINITIONS_LOCK.contains(block)) {
-			throw new IllegalStateException("Block " + block + " already has a defined storage query!");
+			throw new IllegalStateException("Block " + block + " already has a defined query handler!");
 		}
 		DEFINITIONS_LOCK.add(block);
 		SIDED.registerForBlocks((level, pos, _, _, side) -> {

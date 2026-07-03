@@ -10,13 +10,13 @@ import org.jetbrains.annotations.ApiStatus;
 public interface EnergyView {
 
 	/**
-	 * Checks if the storage is empty.
+	 * Checks if the view is empty.
 	 * @return the result
 	 */
 	boolean isEmpty();
 
 	/**
-	 * Checks if the storage is full.
+	 * Checks if the view is full.
 	 * @return the result
 	 */
 	boolean isFull();

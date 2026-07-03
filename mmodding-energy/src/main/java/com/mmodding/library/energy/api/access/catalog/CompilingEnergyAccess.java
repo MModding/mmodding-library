@@ -9,14 +9,14 @@ import java.util.List;
 
 /**
  * A special-case implementation of {@link EnergyAccess}, delegating to multiple other energy accesses.
- * <br>You will need to implement the behavior of the storage collection with the two following methods:
+ * <br>You will need to implement the behavior of the energy access collection with the two following methods:
  * <ul>
  *     <li>{@link EnergyAccess#insert(long, TransactionContext)}</li>
  *     <li>{@link EnergyAccess#extract(long, TransactionContext)}</li>
  * </ul>
- * <br>An application of this is storage redirection to multiple other energy accesses.
+ * <br>An application of this is energy access redirection to multiple other energy accesses.
  * <br><br>A good example would be energy cables: you collect energy accesses linked through the cables,
- * and make this the energy storage of the cable, and using it would spread to other accesses.
+ * and make this the energy access of the cable, and using it would spread to other accesses.
  * @apiNote Collection order is preserved.
  */
 public abstract class CompilingEnergyAccess implements EnergyAccess {
@@ -30,7 +30,7 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 	}
 
 	/**
-	 * Pushes another access into this storage collection.
+	 * Pushes another access into this energy access collection.
 	 * @param access the energy access
 	 */
 	public final void push(EnergyAccess access) {
@@ -50,14 +50,14 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 	@Override
 	public long amount() {
 		return this.collection.stream()
-			.map(storage -> EnergyUnit.convert(storage.amount(), storage.unit(), this.unit))
+			.map(access -> EnergyUnit.convert(access.amount(), access.unit(), this.unit))
 			.reduce(0L, Long::sum);
 	}
 
 	@Override
 	public long capacity() {
 		return this.collection.stream()
-			.map(storage -> EnergyUnit.convert(storage.amount(), storage.unit(), this.unit))
+			.map(access -> EnergyUnit.convert(access.amount(), access.unit(), this.unit))
 			.reduce(0L, Long::sum);
 	}
 

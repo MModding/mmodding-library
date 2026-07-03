@@ -50,6 +50,7 @@ public final class BlockEnergy {
 	 * @param capacity the energy capacity
 	 * @param unit the energy unit
 	 * @param handler the access query handler
+	 * @throws IllegalStateException if the block already has a query handler definition
 	 */
 	public static void defineEnergy(Block block, long capacity, EnergyUnit unit, AccessQueryHandler handler) {
 		BlockEnergy.defineEnergy(block, (_, _) -> capacity, unit, handler);
@@ -61,6 +62,7 @@ public final class BlockEnergy {
 	 * @param capacityGetter the energy capacity getter
 	 * @param unit the energy unit
 	 * @param handler the access query handler
+	 * @throws IllegalStateException if the block already has a query handler definition
 	 */
 	public static <T extends BlockEntity> void defineEnergy(Block block, BiFunction<BlockState, @Nullable T, Long> capacityGetter, EnergyUnit unit, AccessQueryHandler handler) {
 		BlockEnergyImpl.defineEnergy(block, capacityGetter, unit, handler);
@@ -70,7 +72,8 @@ public final class BlockEnergy {
 	 * Defines only a query for the current block.
 	 * <br>For example, it allows delegating the access query to other block accesses.
 	 * @param block the block
-	 * @param handler the access query handler, without an internal storage
+	 * @param handler the headless query handler
+	 * @throws IllegalStateException if the block already has a query handler definition
 	 */
 	public static void defineEnergyDelegate(Block block, HeadlessQueryHandler handler) {
 		BlockEnergyImpl.defineEnergyDelegate(block, handler);
@@ -79,12 +82,12 @@ public final class BlockEnergy {
 	public interface AccessQueryHandler {
 
 		/**
-		 * Handles a storage query with provided context.
+		 * Handles an access query with provided context.
 		 * @param level the level
 		 * @param pos the block position
 		 * @param side the side
 		 * @param internalComponent the internal component for the block instance
-		 * @return the possible energy storage
+		 * @return the possible energy access
 		 */
 		@Nullable
 		EnergyAccess handle(ServerLevel level, BlockPos pos, @Nullable Direction side, EnergyComponent internalComponent);
@@ -93,11 +96,11 @@ public final class BlockEnergy {
 	public interface HeadlessQueryHandler {
 
 		/**
-		 * Handles a storage query with the provided context.
+		 * Handles an access query with the provided context.
 		 * @param level the level
 		 * @param pos the block position
 		 * @param side the side
-		 * @return the possible energy storage
+		 * @return the possible energy access
 		 */
 		@Nullable
 		EnergyAccess handle(ServerLevel level, BlockPos pos, @Nullable Direction side);

@@ -135,7 +135,7 @@ public interface EnergyAccess extends EnergyView {
 	long insert(long amount, TransactionContext context);
 
 	/**
-	 * Indicates if the extraction method will always return <code>0</code>, meaning that this storage
+	 * Indicates if the extraction method will always return <code>0</code>, meaning that this access
 	 * does not have to be considered for extraction.
 	 * <br>In example, this is useful for energy cables.
 	 * @return a boolean which indicates if extraction is supported

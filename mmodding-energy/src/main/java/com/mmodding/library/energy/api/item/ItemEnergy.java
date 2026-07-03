@@ -9,6 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
+import java.util.function.Function;
+
 public final class ItemEnergy {
 
 	private ItemEnergy() {}
@@ -30,33 +32,46 @@ public final class ItemEnergy {
 	 * <br>By such, you can assume that as long you follow these guidelines, and that
 	 * the item has a proper energy definition, the result will be non-null.
 	 * @param stack the stack
-	 * @return the energy storage
+	 * @return the energy component
 	 */
 	public static EnergyComponent retrieveFrom(ItemStack stack) {
 		return ItemEnergyImpl.retrieveFrom(stack);
 	}
 
 	/**
-	 * Defines an energy storage for this item.
+	 * Defines the energy specification for this item.
 	 * @param item the item
 	 * @param capacity the energy capacity
 	 * @param unit the energy unit
-	 * @param handler the storage query handler
+	 * @param handler the access query handler
+	 * @throws IllegalStateException if the block already has a query handler definition
 	 */
-	public static void defineEnergyStorage(Item item, long capacity, EnergyUnit unit, ItemEnergy.StorageQueryHandler handler) {
-		ItemEnergyImpl.defineEnergyStorage(item, capacity, unit, handler);
+	public static void defineEnergy(Item item, long capacity, EnergyUnit unit, AccessQueryHandler handler) {
+		ItemEnergy.defineEnergy(item, _ -> capacity, unit, handler);
 	}
 
-	public interface StorageQueryHandler {
+	/**
+	 * Defines the energy specification for this item.
+	 * @param item the item
+	 * @param capacityGetter the energy capacity getter
+	 * @param unit the energy unit
+	 * @param handler the access query handler
+	 * @throws IllegalStateException if the block already has a query handler definition
+	 */
+	public static void defineEnergy(Item item, Function<ItemStack, Long> capacityGetter, EnergyUnit unit, AccessQueryHandler handler) {
+		ItemEnergyImpl.defineEnergy(item, capacityGetter, unit, handler);
+	}
+
+	public interface AccessQueryHandler {
 
 		/**
-		 * Handles a storage query with provided context.
+		 * Handles an access query with provided context.
 		 * @param stack the item stack
 		 * @param context the container item context
-		 * @param internalStorage the internal storage for the item instance
-		 * @return the possible energy storage
+		 * @param internalComponent the internal access for the item instance
+		 * @return the possible energy access
 		 */
 		@Nullable
-		EnergyAccess handle(ItemStack stack, ContainerItemContext context, EnergyComponent internalStorage);
+		EnergyAccess handle(ItemStack stack, ContainerItemContext context, EnergyComponent internalComponent);
 	}
 }

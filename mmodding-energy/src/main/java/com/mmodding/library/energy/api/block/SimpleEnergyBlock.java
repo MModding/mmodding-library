@@ -11,6 +11,6 @@ public class SimpleEnergyBlock extends Block {
 
 	public SimpleEnergyBlock(int capacity, EnergyUnit unit, Properties properties) {
 		super(properties);
-		BlockEnergy.defineEnergy(this, capacity, unit, (_, _, _, internalStorage) -> EnergyAccess.from(internalStorage));
+		BlockEnergy.defineEnergy(this, capacity, unit, (_, _, _, internal) -> EnergyAccess.from(internal));
 	}
 }
