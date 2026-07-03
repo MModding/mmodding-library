@@ -1,9 +1,8 @@
 package com.mmodding.library.item.impl.property;
 
 import com.mmodding.library.core.api.registry.LiteRegistry;
-import com.mmodding.library.core.api.registry.companion.RegistryCompanion;
+import com.mmodding.library.core.api.registry.companion.IdentityCompanion;
 import com.mmodding.library.item.api.properties.CustomItemProperty;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public class CustomItemPropertyImpl<T> implements CustomItemProperty<T> {
 
-	public static final RegistryCompanion<Item, Object> PROPERTIES_COMPANION = RegistryCompanion.create(BuiltInRegistries.ITEM);
+	public static final IdentityCompanion<Item, Object> PROPERTIES_COMPANION = IdentityCompanion.create();
 
 	private final Identifier identifier;
 	private final Class<?> type;
