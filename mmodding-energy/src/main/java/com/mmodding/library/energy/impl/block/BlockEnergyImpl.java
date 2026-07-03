@@ -8,6 +8,7 @@ import com.mmodding.library.energy.api.block.BlockEnergy;
 import com.mmodding.library.energy.api.access.EnergyAccess;
 import com.mmodding.library.java.api.container.Pair;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
@@ -30,11 +31,32 @@ public final class BlockEnergyImpl {
 
 	private BlockEnergyImpl() {}
 
+	// Caching Block State and Block Entity
+	public static EnergyAccess query(ServerLevel level, BlockPos pos, @Nullable Direction side) {
+		BlockEnergySavedData storage = level.getDataStorage().get(BlockEnergySavedData.TYPE);
+		if (storage != null) {
+			return SIDED.find(
+				level, pos,
+				storage.cachedBlockState(level, pos),
+				storage.cachedBlockEntity(level, pos),
+				side
+			);
+		}
+		else {
+			return null;
+		}
+	}
+
 	public static EnergyComponent retrieveFrom(BlockEntity blockEntity) {
 		if (blockEntity.getLevel() instanceof ServerLevel level) {
 			return level.getDataStorage()
 				.computeIfAbsent(BlockEnergySavedData.TYPE)
-				.getComponent(level, blockEntity.getBlockPos(), blockEntity.getBlockState().getBlock());
+				.getComponent(
+					blockEntity.getBlockPos(),
+					blockEntity.getBlockState().getBlock(),
+					blockEntity.getBlockState(),
+					blockEntity
+				);
 		}
 		else {
 			throw new IllegalStateException("Block entity is not in a level!");
@@ -48,13 +70,13 @@ public final class BlockEnergyImpl {
 		}
 		DEFINITIONS_LOCK.add(block);
 		DEFINITIONS.put(block, Pair.create((BiFunction<BlockState, BlockEntity, Long>) capacityGetter, unit));
-		SIDED.registerForBlocks((level, pos, _, _, side) -> {
+		SIDED.registerForBlocks((level, pos, state, blockEntity, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
 			return handler.handle(
 				serverLevel, pos, side,
 				serverLevel.getDataStorage()
 					.computeIfAbsent(BlockEnergySavedData.TYPE)
-					.getComponent(serverLevel, pos, block)
+					.getComponent(pos, block, state, blockEntity)
 			);
 		}, block);
 	}

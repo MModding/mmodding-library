@@ -9,6 +9,8 @@ import com.mmodding.library.energy.impl.data.DedicatedEnergyData;
 import com.mmodding.library.java.api.container.Pair;
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
@@ -51,14 +53,19 @@ public class BlockEnergySavedData extends SavedData {
 		this.storage = new Object2ObjectOpenHashMap<>(storage);
 	}
 
-	public EnergyComponent getComponent(ServerLevel level, BlockPos pos, Block type) {
+	public BlockState cachedBlockState(ServerLevel level, BlockPos pos) {
+		return this.blockStateCache.computeIfAbsent(pos, level::getBlockState);
+	}
+
+	public BlockEntity cachedBlockEntity(ServerLevel level, BlockPos pos) {
+		return this.blockEntityCache.computeIfAbsent(pos, level::getBlockEntity);
+	}
+
+	public EnergyComponent getComponent(BlockPos pos, Block type, BlockState state, BlockEntity blockEntity) {
 		this.setDirty();
 		Pair<BiFunction<BlockState, @Nullable BlockEntity, Long>, EnergyUnit> definition = Objects.requireNonNull(BlockEnergyImpl.DEFINITIONS.get(type), "Unregistered Block Energy Definition for block " + type);
 		return new EnergyComponentImpl(
-			() -> definition.first().apply(
-				this.blockStateCache.computeIfAbsent(pos, level::getBlockState),
-				this.blockEntityCache.computeIfAbsent(pos, level::getBlockEntity)
-			),
+			() -> definition.first().apply(state, blockEntity),
 			definition.second(),
 			this.storage.computeIfAbsent(pos, _ -> new DedicatedEnergyData(0L))
 		);
@@ -77,5 +84,39 @@ public class BlockEnergySavedData extends SavedData {
 
 	public Map<BlockPos, DedicatedEnergyData> storage() {
 		return this.storage;
+	}
+
+	public static void registerCacheInvalidation() {
+		ServerChunkEvents.CHUNK_LOAD.register((level, chunk, _) -> {
+			BlockEnergySavedData storage = level.getDataStorage().get(BlockEnergySavedData.TYPE);
+			if (storage != null) {
+				storage.blockStateCache.keySet().removeIf(chunk.getPos()::contains);
+				storage.blockEntityCache.keySet().removeIf(chunk.getPos()::contains);
+			}
+		});
+
+		ServerChunkEvents.CHUNK_UNLOAD.register((level, chunk) -> {
+			BlockEnergySavedData storage = level.getDataStorage().get(BlockEnergySavedData.TYPE);
+			if (storage != null) {
+				storage.blockStateCache.keySet().removeIf(chunk.getPos()::contains);
+				storage.blockEntityCache.keySet().removeIf(chunk.getPos()::contains);
+			}
+		});
+
+		ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register((blockEntity, level) -> {
+			BlockEnergySavedData storage = level.getDataStorage().get(BlockEnergySavedData.TYPE);
+			if (storage != null) {
+				storage.blockStateCache.remove(blockEntity.getBlockPos());
+				storage.blockEntityCache.remove(blockEntity.getBlockPos());
+			}
+		});
+
+		ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register((blockEntity, level) -> {
+			BlockEnergySavedData storage = level.getDataStorage().get(BlockEnergySavedData.TYPE);
+			if (storage != null) {
+				storage.blockStateCache.remove(blockEntity.getBlockPos());
+				storage.blockEntityCache.remove(blockEntity.getBlockPos());
+			}
+		});
 	}
 }

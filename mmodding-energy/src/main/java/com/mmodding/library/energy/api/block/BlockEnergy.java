@@ -27,7 +27,7 @@ public final class BlockEnergy {
 	 */
 	@Nullable
 	public static EnergyAccess query(ServerLevel level, BlockPos pos, @Nullable Direction side) {
-		return BlockEnergyImpl.SIDED.find(level, pos, side);
+		return BlockEnergyImpl.query(level, pos, side);
 	}
 
 	/**
