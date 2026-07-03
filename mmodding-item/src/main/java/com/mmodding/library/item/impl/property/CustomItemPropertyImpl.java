@@ -12,7 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public class CustomItemPropertyImpl<T> implements CustomItemProperty<T> {
 
-	public static final RegistryCompanion<Item, Object> REGISTRY = RegistryCompanion.create(BuiltInRegistries.ITEM);
+	public static final RegistryCompanion<Item, Object> PROPERTIES_COMPANION = RegistryCompanion.create(BuiltInRegistries.ITEM);
 
 	private final Identifier identifier;
 	private final Class<?> type;
@@ -26,8 +26,8 @@ public class CustomItemPropertyImpl<T> implements CustomItemProperty<T> {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T get(ItemLike item, CustomItemProperty<T> setting) {
-		if (REGISTRY.hasCompanion(item.asItem())) {
-			LiteRegistry<?> companion = REGISTRY.getCompanion(item.asItem());
+		if (PROPERTIES_COMPANION.hasCompanion(item.asItem())) {
+			LiteRegistry<?> companion = PROPERTIES_COMPANION.getCompanion(item.asItem());
 			if (companion.contains(setting.getIdentifier())) {
 				return (T) companion.get(setting.getIdentifier());
 			}

@@ -7,6 +7,7 @@
     "DecoratedPotPatternsMixin",
     "EntityMixin",
     "FishingBobberEntityMixin",
+    "ItemMixin",
     "ItemPropertiesMixin",
     "PlayerEntityMixin",
     "ProjectileWeaponItemMixin"

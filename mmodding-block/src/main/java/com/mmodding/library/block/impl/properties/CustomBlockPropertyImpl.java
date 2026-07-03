@@ -2,16 +2,16 @@ package com.mmodding.library.block.impl.properties;
 
 import com.mmodding.library.block.api.properties.CustomBlockProperty;
 import com.mmodding.library.core.api.registry.LiteRegistry;
-import com.mmodding.library.core.api.registry.companion.RegistryCompanion;
-import net.minecraft.core.registries.BuiltInRegistries;
+import com.mmodding.library.core.api.registry.companion.IdentityCompanion;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class CustomBlockPropertyImpl<T> implements CustomBlockProperty<T> {
 
-	public static final RegistryCompanion<Block, Object> REGISTRY = RegistryCompanion.create(BuiltInRegistries.BLOCK);
+	public static final IdentityCompanion<BlockBehaviour.Properties, Object> PROPERTIES_COMPANION = IdentityCompanion.create();
 
 	private final Identifier identifier;
 	private final Class<?> type;
@@ -25,8 +25,8 @@ public class CustomBlockPropertyImpl<T> implements CustomBlockProperty<T> {
 
 	@SuppressWarnings("unchecked")
 	public static <T> T get(Block block, CustomBlockProperty<T> setting) {
-		if (REGISTRY.hasCompanion(block)) {
-			LiteRegistry<?> companion = REGISTRY.getCompanion(block);
+		if (PROPERTIES_COMPANION.hasCompanion(block.properties())) {
+			LiteRegistry<?> companion = PROPERTIES_COMPANION.getCompanion(block.properties());
 			if (companion.contains(setting.getIdentifier())) {
 				return (T) companion.get(setting.getIdentifier());
 			}
