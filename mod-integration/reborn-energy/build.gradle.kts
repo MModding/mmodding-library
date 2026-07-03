@@ -10,7 +10,7 @@ mmodding {
 	}
 	configureFabricModJson {
 		withDependencies {
-			addDependency("reborn_energy", ">=" + libs.versions.reborn.energy.get())
+			addDependency("team_reborn_energy", ">=" + libs.versions.reborn.energy.get())
 		}
 		withEntrypoints {
 			init("com.mmodding.library.integration.reborn_energy.RebornEnergyIntegration")
