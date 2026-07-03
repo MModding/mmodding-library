@@ -14,6 +14,7 @@ fabric_api = "0.152.1+26.2"
 
 # Mod Integrations
 trinkets_updated = "4.0.0-alpha.8+26.1"
+reborn_energy = "5.0.0"
 
 [libraries]
 # For Convention Plugins
@@ -33,3 +34,4 @@ fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 
 # Mod Integrations
 trinkets = { module = "eu.pb4:trinkets", version.ref = "trinkets_updated" }
+reborn_energy = { module = "teamreborn:energy", version.ref = "reborn_energy" }
