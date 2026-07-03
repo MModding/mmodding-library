@@ -6,6 +6,7 @@
   "mixins": [
     "EntityMixin",
     "FishingBobberEntityMixin",
+    "ItemMixin",
     "ItemPropertiesMixin",
     "PlayerEntityMixin",
     "ProjectileWeaponItemMixin"
