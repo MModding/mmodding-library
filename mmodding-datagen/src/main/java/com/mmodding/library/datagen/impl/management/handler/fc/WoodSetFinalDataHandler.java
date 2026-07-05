@@ -113,20 +113,32 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		@Override
 		public void generateBlockStateModels(BlockModelGenerators generator) {
 			for (WoodSet set : this.sets) {
-				BlockModelGenerators.WoodProvider provider = generator.woodProvider(set.getLog()).wood(set.getWood());
+				if (!set.getSettings().isLogModelManuallyConfigured()) {
+					BlockModelGenerators.WoodProvider provider = generator.woodProvider(set.getLog()).wood(set.getWood());
+					switch (set.getSettings().getLogDisplay()) {
+						case NORMAL -> provider.log(set.getLog());
+						case WITH_HORIZONTAL -> provider.logWithHorizontal(set.getLog());
+						case UV_LOCKED -> provider.logUVLocked(set.getLog());
+					}
+				}
+
 				BlockModelGenerators.WoodProvider stripped = generator.woodProvider(set.getStrippedLog()).wood(set.getStrippedWood());
 				switch (set.getSettings().getLogDisplay()) {
-					case NORMAL -> { provider.log(set.getLog()); stripped.log(set.getStrippedLog()); }
-					case WITH_HORIZONTAL -> { provider.logWithHorizontal(set.getLog()); stripped.logWithHorizontal(set.getStrippedLog()); }
-					case UV_LOCKED -> { provider.logUVLocked(set.getLog()); stripped.logUVLocked(set.getStrippedLog()); }
+					case NORMAL -> stripped.log(set.getStrippedLog());
+					case WITH_HORIZONTAL -> stripped.logWithHorizontal(set.getStrippedLog());
+					case UV_LOCKED -> stripped.logUVLocked(set.getStrippedLog());
 				}
-				AdvancedLeavesBlock leaves = (AdvancedLeavesBlock) set.getLeaves();
-				if (leaves.getItemTintColor() != null) {
-					generator.createTintedLeaves(leaves, TexturedModel.LEAVES, leaves.getItemTintColor().toDecimal());
+
+				if (!set.getSettings().isLeavesModelManuallyConfigured()) {
+					AdvancedLeavesBlock leaves = (AdvancedLeavesBlock) set.getLeaves();
+					if (leaves.getItemTintColor() != null) {
+						generator.createTintedLeaves(leaves, TexturedModel.LEAVES, leaves.getItemTintColor().toDecimal());
+					}
+					else {
+						generator.createTrivialBlock(leaves, TexturedModel.LEAVES);
+					}
 				}
-				else {
-					generator.createTrivialBlock(leaves, TexturedModel.LEAVES);
-				}
+
 				generator.createPlantWithDefaultItem(set.getSapling(), set.getPottedSapling(), BlockModelGenerators.PlantType.NOT_TINTED);
 				generator.family(set.getPlankRelatives().getMain()).hangingSign(set.getHangingSign());
 				generator.createShelf(set.getShelf(), set.getStrippedLog());

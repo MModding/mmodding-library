@@ -82,7 +82,7 @@ public abstract class BuiltinRegistryTagsProvider<T> extends FabricTagsProvider<
 		@Nullable
 		private final Function<TagKey<Block>, TagBuilder> blockTagBuilderProvider;
 
-		public ItemTagsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture, @Nullable BlockTagsProvider blockTagsProvider) {
+		public ItemTagsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture, BuiltinRegistryTagsProvider.@Nullable BlockTagsProvider blockTagsProvider) {
 			super(output, BuiltInRegistries.ITEM, registryLookupFuture);
 			this.blockTagBuilderProvider = blockTagsProvider == null ? null : blockTagsProvider::getOrCreateRawBuilder;
 		}

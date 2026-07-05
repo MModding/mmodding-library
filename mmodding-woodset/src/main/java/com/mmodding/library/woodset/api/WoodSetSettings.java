@@ -18,7 +18,11 @@ public interface WoodSetSettings {
 	}
 
 	static WoodSetSettings create(boolean burnable, LogDisplay logDisplay, Supplier<Block> hangingSignChain) {
-		return new WoodSetSettingsImpl(burnable, logDisplay, hangingSignChain);
+		return WoodSetSettings.create(burnable, logDisplay, hangingSignChain, false, false);
+	}
+
+	static WoodSetSettings create(boolean burnable, LogDisplay logDisplay, Supplier<Block> hangingSignChain, boolean logModelManuallyConfigured, boolean leavesModelManuallyConfigured) {
+		return new WoodSetSettingsImpl(burnable, logDisplay, hangingSignChain, logModelManuallyConfigured, leavesModelManuallyConfigured);
 	}
 
 	boolean isBurnable();
@@ -35,6 +39,18 @@ public interface WoodSetSettings {
 	 * @return the resource key
 	 */
 	Block getHangingSignChain();
+
+	/**
+	 * Indicates that the normal log model of the wood set is not automatically handled by the data generation module.
+	 * @return the boolean indicator
+	 */
+	boolean isLogModelManuallyConfigured();
+
+	/**
+	 * Indicates that the leaves model of the wood set is not automatically handled by the data generation module.
+	 * @return the boolean indicator
+	 */
+	boolean isLeavesModelManuallyConfigured();
 
 	/**
 	 * Indicates which model should be used for the log.
