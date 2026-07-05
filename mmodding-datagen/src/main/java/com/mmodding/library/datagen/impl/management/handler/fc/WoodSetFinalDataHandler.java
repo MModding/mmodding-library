@@ -113,8 +113,8 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 		@Override
 		public void generateBlockStateModels(BlockModelGenerators generator) {
 			for (WoodSet set : this.sets) {
+				BlockModelGenerators.WoodProvider provider = generator.woodProvider(set.getLog()).wood(set.getWood());
 				if (!set.getSettings().isLogModelManuallyConfigured()) {
-					BlockModelGenerators.WoodProvider provider = generator.woodProvider(set.getLog()).wood(set.getWood());
 					switch (set.getSettings().getLogDisplay()) {
 						case NORMAL -> provider.log(set.getLog());
 						case WITH_HORIZONTAL -> provider.logWithHorizontal(set.getLog());
