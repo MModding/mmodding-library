@@ -4,6 +4,7 @@ import com.mmodding.library.core.api.registry.factory.RegistrationFactory;
 import com.mmodding.library.core.api.registry.factory.ResourceKeyFactory;
 import com.mmodding.library.core.impl.AdvancedContainerImpl;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
@@ -107,40 +108,54 @@ public interface AdvancedContainer extends ModContainer {
 	}
 
 	/**
-	 * Creates a stream of entries of the current mod from a specified registry.
+	 * Creates a sequential stream of filtered holders from a specified registry to match the current mod.
+	 * <br>Holders are ordered by registration.
 	 * @param registry the registry
 	 * @return the stream
 	 * @param <T> the element type
 	 */
+	default <T> Stream<Holder.Reference<T>> streamRegistryHolders(Registry<T> registry) {
+		return registry.listElements().filter(e -> e.key().identifier().getNamespace().equals(getMetadata().getId()));
+	}
+
+	/**
+	 * Creates a stream of entries of the current mod from a specified registry.
+	 * <br>Entries are ordered by registration.
+	 * @param registry the registry
+	 * @return the stream
+	 * @param <T> the element type
+	 */
+	@Deprecated(forRemoval = true)
 	default <T> Stream<Map.Entry<ResourceKey<T>, T>> streamRegistryEntries(Registry<T> registry) {
-		return registry.entrySet()
-			.stream()
-			.filter(e -> e.getKey().identifier().getNamespace().equals(getMetadata().getId()));
+		return this.streamRegistryHolders(registry).map(ref -> Map.entry(ref.key(), ref.value()));
 	}
 
 	/**
 	 * Creates a stream of values of the current mod from a specified registry.
+	 * <br>Values are ordered by registration.
 	 * @param registry the registry
 	 * @return the stream
 	 * @param <T> the element type
 	 */
 	default <T> Stream<T> streamRegistryValues(Registry<T> registry) {
-		return this.streamRegistryEntries(registry).map(Map.Entry::getValue);
+		return this.streamRegistryHolders(registry).map(Holder::value);
 	}
 
 	/**
-	 * Iterates over entries of the current mod from a specified registry.
+	 * Iterates over holders of the current mod from a specified registry.
+	 * <br>Holders are ordered by registration.
 	 * @param registry the registry
 	 * @param consumer the consumer
 	 * @param <T> the element type
 	 */
 	default <T> void iterateOverRegistry(Registry<T> registry, BiConsumer<ResourceKey<T>, T> consumer) {
-		this.streamRegistryEntries(registry)
-			.forEachOrdered(e -> consumer.accept(e.getKey(), e.getValue()));
+		this.streamRegistryHolders(registry)
+			.forEachOrdered(ref -> consumer.accept(ref.key(), ref.value()));
 	}
 
 	/**
 	 * Iterates over values of the current mod from a specified registry.
+	 * <br>Values are ordered by registration.
 	 * @param registry the registry
 	 * @param consumer the consumer
 	 * @param <T> the element type
