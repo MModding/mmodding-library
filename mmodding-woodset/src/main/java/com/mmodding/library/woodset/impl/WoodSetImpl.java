@@ -63,13 +63,13 @@ public class WoodSetImpl implements WoodSet {
 
 	private final WoodSetSettings settings;
 
-	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, String woodName, SoundType woodSoundType, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch, WoodSetSettings settings) {
+	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, BlockFactory<? extends RotatedPillarBlock> normalLogFactory, BlockFactory<? extends RotatedPillarBlock> strippedLogFactory, String woodName, BlockFactory<? extends RotatedPillarBlock> normalWoodFactory, BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory, SoundType woodSoundType, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch, WoodSetSettings settings) {
 		this.identifier = Identifier.fromNamespaceAndPath(namespace, name);
 		this.type = woodTypeBuilder.register(this.identifier, setTypeBuilder.register(this.identifier));
-		this.log = this.registerBlock("_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
-		this.wood = this.registerBlock("_" + woodName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
-		this.strippedLog = this.registerBlock("stripped_", "_" + logName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
-		this.strippedWood = this.registerBlock("stripped_", "_" + woodName, RotatedPillarBlock::new, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.log = this.registerBlock("_" + logName, normalLogFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.wood = this.registerBlock("_" + woodName, normalWoodFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.strippedLog = this.registerBlock("stripped_", "_" + logName, strippedLogFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.strippedWood = this.registerBlock("stripped_", "_" + woodName, strippedWoodFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
 		StrippableBlockRegistry.register(this.log, this.strippedLog);
 		StrippableBlockRegistry.register(this.wood, this.strippedWood);
 		this.logsBlockTag = TagKey.create(Registries.BLOCK, this.identifier.withPath(path -> path + "_logs"));

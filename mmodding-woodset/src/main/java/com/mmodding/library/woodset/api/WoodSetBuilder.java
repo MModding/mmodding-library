@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -59,12 +60,68 @@ public interface WoodSetBuilder {
 	WoodSetBuilder withLogName(String log);
 
 	/**
+	 * Sets a {@link BlockFactory} for the normal log block. It allows advanced configuration of the normal log block, if necessary.
+	 * <br>Defaults to the factory used by {@link Blocks#OAK_LOG}.
+	 * @param normalLogFactory the normal log factory
+	 * @return the builder
+	 */
+	WoodSetBuilder withNormalLogFactory(BlockFactory<? extends RotatedPillarBlock> normalLogFactory);
+
+	/**
+	 * Sets a {@link BlockFactory} for the stripped log block. It allows advanced configuration of the stripped log block, if necessary.
+	 * <br>Defaults to the factory used by {@link Blocks#STRIPPED_OAK_LOG}.
+	 * @param strippedLogFactory the stripped log factory
+	 * @return the builder
+	 */
+	WoodSetBuilder withStrippedLogFactory(BlockFactory<? extends RotatedPillarBlock> strippedLogFactory);
+
+	/**
+	 * Sets a {@link BlockFactory} for the log blocks. It allows advanced configuration of the log blocks, if necessary.
+	 * <br>Defaults to the factory used by {@link Blocks#OAK_LOG}.
+	 * @param logFactory the log factory
+	 * @return the builder
+	 */
+	default WoodSetBuilder withLogFactory(BlockFactory<? extends RotatedPillarBlock> logFactory) {
+		this.withNormalLogFactory(logFactory);
+		this.withStrippedLogFactory(logFactory);
+		return this;
+	}
+
+	/**
 	 * Sets a string which replaces "wood" in the wood block identifier.
 	 * <br>Defaults to <code>"wood"</code>.
 	 * @param wood the wood name
 	 * @return the builder
 	 */
 	WoodSetBuilder withWoodName(String wood);
+
+	/**
+	 * Sets a {@link BlockFactory} for the normal wood block. It allows advanced configuration of the normal wood block, if necessary.
+	 * <br>Defaults to the factory used by {@link Blocks#OAK_WOOD}.
+	 * @param normalWoodFactory the normal wood factory
+	 * @return the builder
+	 */
+	WoodSetBuilder withNormalWoodFactory(BlockFactory<? extends RotatedPillarBlock> normalWoodFactory);
+
+	/**
+	 * Sets a {@link BlockFactory} for the stripped wood block. It allows advanced configuration of the stripped wood block, if necessary.
+	 * <br>Defaults to the factory used by {@link Blocks#STRIPPED_OAK_WOOD}.
+	 * @param strippedWoodFactory the stripped wood factory
+	 * @return the builder
+	 */
+	WoodSetBuilder withStrippedWoodFactory(BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory);
+
+	/**
+	 * Sets a {@link BlockFactory} for the wood blocks. It allows advanced configuration of the wood blocks, if necessary.
+	 * <br>Defaults to the factory used by {@link Blocks#OAK_WOOD}.
+	 * @param woodFactory the wood factory
+	 * @return the builder
+	 */
+	default WoodSetBuilder withWoodFactory(BlockFactory<? extends RotatedPillarBlock> woodFactory) {
+		this.withNormalWoodFactory(woodFactory);
+		this.withStrippedWoodFactory(woodFactory);
+		return this;
+	}
 
 	/**
 	 * Sets a {@link SoundType} for standard wood objects.
@@ -160,7 +217,7 @@ public interface WoodSetBuilder {
 
 	/**
 	 * Builds and registers the {@link WoodSet}.
-	 * Do not forget to classload the woodset at mod initialization!
+	 * Do not forget to classload the wood set at mod initialization!
 	 * @return the newly built wood set
 	 */
 	WoodSet buildAndRegister();

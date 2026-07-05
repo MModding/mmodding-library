@@ -10,6 +10,7 @@ import com.mmodding.library.woodset.api.WoodSetSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -24,7 +25,11 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	private final BlockSetTypeBuilder setTypeBuilder;
 
 	private String logName = "log";
+	private BlockFactory<? extends RotatedPillarBlock> normalLogFactory = RotatedPillarBlock::new;
+	private BlockFactory<? extends RotatedPillarBlock> strippedLogFactory = RotatedPillarBlock::new;
 	private String woodName = "wood";
+	private BlockFactory<? extends RotatedPillarBlock> normalWoodFactory = RotatedPillarBlock::new;
+	private BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory = RotatedPillarBlock::new;
 	private SoundType woodSoundType = SoundType.WOOD;
 	private BlockFactory<? extends AdvancedLeavesBlock> leavesFactory = properties -> new AdvancedLeavesBlock(0.01f, Color.rgb(-12012264), properties);
 	private SoundType leavesSoundType = SoundType.GRASS;
@@ -45,6 +50,30 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	@Override
 	public WoodSetBuilder withLogName(String log) {
 		this.logName = log;
+		return this;
+	}
+
+	@Override
+	public WoodSetBuilder withNormalLogFactory(BlockFactory<? extends RotatedPillarBlock> normalLogFactory) {
+		this.normalLogFactory = normalLogFactory;
+		return this;
+	}
+
+	@Override
+	public WoodSetBuilder withStrippedLogFactory(BlockFactory<? extends RotatedPillarBlock> strippedLogFactory) {
+		this.strippedLogFactory = strippedLogFactory;
+		return this;
+	}
+
+	@Override
+	public WoodSetBuilder withNormalWoodFactory(BlockFactory<? extends RotatedPillarBlock> normalWoodFactory) {
+		this.normalWoodFactory = normalWoodFactory;
+		return this;
+	}
+
+	@Override
+	public WoodSetBuilder withStrippedWoodFactory(BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory) {
+		this.strippedWoodFactory = strippedWoodFactory;
 		return this;
 	}
 
@@ -116,7 +145,11 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 			this.woodTypeBuilder,
 			this.setTypeBuilder,
 			this.logName,
+			this.normalLogFactory,
+			this.strippedLogFactory,
 			this.woodName,
+			this.normalLogFactory,
+			this.strippedWoodFactory,
 			this.woodSoundType,
 			this.leavesFactory,
 			this.leavesSoundType,
