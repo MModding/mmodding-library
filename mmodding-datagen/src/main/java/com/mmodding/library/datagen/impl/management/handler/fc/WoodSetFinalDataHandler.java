@@ -5,6 +5,7 @@ import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.impl.wrapper.BlockRelativesImpl;
 import com.mmodding.library.datagen.api.lang.DefaultLangProcessors;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
+import com.mmodding.library.datagen.api.model.block.DefaultBlockModelProcessing;
 import com.mmodding.library.datagen.api.provider.BuiltinRegistryTagsProvider;
 import com.mmodding.library.datagen.api.provider.MModdingLanguageProvider;
 import com.mmodding.library.woodset.api.WoodSet;
@@ -140,7 +141,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 				}
 
 				generator.createPlantWithDefaultItem(set.getSapling(), set.getPottedSapling(), BlockModelGenerators.PlantType.NOT_TINTED);
-				generator.family(set.getPlankRelatives().getMain()).hangingSign(set.getHangingSign());
+				DefaultBlockModelProcessing.createHangingSign(generator, set.getHangingSign(), set.getWallHangingSign(), set.getStrippedLog());
 				generator.createShelf(set.getShelf(), set.getStrippedLog());
 			}
 		}

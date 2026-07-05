@@ -41,6 +41,26 @@ public class DefaultBlockModelProcessing {
 		generator.registerSimpleItemModel(block, bottom);
 	}
 
+	public static void createHangingSign(BlockModelGenerators generator, Block hangingSign, Block wallHangingSign, Block particleBlock) {
+		TextureMapping mapping = new TextureMapping()
+			.put(TextureSlot.ALL, TextureMapping.getBlockTexture(hangingSign))
+			.put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(particleBlock));
+		generator.blockStateOutput.accept(BlockModelGenerators.createHangingSign(
+			hangingSign,
+			BlockModelGenerators.plainVariant(ModelTemplates.HANGING_SIGN_ROT_0.create(ModelLocationUtils.getModelLocation(hangingSign, "_rot_0"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.HANGING_SIGN_ROT_1.create(ModelLocationUtils.getModelLocation(hangingSign, "_rot_1"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.HANGING_SIGN_ROT_2.create(ModelLocationUtils.getModelLocation(hangingSign, "_rot_2"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.HANGING_SIGN_ROT_3.create(ModelLocationUtils.getModelLocation(hangingSign, "_rot_3"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_0.create(ModelLocationUtils.getModelLocation(hangingSign, "_attached_rot_0"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_1.create(ModelLocationUtils.getModelLocation(hangingSign, "_attached_rot_1"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_2.create(ModelLocationUtils.getModelLocation(hangingSign, "_attached_rot_2"), mapping, generator.modelOutput)),
+			BlockModelGenerators.plainVariant(ModelTemplates.ATTACHED_HANGING_SIGN_ROT_3.create(ModelLocationUtils.getModelLocation(hangingSign, "_attached_rot_3"), mapping, generator.modelOutput))
+		));
+		MultiVariant wallModel = BlockModelGenerators.plainVariant(ModelTemplates.WALL_HANGING_SIGN.create(wallHangingSign, mapping, generator.modelOutput));
+		generator.blockStateOutput.accept(MultiVariantGenerator.dispatch(wallHangingSign, wallModel).with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
+		generator.registerSimpleFlatItemModel(hangingSign.asItem());
+	}
+
 	public static Block unwax(Block waxed) {
 		return BuiltInRegistries.BLOCK.getValueOrThrow(waxed.builtInRegistryHolder().key().mapIdentifier(id -> id.withPath(s -> s.replace("waxed_", ""))));
 	}
