@@ -38,12 +38,12 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public RecipeHelper shaped(RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
-		return this.shaped(1, category, consumer);
+		return this.shaped(1, category, consumer, unlockers);
 	}
 
 	@Override
 	public RecipeHelper shaped(String suffix, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
-		return this.shaped(suffix, 1, category, consumer);
+		return this.shaped(suffix, 1, category, consumer, unlockers);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class RecipeHelperImpl implements RecipeHelper {
 
 	@Override
 	public RecipeHelper shaped(String suffix, int count, RecipeCategory category, Consumer<ShapedRecipe> consumer, ItemLike... unlockers) {
-		ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.provider, this.target, count, category);
+		ShapedRecipeImpl recipe = new ShapedRecipeImpl(this.provider, this.target, count, category, unlockers);
 		consumer.accept(recipe);
 		return this.save(recipe.factory, suffix);
 	}
