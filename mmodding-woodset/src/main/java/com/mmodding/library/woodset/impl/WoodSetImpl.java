@@ -79,7 +79,7 @@ public class WoodSetImpl implements WoodSet {
 		this.sapling = this.registerBlock("_sapling", properties -> new SaplingBlock(grower, properties), _ -> patch.map(saplingSettings)).registerItem();
 		this.pottedSapling = this.registerBlock("potted_", "_sapling", properties -> new FlowerPotBlock(this.sapling, properties), patch);
 		this.plankRelatives = BlockRelatives.registerPlanks(this.identifier, this.type, patch);
-		this.wallHangingSign = this.registerBlock("_hangign_sign_wall", properties -> new WallHangingSignBlock(this.type, properties), patch);
+		this.wallHangingSign = this.registerBlock("_hanging_sign_wall", properties -> new WallHangingSignBlock(this.type, properties), patch);
 		this.hangingSign = this.registerBlock("_hanging_sign", properties -> new CeilingHangingSignBlock(this.type, properties), patch).registerItem((block, properties) -> new HangingSignItem(block, this.wallHangingSign, properties), new Item.Properties().stacksTo(16));
 		BlockEntityTypes.HANGING_SIGN.addValidBlock(this.hangingSign);
 		BlockEntityTypes.HANGING_SIGN.addValidBlock(this.wallHangingSign);
