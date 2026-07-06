@@ -8,6 +8,8 @@ import com.mmodding.library.datagen.api.management.handler.DataHandler;
 import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.datagen.api.management.handler.FinalDataHandler;
 import com.mmodding.library.datagen.api.management.resolver.DataContentResolver;
+import com.mmodding.library.item.api.wrapper.ItemHeap;
+import com.mmodding.library.item.impl.wrapper.ItemHeapImpl;
 import com.mmodding.library.java.api.list.BiList;
 import com.mmodding.library.java.api.list.TriList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -17,6 +19,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.*;
@@ -176,6 +179,7 @@ public class TaskDataManagerImpl implements DataManager {
 	}
 
 	static {
+		DataContentResolver.register(ItemHeapImpl.class, Item.class, ItemHeap::getEntries);
 		DataContentResolver.register(BlockHeapImpl.class, Block.class, BlockHeap::getEntries);
 	}
 }
