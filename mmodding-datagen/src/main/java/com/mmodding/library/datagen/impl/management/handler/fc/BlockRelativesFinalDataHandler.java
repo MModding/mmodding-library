@@ -191,7 +191,7 @@ public class BlockRelativesFinalDataHandler implements FinalDataHandler<BlockRel
 						case DOOR -> this.buildAndMemorize(BlockTags.DOORS).add(block);
 						case FENCE -> this.buildAndMemorize(BlockTags.FENCES).add(block);
 						case FENCE_GATE -> this.buildAndMemorize(BlockTags.FENCE_GATES).add(block);
-						case SIGN -> this.buildAndMemorize(BlockTags.SIGNS).add(block);
+						case SIGN -> this.buildAndMemorize(BlockTags.STANDING_SIGNS).add(block);
 						case SLAB -> this.buildAndMemorize(BlockTags.SLABS).add(block);
 						case STAIRS -> this.buildAndMemorize(BlockTags.STAIRS).add(block);
 						case PRESSURE_PLATE -> this.buildAndMemorize(BlockTags.PRESSURE_PLATES).add(block);
