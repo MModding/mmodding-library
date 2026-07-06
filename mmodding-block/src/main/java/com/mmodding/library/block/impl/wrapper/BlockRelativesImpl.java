@@ -68,7 +68,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 		}
 		if (variant.equals(BlockFamily.Variant.WALL_SIGN)) {
 			ResourceKey<Item> signKey = ResourceKey.create(Registries.ITEM, IdentifierUtil.extend(this.identifier, BlockFamily.Variant.SIGN.getRecipeGroup()));
-			Items.registerItem(signKey, properties -> new SignItem(this.variants.get(BlockFamily.Variant.SIGN), block, properties));
+			Items.registerItem(signKey, properties -> new SignItem(this.variants.get(BlockFamily.Variant.SIGN), block, properties), new Item.Properties().stacksTo(16));
 		}
 		this.variants.put(variant, block);
 		return this;
