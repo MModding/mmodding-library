@@ -35,4 +35,12 @@ public class DefaultLangProcessors {
 		String classic = CLASSIC.process(identifier);
 		return classic.substring(0, classic.length() - 11) + " Boat with Chest";
 	};
+
+	/**
+	 * For example: "axolotl_bucket" -> "Bucket of Axolotl"
+	 */
+	public static final TranslationProcessor MOB_BUCKET = identifier -> {
+		String classic = CLASSIC.process(identifier);
+		return "Bucket of " + classic.substring(0, classic.length() - 6);
+	};
 }
