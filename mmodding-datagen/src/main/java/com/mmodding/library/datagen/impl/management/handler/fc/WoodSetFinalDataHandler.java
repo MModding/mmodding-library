@@ -267,7 +267,7 @@ public class WoodSetFinalDataHandler implements FinalDataHandler<WoodSet> {
 				this.valueBuilder(BlockTags.WOODEN_DOORS).add(set.getPlankRelatives().get(BlockFamily.Variant.DOOR));
 				this.valueBuilder(BlockTags.WOODEN_FENCES).add(set.getPlankRelatives().get(BlockFamily.Variant.FENCE));
 				this.valueBuilder(BlockTags.FENCE_GATES).add(set.getPlankRelatives().get(BlockFamily.Variant.FENCE_GATE));
-				this.valueBuilder(BlockTags.SIGNS).add(set.getPlankRelatives().get(BlockFamily.Variant.SIGN));
+				this.valueBuilder(BlockTags.STANDING_SIGNS).add(set.getPlankRelatives().get(BlockFamily.Variant.SIGN));
 				this.valueBuilder(BlockTags.WOODEN_SLABS).add(set.getPlankRelatives().get(BlockFamily.Variant.SLAB));
 				this.valueBuilder(BlockTags.WOODEN_STAIRS).add(set.getPlankRelatives().get(BlockFamily.Variant.STAIRS));
 				this.valueBuilder(BlockTags.WOODEN_PRESSURE_PLATES).add(set.getPlankRelatives().get(BlockFamily.Variant.PRESSURE_PLATE));
