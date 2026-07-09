@@ -53,6 +53,11 @@ public abstract class DoubleCropBlock extends PitcherCropBlock {
 	protected abstract int getBonemealAgeIncrease(final Level level);
 
 	@Override
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+		return (!this.isDoubleBlock(0) || this.canGrowInto(level, pos.above())) && super.canSurvive(state, level, pos);
+	}
+
+	@Override
 	public BlockState updateShape(
 		final BlockState state,
 		final LevelReader level,
@@ -97,7 +102,7 @@ public abstract class DoubleCropBlock extends PitcherCropBlock {
 		return this.getAge(lowerState) < this.getMaxAge()
 			&& CropBlock.hasSufficientLight(level, lowerPos)
 			&& level.isInsideBuildHeight(lowerPos.above())
-			&& (!this.isDoubleBlock(newAge) || canGrowInto(level, lowerPos, lowerPos.above()));
+			&& (!this.isDoubleBlock(newAge) || this.canGrowInto(level, lowerPos.above()));
 	}
 
 	public void growCrops(final ServerLevel level, final BlockState lowerState, final BlockPos lowerPos, final int increase) {
@@ -129,9 +134,9 @@ public abstract class DoubleCropBlock extends PitcherCropBlock {
 		this.growCrops(level, lowerState, lowerPos, this.getBonemealAgeIncrease(level));
 	}
 
-	public static boolean canGrowInto(final LevelReader level, final BlockPos pos, final BlockPos abovePos) {
+	public boolean canGrowInto(LevelReader level, BlockPos abovePos) {
 		BlockState state = level.getBlockState(abovePos);
-		return state.isAir() || state.is(level.getBlockState(pos).getBlock());
+		return state.isAir() || state.is(this);
 	}
 
 	@Override
