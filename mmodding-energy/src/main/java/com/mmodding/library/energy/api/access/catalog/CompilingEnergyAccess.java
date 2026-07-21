@@ -57,7 +57,14 @@ public abstract class CompilingEnergyAccess implements EnergyAccess {
 	@Override
 	public long capacity() {
 		return this.collection.stream()
-			.map(access -> EnergyUnit.convert(access.amount(), access.unit(), this.unit))
+			.map(access -> EnergyUnit.convert(access.capacity(), access.unit(), this.unit))
+			.reduce(0L, Long::sum);
+	}
+
+	@Override
+	public long remaining() {
+		return this.collection.stream()
+			.map(access -> EnergyUnit.convert(access.remaining(), access.unit(), this.unit))
 			.reduce(0L, Long::sum);
 	}
 
