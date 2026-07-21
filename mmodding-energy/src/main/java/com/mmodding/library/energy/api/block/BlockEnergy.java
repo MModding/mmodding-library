@@ -85,12 +85,14 @@ public final class BlockEnergy {
 		 * Handles an access query with provided context.
 		 * @param level the level
 		 * @param pos the block position
+		 * @param state the block state
+		 * @param blockEntity the possibly existing block entity
 		 * @param side the side
 		 * @param internalComponent the internal component for the block instance
 		 * @return the possible energy access
 		 */
 		@Nullable
-		EnergyAccess handle(ServerLevel level, BlockPos pos, @Nullable Direction side, EnergyComponent internalComponent);
+		EnergyAccess handle(ServerLevel level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Direction side, EnergyComponent internalComponent);
 	}
 
 	public interface HeadlessQueryHandler {
@@ -99,10 +101,12 @@ public final class BlockEnergy {
 		 * Handles an access query with the provided context.
 		 * @param level the level
 		 * @param pos the block position
+		 * @param state the block state
+		 * @param blockEntity the possibly existing block entity
 		 * @param side the side
 		 * @return the possible energy access
 		 */
 		@Nullable
-		EnergyAccess handle(ServerLevel level, BlockPos pos, @Nullable Direction side);
+		EnergyAccess handle(ServerLevel level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Direction side);
 	}
 }

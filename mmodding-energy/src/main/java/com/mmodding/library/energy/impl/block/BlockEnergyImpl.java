@@ -73,7 +73,7 @@ public final class BlockEnergyImpl {
 		SIDED.registerForBlocks((level, pos, state, blockEntity, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
 			return handler.handle(
-				serverLevel, pos, side,
+				serverLevel, pos, state, blockEntity, side,
 				serverLevel.getDataStorage()
 					.computeIfAbsent(BlockEnergySavedData.TYPE)
 					.getComponent(pos, block, state, blockEntity)
@@ -86,9 +86,9 @@ public final class BlockEnergyImpl {
 			throw new IllegalStateException("Block " + block + " already has a defined query handler!");
 		}
 		DEFINITIONS_LOCK.add(block);
-		SIDED.registerForBlocks((level, pos, _, _, side) -> {
+		SIDED.registerForBlocks((level, pos, state, blockEntity, side) -> {
 			ServerLevel serverLevel = (ServerLevel) level;
-			return handler.handle(serverLevel, pos, side);
+			return handler.handle(serverLevel, pos, state, blockEntity, side);
 		}, block);
 	}
 }
