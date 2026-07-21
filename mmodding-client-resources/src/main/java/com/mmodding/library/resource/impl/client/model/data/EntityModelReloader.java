@@ -30,4 +30,8 @@ public class EntityModelReloader extends SimpleJsonResourceReloadListener<LayerD
 		preparations.forEach((identifier, definition) -> this.models.put(identifier, new SimpleEntityModel<>(definition.bakeRoot())));
 		DataDrivenModelEvents.FINALIZE_ENTITY_MODELS.invoker().execute(new EntityModelGetterImpl(this.models));
 	}
+
+	public SimpleEntityModel<? extends EntityRenderState> getModel(Identifier identifier) {
+		return this.models.get(identifier);
+	}
 }
