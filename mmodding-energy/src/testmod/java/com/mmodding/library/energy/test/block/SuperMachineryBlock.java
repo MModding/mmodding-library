@@ -27,7 +27,7 @@ public class SuperMachineryBlock extends BaseEntityBlock {
 		super(properties);
 		BlockEnergy.defineEnergy(
 			this, 10000L, FabricEnergy.UNIT,
-			(_, _, side, internalStorage) -> Direction.UP.equals(side) ? EnergyAccess.from(internalStorage) : null
+			(_, _, _, _, side, internalStorage) -> Direction.UP.equals(side) ? EnergyAccess.from(internalStorage) : null
 		);
 	}
 
