@@ -1,9 +1,9 @@
 package com.mmodding.library.resource.impl.client.model.data;
 
-import com.mmodding.library.core.api.registry.LiteRegistry;
 import com.mmodding.library.core.api.serialization.MModdingCodecs;
 import com.mmodding.library.resource.api.client.model.data.DataDrivenModelEvents;
 import com.mmodding.library.resource.api.client.model.SimpleBlockEntityModel;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.resources.FileToIdConverter;
@@ -18,9 +18,7 @@ public class BlockEntityModelReloader extends SimpleJsonResourceReloadListener<L
 
 	public static final BlockEntityModelReloader INSTANCE = new BlockEntityModelReloader(FileToIdConverter.json("mmodding/models/block_entity"));
 
-	private final LiteRegistry<SimpleBlockEntityModel<? extends BlockEntityRenderState>> models = LiteRegistry.create();
-
-	private boolean initial = true;
+	private final Map<Identifier, SimpleBlockEntityModel<? extends BlockEntityRenderState>> models = new Object2ObjectOpenHashMap<>();
 
 	protected BlockEntityModelReloader(FileToIdConverter lister) {
 		super(MModdingCodecs.decodeOnly(LayerDefinitionDecoders.LAYER_DEFINITION_DECODER), lister);
@@ -28,8 +26,8 @@ public class BlockEntityModelReloader extends SimpleJsonResourceReloadListener<L
 
 	@Override
 	protected void apply(Map<Identifier, LayerDefinition> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		preparations.forEach((identifier, definition) -> this.models.register(identifier, new SimpleBlockEntityModel<>(definition.bakeRoot())));
-		DataDrivenModelEvents.FINALIZE_BLOCK_ENTITY_MODELS.invoker().execute(new BlockEntityModelGetterImpl(this.models), this.initial);
-		this.initial = false;
+		this.models.clear();
+		preparations.forEach((identifier, definition) -> this.models.put(identifier, new SimpleBlockEntityModel<>(definition.bakeRoot())));
+		DataDrivenModelEvents.FINALIZE_BLOCK_ENTITY_MODELS.invoker().execute(new BlockEntityModelGetterImpl(this.models));
 	}
 }

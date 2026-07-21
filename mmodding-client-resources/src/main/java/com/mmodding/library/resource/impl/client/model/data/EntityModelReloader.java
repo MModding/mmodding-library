@@ -1,9 +1,9 @@
 package com.mmodding.library.resource.impl.client.model.data;
 
-import com.mmodding.library.core.api.registry.LiteRegistry;
 import com.mmodding.library.core.api.serialization.MModdingCodecs;
 import com.mmodding.library.resource.api.client.model.data.DataDrivenModelEvents;
 import com.mmodding.library.resource.api.client.model.SimpleEntityModel;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.FileToIdConverter;
@@ -18,9 +18,7 @@ public class EntityModelReloader extends SimpleJsonResourceReloadListener<LayerD
 
 	public static final EntityModelReloader INSTANCE = new EntityModelReloader(FileToIdConverter.json("mmodding/models/entity"));
 
-	private final LiteRegistry<SimpleEntityModel<? extends EntityRenderState>> models = LiteRegistry.create();
-
-	private boolean initial = true;
+	private final Map<Identifier, SimpleEntityModel<? extends EntityRenderState>> models = new Object2ObjectOpenHashMap<>();
 
 	protected EntityModelReloader(FileToIdConverter lister) {
 		super(MModdingCodecs.decodeOnly(LayerDefinitionDecoders.LAYER_DEFINITION_DECODER), lister);
@@ -28,8 +26,8 @@ public class EntityModelReloader extends SimpleJsonResourceReloadListener<LayerD
 
 	@Override
 	protected void apply(Map<Identifier, LayerDefinition> preparations, ResourceManager manager, ProfilerFiller profiler) {
-		preparations.forEach((identifier, definition) -> this.models.register(identifier, new SimpleEntityModel<>(definition.bakeRoot())));
-		DataDrivenModelEvents.FINALIZE_ENTITY_MODELS.invoker().execute(new EntityModelGetterImpl(this.models), this.initial);
-		this.initial = false;
+		this.models.clear();
+		preparations.forEach((identifier, definition) -> this.models.put(identifier, new SimpleEntityModel<>(definition.bakeRoot())));
+		DataDrivenModelEvents.FINALIZE_ENTITY_MODELS.invoker().execute(new EntityModelGetterImpl(this.models));
 	}
 }

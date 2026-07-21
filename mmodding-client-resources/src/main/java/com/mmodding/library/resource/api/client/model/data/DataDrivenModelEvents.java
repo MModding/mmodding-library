@@ -17,19 +17,19 @@ public final class DataDrivenModelEvents {
 	private DataDrivenModelEvents() {}
 
 	/**
-	 * @see FinalizeEntityModels#execute(FinalizeEntityModels.ModelGetter, boolean)
+	 * @see FinalizeEntityModels#execute(FinalizeEntityModels.ModelGetter)
 	 */
 	public static final Event<Identifier, FinalizeEntityModels> FINALIZE_ENTITY_MODELS = MModdingLibrary.getEventManager().create(FinalizeEntityModels.class);
 
 	/**
-	 * @see FinalizeBlockEntityModels#execute(FinalizeBlockEntityModels.ModelGetter, boolean)
+	 * @see FinalizeBlockEntityModels#execute(FinalizeBlockEntityModels.ModelGetter)
 	 */
 	public static final Event<Identifier, FinalizeBlockEntityModels> FINALIZE_BLOCK_ENTITY_MODELS = MModdingLibrary.getEventManager().create(FinalizeBlockEntityModels.class);
 
 	@FunctionalInterface
 	public interface FinalizeEntityModels {
 
-		void execute(ModelGetter models, boolean isInitialLoad);
+		void execute(ModelGetter models);
 
 		@ApiStatus.NonExtendable
 		interface ModelGetter {
@@ -41,7 +41,7 @@ public final class DataDrivenModelEvents {
 	@FunctionalInterface
 	public interface FinalizeBlockEntityModels {
 
-		void execute(ModelGetter models, boolean isInitialLoad);
+		void execute(ModelGetter models);
 
 		@ApiStatus.NonExtendable
 		interface ModelGetter {
