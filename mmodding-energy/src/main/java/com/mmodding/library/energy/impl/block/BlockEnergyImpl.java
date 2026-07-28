@@ -33,18 +33,13 @@ public final class BlockEnergyImpl {
 
 	// Caching Block State and Block Entity
 	public static EnergyAccess query(ServerLevel level, BlockPos pos, @Nullable Direction side) {
-		BlockEnergySavedData storage = level.getDataStorage().get(BlockEnergySavedData.TYPE);
-		if (storage != null) {
-			return SIDED.find(
-				level, pos,
-				storage.cachedBlockState(level, pos),
-				storage.cachedBlockEntity(level, pos),
-				side
-			);
-		}
-		else {
-			return null;
-		}
+		BlockEnergySavedData storage = level.getDataStorage().computeIfAbsent(BlockEnergySavedData.TYPE);
+		return SIDED.find(
+			level, pos,
+			storage.cachedBlockState(level, pos),
+			storage.cachedBlockEntity(level, pos),
+			side
+		);
 	}
 
 	public static EnergyComponent retrieveFrom(BlockEntity blockEntity) {
