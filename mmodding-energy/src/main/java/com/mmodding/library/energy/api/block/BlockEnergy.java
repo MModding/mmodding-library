@@ -45,6 +45,15 @@ public final class BlockEnergy {
 	}
 
 	/**
+	 * Checks if the given block has an energy definition.
+	 * @param block the specified block
+	 * @return a boolean that states if the block has an energy definition or not
+	 */
+	public static boolean hasDefinition(Block block) {
+		return BlockEnergyImpl.DEFINITIONS.containsKey(block);
+	}
+
+	/**
 	 * Defines the energy specification for this block.
 	 * @param block the block
 	 * @param capacity the energy capacity
