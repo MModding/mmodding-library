@@ -13,7 +13,7 @@ yumi_commons = "2.0.0"
 fabric_api = "0.152.1+26.2"
 
 # Mod Integrations
-trinkets_updated = "4.0.0-alpha.8+26.1"
+trinkets_updated = "4.1.0-beta.3+26.2"
 reborn_energy = "5.0.0"
 
 [libraries]
