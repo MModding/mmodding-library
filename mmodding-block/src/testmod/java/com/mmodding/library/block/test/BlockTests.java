@@ -4,6 +4,7 @@ import com.mmodding.library.block.api.catalog.AdvancedAnvilBlock;
 import com.mmodding.library.block.api.catalog.SimpleBedBlock;
 import com.mmodding.library.block.api.util.BlockFactory;
 import com.mmodding.library.block.api.wrapper.BlockHeap;
+import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.core.api.management.ElementsManager;
 import com.mmodding.library.core.api.ExtendedModInitializer;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class BlockTests implements ExtendedModInitializer {
 
@@ -30,6 +32,8 @@ public class BlockTests implements ExtendedModInitializer {
 	public static final Block TEST_BED = register("test_bed", SimpleBedBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.BED.white())).registerItem();
 
 	public static final Block TEST_ANVIL = register("test_anvil", p -> new AdvancedAnvilBlock(1.0f, 10, 10.0f, 100, null, p), BlockBehaviour.Properties.ofFullCopy(Blocks.ANVIL)).registerItem();
+
+	public static final BlockRelatives PLANKS_LIKE = BlockRelatives.registerPlanks(Identifier.fromNamespaceAndPath("mmodding_block_tests", "planks_like"), WoodType.ACACIA);
 
 	@Override
 	public void setupManager(ElementsManager manager) {
