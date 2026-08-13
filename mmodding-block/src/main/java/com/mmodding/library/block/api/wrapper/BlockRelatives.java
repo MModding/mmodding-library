@@ -45,7 +45,7 @@ public interface BlockRelatives {
 			.register(BlockFamily.Variant.SIGN, properties -> new StandingSignBlock(type, properties.forceSolidOn().noCollision()))
 			.register(BlockFamily.Variant.DOOR, properties -> new DoorBlock(type.setType(), properties.noOcclusion()))
 			.register(BlockFamily.Variant.TRAPDOOR, properties -> new TrapDoorBlock(type.setType(), properties.noOcclusion().isValidSpawn(Blocks::never)));
-		result.register(BlockFamily.Variant.WALL_SIGN, properties -> new WallSignBlock(type, properties.forceSolidOn().noCollision().overrideLootTable(result.get(BlockFamily.Variant.SIGN).getLootTable())));
+		result.register(BlockFamily.Variant.WALL_SIGN, properties -> new WallSignBlock(type, properties.forceSolidOn().noCollision().overrideDescription(result.get(BlockFamily.Variant.SIGN).getDescriptionId()).overrideLootTable(result.get(BlockFamily.Variant.SIGN).getLootTable())));
 		result.register(BlockFamily.Variant.STAIRS, properties -> new StairBlock(result.getMain().defaultBlockState(), properties));
 		return result;
 	}
