@@ -73,6 +73,14 @@ public interface DataManager {
 	interface ChainManager<T, P> {
 
 		/**
+		 * Chains a new pick for elements reaching this point, and processes it.
+		 * @param pick the pick (handled through identity check)
+		 * @param processor the processor
+		 * @return the chain manager
+		 */
+		ChainManager<T, P> chain(T pick, P processor);
+
+		/**
 		 * Chains a new selection for elements reaching this point, and processes them.
 		 * @param selection the selection
 		 * @param processor the processor

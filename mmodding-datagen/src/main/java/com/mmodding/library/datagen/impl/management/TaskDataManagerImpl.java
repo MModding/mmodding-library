@@ -141,6 +141,12 @@ public class TaskDataManagerImpl implements DataManager {
 		}
 
 		@Override
+		public ChainManager<T, P> chain(T pick, P processor) {
+			this.manager.task(this.source, this.handler, element -> this.exclusion.test(element) && pick == element, processor);
+			return new ChainManagerImpl<>(this.manager, this.source, this.handler, element -> this.exclusion.test(element) && pick != element);
+		}
+
+		@Override
 		public ChainManager<T, P> chain(Set<T> selection, P processor) {
 			this.manager.task(this.source, this.handler, element -> this.exclusion.test(element) && selection.contains(element), processor);
 			return new ChainManagerImpl<>(this.manager, this.source, this.handler, element -> this.exclusion.test(element) && !selection.contains(element));

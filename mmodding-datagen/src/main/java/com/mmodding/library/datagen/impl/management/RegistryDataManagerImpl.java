@@ -56,6 +56,11 @@ public class RegistryDataManagerImpl implements DataManager {
 	private static class EmptyChainManager<T, P> implements ChainManager<T, P> {
 
 		@Override
+		public ChainManager<T, P> chain(T pick, P processor) {
+			return new EmptyChainManager<>();
+		}
+
+		@Override
 		public ChainManager<T, P> chain(Set<T> selection, P processor) {
 			return new EmptyChainManager<>();
 		}
