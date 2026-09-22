@@ -5,7 +5,6 @@ import com.mmodding.library.energy.api.convention.FabricEnergy;
 import com.mmodding.library.energy.api.access.EnergyAccess;
 import com.mmodding.library.energy.test.block.entity.SuperMachineryBlockEntity;
 import com.mmodding.library.energy.test.init.EnergyTestBlockEntities;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -21,19 +20,12 @@ import org.jspecify.annotations.Nullable;
 
 public class SuperMachineryBlock extends BaseEntityBlock {
 
-	public static final MapCodec<SuperMachineryBlock> CODEC = simpleCodec(SuperMachineryBlock::new);
-
 	public SuperMachineryBlock(Properties properties) {
 		super(properties);
 		BlockEnergy.defineEnergy(
 			this, 10000L, FabricEnergy.UNIT,
 			(_, _, _, _, side, internalStorage) -> Direction.UP.equals(side) ? EnergyAccess.from(internalStorage) : null
 		);
-	}
-
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
 	}
 
 	@Nullable

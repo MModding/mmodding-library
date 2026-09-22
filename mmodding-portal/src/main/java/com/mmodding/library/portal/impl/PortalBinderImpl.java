@@ -65,8 +65,8 @@ public class PortalBinderImpl implements PortalBinder {
 		Colliders portalFrameColliders = portal.createPortalFrameColliders(context);
 		ToIntFunction<BlockPos> comesFirst = pos -> portal.isPlacementFitting(this.destinationLevel, lookupOrigin, context, portalFrameColliders, pos) ? -1 : 1;;
 		return StreamSupport.stream(BlockPos.spiralAround(lookupOrigin, radius, Direction.EAST, Direction.SOUTH).spliterator(), false)
-			.map(BlockPos::new)
-			.<BlockPos>mapMulti((pos, collector) -> BlockPos.betweenClosedStream(pos.atY(this.destinationLevel.getMinY()), pos.atY(this.destinationLevel.getMaxY())).forEach(p -> collector.accept(new BlockPos(p))))
+			.map(p -> new BlockPos(p.getX(), p.getY(), p.getZ()))
+			.<BlockPos>mapMulti((pos, collector) -> BlockPos.betweenClosedStream(pos.atY(this.destinationLevel.getMinY()), pos.atY(this.destinationLevel.getMaxY())).forEach(p -> collector.accept(new BlockPos(p.getX(), p.getY(), p.getZ()))))
 			.filter(pos -> pos.getY() + portalFrameColliders.getMinY() > this.destinationLevel.getMinY() && pos.getY() + portalFrameColliders.getMaxY() < this.destinationLevel.getMaxY())
 			.sorted(Comparator.comparingInt(comesFirst).thenComparing(portal.closestSuitableComparator(this.destinationLevel, lookupOrigin))) // since it's a sequential stream, it checks in order, that's what we want
 			.dropWhile(pos -> isFrameUnsuitable(portalFrameColliders, pos)) // cheap on sequential stream, just drops any non-suitable higher-priority position

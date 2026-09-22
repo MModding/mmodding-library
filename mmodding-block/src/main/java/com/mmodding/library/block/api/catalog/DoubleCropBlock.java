@@ -10,10 +10,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.PitcherCropBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -121,14 +118,14 @@ public abstract class DoubleCropBlock extends PitcherCropBlock {
 	}
 
 	@Override
-	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
 		BlockPos lowerPos = this.getLowerPos(level, pos);
 		BlockState lowerState = level.getBlockState(lowerPos);
 		return this.canGrow(level, lowerPos, lowerState, this.getAge(lowerState) + 1);
 	}
 
 	@Override
-	public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
 		BlockPos lowerPos = this.getLowerPos(level, pos);
 		BlockState lowerState = level.getBlockState(lowerPos);
 		this.growCrops(level, lowerState, lowerPos, this.getBonemealAgeIncrease(level));

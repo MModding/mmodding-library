@@ -35,12 +35,12 @@ public class ShoesCosmeticRenderer extends CosmeticRenderer {
 			poseStack.pushPose();
 			contextModel.leftLeg.translateAndRotate(poseStack);
 			poseStack.translate(-0.125f, -0.625, 0.0f);
-			submitNodeCollector.submitModel(leftShoe, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
+			submitNodeCollector.submitModel(leftShoe, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor);
 			poseStack.popPose();
 			poseStack.pushPose();
 			contextModel.rightLeg.translateAndRotate(poseStack);
 			poseStack.translate(0.125f, -0.625, 0.0f);
-			submitNodeCollector.submitModel(rightShoe, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
+			submitNodeCollector.submitModel(rightShoe, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor);
 			poseStack.popPose();
 		}
 		poseStack.popPose();

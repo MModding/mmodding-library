@@ -3,7 +3,6 @@ package com.mmodding.library.block.api.catalog;
 import com.mmodding.library.core.api.AdvancedContainer;
 import com.mmodding.library.java.api.function.AutoMapper;
 import com.mmodding.library.java.api.object.Wrapper;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -74,8 +73,6 @@ public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> 
 
 	public static class Head extends GrowingPlantHeadBlock {
 
-		private static final MapCodec<GrowingPlantHeadBlock> CODEC = simpleCodec(properties -> new Head(properties, null, false, 0.0f, 0, ignored -> true));
-
 		private final GrowsDownPlantBlock plant;
 		private final int growLength;
 		private final Predicate<BlockState> chooseStemState;
@@ -85,11 +82,6 @@ public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> 
 			this.plant = plant;
 			this.growLength = growLength;
 			this.chooseStemState = chooseStemState;
-		}
-
-		@Override
-		protected MapCodec<? extends GrowingPlantHeadBlock> codec() {
-			return CODEC;
 		}
 
 		@Override
@@ -110,18 +102,11 @@ public class GrowsDownPlantBlock implements Wrapper<GrowsDownPlantBlock, Block> 
 
 	public static class Body extends GrowingPlantBodyBlock {
 
-		private static final MapCodec<GrowingPlantBodyBlock> CODEC = simpleCodec(properties -> new Body(properties, null, false));
-
 		private final GrowsDownPlantBlock plant;
 
 		protected Body(Properties settings, GrowsDownPlantBlock plant, boolean tickWater) {
 			super(settings, Direction.DOWN, Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0), tickWater);
 			this.plant = plant;
-		}
-
-		@Override
-		protected MapCodec<? extends GrowingPlantBodyBlock> codec() {
-			return CODEC;
 		}
 
 		@Override

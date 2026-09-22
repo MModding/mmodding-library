@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -31,7 +32,7 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	private BlockFactory<? extends RotatedPillarBlock> normalWoodFactory = RotatedPillarBlock::new;
 	private BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory = RotatedPillarBlock::new;
 	private SoundType woodSoundType = SoundType.WOOD;
-	private BlockFactory<? extends AdvancedLeavesBlock> leavesFactory = properties -> new AdvancedLeavesBlock(0.01f, Color.rgb(-12012264), properties);
+	private BlockFactory<? extends AdvancedLeavesBlock> leavesFactory = properties -> new AdvancedLeavesBlock(0.01f, Color.rgb(-12012264), AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties);
 	private SoundType leavesSoundType = SoundType.GRASS;
 	private TreeGrower grower = TreeGrower.OAK;
 	private SoundType saplingSoundType = SoundType.GRASS;

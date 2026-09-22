@@ -5,6 +5,7 @@ import com.mmodding.library.block.api.wrapper.BlockRelatives;
 import com.mmodding.library.block.mixin.BlockFamilyAccessor;
 import com.mmodding.library.core.api.registry.IdentifierUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.Identifier;
@@ -12,7 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityTypes;
@@ -68,7 +69,7 @@ public class BlockRelativesImpl implements BlockRelatives {
 		}
 		if (variant.equals(BlockFamily.Variant.WALL_SIGN)) {
 			ResourceKey<Item> signKey = ResourceKey.create(Registries.ITEM, IdentifierUtil.extend(this.identifier, BlockFamily.Variant.SIGN.getRecipeGroup()));
-			Items.registerItem(signKey, properties -> new SignItem(this.variants.get(BlockFamily.Variant.SIGN), block, properties), new Item.Properties().stacksTo(16));
+			Items.registerItem(signKey, properties -> new StandingAndWallBlockItem(this.variants.get(BlockFamily.Variant.SIGN), block, Direction.DOWN, properties), new Item.Properties().stacksTo(16));
 		}
 		this.variants.put(variant, block);
 		return this;

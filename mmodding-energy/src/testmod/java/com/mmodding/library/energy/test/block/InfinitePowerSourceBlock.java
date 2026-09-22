@@ -2,7 +2,6 @@ package com.mmodding.library.energy.test.block;
 
 import com.mmodding.library.energy.test.block.entity.InfinitePowerSourceBlockEntity;
 import com.mmodding.library.energy.test.init.EnergyTestBlockEntities;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -14,15 +13,8 @@ import org.jspecify.annotations.Nullable;
 
 public class InfinitePowerSourceBlock extends BaseEntityBlock {
 
-	private static final MapCodec<InfinitePowerSourceBlock> CODEC = simpleCodec(InfinitePowerSourceBlock::new);
-
 	public InfinitePowerSourceBlock(Properties properties) {
 		super(properties);
-	}
-
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return CODEC;
 	}
 
 	@Override

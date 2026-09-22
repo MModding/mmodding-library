@@ -3,6 +3,7 @@ package com.mmodding.library.datagen.impl.recipe;
 import com.mmodding.library.datagen.api.recipe.RecipeGenerator;
 import com.mmodding.library.datagen.api.recipe.RecipeHelper;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -14,10 +15,12 @@ public class RecipeGeneratorImpl implements RecipeGenerator {
 
 	private final RecipeProvider provider;
 	private final RecipeOutput output;
+	private final HolderLookup.Provider registries;
 
-	public RecipeGeneratorImpl(RecipeProvider provider, RecipeOutput output) {
+	public RecipeGeneratorImpl(RecipeProvider provider, RecipeOutput output, HolderLookup.Provider registries) {
 		this.provider = provider;
 		this.output = output;
+		this.registries = registries;
 	}
 
 	@Override
@@ -32,6 +35,6 @@ public class RecipeGeneratorImpl implements RecipeGenerator {
 
 	@Override
 	public <S> HolderGetter<S> lookup(ResourceKey<? extends Registry<? extends S>> key) {
-		return this.provider.registries.lookupOrThrow(key);
+		return this.registries.lookupOrThrow(key);
 	}
 }

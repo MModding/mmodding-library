@@ -1,7 +1,6 @@
 package com.mmodding.library.block.api.catalog;
 
 import com.mmodding.library.java.api.color.Color;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -18,8 +17,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.TintedParticleLeavesBlock;
-import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -30,21 +28,23 @@ import org.jetbrains.annotations.Nullable;
 public class AdvancedLeavesBlock extends LeavesBlock {
 
 	private final ParticleOptions leafParticle;
+	private final float leafParticleChance;
 	private final Color itemTintColor;
 
 	// Tinted
-	public AdvancedLeavesBlock(float leafParticleChance, Color itemTintColor, Properties properties) {
-		this(leafParticleChance, null, itemTintColor, properties);
+	public AdvancedLeavesBlock(float leafParticleChance, Color itemTintColor, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties properties) {
+		this(leafParticleChance, null, itemTintColor, ambientLeavesBlockSoundPlayer, properties);
 	}
 
 	// Untinted
-	public AdvancedLeavesBlock(float leafParticleChance, ParticleOptions leafParticle, Properties properties) {
-		this(leafParticleChance, leafParticle, null, properties);
+	public AdvancedLeavesBlock(float leafParticleChance, ParticleOptions leafParticle, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties properties) {
+		this(leafParticleChance, leafParticle, null, ambientLeavesBlockSoundPlayer, properties);
 	}
 
-	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable Color itemTintColor, Properties settings) {
-		super(leafParticleChance, settings);
+	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable Color itemTintColor, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties settings) {
+		super(ambientLeavesBlockSoundPlayer, settings);
 		this.leafParticle = leafParticle;
+		this.leafParticleChance = leafParticleChance;
 		this.itemTintColor = itemTintColor;
 		this.registerDefaultState(
 			this.defaultBlockState()
@@ -52,11 +52,6 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 				.setValue(AdvancedLeavesBlock.PERSISTENT, false)
 				.setValue(AdvancedLeavesBlock.WATERLOGGED, false)
 		);
-	}
-
-	@Override
-	public MapCodec<? extends LeavesBlock> codec() {
-		return this.leafParticle == null ? TintedParticleLeavesBlock.CODEC : UntintedParticleLeavesBlock.CODEC;
 	}
 
 	public IntegerProperty getDistanceProperty() {
@@ -159,7 +154,23 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 		}
 	}
 
-	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		super.animateTick(state, level, pos, random);
+		if (this.leafParticle != null) {
+			this.makeFallingLeavesParticles(level, pos, random);
+		}
+	}
+
+	private void makeFallingLeavesParticles(Level level, BlockPos pos, RandomSource random) {
+		BlockPos below = pos.below();
+		BlockState belowState = level.getBlockState(below);
+		if (random.nextFloat() < this.leafParticleChance) {
+			if (!isFaceFull(belowState.getCollisionShape(level, below), Direction.UP)) {
+				this.spawnFallingLeavesParticle(level, pos, random);
+			}
+		}
+	}
+
 	protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
 		if (this.leafParticle == null) {
 			ColorParticleOption particle = ColorParticleOption.create(ParticleTypes.TINTED_LEAVES, level.getClientLeafTintColor(pos));

@@ -1,13 +1,11 @@
 package com.mmodding.library.resource.test.client;
 
-import com.mmodding.library.resource.api.client.cosmetic.catalog.DirectCosmetic;
+import com.mmodding.library.resource.api.client.cosmetic.catalog.DataDrivenCosmetic;
 import com.mmodding.library.resource.api.client.cosmetic.renderer.CosmeticRendererRegistry;
 import com.mmodding.library.resource.api.client.cosmetic.renderer.HeadAnchor;
-import com.mmodding.library.resource.api.client.model.data.DataDrivenModelEvents;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.Identifier;
 
 public class RenderingTestsClient implements ClientModInitializer {
 
@@ -26,5 +24,6 @@ public class RenderingTestsClient implements ClientModInitializer {
 		CosmeticRendererRegistry.registerSuitRenderer(TestCosmetics.SUIT, RenderingTests.TEST_SUIT);
 		CosmeticRendererRegistry.registerPantsRenderer(TestCosmetics.PANTS, RenderingTests.TEST_PANTS);
 		CosmeticRendererRegistry.registerShoesRenderer(TestCosmetics.SHOES, RenderingTests.TEST_SHOES);
+		CosmeticRendererRegistry.registerCapRenderer(new DataDrivenCosmetic(RenderingTests.createId("test"), RenderingTests.createTexture("test")), HeadAnchor.HEAD_CENTER, RenderingTests.TEST_CAP);
 	}
 }

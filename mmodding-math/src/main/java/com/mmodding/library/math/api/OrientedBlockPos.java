@@ -24,7 +24,7 @@ public class OrientedBlockPos extends BlockPos {
 	private final Direction relativeZ;
 
 	private OrientedBlockPos(Direction relativeX, Direction relativeY, Direction relativeZ, Vec3i vec3i) {
-		super(vec3i);
+		super(vec3i.getX(), vec3i.getY(), vec3i.getZ());
 		this.relativeX = relativeX;
 		this.relativeY = relativeY;
 		this.relativeZ = relativeZ;
@@ -60,7 +60,7 @@ public class OrientedBlockPos extends BlockPos {
 	}
 
 	public BlockPos defaultBase() {
-		return new BlockPos(this);
+		return new BlockPos(this.getX(), this.getY(), this.getZ());
 	}
 
 	public int getRelativeX() {

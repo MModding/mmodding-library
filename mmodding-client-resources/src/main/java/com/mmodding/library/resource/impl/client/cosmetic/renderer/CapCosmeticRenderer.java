@@ -43,7 +43,7 @@ public class CapCosmeticRenderer extends CosmeticRenderer {
 		// state.eyeHeight changes with the pose, but the translation we want is always the standard eye height
 		poseStack.translate(Vec3.Y_AXIS.scale(-state.entityType.getDimensions().eyeHeight()));
 		int overlayCoords = LivingEntityRenderer.getOverlayCoords(state, 0.0f);
-		submitNodeCollector.submitModel(modelToRender, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
+		submitNodeCollector.submitModel(modelToRender, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor);
 		poseStack.popPose();
 	}
 }

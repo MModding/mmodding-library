@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
@@ -47,7 +48,7 @@ public interface WoodSetBuilder {
 			.withLogName("stem")
 			.withWoodName("hyphae")
 			.withWoodSounds(SoundType.NETHER_WOOD)
-			.withUntintedLeaves(0.0f, ParticleTypes.SOUL_FIRE_FLAME)
+			.withUntintedLeaves(0.0f, ParticleTypes.SOUL_FIRE_FLAME, AmbientLeavesBlockSoundPlayer.noAmbientSound())
 			.withSettings(WoodSetSettings.create(false, WoodSetSettings.LogDisplay.NORMAL));
 	}
 
@@ -137,8 +138,8 @@ public interface WoodSetBuilder {
 	 * @param itemTintColor the item tint color
 	 * @return the builder
 	 */
-	default WoodSetBuilder withTintedLeaves(float leafParticleChance, Color itemTintColor) {
-		return this.withLeavesFactory(properties -> new AdvancedLeavesBlock(leafParticleChance, itemTintColor, properties));
+	default WoodSetBuilder withTintedLeaves(float leafParticleChance, Color itemTintColor, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer) {
+		return this.withLeavesFactory(properties -> new AdvancedLeavesBlock(leafParticleChance, itemTintColor, ambientLeavesBlockSoundPlayer, properties));
 	}
 
 	/**
@@ -147,8 +148,8 @@ public interface WoodSetBuilder {
 	 * @param leafParticle the item tint color
 	 * @return the builder
 	 */
-	default WoodSetBuilder withUntintedLeaves(float leafParticleChance, ParticleOptions leafParticle) {
-		return this.withLeavesFactory(properties -> new AdvancedLeavesBlock(leafParticleChance, leafParticle, properties));
+	default WoodSetBuilder withUntintedLeaves(float leafParticleChance, ParticleOptions leafParticle, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer) {
+		return this.withLeavesFactory(properties -> new AdvancedLeavesBlock(leafParticleChance, leafParticle, ambientLeavesBlockSoundPlayer, properties));
 	}
 
 	/**

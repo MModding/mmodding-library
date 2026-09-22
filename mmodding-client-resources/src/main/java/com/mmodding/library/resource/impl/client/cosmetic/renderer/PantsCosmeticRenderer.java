@@ -38,19 +38,19 @@ public class PantsCosmeticRenderer extends CosmeticRenderer {
 			poseStack.pushPose();
 			contextModel.body.translateAndRotate(poseStack);
 			poseStack.translate(0.0f, -0.125f, 0.0f);
-			submitNodeCollector.submitModel(junctionModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
+			submitNodeCollector.submitModel(junctionModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor);
 			poseStack.popPose();
 		}
 		if (leftLeggingModel != null && rightLeggingModel != null) {
 			poseStack.pushPose();
 			contextModel.leftLeg.translateAndRotate(poseStack);
 			poseStack.translate(-0.125f, -0.875f, 0.0f);
-			submitNodeCollector.submitModel(leftLeggingModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
+			submitNodeCollector.submitModel(leftLeggingModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor);
 			poseStack.popPose();
 			poseStack.pushPose();
 			contextModel.rightLeg.translateAndRotate(poseStack);
 			poseStack.translate(0.125f, -0.875f, 0.0f);
-			submitNodeCollector.submitModel(rightLeggingModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor, null);
+			submitNodeCollector.submitModel(rightLeggingModel, state, poseStack, renderType, state.lightCoords, overlayCoords, state.outlineColor);
 			poseStack.popPose();
 		}
 		poseStack.popPose();
