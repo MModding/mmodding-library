@@ -7,7 +7,7 @@
     "AbstractBlockStateMixin",
     "AnvilBlockMixin",
     "AnvilMenuMixin",
-    "BedBlockMixin",
+    "AbstractBedBlockMixin",
     "BlockBehaviorPropertiesMixin",
     "BlockFamilyAccessor",
     "BlockMixin",

@@ -6,6 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.attribute.BedRule;
+import net.minecraft.world.level.block.AbstractBedBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +22,7 @@ public abstract class ServerPlayerMixin {
 	// This is not being dealt with through the use of the BedBlock class. So we need to take care of it aside from the rest.
 	@SuppressWarnings("unchecked")
 	@ModifyExpressionValue(method = "startSleepInBed", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getValue(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;", ordinal = 0))
-	private <T> Comparable<T> invertHorizontalFacingIfSimpleBed(Comparable<T> original, BlockPos pos) {
+	private <T> Comparable<T> invertHorizontalFacingIfSimpleBed(Comparable<T> original, AbstractBedBlock bedBlock, BlockState bedBlockState, BedRule rule, BlockPos pos) {
 		Direction direction = (Direction) original;
 		return (Comparable<T>) (this.level().getBlockState(pos).getBlock() instanceof SimpleBedBlock ? direction.getOpposite() : direction);
 	}

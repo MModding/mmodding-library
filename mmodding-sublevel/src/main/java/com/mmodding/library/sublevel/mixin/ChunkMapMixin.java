@@ -10,9 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.storage.LevelStorageSource;
@@ -34,11 +36,13 @@ public class ChunkMapMixin {
 	}
 
 	// The LimitedLevelSource can't pass the instance check, so we just pass it to the delegate
-	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/RandomState;create(Lnet/minecraft/world/level/levelgen/NoiseGeneratorSettings;Lnet/minecraft/core/HolderGetter;J)Lnet/minecraft/world/level/levelgen/RandomState;", ordinal = 1))
-	private static RandomState applyForDelegated(NoiseGeneratorSettings settings, HolderGetter<NormalNoise.NoiseParameters> noises, long seed, Operation<RandomState> original, @Local(argsOnly = true, name = "generator") ChunkGenerator generator) {
-		return original.call(
-			generator instanceof LimitedLevelSource limited && limited.getDelegate() instanceof NoiseBasedChunkGenerator based ? based.generatorSettings().value() : settings,
-			noises, seed
-		);
+	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/RandomState;create(Lnet/minecraft/core/HolderGetter;JZLnet/minecraft/world/level/block/state/BlockState;ILnet/minecraft/world/level/levelgen/NoiseRouter;)Lnet/minecraft/world/level/levelgen/RandomState;"))
+	private static RandomState applyForDelegated(HolderGetter<NormalNoise> noises, long seed, boolean useLegacyRandom, BlockState defaultBlock, int seaLevel, NoiseRouter noiseRouter, Operation<RandomState> original, @Local(argsOnly = true, name = "generator") ChunkGenerator generator) {
+		if (generator instanceof LimitedLevelSource limited && limited.getDelegate() instanceof NoiseBasedChunkGenerator based) {
+			return RandomState.create(noises, seed, based.generatorSettings().value());
+		}
+		else {
+			return original.call(noises, seed, useLegacyRandom, defaultBlock, seaLevel, noiseRouter);
+		}
 	}
 }

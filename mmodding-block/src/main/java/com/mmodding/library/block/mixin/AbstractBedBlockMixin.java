@@ -13,13 +13,14 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.CollisionGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractBedBlock;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(BedBlock.class)
-public class BedBlockMixin {
+@Mixin(AbstractBedBlock.class)
+public class AbstractBedBlockMixin {
 
 	@WrapMethod(method = "getBedOrientation")
 	private static Direction invertIfSimple(BlockGetter level, BlockPos pos, Operation<Direction> original) {
@@ -32,7 +33,7 @@ public class BedBlockMixin {
 		return state.getBlock() instanceof SimpleBedBlock ? original.call(instance, direction.getOpposite()) : original.call(instance, direction);
 	}
 
-	@ModifyExpressionValue(method = "updateShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BedBlock;getNeighbourDirection(Lnet/minecraft/world/level/block/state/properties/BedPart;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;"))
+	@ModifyExpressionValue(method = "updateShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/AbstractBedBlock;getNeighbourDirection(Lnet/minecraft/world/level/block/state/properties/BedPart;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;"))
 	private Direction invertIfSimple(Direction original, BlockState state) {
 		return state.getBlock() instanceof SimpleBedBlock ? original.getOpposite() : original;
 	}
@@ -47,7 +48,7 @@ public class BedBlockMixin {
 		return ((BedBlock) (Object) this) instanceof SimpleBedBlock ? original.call(instance, direction.getOpposite()) : original.call(instance, direction);
 	}
 
-	@ModifyExpressionValue(method = "playerWillDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BedBlock;getNeighbourDirection(Lnet/minecraft/world/level/block/state/properties/BedPart;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;"))
+	@ModifyExpressionValue(method = "playerWillDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/AbstractBedBlock;getNeighbourDirection(Lnet/minecraft/world/level/block/state/properties/BedPart;Lnet/minecraft/core/Direction;)Lnet/minecraft/core/Direction;"))
 	private Direction invertIfSimple(Direction original, Level level, BlockPos pos, BlockState state) {
 		return state.getBlock() instanceof SimpleBedBlock ? original.getOpposite() : original;
 	}

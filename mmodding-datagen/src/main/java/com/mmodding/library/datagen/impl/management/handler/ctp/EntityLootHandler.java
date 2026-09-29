@@ -5,17 +5,13 @@ import com.mmodding.library.datagen.api.management.handler.DataProcessHandler;
 import com.mmodding.library.java.api.list.BiList;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricEntityLootSubProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 
 @ApiStatus.Internal
 public class EntityLootHandler implements DataProcessHandler<EntityType<?>, EntityLootProcessor> {
@@ -31,17 +27,17 @@ public class EntityLootHandler implements DataProcessHandler<EntityType<?>, Enti
 		DataProcessHandler.provider(pack, contentToProcess, AutomatedEntityLootProvider::new);
 	}
 
-	private static class AutomatedEntityLootProvider extends SimpleFabricLootTableSubProvider {
+	private static class AutomatedEntityLootProvider extends FabricEntityLootSubProvider {
 
 		private final BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess;
 
 		public AutomatedEntityLootProvider(BiList<EntityLootProcessor, List<EntityType<?>>> contentToProcess, FabricPackOutput output, CompletableFuture<HolderLookup.Provider> future) {
-			super(output, future, LootContextParamSets.ENTITY);
+			super(output, future);
 			this.contentToProcess = contentToProcess;
 		}
 
 		@Override
-		public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> biConsumer) {
+		public void generate() {
 			this.contentToProcess.forEach((processor, entityTypes) -> {
 				for (EntityType<?> entityType : entityTypes) {
 					processor.process(entityType);

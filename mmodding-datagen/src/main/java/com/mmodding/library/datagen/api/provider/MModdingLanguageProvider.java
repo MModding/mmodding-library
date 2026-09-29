@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
+import org.jspecify.annotations.Nullable;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -30,19 +32,22 @@ public abstract class MModdingLanguageProvider extends FabricLanguageProvider {
 	}
 
 	@Override
+	@SuppressWarnings("NonExtendableApiUsage")
 	public CompletableFuture<?> run(CachedOutput writer) {
 		TreeMap<String, String> translationEntries = new TreeMap<>();
 
 		return this.future.thenCompose(provider -> {
-			generateTranslations(provider, (String key, String value) -> {
-				Objects.requireNonNull(key);
-				Objects.requireNonNull(value);
-
-				if (translationEntries.containsKey(key)) {
-					throw new RuntimeException("Existing translation key found - " + key + " - Duplicate will be ignored.");
+			generateTranslations(provider, new TranslationBuilder() {
+				public boolean has(String translationKey) {
+					Objects.requireNonNull(translationKey, "translationKey");
+					return translationEntries.containsKey(translationKey);
 				}
 
-				translationEntries.put(key, value);
+				public @Nullable String overwrite(String translationKey, String value) {
+					Objects.requireNonNull(translationKey, "translationKey");
+					Objects.requireNonNull(value, "value");
+					return translationEntries.put(translationKey, value);
+				}
 			});
 
 			JsonObject langEntryJson = new JsonObject();
