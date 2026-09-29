@@ -78,7 +78,7 @@ public class LimitedLevelSource extends ChunkGenerator {
 	@Override
 	public boolean tryGenerateStructure(final StructureSet.StructureSelectionEntry selected, final StructureManager structureManager, final RegistryAccess registryAccess, final RandomState randomState, final StructureTemplateManager structureTemplateManager, final long seed, final ChunkAccess centerChunk, final ChunkPos sourceChunkPos, final ResourceKey<Level> level, final Climate.Sampler climateSampler) {
 		if (this.isInBounds(centerChunk)) {
-			return this.tryGenerateStructure(selected, structureManager, registryAccess, randomState, structureTemplateManager, seed, centerChunk, sourceChunkPos, level, climateSampler);
+			return super.tryGenerateStructure(selected, structureManager, registryAccess, randomState, structureTemplateManager, seed, centerChunk, sourceChunkPos, level, climateSampler);
 		}
 		else {
 			return false;
