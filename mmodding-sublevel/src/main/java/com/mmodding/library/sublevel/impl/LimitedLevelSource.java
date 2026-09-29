@@ -2,16 +2,26 @@ package com.mmodding.library.sublevel.impl;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class LimitedLevelSource extends ChunkGenerator {
@@ -46,16 +56,12 @@ public class LimitedLevelSource extends ChunkGenerator {
 	}
 
 	@Override
-	public void applyCarvers(WorldGenRegion region, long seed, RandomState randomState, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunk) {
+	public CompletableFuture<ChunkAccess> buildTerrain(ChunkAccess chunk, Blender blender, RandomState randomState, StructureManager structureManager, BiomeManager biomeManager, @Nullable WorldGenRegion carverBiomeRegion, Set<Holder<Biome>> possibleBiomes) {
 		if (this.isInBounds(chunk)) {
-			this.delegate.applyCarvers(region, seed, randomState, biomeManager, structureManager, chunk);
+			return this.delegate.buildTerrain(chunk, blender, randomState, structureManager, biomeManager, carverBiomeRegion, possibleBiomes);
 		}
-	}
-
-	@Override
-	public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState randomState, ChunkAccess protoChunk) {
-		if (this.isInBounds(protoChunk)) {
-			this.delegate.buildSurface(level, structureManager, randomState, protoChunk);
+		else {
+			return CompletableFuture.completedFuture(chunk);
 		}
 	}
 
@@ -70,8 +76,13 @@ public class LimitedLevelSource extends ChunkGenerator {
 	}
 
 	@Override
-	public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess centerChunk) {
-		return this.isInBounds(centerChunk) ? this.delegate.fillFromNoise(blender, randomState, structureManager, centerChunk) : CompletableFuture.completedFuture(centerChunk);
+	public boolean tryGenerateStructure(final StructureSet.StructureSelectionEntry selected, final StructureManager structureManager, final RegistryAccess registryAccess, final RandomState randomState, final StructureTemplateManager structureTemplateManager, final long seed, final ChunkAccess centerChunk, final ChunkPos sourceChunkPos, final ResourceKey<Level> level, final Climate.Sampler climateSampler) {
+		if (this.isInBounds(centerChunk)) {
+			return this.tryGenerateStructure(selected, structureManager, registryAccess, randomState, structureTemplateManager, seed, centerChunk, sourceChunkPos, level, climateSampler);
+		}
+		else {
+			return false;
+		}
 	}
 
 	@Override
@@ -95,8 +106,8 @@ public class LimitedLevelSource extends ChunkGenerator {
 	}
 
 	@Override
-	public void addDebugScreenInfo(List<String> result, RandomState randomState, BlockPos feetPos) {
-		this.delegate.addDebugScreenInfo(result, randomState, feetPos);
+	public void addDebugScreenInfo(List<String> result, RandomState randomState, BlockPos feetPos, SamplerContext samplerContext) {
+		this.delegate.addDebugScreenInfo(result, randomState, feetPos, samplerContext);
 	}
 
 	public ChunkGenerator getDelegate() {
