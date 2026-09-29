@@ -61,7 +61,6 @@ public class AdvancedLargeDripstoneFeature extends LargeDripstoneFeature {
 		return super.place(level, chunkGenerator, random, origin);
 	}
 
-	// TODO: modify hardcoded dripstone block constants by mixins
 	public static class AdvancedLargeDripstone extends LargeDripstone {
 
 		public final BlockStateProvider dripstoneBlock;
