@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.feature.LargeDripstoneFeature;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 /**
- * Feature variant of the vanilla one with <code>DRIPSTONE_BLOCKS</code> modified through mixins.
+ * Feature variant of the vanilla one with <code>DRIPSTONE_BLOCKS</code> constants modified through mixins.
  */
 public class AdvancedLargeDripstoneFeature extends LargeDripstoneFeature {
 

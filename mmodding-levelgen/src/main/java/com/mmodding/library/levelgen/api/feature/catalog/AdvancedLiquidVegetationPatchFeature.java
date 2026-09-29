@@ -1,129 +1,43 @@
 package com.mmodding.library.levelgen.api.feature.catalog;
 
-import com.mmodding.library.levelgen.api.feature.catalog.configurations.AdvancedLiquidVegetationPatchConfiguration;
 import com.mojang.serialization.Codec;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.WorldGenLevel;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
+import net.minecraft.world.level.levelgen.feature.WaterloggedVegetationPatchFeature;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.CaveSurface;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-public class AdvancedLiquidVegetationPatchFeature extends Feature<AdvancedLiquidVegetationPatchConfiguration> {
+/**
+ * Feature variant of the vanilla one with <code>WATER</code> constants modified through mixins.
+ */
+public class AdvancedLiquidVegetationPatchFeature extends WaterloggedVegetationPatchFeature {
 
-	public AdvancedLiquidVegetationPatchFeature(Codec<AdvancedLiquidVegetationPatchConfiguration> codec) {
-		super(codec);
-	}
+	public static final MapCodec<AdvancedLiquidVegetationPatchFeature> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+		BlockStateProvider.CODEC.fieldOf("liquid_state").forGetter(f -> f.liquidState),
+		RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("replaceable").forGetter(f -> f.replaceable),
+		BlockStateProvider.CODEC.fieldOf("ground_state").forGetter(f -> f.groundState),
+		PlacedFeature.CODEC.fieldOf("vegetation_feature").forGetter(f -> f.vegetationFeature),
+		CaveSurface.CODEC.fieldOf("surface").forGetter(f -> f.surface),
+		IntProviders.codec(1, 128).fieldOf("depth").forGetter(f -> f.depth),
+		Codec.floatRange(0.0F, 1.0F).fieldOf("extra_bottom_block_chance").forGetter(f -> f.extraBottomBlockChance),
+		Codec.intRange(1, 256).fieldOf("vertical_range").forGetter(f -> f.verticalRange),
+		Codec.floatRange(0.0F, 1.0F).fieldOf("vegetation_chance").forGetter(f -> f.vegetationChance),
+		IntProviders.CODEC.fieldOf("xz_radius").forGetter(f -> f.xzRadius),
+		Codec.floatRange(0.0F, 1.0F).fieldOf("extra_edge_column_chance").forGetter(f -> f.extraEdgeColumnChance)
+	).apply(i, AdvancedLiquidVegetationPatchFeature::new));
 
-	@Override
-	public boolean place(FeaturePlaceContext<AdvancedLiquidVegetationPatchConfiguration> context) {
-		WorldGenLevel world = context.level();
-		AdvancedLiquidVegetationPatchConfiguration config = context.config();
-		RandomSource random = context.random();
-		BlockPos pos = context.origin();
-		Predicate<BlockState> predicate = state -> state.is(config.replaceable());
-		Set<BlockPos> positions = this.placeGroundAndGetPositions(world, config, random, pos, predicate, config.xzRadius().sample(random) + 1, config.xzRadius().sample(random) + 1);
-		this.generateVegetation(context, world, config, random, positions);
-		return !positions.isEmpty();
-	}
+	public final Holder<BlockStateProvider> liquidState;
 
-	protected Set<BlockPos> placeGroundAndGetPositions(WorldGenLevel level, AdvancedLiquidVegetationPatchConfiguration config, RandomSource random, BlockPos pos, Predicate<BlockState> replaceable, int radiusX, int radiusZ) {
-		BlockPos.MutableBlockPos mutable = pos.mutable();
-		BlockPos.MutableBlockPos result = mutable.mutable();
-		Direction direction = config.surface().getDirection();
-		Direction opposite = direction.getOpposite();
-		Set<BlockPos> positions = new HashSet<>();
-
-		for (int i = -radiusX; i <= radiusX; i++) {
-			boolean xCheck = i == -radiusX || i == radiusX;
-
-			for (int j = -radiusZ; j <= radiusZ; j++) {
-				boolean zCheck = j == -radiusZ || j == radiusZ;
-				boolean or = xCheck || zCheck;
-				boolean equal = xCheck && zCheck;
-				boolean xor = or && !equal;
-
-				if (!equal && (!xor || config.extraEdgeColumnChance() != 0.0f && !(random.nextFloat() > config.extraEdgeColumnChance()))) {
-					mutable.setWithOffset(pos, i, 0, j);
-
-					for (int k = 0; level.isStateAtPosition(mutable, BlockBehaviour.BlockStateBase::isAir) && k < config.verticalRange(); k++) {
-						mutable.move(direction);
-					}
-
-					for (int l = 0; level.isStateAtPosition(mutable, state -> !state.isAir()) && l < config.verticalRange(); l++) {
-						mutable.move(opposite);
-					}
-
-					result.setWithOffset(mutable, config.surface().getDirection());
-					BlockState blockState = level.getBlockState(result);
-					if (level.isEmptyBlock(mutable) && blockState.isFaceSturdy(level, result, config.surface().getDirection().getOpposite())) {
-						int depth = config.depth().sample(random) + (config.extraBottomBlockChance() > 0.0f && random.nextFloat() < config.extraBottomBlockChance() ? 1 : 0);
-						BlockPos blockPos = result.immutable();
-						if (this.placeGround(level, config, replaceable, random, result, depth)) {
-							positions.add(blockPos);
-						}
-					}
-				}
-			}
-		}
-
-		Set<BlockPos> liquidPositions = new HashSet<>();
-		BlockPos.MutableBlockPos liquidMutable = new BlockPos.MutableBlockPos();
-
-		for(BlockPos blockPos : positions) {
-			if (!isSolidBlockAroundPos(level, blockPos, liquidMutable)) {
-				liquidPositions.add(blockPos);
-			}
-		}
-
-		for(BlockPos blockPos : liquidPositions) {
-			level.setBlock(blockPos, config.liquidState.getState(level, random, blockPos), Block.UPDATE_CLIENTS);
-		}
-
-		return liquidPositions.stream().map(BlockPos::above).filter(blockPos -> level.isStateAtPosition(blockPos, BlockState::isAir)).collect(Collectors.toSet());
-	}
-
-	protected void generateVegetation(FeaturePlaceContext<AdvancedLiquidVegetationPatchConfiguration> context, WorldGenLevel world, VegetationPatchConfiguration config, RandomSource random, Set<BlockPos> positions) {
-		for(BlockPos pos : positions) {
-			if (config.vegetationChance() > 0.0f && random.nextFloat() < config.vegetationChance()) {
-				config.vegetationFeature().value().placeWithBiomeCheck(world, context.chunkGenerator(), random, pos.below().relative(config.surface().getDirection().getOpposite()));
-			}
-		}
-	}
-
-	protected boolean placeGround(WorldGenLevel level, AdvancedLiquidVegetationPatchConfiguration config, Predicate<BlockState> replaceable, RandomSource random, BlockPos.MutableBlockPos pos, int depth) {
-		for (int i = 0; i < depth; ++i) {
-			BlockState groundState = config.groundState().getState(level, random, pos);
-			BlockState currentState = level.getBlockState(pos);
-			if (!groundState.is(currentState.getBlock())) {
-				if (!replaceable.test(currentState)) {
-					return i != 0;
-				}
-				level.setBlock(pos, groundState, Block.UPDATE_CLIENTS);
-				pos.move(config.surface().getDirection());
-			}
-		}
-		return true;
-	}
-
-	private static boolean isSolidBlockAroundPos(WorldGenLevel world, BlockPos pos, BlockPos.MutableBlockPos mutablePos) {
-		return isSolidBlockSide(world, pos, mutablePos, Direction.NORTH)
-			|| isSolidBlockSide(world, pos, mutablePos, Direction.EAST)
-			|| isSolidBlockSide(world, pos, mutablePos, Direction.SOUTH)
-			|| isSolidBlockSide(world, pos, mutablePos, Direction.WEST)
-			|| isSolidBlockSide(world, pos, mutablePos, Direction.DOWN);
-	}
-
-	private static boolean isSolidBlockSide(WorldGenLevel world, BlockPos pos, BlockPos.MutableBlockPos mutablePos, Direction direction) {
-		mutablePos.setWithOffset(pos, direction);
-		return !world.getBlockState(mutablePos).isFaceSturdy(world, mutablePos, direction.getOpposite());
+	public AdvancedLiquidVegetationPatchFeature(Holder<BlockStateProvider> liquidState, HolderSet<Block> replaceable, Holder<BlockStateProvider> groundState, Holder<PlacedFeature> vegetationFeature, CaveSurface surface, IntProvider depth, float extraBottomBlockChance, int verticalRange, float vegetationChance, IntProvider xzRadius, float extraEdgeColumnChance) {
+		super(replaceable, groundState, vegetationFeature, surface, depth, extraBottomBlockChance, verticalRange, vegetationChance, xzRadius, extraEdgeColumnChance);
+		this.liquidState = liquidState;
 	}
 }
