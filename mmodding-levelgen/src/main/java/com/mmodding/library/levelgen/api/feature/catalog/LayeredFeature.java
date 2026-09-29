@@ -1,22 +1,33 @@
 package com.mmodding.library.levelgen.api.feature.catalog;
 
-import com.mmodding.library.levelgen.api.feature.catalog.configurations.LayeredConfiguration;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-public class LayeredFeature extends Feature<LayeredConfiguration> {
+public record LayeredFeature(HolderSet<PlacedFeature> layers) implements Feature {
 
-	public LayeredFeature(Codec<LayeredConfiguration> codec) {
-		super(codec);
+	public static final MapCodec<LayeredFeature> CODEC = RecordCodecBuilder.mapCodec(
+		instance -> instance.group(
+			PlacedFeature.LIST_CODEC.fieldOf("layers").forGetter(LayeredFeature::layers)
+		).apply(instance, LayeredFeature::new)
+	);
+
+	@Override
+	public MapCodec<? extends Feature> codec() {
+		return CODEC;
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<LayeredConfiguration> context) {
-		for (Holder<PlacedFeature> placedFeature : context.config().layers()) {
-			placedFeature.value().placeWithBiomeCheck(context.level(), context.chunkGenerator(), context.random(), context.origin());
+	public boolean place(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BlockPos origin) {
+		for (Holder<PlacedFeature> placedFeature : this.layers) {
+			placedFeature.value().place(level, chunkGenerator, random, origin);
 		}
 		return true;
 	}
