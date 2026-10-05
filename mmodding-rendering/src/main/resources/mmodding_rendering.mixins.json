@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.mmodding.library.rendering.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "CompiledSectionMeshMixin"
+  ],
+  "client": [
+    "LevelExtractorMixin",
+    "LevelRendererMixin",
+    "SectionCompilerMixin",
+    "SectionCompilerMixin$ResultsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

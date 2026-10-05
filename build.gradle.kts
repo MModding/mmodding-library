@@ -27,6 +27,7 @@ mmodding {
 		bundle("mmodding-math")
 		bundle("mmodding-network")
 		bundle("mmodding-portal")
+        bundle("mmodding-rendering")
 		bundle("mmodding-sublevel")
 		bundle("mmodding-task")
 		bundle("mmodding-woodset")
