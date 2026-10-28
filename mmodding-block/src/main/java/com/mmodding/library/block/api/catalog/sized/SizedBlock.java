@@ -4,7 +4,6 @@ import com.mmodding.library.java.api.container.Unit;
 import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.LootParams;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-
-import java.util.Collections;
-import java.util.List;
 
 public abstract class SizedBlock extends Block {
 
@@ -137,11 +133,6 @@ public abstract class SizedBlock extends Block {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
-		return this.getInnerPos(state).equals(Vec3i.ZERO) ? super.getDrops(state, params) : Collections.emptyList();
 	}
 
 	public enum SizeAxis {
