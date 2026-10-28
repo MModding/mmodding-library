@@ -38,6 +38,7 @@ Current Modules Table:
 | mmodding-math             | Candidate    | Collection of Math Utilities                           |
 | mmodding-network          | Candidate    | Additionnal Network Codecs                             |
 | mmodding-portal           | Experimental | Node Binding Portals, Node Building Portals            |
+| mmodding-rendering        | Experimental | Special Block Renderers                                |
 | mmodding-sublevel         | Experimental | SubLevel Management                                    |
 | mmodding-task             | Candidate    | Task Scheduling, Persistent Tasks                      |
 | mmodding-woodset          | Stable       | Powerful Tools to create whole WoodSets.               |
