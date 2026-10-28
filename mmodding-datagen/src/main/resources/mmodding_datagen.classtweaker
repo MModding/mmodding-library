@@ -6,6 +6,11 @@ transitive-accessible field net/minecraft/client/data/models/BlockModelGenerator
 transitive-accessible field net/minecraft/client/data/models/BlockModelGenerators ROTATION_HORIZONTAL_FACING_ALT Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;
 transitive-accessible field net/minecraft/client/data/models/BlockModelGenerators ROTATION_HORIZONTAL_FACING Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;
 
+transitive-accessible field net/minecraft/data/loot/BlockLootSubProvider enchantments Lnet/minecraft/core/HolderGetter;
+transitive-accessible field net/minecraft/data/loot/BlockLootSubProvider items Lnet/minecraft/core/HolderGetter;
+transitive-accessible field net/minecraft/data/loot/BlockLootSubProvider blocks Lnet/minecraft/core/HolderGetter;
+transitive-accessible field net/minecraft/data/loot/BlockLootSubProvider predicates Lnet/minecraft/core/HolderGetter;
+
 accessible field net/minecraft/data/recipes/RecipeProvider items Lnet/minecraft/core/HolderGetter;
 
 accessible method net/minecraft/client/data/models/model/ModelTemplates create (Ljava/lang/String;[Lnet/minecraft/client/data/models/model/TextureSlot;)Lnet/minecraft/client/data/models/model/ModelTemplate;
