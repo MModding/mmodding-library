@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link SizedBlock} variant supporting face rotations through {@link OrientedBlockPos}.
@@ -31,23 +32,19 @@ public abstract class FacingSizedBlock extends SizedBlock {
 		return super.getBlockOrigin(OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, pos), state);
 	}
 
-	/*
-	 * Putting the property for the candidate allows the SizedBlock#getBlockOrigin in SizedBlock#forEach
-	 * to the facing property. Otherwise, it does not check placement availability properly for facing sized blocks.
-	 */
 	@Override
-	public BlockState getCandidateForPlacement(BlockPlaceContext ctx) {
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
 		if (this.horizontal) {
-			return super.getCandidateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getHorizontalDirection().getOpposite());
+			return super.getStateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getHorizontalDirection().getOpposite());
 		}
 		else {
-			return super.getCandidateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getNearestLookingDirection().getOpposite());
+			return super.getStateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getNearestLookingDirection().getOpposite());
 		}
 	}
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rotation) {
-		return this.setInnerPos(state, AreaUtil.rotatePlacementInArea(this.getInnerPos(state), this.getLength(), this.getWidth(), rotation))
+		return this.getSizeManager().setInnerPos(state, AreaUtil.rotatePlacementInArea(this.getSizeManager().getInnerPos(state), this.getSizeManager().getLength(state), this.getSizeManager().getWidth(state), rotation))
 			.setValue(this.getFacingProperty(), rotation.rotate(state.getValue(this.getFacingProperty())));
 	}
 
@@ -58,6 +55,7 @@ public abstract class FacingSizedBlock extends SizedBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
 		builder.add(this.getFacingProperty());
 	}
 
