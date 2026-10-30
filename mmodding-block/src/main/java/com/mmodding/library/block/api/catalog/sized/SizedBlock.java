@@ -26,11 +26,15 @@ public abstract class SizedBlock extends Block {
 
 	protected abstract SizeManager getSizeManager();
 
+	protected Vec3i getPlacementOrigin(BlockState state) {
+		return Vec3i.ZERO;
+	}
+
 	@Override
 	public boolean canSurvive(BlockState blockState, LevelReader world, BlockPos blockPos) {
 		Unit.Mutable<Boolean> canBeReplaced = Unit.mutable(true);
 		this.forEach(
-			world, blockPos, blockState,
+			world, blockPos.subtract(this.getPlacementOrigin(blockState)), blockState,
 			(_, state, _) -> canBeReplaced.mutateValue(canBeReplaced.value() && state.canBeReplaced())
 		);
 		return canBeReplaced.value();
@@ -40,7 +44,7 @@ public abstract class SizedBlock extends Block {
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		super.setPlacedBy(level, pos, state, entity, stack);
 		if (!level.isClientSide()) {
-			this.forEach(level, pos, state, (blockPos, _, innerPos) -> {
+			this.forEach(level, pos.subtract(this.getPlacementOrigin(state)), state, (blockPos, _, innerPos) -> {
 				level.setBlock(blockPos, this.getSizeManager().setInnerPos(state, innerPos), Block.UPDATE_ALL);
 			});
 			level.updateNeighborsAt(pos, Blocks.AIR);
