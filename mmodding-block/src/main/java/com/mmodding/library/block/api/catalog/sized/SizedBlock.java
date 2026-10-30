@@ -5,6 +5,7 @@ import com.mmodding.library.java.api.function.consumer.TriConsumer;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.StateDefinition;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 
+/**
+ * A {@link SizedBlock} is <b>one</b> block that expands on more than one block position.
+ * <br>It uses {@link SizeManager} to define its size properties and handle them.
+ * <br>
+ * <br>It differs from a multiblock, which is a collection of blocks being placed relatively to each other
+ * as a small structure.
+ */
 public abstract class SizedBlock extends Block {
 
 	public SizedBlock(Properties properties) {
@@ -83,6 +91,7 @@ public abstract class SizedBlock extends Block {
 	}
 
 	@Override
+	@MustBeInvokedByOverriders
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		this.getSizeManager().defineSizeProperties(builder);
 	}
