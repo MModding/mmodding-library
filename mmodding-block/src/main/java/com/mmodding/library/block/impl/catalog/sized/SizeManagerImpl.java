@@ -1,6 +1,7 @@
 package com.mmodding.library.block.impl.catalog.sized;
 
 import com.mmodding.library.block.api.catalog.sized.SizeManager;
+import com.mmodding.library.java.api.function.Mapper;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,15 +11,22 @@ import org.jspecify.annotations.Nullable;
 
 public class SizeManagerImpl implements SizeManager {
 
-	private final int xMaxSize;
-	private final int yMaxSize;
-	private final int zMaxSize;
-
 	private final @Nullable IntegerProperty xProperty;
 	private final @Nullable IntegerProperty yProperty;
 	private final @Nullable IntegerProperty zProperty;
 
-	public SizeManagerImpl(int xMaxSize, int yMaxSize, int zMaxSize) {
+	private final Mapper<BlockState, Integer> xSizeMapper;
+	private final Mapper<BlockState, Integer> ySizeMapper;
+	private final Mapper<BlockState, Integer> zSizeMapper;
+
+	public SizeManagerImpl(
+		int xMaxSize,
+		int yMaxSize,
+		int zMaxSize,
+		Mapper<BlockState, Integer> xSizeMapper,
+		Mapper<BlockState, Integer> ySizeMapper,
+		Mapper<BlockState, Integer> zSizeMapper
+	) {
 		if (xMaxSize < 1) {
 			throw new IllegalArgumentException("xMaxSize must be greater than 0");
 		}
@@ -29,13 +37,13 @@ public class SizeManagerImpl implements SizeManager {
 			throw new IllegalArgumentException("zMaxSize must be greater than 0");
 		}
 
-		this.xMaxSize = xMaxSize;
-		this.yMaxSize = yMaxSize;
-		this.zMaxSize = zMaxSize;
+		this.xProperty = xMaxSize != 1 ? IntegerProperty.create("x", 0, xMaxSize - 1) : null;
+		this.yProperty = yMaxSize != 1 ? IntegerProperty.create("y", 0, yMaxSize - 1) : null;
+		this.zProperty = zMaxSize != 1 ? IntegerProperty.create("z", 0, zMaxSize - 1) : null;
 
-		this.xProperty = this.xMaxSize != 1 ? IntegerProperty.create("x", 0, xMaxSize - 1) : null;
-		this.yProperty = this.yMaxSize != 1 ? IntegerProperty.create("y", 0, yMaxSize - 1) : null;
-		this.zProperty = this.zMaxSize != 1 ? IntegerProperty.create("z", 0, zMaxSize - 1) : null;
+		this.xSizeMapper = xSizeMapper;
+		this.ySizeMapper = ySizeMapper;
+		this.zSizeMapper = zSizeMapper;
 	}
 
 	@Override
@@ -86,17 +94,17 @@ public class SizeManagerImpl implements SizeManager {
 
 	@Override
 	public int getLength(BlockState state) {
-		return this.xMaxSize;
+		return this.xSizeMapper.map(state);
 	}
 
 	@Override
 	public int getHeight(BlockState state) {
-		return this.yMaxSize;
+		return this.ySizeMapper.map(state);
 	}
 
 	@Override
 	public int getWidth(BlockState state) {
-		return this.zMaxSize;
+		return this.zSizeMapper.map(state);
 	}
 
 	@Override
