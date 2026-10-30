@@ -37,10 +37,48 @@ public class OrientedBlockPos extends BlockPos {
 		this.relativeZ = relativeZ;
 	}
 
+	/**
+	 * Orients a movement vector. Coordinates are permuted and possibly multiplied by -1 depending on the new orientation.
+	 * @param front the direction given as "front"
+	 * @param up the direction given as "up"
+	 * @return the oriented movement vector
+	 */
+	public static OrientedBlockPos orientMotion(Direction front, Direction up, Vec3i vec3i) {
+		return OrientedBlockPos.orientedOrigin(front, up).offset(vec3i);
+	}
+
+	/**
+	 * Defines three relative axis for the origin.
+	 * @param front the direction given as "front"
+	 * @param up the direction given as "upside"
+	 * @return the oriented origin
+	 */
+	public static OrientedBlockPos orientedOrigin(Direction front, Direction up) {
+		return OrientedBlockPos.of(front, up, BlockPos.ZERO);
+	}
+
+	/**
+	 * Defines three relative axis from the given position. Coordinates do not change here,
+	 * while next offsets will be computed with the relative axis.
+	 * @param front the direction given as "front"
+	 * @param up the direction given as "upside"
+	 * @param vec3i the coordinates
+	 * @return the oriented block position
+	 */
 	public static OrientedBlockPos of(Direction front, Direction up, Vec3i vec3i) {
 		return OrientedBlockPos.of(front, up, vec3i.getX(), vec3i.getY(), vec3i.getZ());
 	}
 
+	/**
+	 * Defines three relative axis from the given position. Coordinates do not change here,
+	 * while next offsets will be computed with the relative axis.
+	 * @param front the direction given as "front"
+	 * @param up the direction given as "upside"
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 * @param z the z coordinate
+	 * @return the oriented block position
+	 */
 	public static OrientedBlockPos of(Direction front, Direction up, int x, int y, int z) {
 		// "north" is negative z, so we make "front" the negative relative z too
 		Direction relativeZ = front.getOpposite();
@@ -100,6 +138,11 @@ public class OrientedBlockPos extends BlockPos {
 		return this.relative(this.relativeX, x)
 			.relative(this.relativeY, y)
 			.relative(this.relativeZ, z);
+	}
+
+	@Override
+	public OrientedBlockPos offset(Vec3i vec) {
+		return this.offset(vec.getX(), vec.getY(), vec.getZ());
 	}
 
 	/**

@@ -4,15 +4,20 @@ import com.mmodding.library.math.api.AreaUtil;
 import com.mmodding.library.math.api.OrientedBlockPos;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
+import org.jspecify.annotations.Nullable;
 
 /**
  * {@link SizedBlock} variant supporting face rotations through {@link OrientedBlockPos}.
@@ -33,12 +38,33 @@ public abstract class FacingSizedBlock extends SizedBlock {
 	}
 
 	@Override
-	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		if (this.horizontal) {
-			return super.getStateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getHorizontalDirection().getOpposite());
+	@Nullable
+	@MustBeInvokedByOverriders
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		Direction facing = this.horizontal ? context.getHorizontalDirection().getOpposite() : context.getNearestLookingDirection().getOpposite();
+		BlockState defaultState = this.defaultBlockState().setValue(this.getFacingProperty(), facing);
+		boolean isPlacementValid = true;
+		OrientedBlockPos placementOrigin = (OrientedBlockPos) OrientedBlockPos.of(facing, Direction.UP, context.getClickedPos()).subtract(this.getPlacementOrigin(defaultState));
+		for (int x = 0; x < this.getSizeManager().getLength(defaultState); x++) {
+			for (int y = 0; y < this.getSizeManager().getHeight(defaultState); y++) {
+				for (int z = 0; z < this.getSizeManager().getWidth(defaultState); z++) {
+					OrientedBlockPos currentPos = placementOrigin.offset(x, y, z);
+					isPlacementValid = isPlacementValid && context.getLevel().getBlockState(currentPos).canBeReplaced(context);
+				}
+			}
 		}
-		else {
-			return super.getStateForPlacement(ctx).setValue(this.getFacingProperty(), ctx.getNearestLookingDirection().getOpposite());
+		return isPlacementValid ? defaultState : null;
+	}
+
+	@Override
+	@MustBeInvokedByOverriders
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+		if (!level.isClientSide()) {
+			this.forEach(level, OrientedBlockPos.of(state.getValue(this.getFacingProperty()), Direction.UP, pos).subtract(this.getPlacementOrigin(state)), state, (blockPos, _, innerPos) -> {
+				level.setBlock(blockPos, this.getSizeManager().setInnerPos(state, innerPos), Block.UPDATE_ALL);
+			});
+			level.updateNeighborsAt(pos, Blocks.AIR);
+			state.updateNeighbourShapes(level, pos, Block.UPDATE_ALL);
 		}
 	}
 

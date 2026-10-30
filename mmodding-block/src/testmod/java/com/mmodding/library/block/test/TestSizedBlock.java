@@ -14,12 +14,12 @@ public class TestSizedBlock extends SizedBlock {
 	}
 
 	@Override
-	protected Vec3i getPlacementOrigin(BlockState state) {
-		return new Vec3i(1, 0, 1);
+	protected SizeManager getSizeManager() {
+		return MANAGER;
 	}
 
 	@Override
-	protected SizeManager getSizeManager() {
-		return MANAGER;
+	protected Vec3i getPlacementOrigin(BlockState state) {
+		return new Vec3i(1, 0, 1);
 	}
 }
