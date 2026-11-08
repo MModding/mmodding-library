@@ -9,11 +9,12 @@ import com.mmodding.library.woodset.api.WoodSetBuilder;
 import com.mmodding.library.woodset.api.WoodSetSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
-import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
+import net.minecraft.world.level.block.sounds.BlockSoundSet;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -31,11 +32,11 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	private String woodName = "wood";
 	private BlockFactory<? extends RotatedPillarBlock> normalWoodFactory = RotatedPillarBlock::new;
 	private BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory = RotatedPillarBlock::new;
-	private SoundType woodSoundType = SoundType.WOOD;
-	private BlockFactory<? extends AdvancedLeavesBlock> leavesFactory = properties -> new AdvancedLeavesBlock(0.01f, Color.rgb(-12012264), AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties);
-	private SoundType leavesSoundType = SoundType.GRASS;
+	private ResourceKey<BlockSoundSet> woodSoundSet = BlockSoundSets.WOOD;
+	private BlockFactory<? extends AdvancedLeavesBlock> leavesFactory = properties -> new AdvancedLeavesBlock(0.01f, Color.rgb(-12012264), null, properties);
+	private ResourceKey<BlockSoundSet> leavesSoundSet = BlockSoundSets.GRASS;
 	private TreeGrower grower = TreeGrower.OAK;
-	private SoundType saplingSoundType = SoundType.GRASS;
+	private ResourceKey<BlockSoundSet> saplingSoundSet = BlockSoundSets.GRASS;
 	private WoodSet.BoatFactory boatFactory = EntityTypes::boatFactory;
 	private WoodSet.ChestBoatFactory chestBoatFactory = EntityTypes::chestBoatFactory;
 	private AutoMapper<BlockBehaviour.Properties> patch = AutoMapper.identity();
@@ -85,8 +86,8 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	}
 
 	@Override
-	public WoodSetBuilder withWoodSounds(SoundType soundType) {
-		this.woodSoundType = soundType;
+	public WoodSetBuilder withWoodSounds(ResourceKey<BlockSoundSet> soundSet) {
+		this.woodSoundSet = soundSet;
 		return this;
 	}
 
@@ -97,8 +98,8 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	}
 
 	@Override
-	public WoodSetBuilder withLeavesSounds(SoundType soundType) {
-		this.leavesSoundType = soundType;
+	public WoodSetBuilder withLeavesSounds(ResourceKey<BlockSoundSet> soundSet) {
+		this.leavesSoundSet = soundSet;
 		return this;
 	}
 
@@ -109,8 +110,8 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 	}
 
 	@Override
-	public WoodSetBuilder withSaplingSounds(SoundType soundType) {
-		this.saplingSoundType = soundType;
+	public WoodSetBuilder withSaplingSounds(ResourceKey<BlockSoundSet> soundSet) {
+		this.saplingSoundSet = soundSet;
 		return this;
 	}
 
@@ -149,13 +150,13 @@ public class WoodSetBuilderImpl implements WoodSetBuilder {
 			this.normalLogFactory,
 			this.strippedLogFactory,
 			this.woodName,
-			this.normalLogFactory,
+			this.normalWoodFactory,
 			this.strippedWoodFactory,
-			this.woodSoundType,
+			this.woodSoundSet,
 			this.leavesFactory,
-			this.leavesSoundType,
+			this.leavesSoundSet,
 			this.grower,
-			this.saplingSoundType,
+			this.saplingSoundSet,
 			this.boatFactory,
 			this.chestBoatFactory,
 			this.patch,

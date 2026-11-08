@@ -27,6 +27,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.block.grower.TreeGrower;
+import net.minecraft.world.level.block.sounds.BlockSoundSet;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -63,19 +65,19 @@ public class WoodSetImpl implements WoodSet {
 
 	private final WoodSetSettings settings;
 
-	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, BlockFactory<? extends RotatedPillarBlock> normalLogFactory, BlockFactory<? extends RotatedPillarBlock> strippedLogFactory, String woodName, BlockFactory<? extends RotatedPillarBlock> normalWoodFactory, BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory, SoundType woodSoundType, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, SoundType leavesSoundType, TreeGrower grower, SoundType saplingSoundType, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch, WoodSetSettings settings) {
+	public WoodSetImpl(String namespace, String name, WoodTypeBuilder woodTypeBuilder, BlockSetTypeBuilder setTypeBuilder, String logName, BlockFactory<? extends RotatedPillarBlock> normalLogFactory, BlockFactory<? extends RotatedPillarBlock> strippedLogFactory, String woodName, BlockFactory<? extends RotatedPillarBlock> normalWoodFactory, BlockFactory<? extends RotatedPillarBlock> strippedWoodFactory, ResourceKey<BlockSoundSet> woodSoundSet, BlockFactory<? extends AdvancedLeavesBlock> leavesFactory, ResourceKey<BlockSoundSet> leavesSoundSet, TreeGrower grower, ResourceKey<BlockSoundSet> saplingSoundSet, BoatFactory boatFactory, ChestBoatFactory chestBoatFactory, AutoMapper<BlockBehaviour.Properties> patch, WoodSetSettings settings) {
 		this.identifier = Identifier.fromNamespaceAndPath(namespace, name);
-		this.type = woodTypeBuilder.register(this.identifier, setTypeBuilder.register(this.identifier));
-		this.log = this.registerBlock("_" + logName, normalLogFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
-		this.wood = this.registerBlock("_" + woodName, normalWoodFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
-		this.strippedLog = this.registerBlock("stripped_", "_" + logName, strippedLogFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
-		this.strippedWood = this.registerBlock("stripped_", "_" + woodName, strippedWoodFactory, properties -> patch.map(properties.sound(woodSoundType))).registerItem();
+		this.type = woodTypeBuilder.build(this.identifier, setTypeBuilder.build());
+		this.log = this.registerBlock("_" + logName, normalLogFactory, properties -> patch.map(properties.sound(woodSoundSet))).registerItem();
+		this.wood = this.registerBlock("_" + woodName, normalWoodFactory, properties -> patch.map(properties.sound(woodSoundSet))).registerItem();
+		this.strippedLog = this.registerBlock("stripped_", "_" + logName, strippedLogFactory, properties -> patch.map(properties.sound(woodSoundSet))).registerItem();
+		this.strippedWood = this.registerBlock("stripped_", "_" + woodName, strippedWoodFactory, properties -> patch.map(properties.sound(woodSoundSet))).registerItem();
 		BlockTransformerHelper.registerStripping(this.log, this.strippedLog);
 		BlockTransformerHelper.registerStripping(this.wood, this.strippedWood);
 		this.logsBlockTag = TagKey.create(Registries.BLOCK, this.identifier.withPath(path -> path + "_logs"));
 		this.logsItemTag = TagKey.create(Registries.ITEM, this.identifier.withPath(path -> path + "_logs"));
-		this.leaves = this.registerBlock("_leaves", leavesFactory, _ -> patch.map(Blocks.leavesProperties(leavesSoundType))).registerItem();
-		BlockBehaviour.Properties saplingSettings = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(saplingSoundType).pushReaction(PushReaction.POPPED);
+		this.leaves = this.registerBlock("_leaves", leavesFactory, _ -> patch.map(Blocks.leavesProperties(leavesSoundSet))).registerItem();
+		BlockBehaviour.Properties saplingSettings = BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak().sound(saplingSoundSet).pushReaction(PushReaction.POPPED);
 		this.sapling = this.registerBlock("_sapling", properties -> new SaplingBlock(grower, properties), _ -> patch.map(saplingSettings)).registerItem();
 		this.pottedSapling = this.registerBlock("potted_", "_sapling", properties -> new FlowerPotBlock(this.sapling, properties), patch);
 		this.plankRelatives = BlockRelatives.registerPlanks(this.identifier, this.type, patch);
@@ -84,7 +86,7 @@ public class WoodSetImpl implements WoodSet {
 		this.hangingSign.registerItem((block, properties) -> new HangingSignItem(block, this.wallHangingSign, properties), new Item.Properties().stacksTo(16));
 		BlockEntityTypes.HANGING_SIGN.addValidBlock(this.hangingSign);
 		BlockEntityTypes.HANGING_SIGN.addValidBlock(this.wallHangingSign);
-		this.shelf = this.registerBlock("_shelf", ShelfBlock::new, properties -> patch.map(properties.sound(SoundType.SHELF))).registerItem();
+		this.shelf = this.registerBlock("_shelf", ShelfBlock::new, properties -> patch.map(properties.sound(BlockSoundSets.SHELF))).registerItem();
 		BlockEntityTypes.SHELF.addValidBlock(this.shelf);
 		this.boatEntityType = this.registerEntityType("_boat", EntityType.Builder.of(boatFactory.make(this::getBoatItem), MobCategory.MISC).noLootTable().sized(1.375f, 0.5625f).eyeHeight(0.5625f).clientTrackingRange(10));
 		this.chestBoatEntityType = this.registerEntityType("_chest_boat", EntityType.Builder.of(chestBoatFactory.make(this::getChestBoatItem), MobCategory.MISC).noLootTable().sized(1.375f, 0.5625f).eyeHeight(0.5625f).clientTrackingRange(10));
@@ -98,7 +100,7 @@ public class WoodSetImpl implements WoodSet {
 	}
 
 	private <T extends Block> Block registerBlock(String prefix, String suffix, BlockFactory<T> factory, AutoMapper<BlockBehaviour.Properties> patch) {
-		Block.Properties properties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava());
+		Block.Properties properties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(BlockSoundSets.WOOD).ignitedByLava());
 		return Blocks.register(ResourceKey.create(Registries.BLOCK, this.identifier.withPath(path -> prefix + path + suffix)), factory::make, properties);
 	}
 

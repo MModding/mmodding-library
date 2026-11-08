@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.ObjectUtil;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.Mth;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -41,7 +40,7 @@ public class MModdingStreamCodecs {
 	 */
 	public static <B extends ByteBuf> StreamCodec<B, Integer> intRange(int min, int max) {
 		return ByteBufCodecs.INT.map(
-			decoded -> Mth.clamp(decoded, min, max),
+			decoded -> Math.clamp(decoded, min, max),
 			encoding -> ObjectUtil.checkInRange(min, max, encoding, "encoding")
 		).cast();
 	}
@@ -55,7 +54,7 @@ public class MModdingStreamCodecs {
 	 */
 	public static <B extends ByteBuf> StreamCodec<B, Double> doubleRange(double min, double max) {
 		return ByteBufCodecs.DOUBLE.map(
-			decoded -> Mth.clamp(decoded, min, max),
+			decoded -> Math.clamp(decoded, min, max),
 			encoding -> ObjectUtil.checkInRange(encoding, min, max, "encoding")
 		).cast();
 	}

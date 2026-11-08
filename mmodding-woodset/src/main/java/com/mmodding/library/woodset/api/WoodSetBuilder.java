@@ -9,13 +9,16 @@ import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
+import net.minecraft.world.level.block.sounds.BlockSoundSet;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A builder for {@link WoodSet} objects.
@@ -47,8 +50,8 @@ public interface WoodSetBuilder {
 		return WoodSetBuilder.create(namespace, name, woodTypeBuilder, setTypeBuilder)
 			.withLogName("stem")
 			.withWoodName("hyphae")
-			.withWoodSounds(SoundType.NETHER_WOOD)
-			.withUntintedLeaves(0.0f, ParticleTypes.SOUL_FIRE_FLAME, AmbientLeavesBlockSoundPlayer.noAmbientSound())
+			.withWoodSounds(BlockSoundSets.NETHER_WOOD)
+			.withUntintedLeaves(0.0f, ParticleTypes.SOUL_FIRE_FLAME, null)
 			.withSettings(WoodSetSettings.create(false, WoodSetSettings.LogDisplay.NORMAL));
 	}
 
@@ -125,12 +128,12 @@ public interface WoodSetBuilder {
 	}
 
 	/**
-	 * Sets a {@link SoundType} for standard wood objects.
-	 * <br>Defaults to {@link SoundType#WOOD}.
-	 * @param soundType the sound type
+	 * Sets a {@link ResourceKey<BlockSoundSet>} for standard wood objects.
+	 * <br>Defaults to {@link BlockSoundSets#WOOD}.
+	 * @param soundSet the sound type
 	 * @return the builder
 	 */
-	WoodSetBuilder withWoodSounds(SoundType soundType);
+	WoodSetBuilder withWoodSounds(ResourceKey<BlockSoundSet> soundSet);
 
 	/**
 	 * Sets tinted leaves parameters.
@@ -148,7 +151,7 @@ public interface WoodSetBuilder {
 	 * @param leafParticle the item tint color
 	 * @return the builder
 	 */
-	default WoodSetBuilder withUntintedLeaves(float leafParticleChance, ParticleOptions leafParticle, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer) {
+	default WoodSetBuilder withUntintedLeaves(float leafParticleChance, ParticleOptions leafParticle, @Nullable AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer) {
 		return this.withLeavesFactory(properties -> new AdvancedLeavesBlock(leafParticleChance, leafParticle, ambientLeavesBlockSoundPlayer, properties));
 	}
 
@@ -161,12 +164,12 @@ public interface WoodSetBuilder {
 	WoodSetBuilder withLeavesFactory(BlockFactory<? extends AdvancedLeavesBlock> leavesFactory);
 
 	/**
-	 * Sets a {@link SoundType} for the leaves.
-	 * <br>Defaults to {@link SoundType#GRASS}.
-	 * @param soundType the sound type
+	 * Sets a {@link ResourceKey<BlockSoundSet>} for the leaves.
+	 * <br>Defaults to {@link BlockSoundSets#GRASS}.
+	 * @param soundSet the sound type
 	 * @return the builder
 	 */
-	WoodSetBuilder withLeavesSounds(SoundType soundType);
+	WoodSetBuilder withLeavesSounds(ResourceKey<BlockSoundSet> soundSet);
 
 	/**
 	 * Sets a {@link TreeGrower} for the sapling.
@@ -177,12 +180,12 @@ public interface WoodSetBuilder {
 	WoodSetBuilder withTreeGrower(TreeGrower grower);
 
 	/**
-	 * Sets a {@link SoundType} for the sapling.
-	 * <br>Defaults to {@link SoundType#GRASS}.
-	 * @param soundType the sound type
+	 * Sets a {@link ResourceKey<BlockSoundSet>} for the sapling.
+	 * <br>Defaults to {@link BlockSoundSets#GRASS}.
+	 * @param soundSet the sound type
 	 * @return the builder
 	 */
-	WoodSetBuilder withSaplingSounds(SoundType soundType);
+	WoodSetBuilder withSaplingSounds(ResourceKey<BlockSoundSet> soundSet);
 
 	/**
 	 * Sets a {@link WoodSet.BoatFactory} to use when creating the boat entity type.
