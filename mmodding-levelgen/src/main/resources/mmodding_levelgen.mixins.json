@@ -4,8 +4,6 @@
   "package": "com.mmodding.library.levelgen.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "LargeDripstoneFeatureMixin",
-    "LargeDripstoneFeatureMixin$LargeDripstoneMixin",
     "MinecraftServerMixin",
     "ServerLevelMixin",
     "WaterloggedVegetationPatchFeatureMixin"
