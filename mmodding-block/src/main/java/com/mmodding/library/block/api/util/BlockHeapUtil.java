@@ -63,16 +63,9 @@ public class BlockHeapUtil {
 
 	public static <T extends Block> BlockHeap.NameBlockFactory<T> setTypeForWoods(BiFunction<BlockSetType, BlockBehaviour.Properties, T> factory) {
 		return (constructor, properties) -> factory.apply(switch (constructor) {
-			case "acacia" -> BlockSetType.ACACIA;
+			case "acacia", "jungle", "dark_oak", "pale_oak", "oak", "spruce", "birch" -> BlockSetType.DEFAULT_WOOD;
 			case "cherry" -> BlockSetType.CHERRY;
-			case "jungle" -> BlockSetType.JUNGLE;
-			case "dark_oak" -> BlockSetType.DARK_OAK;
-			case "pale_oak" -> BlockSetType.PALE_OAK;
-			case "mangrove" -> BlockSetType.MANGROVE;
 			case "bamboo" -> BlockSetType.BAMBOO;
-			case "oak" -> BlockSetType.OAK;
-			case "spruce" -> BlockSetType.SPRUCE;
-			case "birch" -> BlockSetType.BIRCH;
 			default -> throw new IllegalArgumentException("Should be a recognized wood constructor");
 		}, properties);
 	}

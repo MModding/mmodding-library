@@ -25,6 +25,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class AdvancedLeavesBlock extends LeavesBlock {
 
 	private final ParticleOptions leafParticle;
@@ -32,17 +34,17 @@ public class AdvancedLeavesBlock extends LeavesBlock {
 	private final Color itemTintColor;
 
 	// Tinted
-	public AdvancedLeavesBlock(float leafParticleChance, Color itemTintColor, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties properties) {
+	public AdvancedLeavesBlock(float leafParticleChance, Color itemTintColor, @Nullable AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties properties) {
 		this(leafParticleChance, null, itemTintColor, ambientLeavesBlockSoundPlayer, properties);
 	}
 
 	// Untinted
-	public AdvancedLeavesBlock(float leafParticleChance, ParticleOptions leafParticle, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties properties) {
+	public AdvancedLeavesBlock(float leafParticleChance, ParticleOptions leafParticle, @Nullable AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties properties) {
 		this(leafParticleChance, leafParticle, null, ambientLeavesBlockSoundPlayer, properties);
 	}
 
-	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable Color itemTintColor, AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties settings) {
-		super(ambientLeavesBlockSoundPlayer, settings);
+	public AdvancedLeavesBlock(float leafParticleChance, @Nullable ParticleOptions leafParticle, @Nullable Color itemTintColor, @Nullable AmbientLeavesBlockSoundPlayer ambientLeavesBlockSoundPlayer, Properties settings) {
+		super(Optional.ofNullable(ambientLeavesBlockSoundPlayer), settings);
 		this.leafParticle = leafParticle;
 		this.leafParticleChance = leafParticleChance;
 		this.itemTintColor = itemTintColor;

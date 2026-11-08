@@ -8,7 +8,6 @@ import com.mojang.serialization.DynamicOps;
 import io.netty.util.internal.ObjectUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.Mth;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -39,14 +38,14 @@ public class MModdingCodecs {
 
 	public static Codec<Integer> intRange(int min, int max) {
 		return Codec.INT.xmap(
-			decoded -> Mth.clamp(decoded, min, max),
+			decoded -> Math.clamp(decoded, min, max),
 			encoding -> ObjectUtil.checkInRange(encoding, min, max, "encoding")
 		);
 	}
 
 	public static Codec<Double> doubleRange(double min, double max) {
 		return Codec.DOUBLE.xmap(
-			decoded -> Mth.clamp(decoded, min, max),
+			decoded -> Math.clamp(decoded, min, max),
 			encoding -> ObjectUtil.checkInRange(encoding, min, max, "encoding")
 		);
 	}

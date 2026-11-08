@@ -16,12 +16,12 @@ import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.WallSignBlock;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -35,7 +35,7 @@ public interface BlockRelatives {
 	}
 
 	static BlockRelatives registerPlanks(Identifier identifier, WoodType type, AutoMapper<Block.Properties> patch) {
-		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava());
+		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(BlockSoundSets.WOOD).ignitedByLava());
 		BlockRelatives result =  BlockRelatives.register(identifier, type.setType(), sharedProperties, "_planks", Block::new)
 			.register(BlockFamily.Variant.BUTTON, properties -> new ButtonBlock(type.setType(), 30, properties.noCollision().strength(0.5F).pushReaction(PushReaction.POPPED)))
 			.register(BlockFamily.Variant.FENCE, properties -> new FenceBlock(properties.forceSolidOn()))
@@ -55,7 +55,7 @@ public interface BlockRelatives {
 	}
 
 	static BlockRelatives registerStone(Identifier identifier, boolean pluralOnMain, AutoMapper<Block.Properties> patch, boolean hasPressurePlate, boolean hasButton) {
-		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build(identifier);
+		BlockSetType setType = BlockSetTypeBuilder.copyOf(BlockSetType.STONE).build();
 		Block.Properties sharedProperties = patch.map(Block.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5f, 6.0f));
 		BlockRelatives result = BlockRelatives.register(identifier, setType, sharedProperties, pluralOnMain ? "s" : "", Block::new)
 			.register(BlockFamily.Variant.SLAB, SlabBlock::new)
