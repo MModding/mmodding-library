@@ -12,8 +12,8 @@ public class SuperMachineryMenu extends BasicInventoryAccessContainerMenu {
 
 	public SuperMachineryMenu(int containerId, Inventory inventory, Container container) {
 		super(EnergyTestMenus.SUPER_MACHINERY, 2, containerId, inventory, container);
-		this.addSlot(new Slot(this.container, 0, 64, 16));
-		this.addSlot(new Slot(this.container, 1, 64, 48));
+		this.addSlot(new Slot(this.container, 0, 64, 16, Slot.Section.INVENTORY));
+		this.addSlot(new Slot(this.container, 1, 64, 48, Slot.Section.INVENTORY));
 	}
 
 	@Override
