@@ -1,4 +1,4 @@
-package com.mmodding.library.item.impl.property;
+package com.mmodding.library.item.impl.properties;
 
 import com.mmodding.library.core.api.registry.LiteRegistry;
 import com.mmodding.library.core.api.registry.companion.IdentityCompanion;

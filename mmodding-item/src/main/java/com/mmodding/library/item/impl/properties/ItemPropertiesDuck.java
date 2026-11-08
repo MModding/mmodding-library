@@ -1,4 +1,4 @@
-package com.mmodding.library.item.impl.property;
+package com.mmodding.library.item.impl.properties;
 
 import com.mmodding.library.core.api.management.info.DuckInterface;
 import net.minecraft.world.item.Item;

@@ -15,11 +15,11 @@ public abstract class UnitedFlowableFluid extends FlowingFluid {
 	private final int maxLevel;
 	private final boolean source;
 
-	public UnitedFlowableFluid(IntegerProperty levels, boolean source) {
+	public UnitedFlowableFluid(IntegerProperty levels, boolean source, Fluid.Properties properties) {
 		this.levels = levels;
 		this.maxLevel = levels.getPossibleValues().stream().max(Integer::compare).orElseThrow();
 		this.source = source;
-		super(); // Fields need to receive their values before super-call.
+		super(properties); // Fields need to receive their values before super-call.
 	}
 
 	@Override
@@ -38,10 +38,5 @@ public abstract class UnitedFlowableFluid extends FlowingFluid {
 	@Override
 	public boolean isSource(FluidState state) {
 		return this.source;
-	}
-
-	@Override
-	public boolean isSame(Fluid other) {
-		return other == this.getSource() || other == this.getFlowing();
 	}
 }

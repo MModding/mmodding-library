@@ -4,8 +4,8 @@
   "package": "com.mmodding.library.fluid.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "FluidBlockMixin",
-    "PointedDripstoneBlockMixin"
+    "FluidMixin",
+    "FluidPropertiesMixin"
   ],
   "client": [],
   "injectors": {

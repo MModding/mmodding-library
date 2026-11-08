@@ -1,6 +1,6 @@
 package com.mmodding.library.item.mixin;
 
-import com.mmodding.library.item.impl.property.ItemPropertiesDuck;
+import com.mmodding.library.item.impl.properties.ItemPropertiesDuck;
 import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

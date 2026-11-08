@@ -1,7 +1,7 @@
 package com.mmodding.library.item.api.properties;
 
 import com.mmodding.library.core.api.MModdingLibrary;
-import com.mmodding.library.item.impl.property.CustomItemPropertyImpl;
+import com.mmodding.library.item.impl.properties.CustomItemPropertyImpl;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 
